@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/common/input_text_decoration.dart';
+import 'package:inventur/common/prefix_icon_text.dart';
+import 'package:inventur/validators/cpf_validator.dart';
+import 'package:inventur/validators/password_validator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -10,8 +13,14 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final TextEditingController cpfController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final CPFValidator _cpfValidator = CPFValidator();
+  final PasswordValidator _passwordValidator = PasswordValidator();
+  final TextEditingController _cpfController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final _form = GlobalKey<FormState>();
+
+  bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -22,59 +31,73 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 70),
+              padding: EdgeInsets.only(top: 20, bottom: 40),
               child: Image(
                 image: AssetImage('assets/images/logo.png')
               ),
             ),
-            TextFormField(
-              controller: cpfController,
-              textAlign: TextAlign.center,
-              cursorColor: const Color.fromARGB(255, 9, 145, 20),
-              style: const TextStyle(fontSize: 20),
-              decoration: InputTextDecoration.textDecoration.copyWith(
-                hintText: 'CPF',
-                prefixIcon: const Icon(
-                  FontAwesomeIcons.solidAddressCard,
-                  size: 32,
-                  color: Color.fromARGB(255, 55, 111, 60),
-                ),
-                suffix: Container(width: 40),
-              )
-            ),
-            const SizedBox(height: 30),
-            TextFormField(
-              obscureText: true,
-              obscuringCharacter: '●',
-              textAlign: TextAlign.center,
-              controller: passwordController,
-              cursorColor: const Color.fromARGB(255, 9, 145, 20),
-              style: const TextStyle(fontSize: 20),
-              decoration: InputTextDecoration.textDecoration.copyWith(
-                hintText: 'Senha',
-                prefixIcon: const Icon(
-                  Icons.lock,
-                  size: 32,
-                  color: Color.fromARGB(255, 55, 111, 60),
-                ),
-                suffix: IconButton(
-                  onPressed: () {}, 
-                  icon: const Icon(
-                    FontAwesomeIcons.eyeSlash,
-                    color: Color.fromARGB(255, 55, 111, 60),
+            Form(
+              key: _form,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _cpfController,
+                    textAlign: TextAlign.center,
+                    cursorColor: const Color.fromARGB(255, 9, 145, 20),
+                    style: const TextStyle(fontSize: 20),
+                    decoration: InputTextDecoration.textDecoration.copyWith(
+                      hintText: 'CPF',
+                      prefixIcon: prefixIcon(FontAwesomeIcons.solidAddressCard),
+                      suffix: const SizedBox(width: 41, height: 35)
+                    ),
+                    validator: (cpf) {
+                      return _cpfValidator.validate(cpf: _cpfController.text);
+                    },
                   ),
-                  style: const ButtonStyle(
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    iconSize: MaterialStatePropertyAll(20),
-                    splashFactory: NoSplash.splashFactory
+                  const SizedBox(height: 30),
+                  TextFormField(
+                    obscuringCharacter: '●',
+                    textAlign: TextAlign.center,
+                    controller: _passwordController,
+                    cursorColor: const Color.fromARGB(255, 9, 145, 20),
+                    style: const TextStyle(fontSize: 20),
+                    decoration: InputTextDecoration.textDecoration.copyWith(
+                      hintText: 'Senha',
+                      prefixIcon: prefixIcon(Icons.lock),
+                      suffix: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        }, 
+                        icon: Icon(
+                          !_passwordVisible ? Icons.visibility_off : Icons.visibility,
+                          size: 25,
+                          color: const Color.fromARGB(255, 55, 111, 60),
+                        ),
+                        style: const ButtonStyle(
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          iconSize: MaterialStatePropertyAll(20),
+                          splashFactory: NoSplash.splashFactory
+                        ),
+                      ),
+                    ),
+                    validator: (password) {
+                      return _passwordValidator.validate(password: _passwordController.text);
+                    },
+                    obscureText: !_passwordVisible,
                   ),
-                ),
-              )
+                ],
+              ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 50, bottom: 20),
+              margin: const EdgeInsets.only(top: 40, bottom: 20),
               child: ElevatedButton(
-                onPressed: () {}, 
+                onPressed: () {
+                  if (_form.currentState!.validate()) {
+                    debugPrint("OK!!!");
+                  }
+                }, 
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
@@ -112,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               )
             ),
+            const SizedBox(height: 10),
             TextButton(
               onPressed: () {}, 
               child: const Text(
