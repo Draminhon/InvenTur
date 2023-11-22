@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:inventur/common/input_text_decoration.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,68 +22,40 @@ class _LoginPageState extends State<LoginPage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 80),
+              padding: EdgeInsets.only(top: 20, bottom: 70),
               child: Image(
                 image: AssetImage('assets/images/logo.png')
               ),
             ),
             TextFormField(
-              autofocus: true,
               controller: cpfController,
-              decoration: const InputDecoration(
-                label: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'CPF',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ],
-                ),
-                prefixIcon: Icon(
+              textAlign: TextAlign.center,
+              cursorColor: const Color.fromARGB(255, 9, 145, 20),
+              style: const TextStyle(fontSize: 20),
+              decoration: InputTextDecoration.textDecoration.copyWith(
+                hintText: 'CPF',
+                prefixIcon: const Icon(
                   FontAwesomeIcons.solidAddressCard,
                   size: 32,
                   color: Color.fromARGB(255, 55, 111, 60),
                 ),
-                prefixIconConstraints: BoxConstraints(
-                  maxHeight: 22,
-                  minWidth: 42
-                ),
-                contentPadding: EdgeInsets.only(left: 50),
-                alignLabelWithHint: true,
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 55, 111, 60)
-                  )
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 9, 145, 20)
-                  )
-                )
-              ),
+                suffix: Container(width: 40),
+              )
             ),
+            const SizedBox(height: 30),
             TextFormField(
-              controller: passwordController,
               obscureText: true,
-              decoration: InputDecoration(
-                label: const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Senha',
-                      style: TextStyle(fontSize: 20),
-                    )
-                  ],
-                ),
+              obscuringCharacter: '●',
+              textAlign: TextAlign.center,
+              controller: passwordController,
+              cursorColor: const Color.fromARGB(255, 9, 145, 20),
+              style: const TextStyle(fontSize: 20),
+              decoration: InputTextDecoration.textDecoration.copyWith(
+                hintText: 'Senha',
                 prefixIcon: const Icon(
                   Icons.lock,
                   size: 32,
                   color: Color.fromARGB(255, 55, 111, 60),
-                ),
-                prefixIconConstraints: const BoxConstraints(
-                  minWidth: 42,
-                  maxHeight: 15
                 ),
                 suffix: IconButton(
                   onPressed: () {}, 
@@ -96,28 +69,16 @@ class _LoginPageState extends State<LoginPage> {
                     splashFactory: NoSplash.splashFactory
                   ),
                 ),
-                contentPadding: const EdgeInsets.only(left: 50),
-                alignLabelWithHint: true,
-                enabledBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 55, 111, 60)
-                  )
-                ),
-                focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color.fromARGB(255, 9, 145, 20)
-                  )
-                )
-              ),
+              )
             ),
             Container(
-              margin: const EdgeInsets.only(top: 70, bottom: 20),
+              margin: const EdgeInsets.only(top: 50, bottom: 20),
               child: ElevatedButton(
                 onPressed: () {}, 
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16)
+                      borderRadius: BorderRadius.circular(10)
                     )
                   ),
                   padding: MaterialStateProperty.all(
@@ -127,6 +88,9 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   backgroundColor: MaterialStateProperty.all(
                     const Color.fromARGB(255, 55, 111, 60)
+                  ),
+                  overlayColor: MaterialStateProperty.all(
+                    Colors.green[600]
                   ),
                 ),
                 child: const Text(

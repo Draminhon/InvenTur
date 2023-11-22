@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/pages/login_page.dart';
 
 void main() {
@@ -10,10 +11,14 @@ class MyAppPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'InvenTur',
-      home: LoginPage(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        fontFamily: GoogleFonts.aBeeZee().fontFamily,
+      ),
+      home: const LoginPage(),
     );
   }
 }
