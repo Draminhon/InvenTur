@@ -26,14 +26,16 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
+        reverse: true,
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 40),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 40),
               child: Image(
-                image: AssetImage('assets/images/logo.png')
+                image: const AssetImage('assets/images/logo.png'),
+                height: MediaQuery.of(context).size.height * 0.39
               ),
             ),
             Form(
@@ -92,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 40, bottom: 20),
+              margin: const EdgeInsets.only(top: 60, bottom: 20),
               child: ElevatedButton(
                 onPressed: () {
                   if (_form.currentState!.validate()) {
