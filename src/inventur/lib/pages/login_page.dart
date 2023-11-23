@@ -81,6 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                           splashFactory: NoSplash.splashFactory
                         ),
                       ),
+                      errorMaxLines: 3
                     ),
                     validator: (password) {
                       return _passwordValidator.validate(password: _passwordController.text);

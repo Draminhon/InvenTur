@@ -36,11 +36,11 @@ void main() {
         },
       );
       test(
-        'deve retornar uma mensagem de erro caso a senha não seja alfanumérica',
+        'deve retornar uma mensagem de erro caso a senha não esteja de acordo com as regras de negócio',
         () {
           final result = passwordValidator.validate(password: '#SeNha@_');
 
-          expect(result, 'A senha deve ser alfanumérica');
+          expect(result, 'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial');
         },
       );
       test(
