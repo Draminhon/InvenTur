@@ -24,20 +24,28 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final sizeScreen = MediaQuery.of(context).size;
+
     return Scaffold(
       body: SingleChildScrollView(
         reverse: true,
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.only(
+          left: 20,
+          right: 20,
+          bottom: 20,
+          top: sizeScreen.height * 0.07
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 40),
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: Image(
                 image: const AssetImage('assets/images/logo.png'),
-                height: MediaQuery.of(context).size.height * 0.39
+                height: sizeScreen.height * 0.30
               ),
             ),
+            SizedBox(height: sizeScreen.height * 0.05),
             Form(
               key: _form,
               child: Column(
