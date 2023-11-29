@@ -28,24 +28,21 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        reverse: true,
+        // reverse: true,
         padding: EdgeInsets.only(
           left: 20,
           right: 20,
           bottom: 20,
-          top: sizeScreen.height * 0.07
+          top: sizeScreen.height * 0.08,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 20),
-              child: Image(
-                image: const AssetImage('assets/images/logo.png'),
-                height: sizeScreen.height * 0.30
-              ),
+            Image(
+              image: const AssetImage('assets/images/logo.png'),
+              height: sizeScreen.height * 0.35
             ),
-            SizedBox(height: sizeScreen.height * 0.05),
+            SizedBox(height: sizeScreen.height * 0.03),
             Form(
               key: _form,
               child: Column(
@@ -102,7 +99,11 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Container(
-              margin: const EdgeInsets.only(top: 60, bottom: 20),
+              // margin: const EdgeInsets.only(top: 60, bottom: 20),
+              margin: EdgeInsets.only(
+                top: sizeScreen.height * 0.05, 
+                bottom: sizeScreen.height * 0.03
+              ),
               child: ElevatedButton(
                 onPressed: () {
                   if (_form.currentState!.validate()) {
