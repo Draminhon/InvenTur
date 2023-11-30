@@ -28,32 +28,32 @@ class _LoginPageState extends State<LoginPage> {
             // ),
             Image.asset("assets/images/logo.png", height: screenHeight * 0.4,),
             SizedBox(height: screenHeight * 0.05),
-            Container(
+            SizedBox(
               width: screenWidth * 0.8,
               child: TextFormField(
                 controller: _emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "E-mail",
                 ),
               ),
             ),
             SizedBox(height: screenHeight * 0.05),
-            Container(
+            SizedBox(
               width: screenWidth * 0.8,
               child: TextFormField(
                 controller: _passwordController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Senha",
                   // obscureText: true,
                 ),
               ),
             ),
             SizedBox(height: screenHeight * 0.05),
-            Container(
+            SizedBox(
               width: screenWidth * 0.8,
               child: ElevatedButton(
                 onPressed: () {},
-                child: Text("Entrar"),
+                child: const Text("Entrar"),
               ),
             ),
           ],

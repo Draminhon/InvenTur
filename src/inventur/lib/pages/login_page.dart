@@ -28,12 +28,12 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        // reverse: true,
+        reverse: true,
         padding: EdgeInsets.only(
           left: 20,
           right: 20,
           bottom: 20,
-          top: sizeScreen.height * 0.08,
+          top: sizeScreen.height * 0.1,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -51,44 +51,50 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _cpfController,
                     textAlign: TextAlign.center,
                     cursorColor: const Color.fromARGB(255, 9, 145, 20),
-                    style: const TextStyle(fontSize: 20),
-                    decoration: InputTextDecoration.textDecoration.copyWith(
+                    style: TextStyle(fontSize: sizeScreen.height * 0.028),
+                    decoration: textDecoration(
                       hintText: 'CPF',
-                      prefixIcon: prefixIcon(FontAwesomeIcons.solidAddressCard),
-                      suffix: const SizedBox(width: 41, height: 35)
+                      prefixIcon: prefixIcon(FontAwesomeIcons.solidAddressCard, sizeScreen),
+                      suffix: SizedBox(
+                        width: sizeScreen.width * 0.114, 
+                        height: sizeScreen.height * 0.042
+                      ),
+                      sizeScreen: sizeScreen
                     ),
                     validator: (cpf) {
                       return _cpfValidator.validate(cpf: _cpfController.text);
                     },
                   ),
-                  const SizedBox(height: 30),
+                  SizedBox(height: sizeScreen.height * 0.03),
                   TextFormField(
                     obscuringCharacter: '●',
                     textAlign: TextAlign.center,
                     controller: _passwordController,
                     cursorColor: const Color.fromARGB(255, 9, 145, 20),
-                    style: const TextStyle(fontSize: 20),
-                    decoration: InputTextDecoration.textDecoration.copyWith(
+                    style: TextStyle(fontSize: sizeScreen.height * 0.028),
+                    decoration: textDecoration(
                       hintText: 'Senha',
-                      prefixIcon: prefixIcon(Icons.lock),
-                      suffix: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _passwordVisible = !_passwordVisible;
-                          });
-                        }, 
-                        icon: Icon(
-                          !_passwordVisible ? Icons.visibility_off : Icons.visibility,
-                          size: 25,
-                          color: const Color.fromARGB(255, 55, 111, 60),
-                        ),
-                        style: const ButtonStyle(
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          iconSize: MaterialStatePropertyAll(20),
-                          splashFactory: NoSplash.splashFactory
+                      prefixIcon: prefixIcon(Icons.lock, sizeScreen),
+                      suffix: SizedBox(
+                        width: sizeScreen.width * 0.114,
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _passwordVisible = !_passwordVisible;
+                            });
+                          }, 
+                          icon: Icon(
+                            !_passwordVisible ? Icons.visibility_off : Icons.visibility,
+                            color: const Color.fromARGB(255, 55, 111, 60),
+                            size: sizeScreen.width * 0.07
+                          ),
+                          style: const ButtonStyle(
+                            splashFactory: NoSplash.splashFactory
+                          ),
                         ),
                       ),
-                      errorMaxLines: 3
+                      errorMaxLines: 3,
+                      sizeScreen: sizeScreen
                     ),
                     validator: (password) {
                       return _passwordValidator.validate(password: _passwordController.text);
@@ -99,9 +105,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Container(
-              // margin: const EdgeInsets.only(top: 60, bottom: 20),
               margin: EdgeInsets.only(
-                top: sizeScreen.height * 0.05, 
+                top: sizeScreen.height * 0.04, 
                 bottom: sizeScreen.height * 0.03
               ),
               child: ElevatedButton(
@@ -117,8 +122,8 @@ class _LoginPageState extends State<LoginPage> {
                     )
                   ),
                   padding: MaterialStateProperty.all(
-                    const EdgeInsets.symmetric(
-                      vertical: 12
+                    EdgeInsets.symmetric(
+                      vertical: sizeScreen.height * 0.012
                     )
                   ),
                   backgroundColor: MaterialStateProperty.all(
@@ -128,33 +133,33 @@ class _LoginPageState extends State<LoginPage> {
                     Colors.green[600]
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   'ENTRAR',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 20
+                    fontSize: sizeScreen.height * 0.028
                   ),
                 )
               ),
             ),
             TextButton(
               onPressed: () {}, 
-              child: const Text(
+              child: Text(
                 'Esqueceu sua senha?',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 20
+                  fontSize: sizeScreen.height * 0.025
                 ),
               )
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: sizeScreen.height * 0.0085),
             TextButton(
               onPressed: () {}, 
-              child: const Text(
+              child: Text(
                 'Registre-se',
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 20
+                  fontSize: sizeScreen.height * 0.025
                 ),
               )
             ),
