@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/common/input_text_decoration.dart';
 import 'package:inventur/common/prefix_icon_text.dart';
+import 'package:inventur/pages/register_page.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 
@@ -154,7 +155,12 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: sizeScreen.height * 0.0085),
             TextButton(
-              onPressed: () {}, 
+              onPressed: () {
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => const RegisterPage())
+                );
+              }, 
               child: Text(
                 'Registre-se',
                 style: TextStyle(
