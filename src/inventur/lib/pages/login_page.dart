@@ -14,14 +14,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool _passwordVisible = false;
+  final _form = GlobalKey<FormState>();
   final CPFValidator _cpfValidator = CPFValidator();
   final PasswordValidator _passwordValidator = PasswordValidator();
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
-  final _form = GlobalKey<FormState>();
-
-  bool _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                       prefixIcon: prefixIcon(Icons.lock, sizeScreen),
                       suffix: SizedBox(
                         width: sizeScreen.width * 0.114,
+                        height: sizeScreen.height * 0.08,
                         child: IconButton(
                           onPressed: () {
                             setState(() {
@@ -87,10 +86,10 @@ class _LoginPageState extends State<LoginPage> {
                           icon: Icon(
                             !_passwordVisible ? Icons.visibility_off : Icons.visibility,
                             color: const Color.fromARGB(255, 55, 111, 60),
-                            size: sizeScreen.width * 0.07
                           ),
                           style: const ButtonStyle(
-                            splashFactory: NoSplash.splashFactory
+                            splashFactory: NoSplash.splashFactory,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                           ),
                         ),
                       ),

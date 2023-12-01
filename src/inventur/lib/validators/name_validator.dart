@@ -4,6 +4,8 @@ class NameValidator {
 
     if (name.length > 250) return 'O nome deve possuir no máximo 250 caracteres';
 
+    // final nameRegex = RegExp(r'^()')
+
     return null;
   }
 }

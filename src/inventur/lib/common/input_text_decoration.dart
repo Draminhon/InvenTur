@@ -6,8 +6,7 @@ InputDecoration textDecoration({String? hintText, Widget? prefixIcon, Widget? su
     hintText: hintText,
     hintStyle: TextStyle(
       fontSize: sizeScreen.height * 0.028,
-      color: Colors.black,
-      fontWeight: FontWeight.normal
+      color: Colors.black
     ),
     prefixIcon: prefixIcon,
     prefixIconConstraints: BoxConstraints(
