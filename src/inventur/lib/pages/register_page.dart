@@ -58,9 +58,9 @@ class _RegisterPageState extends State<RegisterPage> {
             SizedBox(height: sizeScreen.height * 0.02),
             Image.asset(
               'assets/images/logo.png',
-              height: sizeScreen.height * 0.28,
+              height: sizeScreen.height * 0.27,
             ),
-            SizedBox(height: sizeScreen.height * 0.03),
+            SizedBox(height: sizeScreen.height * 0.02),
             Form(
               key: _formRegister,
               child: Column(
@@ -100,7 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return _nameValidator.validate(name: name);
                     },
                   ),
-                  SizedBox(height: sizeScreen.height * 0.02),
+                  SizedBox(height: sizeScreen.height * 0.01),
                   TextFormField(
                     controller: _cpfController,
                     textAlign: TextAlign.center,
@@ -136,7 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return _cpfValidator.validate(cpf: cpf);
                     },
                   ),
-                  SizedBox(height: sizeScreen.height * 0.02),
+                  SizedBox(height: sizeScreen.height * 0.01),
                   TextFormField(
                     controller: _emailController,
                     textAlign: TextAlign.center,
@@ -172,7 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return _emailValidator.validate(email: email);
                     },
                   ),
-                  SizedBox(height: sizeScreen.height * 0.02),
+                  SizedBox(height: sizeScreen.height * 0.01),
                   TextFormField(
                     obscuringCharacter: '●',
                     textAlign: TextAlign.center,
@@ -215,6 +215,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           size: sizeScreen.height * 0.035,
                           color: const Color.fromARGB(255, 55, 111, 60),
                         ),
+                        style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
                       )
                     ),
                     obscureText: !_passwordVisible,
@@ -222,7 +223,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       return _passwordValidator.validate(password: password);
                     },
                   ),
-                  SizedBox(height: sizeScreen.height * 0.02),
+                  SizedBox(height: sizeScreen.height * 0.01),
                   TextFormField(
                     obscuringCharacter: '●',
                     textAlign: TextAlign.center,
@@ -264,6 +265,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           size: sizeScreen.height * 0.035,
                           color: const Color.fromARGB(255, 55, 111, 60),
                         ),
+                        style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
                       )
                     ),
                     obscureText: !_passwordConfirmVisible,
@@ -271,7 +273,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               )
             ),
-            SizedBox(height: sizeScreen.height * 0.05),
+            SizedBox(height: sizeScreen.height * 0.03),
             SizedBox(
               height: sizeScreen.height * 0.06,
               child: ElevatedButton(
