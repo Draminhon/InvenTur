@@ -40,7 +40,7 @@ void main() {
       test(
         'deve retornar uma mensagem de erro caso o nome contenha digitos e caracteres especiais',
         () {
-          final result = nameValidator.validate(name: '');
+          final result = nameValidator.validate(name: 'fulano 123');
 
           expect(result, equals('O nome deve possuir apenas letras'));
         },

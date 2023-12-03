@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/validators/cpf_validator.dart';
-import 'package:inventur/validators/email_validator.dart';
 import 'package:inventur/validators/name_validator.dart';
-import 'package:inventur/validators/password_confirm_validator.dart';
+import 'package:inventur/validators/email_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:inventur/validators/password_confirm_validator.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

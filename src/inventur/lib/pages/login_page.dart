@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/register_page.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
