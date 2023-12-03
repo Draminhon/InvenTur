@@ -39,6 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
           title: Text(
             'Cadastro',
             style: TextStyle(
+              color: Colors.black,
               fontSize: sizeScreen.height * 0.028
             ),
           ),
@@ -55,7 +56,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: sizeScreen.height * 0.02),
+            SizedBox(height: sizeScreen.height * 0.06),
             Image.asset(
               'assets/images/logo.png',
               height: sizeScreen.height * 0.27,
@@ -304,7 +305,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "REGISTRAR",
+                      'REGISTRAR',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: sizeScreen.height * 0.028

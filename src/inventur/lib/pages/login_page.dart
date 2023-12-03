@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/common/input_text_decoration.dart';
-import 'package:inventur/common/prefix_icon_text.dart';
 import 'package:inventur/pages/register_page.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
@@ -15,7 +13,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _passwordVisible = false;
-  final _form = GlobalKey<FormState>();
+
+  final _formLogin = GlobalKey<FormState>();
   final CPFValidator _cpfValidator = CPFValidator();
   final PasswordValidator _passwordValidator = PasswordValidator();
   final TextEditingController _cpfController = TextEditingController();
@@ -26,95 +25,138 @@ class _LoginPageState extends State<LoginPage> {
     final sizeScreen = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(45),
+        child: AppBar(
+          title: Text(
+            'Login',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: sizeScreen.height * 0.028,
+            ),
+          ),
+          centerTitle: true,
+        ),
+      ),
       body: SingleChildScrollView(
         reverse: true,
-        padding: EdgeInsets.only(
+        padding: const EdgeInsets.only(
           left: 20,
           right: 20,
-          bottom: 20,
-          top: sizeScreen.height * 0.1,
+          bottom: 20
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image(
-              image: const AssetImage('assets/images/logo.png'),
-              height: sizeScreen.height * 0.35
+            Padding(
+              padding: EdgeInsets.only(
+                top: sizeScreen.height * 0.06,
+                bottom: sizeScreen.height * 0.04,
+              ),
+              child: Image.asset(
+                'assets/images/logo.png',
+                height: sizeScreen.height * 0.27,
+              ),
             ),
-            SizedBox(height: sizeScreen.height * 0.03),
             Form(
-              key: _form,
+              key: _formLogin,
               child: Column(
                 children: [
                   TextFormField(
                     controller: _cpfController,
                     textAlign: TextAlign.center,
-                    cursorColor: const Color.fromARGB(255, 9, 145, 20),
-                    style: TextStyle(fontSize: sizeScreen.height * 0.028),
-                    decoration: textDecoration(
-                      hintText: 'CPF',
-                      prefixIcon: prefixIcon(FontAwesomeIcons.solidAddressCard, sizeScreen),
-                      suffix: SizedBox(
-                        width: sizeScreen.width * 0.114, 
-                        height: sizeScreen.height * 0.042
-                      ),
-                      sizeScreen: sizeScreen
-                    ),
-                    validator: (cpf) {
-                      return _cpfValidator.validate(cpf: _cpfController.text);
-                    },
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: sizeScreen.height * 0.028),
+                    decoration: InputDecoration(
+                        isDense: true,
+                        hintText: 'CPF',
+                        hintStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: sizeScreen.height * 0.028,
+                        ),
+                        contentPadding: const EdgeInsets.only(top: 10),
+                        enabledBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromARGB(255, 55, 111, 60)),
+                        ),
+                        focusedBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                          width: 2,
+                          color: Color.fromARGB(255, 9, 145, 20),
+                        )),
+                        prefixIcon: Icon(
+                          FontAwesomeIcons.solidAddressCard,
+                          size: sizeScreen.height * 0.04,
+                          color: const Color.fromARGB(255, 55, 111, 60),
+                        ),
+                        suffixIcon: Container(width: 0)),
+                        validator: (cpf) {
+                          return _cpfValidator.validate(cpf: cpf);
+                        },
                   ),
-                  SizedBox(height: sizeScreen.height * 0.03),
+                  SizedBox(height: sizeScreen.height * 0.01),
                   TextFormField(
                     obscuringCharacter: '●',
                     textAlign: TextAlign.center,
                     controller: _passwordController,
-                    cursorColor: const Color.fromARGB(255, 9, 145, 20),
-                    style: TextStyle(fontSize: sizeScreen.height * 0.028),
-                    decoration: textDecoration(
-                      hintText: 'Senha',
-                      prefixIcon: prefixIcon(Icons.lock, sizeScreen),
-                      suffix: SizedBox(
-                        width: sizeScreen.width * 0.114,
-                        height: sizeScreen.height * 0.08,
-                        child: IconButton(
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: sizeScreen.height * 0.028),
+                    decoration: InputDecoration(
+                        isDense: true,
+                        hintText: 'Senha',
+                        hintStyle: TextStyle(
+                          color: Colors.black,
+                          fontSize: sizeScreen.height * 0.028,
+                        ),
+                        errorMaxLines: 3,
+                        contentPadding: const EdgeInsets.only(top: 10),
+                        enabledBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 55, 111, 60))),
+                        focusedBorder: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                width: 2,
+                                color: Color.fromARGB(255, 9, 145, 20))),
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          size: sizeScreen.height * 0.05,
+                          color: const Color.fromARGB(255, 55, 111, 60),
+                        ),
+                        suffixIcon: IconButton(
                           onPressed: () {
                             setState(() {
                               _passwordVisible = !_passwordVisible;
                             });
-                          }, 
+                          },
                           icon: Icon(
-                            !_passwordVisible ? Icons.visibility_off : Icons.visibility,
+                            !_passwordVisible
+                                ? Icons.visibility_off
+                                : Icons.visibility,
+                            size: sizeScreen.height * 0.035,
                             color: const Color.fromARGB(255, 55, 111, 60),
                           ),
                           style: const ButtonStyle(
-                            splashFactory: NoSplash.splashFactory,
-                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          ),
-                        ),
-                      ),
-                      errorMaxLines: 3,
-                      sizeScreen: sizeScreen
-                    ),
-                    validator: (password) {
-                      return _passwordValidator.validate(password: _passwordController.text);
-                    },
+                              splashFactory: NoSplash.splashFactory),
+                        )),
                     obscureText: !_passwordVisible,
-                  ),
+                    validator: (password) {
+                      return _passwordValidator.validate(password: password);
+                    },
+                  )
                 ],
               ),
             ),
-            Container(
-              margin: EdgeInsets.only(
-                top: sizeScreen.height * 0.04, 
-                bottom: sizeScreen.height * 0.03
-              ),
+            SizedBox(height: sizeScreen.height * 0.03),
+            SizedBox(
+              height: sizeScreen.height * 0.06,
               child: ElevatedButton(
                 onPressed: () {
-                  if (_form.currentState!.validate()) {
-                    debugPrint("OK!!!");
+                  if (_formLogin.currentState!.validate()) {
+
                   }
-                }, 
+                },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(
                     RoundedRectangleBorder(
@@ -131,17 +173,23 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   overlayColor: MaterialStateProperty.all(
                     Colors.green[600]
-                  ),
+                  )
                 ),
-                child: Text(
-                  'ENTRAR',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: sizeScreen.height * 0.028
-                  ),
-                )
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'ENTRAR',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: sizeScreen.height * 0.028
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+            SizedBox(height: sizeScreen.height * 0.03),
             TextButton(
               onPressed: () {}, 
               child: Text(
@@ -152,7 +200,6 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               )
             ),
-            SizedBox(height: sizeScreen.height * 0.0085),
             TextButton(
               onPressed: () {
                 Navigator.push(
