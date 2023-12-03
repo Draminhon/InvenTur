@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/email_validator.dart';
 import 'package:inventur/validators/name_validator.dart';
+import 'package:inventur/validators/password_confirm_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -21,6 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final NameValidator _nameValidator = NameValidator();
   final EmailValidator _emailValidator = EmailValidator();
   final PasswordValidator _passwordValidator = PasswordValidator();
+  final PasswordConfirmValidator _passwordConfirmValidator = PasswordConfirmValidator();
 
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
@@ -270,6 +272,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       )
                     ),
                     obscureText: !_passwordConfirmVisible,
+                    validator: (passwordConfirm) {
+                      return _passwordConfirmValidator.validate(
+                        password: _passwordController.text,
+                        passwordConfirm: passwordConfirm
+                      );
+                    },
                   ),
                 ],
               )
