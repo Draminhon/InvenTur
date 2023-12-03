@@ -55,7 +55,11 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '${_timeRemaining ~/ 60}:${
+              '${
+                _timeRemaining ~/ 60 < 10
+                ? "0${_timeRemaining ~/ 60}"
+                : _timeRemaining ~/ 60
+                }:${
                 _timeRemaining % 60 < 10
                 ? "0${_timeRemaining % 60}"
                 : _timeRemaining % 60
