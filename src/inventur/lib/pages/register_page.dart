@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventur/pages/email_validator_page.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/name_validator.dart';
 import 'package:inventur/validators/email_validator.dart';
@@ -288,7 +289,10 @@ class _RegisterPageState extends State<RegisterPage> {
               child: ElevatedButton(
                 onPressed: () {
                   if (_formRegister.currentState!.validate()){
-                    
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => const EmailValidatorPage()),
+                    );
                   }
                 },
                 style: ButtonStyle(
