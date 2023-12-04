@@ -35,7 +35,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
         preferredSize: const Size.fromHeight(45),
         child: AppBar(
           title: Text(
-            'Validação do E-mail',
+            'Validação do e-mail',
             style: TextStyle(
               color: Colors.black,
               fontSize: sizeScreen.height * 0.028
@@ -54,6 +54,34 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container(
+              width: sizeScreen.width * 0.8,
+              height: sizeScreen.height * 0.3,
+              margin: EdgeInsets.all(sizeScreen.height * 0.02),
+              padding: EdgeInsets.all(sizeScreen.height * 0.008),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(225, 227, 226, 226),
+                borderRadius: BorderRadius.circular(sizeScreen.height * 0.03)
+              ),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.info,
+                    size: sizeScreen.height * 0.08,
+                    color: const Color.fromARGB(255, 0, 128, 0),
+                  ),
+                  Text(
+                    "Para confirmar sua identidade, enviaremos um código para o e-mail. Insira o código abaixo"
+                  ),
+                  Text(
+                    "O código é válido durante 15 minutos",
+                    style: TextStyle(
+                      color: Colors.red[800]
+                    ),
+                  )
+                ],
+              ),
+            ),
             Text(
               '${
                 _timeRemaining ~/ 60 < 10

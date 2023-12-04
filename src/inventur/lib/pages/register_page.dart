@@ -142,8 +142,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: sizeScreen.height * 0.01),
                   TextFormField(
-                    controller: _emailController,
                     textAlign: TextAlign.center,
+                    controller: _emailController,
+                    keyboardType: TextInputType.emailAddress,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: sizeScreen.height * 0.028
