@@ -1,14 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventur/generators/email_verification_code_generator.dart';
+import 'package:inventur/utils/email_verification_code.dart';
 import 'package:inventur/validators/email_verification_code_validator.dart';
 
 void main() {
   String expectedCode;
-  late EmailVerificationCodeGenerator emailVerificationCodeGenerator;
+  late EmailVerificationCode emailVerificationCodeGenerator;
   late EmailVerificationCodeValidator emailVerificationCodeValidator;
 
   setUp(() {
-    emailVerificationCodeGenerator = EmailVerificationCodeGenerator();
+    emailVerificationCodeGenerator = EmailVerificationCode();
     emailVerificationCodeValidator = EmailVerificationCodeValidator();
   });
 
@@ -50,7 +50,7 @@ void main() {
       test(
         'deve retornar uma mensagem de erro caso o código informado seja diferente do esperado', 
         () {
-          expectedCode = emailVerificationCodeGenerator.generate();
+          expectedCode = emailVerificationCodeGenerator.generateVerificationCode();
           final result = emailVerificationCodeValidator.validate(code: '010250', expectedCode: expectedCode);
 
           expect(result, 'Código inválido');
@@ -59,7 +59,7 @@ void main() {
       test(
         'deve retornar null caso o código seja válido', 
         () {
-          expectedCode = emailVerificationCodeGenerator.generate();
+          expectedCode = emailVerificationCodeGenerator.generateVerificationCode();
           final result = emailVerificationCodeValidator.validate(code: expectedCode, expectedCode: expectedCode);
 
           expect(result, isNull);

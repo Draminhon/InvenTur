@@ -289,12 +289,16 @@ class _RegisterPageState extends State<RegisterPage> {
               height: sizeScreen.height * 0.06,
               child: ElevatedButton(
                 onPressed: () {
-                  if (_formRegister.currentState!.validate()){
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => const EmailValidatorPage()),
-                    );
-                  }
+                  // if (_formRegister.currentState!.validate()){
+                  //   Navigator.push(
+                  //     context, 
+                  //     MaterialPageRoute(builder: (context) => const EmailValidatorPage()),
+                  //   );
+                  // }
+                  Navigator.push(
+                    context, 
+                    MaterialPageRoute(builder: (context) => const EmailValidatorPage()),
+                  );
                 },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(

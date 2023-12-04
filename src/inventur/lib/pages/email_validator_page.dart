@@ -1,5 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:inventur/utils/email_verification_code.dart';
 
 class EmailValidatorPage extends StatefulWidget {
   const EmailValidatorPage({super.key});
@@ -9,25 +9,26 @@ class EmailValidatorPage extends StatefulWidget {
 }
 
 class _EmailValidatorPageState extends State<EmailValidatorPage> {
-  late int _timeRemaining;
-
-  void startTime() {
-    _timeRemaining = 1 * 60;
-    Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        _timeRemaining--;
-      });
-
-      if (_timeRemaining == 0) {
-        timer.cancel();
-      }
-    });
-  }
+  int _timeRemaining = 1 * 60;
+  late String _verificationCode;
+  final EmailVerificationCode _emailVerificationCode = EmailVerificationCode();
 
   @override
   void initState() {
     super.initState();
-    startTime();
+    _emailVerificationCode.addListener(() {
+      setState(() {
+        _timeRemaining = _emailVerificationCode.timeRemaining;
+      });
+    });
+    _verificationCode = _emailVerificationCode.generateVerificationCode();
+    _emailVerificationCode.startCodeTimeout();
+  }
+
+  @override
+  void dispose() {
+    _emailVerificationCode.setStopCodeTimeout(true);
+    super.dispose();
   }
 
   @override
@@ -75,11 +76,12 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                     color: const Color.fromARGB(255, 0, 128, 0),
                   ),
                   Text(
-                    "Para confirmar sua identidade, enviaremos um código para o e-mail. Insira o código abaixo",
+                    "Para confirmar sua identidade, enviaremos um código para o e-mail. Evite sair da tela atual antes da validação ser concluída",
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: sizeScreen.height * 0.028
                     ),
+                    textAlign: TextAlign.center,
                   ),
                   Text(
                     "O código é válido durante 15 minutos",
@@ -108,7 +110,10 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
             ),
             TextButton(
               onPressed: () {
-                if (_timeRemaining == 0) startTime();
+                if (_emailVerificationCode.timeRemaining == 0) {
+                  _verificationCode = _emailVerificationCode.generateVerificationCode();
+                  _emailVerificationCode.startCodeTimeout();
+                }
               }, 
               child: Text("Enviar novo código")
             ),
@@ -118,8 +123,4 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
       ),
     );
   }
-}
-
-void sendEmailVerificationCode() {
-
 }
