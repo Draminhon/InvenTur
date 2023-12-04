@@ -60,9 +60,9 @@ void main() {
         'deve retornar null caso o código seja válido', 
         () {
           expectedCode = emailVerificationCodeGenerator.generate();
-          final result = emailVerificationCodeValidator.validate(code: '010250', expectedCode: expectedCode);
+          final result = emailVerificationCodeValidator.validate(code: expectedCode, expectedCode: expectedCode);
 
-          expect(result, 'Código inválido');
+          expect(result, isNull);
         }
       );
     },

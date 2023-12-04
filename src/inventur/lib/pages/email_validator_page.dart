@@ -9,12 +9,10 @@ class EmailValidatorPage extends StatefulWidget {
 }
 
 class _EmailValidatorPageState extends State<EmailValidatorPage> {
-  int _timeRemaining = 15 * 60;
+  late int _timeRemaining;
 
-  @override
-  void initState() {
-    super.initState();
-
+  void startTime() {
+    _timeRemaining = 1 * 60;
     Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _timeRemaining--;
@@ -24,6 +22,12 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
         timer.cancel();
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    startTime();
   }
 
   @override
@@ -71,12 +75,17 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                     color: const Color.fromARGB(255, 0, 128, 0),
                   ),
                   Text(
-                    "Para confirmar sua identidade, enviaremos um código para o e-mail. Insira o código abaixo"
+                    "Para confirmar sua identidade, enviaremos um código para o e-mail. Insira o código abaixo",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: sizeScreen.height * 0.028
+                    ),
                   ),
                   Text(
                     "O código é válido durante 15 minutos",
                     style: TextStyle(
-                      color: Colors.red[800]
+                      color: Colors.red[800],
+                      fontSize: sizeScreen.height * 0.028
                     ),
                   )
                 ],
@@ -97,10 +106,20 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                 fontSize: sizeScreen.height * 0.028
               ),
             ),
+            TextButton(
+              onPressed: () {
+                if (_timeRemaining == 0) startTime();
+              }, 
+              child: Text("Enviar novo código")
+            ),
             Row()
           ],
         ),
       ),
     );
   }
+}
+
+void sendEmailVerificationCode() {
+
 }
