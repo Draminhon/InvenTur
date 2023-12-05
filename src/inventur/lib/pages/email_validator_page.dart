@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:inventur/utils/email_verification_code.dart';
 
 class EmailValidatorPage extends StatefulWidget {
-  const EmailValidatorPage({super.key});
+  final String email;
+  const EmailValidatorPage({super.key, required this.email});
 
   @override
   State<EmailValidatorPage> createState() => _EmailValidatorPageState();
@@ -16,6 +17,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
   @override
   void initState() {
     super.initState();
+    _emailVerificationCode.setCodeTimeout(_timeRemaining);
     _emailVerificationCode.addListener(() {
       setState(() {
         _timeRemaining = _emailVerificationCode.timeRemaining;
@@ -75,19 +77,39 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                     size: sizeScreen.height * 0.08,
                     color: const Color.fromARGB(255, 0, 128, 0),
                   ),
-                  Text(
-                    "Para confirmar sua identidade, enviaremos um código para o e-mail. Evite sair da tela atual antes da validação ser concluída",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: sizeScreen.height * 0.028
-                    ),
+                  SizedBox(height: sizeScreen.height *0.02),
+                  RichText(
                     textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text: "Para confirmar sua identidade, enviaremos um código para o e-mail ",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: sizeScreen.height * 0.02
+                      ),
+                      children: [
+                        TextSpan(
+                          text: widget.email,
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 0, 128, 0),
+                            fontSize: sizeScreen.height * 0.02
+                          )
+                        ),
+                        TextSpan(
+                          text: " Evite sair da tela atual antes da validação ser concluída",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: sizeScreen.height * 0.02
+                          ),
+                        )
+                      ]
+                    ),
                   ),
+                  SizedBox(height: sizeScreen.height *0.02),
                   Text(
                     "O código é válido durante 15 minutos",
                     style: TextStyle(
                       color: Colors.red[800],
-                      fontSize: sizeScreen.height * 0.028
+                      fontSize: sizeScreen.height * 0.02
                     ),
                   )
                 ],

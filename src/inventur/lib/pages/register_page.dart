@@ -74,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: sizeScreen.height * 0.028
+                      fontSize: sizeScreen.height * 0.021
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -110,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: sizeScreen.height * 0.028
+                      fontSize: sizeScreen.height * 0.021
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -147,7 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.emailAddress,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: sizeScreen.height * 0.028
+                      fontSize: sizeScreen.height * 0.021
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -184,7 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _passwordController,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: sizeScreen.height * 0.028
+                      fontSize: sizeScreen.height * 0.021
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -235,7 +235,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _passwordConfirmController,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: sizeScreen.height * 0.028
+                      fontSize: sizeScreen.height * 0.021
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -297,7 +297,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   // }
                   Navigator.push(
                     context, 
-                    MaterialPageRoute(builder: (context) => const EmailValidatorPage()),
+                    MaterialPageRoute(builder: (context) => EmailValidatorPage(email: _emailController.text)),
                   );
                 },
                 style: ButtonStyle(

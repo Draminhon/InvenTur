@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 
 class EmailVerificationCode extends ChangeNotifier{
   late int _timeRemaining;
+  late int _codeTimeout;
   bool _stopCodeTimeout = false;
+
+  setCodeTimeout(int seconds) {
+    _codeTimeout = seconds;
+  }
 
   setStopCodeTimeout(bool stop) {
     _stopCodeTimeout = stop;
@@ -19,7 +24,7 @@ class EmailVerificationCode extends ChangeNotifier{
   }
 
   void startCodeTimeout() {
-    _timeRemaining = 1 * 60;
+    _timeRemaining = _codeTimeout;
     Timer.periodic(const Duration(seconds: 1), (timer) {
 
       if (_timeRemaining == 0 || _stopCodeTimeout) {

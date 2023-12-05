@@ -200,6 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               )
             ),
+            SizedBox(height: sizeScreen.height * 0.03),
             TextButton(
               onPressed: () {
                 Navigator.push(
