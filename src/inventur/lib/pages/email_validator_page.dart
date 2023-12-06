@@ -65,7 +65,12 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
               width: sizeScreen.width * 0.8,
               height: sizeScreen.height * 0.3,
               margin: EdgeInsets.all(sizeScreen.height * 0.02),
-              padding: EdgeInsets.all(sizeScreen.height * 0.008),
+              padding: EdgeInsets.only(
+                left: sizeScreen.height * 0.008,
+                top: sizeScreen.height * 0.02,
+                right: sizeScreen.height * 0.008,
+                bottom: sizeScreen.height * 0.008,
+              ),
               decoration: BoxDecoration(
                 color: const Color.fromARGB(225, 227, 226, 226),
                 borderRadius: BorderRadius.circular(sizeScreen.height * 0.03)
@@ -95,7 +100,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                           )
                         ),
                         TextSpan(
-                          text: " Evite sair da tela atual antes da validação ser concluída",
+                          text: ". Evite sair da tela atual antes da validação ser concluída",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: sizeScreen.height * 0.02
@@ -115,20 +120,39 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                 ],
               ),
             ),
-            Text(
-              '${
-                _timeRemaining ~/ 60 < 10
-                ? "0${_timeRemaining ~/ 60}"
-                : _timeRemaining ~/ 60
-                }:${
-                _timeRemaining % 60 < 10
-                ? "0${_timeRemaining % 60}"
-                : _timeRemaining % 60
-              }',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: sizeScreen.height * 0.028
-              ),
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                text: 'Espere: ',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: sizeScreen.height * 0.028
+                ),
+                children: [
+                  TextSpan(
+                    text: '${
+                      _timeRemaining ~/ 60 < 10
+                      ? "0${_timeRemaining ~/ 60}"
+                      : _timeRemaining ~/ 60
+                      }:${
+                      _timeRemaining % 60 < 10
+                      ? "0${_timeRemaining % 60}"
+                      : _timeRemaining % 60
+                    }',
+                    style: TextStyle(
+                      color: const Color.fromARGB(255, 0, 128, 0),
+                      fontSize: sizeScreen.height * 0.028
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' para enviar um novo código.',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: sizeScreen.height * 0.028
+                    ),
+                  ),
+                ]
+              )
             ),
             TextButton(
               onPressed: () {
