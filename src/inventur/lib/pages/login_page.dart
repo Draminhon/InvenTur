@@ -66,34 +66,38 @@ class _LoginPageState extends State<LoginPage> {
                     controller: _cpfController,
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: sizeScreen.height * 0.028),
+                      color: Colors.black,
+                      fontSize: sizeScreen.height * 0.023
+                    ),
                     decoration: InputDecoration(
-                        isDense: true,
-                        hintText: 'CPF',
-                        hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: sizeScreen.height * 0.028,
+                      isDense: true,
+                      hintText: 'CPF',
+                      hintStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: sizeScreen.height * 0.028,
+                      ),
+                      contentPadding: const EdgeInsets.only(top: 10),
+                      enabledBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 55, 111, 60)
                         ),
-                        contentPadding: const EdgeInsets.only(top: 10),
-                        enabledBorder: const UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Color.fromARGB(255, 55, 111, 60)),
-                        ),
-                        focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(
+                      ),
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(
                           width: 2,
                           color: Color.fromARGB(255, 9, 145, 20),
-                        )),
-                        prefixIcon: Icon(
-                          FontAwesomeIcons.solidAddressCard,
-                          size: sizeScreen.height * 0.04,
-                          color: const Color.fromARGB(255, 55, 111, 60),
-                        ),
-                        suffixIcon: Container(width: 0)),
-                        validator: (cpf) {
-                          return _cpfValidator.validate(cpf: cpf);
-                        },
+                        )
+                      ),
+                      prefixIcon: Icon(
+                        FontAwesomeIcons.solidAddressCard,
+                        size: sizeScreen.height * 0.035,
+                        color: const Color.fromARGB(255, 55, 111, 60),
+                      ),
+                      suffixIcon: Container(width: 0)
+                    ),
+                    validator: (cpf) {
+                      return _cpfValidator.validate(cpf: cpf);
+                    },
                   ),
                   SizedBox(height: sizeScreen.height * 0.01),
                   TextFormField(
@@ -101,45 +105,52 @@ class _LoginPageState extends State<LoginPage> {
                     textAlign: TextAlign.center,
                     controller: _passwordController,
                     style: TextStyle(
-                        color: Colors.black,
-                        fontSize: sizeScreen.height * 0.028),
+                      color: Colors.black,
+                      fontSize: sizeScreen.height * 0.023
+                    ),
                     decoration: InputDecoration(
-                        isDense: true,
-                        hintText: 'Senha',
-                        hintStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: sizeScreen.height * 0.028,
-                        ),
-                        errorMaxLines: 3,
-                        contentPadding: const EdgeInsets.only(top: 10),
-                        enabledBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color.fromARGB(255, 55, 111, 60))),
-                        focusedBorder: const UnderlineInputBorder(
-                            borderSide: BorderSide(
-                                width: 2,
-                                color: Color.fromARGB(255, 9, 145, 20))),
-                        prefixIcon: Icon(
-                          Icons.lock,
-                          size: sizeScreen.height * 0.05,
+                      isDense: true,
+                      hintText: 'Senha',
+                      hintStyle: TextStyle(
+                        color: Colors.black,
+                        fontSize: sizeScreen.height * 0.028,
+                      ),
+                      errorMaxLines: 3,
+                      contentPadding: const EdgeInsets.only(top: 10),
+                      enabledBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color.fromARGB(255, 55, 111, 60)
+                        )
+                      ),
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          width: 2,
+                          color: Color.fromARGB(255, 9, 145, 20)
+                        )
+                      ),
+                      prefixIcon: Icon(
+                        Icons.lock,
+                        size: sizeScreen.height * 0.045,
+                        color: const Color.fromARGB(255, 55, 111, 60),
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        },
+                        icon: Icon(
+                          !_passwordVisible
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                          size: sizeScreen.height * 0.035,
                           color: const Color.fromARGB(255, 55, 111, 60),
                         ),
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _passwordVisible = !_passwordVisible;
-                            });
-                          },
-                          icon: Icon(
-                            !_passwordVisible
-                                ? Icons.visibility_off
-                                : Icons.visibility,
-                            size: sizeScreen.height * 0.035,
-                            color: const Color.fromARGB(255, 55, 111, 60),
-                          ),
-                          style: const ButtonStyle(
-                              splashFactory: NoSplash.splashFactory),
-                        )),
+                        style: const ButtonStyle(
+                          splashFactory: NoSplash.splashFactory
+                        ),
+                      )
+                    ),
                     obscureText: !_passwordVisible,
                     validator: (password) {
                       return _passwordValidator.validate(password: password);
@@ -200,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               )
             ),
-            SizedBox(height: sizeScreen.height * 0.03),
+            SizedBox(height: sizeScreen.height * 0.01),
             TextButton(
               onPressed: () {
                 Navigator.push(

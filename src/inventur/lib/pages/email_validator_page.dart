@@ -86,7 +86,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(
-                      text: "Para confirmar sua identidade, enviaremos um código para o e-mail ",
+                      text: "Para confirmar sua identidade, digite o código enviado para o seu e-mail ",
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: sizeScreen.height * 0.02
@@ -123,7 +123,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                text: 'Espere: ',
+                text: 'Aguarde: ',
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: sizeScreen.height * 0.028
@@ -145,7 +145,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                     ),
                   ),
                   TextSpan(
-                    text: ' para enviar um novo código.',
+                    text: ' antes de enviar um novo código.',
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: sizeScreen.height * 0.028

@@ -74,7 +74,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: sizeScreen.height * 0.021
+                      fontSize: sizeScreen.height * 0.023
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -95,7 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       prefixIcon: Icon(
                         Icons.person,
-                        size: sizeScreen.height * 0.055,
+                        size: sizeScreen.height * 0.050,
                         color: const Color.fromARGB(255, 55, 111, 60),
                       ),
                       suffixIcon: Container(width: 0)
@@ -110,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: sizeScreen.height * 0.021
+                      fontSize: sizeScreen.height * 0.023
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -131,7 +131,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       prefixIcon: Icon(
                         FontAwesomeIcons.solidAddressCard,
-                        size: sizeScreen.height * 0.04,
+                        size: sizeScreen.height * 0.035,
                         color: const Color.fromARGB(255, 55, 111, 60),
                       ),
                       suffixIcon: Container(width: 0)
@@ -147,7 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     keyboardType: TextInputType.emailAddress,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: sizeScreen.height * 0.021
+                      fontSize: sizeScreen.height * 0.023
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -168,7 +168,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       prefixIcon: Icon(
                         FontAwesomeIcons.solidEnvelope,
-                        size: sizeScreen.height * 0.045,
+                        size: sizeScreen.height * 0.04,
                         color: const Color.fromARGB(255, 55, 111, 60),
                       ),
                       suffixIcon: Container(width: 0)
@@ -184,7 +184,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _passwordController,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: sizeScreen.height * 0.021
+                      fontSize: sizeScreen.height * 0.023
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -206,7 +206,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       prefixIcon: Icon(
                         Icons.lock,
-                        size: sizeScreen.height * 0.05,
+                        size: sizeScreen.height * 0.045,
                         color: const Color.fromARGB(255, 55, 111, 60),
                       ),
                       suffixIcon: IconButton(
@@ -235,7 +235,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     controller: _passwordConfirmController,
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: sizeScreen.height * 0.021
+                      fontSize: sizeScreen.height * 0.023
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -256,7 +256,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       prefixIcon: Icon(
                         Icons.lock,
-                        size: sizeScreen.height * 0.05,
+                        size: sizeScreen.height * 0.045,
                         color: const Color.fromARGB(255, 55, 111, 60),
                       ),
                       suffixIcon: IconButton(
