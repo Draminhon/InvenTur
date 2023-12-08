@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/pages/register_page.dart';
+import 'package:inventur/pages/auth/register_page.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:inventur/widgets/custom_text_field.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -62,100 +63,46 @@ class _LoginPageState extends State<LoginPage> {
               key: _formLogin,
               child: Column(
                 children: [
-                  TextFormField(
+                  CustomTextField(
+                    hintText: 'CPF',
+                    prefixIconSize: 0.035,
+                    sizeScreen: sizeScreen,
                     controller: _cpfController,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: sizeScreen.height * 0.023
-                    ),
-                    decoration: InputDecoration(
-                      isDense: true,
-                      hintText: 'CPF',
-                      hintStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: sizeScreen.height * 0.028,
-                      ),
-                      contentPadding: const EdgeInsets.only(top: 10),
-                      enabledBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color.fromARGB(255, 55, 111, 60)
-                        ),
-                      ),
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          width: 2,
-                          color: Color.fromARGB(255, 9, 145, 20),
-                        )
-                      ),
-                      prefixIcon: Icon(
-                        FontAwesomeIcons.solidAddressCard,
-                        size: sizeScreen.height * 0.035,
-                        color: const Color.fromARGB(255, 55, 111, 60),
-                      ),
-                      suffixIcon: Container(width: 0)
-                    ),
+                    suffixIcon: Container(width: 0),
+                    prefixIcon: FontAwesomeIcons.solidAddressCard,
                     validator: (cpf) {
                       return _cpfValidator.validate(cpf: cpf);
                     },
                   ),
                   SizedBox(height: sizeScreen.height * 0.01),
-                  TextFormField(
-                    obscuringCharacter: '●',
-                    textAlign: TextAlign.center,
+                  CustomTextField(
+                    hintText: 'Senha',
+                    prefixIconSize: 0.045,
+                    sizeScreen: sizeScreen,
+                    prefixIcon: Icons.lock,
                     controller: _passwordController,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: sizeScreen.height * 0.023
-                    ),
-                    decoration: InputDecoration(
-                      isDense: true,
-                      hintText: 'Senha',
-                      hintStyle: TextStyle(
-                        color: Colors.black,
-                        fontSize: sizeScreen.height * 0.028,
-                      ),
-                      errorMaxLines: 3,
-                      contentPadding: const EdgeInsets.only(top: 10),
-                      enabledBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Color.fromARGB(255, 55, 111, 60)
-                        )
-                      ),
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          width: 2,
-                          color: Color.fromARGB(255, 9, 145, 20)
-                        )
-                      ),
-                      prefixIcon: Icon(
-                        Icons.lock,
-                        size: sizeScreen.height * 0.045,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _passwordVisible = !_passwordVisible;
+                        });
+                      },
+                      icon: Icon(
+                        !_passwordVisible
+                        ? Icons.visibility_off
+                        : Icons.visibility,
+                        size: sizeScreen.height * 0.035,
                         color: const Color.fromARGB(255, 55, 111, 60),
                       ),
-                      suffixIcon: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            _passwordVisible = !_passwordVisible;
-                          });
-                        },
-                        icon: Icon(
-                          !_passwordVisible
-                          ? Icons.visibility_off
-                          : Icons.visibility,
-                          size: sizeScreen.height * 0.035,
-                          color: const Color.fromARGB(255, 55, 111, 60),
-                        ),
-                        style: const ButtonStyle(
-                          splashFactory: NoSplash.splashFactory
-                        ),
-                      )
+                      style: const ButtonStyle(
+                        splashFactory: NoSplash.splashFactory
+                      ),
                     ),
                     obscureText: !_passwordVisible,
                     validator: (password) {
                       return _passwordValidator.validate(password: password);
                     },
-                  )
+                  ),
                 ],
               ),
             ),

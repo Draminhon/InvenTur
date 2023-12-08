@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/utils/email_verification_code.dart';
 import 'package:inventur/validators/email_verification_code_validator.dart';
+import 'package:inventur/widgets/custom_text_field.dart';
 
 class EmailValidatorPage extends StatefulWidget {
   final String email;
@@ -179,38 +180,13 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
             ),
             Form(
               key: _formCodeValidator,
-              child: TextFormField(
+              child: CustomTextField(
+                hintText: 'Código',
+                prefixIconSize: 0.045,
+                prefixIcon: Icons.pin,
+                sizeScreen: sizeScreen,
                 controller: _codeController,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: sizeScreen.height * 0.028
-                ),
-                decoration: InputDecoration(
-                  isDense: true,
-                  hintText: 'Código',
-                  hintStyle: TextStyle(
-                    color: Colors.black,
-                    fontSize: sizeScreen.height * 0.028
-                  ),
-                  enabledBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color.fromARGB(255, 55, 111, 60)
-                    )
-                  ),
-                  focusedBorder: const UnderlineInputBorder(
-                    borderSide: BorderSide(
-                      width: 2,
-                      color: Color.fromARGB(255, 9, 145, 20)
-                    )
-                  ),
-                  prefixIcon: Icon(
-                    Icons.pin,
-                    size: sizeScreen.height * 0.045,
-                    color: const Color.fromARGB(255, 55, 111, 60),
-                  ),
-                  suffixIcon: Container(width: 0)
-                ),
+                suffixIcon: Container(width: 0),
                 validator: (code) {
                   return _codeValidator.validate(expectedCode: _verificationCode, code: code);
                 },
