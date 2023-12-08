@@ -44,7 +44,7 @@ void main() {
         () {
           final result = emailVerificationCodeValidator.validate(code: '01025', expectedCode: '');
 
-          expect(result, 'O código deve possuir 6 digitos');
+          expect(result, 'O código é formado por 6 dígitos');
         }
       );
       test(

@@ -6,6 +6,7 @@ class EmailVerificationCode extends ChangeNotifier{
   late int _timeRemaining;
   late int _codeTimeout;
   bool _stopCodeTimeout = false;
+  bool _startedTime = false;
 
   setCodeTimeout(int seconds) {
     _codeTimeout = seconds;
@@ -14,6 +15,8 @@ class EmailVerificationCode extends ChangeNotifier{
   setStopCodeTimeout(bool stop) {
     _stopCodeTimeout = stop;
   }
+
+  bool get startedTime => _startedTime;
 
   int get timeRemaining => _timeRemaining;
 
@@ -24,11 +27,13 @@ class EmailVerificationCode extends ChangeNotifier{
   }
 
   void startCodeTimeout() {
+    _startedTime = true;
     _timeRemaining = _codeTimeout;
     Timer.periodic(const Duration(seconds: 1), (timer) {
 
       if (_timeRemaining == 0 || _stopCodeTimeout) {
         timer.cancel();
+        _startedTime = false;
         return;
       }
       _timeRemaining--;

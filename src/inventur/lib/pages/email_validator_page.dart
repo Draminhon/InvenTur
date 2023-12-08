@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/utils/email_verification_code.dart';
+import 'package:inventur/validators/email_verification_code_validator.dart';
 
 class EmailValidatorPage extends StatefulWidget {
   final String email;
@@ -10,9 +11,14 @@ class EmailValidatorPage extends StatefulWidget {
 }
 
 class _EmailValidatorPageState extends State<EmailValidatorPage> {
-  int _timeRemaining = 1 * 60;
+  // int _codeSendLimit = 5;
+  // int _codeShippingAmount = 0;
+  int _timeRemaining = 1 * 30;
   late String _verificationCode;
+  final _formCodeValidator = GlobalKey<FormState>();
+  final TextEditingController _codeController = TextEditingController();
   final EmailVerificationCode _emailVerificationCode = EmailVerificationCode();
+  final EmailVerificationCodeValidator _codeValidator = EmailVerificationCodeValidator();
 
   @override
   void initState() {
@@ -21,10 +27,14 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
     _emailVerificationCode.addListener(() {
       setState(() {
         _timeRemaining = _emailVerificationCode.timeRemaining;
+        if (_timeRemaining == 0) {
+          _verificationCode = _emailVerificationCode.generateVerificationCode();
+        }
       });
     });
     _verificationCode = _emailVerificationCode.generateVerificationCode();
     _emailVerificationCode.startCodeTimeout();
+    debugPrint(_verificationCode);
   }
 
   @override
@@ -154,16 +164,138 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                 ]
               )
             ),
-            TextButton(
-              onPressed: () {
-                if (_emailVerificationCode.timeRemaining == 0) {
-                  _verificationCode = _emailVerificationCode.generateVerificationCode();
-                  _emailVerificationCode.startCodeTimeout();
-                }
-              }, 
-              child: Text("Enviar novo código")
+            Padding(
+              padding: EdgeInsets.only(top:sizeScreen.height * 0.03, bottom: sizeScreen.height * 0.06),
+              child: TextButton(
+                onPressed: () {
+                  if (_emailVerificationCode.timeRemaining == 0 && !_emailVerificationCode.startedTime) {
+                    _verificationCode = _emailVerificationCode.generateVerificationCode();
+                    _emailVerificationCode.startCodeTimeout();
+                  }
+                  debugPrint(_verificationCode);
+                }, 
+                child: const Text("Enviar novo código")
+              ),
             ),
-            Row()
+            Form(
+              key: _formCodeValidator,
+              child: TextFormField(
+                controller: _codeController,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: sizeScreen.height * 0.028
+                ),
+                decoration: InputDecoration(
+                  isDense: true,
+                  hintText: 'Código',
+                  hintStyle: TextStyle(
+                    color: Colors.black,
+                    fontSize: sizeScreen.height * 0.028
+                  ),
+                  enabledBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color.fromARGB(255, 55, 111, 60)
+                    )
+                  ),
+                  focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      width: 2,
+                      color: Color.fromARGB(255, 9, 145, 20)
+                    )
+                  ),
+                  prefixIcon: Icon(
+                    Icons.pin,
+                    size: sizeScreen.height * 0.045,
+                    color: const Color.fromARGB(255, 55, 111, 60),
+                  ),
+                  suffixIcon: Container(width: 0)
+                ),
+                validator: (code) {
+                  return _codeValidator.validate(expectedCode: _verificationCode, code: code);
+                },
+              )
+            ),
+            SizedBox(height: sizeScreen.height * 0.05),
+            SizedBox(
+              height: sizeScreen.height * 0.06,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (_formCodeValidator.currentState!.validate()) {
+
+                  }
+                },
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
+                    )
+                  ),
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(
+                      vertical: sizeScreen.height * 0.012
+                    )
+                  ),
+                  backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 55, 111, 60)
+                  ),
+                  overlayColor: MaterialStateProperty.all(
+                    Colors.green[600]
+                  )
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'CONFIRMAR',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: sizeScreen.height * 0.028
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: sizeScreen.height * 0.04),
+            SizedBox(
+              height: sizeScreen.height * 0.06,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
+                    )
+                  ),
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(
+                      vertical: sizeScreen.height * 0.012
+                    )
+                  ),
+                  backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 207, 0, 0)
+                  ),
+                  overlayColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 247, 22, 22)
+                  )
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'CANCELAR',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: sizeScreen.height * 0.028
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
