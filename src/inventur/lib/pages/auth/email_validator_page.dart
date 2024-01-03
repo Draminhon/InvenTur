@@ -91,7 +91,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                   Icon(
                     Icons.info,
                     size: sizeScreen.height * 0.08,
-                    color: const Color.fromARGB(255, 0, 128, 0),
+                    color: const Color.fromARGB(255, 55, 111, 60),
                   ),
                   SizedBox(height: sizeScreen.height *0.02),
                   RichText(

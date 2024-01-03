@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/pages/auth/register_page.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -161,10 +160,7 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: sizeScreen.height * 0.01),
             TextButton(
               onPressed: () {
-                Navigator.push(
-                  context, 
-                  MaterialPageRoute(builder: (context) => const RegisterPage())
-                );
+                Navigator.pushNamed(context, '/Register');
               }, 
               child: Text(
                 'Registre-se',
