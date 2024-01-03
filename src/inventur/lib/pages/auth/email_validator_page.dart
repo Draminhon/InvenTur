@@ -73,9 +73,12 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: sizeScreen.width * 0.8,
-              height: sizeScreen.height * 0.3,
-              margin: EdgeInsets.all(sizeScreen.height * 0.02),
+              // width: sizeScreen.width,
+              height: sizeScreen.height * 0.28,
+              margin: EdgeInsets.only(
+                top: sizeScreen.height * 0.02,
+                bottom: sizeScreen.height * 0.02,
+              ),
               padding: EdgeInsets.only(
                 left: sizeScreen.height * 0.008,
                 top: sizeScreen.height * 0.02,
