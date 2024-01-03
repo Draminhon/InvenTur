@@ -27,11 +27,14 @@ class _AdminHomePageState extends State<AdminHomePage> {
             foregroundColor: Colors.white,
             bottom: currentPageIndex == 0
             ? const TabBar(
+              indicatorWeight: 0.5,
+              labelColor: Colors.black,
               indicatorColor: Colors.black,
+              unselectedLabelColor: Colors.white,
               tabs: [
                 Tab(
                   text: 'Gerenciar Pesquisadores',
-                  icon: Icon(Icons.directions_car)
+                  icon: Icon(Icons.supervised_user_circle)
                 ),
                 Tab(
                   text: 'Gerenciar Administradores',
