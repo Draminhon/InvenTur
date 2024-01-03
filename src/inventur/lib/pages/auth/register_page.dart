@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/name_validator.dart';
-import 'package:inventur/widgets/custom_text_field.dart';
+import 'package:inventur/widgets/custom_text_field_widget.dart';
 import 'package:inventur/validators/email_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:inventur/pages/auth/email_validator_page.dart';
@@ -53,8 +53,8 @@ class _RegisterPageState extends State<RegisterPage> {
       body: SingleChildScrollView(
         reverse: true,
         padding: const EdgeInsets.only(
-          left: 20,
-          right: 20,
+          left: 10,
+          right: 10,
           bottom: 20
         ),
         child: Column(

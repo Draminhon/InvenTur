@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/widgets/custom_text_field.dart';
+import 'package:inventur/widgets/custom_text_field_widget.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -41,8 +41,8 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         reverse: true,
         padding: const EdgeInsets.only(
-          left: 20,
-          right: 20,
+          left: 10,
+          right: 10,
           bottom: 20
         ),
         child: Column(
@@ -111,7 +111,7 @@ class _LoginPageState extends State<LoginPage> {
               child: ElevatedButton(
                 onPressed: () {
                   if (_formLogin.currentState!.validate()) {
-
+                    Navigator.pushNamed(context, '/AdminHome');
                   }
                 },
                 style: ButtonStyle(

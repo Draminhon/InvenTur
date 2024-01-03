@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/utils/email_verification_code.dart';
 import 'package:inventur/validators/email_verification_code_validator.dart';
-import 'package:inventur/widgets/custom_text_field.dart';
+import 'package:inventur/widgets/custom_text_field_widget.dart';
 
 class EmailValidatorPage extends StatefulWidget {
   final String email;
@@ -65,8 +65,8 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
       body: SingleChildScrollView(
         reverse: true,
         padding: const EdgeInsets.only(
-          left: 20,
-          right: 20,
+          left: 10,
+          right: 10,
           bottom: 20
         ),
         child: Column(
