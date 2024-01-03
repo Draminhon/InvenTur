@@ -46,7 +46,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
 
   @override
   Widget build(BuildContext context) {
-    final sizeScreen = MediaQuery.of(context).size;
+    final sizeScreen = MediaQuery.sizeOf(context);
 
     return Scaffold(
       appBar: PreferredSize(
