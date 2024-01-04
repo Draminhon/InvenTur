@@ -40,8 +40,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
             ),
           ),
           appBar: AppBar(
-            backgroundColor: const Color.fromARGB(255, 55, 111, 60),
             foregroundColor: Colors.white,
+            backgroundColor: const Color.fromARGB(255, 55, 111, 60),
             bottom: currentPageIndex == 0
             ? TabBar(
               onTap: (int index) {
@@ -101,14 +101,17 @@ class _AdminHomePageState extends State<AdminHomePage> {
             ],
           ),
           body: <Widget>[
-            Column(
-              children: [
-                Container(
-                  width: 200,
-                  height: 200,
-                  color: Colors.brown,
-                ),
-              ],
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  Container(
+                    height: 200,
+                    color: Colors.red,
+                  ),
+                ],
+              )
             ),
             Container(
               width: 200,
