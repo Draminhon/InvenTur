@@ -10,6 +10,7 @@ class AdminHomePage extends StatefulWidget {
 
 class _AdminHomePageState extends State<AdminHomePage> {
   int currentPageIndex = 0;
+  int currentManageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +23,37 @@ class _AdminHomePageState extends State<AdminHomePage> {
       home: DefaultTabController(
         length: 2,
         child: Scaffold(
+          drawer: const Drawer(
+            child: Column(
+              children: [
+                UserAccountsDrawerHeader(
+                  accountName: Text('accountName'), 
+                  accountEmail: Text('accountEmail'),
+                  currentAccountPicture: CircleAvatar(
+                    child: Icon(
+                      Icons.person,
+                      size: 65,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
           appBar: AppBar(
             backgroundColor: const Color.fromARGB(255, 55, 111, 60),
             foregroundColor: Colors.white,
             bottom: currentPageIndex == 0
-            ? const TabBar(
+            ? TabBar(
+              onTap: (int index) {
+                setState(() {
+                  currentManageIndex = index;
+                });
+              },
               indicatorWeight: 0.5,
               labelColor: Colors.black,
               indicatorColor: Colors.black,
               unselectedLabelColor: Colors.white,
-              tabs: [
+              tabs: const [
                 Tab(
                   text: 'Gerenciar Pesquisadores',
                   icon: Icon(Icons.supervised_user_circle)
@@ -48,11 +70,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
           ? FloatingActionButton(
             onPressed: () {},
             shape: const CircleBorder(),
-            tooltip: 'Adicionar Administrador',
+            tooltip: currentManageIndex == 1
+              ? 'Adicionar Administrador'
+              : 'Adicionar Pesquisador',
             foregroundColor: Colors.white,
             backgroundColor: const Color.fromARGB(255, 55, 111, 60),
             child: const Icon(
-              Icons.add,
+              Icons.person_add_alt_1_rounded,
               size: 35,
             ),
           )
@@ -64,7 +88,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               });
             },
             currentIndex: currentPageIndex,
-            // selectedItemColor: const Color.fromARGB(255, 55, 111, 60),
+            selectedItemColor: const Color.fromARGB(255, 55, 111, 60),
             items: const <BottomNavigationBarItem> [
               BottomNavigationBarItem(
                 icon: Icon(Icons.groups),
