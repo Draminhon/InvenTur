@@ -4,7 +4,7 @@ class CPFValidator {
 
     final cpfRegex = RegExp(
         r'^([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}-?[0-9]{2})|^([0-9]{11})$');
-    if (!cpfRegex.hasMatch(cpf.trim()) || !validateCheckDigits(cpf: cpf)) return 'O CPF informado é inválido';
+    if (!cpfRegex.hasMatch(cpf.trim()) || !validateCheckDigits(cpf: cpf.trim())) return 'O CPF informado é inválido';
 
     return null;
   }

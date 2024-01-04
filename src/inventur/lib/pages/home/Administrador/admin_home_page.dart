@@ -103,7 +103,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
           body: <Widget>[
             Container(
               padding: const EdgeInsets.all(10),
-              child: ListView(
+              child: currentManageIndex == 0
+              ? ListView(
                 padding: EdgeInsets.zero,
                 children: [
                   Container(
@@ -111,6 +112,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     color: Colors.red,
                   ),
                 ],
+              )
+              : Container(
+                width: 200,
+                height: 200,
+                color: Colors.blue,
               )
             ),
             Container(
