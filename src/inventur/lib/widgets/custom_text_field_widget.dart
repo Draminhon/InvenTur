@@ -40,17 +40,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
       keyboardType: widget.keyboardType,
       style: TextStyle(
         color: Colors.black,
-        fontSize: widget.sizeScreen.height * 0.023,
+        fontSize: widget.sizeScreen.height * 0.02,
       ),
       decoration: InputDecoration(
         isDense: true,
         errorMaxLines: 3,
         hintText: widget.hintText,
         hintStyle: TextStyle(
-          color: Colors.black,
-          fontSize: widget.sizeScreen.height * 0.028,
+          color: Colors.grey,
+          fontSize: widget.sizeScreen.height * 0.02,
         ),
-        contentPadding: const EdgeInsets.only(top: 10),
+        contentPadding: const EdgeInsets.only(top: 15),
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(color: Color.fromARGB(255, 55, 111, 60))
         ),

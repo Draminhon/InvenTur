@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   CustomTextField(
                     hintText: 'CPF',
-                    prefixIconSize: 0.035,
+                    prefixIconSize: 0.025,
                     sizeScreen: sizeScreen,
                     controller: _cpfController,
                     suffixIcon: Container(width: 0),
@@ -73,10 +73,10 @@ class _LoginPageState extends State<LoginPage> {
                       return _cpfValidator.validate(cpf: cpf);
                     },
                   ),
-                  SizedBox(height: sizeScreen.height * 0.01),
+                  SizedBox(height: sizeScreen.height * 0.05),
                   CustomTextField(
                     hintText: 'Senha',
-                    prefixIconSize: 0.045,
+                    prefixIconSize: 0.035,
                     sizeScreen: sizeScreen,
                     prefixIcon: Icons.lock,
                     controller: _passwordController,
@@ -90,7 +90,7 @@ class _LoginPageState extends State<LoginPage> {
                         !_passwordVisible
                         ? Icons.visibility_off
                         : Icons.visibility,
-                        size: sizeScreen.height * 0.035,
+                        size: sizeScreen.height * 0.025,
                         color: const Color.fromARGB(255, 55, 111, 60),
                       ),
                       style: const ButtonStyle(
@@ -105,7 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            SizedBox(height: sizeScreen.height * 0.03),
+            SizedBox(height: sizeScreen.height * 0.04),
             SizedBox(
               height: sizeScreen.height * 0.06,
               child: ElevatedButton(

@@ -72,7 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   CustomTextField(
                     hintText: 'Nome Completo',
-                    prefixIconSize: 0.05,
+                    prefixIconSize: 0.04,
                     sizeScreen: sizeScreen,
                     prefixIcon: Icons.person,
                     controller: _nameController,
@@ -84,7 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(height: sizeScreen.height * 0.01),
                   CustomTextField(
                     hintText: 'CPF',
-                    prefixIconSize: 0.035,
+                    prefixIconSize: 0.025,
                     sizeScreen: sizeScreen,
                     controller: _cpfController,
                     suffixIcon: Container(width: 0),
@@ -96,7 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(height: sizeScreen.height * 0.01),
                   CustomTextField(
                     hintText: 'E-mail',
-                    prefixIconSize: 0.04,
+                    prefixIconSize: 0.027,
                     sizeScreen: sizeScreen,
                     controller: _emailController,
                     suffixIcon: Container(width: 0),
@@ -109,7 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   SizedBox(height: sizeScreen.height * 0.01),
                   CustomTextField(
                     hintText: 'Senha',
-                    prefixIconSize: 0.045,
+                    prefixIconSize: 0.035,
                     prefixIcon: Icons.lock, 
                     sizeScreen: sizeScreen, 
                     controller: _passwordController, 
@@ -121,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                       icon: Icon(
                         !_passwordVisible ? Icons.visibility_off : Icons.visibility,
-                        size: sizeScreen.height * 0.035,
+                        size: sizeScreen.height * 0.025,
                         color: const Color.fromARGB(255, 55, 111, 60),
                       ),
                       style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
@@ -133,7 +133,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: sizeScreen.height * 0.01),
                   CustomTextField(
-                    prefixIconSize: 0.045,
+                    prefixIconSize: 0.035,
                     prefixIcon: Icons.lock,
                     sizeScreen: sizeScreen,
                     hintText: 'Confirmar Senha',
@@ -146,7 +146,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       },
                       icon: Icon(
                         !_passwordConfirmVisible ? Icons.visibility_off : Icons.visibility,
-                        size: sizeScreen.height * 0.035,
+                        size: sizeScreen.height * 0.025,
                         color: const Color.fromARGB(255, 55, 111, 60),
                       ),
                       style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
