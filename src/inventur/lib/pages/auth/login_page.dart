@@ -62,46 +62,95 @@ class _LoginPageState extends State<LoginPage> {
               key: _formLogin,
               child: Column(
                 children: [
-                  CustomTextField(
-                    hintText: 'CPF',
-                    prefixIconSize: 0.025,
-                    sizeScreen: sizeScreen,
+                  // CustomTextField(
+                  //   hintText: 'CPF',
+                  //   prefixIconSize: 0.025,
+                  //   sizeScreen: sizeScreen,
+                  //   controller: _cpfController,
+                  //   suffixIcon: Container(width: 0),
+                  //   prefixIcon: FontAwesomeIcons.solidAddressCard,
+                  //   validator: (cpf) {
+                  //     return _cpfValidator.validate(cpf: cpf);
+                  //   },
+                  // ),
+                  TextFormField(
                     controller: _cpfController,
-                    suffixIcon: Container(width: 0),
-                    prefixIcon: FontAwesomeIcons.solidAddressCard,
+                    decoration: InputDecoration(
+                      hintText: 'CPF',
+                      isDense: true,
+                      prefixIcon: const Icon(
+                        FontAwesomeIcons.solidAddressCard,
+                        color: Color.fromARGB(255, 55, 111, 60)
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                      )
+                    ),
                     validator: (cpf) {
                       return _cpfValidator.validate(cpf: cpf);
                     },
                   ),
                   SizedBox(height: sizeScreen.height * 0.05),
-                  CustomTextField(
-                    hintText: 'Senha',
-                    prefixIconSize: 0.035,
-                    sizeScreen: sizeScreen,
-                    prefixIcon: Icons.lock,
+                  TextFormField(
                     controller: _passwordController,
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _passwordVisible = !_passwordVisible;
-                        });
-                      },
-                      icon: Icon(
-                        !_passwordVisible
-                        ? Icons.visibility_off
-                        : Icons.visibility,
-                        size: sizeScreen.height * 0.025,
-                        color: const Color.fromARGB(255, 55, 111, 60),
-                      ),
-                      style: const ButtonStyle(
-                        splashFactory: NoSplash.splashFactory
-                      ),
-                    ),
                     obscureText: !_passwordVisible,
+                    obscuringCharacter: '●',
+                    decoration: InputDecoration(
+                      hintText: 'Senha',
+                      isDense: true,
+                      prefixIcon: const Icon(
+                        Icons.lock,
+                        color:Color.fromARGB(255, 55, 111, 60)
+                      ),
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _passwordVisible = !_passwordVisible;
+                          });
+                        }, 
+                        icon: Icon(
+                          ! _passwordVisible
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                          color: const Color.fromARGB(255, 55, 111, 60)
+                        )
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)
+                      )
+                    ),
                     validator: (password) {
                       return _passwordValidator.validate(password: password);
                     },
                   ),
+                  // CustomTextField(
+                  //   hintText: 'Senha',
+                  //   prefixIconSize: 0.035,
+                  //   sizeScreen: sizeScreen,
+                  //   prefixIcon: Icons.lock,
+                  //   controller: _passwordController,
+                  //   suffixIcon: IconButton(
+                  //     onPressed: () {
+                  //       setState(() {
+                  //         _passwordVisible = !_passwordVisible;
+                  //       });
+                  //     },
+                  //     icon: Icon(
+                  //       !_passwordVisible
+                  //       ? Icons.visibility_off
+                  //       : Icons.visibility,
+                  //       size: sizeScreen.height * 0.025,
+                  //       color: const Color.fromARGB(255, 55, 111, 60),
+                  //     ),
+                  //     style: const ButtonStyle(
+                  //       splashFactory: NoSplash.splashFactory
+                  //     ),
+                  //   ),
+                  //   obscureText: !_passwordVisible,
+                  //   validator: (password) {
+                  //     return _passwordValidator.validate(password: password);
+                  //   },
+                  // ),
                 ],
               ),
             ),
