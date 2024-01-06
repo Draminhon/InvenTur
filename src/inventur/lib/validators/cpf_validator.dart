@@ -4,7 +4,9 @@ class CPFValidator {
 
     final cpfRegex = RegExp(
         r'^([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}-?[0-9]{2})|^([0-9]{11})$');
-    if (!cpfRegex.hasMatch(cpf.trim()) || !validateCheckDigits(cpf: cpf.trim())) return 'O CPF informado é inválido';
+    if (!cpfRegex.hasMatch(cpf.trim()) || !validateCheckDigits(cpf: cpf.trim())) {
+      return 'O CPF informado é inválido';
+    }
 
     return null;
   }
@@ -18,7 +20,7 @@ class CPFValidator {
     }
 
     firstCheckDigit %= 11;
-    firstCheckDigit = firstCheckDigit == 0 || firstCheckDigit == 1 
+    firstCheckDigit = firstCheckDigit < 2
     ? 0 
     : 11 - firstCheckDigit;
 
@@ -28,7 +30,7 @@ class CPFValidator {
     }
 
     secondCheckDigit %= 11;
-    secondCheckDigit = secondCheckDigit == 0 || secondCheckDigit == 1 
+    secondCheckDigit = secondCheckDigit < 2
     ? 0 
     : 11 - secondCheckDigit;
 
