@@ -184,12 +184,9 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
             Form(
               key: _formCodeValidator,
               child: CustomTextField(
-                hintText: 'Código',
-                prefixIconSize: 0.045,
+                labelText: 'Código',
                 prefixIcon: Icons.pin,
-                sizeScreen: sizeScreen,
                 controller: _codeController,
-                suffixIcon: Container(width: 0),
                 validator: (code) {
                   return _codeValidator.validate(expectedCode: _verificationCode, code: code);
                 },

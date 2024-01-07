@@ -16,10 +16,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  bool _passwordVisible = false;
-  bool _passwordConfirmVisible = false;
-
   final _formRegister = GlobalKey<FormState>();
+  
   final CPFValidator _cpfValidator = CPFValidator();
   final NameValidator _nameValidator = NameValidator();
   final EmailValidator _emailValidator = EmailValidator();
@@ -71,23 +69,17 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 children: [
                   CustomTextField(
-                    hintText: 'Nome Completo',
-                    prefixIconSize: 0.04,
-                    sizeScreen: sizeScreen,
+                    labelText: 'Nome Completo',
                     prefixIcon: Icons.person,
                     controller: _nameController,
-                    suffixIcon: Container(width: 0),
                     validator: (name) {
                       return _nameValidator.validate(name: name);
                     },
                   ),
                   SizedBox(height: sizeScreen.height * 0.01),
                   CustomTextField(
-                    hintText: 'CPF',
-                    prefixIconSize: 0.025,
-                    sizeScreen: sizeScreen,
+                    labelText: 'CPF',
                     controller: _cpfController,
-                    suffixIcon: Container(width: 0),
                     prefixIcon: FontAwesomeIcons.solidAddressCard,
                     validator: (cpf) {
                       return _cpfValidator.validate(cpf: cpf);
@@ -95,11 +87,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: sizeScreen.height * 0.01),
                   CustomTextField(
-                    hintText: 'E-mail',
-                    prefixIconSize: 0.027,
-                    sizeScreen: sizeScreen,
+                    labelText: 'E-mail',
                     controller: _emailController,
-                    suffixIcon: Container(width: 0),
                     keyboardType: TextInputType.emailAddress,
                     prefixIcon: FontAwesomeIcons.solidEnvelope,
                     validator: (email) {
@@ -108,50 +97,20 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   SizedBox(height: sizeScreen.height * 0.01),
                   CustomTextField(
-                    hintText: 'Senha',
-                    prefixIconSize: 0.035,
+                    labelText: 'Senha',
                     prefixIcon: Icons.lock, 
-                    sizeScreen: sizeScreen, 
                     controller: _passwordController, 
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _passwordVisible = !_passwordVisible;
-                        });
-                      },
-                      icon: Icon(
-                        !_passwordVisible ? Icons.visibility_off : Icons.visibility,
-                        size: sizeScreen.height * 0.025,
-                        color: const Color.fromARGB(255, 55, 111, 60),
-                      ),
-                      style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-                    ),
-                    obscureText: !_passwordVisible,
+                    isSecret: true,
                     validator: (password) {
                       return _passwordValidator.validate(password: password);
                     }, 
                   ),
                   SizedBox(height: sizeScreen.height * 0.01),
                   CustomTextField(
-                    prefixIconSize: 0.035,
-                    prefixIcon: Icons.lock,
-                    sizeScreen: sizeScreen,
-                    hintText: 'Confirmar Senha',
+                    prefixIcon: Icons.lock, 
+                    labelText: 'Confirmar Senha',
                     controller: _passwordConfirmController,
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _passwordConfirmVisible = !_passwordConfirmVisible;
-                        });
-                      },
-                      icon: Icon(
-                        !_passwordConfirmVisible ? Icons.visibility_off : Icons.visibility,
-                        size: sizeScreen.height * 0.025,
-                        color: const Color.fromARGB(255, 55, 111, 60),
-                      ),
-                      style: const ButtonStyle(splashFactory: NoSplash.splashFactory),
-                    ),
-                    obscureText: !_passwordConfirmVisible,
+                    isSecret: true,
                     validator: (passwordConfirm) {
                       return _passwordConfirmValidator.validate(
                         password: _passwordController.text,
@@ -167,16 +126,16 @@ class _RegisterPageState extends State<RegisterPage> {
               height: sizeScreen.height * 0.06,
               child: ElevatedButton(
                 onPressed: () {
-                  // if (_formRegister.currentState!.validate()){
-                  //   Navigator.push(
-                  //     context, 
-                  //     MaterialPageRoute(builder: (context) => EmailValidatorPage(email: _emailController.text)),
-                  //   );
-                  // }
-                  Navigator.push(
-                    context, 
-                    MaterialPageRoute(builder: (context) => EmailValidatorPage(email: _emailController.text)),
-                  );
+                  if (_formRegister.currentState!.validate()){
+                    Navigator.push(
+                      context, 
+                      MaterialPageRoute(builder: (context) => EmailValidatorPage(email: _emailController.text)),
+                    );
+                  }
+                  // Navigator.push(
+                  //   context, 
+                  //   MaterialPageRoute(builder: (context) => EmailValidatorPage(email: _emailController.text)),
+                  // );
                 },
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(

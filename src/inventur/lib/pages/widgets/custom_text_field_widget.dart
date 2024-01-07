@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatefulWidget {
-  final Size sizeScreen;
-  final String hintText;
-  final bool obscureText;
-  final Widget? suffixIcon;
+  final bool isSecret;
+  final String labelText;
   final IconData prefixIcon;
-  final double prefixIconSize;
   final String obscuringCharacter;
   final TextInputType keyboardType;
   final TextEditingController controller;
@@ -14,16 +11,13 @@ class CustomTextField extends StatefulWidget {
 
   const CustomTextField({
     super.key,
-    this.suffixIcon,
-    this.obscureText = false,
+    this.isSecret = false,
     this.obscuringCharacter = '●',
     this.keyboardType = TextInputType.text,
-    required this.hintText,
+    required this.labelText,
     required this.controller,
     required this.prefixIcon,
     required this.validator,
-    required this.sizeScreen,
-    required this.prefixIconSize,
   });
 
   @override
@@ -31,44 +25,53 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
+  bool obscureText = false;
+
+  @override
+  void initState() {
+    super.initState();
+    obscureText = widget.isSecret;
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      textAlign: TextAlign.center,
       controller: widget.controller,
+      validator: widget.validator,
+      obscureText: obscureText,
       obscuringCharacter: widget.obscuringCharacter,
       keyboardType: widget.keyboardType,
-      style: TextStyle(
-        color: Colors.black,
-        fontSize: widget.sizeScreen.height * 0.02,
-      ),
       decoration: InputDecoration(
         isDense: true,
         errorMaxLines: 3,
-        hintText: widget.hintText,
-        hintStyle: TextStyle(
-          color: Colors.grey,
-          fontSize: widget.sizeScreen.height * 0.02,
+        labelText: widget.labelText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10)
         ),
-        contentPadding: const EdgeInsets.only(top: 15),
-        enabledBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Color.fromARGB(255, 55, 111, 60))
-        ),
-        focusedBorder: const UnderlineInputBorder(
-          borderSide: BorderSide(
-            width: 2,
-            color: Color.fromARGB(255, 9, 145, 20)
-          ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
         ),
         prefixIcon: Icon(
           widget.prefixIcon,
-          size: widget.sizeScreen.height * widget.prefixIconSize,
           color: const Color.fromARGB(255, 55, 111, 60),
         ),
-        suffixIcon: widget.suffixIcon,
+        suffixIcon: widget.isSecret
+        ? IconButton(
+          onPressed: () {
+            setState(() {
+              obscureText = !obscureText;
+            });
+          }, 
+          icon: Icon(
+            obscureText
+            ? Icons.visibility
+            : Icons.visibility_off,
+            color: const Color.fromARGB(255, 55, 111, 60)
+          )
+        )
+        : null,
       ),
-      validator: widget.validator,
-      obscureText: widget.obscureText,
     );
   }
 }

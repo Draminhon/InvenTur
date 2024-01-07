@@ -11,7 +11,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _passwordVisible = false;
+  bool _passwordVisible = true;
 
   final _formLogin = GlobalKey<FormState>();
   final CPFValidator _cpfValidator = CPFValidator();
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 32,
-                  vertical: 40,
+                  vertical: 30,
                 ),
                 child: Form(
                   key: _formLogin,
@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                       TextFormField(
                         controller: _cpfController,
                         decoration: InputDecoration(
-                          hintText: 'CPF',
+                          labelText: 'CPF',
                           isDense: true,
                           prefixIcon: const Icon(
                             FontAwesomeIcons.solidAddressCard,
@@ -76,11 +76,12 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: sizeScreen.height * 0.02),
                       TextFormField(
                         controller: _passwordController,
-                        obscureText: !_passwordVisible,
+                        obscureText: _passwordVisible,
                         obscuringCharacter: '●',
                         decoration: InputDecoration(
-                          hintText: 'Senha',
+                          labelText: 'Senha',
                           isDense: true,
+                          errorMaxLines: 3,
                           prefixIcon: const Icon(
                             Icons.lock,
                             color:Color.fromARGB(255, 55, 111, 60)
@@ -92,9 +93,9 @@ class _LoginPageState extends State<LoginPage> {
                               });
                             }, 
                             icon: Icon(
-                              ! _passwordVisible
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                              _passwordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
                               color: const Color.fromARGB(255, 55, 111, 60)
                             )
                           ),
