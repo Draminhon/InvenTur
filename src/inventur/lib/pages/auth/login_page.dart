@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:inventur/pages/widgets/custom_text_field_widget.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 
@@ -11,11 +12,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool _passwordVisible = true;
-
   final _formLoginKey = GlobalKey<FormState>();
+
   final CPFValidator _cpfValidator = CPFValidator();
   final PasswordValidator _passwordValidator = PasswordValidator();
+
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -25,7 +26,6 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       body: SingleChildScrollView(
-        reverse: true,
         child: SizedBox(
           width: sizeScreen.width,
           height: sizeScreen.height,
@@ -43,70 +43,27 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 30,
-                ),
+                padding: const EdgeInsets.all(20),
                 child: Form(
                   key: _formLoginKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      TextFormField(
+                      CustomTextField(
+                        labelText: 'CPF',
                         controller: _cpfController,
-                        decoration: InputDecoration(
-                          labelText: 'CPF',
-                          isDense: true,
-                          prefixIcon: const Icon(
-                            FontAwesomeIcons.solidAddressCard,
-                            color: Color.fromARGB(255, 55, 111, 60)
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
-                          )
-                        ),
+                        keyboardType: TextInputType.number,
+                        prefixIcon: FontAwesomeIcons.solidAddressCard,
                         validator: (cpf) {
                           return _cpfValidator.validate(cpf: cpf);
                         },
                       ),
                       SizedBox(height: sizeScreen.height * 0.02),
-                      TextFormField(
-                        controller: _passwordController,
-                        obscureText: _passwordVisible,
-                        obscuringCharacter: '●',
-                        decoration: InputDecoration(
-                          labelText: 'Senha',
-                          isDense: true,
-                          errorMaxLines: 3,
-                          prefixIcon: const Icon(
-                            Icons.lock,
-                            color:Color.fromARGB(255, 55, 111, 60)
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _passwordVisible = !_passwordVisible;
-                              });
-                            }, 
-                            icon: Icon(
-                              _passwordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                              color: const Color.fromARGB(255, 55, 111, 60)
-                            )
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10)
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
-                          )
-                        ),
+                      CustomTextField(
+                        isSecret: true,
+                        labelText: 'Senha',
+                        controller: _passwordController, 
+                        prefixIcon: Icons.lock,
                         validator: (password) {
                           return _passwordValidator.validate(password: password);
                         },

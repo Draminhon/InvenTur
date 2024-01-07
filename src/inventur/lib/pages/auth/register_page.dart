@@ -44,15 +44,15 @@ class RegisterPage extends StatelessWidget {
                     child: Center(
                       child: Image.asset(
                         'assets/images/logo.png',
-                        height: sizeScreen.height * 0.27,
+                        height: sizeScreen.height * 0.35,
                       ),
                     ),
                   ),
                   Container(
                     padding: const EdgeInsets.only(
-                      left: 32,
-                      right: 32,
-                      bottom: 25,
+                      left: 20,
+                      right: 20,
+                      bottom: 20,
                     ),
                     child: Form(
                       key: _formRegisterKey,
@@ -161,14 +161,16 @@ class RegisterPage extends StatelessWidget {
               ),
               Positioned(
                 top: 10,
-                left: 10,
+                left: 5,
                 child: SafeArea(
                   child: IconButton(
+                    tooltip: 'Voltar',
                     onPressed: () {
                       Navigator.pop(context);
                     },
                     icon: const Icon(
-                      Icons.arrow_back_ios_new,
+                      Icons.arrow_back_ios,
+                      color: Color.fromARGB(255, 9, 145, 20),
                     ),
                   ),
                 ),
