@@ -13,7 +13,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _passwordVisible = true;
 
-  final _formLogin = GlobalKey<FormState>();
+  final _formLoginKey = GlobalKey<FormState>();
   final CPFValidator _cpfValidator = CPFValidator();
   final PasswordValidator _passwordValidator = PasswordValidator();
   final TextEditingController _cpfController = TextEditingController();
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
                   vertical: 30,
                 ),
                 child: Form(
-                  key: _formLogin,
+                  key: _formLoginKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -134,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                             )
                           ),
                           onPressed: () {
-                            if (_formLogin.currentState!.validate()) {
+                            if (_formLoginKey.currentState!.validate()) {
                               Navigator.pushNamed(context, '/AdminHome');
                             }
                           }, 

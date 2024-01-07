@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/pages/auth/login_page.dart';
 import 'package:inventur/pages/auth/register_page.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+    [DeviceOrientation.portraitUp]
+  );
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -21,7 +28,7 @@ class MyApp extends StatelessWidget {
       home: const LoginPage(),
       routes: {
         '/Login': (_) => const LoginPage(),
-        '/Register': (_) => const RegisterPage(),
+        '/Register': (_) => RegisterPage(),
         '/AdminHome': (_) => const AdminHomePage(),
       },
     );
