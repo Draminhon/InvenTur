@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+List<String> statusItems = ['Pendente', 'Ativo', 'Não Ativo'];
+
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
 
@@ -11,6 +13,8 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
   int currentPageIndex = 0;
   int currentManageIndex = 0;
+
+  String dropValue = statusItems.first;
 
   @override
   Widget build(BuildContext context) {
@@ -86,9 +90,73 @@ class _AdminHomePageState extends State<AdminHomePage> {
               ? ListView(
                 padding: EdgeInsets.zero,
                 children: [
-                  Container(
-                    height: 200,
-                    color: Colors.red,
+                  // Container(
+                  //   height: 200,
+                  //   color: Colors.red,
+                  // ),
+                  Card(
+                    child: Container(
+                      padding: EdgeInsets.only(
+                        left: 12,
+                        top: 5,
+                        right: 2,
+                        bottom: 5
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    value: false, 
+                                    onChanged: (selected) {}
+                                  ),
+                                  Text('Nome')
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Text('Status: '),
+                                  
+                                  // DropdownButton(
+                                  //   isDense: true,
+                                  //   value: dropValue,
+                                  //   dropdownColor: Colors.green[100],
+                                  //   alignment: AlignmentDirectional.center,
+                                  //   borderRadius: const BorderRadius.all(Radius.circular(10)),
+                                  //   items: statusItems.map<DropdownMenuItem<String>>((String status) {
+                                  //     return DropdownMenuItem<String>(
+                                  //       value: status,
+                                  //       child: Text(status),
+                                  //     );
+                                  //   }).toList(), 
+                                  //   onChanged: (value) {
+                                  //     setState(() {
+                                  //       dropValue = value!;
+                                  //     });
+                                  //   }
+                                  // ),
+                                ],
+                              )
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              IconButton(
+                                onPressed: () {}, 
+                                icon: Icon(Icons.edit)
+                              ),
+                              IconButton(
+                                onPressed: () {}, 
+                                icon: Icon(Icons.delete)
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
                   ),
                 ],
               )
