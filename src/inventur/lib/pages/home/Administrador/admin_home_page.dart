@@ -24,6 +24,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         length: 2,
         child: Scaffold(
           drawer: const Drawer(
+            backgroundColor: Color.fromARGB(255, 245, 245, 245),
             child: Column(
               children: [
                 UserAccountsDrawerHeader(
@@ -31,40 +32,17 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   accountEmail: Text('accountEmail'),
                   currentAccountPicture: CircleAvatar(
                     child: Icon(
-                      Icons.person,
+                      Icons.admin_panel_settings,
                       size: 65,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
           appBar: AppBar(
-            foregroundColor: Colors.white,
-            backgroundColor: const Color.fromARGB(255, 55, 111, 60),
-            bottom: currentPageIndex == 0
-            ? TabBar(
-              onTap: (int index) {
-                setState(() {
-                  currentManageIndex = index;
-                });
-              },
-              indicatorWeight: 0.5,
-              labelColor: Colors.black,
-              indicatorColor: Colors.black,
-              unselectedLabelColor: Colors.white,
-              tabs: const [
-                Tab(
-                  text: 'Gerenciar Pesquisadores',
-                  icon: Icon(Icons.supervised_user_circle)
-                ),
-                Tab(
-                  text: 'Gerenciar Administradores',
-                  icon: Icon(Icons.directions_transit)
-                )
-              ]
-            )
-            : null,
+            foregroundColor: const Color.fromARGB(255, 55, 111, 60),
+            backgroundColor: Colors.white,
           ),
           floatingActionButton: currentPageIndex == 0
           ? FloatingActionButton(
@@ -103,6 +81,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           body: <Widget>[
             Container(
               padding: const EdgeInsets.all(10),
+              color: const Color.fromARGB(255, 245, 245, 245),
               child: currentManageIndex == 0
               ? ListView(
                 padding: EdgeInsets.zero,
