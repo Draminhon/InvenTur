@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inventur/pages/widgets/user_card_widget.dart';
 
 List<String> statusItems = ['Pendente', 'Ativo', 'Não Ativo'];
 
@@ -15,6 +16,18 @@ class _AdminHomePageState extends State<AdminHomePage> {
   int currentManageIndex = 0;
 
   String dropValue = statusItems.first;
+
+  final List<List<String>> users = [
+    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
+    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
+    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
+    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
+    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
+    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
+    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
+    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
+    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -86,84 +99,15 @@ class _AdminHomePageState extends State<AdminHomePage> {
             Container(
               padding: const EdgeInsets.all(10),
               color: const Color.fromARGB(255, 245, 245, 245),
-              child: currentManageIndex == 0
-              ? ListView(
-                padding: EdgeInsets.zero,
-                children: [
-                  // Container(
-                  //   height: 200,
-                  //   color: Colors.red,
-                  // ),
-                  Card(
-                    child: Container(
-                      padding: EdgeInsets.only(
-                        left: 12,
-                        top: 5,
-                        right: 2,
-                        bottom: 5
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    value: false, 
-                                    onChanged: (selected) {}
-                                  ),
-                                  Text('Nome')
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Text('Status: '),
-                                  
-                                  // DropdownButton(
-                                  //   isDense: true,
-                                  //   value: dropValue,
-                                  //   dropdownColor: Colors.green[100],
-                                  //   alignment: AlignmentDirectional.center,
-                                  //   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                                  //   items: statusItems.map<DropdownMenuItem<String>>((String status) {
-                                  //     return DropdownMenuItem<String>(
-                                  //       value: status,
-                                  //       child: Text(status),
-                                  //     );
-                                  //   }).toList(), 
-                                  //   onChanged: (value) {
-                                  //     setState(() {
-                                  //       dropValue = value!;
-                                  //     });
-                                  //   }
-                                  // ),
-                                ],
-                              )
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              IconButton(
-                                onPressed: () {}, 
-                                icon: Icon(Icons.edit)
-                              ),
-                              IconButton(
-                                onPressed: () {}, 
-                                icon: Icon(Icons.delete)
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    )
-                  ),
-                ],
-              )
-              : Container(
-                width: 200,
-                height: 200,
-                color: Colors.blue,
+              child: ListView.builder(
+                itemCount: users.length,
+                itemBuilder: (context, index) {
+                  return UserCard(
+                    nome: users[index][0], 
+                    cpf: users[index][1], 
+                    email: users[index][2]
+                  );
+                }
               )
             ),
             Container(
