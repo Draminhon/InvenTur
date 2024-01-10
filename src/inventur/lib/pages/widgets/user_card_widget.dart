@@ -32,6 +32,7 @@ class _UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 5,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
