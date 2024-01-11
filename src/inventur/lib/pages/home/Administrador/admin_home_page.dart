@@ -147,7 +147,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           },
                           child: Row(
                             children: [
-                              const Icon(Icons.filter_alt),
+                              const Icon(
+                                Icons.filter_alt,
+                                color: Colors.black,
+                              ),
                               SizedBox(
                                 width: 100,
                                 child: Text(
@@ -168,6 +171,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           borderRadius: BorderRadius.circular(30)
                         ),
                         child: DropdownButton(
+                          icon: const Icon(Icons.group),
+                          iconEnabledColor: Colors.black,
                           isDense: true,
                           underline: Container(),
                           value: currentTypeUser,
