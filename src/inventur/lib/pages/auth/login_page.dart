@@ -91,9 +91,10 @@ class _LoginPageState extends State<LoginPage> {
                             )
                           ),
                           onPressed: () {
-                            if (_formLoginKey.currentState!.validate()) {
-                              Navigator.pushNamed(context, '/AdminHome');
-                            }
+                            // if (_formLoginKey.currentState!.validate()) {
+                            //   Navigator.pushNamed(context, '/AdminHome');
+                            // }
+                            Navigator.pushNamed(context, '/AdminHome');
                           }, 
                           child: const Text(
                             'Entrar',

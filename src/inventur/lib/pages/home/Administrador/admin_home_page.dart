@@ -12,8 +12,10 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
   int currentPageIndex = 0;
   String currentTypeUser = 'Pesquisador';
+  String selectedFilter = 'Todos';
 
   final List<String> typesUsers = ['Pesquisador', 'Administrador'];
+  final List<String> filters = ['Todos', 'Ativo', 'Não Ativo', 'Aguardando Aprovação'];
 
   final List<List<String>> users = [
     ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
@@ -113,48 +115,76 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     ],
                   )
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    TextButton(
-                      onPressed: () {}, 
-                      child: const Row(
-                        children: [
-                          Icon(Icons.filter_alt),
-                          Text(
-                            "Filtro",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold
-                            ),
-                          )
-                        ],
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(left: 13),
+                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(30)
+                        ),
+                        child: PopupMenuButton(
+                          tooltip: 'Filtro selecionado',
+                          surfaceTintColor: Colors.white,
+                          initialValue: selectedFilter,
+                          itemBuilder: (context) {
+                            return filters.map<PopupMenuItem<String>>((String filter) {
+                              return PopupMenuItem(
+                                value: filter,
+                                child: Text(filter)
+                              );
+                            }).toList();
+                          },
+                          onSelected: (String filter) {
+                            setState(() {
+                              selectedFilter = filter;
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(Icons.filter_alt),
+                              SizedBox(
+                                width: 100,
+                                child: Text(
+                                  selectedFilter, 
+                                  textAlign: TextAlign.end,
+                                  overflow: TextOverflow.ellipsis,
+                                )
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(right: 13),
+                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(30)
+                        ),
+                        child: DropdownButton(
+                          isDense: true,
+                          underline: Container(),
+                          value: currentTypeUser,
+                          items: typesUsers.map<DropdownMenuItem<String>>((String type) {
+                            return DropdownMenuItem(
+                              value: type,
+                              child: Text(type)
+                            );
+                          }).toList(), 
+                          onChanged: (value) {
+                            setState(() {
+                              currentTypeUser = value!;
+                            });
+                          }
+                        ),
                       )
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(right: 13),
-                      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(30)
-                      ),
-                      child: DropdownButton(
-                        isDense: true,
-                        underline: Container(),
-                        value: currentTypeUser,
-                        items: typesUsers.map<DropdownMenuItem<String>>((String type) {
-                          return DropdownMenuItem(
-                            value: type,
-                            child: Text(type)
-                          );
-                        }).toList(), 
-                        onChanged: (value) {
-                          setState(() {
-                            currentTypeUser = value!;
-                          });
-                        }
-                      ),
-                    )
-                  ],
+                    ],
+                  ),
                 ),
                 Container(
                   height: 477,
