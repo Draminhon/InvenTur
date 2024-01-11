@@ -40,6 +40,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
       home: DefaultTabController(
         length: 2,
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: const Color.fromARGB(255, 245, 245, 245),
           drawer: const Drawer(
             backgroundColor: Color.fromARGB(255, 245, 245, 245),
@@ -100,7 +101,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             Column(
               children: [
                 Container(
-                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                   height: 40,
                   child: SearchBar(
                     elevation: MaterialStateProperty.all(2),
@@ -188,7 +189,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 ),
                 Container(
                   height: 477,
-                  padding: const EdgeInsets.only(left:10, right: 10, bottom: 10),
+                  padding: const EdgeInsets.only(left:10, top: 5, right: 10, bottom: 10),
                   child: ListView.builder(
                     itemCount: users.length,
                     itemBuilder: (context, index) {
