@@ -32,6 +32,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
     ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
     ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
   ];
+
+  void incrementUsersSelecteds() {
+    setState(() {
+      contUsersSelecteds++;
+    });
+  }
   
   @override
   void initState() {
@@ -51,6 +57,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
         length: 2,
         child: Scaffold(
           resizeToAvoidBottomInset: false,
+          floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
           backgroundColor: const Color.fromARGB(255, 245, 245, 245),
           drawer: const Drawer(
             backgroundColor: Color.fromARGB(255, 245, 245, 245),
@@ -73,27 +80,30 @@ class _AdminHomePageState extends State<AdminHomePage> {
             foregroundColor: const Color.fromARGB(255, 55, 111, 60),
             backgroundColor: Colors.white,
           ),
-          floatingActionButton: currentPageIndex == 0
-          ? FloatingActionButton(
-            onPressed: () {},
-            shape: const CircleBorder(),
-            tooltip: currentTypeUser == 'Administrador'
-              ? 'Adicionar Administrador'
-              : 'Adicionar Pesquisador',
-            foregroundColor: Colors.white,
-            backgroundColor: const Color.fromARGB(255, 55, 111, 60),
-            child: const Icon(
-              Icons.person_add_alt_1_rounded,
-              size: 35,
-            ),
-          )
-          : null,
+          floatingActionButton: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: currentPageIndex == 0
+            ? FloatingActionButton(
+              onPressed: () {},
+              shape: const CircleBorder(),
+              tooltip: currentTypeUser == 'Administrador'
+                ? 'Adicionar Administrador'
+                : 'Adicionar Pesquisador',
+              foregroundColor: Colors.white,
+              backgroundColor: const Color.fromARGB(255, 55, 111, 60),
+              child: const Icon(
+                Icons.person_add_alt_1_rounded,
+                size: 35,
+              ),
+            )
+            : null,
+          ),
           bottomNavigationBar: BottomNavigationBar(
             onTap: (page) {
               pageController.animateToPage(
                 page, 
                 duration: const Duration(milliseconds: 400), 
-                curve: Curves.ease
+                curve: Curves.linear
               );
             },
             currentIndex: currentPageIndex,
@@ -104,7 +114,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 label: 'Gerenciar Usuários'
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.business),
+                icon: Icon(Icons.insert_chart),
                 label: 'Business'
               ),
             ],
@@ -174,6 +184,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         itemCount: users.length,
                         itemBuilder: (context, index) {
                           return UserCard(
+                            callback: incrementUsersSelecteds,
                             nome: users[index][0], 
                             cpf: users[index][1], 
                             email: users[index][2]

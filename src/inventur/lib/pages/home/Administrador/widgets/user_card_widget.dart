@@ -4,9 +4,11 @@ class UserCard extends StatefulWidget {
   final String nome;
   final String cpf;
   final String email;
+  final Function? callback;
 
   const UserCard({
     super.key,
+    this.callback,
     required this.nome,
     required this.cpf,
     required this.email
@@ -56,6 +58,7 @@ class _UserCardState extends State<UserCard> {
                             value: isSelected, 
                             visualDensity: VisualDensity.compact,
                             onChanged: (value) {
+                              widget.callback!();
                               setState(() {
                                 isSelected = value!;
                               });
@@ -122,38 +125,45 @@ class _UserCardState extends State<UserCard> {
                 ),
                 borderRadius: BorderRadius.circular(30)
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    'Status: ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 17
+              child: PopupMenuButton(
+                tooltip: 'Status do pesquisador',
+                initialValue: dropValue,
+                surfaceTintColor: Colors.white,
+                itemBuilder: (context) {
+                  return statusItems.map<PopupMenuItem<String>>((String value) {
+                    return PopupMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList();
+                },
+                onSelected: (String value) {
+                  setState(() {
+                    dropValue = value;
+                    if (dropValue == 'Aguardando Aprovação') statusColor = Colors.orangeAccent[400]!;
+                    if (dropValue == 'Ativo') statusColor = Colors.greenAccent[700]!;
+                    if (dropValue == 'Não Ativo') statusColor = Colors.redAccent[400]!;
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Status:',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 15
+                      ),
                     ),
-                  ),
-                  DropdownButton(
-                    isDense: true,
-                    value: dropValue,
-                    underline: Container(),
-                    iconEnabledColor: Colors.black,
-                    alignment: AlignmentDirectional.centerEnd,
-                    items: statusItems.map<DropdownMenuItem<String>>((String status) {
-                      return DropdownMenuItem(
-                        value: status,
-                        child: Text(status)
-                      );
-                    }).toList(), 
-                    onChanged: (value) {
-                      setState(() {
-                        dropValue = value!;
-                        if (dropValue == 'Aguardando Aprovação') statusColor = Colors.orangeAccent[400]!;
-                        if (dropValue == 'Ativo') statusColor = Colors.greenAccent[700]!;
-                        if (dropValue == 'Não Ativo') statusColor = Colors.redAccent[400]!;
-                      });
-                    },
-                  ),
-                ],
+                    Text(
+                      dropValue,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    const Icon(Icons.keyboard_arrow_down)
+                  ],
+                ),
               ),
             )
           ],

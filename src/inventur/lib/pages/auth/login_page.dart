@@ -105,16 +105,19 @@ class _LoginPageState extends State<LoginPage> {
                           )
                         )
                       ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: TextButton(
-                          onPressed: () {},
-                          child: const Text(
-                            'Esqueceu sua senha?',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 55, 111, 60),
-                              decoration: TextDecoration.underline,
-                              decorationColor: Color.fromARGB(255, 55, 111, 60),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: const Text(
+                              'Esqueceu sua senha?',
+                              style: TextStyle(
+                                color: Color.fromARGB(255, 55, 111, 60),
+                                decoration: TextDecoration.underline,
+                                decorationColor: Color.fromARGB(255, 55, 111, 60),
+                              ),
                             ),
                           ),
                         ),
