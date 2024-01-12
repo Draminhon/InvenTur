@@ -33,6 +33,10 @@ class _PopupMenuState extends State<PopupMenu> {
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
       decoration: BoxDecoration(
         color: Colors.green,
+        border: Border.all(
+          width: 1,
+          color: Theme.of(context).primaryColor
+        ),
         borderRadius: BorderRadius.circular(30)
       ),
       child: PopupMenuButton(

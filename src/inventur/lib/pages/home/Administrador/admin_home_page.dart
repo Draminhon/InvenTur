@@ -14,9 +14,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
   int currentPageIndex = 0;
   String currentTypeUser = 'Pesquisador';
   String selectedFilter = 'Todos';
+  int contUsersSelecteds = 0;
 
   late PageController pageController;
-
+  
   final List<String> typesUsers = ['Pesquisador', 'Administrador'];
   final List<String> filters = ['Todos', 'Ativo', 'Não Ativo', 'Aguardando Aprovação'];
 
@@ -122,6 +123,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     margin: const EdgeInsets.only(left: 10, top: 8, right: 10, bottom: 2),
                     height: 40,
                     child: SearchBar(
+                      backgroundColor: MaterialStateProperty.all(Colors.white),
+                      surfaceTintColor: MaterialStateProperty.all(Colors.white),
                       elevation: MaterialStateProperty.all(2),
                       trailing: [
                         IconButton(
@@ -154,11 +157,13 @@ class _AdminHomePageState extends State<AdminHomePage> {
                             )
                           ],
                         ),
-                        // Row(
-                        //   children: [
-                        //     Text('Usuários selecionados')
-                        //   ],
-                        // )
+                        contUsersSelecteds > 0
+                        ? Row(
+                          children: [
+                            Text('$contUsersSelecteds Usuário(s) selecionado(s)')
+                          ],
+                        )
+                        : Container()
                       ],
                     ),
                   ),

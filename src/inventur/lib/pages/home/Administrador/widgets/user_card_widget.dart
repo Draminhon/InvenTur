@@ -33,6 +33,8 @@ class _UserCardState extends State<UserCard> {
   Widget build(BuildContext context) {
     return Card(
       elevation: 5,
+      color: Colors.white,
+      surfaceTintColor: Colors.white,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 10),
         child: Column(
@@ -115,6 +117,9 @@ class _UserCardState extends State<UserCard> {
               padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
               decoration: BoxDecoration(
                 color: statusColor,
+                border: Border.all(
+                  width: 0.5,
+                ),
                 borderRadius: BorderRadius.circular(30)
               ),
               child: Row(
