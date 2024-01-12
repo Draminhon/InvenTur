@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:inventur/pages/widgets/user_card_widget.dart';
+import 'package:inventur/pages/home/Administrador/widgets/popup_menu_widget.dart';
+import 'package:inventur/pages/home/Administrador/widgets/user_card_widget.dart';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
@@ -13,6 +14,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
   int currentPageIndex = 0;
   String currentTypeUser = 'Pesquisador';
   String selectedFilter = 'Todos';
+
+  late PageController pageController;
 
   final List<String> typesUsers = ['Pesquisador', 'Administrador'];
   final List<String> filters = ['Todos', 'Ativo', 'Não Ativo', 'Aguardando Aprovação'];
@@ -28,6 +31,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
     ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
     ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
   ];
+  
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController(initialPage: currentPageIndex);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +76,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           ? FloatingActionButton(
             onPressed: () {},
             shape: const CircleBorder(),
-            tooltip: currentTypeUser == 'Pesquisador'
+            tooltip: currentTypeUser == 'Administrador'
               ? 'Adicionar Administrador'
               : 'Adicionar Pesquisador',
             foregroundColor: Colors.white,
@@ -79,10 +88,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
           )
           : null,
           bottomNavigationBar: BottomNavigationBar(
-            onTap: (int index) {
-              setState(() {
-                currentPageIndex = index;
-              });
+            onTap: (page) {
+              pageController.animateToPage(
+                page, 
+                duration: const Duration(milliseconds: 400), 
+                curve: Curves.ease
+              );
             },
             currentIndex: currentPageIndex,
             selectedItemColor: const Color.fromARGB(255, 55, 111, 60),
@@ -97,123 +108,84 @@ class _AdminHomePageState extends State<AdminHomePage> {
               ),
             ],
           ),
-          body: <Widget>[
-            Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
-                  height: 40,
-                  child: SearchBar(
-                    elevation: MaterialStateProperty.all(2),
-                    trailing: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.search,
-                          color: Color.fromARGB(255, 55, 111, 60),
+          body: PageView(
+            controller: pageController,
+            onPageChanged: (page) {
+              setState(() {
+                currentPageIndex = page;
+              });
+            },
+            children: [
+              Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(left: 10, top: 8, right: 10, bottom: 2),
+                    height: 40,
+                    child: SearchBar(
+                      elevation: MaterialStateProperty.all(2),
+                      trailing: [
+                        IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.search,
+                            color: Color.fromARGB(255, 55, 111, 60),
+                          )
                         )
-                      )
-                    ],
-                  )
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(left: 13),
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(30)
-                        ),
-                        child: PopupMenuButton(
-                          tooltip: 'Filtro selecionado',
-                          surfaceTintColor: Colors.white,
-                          initialValue: selectedFilter,
-                          itemBuilder: (context) {
-                            return filters.map<PopupMenuItem<String>>((String filter) {
-                              return PopupMenuItem(
-                                value: filter,
-                                child: Text(filter)
-                              );
-                            }).toList();
-                          },
-                          onSelected: (String filter) {
-                            setState(() {
-                              selectedFilter = filter;
-                            });
-                          },
-                          child: Row(
-                            children: [
-                              const Icon(
-                                Icons.filter_alt,
-                                color: Colors.black,
-                              ),
-                              SizedBox(
-                                width: 100,
-                                child: Text(
-                                  selectedFilter, 
-                                  textAlign: TextAlign.end,
-                                  overflow: TextOverflow.ellipsis,
-                                )
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 13),
-                        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.green,
-                          borderRadius: BorderRadius.circular(30)
-                        ),
-                        child: DropdownButton(
-                          icon: const Icon(Icons.group),
-                          iconEnabledColor: Colors.black,
-                          isDense: true,
-                          underline: Container(),
-                          value: currentTypeUser,
-                          items: typesUsers.map<DropdownMenuItem<String>>((String type) {
-                            return DropdownMenuItem(
-                              value: type,
-                              child: Text(type)
-                            );
-                          }).toList(), 
-                          onChanged: (value) {
-                            setState(() {
-                              currentTypeUser = value!;
-                            });
-                          }
-                        ),
-                      )
-                    ],
+                      ],
+                    )
                   ),
-                ),
-                Container(
-                  height: 477,
-                  padding: const EdgeInsets.only(left:10, top: 5, right: 10, bottom: 10),
-                  child: ListView.builder(
-                    itemCount: users.length,
-                    itemBuilder: (context, index) {
-                      return UserCard(
-                        nome: users[index][0], 
-                        cpf: users[index][1], 
-                        email: users[index][2]
-                      );
-                    }
-                  )
-                ),
-              ],
-            ),
-            Container(
-              width: 200,
-              height: 200,
-              color: Colors.green,
-            )
-          ][currentPageIndex],
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            PopupMenu(
+                              itens: filters, 
+                              popupIcon: Icons.filter_alt,
+                              tooltip: 'Filtro selecionado',
+                            ),
+                            PopupMenu(
+                              itens: typesUsers, 
+                              popupIcon: Icons.group,
+                              rightIconPosition: false,
+                              tooltip: 'Grupo selecionado',
+                            )
+                          ],
+                        ),
+                        // Row(
+                        //   children: [
+                        //     Text('Usuários selecionados')
+                        //   ],
+                        // )
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.only(left:10, right: 10),
+                      child: ListView.builder(
+                        itemCount: users.length,
+                        itemBuilder: (context, index) {
+                          return UserCard(
+                            nome: users[index][0], 
+                            cpf: users[index][1], 
+                            email: users[index][2]
+                          );
+                        }
+                      )
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: 200,
+                height: 200,
+                color: Colors.green,
+              )
+            ],
+          ),
         ),
       ),
     );
