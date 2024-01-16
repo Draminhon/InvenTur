@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:inventur/models/user_model.dart';
 
 class UserCard extends StatefulWidget {
-  final String nome;
-  final String cpf;
-  final String email;
+  final UserModel user;
   final Function? callback;
 
   const UserCard({
     super.key,
     this.callback,
-    required this.nome,
-    required this.cpf,
-    required this.email
+    required this.user,
   });
 
   @override
@@ -21,14 +18,18 @@ class UserCard extends StatefulWidget {
 class _UserCardState extends State<UserCard> {
   final List<String> statusItems = ['Aguardando Aprovação', 'Ativo', 'Não Ativo'];
   late String dropValue;
-
-  Color statusColor = Colors.orange;
-  bool isSelected = false;
+  late bool isSelected;
+  late Color statusColor;
 
   @override
   void initState() {
     super.initState();
-    dropValue = statusItems.first;
+    dropValue = widget.user.status;
+    isSelected = widget.user.isSelected;
+
+    if (dropValue == 'Aguardando Aprovação') statusColor = Colors.orangeAccent[400]!;
+    if (dropValue == 'Ativo') statusColor = Colors.greenAccent[700]!;
+    if (dropValue == 'Não Ativo') statusColor = Colors.redAccent[400]!;
   }
 
   @override
@@ -58,14 +59,15 @@ class _UserCardState extends State<UserCard> {
                             value: isSelected, 
                             visualDensity: VisualDensity.compact,
                             onChanged: (value) {
-                              widget.callback!();
+                              widget.callback!(value);
+                              widget.user.isSelected = value!;
                               setState(() {
-                                isSelected = value!;
+                                isSelected = value;
                               });
                             },
                           ),
                           Text(
-                            widget.nome,
+                            widget.user.nome,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18
                             ),
@@ -79,13 +81,13 @@ class _UserCardState extends State<UserCard> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            widget.cpf,
+                            widget.user.cpf,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18
                             ),
                           ),
                           Text(
-                            widget.email,
+                            widget.user.email,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold, fontSize: 18
                             ),
@@ -138,8 +140,9 @@ class _UserCardState extends State<UserCard> {
                   }).toList();
                 },
                 onSelected: (String value) {
+                  dropValue = value;
+                  widget.user.status = value;
                   setState(() {
-                    dropValue = value;
                     if (dropValue == 'Aguardando Aprovação') statusColor = Colors.orangeAccent[400]!;
                     if (dropValue == 'Ativo') statusColor = Colors.greenAccent[700]!;
                     if (dropValue == 'Não Ativo') statusColor = Colors.redAccent[400]!;

@@ -5,11 +5,13 @@ class PopupMenu extends StatefulWidget {
   final String? tooltip;
   final bool rightIconPosition;
   final IconData popupIcon;
+  final Function? insertFilter;
 
   const PopupMenu({
     super.key,
     this.tooltip,
     this.rightIconPosition = true,
+    this.insertFilter,
     required this.itens,
     required this.popupIcon,
   });
@@ -52,6 +54,7 @@ class _PopupMenuState extends State<PopupMenu> {
           }).toList();
         },
         onSelected: (String value) {
+          widget.insertFilter!(value);
           setState(() {
             selectedItem = value;
           });

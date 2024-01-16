@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/home/Administrador/widgets/popup_menu_widget.dart';
 import 'package:inventur/pages/home/Administrador/widgets/user_card_widget.dart';
 
@@ -21,21 +22,35 @@ class _AdminHomePageState extends State<AdminHomePage> {
   final List<String> typesUsers = ['Pesquisador', 'Administrador'];
   final List<String> filters = ['Todos', 'Ativo', 'Não Ativo', 'Aguardando Aprovação'];
 
-  final List<List<String>> users = [
-    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
-    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
-    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
-    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
-    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
-    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
-    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
-    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
-    ["Tiago Alves de Lima", "000.000.000-00", "teste@teste.com"],
+  final List<UserModel> users = [
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Ativo"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Não Ativo"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Ativo"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Não Ativo"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
   ];
 
-  void incrementUsersSelecteds() {
+  void incrementUsersSelecteds(bool value) {
     setState(() {
-      contUsersSelecteds++;
+      value 
+      ? contUsersSelecteds++
+      : contUsersSelecteds--;
+    });
+  }
+
+  void insertFilter(value) {
+    selectedFilter = value;
+    setState(() {
+      
     });
   }
   
@@ -163,6 +178,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                               itens: filters, 
                               popupIcon: Icons.filter_alt,
                               tooltip: 'Filtro selecionado',
+                              insertFilter: insertFilter,
                             ),
                             PopupMenu(
                               itens: typesUsers, 
@@ -190,9 +206,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         itemBuilder: (context, index) {
                           return UserCard(
                             callback: incrementUsersSelecteds,
-                            nome: users[index][0], 
-                            cpf: users[index][1], 
-                            email: users[index][2]
+                            user: users[index],
                           );
                         }
                       )
