@@ -82,7 +82,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           ),
           floatingActionButton: AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
-            child: currentPageIndex == 0
+            child: currentPageIndex == 1
             ? FloatingActionButton(
               onPressed: () {},
               shape: const CircleBorder(),
@@ -110,12 +110,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
             selectedItemColor: const Color.fromARGB(255, 55, 111, 60),
             items: const <BottomNavigationBarItem> [
               BottomNavigationBarItem(
-                icon: Icon(Icons.groups),
-                label: 'Gerenciar Usuários'
-              ),
-              BottomNavigationBarItem(
                 icon: Icon(Icons.insert_chart),
                 label: 'Business'
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.groups),
+                label: 'Gerenciar Usuários'
               ),
             ],
           ),
@@ -127,10 +127,15 @@ class _AdminHomePageState extends State<AdminHomePage> {
               });
             },
             children: [
+              Container(
+                width: 200,
+                height: 200,
+                color: Colors.green,
+              ),
               Column(
                 children: [
                   Container(
-                    margin: const EdgeInsets.only(left: 10, top: 8, right: 10, bottom: 2),
+                    margin: const EdgeInsets.only(left: 13, top: 8, right: 13, bottom: 2),
                     height: 40,
                     child: SearchBar(
                       backgroundColor: MaterialStateProperty.all(Colors.white),
@@ -195,11 +200,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                   ),
                 ],
               ),
-              Container(
-                width: 200,
-                height: 200,
-                color: Colors.green,
-              )
             ],
           ),
         ),
