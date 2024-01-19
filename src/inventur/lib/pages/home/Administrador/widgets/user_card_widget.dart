@@ -3,11 +3,11 @@ import 'package:inventur/models/user_model.dart';
 
 class UserCard extends StatefulWidget {
   final UserModel user;
-  final Function? callback;
+  final Function? onChanged;
 
   const UserCard({
     super.key,
-    this.callback,
+    this.onChanged,
     required this.user,
   });
 
@@ -39,7 +39,7 @@ class _UserCardState extends State<UserCard> {
       color: Colors.white,
       surfaceTintColor: Colors.white,
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(vertical: 14),
         child: Column(
           children: [
             Row(
@@ -59,7 +59,7 @@ class _UserCardState extends State<UserCard> {
                             value: isSelected, 
                             visualDensity: VisualDensity.compact,
                             onChanged: (value) {
-                              widget.callback!(value);
+                              widget.onChanged!(value);
                               widget.user.isSelected = value!;
                               setState(() {
                                 isSelected = value;
@@ -125,11 +125,12 @@ class _UserCardState extends State<UserCard> {
                 border: Border.all(
                   width: 0.5,
                 ),
-                borderRadius: BorderRadius.circular(30)
+                borderRadius: BorderRadius.circular(5)
               ),
               child: PopupMenuButton(
-                tooltip: 'Status do pesquisador',
+                enableFeedback: true,
                 initialValue: dropValue,
+                tooltip: 'Status do pesquisador',
                 surfaceTintColor: Colors.white,
                 itemBuilder: (context) {
                   return statusItems.map<PopupMenuItem<String>>((String value) {

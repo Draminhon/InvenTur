@@ -13,7 +13,7 @@ class AdminHomePage extends StatefulWidget {
 
 class _AdminHomePageState extends State<AdminHomePage> {
   int currentPageIndex = 0;
-  String currentTypeUser = 'Pesquisador';
+  String currentUserGroup = 'Pesquisador';
   String selectedFilter = 'Todos';
   int contUsersSelecteds = 0;
 
@@ -49,9 +49,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   void insertFilter(value) {
     selectedFilter = value;
-    setState(() {
-      
-    });
+    setState(() {});
+  }
+
+  void setUserGroup(value) {
+    currentUserGroup = value;
+    setState(() {});
   }
   
   @override
@@ -101,7 +104,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             ? FloatingActionButton(
               onPressed: () {},
               shape: const CircleBorder(),
-              tooltip: currentTypeUser == 'Administrador'
+              tooltip: currentUserGroup == 'Administrador'
                 ? 'Adicionar Administrador'
                 : 'Adicionar Pesquisador',
               foregroundColor: Colors.white,
@@ -176,23 +179,48 @@ class _AdminHomePageState extends State<AdminHomePage> {
                           children: [
                             PopupMenu(
                               itens: filters, 
+                              onChanged: insertFilter,
                               popupIcon: Icons.filter_alt,
                               tooltip: 'Filtro selecionado',
-                              insertFilter: insertFilter,
                             ),
                             PopupMenu(
                               itens: typesUsers, 
                               popupIcon: Icons.group,
+                              onChanged: setUserGroup,
                               rightIconPosition: false,
                               tooltip: 'Grupo selecionado',
                             )
                           ],
                         ),
                         contUsersSelecteds > 0
-                        ? Row(
-                          children: [
-                            Text('$contUsersSelecteds Usuário(s) selecionado(s)')
-                          ],
+                        ? Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Checkbox(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(45)
+                                    ),
+                                    value: false, 
+                                    visualDensity: VisualDensity.compact,
+                                    onChanged: (value) {},
+                                  ),
+                                  Text('$contUsersSelecteds Usuário(s) selecionado(s)'),
+                                ],
+                              ),
+                              IconButton(
+                                tooltip: 'Excluir selecionados',
+                                onPressed: () {}, 
+                                icon: Icon(
+                                  Icons.delete, 
+                                  color: Colors.red[700],
+                                )
+                              )
+                            ],
+                          ),
                         )
                         : Container()
                       ],
@@ -205,7 +233,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         itemCount: users.length,
                         itemBuilder: (context, index) {
                           return UserCard(
-                            callback: incrementUsersSelecteds,
+                            onChanged: incrementUsersSelecteds,
                             user: users[index],
                           );
                         }

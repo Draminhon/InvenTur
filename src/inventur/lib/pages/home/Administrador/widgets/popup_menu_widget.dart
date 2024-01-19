@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
 class PopupMenu extends StatefulWidget {
-  final List<String> itens;
   final String? tooltip;
-  final bool rightIconPosition;
+  final List<String> itens;
   final IconData popupIcon;
-  final Function? insertFilter;
+  final Function? onChanged;
+  final bool rightIconPosition;
 
   const PopupMenu({
     super.key,
     this.tooltip,
+    this.onChanged,
     this.rightIconPosition = true,
-    this.insertFilter,
     required this.itens,
     required this.popupIcon,
   });
@@ -54,7 +54,7 @@ class _PopupMenuState extends State<PopupMenu> {
           }).toList();
         },
         onSelected: (String value) {
-          widget.insertFilter!(value);
+          widget.onChanged!(value);
           setState(() {
             selectedItem = value;
           });
