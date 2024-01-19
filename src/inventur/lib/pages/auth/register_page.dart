@@ -5,7 +5,6 @@ import 'package:inventur/pages/widgets/custom_text_field_widget.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/email_validator.dart';
 import 'package:inventur/validators/name_validator.dart';
-import 'package:inventur/validators/password_confirm_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -17,19 +16,17 @@ class RegisterPage extends StatelessWidget {
   final NameValidator _nameValidator = NameValidator();
   final EmailValidator _emailValidator = EmailValidator();
   final PasswordValidator _passwordValidator = PasswordValidator();
-  final PasswordConfirmValidator _passwordConfirmValidator = PasswordConfirmValidator();
 
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _passwordConfirmController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
     
-    double paddingBottomTextField = sizeScreen.height * 0.01;
+    double paddingBottomTextField = sizeScreen.height * 0.02;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -95,19 +92,6 @@ class RegisterPage extends StatelessWidget {
                             isSecret: true,
                             validator: (password) {
                               return _passwordValidator.validate(password: password);
-                            }, 
-                          ),
-                          SizedBox(height: paddingBottomTextField),
-                          CustomTextField(
-                            prefixIcon: Icons.lock, 
-                            labelText: 'Confirmar Senha',
-                            controller: _passwordConfirmController,
-                            isSecret: true,
-                            validator: (passwordConfirm) {
-                              return _passwordConfirmValidator.validate(
-                                password: _passwordController.text,
-                                passwordConfirm: passwordConfirm
-                              );
                             }, 
                           ),
                           SizedBox(height: paddingBottomTextField),
