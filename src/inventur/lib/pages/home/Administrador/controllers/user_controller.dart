@@ -31,11 +31,16 @@ class UserController extends ChangeNotifier {
       _selectedUsers.add(user);
       user.isSelected = true;
       _countSelecedUsers++;
-      notifyListeners();
     }
+
+    if (!allSelectedUsers && _selectedUsers.length == users.length){
+      setAllSelectedUsers(true);
+    }
+    notifyListeners();
   }
 
   void unselectUser({required UserModel user}) {
+    if (allSelectedUsers) setAllSelectedUsers(false);
     _selectedUsers.remove(user);
     user.isSelected = false;
     _countSelecedUsers--;
@@ -46,19 +51,11 @@ class UserController extends ChangeNotifier {
     for (UserModel user in _users) {
       selectUser(user: user);
     }
-    _countSelecedUsers = _selectedUsers.length;
-    notifyListeners();
   }
 
   void unselectAllUsers() {
-    // for (var i = 0; i < _selectedUsers.length; i++) {
-    //   UserModel user = _selectedUsers[i];
-    //   unselectUser(user: user);
-    // }
-    for (UserModel user in _selectedUsers) {
-      user.isSelected = false;
+    for (UserModel user in _users) {
+      unselectUser(user: user);
     }
-    _countSelecedUsers = 0;
-    notifyListeners();
   }
 }

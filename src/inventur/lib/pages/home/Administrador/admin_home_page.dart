@@ -190,7 +190,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         ListenableBuilder(
                           listenable: _userController, 
                           builder: (context, child) {
-                            // if (_userController.countSelecedUsers > 0) {
+                            if (_userController.countSelecedUsers > 0) {
                               return Padding(
                                 padding: const EdgeInsets.only(top: 8),
                                 child: Row(
@@ -225,10 +225,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                   ],
                                 ),
                               );
-                            // } else {
-                            //   _userController.setAllSelectedUsers(false);
-                            //   return Container();
-                            // }
+                            } else {
+                              // if (_userController.allSelectedUsers) _userController.setAllSelectedUsers(false);
+                              return Container();
+                            }
                           }
                         ),
                       ],
@@ -238,10 +238,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     child: Container(
                       padding: const EdgeInsets.only(left:10, right: 10),
                       child: ListView.builder(
-                        itemCount: users.length,
+                        itemCount: _userController.users.length,
                         itemBuilder: (context, index) {
                           return UserCard(
-                            user: users[index],
+                            user: _userController.users[index],
                             userControllerNotifier: _userController,
                           );
                         }
