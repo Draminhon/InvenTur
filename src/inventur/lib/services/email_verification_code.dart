@@ -2,7 +2,7 @@ import 'dart:math';
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-class EmailVerificationCode extends ChangeNotifier{
+class EmailVerificationCode extends ChangeNotifier {
   late int _timeRemaining;
   late int _codeTimeout;
   bool _stopCodeTimeout = false;

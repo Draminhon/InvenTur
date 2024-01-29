@@ -3,10 +3,9 @@ class UserModel {
   String email;
   String cpf;
   String status;
-  bool isSelected;
+  bool isSelected = false;
   
   UserModel({
-    this.isSelected = false,
     required this.nome,
     required this.cpf,
     required this.email,

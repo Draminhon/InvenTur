@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/models/user_model.dart';
+import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
 import 'package:inventur/pages/home/Administrador/widgets/popup_menu_widget.dart';
 import 'package:inventur/pages/home/Administrador/widgets/user_card_widget.dart';
 
@@ -15,13 +16,14 @@ class _AdminHomePageState extends State<AdminHomePage> {
   int currentPageIndex = 0;
   String currentUserGroup = 'Pesquisador';
   String selectedFilter = 'Todos';
-  int contUsersSelecteds = 0;
 
   late PageController pageController;
+
+  final UserController _userController = UserController();
   
   final List<String> typesUsers = ['Pesquisador', 'Administrador'];
   final List<String> filters = ['Todos', 'Ativo', 'Não Ativo', 'Aguardando Aprovação'];
-
+  
   final List<UserModel> users = [
     UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
     UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Ativo"),
@@ -38,15 +40,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
     UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
   ];
-
-  void incrementUsersSelecteds(bool value) {
-    setState(() {
-      value 
-      ? contUsersSelecteds++
-      : contUsersSelecteds--;
-    });
-  }
-
+  
   void insertFilter(value) {
     selectedFilter = value;
     setState(() {});
@@ -61,6 +55,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   void initState() {
     super.initState();
     pageController = PageController(initialPage: currentPageIndex);
+    _userController.setUsers(users);
   }
 
   @override
@@ -192,37 +187,50 @@ class _AdminHomePageState extends State<AdminHomePage> {
                             )
                           ],
                         ),
-                        contUsersSelecteds > 0
-                        ? Padding(
-                          padding: const EdgeInsets.only(top: 8),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  Checkbox(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(45)
+                        ListenableBuilder(
+                          listenable: _userController, 
+                          builder: (context, child) {
+                            // if (_userController.countSelecedUsers > 0) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 8),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Checkbox(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(45)
+                                          ),
+                                          value: _userController.allSelectedUsers, 
+                                          visualDensity: VisualDensity.compact,
+                                          onChanged: (marked) {
+                                            _userController.setAllSelectedUsers(marked!);
+                                            marked
+                                            ? _userController.selectAllUsers()
+                                            : _userController.unselectAllUsers();
+                                          },
+                                        ),
+                                        Text('${_userController.countSelecedUsers} Usuário(s) selecionado(s)'),
+                                      ],
                                     ),
-                                    value: false, 
-                                    visualDensity: VisualDensity.compact,
-                                    onChanged: (value) {},
-                                  ),
-                                  Text('$contUsersSelecteds Usuário(s) selecionado(s)'),
-                                ],
-                              ),
-                              IconButton(
-                                tooltip: 'Excluir selecionados',
-                                onPressed: () {}, 
-                                icon: Icon(
-                                  Icons.delete, 
-                                  color: Colors.red[700],
-                                )
-                              )
-                            ],
-                          ),
-                        )
-                        : Container()
+                                    IconButton(
+                                      tooltip: 'Excluir selecionados',
+                                      onPressed: () {}, 
+                                      icon: Icon(
+                                        Icons.delete, 
+                                        color: Colors.red[700],
+                                      )
+                                    )
+                                  ],
+                                ),
+                              );
+                            // } else {
+                            //   _userController.setAllSelectedUsers(false);
+                            //   return Container();
+                            // }
+                          }
+                        ),
                       ],
                     ),
                   ),
@@ -233,8 +241,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         itemCount: users.length,
                         itemBuilder: (context, index) {
                           return UserCard(
-                            onChanged: incrementUsersSelecteds,
                             user: users[index],
+                            userControllerNotifier: _userController,
                           );
                         }
                       )

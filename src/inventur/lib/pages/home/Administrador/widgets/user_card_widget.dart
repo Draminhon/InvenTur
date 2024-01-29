@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/models/user_model.dart';
+import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
 
 class UserCard extends StatefulWidget {
   final UserModel user;
-  final Function? onChanged;
+  final UserController userControllerNotifier;
 
   const UserCard({
     super.key,
-    this.onChanged,
     required this.user,
+    required this.userControllerNotifier,
   });
 
   @override
@@ -18,14 +19,14 @@ class UserCard extends StatefulWidget {
 class _UserCardState extends State<UserCard> {
   final List<String> statusItems = ['Aguardando Aprovação', 'Ativo', 'Não Ativo'];
   late String dropValue;
-  late bool isSelected;
   late Color statusColor;
 
+  // bool isSelected = false;
+  
   @override
   void initState() {
     super.initState();
     dropValue = widget.user.status;
-    isSelected = widget.user.isSelected;
 
     if (dropValue == 'Aguardando Aprovação') statusColor = Colors.orangeAccent[400]!;
     if (dropValue == 'Ativo') statusColor = Colors.greenAccent[700]!;
@@ -52,19 +53,23 @@ class _UserCardState extends State<UserCard> {
                       padding: const EdgeInsets.only(left: 2),
                       child: Row(
                         children: [
-                          Checkbox(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(45)
-                            ),
-                            value: isSelected, 
-                            visualDensity: VisualDensity.compact,
-                            onChanged: (value) {
-                              widget.onChanged!(value);
-                              widget.user.isSelected = value!;
-                              setState(() {
-                                isSelected = value;
-                              });
-                            },
+                          ListenableBuilder(
+                            listenable: widget.userControllerNotifier, 
+                            builder: (context, child) {
+                              return Checkbox(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(45)
+                                ),
+                                value: widget.user.isSelected, 
+                                visualDensity: VisualDensity.compact,
+                                onChanged: (value) {
+                                  widget.user.isSelected = value!;
+                                  value
+                                  ? widget.userControllerNotifier.selectUser(user: widget.user)
+                                  : widget.userControllerNotifier.unselectUser(user: widget.user);
+                                },
+                              );
+                            }
                           ),
                           Text(
                             widget.user.nome,
