@@ -17,22 +17,7 @@ class UserCard extends StatefulWidget {
 }
 
 class _UserCardState extends State<UserCard> {
-  final List<String> statusItems = ['Aguardando Aprovação', 'Ativo', 'Não Ativo'];
-  late String dropValue;
-  late Color statusColor;
-
-  // bool isSelected = false;
   
-  @override
-  void initState() {
-    super.initState();
-    dropValue = widget.user.status;
-
-    if (dropValue == 'Aguardando Aprovação') statusColor = Colors.orangeAccent[400]!;
-    if (dropValue == 'Ativo') statusColor = Colors.greenAccent[700]!;
-    if (dropValue == 'Não Ativo') statusColor = Colors.redAccent[400]!;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -53,23 +38,18 @@ class _UserCardState extends State<UserCard> {
                       padding: const EdgeInsets.only(left: 2),
                       child: Row(
                         children: [
-                          ListenableBuilder(
-                            listenable: widget.userControllerNotifier, 
-                            builder: (context, child) {
-                              return Checkbox(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(45)
-                                ),
-                                value: widget.user.isSelected, 
-                                visualDensity: VisualDensity.compact,
-                                onChanged: (value) {
-                                  widget.user.isSelected = value!;
-                                  value
-                                  ? widget.userControllerNotifier.selectUser(user: widget.user)
-                                  : widget.userControllerNotifier.unselectUser(user: widget.user);
-                                },
-                              );
-                            }
+                          Checkbox(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(45)
+                            ),
+                            value: widget.user.isSelected, 
+                            visualDensity: VisualDensity.compact,
+                            onChanged: (value) {
+                              widget.user.isSelected = value!;
+                              value
+                              ? widget.userControllerNotifier.selectUser(user: widget.user)
+                              : widget.userControllerNotifier.unselectUser(user: widget.user);
+                            },
                           ),
                           Text(
                             widget.user.nome,
@@ -126,7 +106,7 @@ class _UserCardState extends State<UserCard> {
               margin: const EdgeInsets.only(left: 14, right: 14),
               padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
               decoration: BoxDecoration(
-                color: statusColor,
+                color: widget.userControllerNotifier.statusColor(widget.user.status),
                 border: Border.all(
                   width: 0.5,
                 ),
@@ -134,11 +114,11 @@ class _UserCardState extends State<UserCard> {
               ),
               child: PopupMenuButton(
                 enableFeedback: true,
-                initialValue: dropValue,
+                initialValue: widget.user.status,
                 tooltip: 'Status do pesquisador',
                 surfaceTintColor: Colors.white,
                 itemBuilder: (context) {
-                  return statusItems.map<PopupMenuItem<String>>((String value) {
+                  return widget.userControllerNotifier.statusItems.map<PopupMenuItem<String>>((String value) {
                     return PopupMenuItem(
                       value: value,
                       child: Text(value),
@@ -146,13 +126,7 @@ class _UserCardState extends State<UserCard> {
                   }).toList();
                 },
                 onSelected: (String value) {
-                  dropValue = value;
-                  widget.user.status = value;
-                  setState(() {
-                    if (dropValue == 'Aguardando Aprovação') statusColor = Colors.orangeAccent[400]!;
-                    if (dropValue == 'Ativo') statusColor = Colors.greenAccent[700]!;
-                    if (dropValue == 'Não Ativo') statusColor = Colors.redAccent[400]!;
-                  });
+                  widget.userControllerNotifier.setUserStatus(value, widget.user);
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -165,7 +139,7 @@ class _UserCardState extends State<UserCard> {
                       ),
                     ),
                     Text(
-                      dropValue,
+                      widget.user.status,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold
                       ),

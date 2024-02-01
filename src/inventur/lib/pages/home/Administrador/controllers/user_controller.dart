@@ -7,6 +7,7 @@ class UserController extends ChangeNotifier {
   List<UserModel> _users = [];
 
   final List<UserModel> _selectedUsers = [];
+  final List<String> statusItems = ['Aguardando Aprovação', 'Ativo', 'Não Ativo'];
 
   int get countSelecedUsers => _countSelecedUsers;
   List<UserModel> get users => _users;
@@ -57,5 +58,28 @@ class UserController extends ChangeNotifier {
     for (UserModel user in _users) {
       unselectUser(user: user);
     }
+  }
+
+  void setUserStatus(String status, UserModel user) {
+    user.status = status;
+    notifyListeners();
+  }
+
+  void changeUserStatus(String status) {
+    for (UserModel user in _users) {
+      setUserStatus(status, user);
+    }
+  }
+
+  Color? statusColor(String status) {
+    switch (status) {
+      case 'Aguardando Aprovação':
+        return Colors.orangeAccent[400]!;
+      case 'Ativo':
+        return Colors.greenAccent[700]!;
+      case 'Não Ativo':
+        return Colors.redAccent[400]!;
+    }
+    return null;
   }
 }

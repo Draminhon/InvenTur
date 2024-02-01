@@ -216,7 +216,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                     ),
                                     IconButton(
                                       tooltip: 'Excluir selecionados',
-                                      onPressed: () {}, 
+                                      onPressed: () {
+                                        _userController.changeUserStatus('Ativo');
+                                      }, 
                                       icon: Icon(
                                         Icons.delete, 
                                         color: Colors.red[700],
@@ -226,7 +228,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                 ),
                               );
                             } else {
-                              // if (_userController.allSelectedUsers) _userController.setAllSelectedUsers(false);
                               return Container();
                             }
                           }
@@ -235,16 +236,21 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     ),
                   ),
                   Expanded(
-                    child: Container(
+                    child: Padding(
                       padding: const EdgeInsets.only(left:10, right: 10),
-                      child: ListView.builder(
-                        itemCount: _userController.users.length,
-                        itemBuilder: (context, index) {
-                          return UserCard(
-                            user: _userController.users[index],
-                            userControllerNotifier: _userController,
+                      child: ListenableBuilder(
+                        listenable: _userController,
+                        builder: (context, child) {
+                          return ListView.builder(
+                            itemCount: _userController.users.length,
+                            itemBuilder: (context, index) {
+                              return UserCard(
+                                user: _userController.users[index],
+                                userControllerNotifier: _userController,
+                              );
+                            }
                           );
-                        }
+                        },
                       )
                     ),
                   ),
