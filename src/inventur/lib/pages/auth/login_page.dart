@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/widgets/custom_text_field_widget.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -19,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
 
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                         validator: (cpf) {
                           return _cpfValidator.validate(cpf: cpf);
                         },
+                        inputFormatters: [cpfMask],
                       ),
                       SizedBox(height: sizeScreen.height * 0.02),
                       CustomTextField(

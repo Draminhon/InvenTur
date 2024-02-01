@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatefulWidget {
   final bool isSecret;
@@ -7,17 +8,19 @@ class CustomTextField extends StatefulWidget {
   final String obscuringCharacter;
   final TextInputType keyboardType;
   final TextEditingController controller;
-  final String? Function(String?) validator;
+  final String? Function(String?)? validator;
+  final List<TextInputFormatter>? inputFormatters;
 
   const CustomTextField({
     super.key,
+    this.validator,
+    this.inputFormatters,
     this.isSecret = false,
     this.obscuringCharacter = '●',
     this.keyboardType = TextInputType.text,
     required this.labelText,
     required this.controller,
     required this.prefixIcon,
-    required this.validator,
   });
 
   @override
@@ -36,11 +39,12 @@ class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      controller: widget.controller,
-      validator: widget.validator,
       obscureText: obscureText,
-      obscuringCharacter: widget.obscuringCharacter,
+      validator: widget.validator,
+      controller: widget.controller,
       keyboardType: widget.keyboardType,
+      inputFormatters: widget.inputFormatters,
+      obscuringCharacter: widget.obscuringCharacter,
       decoration: InputDecoration(
         isDense: true,
         errorMaxLines: 3,

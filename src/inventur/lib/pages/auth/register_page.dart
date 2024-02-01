@@ -6,6 +6,7 @@ import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/email_validator.dart';
 import 'package:inventur/validators/name_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
@@ -21,6 +22,7 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +75,7 @@ class RegisterPage extends StatelessWidget {
                             validator: (cpf) {
                               return _cpfValidator.validate(cpf: cpf);
                             },
+                            inputFormatters: [cpfMask],
                           ),
                           SizedBox(height: paddingBottomTextField),
                           CustomTextField(
