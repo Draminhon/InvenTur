@@ -14,42 +14,27 @@ class AdminHomePage extends StatefulWidget {
 
 class _AdminHomePageState extends State<AdminHomePage> {
   int currentPageIndex = 0;
-  String currentUserGroup = 'Pesquisador';
-  String selectedFilter = 'Todos';
 
   late PageController pageController;
 
   final UserController _userController = UserController();
   
-  final List<String> typesUsers = ['Pesquisador', 'Administrador'];
-  final List<String> filters = ['Todos', 'Ativo', 'Não Ativo', 'Aguardando Aprovação'];
-  
   final List<UserModel> users = [
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Ativo"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Não Ativo"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Ativo"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Não Ativo"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
-    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação"),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", accessLevel: 'Administrador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
   ];
-  
-  void insertFilter(value) {
-    selectedFilter = value;
-    setState(() {});
-  }
-
-  void setUserGroup(value) {
-    currentUserGroup = value;
-    setState(() {});
-  }
   
   @override
   void initState() {
@@ -99,7 +84,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             ? FloatingActionButton(
               onPressed: () {},
               shape: const CircleBorder(),
-              tooltip: currentUserGroup == 'Administrador'
+              tooltip: _userController.usersFilteredAccessLevel == 'Administrador'
                 ? 'Adicionar Administrador'
                 : 'Adicionar Pesquisador',
               foregroundColor: Colors.white,
@@ -165,75 +150,75 @@ class _AdminHomePageState extends State<AdminHomePage> {
                       ],
                     )
                   ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  ListenableBuilder(
+                    listenable: _userController,
+                    builder: (context, child) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 13),
+                        child: Column(
                           children: [
-                            PopupMenu(
-                              itens: filters, 
-                              onChanged: insertFilter,
-                              popupIcon: Icons.filter_alt,
-                              tooltip: 'Filtro selecionado',
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                _userController.usersFilteredAccessLevel == 'Pesquisador'
+                                ? PopupMenu(
+                                  popupIcon: Icons.filter_alt,
+                                  tooltip: 'Filtro selecionado',
+                                  itens: _userController.statusFilters, 
+                                  onChanged: _userController.filterUsersStatus,
+                                )
+                                : const Row(),
+                                PopupMenu(
+                                  popupIcon: Icons.group,
+                                  rightIconPosition: false,
+                                  tooltip: 'Grupo selecionado',
+                                  itens: _userController.accessLeves, 
+                                  onChanged: _userController.filterUsersAccessLevel,
+                                )
+                              ],
                             ),
-                            PopupMenu(
-                              itens: typesUsers, 
-                              popupIcon: Icons.group,
-                              onChanged: setUserGroup,
-                              rightIconPosition: false,
-                              tooltip: 'Grupo selecionado',
+                            _userController.countSelectedUsers > 0
+                            ? Padding(
+                              padding: const EdgeInsets.only(top: 8),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Checkbox(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(45)
+                                        ),
+                                        value: _userController.allSelectedUsers, 
+                                        visualDensity: VisualDensity.compact,
+                                        onChanged: (marked) {
+                                          _userController.setAllSelectedUsers(marked!);
+                                          marked
+                                          ? _userController.selectAllUsers()
+                                          : _userController.unselectAllUsers();
+                                        },
+                                      ),
+                                      Text('${_userController.countSelectedUsers} Usuário(s) selecionado(s)'),
+                                    ],
+                                  ),
+                                  IconButton(
+                                    tooltip: 'Excluir selecionados',
+                                    onPressed: () {
+                                      _userController.changeUserStatus('Ativo');
+                                    }, 
+                                    icon: Icon(
+                                      Icons.delete, 
+                                      color: Colors.red[700],
+                                    )
+                                  )
+                                ],
+                              ),
                             )
+                            :Container()
                           ],
                         ),
-                        ListenableBuilder(
-                          listenable: _userController, 
-                          builder: (context, child) {
-                            if (_userController.countSelecedUsers > 0) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 8),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Checkbox(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(45)
-                                          ),
-                                          value: _userController.allSelectedUsers, 
-                                          visualDensity: VisualDensity.compact,
-                                          onChanged: (marked) {
-                                            _userController.setAllSelectedUsers(marked!);
-                                            marked
-                                            ? _userController.selectAllUsers()
-                                            : _userController.unselectAllUsers();
-                                          },
-                                        ),
-                                        Text('${_userController.countSelecedUsers} Usuário(s) selecionado(s)'),
-                                      ],
-                                    ),
-                                    IconButton(
-                                      tooltip: 'Excluir selecionados',
-                                      onPressed: () {
-                                        _userController.changeUserStatus('Ativo');
-                                      }, 
-                                      icon: Icon(
-                                        Icons.delete, 
-                                        color: Colors.red[700],
-                                      )
-                                    )
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return Container();
-                            }
-                          }
-                        ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
                   Expanded(
                     child: Padding(

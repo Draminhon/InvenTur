@@ -1,14 +1,16 @@
 class UserModel {
+  String cpf;
   String nome;
   String email;
-  String cpf;
-  String status;
+  String? status;
+  String accessLevel;
   bool isSelected = false;
   
   UserModel({
-    required this.nome,
+    this.status,
     required this.cpf,
+    required this.nome,
     required this.email,
-    required this.status
+    required this.accessLevel,
   });
 }

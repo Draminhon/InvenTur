@@ -102,11 +102,12 @@ class _UserCardState extends State<UserCard> {
                 )
               ],
             ),
-            Container(
+            widget.user.accessLevel == 'Pesquisador'
+            ? Container(
               margin: const EdgeInsets.only(left: 14, right: 14),
               padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
               decoration: BoxDecoration(
-                color: widget.userControllerNotifier.statusColor(widget.user.status),
+                color: widget.userControllerNotifier.statusColor(widget.user.status!),
                 border: Border.all(
                   width: 0.5,
                 ),
@@ -139,7 +140,7 @@ class _UserCardState extends State<UserCard> {
                       ),
                     ),
                     Text(
-                      widget.user.status,
+                      widget.user.status!,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold
                       ),
@@ -149,6 +150,7 @@ class _UserCardState extends State<UserCard> {
                 ),
               ),
             )
+            : Container(),
           ],
         ),
       ),

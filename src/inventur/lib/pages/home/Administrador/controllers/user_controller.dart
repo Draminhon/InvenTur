@@ -2,15 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:inventur/models/user_model.dart';
 
 class UserController extends ChangeNotifier {
-  int _countSelecedUsers = 0;
-  bool _allSelectedUsers = false;
+  int _countSelectedUsers = 0;
   List<UserModel> _users = [];
+  bool _allSelectedUsers = false;
+  String _usersFilteredStatus = 'Todos';
+  String _usersFilteredAccessLevel = 'Pesquisador';
 
   final List<UserModel> _selectedUsers = [];
+  
+  final List<String> _accessLevels = ['Pesquisador', 'Administrador'];
   final List<String> statusItems = ['Aguardando Aprovação', 'Ativo', 'Não Ativo'];
+  final List<String> _statusFilters = ['Todos', 'Ativo', 'Não Ativo', 'Aguardando Aprovação'];
 
-  int get countSelecedUsers => _countSelecedUsers;
   List<UserModel> get users => _users;
+  List<String> get accessLeves => _accessLevels;
+  int get countSelectedUsers => _countSelectedUsers;
+  List<String> get statusFilters => _statusFilters;
+  String get usersFilteredStatus => _usersFilteredStatus;
+  String get usersFilteredAccessLevel => _usersFilteredAccessLevel;
 
   bool get allSelectedUsers => _allSelectedUsers;
   void setAllSelectedUsers(bool marked) {
@@ -31,7 +40,7 @@ class UserController extends ChangeNotifier {
     if (!_selectedUsers.contains(user)){
       _selectedUsers.add(user);
       user.isSelected = true;
-      _countSelecedUsers++;
+      _countSelectedUsers++;
     }
 
     if (!allSelectedUsers && _selectedUsers.length == users.length){
@@ -44,7 +53,7 @@ class UserController extends ChangeNotifier {
     if (allSelectedUsers) setAllSelectedUsers(false);
     _selectedUsers.remove(user);
     user.isSelected = false;
-    _countSelecedUsers--;
+    _countSelectedUsers--;
     notifyListeners();
   }
 
@@ -69,6 +78,16 @@ class UserController extends ChangeNotifier {
     for (UserModel user in _users) {
       setUserStatus(status, user);
     }
+  }
+
+  void filterUsersStatus(String status) {
+    _usersFilteredStatus = status;
+    notifyListeners();
+  }
+
+  void filterUsersAccessLevel(String accessLevel) {
+    _usersFilteredAccessLevel = accessLevel;
+    notifyListeners();
   }
 
   Color? statusColor(String status) {
