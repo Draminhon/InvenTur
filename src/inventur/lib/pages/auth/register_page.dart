@@ -120,16 +120,16 @@ class RegisterPage extends StatelessWidget {
                                 )
                               ),
                               onPressed: () {
-                                if (_formRegisterKey.currentState!.validate()){
-                                  Navigator.push(
-                                    context, 
-                                    MaterialPageRoute(builder: (context) => EmailValidatorPage(email: _emailController.text)),
-                                  );
-                                }
-                                // Navigator.push(
-                                //   context, 
-                                //   MaterialPageRoute(builder: (context) => EmailValidatorPage(email: _emailController.text)),
-                                // );
+                                // if (_formRegisterKey.currentState!.validate()){
+                                //   Navigator.push(
+                                //     context, 
+                                //     MaterialPageRoute(builder: (context) => EmailValidatorPage(email: _emailController.text)),
+                                //   );
+                                // }
+                                Navigator.push(
+                                  context, 
+                                  MaterialPageRoute(builder: (context) => EmailValidatorPage(email: _emailController.text)),
+                                );
                               }, 
                               child: const Text(
                                 'Solicitar Cadastro',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/widgets/custom_text_field_widget.dart';
+import 'package:inventur/pages/widgets/divider_text_widget.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -127,31 +128,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const Padding(
                         padding: EdgeInsets.only(bottom: 10),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Divider(
-                                color: Color.fromARGB(255, 9, 145, 20),
-                                thickness: 2,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 15),
-                              child: Text(
-                                'Solicite seu Registro',
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 9, 145, 20)
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Divider(
-                                color: Color.fromARGB(255, 9, 145, 20),
-                                thickness: 2,
-                              ),
-                            ),
-                          ],
-                        ),
+                        child: DividerText(text: 'Solicite seu Registro')
                       ),
                       SizedBox(
                         height: 50,

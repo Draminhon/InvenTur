@@ -76,7 +76,9 @@ class UserController extends ChangeNotifier {
 
   void changeUserStatus(String status) {
     for (UserModel user in _users) {
-      setUserStatus(status, user);
+      if (user.isSelected) {
+        setUserStatus(status, user);
+      }
     }
   }
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
+import 'package:inventur/pages/home/Administrador/widgets/manage_users_widget.dart';
 import 'package:inventur/pages/home/Administrador/widgets/popup_menu_widget.dart';
 import 'package:inventur/pages/home/Administrador/widgets/user_card_widget.dart';
 
@@ -201,16 +202,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                       Text('${_userController.countSelectedUsers} Usuário(s) selecionado(s)'),
                                     ],
                                   ),
-                                  IconButton(
-                                    tooltip: 'Excluir selecionados',
-                                    onPressed: () {
-                                      _userController.changeUserStatus('Ativo');
-                                    }, 
-                                    icon: Icon(
-                                      Icons.delete, 
-                                      color: Colors.red[700],
-                                    )
-                                  )
+                                  ManageUsers(userControllerNotifier: _userController)
                                 ],
                               ),
                             )

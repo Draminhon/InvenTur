@@ -65,8 +65,8 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
       body: SingleChildScrollView(
         reverse: true,
         padding: const EdgeInsets.only(
-          left: 10,
-          right: 10,
+          left: 20,
+          right: 20,
           bottom: 20
         ),
         child: Column(
@@ -127,7 +127,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                   Text(
                     "O código é válido durante 15 minutos",
                     style: TextStyle(
-                      color: Colors.red[800],
+                      color: const Color.fromARGB(255, 207, 0, 0),
                       fontSize: sizeScreen.height * 0.02
                     ),
                   )
@@ -223,7 +223,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'CONFIRMAR',
+                      'Confirmar',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: sizeScreen.height * 0.028
@@ -252,17 +252,17 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                     )
                   ),
                   backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 207, 0, 0)
+                    Colors.red[700]
                   ),
                   overlayColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 247, 22, 22)
+                    Colors.red[400]
                   )
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'CANCELAR',
+                      'Cancelar',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: sizeScreen.height * 0.028
