@@ -42,6 +42,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     super.initState();
     pageController = PageController(initialPage: currentPageIndex);
     _userController.setUsers(users);
+    _userController.populateFilteredUsers();
   }
 
   @override
@@ -219,10 +220,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                         listenable: _userController,
                         builder: (context, child) {
                           return ListView.builder(
-                            itemCount: _userController.users.length,
+                            itemCount: _userController.filteredUsers.length,
                             itemBuilder: (context, index) {
                               return UserCard(
-                                user: _userController.users[index],
+                                user: _userController.filteredUsers[index],
                                 userControllerNotifier: _userController,
                               );
                             }
