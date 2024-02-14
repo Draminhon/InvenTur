@@ -10,10 +10,19 @@ class UserController extends ChangeNotifier {
 
   final List<UserModel> _selectedUsers = [];
   final List<UserModel> _filteredUsers = [];
-  
+
   final List<String> _accessLevels = ['Pesquisador', 'Administrador'];
-  final List<String> statusItems = ['Aguardando Aprovação', 'Ativo', 'Não Ativo'];
-  final List<String> _statusFilters = ['Todos', 'Ativo', 'Não Ativo', 'Aguardando Aprovação'];
+  final List<String> statusItems = [
+    'Aguardando Aprovação',
+    'Ativo',
+    'Não Ativo'
+  ];
+  final List<String> _statusFilters = [
+    'Todos',
+    'Ativo',
+    'Não Ativo',
+    'Aguardando Aprovação'
+  ];
 
   List<String> get accessLeves => _accessLevels;
   List<String> get statusFilters => _statusFilters;
@@ -23,7 +32,7 @@ class UserController extends ChangeNotifier {
   String get usersFilteredAccessLevel => _usersFilteredAccessLevel;
 
   bool get allSelectedUsers => _allSelectedUsers;
-  
+
   void setAllSelectedUsers(bool marked) {
     _allSelectedUsers = marked;
     notifyListeners();
@@ -35,7 +44,8 @@ class UserController extends ChangeNotifier {
     }
 
     for (UserModel user in _users) {
-      if (usersFilteredAccessLevel == _accessLevels[0] && user.accessLevel == _accessLevels[0]) {
+      if (usersFilteredAccessLevel == _accessLevels[0] &&
+          user.accessLevel == _accessLevels[0]) {
         switch (usersFilteredStatus) {
           case 'Todos':
             _filteredUsers.add(user);
@@ -46,7 +56,8 @@ class UserController extends ChangeNotifier {
             }
             break;
         }
-      } else if (usersFilteredAccessLevel == _accessLevels[1] && user.accessLevel == _accessLevels[1]) {
+      } else if (usersFilteredAccessLevel == _accessLevels[1] &&
+          user.accessLevel == _accessLevels[1]) {
         _filteredUsers.add(user);
       }
       notifyListeners();
@@ -56,15 +67,15 @@ class UserController extends ChangeNotifier {
   void setUsers(List<UserModel> users) {
     _users = users;
   }
-  
+
   void selectUser({required UserModel user}) {
-    if (!_selectedUsers.contains(user)){
+    if (!_selectedUsers.contains(user)) {
       _selectedUsers.add(user);
       user.isSelected = true;
       _countSelectedUsers++;
     }
 
-    if (!allSelectedUsers && _selectedUsers.length == filteredUsers.length){
+    if (!allSelectedUsers && _selectedUsers.length == filteredUsers.length) {
       setAllSelectedUsers(true);
     }
     notifyListeners();
@@ -86,7 +97,9 @@ class UserController extends ChangeNotifier {
 
   void unselectAllUsers() {
     for (UserModel user in _filteredUsers) {
-      unselectUser(user: user);
+      if (user.isSelected) {
+        unselectUser(user: user);
+      }
     }
   }
 
@@ -95,21 +108,26 @@ class UserController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeUserStatus(String status) {
-    for (UserModel user in _users) {
+  void changeSelectedUsersStatus(String status) {
+    for (UserModel user in _filteredUsers) {
       if (user.isSelected) {
         setUserStatus(status, user);
+        unselectUser(user: user);
       }
     }
+    populateFilteredUsers();
   }
 
-  void filterUsersStatus(String status) {
+  void filterUsersByStatus(String status) {
+    if (_selectedUsers.isNotEmpty) {
+      unselectAllUsers();
+    }
     _usersFilteredStatus = status;
     notifyListeners();
     populateFilteredUsers();
   }
 
-  void filterUsersAccessLevel(String accessLevel) {
+  void filterUsersByAccessLevel(String accessLevel) {
     _usersFilteredAccessLevel = accessLevel;
     notifyListeners();
     populateFilteredUsers();

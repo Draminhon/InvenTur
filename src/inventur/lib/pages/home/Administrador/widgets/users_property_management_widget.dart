@@ -23,13 +23,14 @@ class _ManageUsersState extends State<ManageUsers> {
 
   @override
   Widget build(BuildContext context) {
-    final sizeScreen = MediaQuery.sizeOf(context);
     
     return IconButton(
       tooltip: 'Gerenciar usuários selecionados',
       onPressed: () {
         showModalBottomSheet(
           context: context,
+          showDragHandle: true,
+          isScrollControlled: true,
           builder: (context) {
             return StatefulBuilder(
               builder: (context, setState) {
@@ -63,7 +64,7 @@ class _ManageUsersState extends State<ManageUsers> {
                                 value: statusItems[index], 
                                 groupValue: groupValue, 
                                 onChanged: (value) {
-                                  widget.userControllerNotifier.changeUserStatus(value!);
+                                  widget.userControllerNotifier.changeSelectedUsersStatus(value!);
                                   setState(() {
                                     groupValue = value;
                                   });
@@ -78,25 +79,16 @@ class _ManageUsersState extends State<ManageUsers> {
                         child: DividerText(text: 'Excluir Usuários')
                       ),
                       Container(
-                        height: 50,
-                        margin: const EdgeInsets.only(left: 20, top: 10, right: 20, bottom: 14),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)
-                              )
+                        height: 40,
+                        margin: const EdgeInsets.symmetric(horizontal: 20),
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
                             ),
-                            padding: MaterialStateProperty.all(
-                              EdgeInsets.symmetric(
-                                vertical: sizeScreen.height * 0.012
-                              )
-                            ),
-                            backgroundColor: MaterialStateProperty.all(
-                              Colors.red[700]
-                            ),
-                            overlayColor: MaterialStateProperty.all(
-                              Colors.red[400]
+                            side: const BorderSide(
+                              width: 2,
+                              color: Colors.red
                             )
                           ),
                           onPressed: () {
@@ -105,7 +97,7 @@ class _ManageUsersState extends State<ManageUsers> {
                           child: const Text(
                             'Excluir Usuários',
                             style: TextStyle(
-                              color: Colors.white,
+                              color: Colors.red,
                               fontSize: 22
                             ),
                           )
