@@ -30,6 +30,7 @@ class _UsersManagementPageState extends State<UsersManagementPage> {
           margin: const EdgeInsets.only(left: 13, top: 8, right: 13, bottom: 2),
           height: 40,
           child: SearchBar(
+            hintText: 'Pesquisar',
             backgroundColor: MaterialStateProperty.all(Colors.white),
             surfaceTintColor: MaterialStateProperty.all(Colors.white),
             elevation: MaterialStateProperty.all(2),
@@ -40,7 +41,7 @@ class _UsersManagementPageState extends State<UsersManagementPage> {
                   Icons.search,
                   color: Color.fromARGB(255, 55, 111, 60),
                 )
-              )
+              ),
             ],
           )
         ),
