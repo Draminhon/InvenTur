@@ -14,6 +14,8 @@ class UsersManagementPage extends StatefulWidget {
 }
 
 class _UsersManagementPageState extends State<UsersManagementPage> {
+  final TextEditingController _searchController = TextEditingController();
+
   late UserController _userController;
 
   @override
@@ -31,18 +33,24 @@ class _UsersManagementPageState extends State<UsersManagementPage> {
           height: 40,
           child: SearchBar(
             hintText: 'Pesquisar',
+            controller: _searchController,
             backgroundColor: MaterialStateProperty.all(Colors.white),
             surfaceTintColor: MaterialStateProperty.all(Colors.white),
             elevation: MaterialStateProperty.all(2),
             trailing: [
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  _userController.searchUsers(_searchController.text);
+                },
                 icon: const Icon(
                   Icons.search,
                   color: Color.fromARGB(255, 55, 111, 60),
                 )
               ),
             ],
+            onChanged: (value) {
+              if (value == '') _userController.populateFilteredUsers();
+            },
           )
         ),
         ListenableBuilder(
@@ -58,17 +66,19 @@ class _UsersManagementPageState extends State<UsersManagementPage> {
                       _userController.usersFilteredAccessLevel == 'Pesquisador'
                       ? PopupMenu(
                         popupIcon: Icons.filter_alt,
-                        tooltip: 'Filtro selecionado',
+                        tooltip: 'Status filtrado',
                         itens: _userController.statusFilters, 
                         onChanged: _userController.filterUsersByStatus,
+                        selectedItem: _userController.usersFilteredStatus,
                       )
                       : const Row(),
                       PopupMenu(
                         popupIcon: Icons.group,
                         rightIconPosition: false,
-                        tooltip: 'Grupo selecionado',
+                        tooltip: 'Grupo filtrado',
                         itens: _userController.accessLeves, 
                         onChanged: _userController.filterUsersByAccessLevel,
+                        selectedItem: _userController.usersFilteredAccessLevel,
                       )
                     ],
                   ),
@@ -112,7 +122,8 @@ class _UsersManagementPageState extends State<UsersManagementPage> {
             child: ListenableBuilder(
               listenable: _userController,
               builder: (context, child) {
-                return ListView.builder(
+                return _userController.filteredUsers.isNotEmpty
+                  ? ListView.builder(
                   itemCount: _userController.filteredUsers.length,
                   itemBuilder: (context, index) {
                     return UserCard(
@@ -120,6 +131,9 @@ class _UsersManagementPageState extends State<UsersManagementPage> {
                       userControllerNotifier: _userController,
                     );
                   }
+                )
+                : const Center(
+                  child: Text('Nenhum usuário encontrado'),
                 );
               },
             )

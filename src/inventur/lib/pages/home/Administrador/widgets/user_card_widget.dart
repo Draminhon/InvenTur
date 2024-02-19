@@ -35,10 +35,11 @@ class _UserCardState extends State<UserCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      padding: const EdgeInsets.only(left: 2),
+                      padding: const EdgeInsets.only(left: 4),
                       child: Row(
                         children: [
-                          Checkbox(
+                          widget.user.accessLevel == 'Pesquisador'
+                          ? Checkbox(
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(45)
                             ),
@@ -50,7 +51,8 @@ class _UserCardState extends State<UserCard> {
                               ? widget.userControllerNotifier.selectUser(user: widget.user)
                               : widget.userControllerNotifier.unselectUser(user: widget.user);
                             },
-                          ),
+                          )
+                          : const Padding(padding: EdgeInsets.only(left: 10)),
                           Text(
                             widget.user.nome,
                             style: const TextStyle(

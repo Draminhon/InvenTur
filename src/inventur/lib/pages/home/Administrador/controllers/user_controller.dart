@@ -39,6 +39,10 @@ class UserController extends ChangeNotifier {
   }
 
   void populateFilteredUsers() {
+    if (_selectedUsers.isNotEmpty) {
+      unselectAllUsers();
+    }
+
     if (_filteredUsers.isNotEmpty) {
       _filteredUsers.clear();
     }
@@ -119,9 +123,6 @@ class UserController extends ChangeNotifier {
   }
 
   void filterUsersByStatus(String status) {
-    if (_selectedUsers.isNotEmpty) {
-      unselectAllUsers();
-    }
     _usersFilteredStatus = status;
     notifyListeners();
     populateFilteredUsers();
@@ -131,6 +132,31 @@ class UserController extends ChangeNotifier {
     _usersFilteredAccessLevel = accessLevel;
     notifyListeners();
     populateFilteredUsers();
+  }
+
+  void searchUsers(String text) {
+    List<UserModel> auxUsers = [];
+
+    if (_selectedUsers.isNotEmpty) {
+      unselectAllUsers();
+    }
+    
+    text = text.toLowerCase();
+    for (UserModel user in _filteredUsers) {
+      if (user.nome.toLowerCase().contains(text)) {
+        auxUsers.add(user);
+      } else if (user.cpf.contains(text)) {
+        auxUsers.add(user);
+      } else if (user.email.toLowerCase().contains(text)) {
+        auxUsers.add(user);
+      }
+    }
+
+    _filteredUsers.clear();
+    for (UserModel user in auxUsers){
+      _filteredUsers.add(user);
+    }
+    notifyListeners();
   }
 
   Color? statusColor(String status) {

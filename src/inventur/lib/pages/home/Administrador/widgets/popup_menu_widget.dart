@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class PopupMenu extends StatefulWidget {
   final String? tooltip;
+  final String selectedItem;
   final List<String> itens;
   final IconData popupIcon;
   final Function? onChanged;
@@ -14,6 +15,7 @@ class PopupMenu extends StatefulWidget {
     this.rightIconPosition = true,
     required this.itens,
     required this.popupIcon,
+    required this.selectedItem,
   });
 
   @override
@@ -26,7 +28,7 @@ class _PopupMenuState extends State<PopupMenu> {
   @override
   void initState() {
     super.initState();
-    selectedItem  = widget.itens.first;
+    selectedItem  = widget.selectedItem;
   }
 
   @override
