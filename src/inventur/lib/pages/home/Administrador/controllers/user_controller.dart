@@ -162,11 +162,11 @@ class UserController extends ChangeNotifier {
   Color? statusColor(String status) {
     switch (status) {
       case 'Aguardando Aprovação':
-        return Colors.orangeAccent[400]!;
+        return Colors.orange[600];
       case 'Ativo':
-        return Colors.greenAccent[700]!;
+        return Colors.green[600];
       case 'Não Ativo':
-        return Colors.redAccent[400]!;
+        return Colors.red[600];
     }
     return null;
   }

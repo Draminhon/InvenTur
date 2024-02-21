@@ -18,102 +18,122 @@ class UserCard extends StatefulWidget {
 
 class _UserCardState extends State<UserCard> {
   
+  late UserController _userController;
+
+  @override
+  void initState() {
+    super.initState();
+    _userController = widget.userControllerNotifier;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
+      elevation: 6,
       color: Colors.white,
       surfaceTintColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18)
+      ),
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 14),
+        padding: const EdgeInsets.all(8),
         child: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(left: 4),
-                      child: Row(
-                        children: [
-                          widget.user.accessLevel == 'Pesquisador'
-                          ? Checkbox(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(45)
-                            ),
-                            value: widget.user.isSelected, 
-                            visualDensity: VisualDensity.compact,
-                            onChanged: (value) {
-                              widget.user.isSelected = value!;
-                              value
-                              ? widget.userControllerNotifier.selectUser(user: widget.user)
-                              : widget.userControllerNotifier.unselectUser(user: widget.user);
-                            },
-                          )
-                          : const Padding(padding: EdgeInsets.only(left: 10)),
-                          Text(
-                            widget.user.nome,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 14, bottom: 5),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.user.cpf,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18
-                            ),
-                          ),
-                          Text(
-                            widget.user.email,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  children: [
-                    IconButton(
-                      onPressed: () {}, 
-                      icon: Icon(
-                        Icons.edit,
-                        color: Colors.green[700],
-                      )
-                    ),
-                    IconButton(
-                      onPressed: () {}, 
-                      icon: Icon(
-                        Icons.delete,
-                        color: Colors.red[700],
-                      )
-                    ),
-                  ],
+                widget.user.accessLevel == 'Pesquisador'
+                ? Checkbox(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(45)
+                  ),
+                  value: widget.user.isSelected, 
+                  visualDensity: VisualDensity.compact,
+                  onChanged: (value) {
+                    widget.user.isSelected = value!;
+                    value
+                    ? _userController.selectUser(user: widget.user)
+                    : _userController.unselectUser(user: widget.user);
+                  },
                 )
+                : const Padding(padding: EdgeInsets.only(left: 10)),
+                IconButton(
+                  onPressed: () {}, 
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.red[700],
+                  )
+                ),
               ],
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  width: 2,
+                  color: const Color.fromARGB(255, 55, 111, 60),
+                ),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Nome:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: Text(
+                          widget.user.nome,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(overflow: TextOverflow.ellipsis),
+                        ),
+                      )
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'CPF:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(widget.user.cpf)
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'E-mail:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: Text(
+                          widget.user.email,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(overflow: TextOverflow.ellipsis),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
             widget.user.accessLevel == 'Pesquisador'
             ? Container(
-              margin: const EdgeInsets.only(left: 14, right: 14),
+              margin: const EdgeInsets.only(top: 10),
               padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
               decoration: BoxDecoration(
-                color: widget.userControllerNotifier.statusColor(widget.user.status!),
                 border: Border.all(
-                  width: 0.5,
+                  width: 2,
+                  color: const Color.fromARGB(255, 55, 111, 60),
                 ),
-                borderRadius: BorderRadius.circular(5)
+                borderRadius: BorderRadius.circular(10),
               ),
               child: PopupMenuButton(
                 enableFeedback: true,
@@ -121,7 +141,7 @@ class _UserCardState extends State<UserCard> {
                 tooltip: 'Status do pesquisador',
                 surfaceTintColor: Colors.white,
                 itemBuilder: (context) {
-                  return widget.userControllerNotifier.statusItems.map<PopupMenuItem<String>>((String value) {
+                  return _userController.statusItems.map<PopupMenuItem<String>>((String value) {
                     return PopupMenuItem(
                       value: value,
                       child: Text(value),
@@ -129,25 +149,31 @@ class _UserCardState extends State<UserCard> {
                   }).toList();
                 },
                 onSelected: (String value) {
-                  widget.userControllerNotifier.setUserStatus(value, widget.user);
+                  _userController.setUserStatus(value, widget.user);
+                  _userController.populateFilteredUsers();
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      'Status:',
+                    Text(
+                      'Status',
                       style: TextStyle(
+                        color: _userController.statusColor(widget.user.status!),
                         fontWeight: FontWeight.bold,
-                        fontSize: 15
+                        fontSize: 15,
                       ),
                     ),
                     Text(
                       widget.user.status!,
-                      style: const TextStyle(
+                      style: TextStyle(
+                        color: _userController.statusColor(widget.user.status!),
                         fontWeight: FontWeight.bold
                       ),
                     ),
-                    const Icon(Icons.keyboard_arrow_down)
+                    Icon(
+                      color: _userController.statusColor(widget.user.status!),
+                      Icons.keyboard_arrow_down
+                    ),
                   ],
                 ),
               ),

@@ -36,12 +36,11 @@ class _PopupMenuState extends State<PopupMenu> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
       decoration: BoxDecoration(
-        color: Colors.green,
         border: Border.all(
-          width: 1,
-          color: Theme.of(context).primaryColor
+          width: 2,
+          color: const Color.fromARGB(255, 55, 111, 60),
         ),
-        borderRadius: BorderRadius.circular(30)
+        borderRadius: BorderRadius.circular(10)
       ),
       child: PopupMenuButton(
         tooltip: widget.tooltip,
