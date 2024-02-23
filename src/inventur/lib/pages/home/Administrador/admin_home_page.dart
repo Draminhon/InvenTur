@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/models/user_model.dart';
+import 'package:inventur/pages/home/Administrador/add_user_page.dart';
 import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
 import 'package:inventur/pages/home/Administrador/users_management_page.dart';
 
@@ -50,12 +51,17 @@ class _AdminHomePageState extends State<AdminHomePage> {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
         fontFamily: GoogleFonts.aBeeZee().fontFamily,
+        checkboxTheme: const CheckboxThemeData(
+          side: BorderSide(
+            color: Color.fromARGB(255, 55, 111, 60),
+            width: 1.8
+          ),
+        )
       ),
       home: DefaultTabController(
         length: 2,
         child: Scaffold(
           resizeToAvoidBottomInset: false,
-          floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterDocked,
           backgroundColor: const Color.fromARGB(255, 245, 245, 245),
           drawer: const Drawer(
             backgroundColor: Color.fromARGB(255, 245, 245, 245),
@@ -78,25 +84,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
             foregroundColor: const Color.fromARGB(255, 55, 111, 60),
             backgroundColor: Colors.white,
           ),
-          floatingActionButton: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: currentPageIndex == 1
-            ? FloatingActionButton(
-              onPressed: () {},
-              shape: const CircleBorder(),
-              tooltip: _userController.usersFilteredAccessLevel == 'Administrador'
-                ? 'Adicionar Administrador'
-                : 'Adicionar Pesquisador',
-              foregroundColor: Colors.white,
-              backgroundColor: const Color.fromARGB(255, 55, 111, 60),
-              child: const Icon(
-                Icons.person_add_alt_1_rounded,
-                size: 35,
-              ),
-            )
-            : null,
-          ),
           bottomNavigationBar: BottomNavigationBar(
+            backgroundColor: Colors.white,
             onTap: (page) {
               pageController.animateToPage(
                 page, 
@@ -115,6 +104,10 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 icon: Icon(Icons.groups),
                 label: 'Gerenciar Usuários'
               ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person_add_alt_1_rounded),
+                label: 'Add Usuário'
+              ),
             ],
           ),
           body: PageView(
@@ -130,7 +123,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 height: 200,
                 color: Colors.green,
               ),
-              UsersManagementPage(userControllerNotifier: _userController)
+              UsersManagementPage(userControllerNotifier: _userController),
+              AddUserPage(userControllerNotifier: _userController,)
             ],
           ),
         ),
