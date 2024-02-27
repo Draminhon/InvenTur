@@ -1,0 +1,280 @@
+import 'package:flutter/material.dart';
+import 'package:inventur/services/email_verification_code.dart';
+import 'package:inventur/validators/email_verification_code_validator.dart';
+import 'package:inventur/pages/widgets/custom_text_field_widget.dart';
+
+class EmailValidatorPage extends StatefulWidget {
+  final String email;
+  const EmailValidatorPage({super.key, required this.email});
+
+  @override
+  State<EmailValidatorPage> createState() => _EmailValidatorPageState();
+}
+
+class _EmailValidatorPageState extends State<EmailValidatorPage> {
+  // int _codeSendLimit = 5;
+  // int _codeShippingAmount = 0;
+  int _timeRemaining = 1 * 30;
+  late String _verificationCode;
+  final _formCodeValidator = GlobalKey<FormState>();
+  final TextEditingController _codeController = TextEditingController();
+  final EmailVerificationCode _emailVerificationCode = EmailVerificationCode();
+  final EmailVerificationCodeValidator _codeValidator = EmailVerificationCodeValidator();
+
+  @override
+  void initState() {
+    super.initState();
+    _emailVerificationCode.setCodeTimeout(_timeRemaining);
+    _emailVerificationCode.addListener(() {
+      setState(() {
+        _timeRemaining = _emailVerificationCode.timeRemaining;
+        if (_timeRemaining == 0) {
+          _verificationCode = _emailVerificationCode.generateVerificationCode();
+        }
+      });
+    });
+    _verificationCode = _emailVerificationCode.generateVerificationCode();
+    _emailVerificationCode.startCodeTimeout();
+    debugPrint(_verificationCode);
+  }
+
+  @override
+  void dispose() {
+    _emailVerificationCode.setStopCodeTimeout(true);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final sizeScreen = MediaQuery.sizeOf(context);
+
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(45),
+        child: AppBar(
+          title: Text(
+            'Validação do e-mail',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: sizeScreen.height * 0.028
+            ),
+          ),
+          centerTitle: true,
+        ),
+      ),
+      body: SingleChildScrollView(
+        reverse: true,
+        padding: const EdgeInsets.only(
+          left: 20,
+          right: 20,
+          bottom: 20
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Container(
+              // width: sizeScreen.width,
+              height: sizeScreen.height * 0.28,
+              margin: EdgeInsets.only(
+                top: sizeScreen.height * 0.02,
+                bottom: sizeScreen.height * 0.02,
+              ),
+              padding: EdgeInsets.only(
+                left: sizeScreen.height * 0.008,
+                top: sizeScreen.height * 0.02,
+                right: sizeScreen.height * 0.008,
+                bottom: sizeScreen.height * 0.008,
+              ),
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(225, 227, 226, 226),
+                borderRadius: BorderRadius.circular(sizeScreen.height * 0.03)
+              ),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.info,
+                    size: sizeScreen.height * 0.08,
+                    color: const Color.fromARGB(255, 55, 111, 60),
+                  ),
+                  SizedBox(height: sizeScreen.height *0.02),
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      text: "Para confirmar sua identidade, digite o código enviado para o seu e-mail ",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: sizeScreen.height * 0.02
+                      ),
+                      children: [
+                        TextSpan(
+                          text: widget.email,
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 0, 128, 0),
+                            fontSize: sizeScreen.height * 0.02
+                          )
+                        ),
+                        TextSpan(
+                          text: ". Evite sair da tela atual antes da validação ser concluída",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: sizeScreen.height * 0.02
+                          ),
+                        )
+                      ]
+                    ),
+                  ),
+                  SizedBox(height: sizeScreen.height *0.02),
+                  Text(
+                    "O código é válido durante 15 minutos",
+                    style: TextStyle(
+                      color: const Color.fromARGB(255, 207, 0, 0),
+                      fontSize: sizeScreen.height * 0.02
+                    ),
+                  )
+                ],
+              ),
+            ),
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                text: 'Aguarde: ',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: sizeScreen.height * 0.028
+                ),
+                children: [
+                  TextSpan(
+                    text: '${
+                      _timeRemaining ~/ 60 < 10
+                      ? "0${_timeRemaining ~/ 60}"
+                      : _timeRemaining ~/ 60
+                      }:${
+                      _timeRemaining % 60 < 10
+                      ? "0${_timeRemaining % 60}"
+                      : _timeRemaining % 60
+                    }',
+                    style: TextStyle(
+                      color: const Color.fromARGB(255, 0, 128, 0),
+                      fontSize: sizeScreen.height * 0.028
+                    ),
+                  ),
+                  TextSpan(
+                    text: ' antes de enviar um novo código.',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: sizeScreen.height * 0.028
+                    ),
+                  ),
+                ]
+              )
+            ),
+            Padding(
+              padding: EdgeInsets.only(top:sizeScreen.height * 0.03, bottom: sizeScreen.height * 0.06),
+              child: TextButton(
+                onPressed: () {
+                  if (_emailVerificationCode.timeRemaining == 0 && !_emailVerificationCode.startedTime) {
+                    _verificationCode = _emailVerificationCode.generateVerificationCode();
+                    _emailVerificationCode.startCodeTimeout();
+                  }
+                  debugPrint(_verificationCode);
+                }, 
+                child: const Text("Enviar novo código")
+              ),
+            ),
+            Form(
+              key: _formCodeValidator,
+              child: CustomTextField(
+                labelText: 'Código',
+                prefixIcon: Icons.pin,
+                controller: _codeController,
+                validator: (code) {
+                  return _codeValidator.validate(expectedCode: _verificationCode, code: code);
+                },
+              )
+            ),
+            SizedBox(height: sizeScreen.height * 0.05),
+            SizedBox(
+              height: sizeScreen.height * 0.06,
+              child: ElevatedButton(
+                onPressed: () {
+                  if (_formCodeValidator.currentState!.validate()) {
+
+                  }
+                },
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
+                    )
+                  ),
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(
+                      vertical: sizeScreen.height * 0.012
+                    )
+                  ),
+                  backgroundColor: MaterialStateProperty.all(
+                    const Color.fromARGB(255, 55, 111, 60)
+                  ),
+                  overlayColor: MaterialStateProperty.all(
+                    Colors.green[600]
+                  )
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Confirmar',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: sizeScreen.height * 0.028
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: sizeScreen.height * 0.04),
+            SizedBox(
+              height: sizeScreen.height * 0.06,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+                style: ButtonStyle(
+                  shape: MaterialStateProperty.all(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)
+                    )
+                  ),
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.symmetric(
+                      vertical: sizeScreen.height * 0.012
+                    )
+                  ),
+                  backgroundColor: MaterialStateProperty.all(
+                    Colors.red[700]
+                  ),
+                  overlayColor: MaterialStateProperty.all(
+                    Colors.red[400]
+                  )
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Cancelar',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: sizeScreen.height * 0.028
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
