@@ -23,7 +23,7 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(15)),
-              child: Expanded(
+              
                   child: Column(
                 children: [
                   Image.asset(
@@ -41,7 +41,7 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
                     ),
                   )
                 ],
-              ))))),
+              )))),
       SizedBox(
           height: 50,
           width: 300,

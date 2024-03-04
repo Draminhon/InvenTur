@@ -8,6 +8,8 @@ import 'package:inventur/pages/recover/passwordrecover_page.dart';
 import 'package:inventur/pages/recover/passwordcod_page.dart';
 import 'package:inventur/pages/recover/changepassword_page.dart';
 import 'package:inventur/pages/recover/changepasswordsucess_page.dart';
+import 'package:inventur/pages/home/Pesquisador/choose/choosebetween.dart';
+import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
@@ -36,7 +38,9 @@ class MyApp extends StatelessWidget {
         '/PassWordRecover' : (_) => RecuperarSenha(),
         '/ConfirmarCodigo' : (_) => ConfirmarCodigo(),
         '/MudarSenha' : (_) => MudarSenha(),
-        '/NewPassword' : (_) => ConfirmacaoNovaSenha()
+        '/NewPassword' : (_) => ConfirmacaoNovaSenha(),
+        '/Choose' : (_) => Choose(),
+        '/PesquisadorHome' : (_) => PesquisadorHome()
         },
     );
   }

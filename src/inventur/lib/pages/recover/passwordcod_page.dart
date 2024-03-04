@@ -45,7 +45,7 @@ class ConfirmarCodigo extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(15)),
-              child: Expanded(
+            
                   child: Column(
                 children: [
                   Icon(
@@ -64,7 +64,7 @@ class ConfirmarCodigo extends StatelessWidget {
                     
                   ),)
                 ],
-              ))))),
+              )))),
               SizedBox(height: sizeScreen.height * 0.03,),
                Padding(
           padding: EdgeInsets.all(25),
