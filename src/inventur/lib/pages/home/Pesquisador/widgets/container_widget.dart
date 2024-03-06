@@ -26,7 +26,7 @@ class ContainerWidget extends StatelessWidget{
           height: sizeScreen.height * 0.30,
           decoration: BoxDecoration(color: Color.fromARGB(255, 255, 255, 255),
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: Color.fromARGB(255, 55, 111, 60), width: 2)),
+          border: Border.all(color: Color.fromARGB(255, 55, 111, 60), width: 2), boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.5), blurRadius: 5, spreadRadius:2,offset: const Offset(0, 3) )]),
 
           child: 
 
