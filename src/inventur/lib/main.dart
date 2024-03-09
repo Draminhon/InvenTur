@@ -10,6 +10,8 @@ import 'package:inventur/pages/recover/changepassword_page.dart';
 import 'package:inventur/pages/recover/changepasswordsucess_page.dart';
 import 'package:inventur/pages/home/Pesquisador/choose/choosebetween.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
+import 'package:inventur/pages/home/Pesquisador/pesquisas.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
@@ -40,7 +42,9 @@ class MyApp extends StatelessWidget {
         '/MudarSenha' : (_) => MudarSenha(),
         '/NewPassword' : (_) => ConfirmacaoNovaSenha(),
         '/Choose' : (_) => Choose(),
-        '/PesquisadorHome' : (_) => PesquisadorHome()
+        '/PesquisadorHome' : (_) => PesquisadorHome(),
+        '/Pesquisas' : (_) => Pesquisas(),
+        '/FormA' : (_) => FormularioA()
         },
     );
   }

@@ -7,18 +7,20 @@ class PesquisadorHome extends StatelessWidget {
   Widget build(BuildContext context) {
      final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
-      appBar: AppBar(),
+      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+      appBar: AppBar( foregroundColor: const Color.fromARGB(255, 55, 111, 60),
+            backgroundColor: Colors.white,),
       drawer: Drawer(
         width: sizeScreen.width * 0.6,
         child: Column(
          // padding:  EdgeInsets.zero,
          
           children:  <Widget>[
-            UserAccountsDrawerHeader(accountName: Text('Ex'), accountEmail: Text('ex@gmail.com', ),
+            const UserAccountsDrawerHeader(accountName: Text('Ex'), accountEmail: Text('ex@gmail.com', ),
             currentAccountPicture: CircleAvatar(child: Text('Sz'),),),
             ListTile(
-              leading: Icon(Icons.person),
-              title: Text('Conta'),
+              leading: const Icon(Icons.person),
+              title: const Text('Conta'),
             
               
               onTap: () {

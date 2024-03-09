@@ -48,7 +48,7 @@ class ContainerWidget extends StatelessWidget{
           height: sizeScreen.height * 0.04,
           child: IconButton(
               
-              onPressed: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => PesquisadorHome()))}, icon: Icon(Icons.arrow_forward), padding: EdgeInsets.only(bottom: sizeScreen.height * 0.005),
+              onPressed: () => {Navigator.pushNamed(context, '/Pesquisas')}, icon: Icon(Icons.arrow_forward), padding: EdgeInsets.only(bottom: sizeScreen.height * 0.005),
            
        
               ))) 
