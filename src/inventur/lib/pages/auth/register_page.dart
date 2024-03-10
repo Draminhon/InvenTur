@@ -26,24 +26,28 @@ class RegisterPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeScreen = MediaQuery.sizeOf(context);
+    final screenSize = MediaQuery.sizeOf(context);
     
-    double paddingBottomTextField = sizeScreen.height * 0.02;
+    double paddingBottomTextField = screenSize.height * 0.015;
 
     return Scaffold(
       body: SingleChildScrollView(
+        reverse: true,
         child: SizedBox(
-          width: sizeScreen.width,
-          height: sizeScreen.height,
+          width: screenSize.width,
+          height: screenSize.height,
           child: Stack(
             children: [
               Column(
                 children: [
                   Expanded(
-                    child: Center(
-                      child: Image.asset(
-                        'assets/images/logo.png',
-                        height: sizeScreen.height * 0.35,
+                    child: Padding(
+                      padding: EdgeInsets.only(top: screenSize.height * .07),
+                      child: Center(
+                        child: Image.asset(
+                          'assets/images/logo.png',
+                          height: screenSize.height * 0.35,
+                        ),
                       ),
                     ),
                   ),
@@ -99,7 +103,7 @@ class RegisterPage extends StatelessWidget {
                           ),
                           SizedBox(height: paddingBottomTextField),
                           SizedBox(
-                            height: 50,
+                            height: screenSize.height * .07,
                             child: ElevatedButton(
                               style: ButtonStyle(
                                 shape: MaterialStateProperty.all(
@@ -109,7 +113,7 @@ class RegisterPage extends StatelessWidget {
                                 ),
                                 padding: MaterialStateProperty.all(
                                   EdgeInsets.symmetric(
-                                    vertical: sizeScreen.height * 0.012
+                                    vertical: screenSize.height * 0.012
                                   )
                                 ),
                                 backgroundColor: MaterialStateProperty.all(
