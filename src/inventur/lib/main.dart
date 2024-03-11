@@ -4,6 +4,14 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/pages/auth/login_page.dart';
 import 'package:inventur/pages/auth/register_page.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
+import 'package:inventur/pages/recover/changepasswordsucess_page.dart';
+import 'package:inventur/pages/home/Pesquisador/choose/choosebetween.dart';
+import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
+import 'package:inventur/pages/home/Pesquisador/pesquisas.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
+import 'package:inventur/pages/recover/changepassword_page.dart';
+import 'package:inventur/pages/recover/passwordcod_page.dart';
+import 'package:inventur/pages/recover/passwordrecover_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,9 +35,17 @@ class MyApp extends StatelessWidget {
       ),
       home: const LoginPage(),
       routes: {
-        '/Login': (_) => const LoginPage(),
+      '/Login': (_) => const LoginPage(),
         '/Register': (_) => RegisterPage(),
         '/AdminHome': (_) => const AdminHomePage(),
+        '/PassWordRecover' : (_) => RecuperarSenha(),
+        '/ConfirmarCodigo' : (_) => ConfirmarCodigo(),
+        '/MudarSenha' : (_) => MudarSenha(),
+        '/NewPassword' : (_) => ConfirmacaoNovaSenha(),
+        '/Choose' : (_) => Choose(),
+        '/PesquisadorHome' : (_) => PesquisadorHome(),
+        '/Pesquisas' : (_) => Pesquisas(),
+        '/FormA' : (_) => FormularioA()
       },
     );
   }
