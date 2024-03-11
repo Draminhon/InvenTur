@@ -36,6 +36,7 @@ class _PopupMenuState extends State<PopupMenu> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
       decoration: BoxDecoration(
+        color: Colors.white,
         border: Border.all(
           width: 2,
           color: const Color.fromARGB(255, 55, 111, 60),
@@ -65,7 +66,7 @@ class _PopupMenuState extends State<PopupMenu> {
             widget.rightIconPosition
             ? Icon(
               widget.popupIcon,
-              color: Colors.black,
+              color: const Color.fromARGB(255, 55, 111, 60),
             )
             : Container(),
             SizedBox(
@@ -82,7 +83,7 @@ class _PopupMenuState extends State<PopupMenu> {
             ? Container()
             : Icon(
               widget.popupIcon,
-              color: Colors.black,
+              color: const Color.fromARGB(255, 55, 111, 60),
             )
           ],
         ),

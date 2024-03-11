@@ -13,7 +13,7 @@ class ManageUsers extends StatefulWidget {
 
 class _ManageUsersState extends State<ManageUsers> {
   late List<String> statusItems;
-  String groupValue = '';
+  String radioGroupValue = '';
 
   @override
   void initState() {
@@ -62,11 +62,11 @@ class _ManageUsersState extends State<ManageUsers> {
                               title: Text(statusItems[index]),
                               leading: Radio(
                                 value: statusItems[index], 
-                                groupValue: groupValue, 
+                                groupValue: radioGroupValue, 
                                 onChanged: (value) {
                                   widget.userControllerNotifier.changeSelectedUsersStatus(value!);
                                   setState(() {
-                                    groupValue = value;
+                                    radioGroupValue = value;
                                   });
                                 }
                               ),
@@ -110,7 +110,7 @@ class _ManageUsersState extends State<ManageUsers> {
             );
           },
         );
-        groupValue = '';
+        radioGroupValue = '';
       }, 
       icon: const Icon(
         Icons.manage_accounts,

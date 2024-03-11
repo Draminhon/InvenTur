@@ -38,6 +38,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final Size screenSize = MediaQuery.sizeOf(context);
+
     return TextFormField(
       obscureText: obscureText,
       validator: widget.validator,
@@ -49,6 +51,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         isDense: true,
         errorMaxLines: 3,
         labelText: widget.labelText,
+        contentPadding: EdgeInsets.symmetric(vertical: screenSize.height * .02),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10)
         ),

@@ -45,7 +45,7 @@ class _UserCardState extends State<UserCard> {
                 widget.user.accessLevel == 'Pesquisador'
                 ? Checkbox(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(45)
+                    borderRadius: BorderRadius.circular(45),
                   ),
                   value: widget.user.isSelected, 
                   visualDensity: VisualDensity.compact,
