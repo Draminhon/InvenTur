@@ -5,7 +5,6 @@ import 'package:inventur/pages/widgets/divider_text_widget.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:inventur/pages/recover/passwordrecover_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,24 +25,25 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final sizeScreen = MediaQuery.sizeOf(context);
+    final screenSize = MediaQuery.sizeOf(context);
 
     return Scaffold(
       body: SingleChildScrollView(
+        reverse: true,
         child: SizedBox(
-          width: sizeScreen.width,
-          height: sizeScreen.height,
+          width: screenSize.width,
+          height: screenSize.height,
           child: Column(
             children: [
               Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
+                child: Padding(
+                  padding: EdgeInsets.only(top: screenSize.height * .07),
+                  child: Center(
+                    child: Image.asset(
                       'assets/images/logo.png',
-                      height: sizeScreen.height * 0.35,
+                      height: screenSize.height * 0.35,
                     ),
-                  ],
+                  ),
                 ),
               ),
               Container(
@@ -63,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                         },
                         inputFormatters: [cpfMask],
                       ),
-                      SizedBox(height: sizeScreen.height * 0.02),
+                      SizedBox(height: screenSize.height * 0.02),
                       CustomTextField(
                         isSecret: true,
                         labelText: 'Senha',
@@ -73,9 +73,9 @@ class _LoginPageState extends State<LoginPage> {
                           return _passwordValidator.validate(password: password);
                         },
                       ),
-                      SizedBox(height: sizeScreen.height * 0.02),
+                      SizedBox(height: screenSize.height * 0.02),
                       SizedBox(
-                        height: 50,
+                        height: screenSize.height * .07,
                         child: ElevatedButton(
                           style: ButtonStyle(
                             shape: MaterialStateProperty.all(
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             padding: MaterialStateProperty.all(
                               EdgeInsets.symmetric(
-                                vertical: sizeScreen.height * 0.012
+                                vertical: screenSize.height * 0.012
                               )
                             ),
                             backgroundColor: MaterialStateProperty.all(
@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                             // if (_formLoginKey.currentState!.validate()) {
                             //   Navigator.pushNamed(context, '/AdminHome');
                             // }
-                            Navigator.pushNamed(context, '/Choose');
+                            Navigator.pushNamed(context, '/AdminHome');
                           }, 
                           child: const Text(
                             'Entrar',
@@ -111,15 +111,11 @@ class _LoginPageState extends State<LoginPage> {
                         )
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
+                        padding: EdgeInsets.symmetric(vertical: screenSize.height * .015),
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () {
-
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => RecuperarSenha()));
-
-                            },
+                            onPressed: () {},
                             child: const Text(
                               'Esqueceu sua senha?',
                               style: TextStyle(
@@ -136,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: DividerText(text: 'Solicite seu Registro')
                       ),
                       SizedBox(
-                        height: 50,
+                        height: screenSize.height * .07,
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
                             shape: RoundedRectangleBorder(
