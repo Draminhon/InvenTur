@@ -21,7 +21,7 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
               height: sizeScreen.height * 0.23,
               width: sizeScreen.width * 0.7,
               decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(15)),
               
                   child: Column(

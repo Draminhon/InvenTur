@@ -12,12 +12,12 @@ import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
 import 'package:inventur/pages/recover/changepassword_page.dart';
 import 'package:inventur/pages/recover/passwordcod_page.dart';
 import 'package:inventur/pages/recover/passwordrecover_page.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-    [DeviceOrientation.portraitUp]
-  );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
 }
 
@@ -35,17 +35,20 @@ class MyApp extends StatelessWidget {
       ),
       home: const LoginPage(),
       routes: {
-      '/Login': (_) => const LoginPage(),
+        '/Login': (_) => const LoginPage(),
         '/Register': (_) => RegisterPage(),
         '/AdminHome': (_) => const AdminHomePage(),
-        '/PassWordRecover' : (_) => RecuperarSenha(),
-        '/ConfirmarCodigo' : (_) => ConfirmarCodigo(),
-        '/MudarSenha' : (_) => MudarSenha(),
-        '/NewPassword' : (_) => ConfirmacaoNovaSenha(),
-        '/Choose' : (_) => Choose(),
-        '/PesquisadorHome' : (_) => PesquisadorHome(),
-        '/Pesquisas' : (_) => Pesquisas(),
-        '/FormA' : (_) => FormularioA()
+        '/PassWordRecover': (_) => RecuperarSenha(),
+        '/ConfirmarCodigo': (_) => ConfirmarCodigo(),
+        '/MudarSenha': (_) => MudarSenha(),
+        '/NewPassword': (_) => ConfirmacaoNovaSenha(),
+        '/Choose': (_) => Choose(),
+        '/PesquisadorHome': (_) => PesquisadorHome(),
+        '/Pesquisas': (_) => Pesquisas(),
+        '/FormA': (_) => FormularioA(),
+        '/FormB': (_) => FormularioB(),
+        '/FormC': (_) => FormularioC(),
+        '/A': (_) => A()
       },
     );
   }

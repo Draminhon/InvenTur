@@ -115,7 +115,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Align(
                           alignment: Alignment.centerRight,
                           child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {Navigator.pushNamed(context, '/PassWordRecover');},
                             child: const Text(
                               'Esqueceu sua senha?',
                               style: TextStyle(

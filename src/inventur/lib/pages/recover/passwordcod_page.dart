@@ -43,7 +43,7 @@ class ConfirmarCodigo extends StatelessWidget {
                 bottom: sizeScreen.height * 0.02,
               ),
               decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: Colors.grey[300],
                   borderRadius: BorderRadius.circular(15)),
             
                   child: Column(
