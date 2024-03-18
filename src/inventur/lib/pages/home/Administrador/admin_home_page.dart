@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/models/user_model.dart';
-import 'package:inventur/pages/home/Administrador/user_registration_page.dart';
 import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
 import 'package:inventur/pages/home/Administrador/users_management_page.dart';
 
@@ -104,10 +103,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 icon: Icon(Icons.groups),
                 label: 'Gerenciar Usuários'
               ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_add_alt_1_rounded),
-                label: 'Add Usuário'
-              ),
             ],
           ),
           body: PageView(
@@ -124,7 +119,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
                 color: Colors.green,
               ),
               UsersManagementPage(userControllerNotifier: _userController),
-              AddUserPage(userControllerNotifier: _userController,)
             ],
           ),
         ),

@@ -49,6 +49,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
     final sizeScreen = MediaQuery.sizeOf(context);
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(45),
         child: AppBar(
