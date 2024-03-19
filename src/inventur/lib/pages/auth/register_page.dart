@@ -106,7 +106,7 @@ class RegisterPage extends StatelessWidget {
                             SizedBox(height: paddingBottomTextField),
                             SizedBox(
                               height: screenSize.height * .07,
-                              child: OutlinedButton(
+                              child: ElevatedButton(
                                 style: ButtonStyle(
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
@@ -167,7 +167,7 @@ class RegisterPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),

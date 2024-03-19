@@ -136,13 +136,20 @@ class _LoginPageState extends State<LoginPage> {
                         SizedBox(
                           height: screenSize.height * .07,
                           child: OutlinedButton(
-                            style: OutlinedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)
+                            style: ButtonStyle(
+                              shape: MaterialStatePropertyAll(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                                )
                               ),
-                              side: const BorderSide(
-                                width: 2,
-                                color: Color.fromARGB(255, 55, 111, 60)
+                              side: const MaterialStatePropertyAll(
+                                BorderSide(
+                                  width: 2,
+                                  color: Color.fromARGB(255, 55, 111, 60),
+                                )
+                              ),
+                              padding: MaterialStatePropertyAll(
+                                EdgeInsets.symmetric(vertical: screenSize.height * .012)
                               )
                             ),
                             onPressed: () {
