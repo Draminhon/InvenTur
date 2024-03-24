@@ -103,6 +103,101 @@ class Pesquisas extends StatelessWidget {
                   )
                 ],
               )),
+          Center(
+            child: Padding(
+              padding: EdgeInsets.all(15.0),
+              child: Table(
+                columnWidths: {
+                  1: FlexColumnWidth(sizeScreen.width * 0.001)
+                },
+                border: TableBorder.all(),
+                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                children:  [
+                  const TableRow(
+                      decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 55, 111, 50)),
+                      children: [
+                        TableCell(
+                            verticalAlignment:
+                                TableCellVerticalAlignment.middle,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'LOCALIDADE',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            )),
+                        TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'CATEGORIA',
+                              style: TextStyle(color: Colors.white),
+                                   textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      ]),
+                      TableRow(
+                      decoration: BoxDecoration(
+                          color: Colors.grey[300]),
+                      children: [
+                        TableCell(
+                            verticalAlignment:
+                                TableCellVerticalAlignment.middle,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                '',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            )),
+                        TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              '',
+                              style: TextStyle(color: Colors.white),
+                                   textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      ]),
+                       TableRow(
+                      decoration: BoxDecoration(
+                          color: Colors.grey[300]),
+                      children: [
+                        TableCell(
+                            verticalAlignment:
+                                TableCellVerticalAlignment.middle,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                '',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            )),
+                        TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              '',
+                              style: TextStyle(color: Colors.white),
+                                   textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      ]),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );

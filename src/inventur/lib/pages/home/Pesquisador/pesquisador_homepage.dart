@@ -36,13 +36,13 @@ class PesquisadorHome extends StatelessWidget {
               leading: const Icon(Icons.person),
               title: const Text('Conta'),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushNamed(context, '/PerfilPesquisador');
               },
             )
           ],
         ),
       ),
-      body: Padding(
+      body:  Padding(
           padding: EdgeInsets.only(
             top: sizeScreen.height * 0.01,
             left: sizeScreen.height * 0.02,
