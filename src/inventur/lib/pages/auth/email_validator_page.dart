@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/pages/widgets/custom_text_field_widget.dart';
+import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/services/email_verification_code.dart';
 import 'package:inventur/validators/email_verification_code_validator.dart';
 
@@ -251,7 +251,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                                     )
                                   ),
                                   overlayColor: MaterialStatePropertyAll(
-                                    Colors.red[400]
+                                    Colors.red[100]
                                   )
                                 ),
                                 onPressed: () {

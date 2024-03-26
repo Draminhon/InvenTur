@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
 import 'package:inventur/pages/widgets/registration_form_widget.dart';
 
-class AddUserDialog extends StatefulWidget {
+class AddAdminDialog extends StatefulWidget {
   final UserController userControllerNotifier;
 
-  const AddUserDialog({super.key, required this.userControllerNotifier});
+  const AddAdminDialog({super.key, required this.userControllerNotifier});
 
   @override
-  State<AddUserDialog> createState() => _AddUserDialogState();
+  State<AddAdminDialog> createState() => _AddAdminDialogState();
 }
 
-class _AddUserDialogState extends State<AddUserDialog> {
+class _AddAdminDialogState extends State<AddAdminDialog> {
   
   late UserController _userController;
 
@@ -23,7 +23,8 @@ class _AddUserDialogState extends State<AddUserDialog> {
 
   @override
   Widget build(BuildContext context) {
-    
+    final screenSize = MediaQuery.sizeOf(context);
+
     return OutlinedButton(
       style: ButtonStyle(
         padding: const MaterialStatePropertyAll(
@@ -109,21 +110,39 @@ class _AddUserDialogState extends State<AddUserDialog> {
                         margin: const EdgeInsets.only(top: 15, bottom: 40),
                         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 2,
-                            color: const Color.fromARGB(255, 55, 111, 60),
-                          ),
-                          borderRadius: BorderRadius.circular(10),
+                          color: const Color.fromARGB(225, 227, 226, 226),
+                          borderRadius: BorderRadius.circular(screenSize.height * .03)
                         ),
-                        child: const Text(
-                          'Um e-mail com os dados cadastrados será enviado para o usuário',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.info,
+                              size: screenSize.height * .08,
+                              color: const Color.fromARGB(255, 55, 111, 60),
+                            ),
+                            SizedBox(height: screenSize.height * .02),
+                            const Text(
+                              'Um e-mail com os dados cadastrados será enviado para o usuário',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                              ),
+                            ),
+                            Text(
+                              'O usuário terá acesso à todas as funcionalidades disponíveis ao perfil de nivel Administrador',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.orange[900],
+                                fontSize: 16,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      ResgistrationForm()
+                      ResgistrationForm(
+                        userLevel: _userController.primaryLevel,
+                        userController: _userController,
+                      )
                     ],
                   ),
                 ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/auth/email_validator_page.dart';
-import 'package:inventur/pages/widgets/custom_text_field_widget.dart';
+import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/email_validator.dart';
 import 'package:inventur/validators/name_validator.dart';
@@ -28,7 +28,7 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
     
-    double paddingBottomTextField = screenSize.height * 0.015;
+    double paddingBottomTextField = screenSize.height * .015;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -154,13 +154,16 @@ class RegisterPage extends StatelessWidget {
                 ),
                 Positioned(
                   top: 50,
-                  left: 5,
+                  left: 8,
                   child: SafeArea(
                     child: IconButton(
                       tooltip: 'Voltar',
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
+                      style: ButtonStyle(
+                        overlayColor: MaterialStatePropertyAll(
+                          Colors.green[100]
+                        )
+                      ),
+                      onPressed: () => Navigator.pop(context),
                       icon: const Icon(
                         Icons.arrow_back_ios,
                         color: Color.fromARGB(255, 9, 145, 20),

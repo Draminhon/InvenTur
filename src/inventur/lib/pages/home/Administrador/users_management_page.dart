@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
-import 'package:inventur/pages/home/Administrador/dialogs/user_registration_dialog.dart';
+import 'package:inventur/pages/home/Administrador/dialogs/admin_registration_dialog.dart';
 import 'package:inventur/pages/home/Administrador/widgets/popup_menu_widget.dart';
 import 'package:inventur/pages/home/Administrador/widgets/user_card_widget.dart';
 import 'package:inventur/pages/home/Administrador/dialogs/users_management_dialog.dart';
@@ -72,7 +72,7 @@ class _UsersManagementPageState extends State<UsersManagementPage> {
                         onChanged: _userController.filterUsersByStatus,
                         selectedItem: _userController.usersFilteredStatus,
                       )
-                      : AddUserDialog(userControllerNotifier: _userController),
+                      : AddAdminDialog(userControllerNotifier: _userController),
                       PopupMenu(
                         popupIcon: Icons.group,
                         rightIconPosition: false,
