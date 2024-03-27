@@ -15,6 +15,7 @@ import 'package:inventur/pages/recover/passwordrecover_page.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
 import 'package:inventur/pages/home/Pesquisador/perfil_pesquisador.dart';
+import 'package:inventur/pages/home/Pesquisador/alterarDados-pesquisador.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -50,7 +51,8 @@ class MyApp extends StatelessWidget {
         '/FormB': (_) => FormularioB(),
         '/FormC': (_) => FormularioC(),
         '/A': (_) => A(),
-        '/PerfilPesquisador': (_) => ContaPesquisador()
+        '/PerfilPesquisador': (_) => ContaPesquisador(),
+        '/AlterarDados': (_) => AlterarCadastro()
       },
     );
   }
