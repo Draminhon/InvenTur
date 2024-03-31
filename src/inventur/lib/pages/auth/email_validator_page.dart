@@ -84,21 +84,21 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                                 text: "Validação do E-mail\n\n",
                                 style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: screenSize.height * .023
+                                  fontSize: screenSize.height * .025
                                 ),
                                 children: [
                                   TextSpan(
                                     text: "Para confirmar sua identidade, digite o código enviado para o e-mail ",
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: screenSize.height * .02
+                                      fontSize: screenSize.height * .025
                                     )
                                   ),
                                   TextSpan(
                                     text: widget.email,
                                     style: TextStyle(
                                       color: const Color.fromARGB(255, 0, 128, 0),
-                                      fontSize: screenSize.height * .02
+                                      fontSize: screenSize.height * .023
                                     )
                                   ),
                                 ]
@@ -107,9 +107,10 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                             SizedBox(height: screenSize.height *.02),
                             Text(
                               "O código é válido durante 15 minutos",
+                              textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: const Color.fromARGB(255, 207, 0, 0),
-                                fontSize: screenSize.height * .02
+                                fontSize: screenSize.height * .023
                               ),
                             )
                           ],
@@ -162,7 +163,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                           child: Text(
                             "Enviar novo código",
                             style: TextStyle(
-                              fontSize: screenSize.height * .02
+                              fontSize: screenSize.height * .025
                             ),
                           ),
                         ),
@@ -175,7 +176,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                               'Insira o código de 6 dígitos',
                               style: TextStyle(
                                 color: const Color.fromARGB(255, 0, 128, 0),
-                                fontSize: screenSize.height * .021,
+                                fontSize: screenSize.height * .022,
                                 fontWeight: FontWeight.bold
                               ),
                             ),

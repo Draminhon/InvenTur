@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
-import 'package:inventur/pages/home/Administrador/users_management_page.dart';
+import 'package:inventur/pages/home/Administrador/user_management_page.dart';
 import 'package:inventur/pages/widgets/options_drawer_widget.dart';
 
 class AdminHomePage extends StatefulWidget {
@@ -34,6 +34,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
     UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
     UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
   ];
+
+  final Map<int, String> pageTitle = {
+    0: 'Andamento das Pesquisas',
+    1: 'Pesquisas',
+    2: 'Gerenciar Usuários',
+  };
   
   @override
   void initState() {
@@ -46,14 +52,14 @@ class _AdminHomePageState extends State<AdminHomePage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
         backgroundColor: const Color.fromARGB(255, 245, 245, 245),
-        drawer: const SafeArea(
-          child: OptionsDrawer()
+        drawer: SafeArea(
+          child: OptionsDrawer(userController: _userController,)
         ),
         appBar: AppBar(
+          title: Text(pageTitle[currentPageIndex]!),
           foregroundColor: const Color.fromARGB(255, 55, 111, 60),
           backgroundColor: Colors.white,
           leading: Builder(
@@ -78,7 +84,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
             pageController.animateToPage(
               page, 
               duration: const Duration(milliseconds: 400), 
-              curve: Curves.linear
+              curve: Curves.ease
             );
           },
           selectedItemColor: const Color.fromARGB(255, 55, 111, 60),
@@ -94,10 +100,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
             BottomNavigationBarItem(
               icon: Icon(Icons.groups),
               label: 'Usuários'
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.account_circle),
-              label: 'Perfil'
             ),
           ],
         ),
@@ -119,12 +121,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               height: 200,
               color: Colors.blue,
             ),
-            UsersManagementPage(userControllerNotifier: _userController),
-            Container(
-              width: 200,
-              height: 200,
-              color: Colors.red,
-            ),
+            UserManagementPage(userControllerNotifier: _userController),
           ],
         ),
       ),

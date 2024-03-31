@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
-import 'package:inventur/pages/home/Administrador/dialogs/admin_registration_dialog.dart';
+import 'package:inventur/pages/home/Administrador/dialogs/admin_register_dialog.dart';
 import 'package:inventur/pages/home/Administrador/widgets/popup_menu_widget.dart';
 import 'package:inventur/pages/home/Administrador/widgets/user_card_widget.dart';
-import 'package:inventur/pages/home/Administrador/dialogs/users_management_dialog.dart';
+import 'package:inventur/pages/home/Administrador/dialogs/user_management_dialog.dart';
 
-class UsersManagementPage extends StatefulWidget {
+class UserManagementPage extends StatefulWidget {
   final UserController userControllerNotifier;
 
-  const UsersManagementPage({super.key, required this.userControllerNotifier});
+  const UserManagementPage({super.key, required this.userControllerNotifier});
 
   @override
-  State<UsersManagementPage> createState() => _UsersManagementPageState();
+  State<UserManagementPage> createState() => _UserManagementPageState();
 }
 
-class _UsersManagementPageState extends State<UsersManagementPage> {
+class _UserManagementPageState extends State<UserManagementPage> {
   final TextEditingController _searchController = TextEditingController();
 
   late UserController _userController;
@@ -72,7 +72,7 @@ class _UsersManagementPageState extends State<UsersManagementPage> {
                         onChanged: _userController.filterUsersByStatus,
                         selectedItem: _userController.usersFilteredStatus,
                       )
-                      : AddAdminDialog(userControllerNotifier: _userController),
+                      : AdminRegisterDialogButton(userControllerNotifier: _userController),
                       PopupMenu(
                         popupIcon: Icons.group,
                         rightIconPosition: false,
@@ -107,7 +107,7 @@ class _UsersManagementPageState extends State<UsersManagementPage> {
                             Text('${_userController.countSelectedUsers} Usuário(s) selecionado(s)'),
                           ],
                         ),
-                        ManageUsersDialog(userControllerNotifier: _userController)
+                        UserManagementDialogButton(userControllerNotifier: _userController)
                       ],
                     ),
                   )

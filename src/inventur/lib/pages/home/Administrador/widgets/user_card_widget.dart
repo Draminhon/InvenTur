@@ -141,12 +141,14 @@ class _UserCardState extends State<UserCard> {
                 tooltip: 'Status do pesquisador',
                 surfaceTintColor: Colors.white,
                 itemBuilder: (context) {
-                  return _userController.statusItems.map<PopupMenuItem<String>>((String value) {
-                    return PopupMenuItem(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList();
+                  return _userController.statusItems.map<PopupMenuItem<String>>(
+                    (String value) {
+                      return PopupMenuItem(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }
+                  ).toList();
                 },
                 onSelected: (String value) {
                   _userController.setUserStatus(value, widget.user);

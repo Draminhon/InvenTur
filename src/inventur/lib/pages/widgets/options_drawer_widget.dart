@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:inventur/pages/home/Administrador/account_page.dart';
+import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
 
 class OptionsDrawer extends StatelessWidget {
-  const OptionsDrawer({super.key});
+  final UserController userController;
+
+  const OptionsDrawer({super.key, required this.userController});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,13 @@ class OptionsDrawer extends StatelessWidget {
               ),
               foregroundColor: MaterialStatePropertyAll(Colors.green[800]),
             ),
-            onPressed: () {},
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => AccountPage(
+                  userControllerNotifier: userController,
+                ),
+              ),
+            ),
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

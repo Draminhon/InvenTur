@@ -33,9 +33,9 @@ class ResgistrationForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeScreen = MediaQuery.sizeOf(context);
+    final screenSize = MediaQuery.sizeOf(context);
     
-    double paddingBottomTextField = sizeScreen.height * 0.02;
+    double paddingBottomTextField = screenSize.height * 0.02;
 
     return Form(
       key: _formRegisterKey,
@@ -83,7 +83,7 @@ class ResgistrationForm extends StatelessWidget {
           ),
           SizedBox(height: paddingBottomTextField),
           SizedBox(
-            height: 50,
+            height: screenSize.height * .07,
             child: ElevatedButton(
               style: ButtonStyle(
                 shape: MaterialStateProperty.all(
@@ -93,7 +93,7 @@ class ResgistrationForm extends StatelessWidget {
                 ),
                 padding: MaterialStateProperty.all(
                   EdgeInsets.symmetric(
-                    vertical: sizeScreen.height * 0.012
+                    vertical: screenSize.height * 0.012
                   )
                 ),
                 backgroundColor: MaterialStateProperty.all(
