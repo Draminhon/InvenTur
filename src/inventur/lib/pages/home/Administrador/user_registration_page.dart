@@ -75,7 +75,7 @@ class _AddUserPageState extends State<AddUserPage> {
                 ),
               ),
             ),
-            ResgistrationForm()
+          //ResgistrationForm(userLevel: '', userController: null,)
           ],
         ),
       ),

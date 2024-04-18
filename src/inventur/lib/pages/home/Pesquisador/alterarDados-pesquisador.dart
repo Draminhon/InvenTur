@@ -127,14 +127,21 @@ class AlterarCadastro extends StatelessWidget {
                               onPressed: () => showDialog(
                                   context: context,
                                   builder: (BuildContext context) {
-                                    return AlertDialog(content: Container(height: sizeScreen.height * 0.1,child: Text("Dados alterados com sucesso!", style: TextStyle(fontSize: sizeScreen.width * 0.05),),));
+                                    return AlertDialog(
+                                        content: Container(
+                                      height: sizeScreen.height * 0.1,
+                                      child: Text(
+                                        "Dados alterados com sucesso!",
+                                        style: TextStyle(
+                                            fontSize: sizeScreen.width * 0.05),
+                                      ),
+                                    ));
                                   }),
                               style: OutlinedButton.styleFrom(
                                   backgroundColor:
                                       const Color.fromARGB(255, 55, 111, 60),
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(10))),
+                                      borderRadius: BorderRadius.circular(10))),
                               child: const Text(
                                 'CONFIRMAR ALTERAÇÕES',
                                 style: TextStyle(color: Colors.white),

@@ -16,6 +16,8 @@ import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
 import 'package:inventur/pages/home/Pesquisador/perfil_pesquisador.dart';
 import 'package:inventur/pages/home/Pesquisador/alterarDados-pesquisador.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosDeHospedagem.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/placeholder.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,7 +54,9 @@ class MyApp extends StatelessWidget {
         '/FormC': (_) => FormularioC(),
         '/A': (_) => A(),
         '/PerfilPesquisador': (_) => ContaPesquisador(),
-        '/AlterarDados': (_) => AlterarCadastro()
+        '/AlterarDados': (_) => AlterarCadastro(),
+        '/MeiosDeHospedagem': (_) => MeiosDeHospedagem(),
+        '/Placeholder': (_) => PlaceHolder()
       },
     );
   }

@@ -11,10 +11,6 @@ class PesquisadorHome extends StatelessWidget {
 
     var outputFormat = DateFormat('dd/MM/yyyy');
 
-
-  
-
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       appBar: AppBar(
@@ -46,12 +42,11 @@ class PesquisadorHome extends StatelessWidget {
           ],
         ),
       ),
-      body:  Padding(
+      body: Padding(
           padding: EdgeInsets.only(
             top: sizeScreen.height * 0.01,
             left: sizeScreen.height * 0.02,
             right: sizeScreen.height * 0.02,
-          
           ),
           child: ListView(children: [
             ContainerWidget(

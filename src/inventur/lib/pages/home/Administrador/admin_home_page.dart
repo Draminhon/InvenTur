@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/models/user_model.dart';
-import 'package:inventur/pages/home/Administrador/user_registration_page.dart';
 import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
-import 'package:inventur/pages/home/Administrador/users_management_page.dart';
+import 'package:inventur/pages/home/Administrador/user_management_page.dart';
+import 'package:inventur/pages/widgets/options_drawer_widget.dart';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
@@ -35,6 +34,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
     UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
     UserModel(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
   ];
+
+  final Map<int, String> pageTitle = {
+    0: 'Andamento das Pesquisas',
+    1: 'Pesquisas',
+    2: 'Gerenciar Usuários',
+  };
   
   @override
   void initState() {
@@ -46,87 +51,78 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
-        fontFamily: GoogleFonts.aBeeZee().fontFamily,
-        checkboxTheme: const CheckboxThemeData(
-          side: BorderSide(
-            color: Color.fromARGB(255, 55, 111, 60),
-            width: 1.8
-          ),
-        )
-      ),
-      home: DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: const Color.fromARGB(255, 245, 245, 245),
-          drawer: const Drawer(
-            backgroundColor: Color.fromARGB(255, 245, 245, 245),
-            child: Column(
-              children: [
-                UserAccountsDrawerHeader(
-                  accountName: Text('accountName'), 
-                  accountEmail: Text('accountEmail'),
-                  currentAccountPicture: CircleAvatar(
-                    child: Icon(
-                      Icons.admin_panel_settings,
-                      size: 65,
-                    ),
-                  ),
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+        drawer: SafeArea(
+          child: OptionsDrawer(userController: _userController,)
+        ),
+        appBar: AppBar(
+          title: Text(pageTitle[currentPageIndex]!),
+          foregroundColor: const Color.fromARGB(255, 55, 111, 60),
+          backgroundColor: Colors.white,
+          leading: Builder(
+            builder: (context) {
+              return IconButton(
+                onPressed: () => Scaffold.of(context).openDrawer(),
+                icon: const Icon(
+                  Icons.account_circle,
+                  size: 35,
                 ),
-              ],
-            ),
-          ),
-          appBar: AppBar(
-            foregroundColor: const Color.fromARGB(255, 55, 111, 60),
-            backgroundColor: Colors.white,
-          ),
-          bottomNavigationBar: BottomNavigationBar(
-            backgroundColor: Colors.white,
-            onTap: (page) {
-              pageController.animateToPage(
-                page, 
-                duration: const Duration(milliseconds: 400), 
-                curve: Curves.linear
+                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
               );
             },
-            currentIndex: currentPageIndex,
-            selectedItemColor: const Color.fromARGB(255, 55, 111, 60),
-            items: const <BottomNavigationBarItem> [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.insert_chart),
-                label: 'Business'
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.groups),
-                label: 'Gerenciar Usuários'
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_add_alt_1_rounded),
-                label: 'Add Usuário'
-              ),
-            ],
           ),
-          body: PageView(
-            controller: pageController,
-            onPageChanged: (page) {
-              setState(() {
-                currentPageIndex = page;
-              });
-            },
-            children: [
-              Container(
-                width: 200,
-                height: 200,
-                color: Colors.green,
-              ),
-              UsersManagementPage(userControllerNotifier: _userController),
-              AddUserPage(userControllerNotifier: _userController,)
-            ],
-          ),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          useLegacyColorScheme: false,
+          currentIndex: currentPageIndex,
+          backgroundColor: Colors.white,
+          type: BottomNavigationBarType.fixed,
+          onTap: (page) {
+            pageController.animateToPage(
+              page, 
+              duration: const Duration(milliseconds: 400), 
+              curve: Curves.ease
+            );
+          },
+          selectedItemColor: const Color.fromARGB(255, 55, 111, 60),
+          items: const <BottomNavigationBarItem> [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.insert_chart),
+              label: 'Andamento'
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.manage_search),
+              label: 'Pesquisas'
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.groups),
+              label: 'Usuários'
+            ),
+          ],
+        ),
+        body: PageView(
+          controller: pageController,
+          onPageChanged: (page) {
+            setState(() {
+              currentPageIndex = page;
+            });
+          },
+          children: [
+            Container(
+              width: 200,
+              height: 200,
+              color: Colors.green,
+            ),
+            Container(
+              width: 200,
+              height: 200,
+              color: Colors.blue,
+            ),
+            UserManagementPage(userControllerNotifier: _userController),
+          ],
         ),
       ),
     );

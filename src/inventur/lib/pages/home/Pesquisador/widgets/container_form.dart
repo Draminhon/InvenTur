@@ -37,7 +37,7 @@ class ContainerA extends StatelessWidget {
           ),
           Expanded(
               child: IconButton(
-            onPressed: () => print('sexo'),
+            onPressed: () => print(''),
             icon: Icon(
               Icons.arrow_forward,
               size: sizeScreen.height * 0.029,
@@ -50,9 +50,9 @@ class ContainerA extends StatelessWidget {
 
 class Tilee extends StatelessWidget {
   @override
-  final String texto;
+  final String texto, routeName;
 
-  Tilee({super.key, required this.texto});
+  const Tilee({super.key, required this.texto, required this.routeName});
 
   Widget build(BuildContext context) {
     return Container(
@@ -69,6 +69,7 @@ class Tilee extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           )),
           dense: true,
+          onTap: () => Navigator.pushNamed(context, routeName),
         ));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/pages/widgets/custom_text_field_widget.dart';
+import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
+import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/email_validator.dart';
 import 'package:inventur/validators/name_validator.dart';
@@ -8,8 +9,15 @@ import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class ResgistrationForm extends StatelessWidget {
-  ResgistrationForm({super.key});
+  ResgistrationForm({
+    super.key,
+    required this.userLevel,
+    required this.userController,
+  });
 
+  final String userLevel;
+  final UserController userController;
+  
   final _formRegisterKey = GlobalKey<FormState>();
 
   final CPFValidator _cpfValidator = CPFValidator();
@@ -25,9 +33,9 @@ class ResgistrationForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeScreen = MediaQuery.sizeOf(context);
+    final screenSize = MediaQuery.sizeOf(context);
     
-    double paddingBottomTextField = sizeScreen.height * 0.02;
+    double paddingBottomTextField = screenSize.height * 0.02;
 
     return Form(
       key: _formRegisterKey,
@@ -75,7 +83,7 @@ class ResgistrationForm extends StatelessWidget {
           ),
           SizedBox(height: paddingBottomTextField),
           SizedBox(
-            height: 50,
+            height: screenSize.height * .07,
             child: ElevatedButton(
               style: ButtonStyle(
                 shape: MaterialStateProperty.all(
@@ -85,7 +93,7 @@ class ResgistrationForm extends StatelessWidget {
                 ),
                 padding: MaterialStateProperty.all(
                   EdgeInsets.symmetric(
-                    vertical: sizeScreen.height * 0.012
+                    vertical: screenSize.height * 0.012
                   )
                 ),
                 backgroundColor: MaterialStateProperty.all(
@@ -98,9 +106,11 @@ class ResgistrationForm extends StatelessWidget {
               onPressed: () {
                 if (_formRegisterKey.currentState!.validate()){}
               }, 
-              child: const Text(
-                'Solicitar Cadastro',
-                style: TextStyle(
+              child: Text(
+                userLevel == userController.primaryLevel
+                ? 'Cadastrar'
+                : 'Solicitar Cadastro',
+                style: const TextStyle(
                   color: Colors.white,
                   fontSize: 22
                 ),

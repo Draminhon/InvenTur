@@ -2,27 +2,37 @@ import 'package:flutter/material.dart';
 import 'package:inventur/models/user_model.dart';
 
 class UserController extends ChangeNotifier {
+  static const String _allStatus = 'Todos';
+  static const String _onStatus = 'Ativo';
+  static const String _offStatus = 'Não Ativo';
+  static const String _waitingStatus = 'Aguardando Aprovação';
+  static const String _primaryLevel = 'Administrador';
+  static const String _secondaryLevel = 'Pesquisador';
+
   int _countSelectedUsers = 0;
   List<UserModel> _users = [];
   bool _allSelectedUsers = false;
-  String _usersFilteredStatus = 'Todos';
-  String _usersFilteredAccessLevel = 'Pesquisador';
+  String _usersFilteredStatus = _allStatus;
+  String _usersFilteredAccessLevel = _secondaryLevel;
 
   final List<UserModel> _selectedUsers = [];
   final List<UserModel> _filteredUsers = [];
 
-  final List<String> _accessLevels = ['Pesquisador', 'Administrador'];
+  final List<String> _accessLevels = [_secondaryLevel, _primaryLevel];
   final List<String> statusItems = [
-    'Aguardando Aprovação',
-    'Ativo',
-    'Não Ativo'
+    _waitingStatus,
+    _onStatus,
+    _offStatus
   ];
   final List<String> _statusFilters = [
-    'Todos',
-    'Ativo',
-    'Não Ativo',
-    'Aguardando Aprovação'
+    _allStatus,
+    _onStatus,
+    _offStatus,
+    _waitingStatus
   ];
+
+  String get primaryLevel => _primaryLevel;
+  String get secondaryLevel => _secondaryLevel;
 
   List<String> get accessLeves => _accessLevels;
   List<String> get statusFilters => _statusFilters;
@@ -51,7 +61,7 @@ class UserController extends ChangeNotifier {
       if (usersFilteredAccessLevel == _accessLevels[0] &&
           user.accessLevel == _accessLevels[0]) {
         switch (usersFilteredStatus) {
-          case 'Todos':
+          case _allStatus:
             _filteredUsers.add(user);
             break;
           default:
@@ -161,11 +171,11 @@ class UserController extends ChangeNotifier {
 
   Color? statusColor(String status) {
     switch (status) {
-      case 'Aguardando Aprovação':
+      case _waitingStatus:
         return Colors.orange[600];
-      case 'Ativo':
+      case _onStatus:
         return Colors.green[600];
-      case 'Não Ativo':
+      case _offStatus:
         return Colors.red[600];
     }
     return null;

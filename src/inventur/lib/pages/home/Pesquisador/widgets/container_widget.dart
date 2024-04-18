@@ -55,7 +55,7 @@ class ContainerWidget extends StatelessWidget {
           Padding(
               padding: EdgeInsets.only(left: sizeScreen.width * 0.7),
               child: SizedBox(
-                  height: sizeScreen.height * 0.04,
+                  height: sizeScreen.height * 0.03,
                   child: IconButton(
                     onPressed: () =>
                         {Navigator.pushNamed(context, '/Pesquisas')},
