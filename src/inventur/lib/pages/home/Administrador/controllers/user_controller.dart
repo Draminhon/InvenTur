@@ -9,12 +9,6 @@ class UserController extends ChangeNotifier {
   static const String _primaryLevel = 'Administrador';
   static const String _secondaryLevel = 'Pesquisador';
 
-  int _countSelectedUsers = 0;
-  List<UserModel> _users = [];
-  bool _allSelectedUsers = false;
-  String _usersFilteredStatus = _allStatus;
-  String _usersFilteredAccessLevel = _secondaryLevel;
-
   final List<UserModel> _selectedUsers = [];
   final List<UserModel> _filteredUsers = [];
 
@@ -30,6 +24,12 @@ class UserController extends ChangeNotifier {
     _offStatus,
     _waitingStatus
   ];
+
+  int _countSelectedUsers = 0;
+  List<UserModel> _users = [];
+  bool _allSelectedUsers = false;
+  String _usersFilteredStatus = _allStatus;
+  String _usersFilteredAccessLevel = _secondaryLevel;
 
   String get primaryLevel => _primaryLevel;
   String get secondaryLevel => _secondaryLevel;
