@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/tabela.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/container_form.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
@@ -92,6 +94,8 @@ class MeiosDeHospedagem extends StatelessWidget {
           'Hotel de trânsito',
           'Spa'
         ]),
+
+          SizedBox(height: sizeScreen.height * 0.05,),
 
         Container(
           color: const Color.fromARGB(255, 55, 111, 60),
@@ -327,7 +331,40 @@ class MeiosDeHospedagem extends StatelessWidget {
         ]),
         const textLabel(name: 'pontos de referência:'),
         const CustomTextField(name: 'ponto de referência'),
-        SizedBox(height: sizeScreen.height * 0.1,)
+        SizedBox(height: sizeScreen.height * 0.1,),
+        
+         Container(
+          color: const Color.fromARGB(255, 55, 111, 60),
+          height: sizeScreen.height * 0.06,
+          padding: EdgeInsets.only(
+              top: sizeScreen.height * 0.008, left: sizeScreen.width * 0.04),
+          child: Text(
+            'Cadastro, classificação e outros',
+            style: TextStyle(
+                color: Colors.white, fontSize: sizeScreen.height * 0.03),
+          ),
+        ),
+        SizedBox(height: sizeScreen.height * 0.05,),
+       
+        Tabela(),
+         SizedBox(height: sizeScreen.height * 0.05,),
+  Padding(padding: EdgeInsets.only(left: sizeScreen.width * 0.05), child: 
+        textLabel(name: '       Segmentos ou tipos de turismo\nem que é especializado (assinalar até 3)')
+     ),
+      SizedBox(height: sizeScreen.height * 0.05,),
+      CheckB(nomes: ['Aventura', 'Ecoturismo', 'Rural', 'Estudos e intercâmbio', 'Cultural\n(cívico, étnico,\nreligioso, místico e\nesotérico)', 'náutico', 'Saúde\n(Bem estar e médico)', 'Pesca', 'Sol e praia', 'Negócios e\eventos', 'Esporte', 'Não é\nespecializado em nenhum segmento'],)
+      ,SizedBox(height: sizeScreen.height * 0.05,),
+      Container(
+          color: const Color.fromARGB(255, 55, 111, 60),
+          height: sizeScreen.height * 0.06,
+          padding: EdgeInsets.only(
+              top: sizeScreen.height * 0.008, left: sizeScreen.width * 0.04),
+          child: Text(
+            'Funcionamento',
+            style: TextStyle(
+                color: Colors.white, fontSize: sizeScreen.height * 0.03),
+          ),
+        ),
       ]),
     );
   }
