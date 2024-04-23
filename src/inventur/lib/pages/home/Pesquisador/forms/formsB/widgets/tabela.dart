@@ -1,206 +1,304 @@
 import 'package:flutter/material.dart';
 
-class Tabela extends StatelessWidget {
+class TabelaT1 extends StatelessWidget {
+  final List<Widget> column01;
+  final List<Widget> column02;
+
+  const TabelaT1({super.key, required this.column01, required this.column02});
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
-    return 
-    Table(
+    List<Widget> tablesRows = [];
+    for (int i = 0; i < column01.length; i++) {
+      tablesRows.add(Table(
+        border: TableBorder.all(),
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        children: [
+          TableRow(
+              decoration: const BoxDecoration(color: Colors.white),
+              children: [
+                TableCell(
+                    verticalAlignment: TableCellVerticalAlignment.middle,
+                    child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: column01[i])),
+                TableCell(
+                  verticalAlignment: TableCellVerticalAlignment.middle,
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0), child: column02[i]),
+                )
+              ]),
+        ],
+      ));
+    }
+
+    return Column(children: tablesRows);
+  }
+}
+
+class TabelaT2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final sizeScreen = MediaQuery.of(context).size;
+    return Table(
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      border: TableBorder.all(),
+      children: [
+        const TableRow(children: [
+          Text('2º FEIRA'),
+          Text('3º FEIRA'),
+          Text('4º FEIRA'),
+          Text('5º FEIRA'),
+          Text('6º FEIRA'),
+          Text('SABADO'),
+          Text('DOMINGO'),
+        ]),
+        TableRow(
+          children: List.generate(
+              7,
+              (index) => SizedBox(
+                    height: sizeScreen.height * 0.1,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Abertura',
+                        hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+                      ),
+                    ),
+                  )),
+        ),
+        TableRow(
+          children: List.generate(
+              7,
+              (index) => SizedBox(
+                    height: sizeScreen.height * 0.1,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Encerramento',
+                        hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+                      ),
+                    ),
+                  )),
+        ),
+      ],
+    );
+  }
+}
+
+class TabelaT3 extends StatelessWidget {
+  const TabelaT3({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final sizeScreen = MediaQuery.of(context).size;
+    return Table(
+      border: TableBorder.all(),
+      children: [
+        TableRow(
+            decoration: BoxDecoration(border: Border.all()),
+            children: const [
+              TableCell(
+                  child: SizedBox(
+                child: Text('espaço',textAlign: TextAlign.center,),
+              )),
+              TableCell(
+                  child: SizedBox(
+                child: Text('quantidade',textAlign: TextAlign.center,),
                 
-                border: TableBorder.all(),
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                children:   [
-                  TableRow(
+              )),
+              TableCell(
+                  child: SizedBox(
+                child: Text('Área total(m²)',textAlign: TextAlign.center,),
+              )),
+              TableCell(
+                  child: SizedBox(
+                child: Text('Capacidade nº\npessoas',textAlign: TextAlign.center,),
+              ))
+            ]),
+        TableRow(children: [
+          TableCell(
+              child: SizedBox(
+            child: Text('Auditório',textAlign: TextAlign.center,),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+        ]),
+        TableRow(children: [
+          TableCell(
+              child: SizedBox(
+            child: Text('Salas Modulares',textAlign: TextAlign.center,),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+        ]),
+        TableRow(children: [
+          TableCell(
+              child: SizedBox(
+            child: Text('Pavilhão de feiras',textAlign: TextAlign.center,),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+        ]),
+        TableRow(children: [
+          TableCell(
+              child: SizedBox(
+            child: Text('Áreas de exposição coberta',textAlign: TextAlign.center,),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+          TableCell(
+              child: SizedBox(
+            child: TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintStyle: TextStyle(fontSize: sizeScreen.width * 0.03),
+              ),
+            ),
+          )),
+        ])
+      ],
+    );
+  }
+}
 
-                      decoration: BoxDecoration(
-                          color: Colors.white),
-                      children: [
-                        TableCell(
+class TabelaT4 extends StatelessWidget {
+  const TabelaT4({super.key, required this.column01, required this.column02, required this.column03, required this.column04,});
+ final List<Widget> column01;
+  final List<Widget> column02;
+  final List<Widget> column03;
+  final List<Widget> column04;
 
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Entidade/guia\nturístico',
-                                style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900),
-                                textAlign: TextAlign.center,
-                              ),
-                            )),
-                        TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Categoria/tipo/classificação/número',
-                              style: TextStyle(color: Colors.black, fontWeight: FontWeight.w900),
-                                   textAlign: TextAlign.center,
-                            ),
-                          ),
-                        )
-                      ]),
-                      TableRow(
-                      decoration: BoxDecoration(
-                          color: Colors.white),
-                      children: [
-                        TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Mtur',
-                                style: TextStyle(color: Colors.black),
-                                textAlign: TextAlign.center,
-                              ),
-                            )),
-                        TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'CADASTUR\noutros',
-                              style: TextStyle(color: Colors.black),
-                                   textAlign: TextAlign.center,
-                            ),
-                          ),
-                        )
-                      ]),
-                       TableRow(
-                      decoration: BoxDecoration(
-                          color: Colors.white),
-                      children: [
-                        TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Associações e sindicatos do\nsetor de hospedagem',
-                                style: TextStyle(color: Colors.black),
-                                textAlign: TextAlign.center,
-                              ),
-                            )),
-                        TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: TextField(
-                              
-                            
-                            ),
-                          ),
-                        )
-                      ]),
-                       TableRow(
-                      decoration: BoxDecoration(
-                          color: Colors.white),
-                      children: [
-                        TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Associações de turismos',
-                                style: TextStyle(color: Colors.black),
-                                textAlign: TextAlign.center,
-                              ),
-                            )),
-                        TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: TextField(
-                              
-                            
-                            ),
-                          ),
-                        )
-                      ]),
-                       TableRow(
-                      decoration: BoxDecoration(
-                          color: Colors.white),
-                      children: [
-                        TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Associações comerciais',
-                                style: TextStyle(color: Colors.black),
-                                textAlign: TextAlign.center,
-                              ),
-                            )),
-                        TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: TextField(
-                              
-                            
-                            ),
-                          ),
-                        )
-                      ]),
-                       TableRow(
-                      decoration: BoxDecoration(
-                          color: Colors.white),
-                      children: [
-                        TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Guías Turísticos',
-                                style: TextStyle(color: Colors.black),
-                                textAlign: TextAlign.center,
-                              ),
-                            )),
-                        TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                             child: TextField(
-                              
-                            
-                            ),
-                          ),
-                        )
-                      ]),
-                      TableRow(
-                      decoration: BoxDecoration(
-                          color: Colors.white),
-                      children: [
-                        TableCell(
-                            verticalAlignment:
-                                TableCellVerticalAlignment.middle,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Text(
-                                'Outros',
-                                style: TextStyle(color: Colors.black),
-                                textAlign: TextAlign.center,
-                              ),
-                            )),
-                        TableCell(
-                          verticalAlignment: TableCellVerticalAlignment.middle,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: 
-                            SizedBox(height:sizeScreen.height * 0.05  ,child: 
-                            TextField(
-                              decoration: null ,
-                            
-                            ),)
-                          ),
-                        )
-                      ]),
-                ],
-              );
+  @override
+   Widget build(BuildContext context) {
+   
 
-              
+    final sizeScreen = MediaQuery.of(context).size;
+    List<Widget> tableRows = [];
+    for(int i = 0; i<column01.length; i++){
+      tableRows.add(Table(
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      border: TableBorder.all(),
+      children: [
+      TableRow(
+              decoration: const BoxDecoration(color: Colors.white),
+              children: [
+                TableCell(
+                    verticalAlignment: TableCellVerticalAlignment.middle,
+                    child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: column01[i])),
+                TableCell(
+                  verticalAlignment: TableCellVerticalAlignment.middle,
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0), child: column02[i]),
+                ),
+                 TableCell(
+                  verticalAlignment: TableCellVerticalAlignment.middle,
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0), child: column03[i]),
+                ),
+                 TableCell(
+                  verticalAlignment: TableCellVerticalAlignment.middle,
+                  child: Padding(
+                      padding: const EdgeInsets.all(8.0), child: column04[i]),
+                )
+              ]),
+       
+      ],
+      ));
+    }
+    return Column(children:  tableRows);
   }
 }

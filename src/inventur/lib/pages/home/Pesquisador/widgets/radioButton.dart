@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
+import 'dart:math' as math;
 
 enum opcoes { a, b, c, d, e, f, g, h, i, j }
 
@@ -48,6 +49,7 @@ class _RadioStateC extends State<RadioC> {
 
   @override
   Widget build(BuildContext context) {
+    int half = (widget.number / 2).ceil().toInt();
     final sizeScreen = MediaQuery.sizeOf(context);
     List<Widget> radioButtons = [];
     for (var i = 0; i < widget.number; i++) {
@@ -103,46 +105,41 @@ class _RadioStateC extends State<RadioC> {
             )));
       }
     }
-
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Row(children: [
-        SizedBox(
-            width: sizeScreen.width * 0.5,
-            child: Column(
-              children: radioButtons.take(9).toList(),
-            ))
-      ]),
-      Row(
-        children: [
-          SizedBox(
-            width: sizeScreen.width * 0.5,
-            child: Column(
-              children: radioButtons.skip(9).take(9).toList(),
-            ),
-          )
-        ],
-      )
-    ]);
+ if(widget.number.isOdd){
+  radioButtons.add(SizedBox(height: sizeScreen.height * 0.059,));
+ }
+   return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+  Expanded(
+    child: Column(
+      children: radioButtons.take(half).toList(),
+    ),
+  ),
+  Expanded(
+    child: Column(
+      children: radioButtons.skip(half).toList(),
+    ),
+  ),
+]);
   }
 }
 
 class RadioD extends StatefulWidget {
-  const RadioD({super.key, required this.number, required this.options});
+  const RadioD({super.key, required this.options});
   final List<String> options;
-  final int number;
+  
   @override
   State<RadioD> createState() => _RadioStateD();
 }
 
 class _RadioStateD extends State<RadioD> {
-  int _value = 1;
+  int _value = 0;
   opcoes? options = opcoes.a;
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
     return Column(
       children: [
-        for (int i = 0; i < widget.number; i++)
+        for (int i = 0; i < widget.options.length; i++)
           ListTile(
               dense: true,
               title: Text(
@@ -152,7 +149,7 @@ class _RadioStateD extends State<RadioD> {
               leading: Radio<int>(
                 value: i,
                 groupValue: _value,
-                onChanged: i == widget.number
+                onChanged: i == widget.options.length
                     ? null
                     : (value) {
                         setState(() {

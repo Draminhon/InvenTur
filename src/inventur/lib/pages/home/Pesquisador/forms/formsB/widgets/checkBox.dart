@@ -1,6 +1,8 @@
 import 'dart:collection';
 
+
 import 'package:flutter/material.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 
 class CheckB extends StatefulWidget {
   const CheckB({super.key, required this.nomes});
@@ -73,5 +75,53 @@ class _CheckBState extends State<CheckB> {
         ],
       )
     ]);
+  }
+}
+
+class CheckC extends StatefulWidget {
+  const CheckC({super.key, required this.nomes});
+  final List<String> nomes;
+  @override
+  State<CheckC> createState() => _CheckCState();
+}
+
+class _CheckCState extends State<CheckC> {
+  late List<bool> isChecked;
+  late Queue<int> positions;
+  int size = 0;
+  @override
+  void initState() {
+    super.initState();
+    isChecked = List.generate(widget.nomes.length, (_) => false);
+    positions = Queue<int>();
+  }
+
+  Widget build(BuildContext context) {
+    final sizeScreen = MediaQuery.sizeOf(context);
+    List<Widget> listT = [];
+    for (int i = 0; i < widget.nomes.length; i++) {
+      listT.add(Column(children: [ ListTile(
+          title: Tooltip(
+              message: widget.nomes[i],
+              child: Text(
+                widget.nomes[i],
+                overflow: TextOverflow.ellipsis,
+              )),
+          leading: Checkbox(
+              value: isChecked[i],
+              onChanged: (bool? value) {
+                setState(() {
+                  if (value != null) {
+                    isChecked[i] = value;
+                  }
+                
+                });
+              })),
+              widget.nomes[i] == 'outro' && isChecked[i] == true ? CustomTextField(name: 'qual?') : Container(),
+             ]) );
+         
+            
+    }
+    return Column(children: listT,);
   }
 }
