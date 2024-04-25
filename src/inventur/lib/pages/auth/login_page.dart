@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
+import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/pages/widgets/divider_text_widget.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
@@ -153,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                               )
                             ),
                             onPressed: () {
-                              Navigator.pushNamed(context, '/Register');
+                              Navigator.pushNamed(context, '/Choose');
                             }, 
                             child: const Text(
                               'Registre-se',

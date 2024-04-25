@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/pages/auth/login_page.dart';
 import 'package:inventur/pages/auth/register_page.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
+import 'package:inventur/pages/pesquisas/register_pesquisa_page.dart';
 import 'package:inventur/pages/recover/changepasswordsucess_page.dart';
 import 'package:inventur/pages/home/Pesquisador/choose/choosebetween.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
         '/Login': (_) => const LoginPage(),
         '/Register': (_) => RegisterPage(),
         '/AdminHome': (_) => const AdminHomePage(),
+        '/RegisterPesquisa': (_) => RegisterPesquisa(),
         '/PassWordRecover': (_) => RecuperarSenha(),
         '/ConfirmarCodigo': (_) => ConfirmarCodigo(),
         '/MudarSenha': (_) => MudarSenha(),

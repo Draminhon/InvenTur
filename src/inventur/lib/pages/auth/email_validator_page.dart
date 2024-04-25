@@ -221,11 +221,11 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                                 onPressed: () {
                                   
                                 },
-                                child: const Text(
+                                child: Text(
                                   'Confirmar',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 22
+                                    fontSize: screenSize.height * .03
                                   ),
                                 ),
                               ),
@@ -262,7 +262,7 @@ class _EmailValidatorPageState extends State<EmailValidatorPage> {
                                   'Cancelar',
                                   style: TextStyle(
                                     color: Colors.red[700],
-                                    fontSize: 22
+                                    fontSize: screenSize.height * .03
                                   ),
                                 ),
                               ),

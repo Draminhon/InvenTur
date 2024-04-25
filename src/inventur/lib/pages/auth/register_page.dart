@@ -137,11 +137,11 @@ class RegisterPage extends StatelessWidget {
                                     MaterialPageRoute(builder: (context) => EmailValidatorPage(email: _emailController.text)),
                                   );
                                 }, 
-                                child: const Text(
+                                child: Text(
                                   'Solicitar Cadastro',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 22
+                                    fontSize: screenSize.height * .03
                                   ),
                                 )
                               ),

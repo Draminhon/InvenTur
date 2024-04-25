@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/models/user_model.dart';
-import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
+import 'package:inventur/pages/controllers/user_controller.dart';
 
 class UserCard extends StatefulWidget {
   final UserModel user;
@@ -35,8 +35,8 @@ class _UserCardState extends State<UserCard> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18)
       ),
-      child: Container(
-        padding: const EdgeInsets.all(8),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
             Row(
