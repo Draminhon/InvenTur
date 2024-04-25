@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
+import 'package:inventur/pages/controllers/user_controller.dart';
 import 'package:inventur/pages/widgets/registration_form_widget.dart';
 
 class AccountPage extends StatefulWidget {

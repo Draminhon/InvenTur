@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
+import 'package:inventur/pages/controllers/user_controller.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/email_validator.dart';
@@ -93,7 +93,7 @@ class ResgistrationForm extends StatelessWidget {
                 ),
                 padding: MaterialStateProperty.all(
                   EdgeInsets.symmetric(
-                    vertical: screenSize.height * 0.012
+                    vertical: screenSize.height * .012
                   )
                 ),
                 backgroundColor: MaterialStateProperty.all(
@@ -110,9 +110,9 @@ class ResgistrationForm extends StatelessWidget {
                 userLevel == userController.primaryLevel
                 ? 'Cadastrar'
                 : 'Solicitar Cadastro',
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 22
+                  fontSize: screenSize.height * .03
                 ),
               )
             ),

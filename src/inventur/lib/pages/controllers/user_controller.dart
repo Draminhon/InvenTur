@@ -43,6 +43,10 @@ class UserController extends ChangeNotifier {
 
   bool get allSelectedUsers => _allSelectedUsers;
 
+  void setUsers(List<UserModel> users) {
+    _users = users;
+  }
+
   void setAllSelectedUsers(bool marked) {
     _allSelectedUsers = marked;
     notifyListeners();
@@ -76,10 +80,6 @@ class UserController extends ChangeNotifier {
       }
       notifyListeners();
     }
-  }
-
-  void setUsers(List<UserModel> users) {
-    _users = users;
   }
 
   void selectUser({required UserModel user}) {

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/models/user_model.dart';
-import 'package:inventur/pages/home/Administrador/controllers/user_controller.dart';
+import 'package:inventur/pages/controllers/user_controller.dart';
 import 'package:inventur/pages/home/Administrador/user_management_page.dart';
+import 'package:inventur/pages/pesquisas/pesquisas_page.dart';
 import 'package:inventur/pages/widgets/options_drawer_widget.dart';
 
 class AdminHomePage extends StatefulWidget {
@@ -37,7 +38,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   final Map<int, String> pageTitle = {
     0: 'Andamento das Pesquisas',
-    1: 'Pesquisas',
+    1: 'Pesquisas Cadastradas',
     2: 'Gerenciar Usuários',
   };
   
@@ -116,11 +117,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               height: 200,
               color: Colors.green,
             ),
-            Container(
-              width: 200,
-              height: 200,
-              color: Colors.blue,
-            ),
+            PesquisasPage(),
             UserManagementPage(userControllerNotifier: _userController),
           ],
         ),

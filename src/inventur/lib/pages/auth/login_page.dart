@@ -103,11 +103,11 @@ class _LoginPageState extends State<LoginPage> {
                               // }
                               Navigator.pushNamed(context, '/AdminHome');
                             }, 
-                            child: const Text(
+                            child: Text(
                               'Entrar',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 22
+                                fontSize: screenSize.height * .03
                               ),
                             )
                           )
@@ -155,10 +155,10 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () {
                               Navigator.pushNamed(context, '/Register');
                             }, 
-                            child: const Text(
+                            child: Text(
                               'Registre-se',
                               style: TextStyle(
-                                fontSize: 22
+                                fontSize: screenSize.height * .03
                               ),
                             )
                           ),
