@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:inventur/models/user_model.dart';
+import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 
 class UserPesquisaCard extends StatelessWidget {
   final UserModel user;
-  const UserPesquisaCard({super.key, required this.user});
+  final PesquisaController pesquisaController;
+  
+  const UserPesquisaCard({
+    super.key,
+    required this.user,
+    required this.pesquisaController,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +45,19 @@ class UserPesquisaCard extends StatelessWidget {
                 ],
               ),
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.close_rounded,
-                color: Color.fromARGB(255, 232, 0, 0),
-                size: 32,
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: IconButton(
+                padding: EdgeInsets.zero,
+                visualDensity: VisualDensity.compact,
+                onPressed: () {
+                  pesquisaController.removeUserPesquisa(user);
+                },
+                icon: const Icon(
+                  Icons.close_rounded,
+                  color: Color.fromARGB(255, 232, 0, 0),
+                  size: 36,
+                ),
               ),
             ),
           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/models/user_model.dart';
+import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/pesquisas/widgets/user_pesquisa_card_widget.dart';
 
 class RegisterPesquisa extends StatefulWidget {
@@ -23,6 +24,14 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> {
     UserModel(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
     UserModel(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
   ];
+
+  final PesquisaController _pesquisaController = PesquisaController();
+
+  @override
+  void initState() {
+    super.initState();
+    _pesquisaController.setUsers = users;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -200,7 +209,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> {
                                 onPressed: () {},
                                 child: const Row(
                                   children: [
-                                    Text("Confirmar"),
+                                    Text("Confirmar", style: TextStyle(fontWeight: FontWeight.bold,),),
                                     SizedBox(width: 10),
                                     Icon(Icons.done_rounded)
                                   ],
@@ -228,7 +237,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> {
                                 onPressed: () {},
                                 child: const Row(
                                   children: [
-                                    Text("Cancelar"),
+                                    Text("Cancelar", style: TextStyle(fontWeight: FontWeight.bold,),),
                                     SizedBox(width: 10),
                                     Icon(Icons.clear_rounded)
                                   ],
@@ -247,10 +256,21 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> {
                   ],
                 ),
                 Flexible(
-                  child: ListView.builder(
-                    itemCount: users.length,
-                    itemBuilder: (context, index) {
-                      return UserPesquisaCard(user: users[index]);
+                  child: ListenableBuilder(
+                    listenable: _pesquisaController,
+                    builder: (context, child) {
+                      return Container(
+                        // decoration: ,
+                        child: ListView.builder(
+                          itemCount: _pesquisaController.userPesquisa.length,
+                          itemBuilder: (context, index) {
+                            return UserPesquisaCard(
+                              user: _pesquisaController.userPesquisa[index],
+                              pesquisaController: _pesquisaController,
+                            );
+                          },
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -338,3 +358,9 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> {
     );
   }
 }
+
+
+// STATUS DAS PESQUISAS 
+// - Em Andamento
+// - Concluído
+// - Não Iniciado
