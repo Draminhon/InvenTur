@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:inventur/models/user_model.dart';
+import 'package:inventur/pages/pesquisas/widgets/user_pesquisa_card_widget.dart';
 
 class RegisterPesquisa extends StatefulWidget {
   const RegisterPesquisa({super.key});
@@ -10,6 +11,18 @@ class RegisterPesquisa extends StatefulWidget {
 
 class _RegisterPesquisaState extends State<RegisterPesquisa> {
   bool _tileExpanded = false;
+
+  List<UserModel> users = [
+    UserModel(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    UserModel(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -126,7 +139,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> {
                         )
                       ),
                       child: ExpansionTile(
-                        childrenPadding: const EdgeInsets.symmetric(vertical: 10),
+                        childrenPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
                         title: const Row(
                           children: [
                             Spacer(flex: 2),
@@ -169,11 +182,16 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> {
                           ),
                           const SizedBox(height: 10),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               OutlinedButton(
-                                style: const ButtonStyle(
-                                  side: MaterialStatePropertyAll(
+                                style: ButtonStyle(
+                                  shape: MaterialStatePropertyAll(
+                                     RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)
+                                    )
+                                  ),
+                                  side: const MaterialStatePropertyAll(
                                     BorderSide(
                                       color: Color.fromARGB(255, 55, 111, 60)
                                     )
@@ -190,6 +208,11 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> {
                               ),
                               OutlinedButton(
                                 style: ButtonStyle(
+                                  shape: MaterialStatePropertyAll(
+                                     RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)
+                                    )
+                                  ),
                                   side: const MaterialStatePropertyAll(
                                     BorderSide(
                                       color: Color.fromARGB(255, 232, 0, 0)
@@ -224,15 +247,11 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> {
                   ],
                 ),
                 Flexible(
-                  child: ListView(
-                    children: [
-                      Container(height: 100, color: Colors.red,),
-                      Container(height: 100, color: Colors.green,),
-                      Container(height: 100, color: Colors.blue,),
-                      Container(height: 100, color: Colors.yellow,),
-                      Container(height: 100, color: Colors.orange,),
-                      Container(height: 100, color: Colors.pink,),
-                    ],
+                  child: ListView.builder(
+                    itemCount: users.length,
+                    itemBuilder: (context, index) {
+                      return UserPesquisaCard(user: users[index]);
+                    },
                   ),
                 ),
                 Padding(
