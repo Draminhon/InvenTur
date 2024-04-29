@@ -3,7 +3,7 @@ import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 
 class UserPesquisaCard extends StatelessWidget {
-  final UserModel user;
+  final User user;
   final PesquisaController pesquisaController;
   
   const UserPesquisaCard({

@@ -1,4 +1,4 @@
-class UserModel {
+class User {
   String cpf;
   String nome;
   String email;
@@ -6,7 +6,7 @@ class UserModel {
   String accessLevel;
   bool isSelected = false;
   
-  UserModel({
+  User({
     this.status,
     required this.cpf,
     required this.nome,

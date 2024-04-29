@@ -3,7 +3,7 @@ import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/user_controller.dart';
 
 class UserCard extends StatefulWidget {
-  final UserModel user;
+  final User user;
   final UserController userControllerNotifier;
 
   const UserCard({
@@ -17,12 +17,15 @@ class UserCard extends StatefulWidget {
 }
 
 class _UserCardState extends State<UserCard> {
-  
+  late User _user;
   late UserController _userController;
+
+  bool _opened = false;
 
   @override
   void initState() {
     super.initState();
+    _user = widget.user;
     _userController = widget.userControllerNotifier;
   }
 
@@ -42,15 +45,15 @@ class _UserCardState extends State<UserCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                widget.user.accessLevel == 'Pesquisador'
+                _user.accessLevel == 'Pesquisador'
                 ? Checkbox(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(45),
                   ),
-                  value: widget.user.isSelected, 
+                  value: _user.isSelected, 
                   visualDensity: VisualDensity.compact,
                   onChanged: (value) {
-                    widget.user.isSelected = value!;
+                    _user.isSelected = value!;
                     value
                     ? _userController.selectUser(user: widget.user)
                     : _userController.unselectUser(user: widget.user);
@@ -87,7 +90,7 @@ class _UserCardState extends State<UserCard> {
                       SizedBox(
                         width: 200,
                         child: Text(
-                          widget.user.nome,
+                          _user.nome,
                           textAlign: TextAlign.end,
                           style: const TextStyle(overflow: TextOverflow.ellipsis),
                         ),
@@ -101,7 +104,7 @@ class _UserCardState extends State<UserCard> {
                         'CPF:',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(widget.user.cpf)
+                      Text(_user.cpf)
                     ],
                   ),
                   Row(
@@ -114,7 +117,7 @@ class _UserCardState extends State<UserCard> {
                       SizedBox(
                         width: 200,
                         child: Text(
-                          widget.user.email,
+                          _user.email,
                           textAlign: TextAlign.end,
                           style: const TextStyle(overflow: TextOverflow.ellipsis),
                         ),
@@ -124,10 +127,9 @@ class _UserCardState extends State<UserCard> {
                 ],
               ),
             ),
-            widget.user.accessLevel == 'Pesquisador'
+            _user.accessLevel == 'Pesquisador'
             ? Container(
               margin: const EdgeInsets.only(top: 10),
-              padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
               decoration: BoxDecoration(
                 border: Border.all(
                   width: 2,
@@ -137,9 +139,13 @@ class _UserCardState extends State<UserCard> {
               ),
               child: PopupMenuButton(
                 enableFeedback: true,
-                initialValue: widget.user.status,
-                tooltip: 'Status do pesquisador',
+                color: Colors.white,
+                initialValue: _user.status,
+                tooltip: 'Status do Pesquisador',
                 surfaceTintColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)
+                ),
                 itemBuilder: (context) {
                   return _userController.statusItems.map<PopupMenuItem<String>>(
                     (String value) {
@@ -151,32 +157,44 @@ class _UserCardState extends State<UserCard> {
                   ).toList();
                 },
                 onSelected: (String value) {
+                  _opened = !_opened;
                   _userController.setUserStatus(value, widget.user);
                   _userController.populateFilteredUsers();
                 },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Status',
-                      style: TextStyle(
-                        color: _userController.statusColor(widget.user.status!),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                onOpened: () => setState(() {
+                  _opened = !_opened;
+                }),
+                onCanceled: () => setState(() {
+                  _opened = !_opened;
+                }),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Status',
+                        style: TextStyle(
+                          color: _userController.statusColor(_user.status!),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
                       ),
-                    ),
-                    Text(
-                      widget.user.status!,
-                      style: TextStyle(
-                        color: _userController.statusColor(widget.user.status!),
-                        fontWeight: FontWeight.bold
+                      Text(
+                        _user.status!,
+                        style: TextStyle(
+                          color: _userController.statusColor(_user.status!),
+                          fontWeight: FontWeight.bold
+                        ),
                       ),
-                    ),
-                    Icon(
-                      color: _userController.statusColor(widget.user.status!),
-                      Icons.keyboard_arrow_down
-                    ),
-                  ],
+                      Icon(
+                        _opened
+                        ? Icons.keyboard_arrow_up_rounded
+                        : Icons.keyboard_arrow_down_rounded,
+                        color: _userController.statusColor(_user.status!),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             )

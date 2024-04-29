@@ -9,8 +9,8 @@ class UserController extends ChangeNotifier {
   static const String _primaryLevel = 'Administrador';
   static const String _secondaryLevel = 'Pesquisador';
 
-  final List<UserModel> _selectedUsers = [];
-  final List<UserModel> _filteredUsers = [];
+  final List<User> _selectedUsers = [];
+  final List<User> _filteredUsers = [];
 
   final List<String> _accessLevels = [_secondaryLevel, _primaryLevel];
   final List<String> statusItems = [
@@ -26,7 +26,7 @@ class UserController extends ChangeNotifier {
   ];
 
   int _countSelectedUsers = 0;
-  List<UserModel> _users = [];
+  List<User> _users = [];
   bool _allSelectedUsers = false;
   String _usersFilteredStatus = _allStatus;
   String _usersFilteredAccessLevel = _secondaryLevel;
@@ -37,13 +37,13 @@ class UserController extends ChangeNotifier {
   List<String> get accessLeves => _accessLevels;
   List<String> get statusFilters => _statusFilters;
   int get countSelectedUsers => _countSelectedUsers;
-  List<UserModel> get filteredUsers => _filteredUsers;
+  List<User> get filteredUsers => _filteredUsers;
   String get usersFilteredStatus => _usersFilteredStatus;
   String get usersFilteredAccessLevel => _usersFilteredAccessLevel;
 
   bool get allSelectedUsers => _allSelectedUsers;
 
-  void setUsers(List<UserModel> users) {
+  void setUsers(List<User> users) {
     _users = users;
   }
 
@@ -61,7 +61,7 @@ class UserController extends ChangeNotifier {
       _filteredUsers.clear();
     }
 
-    for (UserModel user in _users) {
+    for (User user in _users) {
       if (usersFilteredAccessLevel == _accessLevels[0] &&
           user.accessLevel == _accessLevels[0]) {
         switch (usersFilteredStatus) {
@@ -82,7 +82,7 @@ class UserController extends ChangeNotifier {
     }
   }
 
-  void selectUser({required UserModel user}) {
+  void selectUser({required User user}) {
     if (!_selectedUsers.contains(user)) {
       _selectedUsers.add(user);
       user.isSelected = true;
@@ -95,7 +95,7 @@ class UserController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void unselectUser({required UserModel user}) {
+  void unselectUser({required User user}) {
     if (allSelectedUsers) setAllSelectedUsers(false);
     _selectedUsers.remove(user);
     user.isSelected = false;
@@ -104,26 +104,26 @@ class UserController extends ChangeNotifier {
   }
 
   void selectAllUsers() {
-    for (UserModel user in _filteredUsers) {
+    for (User user in _filteredUsers) {
       selectUser(user: user);
     }
   }
 
   void unselectAllUsers() {
-    for (UserModel user in _filteredUsers) {
+    for (User user in _filteredUsers) {
       if (user.isSelected) {
         unselectUser(user: user);
       }
     }
   }
 
-  void setUserStatus(String status, UserModel user) {
+  void setUserStatus(String status, User user) {
     user.status = status;
     notifyListeners();
   }
 
   void changeSelectedUsersStatus(String status) {
-    for (UserModel user in _filteredUsers) {
+    for (User user in _filteredUsers) {
       if (user.isSelected) {
         setUserStatus(status, user);
         unselectUser(user: user);
@@ -145,14 +145,14 @@ class UserController extends ChangeNotifier {
   }
 
   void searchUsers(String text) {
-    List<UserModel> auxUsers = [];
+    List<User> auxUsers = [];
 
     if (_selectedUsers.isNotEmpty) {
       unselectAllUsers();
     }
     
     text = text.toLowerCase();
-    for (UserModel user in _filteredUsers) {
+    for (User user in _filteredUsers) {
       if (user.nome.toLowerCase().contains(text)) {
         auxUsers.add(user);
       } else if (user.cpf.contains(text)) {
@@ -163,7 +163,7 @@ class UserController extends ChangeNotifier {
     }
 
     _filteredUsers.clear();
-    for (UserModel user in auxUsers){
+    for (User user in auxUsers){
       _filteredUsers.add(user);
     }
     notifyListeners();

@@ -13,7 +13,7 @@ class PesquisasPage extends StatefulWidget {
 class _PesquisasPageState extends State<PesquisasPage> {
   final PesquisaController _pesquisaController = PesquisaController();
 
-  PesquisaModel pm = PesquisaModel(
+  Pesquisa pm = Pesquisa(
     codigoIBGE: 11111,
     estado: "CE",
     municipio: "Tianguá",
@@ -21,15 +21,27 @@ class _PesquisasPageState extends State<PesquisasPage> {
     dataTermino: "01/01/2024",
     quantidadeLocais: 23,
     quantidadePesquisadores: 5,
+    status: "Não Iniciado"
+  );
+
+  Pesquisa pm2 = Pesquisa(
+    codigoIBGE: 11111,
+    estado: "CE",
+    municipio: "Viçosa do Ceará",
+    dataInicio: "01/01/2024",
+    dataTermino: "01/01/2024",
+    quantidadeLocais: 23,
+    quantidadePesquisadores: 5,
+    status: "Não Iniciado"
   );
 
   @override
   void initState() {
     super.initState();
     _pesquisaController.addPesquisa(pm);
+    _pesquisaController.addPesquisa(pm2);
     _pesquisaController.addPesquisa(pm);
-    _pesquisaController.addPesquisa(pm);
-    _pesquisaController.addPesquisa(pm);
+    _pesquisaController.addPesquisa(pm2);
   }
 
   @override
@@ -52,6 +64,7 @@ class _PesquisasPageState extends State<PesquisasPage> {
                   itemBuilder: (context, index) {
                     return PesquisaCard(
                       pesquisa: _pesquisaController.pesquisas[index],
+                      pesquisaController: _pesquisaController,
                     );
                   },
                 )
