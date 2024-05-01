@@ -118,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: TextButton(
-                              onPressed: () {},
+                              onPressed: () {Navigator.pushNamed(context, '/PassWordRecover');},
                               child: const Text(
                                 'Esqueceu sua senha?',
                                 style: TextStyle(
@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                               )
                             ),
                             onPressed: () {
-                              Navigator.pushNamed(context, '/Choose');
+                              Navigator.pushNamed(context, '/Register');
                             }, 
                             child: const Text(
                               'Registre-se',

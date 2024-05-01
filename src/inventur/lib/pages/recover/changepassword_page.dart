@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:inventur/pages/widgets/custom_text_field_widget.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -73,25 +73,9 @@ class MudarSenha extends StatelessWidget {
             child: Form(child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                  CustomTextField(
-                            labelText: 'Senha',
-                            prefixIcon: Icons.lock, 
-                            controller: _passwordController, 
-                            isSecret: true,
-                            validator: (password) {
-                              return _passwordValidator.validate(password: password);
-                            }, 
-                          ),
+                  CustomTextField(name: 'Senha'),
                           SizedBox(height: 15),
-                            CustomTextField(
-                            labelText: 'Recuperar senha',
-                            prefixIcon: Icons.lock, 
-                            controller: _passwordController, 
-                            isSecret: true,
-                            validator: (password) {
-                              return _passwordValidator.validate(password: password);
-                            }, 
-                          ),
+                            CustomTextField(name: 'Recuperar Senha')
               ],
             )),
           ) 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/pages/widgets/custom_text_field_widget.dart';
+
 import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

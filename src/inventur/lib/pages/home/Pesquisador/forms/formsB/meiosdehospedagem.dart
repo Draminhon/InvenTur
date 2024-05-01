@@ -122,21 +122,17 @@ class MeiosDeHospedagem extends StatelessWidget {
         const CustomTextField(name: 'Nome da rede/holding'),
         const CustomTextField(name: 'CNPJ'),
         const textLabel(name: 'natureza'),
-        Padding(
-            padding: EdgeInsets.only(right: sizeScreen.width * 0.5),
-            child: const Column(
+      const Column(
               children: [
                 RadioD(
                   options: ['pública', 'privada', 'outro'],
                 ),
               ],
-            )),
+            ),
         const textLabel(
           name: 'tipo de organização/instituição',
         ),
-        Padding(
-            padding: EdgeInsets.only(right: sizeScreen.width * 0.2),
-            child: const RadioD(
+       const RadioD(
               options: [
                 'associação',
                 'sindicato',
@@ -145,7 +141,7 @@ class MeiosDeHospedagem extends StatelessWidget {
                 'empresa',
                 'outro'
               ],
-            )),
+            ),
         Row(
           children: [
             const textLabel(name: 'início da atividade:'),

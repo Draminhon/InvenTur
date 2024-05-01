@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/validators/email_validator.dart';
-import 'package:inventur/pages/widgets/custom_text_field_widget.dart';
+
 import 'package:inventur/pages/auth/email_validator_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -68,15 +69,8 @@ class ConfirmarCodigo extends StatelessWidget {
               SizedBox(height: sizeScreen.height * 0.03,),
                Padding(
           padding: EdgeInsets.all(25),
-          child: CustomTextField(
-                            labelText: 'Código',
-                            controller: _emailController,
-                            prefixIcon: Icons.person,
-                            keyboardType: TextInputType.emailAddress,
-                            validator: (email) {
-                              return _emailValidator.validate(email: email);
-                            },
-                          ),),
+          child: CustomTextField(name: 'Código')
+                          ),
            
                SizedBox(height: sizeScreen.height * 0.13,),
            SizedBox(

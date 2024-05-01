@@ -45,56 +45,51 @@ class FormularioA extends StatelessWidget {
             const ContainerA(
               form: 'Informações básicas do município',
             ),
-            const ContainerA(form: 'Locadoras de imóveis para temporadas'),
-            const ContainerA(form: 'Compras especiais'),
+            // const ContainerA(form: 'Locadoras de imóveis para temporadas'),
+            // const ContainerA(form: 'Compras especiais'),
             const ContainerA(form: 'Comércio turístico'),
-            const ContainerA(form: 'Representações diplomáticas'),
-            ExpansionTileA(titulo: 'Serviços', minhaLista: [
-              Tilee(texto: 'Serviços bancários', routeName: '/Placeholder'),
-              Tilee(texto: 'Serviços mecânicos e postos de combustível', routeName: '/Placeholder'),
-              const SizedBox(),
-              const SizedBox()
-            ]),
+            // const ContainerA(form: 'Representações diplomáticas'),
+            // ExpansionTileA(titulo: 'Serviços', minhaLista: [
+            //   Tilee(texto: 'Serviços bancários', routeName: '/Placeholder'),
+            //   Tilee(texto: 'Serviços mecânicos e postos de combustível', routeName: '/Placeholder'),
+            //   const SizedBox(),
+            //   const SizedBox()
+            // ]),
             ExpansionTileA(titulo: 'Rodoviário', minhaLista: [
               Tilee(texto: 'Rodovia', routeName: '/Placeholder'),
               Tilee(texto: 'Estação rodoviária', routeName: '/Placeholder'),
               const SizedBox(),
               const SizedBox()
             ]),
-            ExpansionTileA(titulo: 'Ferroviário', minhaLista: [
-              Tilee(texto: 'Ferrovia e metrovia', routeName: '/Placeholder'),
-              Tilee(texto: 'Estação ferroviária', routeName: '/Placeholder'),
-              const SizedBox(),
-              const SizedBox()
-            ]),
-            ExpansionTileA(titulo: 'Aeroviário', minhaLista: [
-              Tilee(texto: 'Aeroporto e campo de pouso', routeName: '/Placeholder'),
-              Tilee(texto: 'Heliporto', routeName: '/Placeholder'),
-              const SizedBox(),
-              const SizedBox()
-            ]),
-            ExpansionTileA(titulo: 'Aquaviário', minhaLista: [
-              Tilee(texto: 'Hidrovia', routeName: '/Placeholder'),
-              Tilee(texto: 'Porto, pier, cais, etc', routeName: '/Placeholder'),
-              const SizedBox(),
-              const SizedBox()
-            ]),
+            // ExpansionTileA(titulo: 'Ferroviário', minhaLista: [
+            //   Tilee(texto: 'Ferrovia e metrovia', routeName: '/Placeholder'),
+            //   Tilee(texto: 'Estação ferroviária', routeName: '/Placeholder'),
+            //   const SizedBox(),
+            //   const SizedBox()
+            // ]),
+            // ExpansionTileA(titulo: 'Aeroviário', minhaLista: [
+            //   Tilee(texto: 'Aeroporto e campo de pouso', routeName: '/Placeholder'),
+            //   Tilee(texto: 'Heliporto', routeName: '/Placeholder'),
+            //   const SizedBox(),
+            //   const SizedBox()
+            // ]),
+            // ExpansionTileA(titulo: 'Aquaviário', minhaLista: [
+            //   Tilee(texto: 'Hidrovia', routeName: '/Placeholder'),
+            //   Tilee(texto: 'Porto, pier, cais, etc', routeName: '/Placeholder'),
+            //   const SizedBox(),
+            //   const SizedBox()
+            // ]),
             ExpansionTileA(
               titulo: 'Sistemas',
               minhaLista: [
-                Tilee(
-                  texto: 'Sistemas de comunicação', routeName: '/Placeholder'
-                  
-                ),
+                SizedBox(),
                 Tilee(
                   texto: 'Sistemas de segurança', routeName: '/Placeholder'
                 ),
                 Tilee(
                   texto: 'Sistemas de saúde', routeName: '/Placeholder'
                 ),
-                Tilee(
-                  texto: 'Locadoras de imóveis por temporada', routeName: '/Placeholder'
-                )
+               SizedBox(),
               ],
             ),
 

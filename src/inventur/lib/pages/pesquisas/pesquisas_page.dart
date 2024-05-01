@@ -113,25 +113,25 @@ class _PesquisasPageState extends State<PesquisasPage> {
           ),
           // TABELA PARA MOSTRAR AS PESQUISASA CADASTRADAS
           // LISTVIEW PARA MOSTRAR AS EM CARDs AS PESQUISAS CADASTRADAS
-          // Expanded(
-          //   child: ListenableBuilder(
-          //     listenable: _pesquisaController,
-          //     builder: (context, child) {
-          //       return _pesquisaController.pesquisas.isNotEmpty
-          //       ? ListView.builder(
-          //         itemCount: _pesquisaController.pesquisas.length,
-          //         itemBuilder: (context, index) {
-          //           return PesquisaCard(
-          //             pesquisa: _pesquisaController.pesquisas[index],
-          //           );
-          //         },
-          //       )
-          //       : const Center(
-          //         child: Text("Nehuma Pesquisa Cadastrada"),
-          //       );
-          //     },
-          //   ),
-          // ),
+          Expanded(
+            child: ListenableBuilder(
+              listenable: _pesquisaController,
+              builder: (context, child) {
+                return _pesquisaController.pesquisas.isNotEmpty
+                ? ListView.builder(
+                  itemCount: _pesquisaController.pesquisas.length,
+                  itemBuilder: (context, index) {
+                    return PesquisaCard(
+                      pesquisa: _pesquisaController.pesquisas[index],
+                    );
+                  },
+                )
+                : const Center(
+                  child: Text("Nehuma Pesquisa Cadastrada"),
+                );
+              },
+            ),
+          ),
           // LISTVIEW PARA MOSTRAR AS EM CARDs AS PESQUISAS CADASTRADAS
           Padding(
             padding: const EdgeInsets.only(top: 10),

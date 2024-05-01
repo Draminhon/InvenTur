@@ -45,33 +45,33 @@ class FormularioB extends StatelessWidget {
             const ContainerA(
               form: 'Parques',
             ),
-            const ContainerA(form: 'Informações turísticas'),
-            const ContainerA(form: 'Entidades associativas e similares'),
-            const ContainerA(form: 'Guiamento e condução artística'),
+            // const ContainerA(form: 'Informações turísticas'),
+            // const ContainerA(form: 'Entidades associativas e similares'),
+            // const ContainerA(form: 'Guiamento e condução artística'),
             ExpansionTileA(titulo: 'Serviços e equipamentos', minhaLista: const [
               Tilee(texto: 'Serviços e equipamentos de agências de turismo', routeName: '/Placeholder'),
               Tilee(texto: 'Serviços e equipamentos de transporte turístico', routeName: '/Placeholder'),
               Tilee(texto: 'Serviços e equipamentos para alimentos e bebidas', routeName: '/Placeholder'),
               SizedBox()
             ]),
-            ExpansionTileA(titulo: 'Eventos', minhaLista: const [
-              Tilee(texto: 'Espaços para eventos', routeName: '/Placeholder'),
-              Tilee(texto: 'Serviços para eventos', routeName: '/Placeholder'),
-              SizedBox(),
-              SizedBox()
-            ]),
-            ExpansionTileA(titulo: 'Instalações', minhaLista: const [
-              Tilee(texto: 'Instalações esportivas', routeName: '/Placeholder'),
-              Tilee(texto: 'Instalações náuticas', routeName: '/Placeholder'),
-              SizedBox(),
-              SizedBox()
-            ]),
-            ExpansionTileA(titulo: 'Espaços', minhaLista: const [
-              Tilee(texto: 'Espaços livres e áreas verde', routeName: '/Placeholder'),
-              Tilee(texto: 'Espaços de diversão e cultura', routeName: '/Placeholder'),
-              Tilee(texto: 'Outros espaços de recreação', routeName: '/Placeholder'),
-              SizedBox()
-            ]),
+            // ExpansionTileA(titulo: 'Eventos', minhaLista: const [
+            //   Tilee(texto: 'Espaços para eventos', routeName: '/Placeholder'),
+            //   Tilee(texto: 'Serviços para eventos', routeName: '/Placeholder'),
+            //   SizedBox(),
+            //   SizedBox()
+            // ]),
+            // ExpansionTileA(titulo: 'Instalações', minhaLista: const [
+            //   Tilee(texto: 'Instalações esportivas', routeName: '/Placeholder'),
+            //   Tilee(texto: 'Instalações náuticas', routeName: '/Placeholder'),
+            //   SizedBox(),
+            //   SizedBox()
+            // ]),
+            // ExpansionTileA(titulo: 'Espaços', minhaLista: const [
+            //   Tilee(texto: 'Espaços livres e áreas verde', routeName: '/Placeholder'),
+            //   Tilee(texto: 'Espaços de diversão e cultura', routeName: '/Placeholder'),
+            //   Tilee(texto: 'Outros espaços de recreação', routeName: '/Placeholder'),
+            //   SizedBox()
+            // ]),
             ExpansionTileA(titulo: 'Hospedagem', minhaLista: const [
               Tilee(texto: 'Meios de hospedagem',routeName:'/MeiosDeHospedagem'),
               Tilee(texto: 'Outros tipos de acomodações', routeName: '/Placeholder',),
