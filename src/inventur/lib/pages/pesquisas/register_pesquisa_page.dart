@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:inventur/models/estado_model.dart';
+import 'package:inventur/models/municipio_model.dart';
 import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/pesquisas/widgets/user_pesquisa_card_widget.dart';
@@ -15,8 +17,8 @@ class RegisterPesquisa extends StatefulWidget {
 class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerProviderStateMixin {
   bool _tileExpanded = false;
 
-  late String? _estadoSelecionado;
-  late String? _municipioSelecionado;
+  late Estado? _estadoSelecionado;
+  late Municipio? _municipioSelecionado;
 
   List<User> users = [
     User(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
@@ -36,6 +38,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
   final PesquisaController _pesquisaController = PesquisaController();
   final TextEditingController _inicioController = TextEditingController();
   final TextEditingController _terminoController = TextEditingController();
+  final TextEditingController _codigIbgeController = TextEditingController();
 
   Future<String> selectDate() async {
     late DateTime? selectedDate;
@@ -180,6 +183,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                           Flexible(
                             child: TextField(
                               textAlign: TextAlign.end,
+                              controller: _codigIbgeController,
                               decoration: InputDecoration(
                                 filled: true,
                                 isCollapsed: true,
@@ -199,10 +203,25 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                           const SizedBox(width: 20),
                           Flexible(
                             child: AutocompleteTextField(
-                              options: _pesquisaController.estados,
                               label: "Estado",
                               onSelected: (option) {
-                                _estadoSelecionado = option;
+                                _estadoSelecionado = _pesquisaController.getEstadoByNome(option);
+                                _pesquisaController.setMunicipios(_estadoSelecionado!.sigla);
+                              },
+                              optionsBuilder: (textEditingValue) {
+                                if (textEditingValue.text == '') {
+                                  return const Iterable.empty();
+                                }
+                                return _pesquisaController.estados.map((e) => e.nome).where(
+                                  (word) => word.toLowerCase().contains(
+                                    textEditingValue.text.toLowerCase(),
+                                  ),
+                                );
+                              },
+                              onChanged: (value) {
+                                if (value == '') {
+                                  _pesquisaController.municipios.clear();
+                                }
                               },
                             ),
                           ),
@@ -210,15 +229,22 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                       ),
                       const SizedBox(height: 10),
                       AutocompleteTextField(
-                        options: [
-                          "Tianguá",
-                          "Viçosa do Ceará",
-                          "Ubajara",
-                          "Guaraciaba do Norte"
-                        ],
                         label: "Município",
                         onSelected: (option) {
-                          _municipioSelecionado = option;
+                          _municipioSelecionado = _pesquisaController.getMunicipioByNome(option);
+                          setState(() {
+                            _codigIbgeController.text = _municipioSelecionado!.codigoIBGE;
+                          });
+                        },
+                        optionsBuilder: (textEditingValue) {
+                          if (textEditingValue.text == '') {
+                            return const Iterable.empty();
+                          }
+                          return _pesquisaController.municipios.map((e) => e.nome).where(
+                            (word) => word.toLowerCase().contains(
+                              textEditingValue.text.toLowerCase(),
+                            ),
+                          );
                         },
                       ),
                       Container(
@@ -259,18 +285,36 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                           ),
                           children: [
                             AutocompleteTextField(
-                              options: [],
                               label: "Nome do Pesquisador",
                               onSelected: (option) {
                                 
                               },
+                              optionsBuilder: (textEditingValue) {
+                                if (textEditingValue.text == '') {
+                                  return const Iterable.empty();
+                                }
+                                return _pesquisaController.estados.map((e) => e.nome).where(
+                                  (word) => word.toLowerCase().contains(
+                                    textEditingValue.text.toLowerCase(),
+                                  ),
+                                );
+                              },
                             ),
                             const SizedBox(height: 10),
                             AutocompleteTextField(
-                              options: [],
                               label: "CPF do Pesquisador",
                               onSelected: (option) {
                                 
+                              },
+                              optionsBuilder: (textEditingValue) {
+                                if (textEditingValue.text == '') {
+                                  return const Iterable.empty();
+                                }
+                                return _pesquisaController.estados.map((e) => e.nome).where(
+                                  (word) => word.toLowerCase().contains(
+                                    textEditingValue.text.toLowerCase(),
+                                  ),
+                                );
                               },
                             ),
                             const SizedBox(height: 10),

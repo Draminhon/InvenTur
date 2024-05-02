@@ -21,16 +21,16 @@ class PesquisaController extends ChangeNotifier {
   
   final BrasilService _brasilService = BrasilService();
   
-  final List<String> _estados = [];
-  final List<String> _municipios = [];
   final List<String> statusItems = [
     _finished,
     _notStarted,
     _inProgress
   ];
 
-  List<User> _usersPesquisas = [];
+  List<Estado> _estados = [];
   List<Pesquisa> _pesquisas = [];
+  List<User> _usersPesquisas = [];
+  List<Municipio> _municipios = [];
 
   set setPesquisas(List<Pesquisa> pesquisas) {
     _pesquisas = pesquisas;
@@ -41,28 +41,38 @@ class PesquisaController extends ChangeNotifier {
     _usersPesquisas = users;
   }
 
-  List<String> get estados => _estados;
-  List<String> get municipios => _municipios;
+  List<Estado> get estados => _estados;
   List<Pesquisa> get pesquisas => _pesquisas;
+  List<Municipio> get municipios => _municipios;
   List<User> get userPesquisa => _usersPesquisas;
   List<String> get informacoesPesquisa => _informacoesPesquisa;
 
-  void setEstados() async {
-    final List<Estado> source = await _brasilService.fetchEstados();
-
-    for (Estado uf in source) {
-      _estados.add(uf.nome);
+  Estado? getEstadoByNome(String nome) {
+    late Estado? estado;
+    
+    for (Estado uf in _estados) {
+      if (uf.nome == nome) estado = uf;
     }
+
+    return estado;
+  }
+
+  Municipio? getMunicipioByNome(String nome) {
+    late Municipio? municipio;
+
+    for (Municipio mun in _municipios) {
+      if (mun.nome == nome) municipio = mun;
+    }
+
+    return municipio;
+  }
+
+  void setEstados() async {
+    _estados = await _brasilService.fetchEstados();
   }
 
   void setMunicipios(String uf) async {
-    final List<Municipio> source = await _brasilService.fetchMunicipiosUF(uf);
-
-    if (_municipios.isNotEmpty) _municipios.clear();
-
-    for (Municipio municipio in source) {
-      _municipios.add(municipio.nome);
-    }
+    _municipios = await _brasilService.fetchMunicipiosUF(uf);
   }
 
   void addPesquisa(Pesquisa pesquisa) {

@@ -1,30 +1,24 @@
 import 'package:flutter/material.dart';
 
 class AutocompleteTextField extends StatelessWidget {
-  final List<String> options;
   final String label;
   final Function(String option) onSelected;
+  final AutocompleteOptionsBuilder<String> optionsBuilder;
+  final Function(String value)? onChanged;
 
   const AutocompleteTextField({
     super.key,
-    required this.options,
-    required this.label, required this.onSelected,
+    this.onChanged,
+    required this.label, 
+    required this.onSelected,
+    required this.optionsBuilder,
   });
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => Autocomplete<String>(
-        optionsBuilder: (textEditingValue) {
-          if (textEditingValue.text == '') {
-            return const Iterable.empty();
-          }
-          return options.where(
-            (word) => word.toLowerCase().contains(
-              textEditingValue.text.toLowerCase(),
-            ),
-          );
-        },
+        optionsBuilder: (textEditingValue) => optionsBuilder(textEditingValue),
         onSelected: onSelected,
         optionsViewBuilder: (context, onSelected, options) => Align(
           alignment: Alignment.topLeft,
@@ -99,6 +93,7 @@ class AutocompleteTextField extends StatelessWidget {
                 borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
               ),
             ),
+            onChanged: onChanged,
           );
         },
       ),
