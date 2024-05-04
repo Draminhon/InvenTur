@@ -13,7 +13,7 @@ class RadioB extends StatefulWidget {
 }
 
 class _RadioState extends State<RadioB> {
-  opcoes? _opcoes = null;
+  opcoes? _opcoes;
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class RadioC extends StatefulWidget {
 }
 
 class _RadioStateC extends State<RadioC> {
-  int _groupValue = 0;
+  int? _groupValue;
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +142,7 @@ class RadioD extends StatefulWidget {
 }
 
 class _RadioStateD extends State<RadioD> {
-  int _value = 0;
+  int? _value;
   opcoes? options = opcoes.a;
   @override
   Widget build(BuildContext context) {
@@ -181,7 +181,12 @@ class _RadioStateD extends State<RadioD> {
                     ))
             ]),
         _value == widget.options.indexOf('outro')
-            ? const CustomTextField(name: 'qual?')
+            ?  CustomTextField(name: 'qual?', validat: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Preencha o campo';
+                              }
+                              return null;
+                            },)
             : Container(),
       ],
     );

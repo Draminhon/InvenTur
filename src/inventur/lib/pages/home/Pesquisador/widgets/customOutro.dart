@@ -11,14 +11,13 @@ class textLabel extends StatelessWidget{
     
     return 
     
-     Padding(
-              padding: EdgeInsets.only(
-                  top: sizeScreen.height * 0.02, left: sizeScreen.width * 0.05),
-              child: Text(
+      Padding(padding: EdgeInsets.only(top: sizeScreen.height * 0.03),child:
+               Text(
                 name,
-                style: TextStyle(fontSize: sizeScreen.width * 0.04),
-              ),
-            );
+                style: TextStyle(fontSize: sizeScreen.width * 0.04,),
+                textAlign: TextAlign.center,
+                
+              ));
   }
 
 }

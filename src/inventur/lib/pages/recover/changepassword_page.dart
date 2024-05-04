@@ -73,9 +73,19 @@ class MudarSenha extends StatelessWidget {
             child: Form(child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                  CustomTextField(name: 'Senha'),
+                  CustomTextField(name: 'Senha', validat: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Preencha o campo';
+                              }
+                              return null;
+                            },),
                           SizedBox(height: 15),
-                            CustomTextField(name: 'Recuperar Senha')
+                            CustomTextField(name: 'Recuperar Senha', validat: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Preencha o campo';
+                              }
+                              return null;
+                            },)
               ],
             )),
           ) 

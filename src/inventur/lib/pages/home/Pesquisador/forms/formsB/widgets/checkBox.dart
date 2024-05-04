@@ -23,11 +23,18 @@ class _CheckBState extends State<CheckB> {
 
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
-    return SizedBox(
+     final ScrollController _firstController = ScrollController();
+    return 
+    
+    SizedBox(
         width: sizeScreen.width,
         height: sizeScreen.height * 0.3,
-        child: Scrollbar(
+        child: RawScrollbar(
+thumbColor: const Color.fromARGB(255, 55, 111, 60),
+          controller: _firstController,
+          thumbVisibility: true,
             child: ListView.builder(
+              controller: _firstController,
                 itemCount: widget.nomes.length,
                 itemBuilder: (context, index) {
                   return Column(children: [
@@ -85,11 +92,17 @@ class _CheckCState extends State<CheckC> {
 
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
-    return SizedBox(
+    final ScrollController _firstController = ScrollController();
+    return 
+    SizedBox(
       width: sizeScreen.width,
       height: sizeScreen.height * 0.3,
-      child: Scrollbar(
+      child: RawScrollbar(
+        thumbColor: const Color.fromARGB(255, 55, 111, 60),
+        controller: _firstController,
+        thumbVisibility: true,
         child: ListView.builder(
+          controller: _firstController,
           itemCount: widget.nomes.length,
           itemBuilder: (context, index) {
             return Column(children: [
@@ -110,7 +123,12 @@ class _CheckCState extends State<CheckC> {
                         });
                       })),
               widget.nomes[index] == 'outro' && isChecked[index] == true
-                  ? const CustomTextField(name: 'qual?')
+                  ?  CustomTextField(name: 'qual?', validat: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Preencha o campo';
+                              }
+                              return null;
+                            },)
                   : Container(),
             ]);
           },

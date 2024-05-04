@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
 
 class CustomTextField extends StatelessWidget {
   final String name;
-
-  const CustomTextField({super.key, required this.name});
+  final String? Function(String?) validat;
+  const CustomTextField({super.key, required this.name, required this.validat});
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
@@ -14,23 +17,28 @@ class CustomTextField extends StatelessWidget {
           right: sizeScreen.width * 0.02,
           top: sizeScreen.height * 0.023,
         ),
-        child: SizedBox(
-            height: sizeScreen.height * 0.056,
+       
+            //height: sizeScreen.height * 0.07,
             // child: Padding(
             //   padding: EdgeInsets.only(
             //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
-            child: TextField(
+            child: TextFormField(//String? Function(String?)
+            
+              validator: validat,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
+                isDense: true,
                 hintText: name,
                 hintStyle: TextStyle(color: Colors.grey),
                 contentPadding: EdgeInsets.only(
                     top: sizeScreen.height * 0.03,
                     left: sizeScreen.width * 0.05),
+                 //errorBorder: UnderlineInputBorder()
               ),
-            )));
+              
+            ));
   }
 }
 
@@ -55,12 +63,24 @@ class CustomTextDate extends StatelessWidget {
           right: sizeScreen.width * 0.02,
           top: sizeScreen.height * 0.023,
         ),
-        child: SizedBox(
-            height: sizeScreen.height * 0.056,
+
             // child: Padding(
             //   padding: EdgeInsets.only(
             //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
-            child: TextField(
+            child: TextFormField(
+              inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]')), MaskTextInputFormatter(mask: '##/##/####')],
+              validator: (value) {
+                if(value == null || value.isEmpty ){
+                  return 'Por favor, insira uma data';
+                }
+                try{
+                  DateTime.parse(value);
+                }catch(e){
+                  return 'Insira uma data válida\n no formado DD/MM/AAAA';
+                }
+                return null;
+                
+              },
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -72,6 +92,6 @@ class CustomTextDate extends StatelessWidget {
                     top: sizeScreen.height * 0.03,
                     left: sizeScreen.width * 0.05),
               ),
-            )));
+            ));
   }
 }

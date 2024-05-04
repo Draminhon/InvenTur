@@ -69,7 +69,12 @@ class RecuperarSenha extends StatelessWidget {
               SizedBox(height: sizeScreen.height * 0.03,),
     Padding(
           padding: EdgeInsets.all(25),
-          child: CustomTextField(name: 'E-mail')),
+          child: CustomTextField(name: 'E-mail', validat: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Preencha o campo';
+                              }
+                              return null;
+                            },)),
         SizedBox(height: sizeScreen.height * 0.13,),
        SizedBox(
             height: 50,
