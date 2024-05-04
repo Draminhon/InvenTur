@@ -8,7 +8,7 @@ class BrasilService {
   
   Future<List<Estado>> fetchEstados() async {
     final response = await http.get(
-      Uri.parse('https://brasilapi.com.br/api/ibge/uf/v1')
+      Uri.parse('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
     );
 
     if (response.statusCode == 200) {
@@ -20,14 +20,14 @@ class BrasilService {
     }
   }
 
-  Future<List<Municipio>> fetchMunicipiosUF(String uf) async {
+  Future<List<Municipio>> fetchMunicipiosUF(int ufId) async {
     final response = await http.get(
-      Uri.parse('https://brasilapi.com.br/api/ibge/municipios/v1/$uf?providers=dados-abertos-br,gov,wikipedia')
+      Uri.parse('https://servicodados.ibge.gov.br/api/v1/localidades/estados/$ufId/municipios')
     );
 
     if (response.statusCode == 200) {
       final jsonList = jsonDecode(response.body) as List;
-
+      
       return jsonList.map((item) => Municipio.fromJson(item)).toList();
     } else {
       throw Exception('Falha ao Carregar Municípios');

@@ -13,8 +13,8 @@ class Estado {
     return switch (json) {
       {
         'id': int id,
-        'sigla': String sigla,
         'nome': String nome,
+        'sigla': String sigla,
       } => 
         Estado(
           id: id,

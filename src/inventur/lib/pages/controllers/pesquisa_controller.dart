@@ -71,7 +71,7 @@ class PesquisaController extends ChangeNotifier {
     _estados = await _brasilService.fetchEstados();
   }
 
-  void setMunicipios(String uf) async {
+  void setMunicipios(int uf) async {
     _municipios = await _brasilService.fetchMunicipiosUF(uf);
   }
 

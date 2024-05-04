@@ -206,7 +206,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                               label: "Estado",
                               onSelected: (option) {
                                 _estadoSelecionado = _pesquisaController.getEstadoByNome(option);
-                                _pesquisaController.setMunicipios(_estadoSelecionado!.sigla);
+                                _pesquisaController.setMunicipios(_estadoSelecionado!.id);
                               },
                               optionsBuilder: (textEditingValue) {
                                 if (textEditingValue.text == '') {
@@ -233,7 +233,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                         onSelected: (option) {
                           _municipioSelecionado = _pesquisaController.getMunicipioByNome(option);
                           setState(() {
-                            _codigIbgeController.text = _municipioSelecionado!.codigoIBGE;
+                            _codigIbgeController.text = _municipioSelecionado!.id.toString();
                           });
                         },
                         optionsBuilder: (textEditingValue) {
@@ -245,6 +245,11 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                               textEditingValue.text.toLowerCase(),
                             ),
                           );
+                        },
+                        onChanged: (value) {
+                          if (value == '') {
+                            _codigIbgeController.text = '';
+                          }
                         },
                       ),
                       Container(
