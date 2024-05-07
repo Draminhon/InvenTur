@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/apis/estados.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/tabela.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/expandedTileYoN.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/apis/paises.dart';
 
 class MeiosDeHospedagem extends StatefulWidget {
   const MeiosDeHospedagem({super.key});
@@ -27,14 +29,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        body: 
-           SingleChildScrollView(
-
-            child:
-            Form(
-          key: _formKey,
-          child: 
-             Column(children: [
+        body: SingleChildScrollView(
+          child: Form(
+            key: _formKey,
+            child: Column(children: [
               Padding(
                   padding: EdgeInsets.only(
                       top: sizeScreen.height * 0.05,
@@ -51,7 +49,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                               }
                               return null;
                             },
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               hintText: 'UF',
                             ),
                           )),
@@ -69,7 +67,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                               return null;
                             },
                             decoration:
-                                InputDecoration(hintText: 'Região Turística'),
+                                const InputDecoration(hintText: 'Região Turística'),
                           ))
                     ],
                   )),
@@ -85,7 +83,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       }
                       return null;
                     },
-                    decoration: InputDecoration(hintText: 'Município'),
+                    decoration: const InputDecoration(hintText: 'Município'),
                   )),
               Padding(
                   padding: EdgeInsets.only(top: sizeScreen.height * 0.05),
@@ -211,9 +209,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   return null;
                 },
               ),
-        SizedBox(height: sizeScreen.height * 0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               Padding(
-                padding: EdgeInsets.only(right: sizeScreen.width * 0.05, bottom: sizeScreen.height * 0.02),
+                padding: EdgeInsets.only(
+                    right: sizeScreen.width * 0.05,
+                    bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'natureza'),
               ),
               const Column(
@@ -223,11 +225,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   ),
                 ],
               ),
-            
+
               const textLabel(
                 name: 'tipo de organização/instituição',
               ),
-                SizedBox(height: sizeScreen.height * 0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const RadioD(
                 options: [
                   'associação',
@@ -240,9 +244,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               Row(
                 children: [
-                 SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                  SizedBox(
+                    width: sizeScreen.width * 0.05,
+                  ),
                   const textLabel(name: 'início da atividade:'),
                   SizedBox(
                     width: sizeScreen.width * 0.1,
@@ -257,7 +261,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.03,
               ),
               const textLabel(name: 'Quantidade de Funcionários'),
-              SizedBox(height: sizeScreen.height * 0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               Column(
                 children: [
                   Row(
@@ -283,7 +289,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           ))
                     ],
                   ),
-                  SizedBox(height: sizeScreen.height * 0.02,),
+                  SizedBox(
+                    height: sizeScreen.height * 0.02,
+                  ),
                   Row(
                     children: [
                       SizedBox(
@@ -328,14 +336,20 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           ))
                     ],
                   ),
-                  SizedBox(height: sizeScreen.height * 0.02,)
+                  SizedBox(
+                    height: sizeScreen.height * 0.02,
+                  )
                 ],
               ),
               const textLabel(name: 'localização:'),
-              SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const RadioD(options: ['urbana', 'rural']),
               const textLabel(name: 'Coordenadas Geográficas'),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               Column(children: [
                 Row(
                   children: [
@@ -360,7 +374,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
-                              SizedBox(height: sizeScreen.height *  0.02,),
+                SizedBox(
+                  height: sizeScreen.height * 0.02,
+                ),
                 Row(
                   children: [
                     SizedBox(
@@ -381,10 +397,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
-                              SizedBox(height: sizeScreen.height *  0.02,),
+                SizedBox(
+                  height: sizeScreen.height * 0.02,
+                ),
               ]),
               const textLabel(name: 'endereço:'),
-              
+
               CustomTextField(
                 validat: (value) {
                   if (value == null || value.isEmpty) {
@@ -421,7 +439,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 },
                 name: 'CEP',
               ),
-                            SizedBox(height: sizeScreen.height *  0.03,),
+              SizedBox(
+                height: sizeScreen.height * 0.03,
+              ),
               Column(children: [
                 Row(
                   children: [
@@ -459,14 +479,15 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                               return null;
                             },
                             name: 'Telefone secundário'))),
-                                          SizedBox(height: sizeScreen.height *  0.03,),
+                SizedBox(
+                  height: sizeScreen.height * 0.03,
+                ),
                 Row(
                   children: [
                     SizedBox(
                       width: sizeScreen.width * 0.05,
                     ),
-                    const textLabel(
-                        name: 'Endereço eletrônico\n(e-mail)'),
+                    const textLabel(name: 'Endereço eletrônico\n(e-mail)'),
                     SizedBox(
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
@@ -481,7 +502,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
-                              SizedBox(height: sizeScreen.height *  0.02,),
+                SizedBox(
+                  height: sizeScreen.height * 0.02,
+                ),
                 Row(
                   children: [
                     SizedBox(
@@ -507,11 +530,17 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   ],
                 ),
               ]),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const textLabel(name: 'sinalização:'),
-                            SizedBox(height: sizeScreen.height *  0.04,),
+              SizedBox(
+                height: sizeScreen.height * 0.04,
+              ),
               Row(children: [
-                SizedBox(width: sizeScreen.width * 0.05,),
+                SizedBox(
+                  width: sizeScreen.width * 0.05,
+                ),
                 const textLabel(name: 'de acessso -'),
                 SizedBox(
                   width: sizeScreen.width * 0.09,
@@ -525,7 +554,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.02,
               ),
               Row(children: [
-                              SizedBox(width: sizeScreen.width *  0.05,),
+                SizedBox(
+                  width: sizeScreen.width * 0.05,
+                ),
                 const textLabel(name: 'turística -'),
                 SizedBox(
                   width: sizeScreen.width * 0.14,
@@ -535,9 +566,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN())
               ]),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const textLabel(name: 'proximidades:'),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               //  RadioD(number: 6, options: options)
               const RadioD(options: [
                 'Restaurante',
@@ -549,7 +584,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'outro'
               ]),
               const textLabel(name: 'pontos de referência:'),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               CustomTextField(
                   validat: (value) {
                     if (value == null || value.isEmpty) {
@@ -650,11 +687,15 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       color: Colors.white, fontSize: sizeScreen.height * 0.03),
                 ),
               ),
-              SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const textLabel(name: 'ESTRUTURA DE FUNCIONAMENTO'),
-                            SizedBox(height: sizeScreen.height *  0.03,),
-                const textLabel(name: 'Tipo de diária'),
-            
+              SizedBox(
+                height: sizeScreen.height * 0.03,
+              ),
+              const textLabel(name: 'Tipo de diária'),
+
               SizedBox(
                 height: sizeScreen.height * 0.03,
               ),
@@ -665,9 +706,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Pensão Completa',
                 'Tudo incluído'
               ]),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const textLabel(name: 'Formas de Pagamento'),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const RadioC(
                 number: 5,
                 options: [
@@ -678,9 +723,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Cartão de Débito'
                 ],
               ),
-                            SizedBox(height: sizeScreen.height *  0.02,),
-             const textLabel(name: 'Reservas'),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
+              const textLabel(name: 'Reservas'),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const RadioC(
                 number: 7,
                 options: [
@@ -693,15 +742,23 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Antecipado'
                 ],
               ),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const textLabel(name: 'ATENDIMENTO AO PÚBLICO'),
-                            SizedBox(height: sizeScreen.height *  0.04,),
-            
-                    const textLabel(name: 'Atendimento em língua estrangeira'),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.04,
+              ),
+
+              const textLabel(name: 'Atendimento em língua estrangeira'),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const RadioD(options: ['Não', 'Inglês', 'Espanhol', 'outro']),
-               const textLabel(name: 'Informativos impressos'),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              const textLabel(name: 'Informativos impressos'),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const RadioD(
                   options: ['Não', 'Inglês', 'Espanhol', 'Português', 'outro']),
               SizedBox(
@@ -720,9 +777,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       color: Colors.white, fontSize: sizeScreen.height * 0.03),
                 ),
               ),
-                            SizedBox(height: sizeScreen.height *  0.02,),
-               const textLabel(name: 'Período'),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
+              const textLabel(name: 'Período'),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const RadioC(number: 13, options: [
                 'Janeiro',
                 'Fevereiro',
@@ -738,24 +799,32 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Dezembro',
                 'Ano Inteiro'
               ]),
-            const textLabel(name: 'Horário'),
-                            SizedBox(height: sizeScreen.height *  0.01,),
+              const textLabel(name: 'Horário'),
+              SizedBox(
+                height: sizeScreen.height * 0.01,
+              ),
               TabelaT2(),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-             const textLabel(name: 'Funcionamento 24 horas'),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              const textLabel(name: 'Funcionamento 24 horas'),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const ExpansionTileYoN(),
-             const textLabel(name: 'Funcionamento em feriados'),
-                            SizedBox(height: sizeScreen.height *  0.03,),
-     const ExpansionTileYoN(),
-            const textLabel(name: 'Restrições'),
-                          SizedBox(height: sizeScreen.height *  0.02,),
+              const textLabel(name: 'Funcionamento em feriados'),
+              SizedBox(
+                height: sizeScreen.height * 0.03,
+              ),
+              const ExpansionTileYoN(),
+              const textLabel(name: 'Restrições'),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const RadioD(
                   options: ['Crianças', 'Fumantes', 'Animais', 'outro']),
               const textLabel(name: 'Outras regras e informações'),
-                        
+
               CustomTextField(
                   validat: (value) {
                     if (value == null || value.isEmpty) {
@@ -764,11 +833,15 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     return null;
                   },
                   name: 'Regras e informações'),
-                                SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const textLabel(name: 'DADOS DA VISITAÇÃO'),
-                            SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const textLabel(name: 'Ocupação ano nº'),
-                         
+
               CustomTextField(
                   validat: (value) {
                     if (value == null || value.isEmpty) {
@@ -777,9 +850,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     return null;
                   },
                   name: 'nº'),
-                   SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const textLabel(name: 'Ocupação na alta temporada nº'),
-            
+
               CustomTextField(
                   validat: (value) {
                     if (value == null || value.isEmpty) {
@@ -788,9 +863,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     return null;
                   },
                   name: 'nº'),
-                   SizedBox(height: sizeScreen.height *  0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const textLabel(name: 'Meses de alta temporada'),
-                 SizedBox(height: sizeScreen.height *  0.01,),
+              SizedBox(
+                height: sizeScreen.height * 0.01,
+              ),
 
               const RadioC(number: 13, options: [
                 'Janeiro',
@@ -816,97 +895,21 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               const textLabel(
                   name: 'Origem dos turistas nacionais (Até 5 estados)'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '1'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '2'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '3'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '4'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '5'),
+                  SizedBox(height: sizeScreen.height * 0.02,),
+           Estados(),
+             Estados(),
+          Estados(),
+            Estados(),
+            Estados(),
+                    SizedBox(height: sizeScreen.height * 0.02,),
               const textLabel(
                   name: 'Origem dos turistas internacionais (Até 5 Países)'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '1'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '2'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '3'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '4'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '5'),
-              const textLabel(name: 'Ano base'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: ''),
+                          SizedBox(height: sizeScreen.height * 0.02,),
+              const Paises(),
+              const Paises(),
+              const Paises(),
+              const Paises(),
+              const Paises(),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
@@ -2553,10 +2556,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('processing data')));
+                          const SnackBar(content: Text('processing data')));
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('preencha os dados!')));
+                          const SnackBar(content: Text('preencha os dados!')));
                     }
                   },
                   style: OutlinedButton.styleFrom(
