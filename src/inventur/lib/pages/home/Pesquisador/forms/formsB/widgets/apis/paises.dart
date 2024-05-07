@@ -31,9 +31,7 @@ for (var state in jsonResponse){
   @override
   Widget build(BuildContext context) {
   final sizeScreen = MediaQuery.of(context).size;
-  return SizedBox(
-    width: sizeScreen.width,
-    child: DropdownButton<String>(
+  return DropdownButton<String>(
       isExpanded: true,
        padding: EdgeInsets.symmetric(horizontal:  sizeScreen.width * 0.05),
       value: selectedState,
@@ -46,13 +44,14 @@ for (var state in jsonResponse){
           Text(value),
         );
       }).toList(),
+    menuMaxHeight: sizeScreen.height * 0.5,
       hint: const Text('Selecione um país'),
       onChanged: (String? value) {
         setState(() {
           selectedState = value;
         });
       },
-    ),
+
   );
 }
 }

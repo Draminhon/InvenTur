@@ -110,8 +110,11 @@ class _RadioStateC extends State<RadioC> {
         height: sizeScreen.height * 0.059,
       ));
     }
+
+    
     return ExpansionTile(tilePadding: EdgeInsets.only(left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
         shape: const Border(),
+      
         title: const Text(
           'opções',
           style: TextStyle(color: Color.fromARGB(255, 55, 111, 60)),
@@ -128,8 +131,17 @@ class _RadioStateC extends State<RadioC> {
                 children: radioButtons.skip(half).toList(),
               ),
             ),
-          ])
-        ]);
+          ]),
+              _groupValue == widget.options.indexOf('outro')
+            ?  CustomTextField(name: 'qual?', validat: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Preencha o campo';
+                              }
+                              return null;
+                            },)
+            : Container()
+        ], );
+        
   }
 }
 
@@ -150,6 +162,7 @@ class _RadioStateD extends State<RadioD> {
     return Column(
       children: [
         ExpansionTile(
+       
             shape: const Border(),
             title: const Text(
               'opções',

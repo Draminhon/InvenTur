@@ -66,8 +66,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                               }
                               return null;
                             },
-                            decoration:
-                                const InputDecoration(hintText: 'Região Turística'),
+                            decoration: const InputDecoration(
+                                hintText: 'Região Turística'),
                           ))
                     ],
                   )),
@@ -895,16 +895,22 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               const textLabel(
                   name: 'Origem dos turistas nacionais (Até 5 estados)'),
-                  SizedBox(height: sizeScreen.height * 0.02,),
-           Estados(),
-             Estados(),
-          Estados(),
-            Estados(),
-            Estados(),
-                    SizedBox(height: sizeScreen.height * 0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
+              const Estados(),
+              const Estados(),
+              const Estados(),
+              const Estados(),
+              const Estados(),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const textLabel(
                   name: 'Origem dos turistas internacionais (Até 5 Países)'),
-                          SizedBox(height: sizeScreen.height * 0.02,),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               const Paises(),
               const Paises(),
               const Paises(),
@@ -926,22 +932,21 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       color: Colors.white, fontSize: sizeScreen.height * 0.03),
                 ),
               ),
-
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.17,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Unidades habitacionais (UH)'),
-              ),
+SizedBox(height: sizeScreen.height * 0.02,),
+      
+             const textLabel(name: 'Unidades habitacionais (UH)'),
+             SizedBox(height: sizeScreen.height * 0.02,),
 
               Column(children: [
                 Row(
                   children: [
+                    SizedBox(width: sizeScreen.width * 0.04,),
                     const textLabel(name: 'Total de UH nº'),
+                    
                     SizedBox(
                       width: sizeScreen.width * 0.055,
                     ),
+                    
                     SizedBox(
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
@@ -956,8 +961,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
+                  SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
+                       SizedBox(width: sizeScreen.width * 0.04,),
                     const textLabel(name: 'Total de leitos nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.005,
@@ -976,8 +983,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
+                  SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
+                       SizedBox(width: sizeScreen.width * 0.04,),
                     const textLabel(name: 'Uh adaptadas\npara PCD nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.071,
@@ -1000,8 +1009,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               Padding(
                 padding: EdgeInsets.only(
                     left: sizeScreen.width * 0.02,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
+                    top: sizeScreen.height * 0.03,
+                    bottom: sizeScreen.height * 0.03),
                 child: const textLabel(name: 'Produtos de higiene pessoal'),
               ),
               const CheckC(nomes: [
@@ -1021,7 +1030,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     left: sizeScreen.width * 0.005,
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Equipamentos e serviços'),
+                child: const textLabel(name: 'Equipamentos e Serviços'),
               ),
               const RadioC(number: 23, options: [
                 'Aparelho de vídeo',
@@ -1053,13 +1062,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     right: sizeScreen.width * 0.05,
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Instalações'),
+                child: const textLabel(name: 'INSTALAÇÕES'),
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.005,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
+                   
+                    top: sizeScreen.height * 0.03,
+                    bottom: sizeScreen.height * 0.03),
                 child: const textLabel(name: 'Estacionamento'),
               ),
               const RadioD(
@@ -1069,6 +1078,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               Column(children: [
                 Row(
                   children: [
+                    SizedBox(width: sizeScreen.width * 0.05,),
                     const textLabel(name: 'Capacidade de\nveículos nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.01,
@@ -1087,8 +1097,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
+                  SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
+                            SizedBox(width: sizeScreen.width * 0.052,),
                     const textLabel(name: 'Automóveis nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.005,
@@ -1107,8 +1119,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
+                  SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
+                            SizedBox(width: sizeScreen.width * 0.05,),
                     const textLabel(name: 'Ônibus nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.1,
@@ -1128,25 +1142,18 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   ],
                 ),
               ]),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.16,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Outras intalações e estruturas'),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.29,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Energia  elétrica'),
-              ),
+              SizedBox(height: sizeScreen.height * 0.03,),
+              const textLabel(name: 'OUTRAS INSTALAÇÕES E ESTRUTURAS'),
+             SizedBox(height: sizeScreen.height * 0.02,),
+               const textLabel(name: 'Energia  elétrica'),
+                  SizedBox(height: sizeScreen.height * 0.02,),
               const RadioD(
                   options: ['110 volts', '220 volts', '110/220 volts']),
+                      SizedBox(height: sizeScreen.height * 0.02,),
               Row(
                 children: [
-                  const textLabel(name: 'Capacidade\n   em KVA'),
+                      SizedBox(width: sizeScreen.width * 0.05,),
+                  const textLabel(name: 'Capacidade\nem KVA'),
                   SizedBox(
                     width: sizeScreen.width * 0.005,
                   ),
@@ -1164,17 +1171,15 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       ))
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.25,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Gerador de emergência'),
-              ),
+                  SizedBox(height: sizeScreen.height * 0.02,),
+              const textLabel(name: 'Gerador de emergência'),
+         SizedBox(height: sizeScreen.height * 0.032,),
               const ExpansionTileYoN(),
+                  SizedBox(height: sizeScreen.height * 0.02,),
               Row(
                 children: [
-                  const textLabel(name: 'Capacidade\n   em KVA'),
+                      SizedBox(width: sizeScreen.width * 0.05,),
+                  const textLabel(name: 'Capacidade\nem KVA'),
                   SizedBox(
                     width: sizeScreen.width * 0.005,
                   ),
@@ -1192,37 +1197,23 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       ))
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.28,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Área de alimentação'),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.35,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Restaurante'),
-              ),
-              const RadioD(options: [
+              SizedBox(height: sizeScreen.height * 0.03,),
+            textLabel(name: 'ÁREA DE ALIMENTAÇÃO'),
+SizedBox(height: sizeScreen.height * 0.02,),
+               const textLabel(name: 'Restaurante'),
+              SizedBox(height: sizeScreen.height * 0.02,)
+,              const RadioD(options: [
                 'Não',
                 'Apenas para hóspedes',
                 'Aberto ao público',
                 'Adaptado para PCD'
               ]),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.2,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Capacidade de atendimento'),
-              ),
-
+               const textLabel(name: 'Capacidade de atendimento'),
+                SizedBox(height: sizeScreen.height * 0.02,),
               Column(children: [
                 Row(
                   children: [
+                      SizedBox(width: sizeScreen.width * 0.05,),
                     const textLabel(name: 'Capacidade\nInstalada\npor dia nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.01,
@@ -1241,10 +1232,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
+                  SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
                     SizedBox(
-                      width: sizeScreen.width * 0.05,
+                      width: sizeScreen.width * 0.04,
                     ),
                     const textLabel(name: 'Pessoas\natendidas\nsentadas nº'),
                     SizedBox(
@@ -1264,8 +1256,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
+                  SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
+                      SizedBox(width: sizeScreen.width * 0.04,),
                     const textLabel(name: 'Capacidade\nsimultânea nº'),
                     SizedBox(
                         width: sizeScreen.width * 0.6,
@@ -1301,13 +1295,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      right: sizeScreen.width * 0.06,
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: const textLabel(name: 'Lanchonete'),
-                ),
+                SizedBox(height: sizeScreen.height * 0.02,),
+           const textLabel(name: 'Lanchonete'),
+                SizedBox(height: sizeScreen.height * 0.02,),
               ]),
               const RadioD(options: [
                 'Não',
@@ -1318,6 +1308,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               Column(children: [
                 Row(
                   children: [
+                    SizedBox(width: sizeScreen.width * 0.05,),
                     const textLabel(name: 'Capacidade\nInstalada\npor dia nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.01,
@@ -1336,6 +1327,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
+                SizedBox(height: sizeScreen.height * 0.02,),
+                 
                 Row(
                   children: [
                     SizedBox(
@@ -1359,8 +1352,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
+                
+                SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
+                    SizedBox(width: sizeScreen.width * 0.02,),
                     const textLabel(name: 'Capacidade\nsimultânea nº'),
                     SizedBox(
                         width: sizeScreen.width * 0.6,
@@ -1376,6 +1372,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
+                SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
                     SizedBox(
@@ -1396,16 +1393,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
+                SizedBox(height: sizeScreen.height * 0.02,),
               ]),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.22,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
+             const textLabel(
                     name:
-                        'Área de recreação e lazer\n\n   Instalações e espaços'),
-              ),
+                    'ÁREA DE RECREAÇÃO E LAZER\n\n\n   Instalações e espaços'),
+               SizedBox(height: sizeScreen.height * 0.02,),
               const RadioD(options: [
                 'Piscina',
                 'Toboágua',
@@ -1423,14 +1416,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Pista de cooper',
                 'outro'
               ]),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.2,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
-                    name: '        Outros espaços,\nequipamentos e atividades'),
-              ),
+            
+              const textLabel(
+                    name: 'Outros espaços,\nequipamentos e atividades'),
+               SizedBox(height: sizeScreen.height * 0.02,),
               const RadioD(options: [
                 'Observação da fauna',
                 'Visita a produção agrícola',
@@ -1465,22 +1454,14 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Retiros espirituais',
                 'outro'
               ]),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.28,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
-                    name: 'Área para eventos\n\n     Instalações'),
-              ),
+               SizedBox(height: sizeScreen.height * 0.02,),
+            const textLabel(
+                    name: 'ÁREA PARA EVENTOS\n\n\nInstalações'),
+               SizedBox(height: sizeScreen.height * 0.04,),
               const TabelaT3(),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.35,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Serviços'),
-              ),
+               SizedBox(height: sizeScreen.height * 0.02,),
+           const textLabel(name: 'Serviços'),
+               SizedBox(height: sizeScreen.height * 0.02,),
               const RadioD(options: [
                 'Realização de eventos próprios',
                 'Aluguel de equipamentos',
@@ -1490,13 +1471,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Serviços de som',
                 'outro',
               ]),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.3,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Equipamentos'),
-              ),
+               const textLabel(name: 'Equipamentos'),
+               SizedBox(height: sizeScreen.height * 0.02,),
               const RadioD(options: [
                 'Cadeira com prancheta',
                 'Copa',
@@ -1522,13 +1498,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Palco',
                 'outro'
               ]),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.25,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Facilidades e serviços'),
-              ),
+             
+              const textLabel(name: 'Facilidades e serviços'),
+               SizedBox(height: sizeScreen.height * 0.02,),
               const RadioD(options: [
                 'Adaptador de voltagem',
                 'Calefação',
@@ -1579,13 +1551,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Exposição de arte/artesanato',
                 'outro'
               ]),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.2,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Facilidades para executivos'),
-              ),
+            const textLabel(name: 'Facilidades para executivos'),
+               SizedBox(height: sizeScreen.height * 0.02,),
               const RadioD(options: [
                 'Apartamentos em andares especiais',
                 'Café da manhã em ambiente privativo',
@@ -1610,6 +1577,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Lavagem e passagem de roupa no período noturno',
                 'outro'
               ]),
+               SizedBox(height: sizeScreen.height * 0.02,),
               Container(
                 color: const Color.fromARGB(255, 55, 111, 60),
                 height: sizeScreen.height * 0.15,
@@ -1626,6 +1594,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.05,
               ),
               Row(children: [
+                 SizedBox(width: sizeScreen.width * 0.05,),
                 const textLabel(name: 'Do equipamento/espaço:'),
                 SizedBox(
                   width: sizeScreen.width * 0.04,
@@ -1635,6 +1604,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN())
               ]),
+               SizedBox(height: sizeScreen.height * 0.02,),
               const TabelaT4(
                 column01: [
                   Text('Categoria'),
@@ -1842,7 +1812,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.05,
               ),
               Row(children: [
+                 SizedBox(width: sizeScreen.width * 0.05,),
                 const textLabel(
+                  
                     name:
                         'Da área ou edificação \nem que está\nlocalizado / Instalado'),
                 SizedBox(
@@ -2095,34 +2067,19 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       color: Colors.white, fontSize: sizeScreen.height * 0.03),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.19,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
+               SizedBox(height: sizeScreen.height * 0.02,),
+              const textLabel(
                     name:
-                        'Possui alguma facilidade\n      para pessoas com\ndeficiência ou mobilidade\n             reduzida?'),
-              ),
+                        'Possui alguma facilidade\npara pessoas com\ndeficiência ou mobilidade\nreduzida?'),
+               SizedBox(height: sizeScreen.height * 0.04,),
               const ExpansionTileYoN(),
-
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.1,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
-                    name: 'obs: responder ás questões seguintes'),
-              ),
-
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.1,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
+ SizedBox(height: sizeScreen.height * 0.02,),
+              const textLabel(
+                    name: 'obs: responder às questões seguintes'),
+          SizedBox(height: sizeScreen.height * 0.02,),
+ const textLabel(
                     name: 'Pessoal capacitado para receber PCD'),
-              ),
+                SizedBox(height: sizeScreen.height * 0.02,),
               const RadioD(options: [
                 'Não',
                 'Física',
@@ -2131,13 +2088,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Mental',
                 'Múltipla'
               ]),
-              Padding(
-                padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.24,
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Rota externa acessível'),
-              ),
+             const textLabel(name: 'Rota externa acessível'),
+                SizedBox(height: sizeScreen.height * 0.02,),
               const RadioD(options: [
                 'Não',
                 'Estacionamento',
@@ -2152,7 +2104,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.15,
+                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Símbolo internacional de acesso'),
@@ -2168,7 +2120,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.11,
+                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Local de embarque e desembarque'),
@@ -2177,7 +2129,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   options: ['Não', 'Sinalizado', 'Com acesso em nível']),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.2,
+                  
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Vaga em estacionamento'),
@@ -2191,12 +2143,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.1,
+                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(
                     name:
-                        'Área de circulação / acesso interno\n          para cadeira de rodas'),
+                        'Área de circulação / acesso interno\npara cadeira de rodas'),
               ),
               const RadioD(options: [
                 'Não',
@@ -2208,7 +2160,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.35,
+        
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Escada'),
@@ -2223,7 +2175,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.35,
+            
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Rampa'),
@@ -2238,7 +2190,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.35,
+                  
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Piso'),
@@ -2251,7 +2203,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.3,
+                  
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Elevador'),
@@ -2265,7 +2217,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.19,
+                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(
@@ -2279,7 +2231,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.25,
+                 
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Sinalização visual'),
@@ -2297,7 +2249,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.29,
+                  
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Sinalização tátil'),
@@ -2315,7 +2267,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.23,
+                
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Alarme de emergência'),
@@ -2328,7 +2280,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.3,
+                  
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Comunicação'),
@@ -2341,7 +2293,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.23,
+                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Balcão de atendimento'),
@@ -2353,7 +2305,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.33,
+                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Mobiliário'),
@@ -2365,7 +2317,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.34,
+                
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Sanitário'),
@@ -2383,7 +2335,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.34,
+               
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(name: 'Telefone'),
@@ -2396,14 +2348,16 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               Padding(
                 padding: EdgeInsets.only(
                     top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
+                    bottom: sizeScreen.height * 0.04),
                 child: const textLabel(
                     name:
-                        'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida'),
+                        'Sinalização indicativa de\natendimento preferencial para pessoas com deficiência ou mobilidade reduzida'),
               ),
+
               const ExpansionTileYoN(),
-              Row(
+              SizedBox(height: sizeScreen.height * 0.02,),              Row(
                 children: [
+                  SizedBox(width: sizeScreen.width * 0.05,),
                   const textLabel(name: 'Outros'),
                   SizedBox(
                     width: sizeScreen.width * 0.1,

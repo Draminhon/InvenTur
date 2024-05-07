@@ -43,6 +43,7 @@ for (var state in jsonResponse){
         );
       }).toList(),
       hint: Text('Selecione um estado'),
+      menuMaxHeight: sizeScreen.height * 0.5,
       onChanged: (String? value) {
         setState(() {
           selectedState = value;
