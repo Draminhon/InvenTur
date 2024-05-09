@@ -1,14 +1,24 @@
 import 'package:flutter/material.dart';
 
 class ExpansionTileYoN extends StatefulWidget {
-  const ExpansionTileYoN({super.key});
+  const ExpansionTileYoN({super.key, required this.getValue});
+  final Function(String) getValue;
   @override
   State<ExpansionTileYoN> createState() => _ExpansionTileYoNState();
 }
 
 class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
   String _option = 'não';
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+            widget.getValue(_option);
+  }
+
   @override
+  
   Widget build(BuildContext context) {
     
     final sizeScreen = MediaQuery.sizeOf(context);
@@ -56,6 +66,7 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                       )),
                       onTap: () => setState(() {
                         _option = 'sim';
+                                widget.getValue(_option);
                       }),
                       dense: true,
                   
@@ -78,13 +89,17 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                       onTap: (){
                         setState(() {
                           _option = 'não';
+                                  widget.getValue(_option);
                         });
                       },
                       // onTap: () => Navigator.pushNamed(context, routeName),
-                    ))
+                    )),
+            
               ],
             ))
       ],
+      
     );
+    
   }
 }

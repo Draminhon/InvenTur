@@ -74,7 +74,7 @@ class RecuperarSenha extends StatelessWidget {
                                 return 'Preencha o campo';
                               }
                               return null;
-                            },)),
+                            }, getValue: (String ) {  },)),
         SizedBox(height: sizeScreen.height * 0.13,),
        SizedBox(
             height: 50,

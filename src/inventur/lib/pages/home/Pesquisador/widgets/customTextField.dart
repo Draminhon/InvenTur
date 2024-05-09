@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 
 class CustomTextField extends StatelessWidget {
   final String name;
   final String? Function(String?) validat;
-  const CustomTextField({super.key, required this.name, required this.validat});
+  const CustomTextField({super.key, required this.name, required this.validat, required this.getValue});
+  final Function(String) getValue;
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
@@ -23,7 +23,9 @@ class CustomTextField extends StatelessWidget {
             //   padding: EdgeInsets.only(
             //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
             child: TextFormField(//String? Function(String?)
-            
+            onSaved: (newValue) {
+              getValue(newValue!);
+            },
               validator: validat,
               decoration: InputDecoration(
                 border: OutlineInputBorder(
@@ -41,15 +43,63 @@ class CustomTextField extends StatelessWidget {
             ));
   }
 }
-
-class CustomTextDate extends StatelessWidget {
-  const CustomTextDate({super.key});
-  
+class CustomTextNumber extends StatelessWidget {
+  const CustomTextNumber({super.key, required this.getValue, required this.labelText});
+   final Function(String) getValue;
+   final String labelText;
   @override
   Widget build(BuildContext context) {
-    DateTime now = DateTime.now();
-    var inputFormat = DateFormat('dd/MM/yyyy');
-    var outputFormat = DateFormat('dd/MM/yyyy');
+    
+   final sizeScreen = MediaQuery.sizeOf(context);
+
+    return Padding(
+        padding: EdgeInsets.only(
+          left: sizeScreen.width * 0.02,
+          right: sizeScreen.width * 0.02,
+          top: sizeScreen.height * 0.023,
+        ),
+
+            // child: Padding(
+            //   padding: EdgeInsets.only(
+            //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
+            child: TextFormField(
+              inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]')), MaskTextInputFormatter(mask: '(##) # ####-####')],
+              // validator: (value) {
+              //   if(value == null || value.isEmpty ){
+              //     return 'Por favor, insira uma data';
+              //   }
+              //   try{
+              //     DateTime.parse(value);
+              //   }catch(e){
+              //     return 'Insira uma data válida\n no formado DD/MM/AAAA';
+              //   }
+              //   return null;
+                
+              // },
+               onSaved: (newValue) {
+              getValue(newValue!);
+            },
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                hintText: labelText,
+                
+                hintStyle: TextStyle(color: Colors.grey),
+                contentPadding: EdgeInsets.only(
+                    top: sizeScreen.height * 0.03,
+                    left: sizeScreen.width * 0.05),
+              ),
+            ));
+  }
+}
+
+class CustomTextDate extends StatelessWidget {
+  const CustomTextDate({super.key, required this.getValue});
+   final Function(String) getValue;
+  @override
+  Widget build(BuildContext context) {
+   
 
     
     // outputFormat.format(inputFormat.parse('07/02/2024')),
@@ -69,18 +119,21 @@ class CustomTextDate extends StatelessWidget {
             //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
             child: TextFormField(
               inputFormatters: [FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]')), MaskTextInputFormatter(mask: '##/##/####')],
-              validator: (value) {
-                if(value == null || value.isEmpty ){
-                  return 'Por favor, insira uma data';
-                }
-                try{
-                  DateTime.parse(value);
-                }catch(e){
-                  return 'Insira uma data válida\n no formado DD/MM/AAAA';
-                }
-                return null;
+              // validator: (value) {
+              //   if(value == null || value.isEmpty ){
+              //     return 'Por favor, insira uma data';
+              //   }
+              //   try{
+              //     DateTime.parse(value);
+              //   }catch(e){
+              //     return 'Insira uma data válida\n no formado DD/MM/AAAA';
+              //   }
+              //   return null;
                 
-              },
+              // },
+               onSaved: (newValue) {
+              getValue(newValue!);
+            },
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),

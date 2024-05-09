@@ -128,7 +128,7 @@ class _CheckCState extends State<CheckC> {
                                 return 'Preencha o campo';
                               }
                               return null;
-                            },)
+                            }, getValue: (String ) {  },)
                   : Container(),
             ]);
           },

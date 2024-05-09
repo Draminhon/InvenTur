@@ -19,7 +19,7 @@ import 'package:inventur/pages/home/Pesquisador/perfil_pesquisador.dart';
 import 'package:inventur/pages/home/Pesquisador/alterarDados-pesquisador.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosDeHospedagem.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/placeholder.dart';
-
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
@@ -58,7 +58,8 @@ class MyApp extends StatelessWidget {
         '/PerfilPesquisador': (_) => ContaPesquisador(),
         '/AlterarDados': (_) => AlterarCadastro(),
         '/MeiosDeHospedagem': (_) => MeiosDeHospedagem(),
-        '/Placeholder': (_) => PlaceHolder()
+        '/Placeholder': (_) => PlaceHolder(),
+        '/AlimentosEbebidas': (_) => AlimentoseBebidas(),
       },
     );
   }

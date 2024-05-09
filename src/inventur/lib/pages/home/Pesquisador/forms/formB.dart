@@ -51,7 +51,7 @@ class FormularioB extends StatelessWidget {
             ExpansionTileA(titulo: 'Serviços e equipamentos', minhaLista: const [
               Tilee(texto: 'Serviços e equipamentos de agências de turismo', routeName: '/Placeholder'),
               Tilee(texto: 'Serviços e equipamentos de transporte turístico', routeName: '/Placeholder'),
-              Tilee(texto: 'Serviços e equipamentos para alimentos e bebidas', routeName: '/Placeholder'),
+              Tilee(texto: 'Serviços e equipamentos para alimentos e bebidas', routeName: '/AlimentosEbebidas'),
               SizedBox()
             ]),
             // ExpansionTileA(titulo: 'Eventos', minhaLista: const [

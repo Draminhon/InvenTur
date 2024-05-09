@@ -78,14 +78,14 @@ class MudarSenha extends StatelessWidget {
                                 return 'Preencha o campo';
                               }
                               return null;
-                            },),
+                            }, getValue: (String ) {  },),
                           SizedBox(height: 15),
                             CustomTextField(name: 'Recuperar Senha', validat: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Preencha o campo';
                               }
                               return null;
-                            },)
+                            }, getValue: (String ) {  },)
               ],
             )),
           ) 

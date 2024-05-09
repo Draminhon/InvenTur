@@ -37,9 +37,10 @@ class _RadioState extends State<RadioB> {
 }
 
 class RadioC extends StatefulWidget {
-  const RadioC({super.key, required this.number, required this.options});
+  const RadioC({super.key, required this.number, required this.options, required this.getValue});
   final List<String> options;
   final int number;
+  final Function(String) getValue;
   @override
   State<RadioC> createState() => _RadioStateC();
 }
@@ -49,6 +50,7 @@ class _RadioStateC extends State<RadioC> {
 
   @override
   Widget build(BuildContext context) {
+    
     int half = (widget.number / 2).ceil().toInt();
     final sizeScreen = MediaQuery.sizeOf(context);
     List<Widget> radioButtons = [];
@@ -75,6 +77,7 @@ class _RadioStateC extends State<RadioC> {
                         if (value != null) {
                           _groupValue = value;
                         }
+                         widget.getValue(widget.options[i]);
                       });
                     },
             )));
@@ -100,6 +103,7 @@ class _RadioStateC extends State<RadioC> {
                         if (value != null) {
                           _groupValue = value;
                         }
+                         widget.getValue(widget.options[i]);
                       });
                     },
             )));
@@ -138,7 +142,7 @@ class _RadioStateC extends State<RadioC> {
                                 return 'Preencha o campo';
                               }
                               return null;
-                            },)
+                            }, getValue: (newValue) { widget.getValue('outro: $newValue'); },)
             : Container()
         ], );
         
@@ -146,9 +150,9 @@ class _RadioStateC extends State<RadioC> {
 }
 
 class RadioD extends StatefulWidget {
-  const RadioD({super.key, required this.options});
+  const RadioD({super.key, required this.options, required this.getValue});
   final List<String> options;
-
+  final Function(String) getValue;
   @override
   State<RadioD> createState() => _RadioStateD();
 }
@@ -186,20 +190,24 @@ class _RadioStateD extends State<RadioD> {
                               setState(() {
                                 if (value != null) {
                                   _value = value;
-                                  print(widget.options[i]);
+                                 
                                 }
+                                   widget.getValue(widget.options[i]);
                               });
                             },
+                       
                       toggleable: true,
-                    ))
+                    )),
+                
             ]),
         _value == widget.options.indexOf('outro')
             ?  CustomTextField(name: 'qual?', validat: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Preencha o campo';
                               }
+                              
                               return null;
-                            },)
+                            }, getValue: (newValue) { widget.getValue('outro: $newValue'); },)
             : Container(),
       ],
     );

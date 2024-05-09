@@ -74,7 +74,7 @@ class ConfirmarCodigo extends StatelessWidget {
                                 return 'Preencha o campo';
                               }
                               return null;
-                            },)
+                            }, getValue: (String ) {  },)
                           ),
            
                SizedBox(height: sizeScreen.height * 0.13,),
