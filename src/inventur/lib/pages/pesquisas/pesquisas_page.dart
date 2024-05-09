@@ -13,7 +13,7 @@ class PesquisasPage extends StatefulWidget {
 class _PesquisasPageState extends State<PesquisasPage> {
   final PesquisaController _pesquisaController = PesquisaController();
 
-  PesquisaModel pm = PesquisaModel(
+  Pesquisa pm = Pesquisa(
     codigoIBGE: 11111,
     estado: "CE",
     municipio: "Tianguá",
@@ -21,15 +21,27 @@ class _PesquisasPageState extends State<PesquisasPage> {
     dataTermino: "01/01/2024",
     quantidadeLocais: 23,
     quantidadePesquisadores: 5,
+    status: "Não Iniciado"
+  );
+
+  Pesquisa pm2 = Pesquisa(
+    codigoIBGE: 11111,
+    estado: "CE",
+    municipio: "Viçosa do Ceará",
+    dataInicio: "01/01/2024",
+    dataTermino: "01/01/2024",
+    quantidadeLocais: 23,
+    quantidadePesquisadores: 5,
+    status: "Não Iniciado"
   );
 
   @override
   void initState() {
     super.initState();
     _pesquisaController.addPesquisa(pm);
+    _pesquisaController.addPesquisa(pm2);
     _pesquisaController.addPesquisa(pm);
-    _pesquisaController.addPesquisa(pm);
-    _pesquisaController.addPesquisa(pm);
+    _pesquisaController.addPesquisa(pm2);
   }
 
   @override
@@ -42,77 +54,6 @@ class _PesquisasPageState extends State<PesquisasPage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // TABELA PARA MOSTRAR AS PESQUISASA CADASTRADAS
-          Expanded(
-            child: Card(
-              color: Colors.white,
-              surfaceTintColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(18)
-              ),
-              child: ListenableBuilder(
-                listenable: _pesquisaController,
-                builder: (context, child) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Row(
-                            children: [
-                              DataTable(
-                                columns: [
-                                  ..._pesquisaController.informacoesPesquisa.map(
-                                    (columnName) => DataColumn(
-                                      label: Text(
-                                        columnName,
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                                rows: [
-                                  ..._pesquisaController.pesquisas.map(
-                                    (e) => DataRow(
-                                      cells: [
-                                        DataCell(
-                                          Center(child: Text(e.codigoIBGE.toString())),
-                                        ),
-                                        DataCell(
-                                          Center(child: Text(e.estado)),
-                                        ),
-                                        DataCell(
-                                          Center(child: Text(e.municipio)),
-                                        ),
-                                        DataCell(
-                                          Center(child: Text(e.dataInicio)),
-                                        ),
-                                        DataCell(
-                                          Center(child: Text(e.dataTermino)),
-                                        ),
-                                        DataCell(
-                                          Center(child: Text(e.quantidadeLocais.toString())),
-                                        ),
-                                        DataCell(
-                                          Center(child: Text(e.quantidadePesquisadores.toString())),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              ),
-            ),
-          ),
-          // TABELA PARA MOSTRAR AS PESQUISASA CADASTRADAS
-          // LISTVIEW PARA MOSTRAR AS EM CARDs AS PESQUISAS CADASTRADAS
           Expanded(
             child: ListenableBuilder(
               listenable: _pesquisaController,
@@ -123,6 +64,7 @@ class _PesquisasPageState extends State<PesquisasPage> {
                   itemBuilder: (context, index) {
                     return PesquisaCard(
                       pesquisa: _pesquisaController.pesquisas[index],
+                      pesquisaController: _pesquisaController,
                     );
                   },
                 )
@@ -132,7 +74,6 @@ class _PesquisasPageState extends State<PesquisasPage> {
               },
             ),
           ),
-          // LISTVIEW PARA MOSTRAR AS EM CARDs AS PESQUISAS CADASTRADAS
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: SizedBox(

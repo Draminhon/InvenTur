@@ -1,13 +1,14 @@
-class PesquisaModel {
-  final int codigoIBGE;
-  final String estado;
-  final String municipio;
-  final String dataInicio;
-  final String dataTermino;
-  final int quantidadeLocais;
-  final int quantidadePesquisadores;
+class Pesquisa {
+  int codigoIBGE;
+  String estado;
+  String municipio;
+  String dataInicio;
+  String dataTermino;
+  int quantidadeLocais;
+  int quantidadePesquisadores;
+  String status;
 
-  PesquisaModel({
+  Pesquisa({
     required this.codigoIBGE,
     required this.estado,
     required this.municipio,
@@ -15,5 +16,6 @@ class PesquisaModel {
     required this.dataTermino,
     required this.quantidadeLocais,
     required this.quantidadePesquisadores,
+    required this.status
   });
 }
