@@ -6,6 +6,7 @@ import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/pesquisas/widgets/user_pesquisa_card_widget.dart';
 import 'package:inventur/pages/widgets/auto_complete_text_field.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class RegisterPesquisa extends StatefulWidget {
   const RegisterPesquisa({super.key});
@@ -16,9 +17,6 @@ class RegisterPesquisa extends StatefulWidget {
 
 class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerProviderStateMixin {
   bool _tileExpanded = false;
-
-  late Estado? _estadoSelecionado;
-  late Municipio? _municipioSelecionado;
 
   List<User> users = [
     User(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
@@ -32,6 +30,8 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
     User(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
   ];
 
+  late Estado? _estadoSelecionado;
+  late Municipio? _municipioSelecionado;
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
 
@@ -39,6 +39,9 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
   final TextEditingController _inicioController = TextEditingController();
   final TextEditingController _terminoController = TextEditingController();
   final TextEditingController _codigIbgeController = TextEditingController();
+  final TextEditingController _nomePesquisadorController = TextEditingController();
+
+  final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
 
   Future<String> selectDate() async {
     late DateTime? selectedDate;
@@ -220,7 +223,11 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                               },
                               onChanged: (value) {
                                 if (value == '') {
-                                  _pesquisaController.municipios.clear();
+                                  setState(() {
+                                    _municipioSelecionado = null;
+                                    _codigIbgeController.text = '';
+                                    _pesquisaController.municipios.clear();
+                                  });
                                 }
                               },
                             ),
@@ -230,6 +237,9 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                       const SizedBox(height: 10),
                       AutocompleteTextField(
                         label: "Município",
+                        onStateChanged: (textEditingController) {
+                          if (_pesquisaController.municipios.isEmpty) textEditingController.text = '';
+                        },
                         onSelected: (option) {
                           _municipioSelecionado = _pesquisaController.getMunicipioByNome(option);
                           setState(() {
@@ -290,7 +300,8 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                           ),
                           children: [
                             AutocompleteTextField(
-                              label: "Nome do Pesquisador",
+                              label: "CPF do Pesquisador",
+                              inputFormatters: [cpfMask],
                               onSelected: (option) {
                                 
                               },
@@ -298,7 +309,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                 if (textEditingValue.text == '') {
                                   return const Iterable.empty();
                                 }
-                                return _pesquisaController.estados.map((e) => e.nome).where(
+                                return users.map((e) => e.cpf).where(
                                   (word) => word.toLowerCase().contains(
                                     textEditingValue.text.toLowerCase(),
                                   ),
@@ -306,21 +317,24 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                               },
                             ),
                             const SizedBox(height: 10),
-                            AutocompleteTextField(
-                              label: "CPF do Pesquisador",
-                              onSelected: (option) {
-                                
-                              },
-                              optionsBuilder: (textEditingValue) {
-                                if (textEditingValue.text == '') {
-                                  return const Iterable.empty();
-                                }
-                                return _pesquisaController.estados.map((e) => e.nome).where(
-                                  (word) => word.toLowerCase().contains(
-                                    textEditingValue.text.toLowerCase(),
-                                  ),
-                                );
-                              },
+                            TextField(
+                              readOnly: true,
+                              textAlign: TextAlign.end,
+                              controller: _nomePesquisadorController,
+                              decoration: InputDecoration(
+                                filled: true,
+                                isCollapsed: true,
+                                fillColor: Colors.white,
+                                contentPadding: const EdgeInsets.all(10),
+                                labelText: "Nome do Pesquisador",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 10),
                             Row(

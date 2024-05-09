@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AutocompleteTextField extends StatelessWidget {
   final String label;
   final Function(String option) onSelected;
   final AutocompleteOptionsBuilder<String> optionsBuilder;
   final Function(String value)? onChanged;
+  final Function(TextEditingController textEditingController)? onStateChanged;
+  final List<TextInputFormatter>? inputFormatters;
 
   const AutocompleteTextField({
     super.key,
     this.onChanged,
+    this.onStateChanged,
+    this.inputFormatters,
     required this.label, 
     required this.onSelected,
     required this.optionsBuilder,
@@ -18,8 +23,8 @@ class AutocompleteTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => Autocomplete<String>(
-        optionsBuilder: (textEditingValue) => optionsBuilder(textEditingValue),
         onSelected: onSelected,
+        optionsBuilder: (textEditingValue) => optionsBuilder(textEditingValue),
         optionsViewBuilder: (context, onSelected, options) => Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -75,9 +80,11 @@ class AutocompleteTextField extends StatelessWidget {
           ),
         ),
         fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
+          if (onStateChanged != null) onStateChanged!(textEditingController);
           return TextField(
             focusNode: focusNode,
             textAlign: TextAlign.end,
+            inputFormatters: inputFormatters,
             controller: textEditingController,
             decoration: InputDecoration(
               filled: true,
