@@ -28,6 +28,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
     User(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
     User(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
     User(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
+    User(nome: "Tiago Alves de Lima", cpf: "078.369.222-03", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
   ];
 
   late Estado? _estadoSelecionado;
@@ -299,6 +300,90 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                             size: 32,
                           ),
                           children: [
+                            LayoutBuilder(
+                              builder: (context, constraints) => Autocomplete<String>(
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') return const Iterable.empty();
+                                  return users.map((e) => e.cpf).where(
+                                    (word) => word.contains(textEditingValue.text),
+                                  );
+                                },
+                                optionsViewBuilder: (context, onSelected, options) => Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Material(
+                                    elevation: 4,
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)
+                                    ),
+                                    child: Container(
+                                      width: constraints.biggest.width,
+                                      constraints: const BoxConstraints(maxHeight: 200),
+                                      child: ListView.separated(
+                                        itemCount: options.length,
+                                        separatorBuilder: (context, index) => const Divider(
+                                          height: 0,
+                                          color: Color.fromARGB(255, 55, 111, 60),
+                                        ),
+                                        itemBuilder: (context, index) {
+                                          final User option = users[index];
+                                          return InkWell(
+                                            borderRadius: options.length == 1
+                                            ? const BorderRadius.all(Radius.circular(10))
+                                            : index == 0
+                                              ? const BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                              )
+                                              : index == options.length - 1
+                                                ? const BorderRadius.only(
+                                                  bottomLeft: Radius.circular(10),
+                                                  bottomRight: Radius.circular(10),
+                                                )
+                                                : null,
+                                            onTap: () {
+                                              onSelected(option.cpf);
+                                              _nomePesquisadorController.text = option.nome;
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(16),
+                                              child: Text(
+                                                "${option.cpf}\n${option.nome}",
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color.fromARGB(255, 55, 111, 60),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
+                                  return TextField(
+                                    focusNode: focusNode,
+                                    textAlign: TextAlign.end,
+                                    controller: textEditingController,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      isCollapsed: true,
+                                      fillColor: Colors.white,
+                                      contentPadding: const EdgeInsets.all(10),
+                                      labelText: "CPF do Pesquisador",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
+                                      )
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                             AutocompleteTextField(
                               label: "CPF do Pesquisador",
                               inputFormatters: [cpfMask],
