@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:inventur/models/estado_model.dart';
 import 'package:inventur/models/municipio_model.dart';
-import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/pesquisas/widgets/user_pesquisa_card_widget.dart';
 import 'package:inventur/pages/widgets/auto_complete_text_field.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class RegisterPesquisa extends StatefulWidget {
   const RegisterPesquisa({super.key});
@@ -20,25 +20,18 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
   late Estado? _estadoSelecionado;
   late Municipio? _municipioSelecionado;
 
-  List<User> users = [
-    User(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
-    User(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
-    User(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
-    User(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
-    User(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
-    User(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
-    User(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
-    User(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
-    User(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
-  ];
-
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
 
+  final _formPesquisaKey = GlobalKey<FormState>();
   final PesquisaController _pesquisaController = PesquisaController();
   final TextEditingController _inicioController = TextEditingController();
   final TextEditingController _terminoController = TextEditingController();
   final TextEditingController _codigIbgeController = TextEditingController();
+
+  final _cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
+  final _dataInicialMask = MaskTextInputFormatter(mask: '##/##/####');
+  final _dataFinalMask = MaskTextInputFormatter(mask: '##/##/####');
 
   Future<String> selectDate() async {
     late DateTime? selectedDate;
@@ -78,7 +71,6 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
     );
 
     _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
-    _pesquisaController.setUsers = users;
     _pesquisaController.setEstados();
   }
 
@@ -97,7 +89,9 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.sizeOf(context);
-    final double screenHeight = screenSize.height - MediaQuery.paddingOf(context).top - appbar.preferredSize.height;
+    final double screenHeight = screenSize.height -
+      MediaQuery.paddingOf(context).top -
+      appbar.preferredSize.height;
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 245, 245),
@@ -112,107 +106,150 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                 children: [
                   Column(
                     children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            child: TextField(
-                              textAlign: TextAlign.end,
-                              controller: _inicioController,
-                              keyboardType: TextInputType.datetime,
-                              decoration: InputDecoration(
-                                filled: true,
-                                isCollapsed: true,
-                                fillColor: Colors.white,
-                                contentPadding: const EdgeInsets.all(10),
-                                labelText: "Data Início",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () async {
-                                    _inicioController.text = await selectDate();
-                                  },
-                                  icon: const Icon(
-                                    Icons.date_range_rounded,
-                                    color: Color.fromARGB(255, 55, 111, 60),
+                      Form(
+                        key: _formPesquisaKey,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: TextFormField(
+                                    textAlign: TextAlign.end,
+                                    controller: _inicioController,
+                                    inputFormatters: [_dataInicialMask],
+                                    keyboardType: TextInputType.datetime,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      isCollapsed: true,
+                                      labelText: "Data Início",
+                                      fillColor: Colors.white,
+                                      contentPadding: const EdgeInsets.all(10),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
+                                      ),
+                                      suffixIcon: IconButton(
+                                        onPressed: () async {
+                                          _inicioController.text = await selectDate();
+                                        },
+                                        icon: const Icon(
+                                          Icons.date_range_rounded,
+                                          color: Color.fromARGB(255, 55, 111, 60),
+                                        ),
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      if (value == '') return "Informe a Data de Inicio";
+                                      return null;
+                                    },
                                   ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          Flexible(
-                            child: TextField(
-                              textAlign: TextAlign.end,
-                              controller: _terminoController,
-                              keyboardType: TextInputType.datetime,
-                              decoration: InputDecoration(
-                                filled: true,
-                                isCollapsed: true,
-                                fillColor: Colors.white,
-                                contentPadding: const EdgeInsets.all(10),
-                                labelText: "Data Término",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
-                                ),
-                                suffixIcon: IconButton(
-                                  onPressed: () async {
-                                    _terminoController.text = await selectDate();
-                                  },
-                                  icon: const Icon(
-                                    Icons.date_range_rounded,
-                                    color: Color.fromARGB(255, 55, 111, 60),
+                                const SizedBox(width: 10),
+                                Flexible(
+                                  child: TextFormField(
+                                    textAlign: TextAlign.end,
+                                    controller: _terminoController,
+                                    inputFormatters: [_dataFinalMask],
+                                    keyboardType: TextInputType.datetime,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      isCollapsed: true,
+                                      fillColor: Colors.white,
+                                      contentPadding: const EdgeInsets.all(10),
+                                      labelText: "Data Término",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
+                                      ),
+                                      suffixIcon: IconButton(
+                                        onPressed: () async {
+                                          _terminoController.text = await selectDate();
+                                        },
+                                        icon: const Icon(
+                                          Icons.date_range_rounded,
+                                          color: Color.fromARGB(255, 55, 111, 60),
+                                        ),
+                                      ),
+                                    ),
+                                    validator: (value) {
+                                      if (value == '') return "Informe a Data de Término";
+                                      return null;
+                                    },
                                   ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Flexible(
-                            child: TextField(
-                              textAlign: TextAlign.end,
-                              controller: _codigIbgeController,
-                              decoration: InputDecoration(
-                                filled: true,
-                                isCollapsed: true,
-                                fillColor: Colors.white,
-                                contentPadding: const EdgeInsets.all(10),
-                                labelText: "Código IBGE",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                Flexible(
+                                  child: TextField(
+                                    textAlign: TextAlign.end,
+                                    controller: _codigIbgeController,
+                                    keyboardType: TextInputType.number,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      isCollapsed: true,
+                                      fillColor: Colors.white,
+                                      contentPadding: const EdgeInsets.all(10),
+                                      labelText: "Código IBGE",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
+                                const SizedBox(width: 10),
+                                Flexible(
+                                  child: AutocompleteTextField(
+                                    label: "Estado",
+                                    onSelected: (option) {
+                                      _estadoSelecionado = _pesquisaController.getEstadoByNome(option);
+                                      _pesquisaController.setMunicipios(_estadoSelecionado!.id);
+                                    },
+                                    optionsBuilder: (textEditingValue) {
+                                      if (textEditingValue.text == '') {
+                                        return const Iterable.empty();
+                                      }
+                                      return _pesquisaController.estados.map((e) => e.nome).where(
+                                        (word) => word.toLowerCase().contains(
+                                          textEditingValue.text.toLowerCase(),
+                                        ),
+                                      );
+                                    },
+                                    onChanged: (value) {
+                                      if (value == '') {
+                                        _pesquisaController.municipios.clear();
+                                      }
+                                    },
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ),
-                          const SizedBox(width: 20),
-                          Flexible(
-                            child: AutocompleteTextField(
-                              label: "Estado",
+                            const SizedBox(height: 10),
+                            AutocompleteTextField(
+                              label: "Município",
                               onSelected: (option) {
-                                _estadoSelecionado = _pesquisaController.getEstadoByNome(option);
-                                _pesquisaController.setMunicipios(_estadoSelecionado!.id);
+                                _municipioSelecionado = _pesquisaController.getMunicipioByNome(option);
+                                setState(() {
+                                  _codigIbgeController.text = _municipioSelecionado!.id.toString();
+                                });
                               },
                               optionsBuilder: (textEditingValue) {
                                 if (textEditingValue.text == '') {
                                   return const Iterable.empty();
                                 }
-                                return _pesquisaController.estados.map((e) => e.nome).where(
+                                return _pesquisaController.municipios.map((e) => e.nome).where(
                                   (word) => word.toLowerCase().contains(
                                     textEditingValue.text.toLowerCase(),
                                   ),
@@ -220,37 +257,12 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                               },
                               onChanged: (value) {
                                 if (value == '') {
-                                  _pesquisaController.municipios.clear();
+                                  _codigIbgeController.text = '';
                                 }
                               },
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-                      AutocompleteTextField(
-                        label: "Município",
-                        onSelected: (option) {
-                          _municipioSelecionado = _pesquisaController.getMunicipioByNome(option);
-                          setState(() {
-                            _codigIbgeController.text = _municipioSelecionado!.id.toString();
-                          });
-                        },
-                        optionsBuilder: (textEditingValue) {
-                          if (textEditingValue.text == '') {
-                            return const Iterable.empty();
-                          }
-                          return _pesquisaController.municipios.map((e) => e.nome).where(
-                            (word) => word.toLowerCase().contains(
-                              textEditingValue.text.toLowerCase(),
-                            ),
-                          );
-                        },
-                        onChanged: (value) {
-                          if (value == '') {
-                            _codigIbgeController.text = '';
-                          }
-                        },
+                          ],
+                        ),
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -321,6 +333,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                   ),
                                 );
                               },
+                              inputFormatters: [_cpfMask],
                             ),
                             const SizedBox(height: 10),
                             Row(
@@ -405,7 +418,14 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                     child: ListenableBuilder(
                       listenable: _pesquisaController,
                       builder: (context, child) {
-                        return ListView.builder(
+                        return _pesquisaController.userPesquisa.isEmpty 
+                        ? const Center(
+                          child: Text(
+                            "Nenhum Pesquisador Adicionado",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        )
+                        : ListView.builder(
                           itemCount: _pesquisaController.userPesquisa.length,
                           itemBuilder: (context, index) {
                             return UserPesquisaCard(
@@ -443,7 +463,11 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                   Colors.green[600]
                                 )
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                if (_formPesquisaKey.currentState!.validate()) {
+                                  
+                                }
+                              },
                               child: Text(
                                 "Confirmar",
                                 style: TextStyle(
