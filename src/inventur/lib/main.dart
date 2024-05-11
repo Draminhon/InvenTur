@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate
       ],
       supportedLocales: const [
-        Locale('pt', 'BR')
+        Locale('pt')
       ],
       home: const LoginPage(),
     );
