@@ -9,14 +9,12 @@ class AutocompleteTextField extends StatelessWidget {
   final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
   final AutocompleteOptionsBuilder<String> optionsBuilder;
-  final Function(TextEditingController textEditingController)? onStateChanged;
 
   const AutocompleteTextField({
     super.key,
     this.onChanged,
     this.validator,
     this.keyboardType,
-    this.onStateChanged,
     this.inputFormatters,
     required this.label, 
     required this.onSelected,
@@ -27,8 +25,8 @@ class AutocompleteTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => Autocomplete<String>(
-        onSelected: onSelected,
         optionsBuilder: (textEditingValue) => optionsBuilder(textEditingValue),
+        onSelected: onSelected,
         optionsViewBuilder: (context, onSelected, options) => Align(
           alignment: Alignment.topLeft,
           child: Material(
@@ -84,7 +82,6 @@ class AutocompleteTextField extends StatelessWidget {
           ),
         ),
         fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
-          if (onStateChanged != null) onStateChanged!(textEditingController);
           return TextFormField(
             focusNode: focusNode,
             validator: validator,
