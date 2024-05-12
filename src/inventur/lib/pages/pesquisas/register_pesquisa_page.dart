@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:inventur/models/estado_model.dart';
 import 'package:inventur/models/municipio_model.dart';
+import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/pesquisas/widgets/user_pesquisa_card_widget.dart';
 import 'package:inventur/pages/widgets/auto_complete_text_field.dart';
@@ -17,6 +18,19 @@ class RegisterPesquisa extends StatefulWidget {
 class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerProviderStateMixin {
   bool _tileExpanded = false;
 
+  List<User> users = [
+    User(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
+    User(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    User(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
+    User(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
+    User(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    User(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
+    User(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
+    User(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
+    User(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
+    User(nome: "Tiago Alves de Lima", cpf: "078.369.222-03", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
+  ];
+
   late Estado? _estadoSelecionado;
   late Municipio? _municipioSelecionado;
 
@@ -28,6 +42,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
   final TextEditingController _inicioController = TextEditingController();
   final TextEditingController _terminoController = TextEditingController();
   final TextEditingController _codigIbgeController = TextEditingController();
+  final TextEditingController _nomePesquisadorController = TextEditingController();
 
   final _cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
   final _dataInicialMask = MaskTextInputFormatter(mask: '##/##/####');
@@ -72,6 +87,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
 
     _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _pesquisaController.setEstados();
+    _pesquisaController.setPesquisadores = users;
   }
 
   var appbar = AppBar(
@@ -189,7 +205,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                             Row(
                               children: [
                                 Flexible(
-                                  child: TextField(
+                                  child: TextFormField(
                                     textAlign: TextAlign.end,
                                     controller: _codigIbgeController,
                                     keyboardType: TextInputType.number,
@@ -207,6 +223,10 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                         borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
                                       ),
                                     ),
+                                    validator: (value) {
+                                      if (value == '') return "Informe o Código IBGE";
+                                      return null;
+                                    },
                                   ),
                                 ),
                                 const SizedBox(width: 10),
@@ -229,8 +249,15 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                     },
                                     onChanged: (value) {
                                       if (value == '') {
+                                        _codigIbgeController.text = '';
+                                        _municipioSelecionado = null;
                                         _pesquisaController.municipios.clear();
+                                        setState(() {});
                                       }
+                                    },
+                                    validator: (value) {
+                                      if (value == '') return "Informe o Estado";
+                                      return null;
                                     },
                                   ),
                                 ),
@@ -239,11 +266,16 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                             const SizedBox(height: 10),
                             AutocompleteTextField(
                               label: "Município",
+                              onStateChanged: (textEditingController) {
+                                WidgetsBinding.instance.addPostFrameCallback((_) {
+                                  if (_pesquisaController.municipios.isEmpty) {
+                                    textEditingController.text = '';
+                                  }
+                                });
+                              },
                               onSelected: (option) {
                                 _municipioSelecionado = _pesquisaController.getMunicipioByNome(option);
-                                setState(() {
-                                  _codigIbgeController.text = _municipioSelecionado!.id.toString();
-                                });
+                                _codigIbgeController.text = _municipioSelecionado!.id.toString();
                               },
                               optionsBuilder: (textEditingValue) {
                                 if (textEditingValue.text == '') {
@@ -259,6 +291,10 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                 if (value == '') {
                                   _codigIbgeController.text = '';
                                 }
+                              },
+                              validator: (value) {
+                                if (value == '') return "Informe o Município";
+                                return null;
                               },
                             ),
                           ],
@@ -301,39 +337,119 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                             size: 32,
                           ),
                           children: [
-                            AutocompleteTextField(
-                              label: "Nome do Pesquisador",
-                              onSelected: (option) {
-                                
-                              },
-                              optionsBuilder: (textEditingValue) {
-                                if (textEditingValue.text == '') {
-                                  return const Iterable.empty();
-                                }
-                                return _pesquisaController.estados.map((e) => e.nome).where(
-                                  (word) => word.toLowerCase().contains(
-                                    textEditingValue.text.toLowerCase(),
+                            LayoutBuilder(
+                              builder: (context, constraints) => Autocomplete<String>(
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') return const Iterable.empty();
+                                  return users.map((e) => e.cpf).where(
+                                    (word) => word.contains(textEditingValue.text),
+                                  );
+                                },
+                                optionsViewBuilder: (context, onSelected, options) => Align(
+                                  alignment: Alignment.topLeft,
+                                  child: Material(
+                                    elevation: 4,
+                                    color: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10)
+                                    ),
+                                    child: Container(
+                                      width: constraints.biggest.width,
+                                      constraints: const BoxConstraints(maxHeight: 200),
+                                      child: ListView.separated(
+                                        shrinkWrap: true,
+                                        padding: EdgeInsets.zero,
+                                        itemCount: options.length,
+                                        separatorBuilder: (context, index) => const Divider(
+                                          height: 0,
+                                          color: Color.fromARGB(255, 55, 111, 60),
+                                        ),
+                                        itemBuilder: (context, index) {
+                                          final User option = users.where(
+                                            (element) => element.cpf == options.elementAt(index)
+                                          ).first;
+                                          return InkWell(
+                                            borderRadius: options.length == 1
+                                            ? const BorderRadius.all(Radius.circular(10))
+                                            : index == 0
+                                              ? const BorderRadius.only(
+                                                topLeft: Radius.circular(10),
+                                                topRight: Radius.circular(10),
+                                              )
+                                              : index == options.length - 1
+                                                ? const BorderRadius.only(
+                                                  bottomLeft: Radius.circular(10),
+                                                  bottomRight: Radius.circular(10),
+                                                )
+                                                : null,
+                                            onTap: () {
+                                              onSelected(option.cpf);
+                                              _nomePesquisadorController.text = option.nome;
+                                            },
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(16),
+                                              child: Text(
+                                                "${option.cpf}\n${option.nome}",
+                                                style: const TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Color.fromARGB(255, 55, 111, 60),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
                                   ),
-                                );
-                              },
+                                ),
+                                fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
+                                  return TextField(
+                                    focusNode: focusNode,
+                                    textAlign: TextAlign.end,
+                                    inputFormatters: [_cpfMask],
+                                    controller: textEditingController,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      isCollapsed: true,
+                                      fillColor: Colors.white,
+                                      contentPadding: const EdgeInsets.all(10),
+                                      labelText: "CPF do Pesquisador",
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10)
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(10),
+                                        borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
+                                      )
+                                    ),
+                                    onChanged: (value) {
+                                      if (value == '') {
+                                        _nomePesquisadorController.text = '';
+                                      }
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                             const SizedBox(height: 10),
-                            AutocompleteTextField(
-                              label: "CPF do Pesquisador",
-                              onSelected: (option) {
-                                
-                              },
-                              optionsBuilder: (textEditingValue) {
-                                if (textEditingValue.text == '') {
-                                  return const Iterable.empty();
-                                }
-                                return _pesquisaController.estados.map((e) => e.nome).where(
-                                  (word) => word.toLowerCase().contains(
-                                    textEditingValue.text.toLowerCase(),
-                                  ),
-                                );
-                              },
-                              inputFormatters: [_cpfMask],
+                            TextField(
+                              readOnly: true,
+                              textAlign: TextAlign.end,
+                              controller: _nomePesquisadorController,
+                              decoration: InputDecoration(
+                                filled: true,
+                                isCollapsed: true,
+                                fillColor: Colors.white,
+                                contentPadding: const EdgeInsets.all(10),
+                                labelText: "Nome do Pesquisador",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
+                                enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 10),
                             Row(
@@ -418,7 +534,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                     child: ListenableBuilder(
                       listenable: _pesquisaController,
                       builder: (context, child) {
-                        return _pesquisaController.userPesquisa.isEmpty 
+                        return _pesquisaController.pesquisadores.isEmpty
                         ? const Center(
                           child: Text(
                             "Nenhum Pesquisador Adicionado",
@@ -426,10 +542,10 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                           ),
                         )
                         : ListView.builder(
-                          itemCount: _pesquisaController.userPesquisa.length,
+                          itemCount: _pesquisaController.pesquisadores.length,
                           itemBuilder: (context, index) {
                             return UserPesquisaCard(
-                              user: _pesquisaController.userPesquisa[index],
+                              user: _pesquisaController.pesquisadores[index],
                               pesquisaController: _pesquisaController,
                             );
                           },

@@ -13,35 +13,53 @@ class PesquisasPage extends StatefulWidget {
 class _PesquisasPageState extends State<PesquisasPage> {
   final PesquisaController _pesquisaController = PesquisaController();
 
-  Pesquisa pm = Pesquisa(
-    codigoIBGE: 11111,
-    estado: "CE",
-    municipio: "Tianguá",
-    dataInicio: "01/01/2024",
-    dataTermino: "01/01/2024",
-    quantidadeLocais: 23,
-    quantidadePesquisadores: 5,
-    status: "Não Iniciado"
-  );
-
-  Pesquisa pm2 = Pesquisa(
-    codigoIBGE: 11111,
-    estado: "CE",
-    municipio: "Viçosa do Ceará",
-    dataInicio: "01/01/2024",
-    dataTermino: "01/01/2024",
-    quantidadeLocais: 23,
-    quantidadePesquisadores: 5,
-    status: "Não Iniciado"
-  );
+  List<Pesquisa> pesquisas = [
+    Pesquisa(
+      codigoIBGE: 11111,
+      estado: "CE",
+      municipio: "Tianguá",
+      dataInicio: "01/01/2024",
+      dataTermino: "01/01/2024",
+      quantidadeLocais: 23,
+      quantidadePesquisadores: 5,
+      status: "Não Iniciado"
+    ),
+    Pesquisa(
+      codigoIBGE: 22222,
+      estado: "CE",
+      municipio: "Viçosa do Ceará",
+      dataInicio: "01/01/2024",
+      dataTermino: "01/01/2024",
+      quantidadeLocais: 23,
+      quantidadePesquisadores: 5,
+      status: "Não Iniciado"
+    ),
+    Pesquisa(
+      codigoIBGE: 33333,
+      estado: "CE",
+      municipio: "Tianguá",
+      dataInicio: "01/01/2024",
+      dataTermino: "01/01/2024",
+      quantidadeLocais: 23,
+      quantidadePesquisadores: 5,
+      status: "Não Iniciado"
+    ),
+    Pesquisa(
+      codigoIBGE: 44444,
+      estado: "CE",
+      municipio: "Viçosa do Ceará",
+      dataInicio: "01/01/2024",
+      dataTermino: "01/01/2024",
+      quantidadeLocais: 23,
+      quantidadePesquisadores: 5,
+      status: "Não Iniciado"
+    ),
+  ];
 
   @override
   void initState() {
     super.initState();
-    _pesquisaController.addPesquisa(pm);
-    _pesquisaController.addPesquisa(pm2);
-    _pesquisaController.addPesquisa(pm);
-    _pesquisaController.addPesquisa(pm2);
+    _pesquisaController.setPesquisas = pesquisas;
   }
 
   @override
@@ -58,8 +76,11 @@ class _PesquisasPageState extends State<PesquisasPage> {
             child: ListenableBuilder(
               listenable: _pesquisaController,
               builder: (context, child) {
-                return _pesquisaController.pesquisas.isNotEmpty
-                ? ListView.builder(
+                return _pesquisaController.pesquisas.isEmpty
+                ? const Center(
+                  child: Text("Nehuma Pesquisa Cadastrada"),
+                )
+                : ListView.builder(
                   itemCount: _pesquisaController.pesquisas.length,
                   itemBuilder: (context, index) {
                     return PesquisaCard(
@@ -67,9 +88,6 @@ class _PesquisasPageState extends State<PesquisasPage> {
                       pesquisaController: _pesquisaController,
                     );
                   },
-                )
-                : const Center(
-                  child: Text("Nehuma Pesquisa Cadastrada"),
                 );
               },
             ),

@@ -117,7 +117,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
               height: 200,
               color: Colors.green,
             ),
-            PesquisasPage(),
+            const PesquisasPage(),
             UserManagementPage(userControllerNotifier: _userController),
           ],
         ),

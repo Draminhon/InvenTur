@@ -29,22 +29,21 @@ class PesquisaController extends ChangeNotifier {
 
   List<Estado> _estados = [];
   List<Pesquisa> _pesquisas = [];
-  List<User> _usersPesquisas = [];
+  List<User> _pesquisadores = [];
   List<Municipio> _municipios = [];
 
   set setPesquisas(List<Pesquisa> pesquisas) {
     _pesquisas = pesquisas;
-    notifyListeners();
   }
 
-  set setUsers(List<User> users) {
-    _usersPesquisas = users;
+  set setPesquisadores(List<User> pesquisadores) {
+    _pesquisadores = pesquisadores;
   }
 
   List<Estado> get estados => _estados;
   List<Pesquisa> get pesquisas => _pesquisas;
   List<Municipio> get municipios => _municipios;
-  List<User> get userPesquisa => _usersPesquisas;
+  List<User> get pesquisadores => _pesquisadores;
   List<String> get informacoesPesquisa => _informacoesPesquisa;
 
   Estado? getEstadoByNome(String nome) {
@@ -81,17 +80,22 @@ class PesquisaController extends ChangeNotifier {
   }
 
   void addUserPesquisa(User user) {
-    _usersPesquisas.add(user);
+    _pesquisadores.add(user);
     notifyListeners();
   }
 
   void removeUserPesquisa(User user) {
-    _usersPesquisas.remove(user);
+    _pesquisadores.remove(user);
     notifyListeners();
   }
 
   void setPesquisaStatus(String status, Pesquisa pesquisa) {
     pesquisa.status = status;
+    notifyListeners();
+  }
+
+  void deletePesquisa(Pesquisa pesquisa) {
+    _pesquisas.remove(pesquisa);
     notifyListeners();
   }
 

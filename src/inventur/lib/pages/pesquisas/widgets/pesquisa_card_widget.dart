@@ -46,6 +46,7 @@ class _PesquisaCardState extends State<PesquisaCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
+                  tooltip: 'Editar Pesquisa',
                   onPressed: () {}, 
                   icon: Icon(
                     Icons.edit_rounded,
@@ -53,7 +54,10 @@ class _PesquisaCardState extends State<PesquisaCard> {
                   )
                 ),
                 IconButton(
-                  onPressed: () {}, 
+                  tooltip: 'Excluir Pesquisa',
+                  onPressed: () {
+                    _pesquisaController.deletePesquisa(_pesquisa);
+                  }, 
                   icon: Icon(
                     Icons.delete_rounded,
                     color: Colors.red[700],
