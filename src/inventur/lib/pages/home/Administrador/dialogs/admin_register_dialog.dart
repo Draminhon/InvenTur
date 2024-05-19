@@ -11,23 +11,23 @@ class AdminRegisterDialogButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return OutlinedButton(
       style: ButtonStyle(
-        padding: const MaterialStatePropertyAll(
+        padding: const WidgetStatePropertyAll(
           EdgeInsets.symmetric(vertical: 0, horizontal: 10)
         ),
         visualDensity: VisualDensity.compact,
-        shape: MaterialStatePropertyAll(
+        shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10)
           )
         ),
-        side: const MaterialStatePropertyAll(
+        side: const WidgetStatePropertyAll(
           BorderSide(
             color: Color.fromARGB(255, 55, 111, 60),
             width: 2,
           )
         ),
-        backgroundColor: const MaterialStatePropertyAll(Colors.white),
-        foregroundColor: const MaterialStatePropertyAll(Colors.black),
+        backgroundColor: const WidgetStatePropertyAll(Colors.white),
+        foregroundColor: const WidgetStatePropertyAll(Colors.black),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap
       ),
       child: const Row(
@@ -123,9 +123,9 @@ class _RegisterAdminDialogState extends State<RegisterAdminDialog> with SingleTi
                             Navigator.of(context).pop();
                           },
                           style: ButtonStyle(
-                            backgroundColor: MaterialStatePropertyAll(Colors.red[700]),
-                            shadowColor: const MaterialStatePropertyAll(Colors.white),
-                            overlayColor: MaterialStatePropertyAll(Colors.red[500]),
+                            backgroundColor: WidgetStatePropertyAll(Colors.red[700]),
+                            shadowColor: const WidgetStatePropertyAll(Colors.white),
+                            overlayColor: WidgetStatePropertyAll(Colors.red[500]),
                             tapTargetSize: MaterialTapTargetSize.shrinkWrap
                           ),
                           icon: const Icon(

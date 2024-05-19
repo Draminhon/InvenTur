@@ -162,6 +162,7 @@ class _PesquisaCardState extends State<PesquisaCard> {
                 enableFeedback: true,
                 color: Colors.white,
                 tooltip: 'Status da Pesquisa',
+                position: PopupMenuPosition.under,
                 initialValue: _pesquisa.status,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)

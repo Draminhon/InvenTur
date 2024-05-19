@@ -143,6 +143,7 @@ class _UserCardState extends State<UserCard> {
                 initialValue: _user.status,
                 tooltip: 'Status do Pesquisador',
                 surfaceTintColor: Colors.white,
+                position: PopupMenuPosition.under,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)
                 ),

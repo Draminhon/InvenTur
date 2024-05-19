@@ -457,17 +457,17 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                               children: [
                                 OutlinedButton(
                                   style: ButtonStyle(
-                                    shape: MaterialStatePropertyAll(
+                                    shape: WidgetStatePropertyAll(
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10)
                                       )
                                     ),
-                                    side: const MaterialStatePropertyAll(
+                                    side: const WidgetStatePropertyAll(
                                       BorderSide(
                                         color: Color.fromARGB(255, 55, 111, 60)
                                       )
                                     ),
-                                    overlayColor: MaterialStatePropertyAll(
+                                    overlayColor: WidgetStatePropertyAll(
                                       Colors.green[100]
                                     ),
                                   ),
@@ -487,20 +487,20 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                 ),
                                 OutlinedButton(
                                   style: ButtonStyle(
-                                    shape: MaterialStatePropertyAll(
+                                    shape: WidgetStatePropertyAll(
                                       RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(10)
                                       )
                                     ),
-                                    side: const MaterialStatePropertyAll(
+                                    side: const WidgetStatePropertyAll(
                                       BorderSide(
                                         color: Color.fromARGB(255, 232, 0, 0)
                                       )
                                     ),
-                                    foregroundColor: const MaterialStatePropertyAll(
+                                    foregroundColor: const WidgetStatePropertyAll(
                                       Color.fromARGB(255, 232, 0, 0)
                                     ),
-                                    overlayColor: MaterialStatePropertyAll(
+                                    overlayColor: WidgetStatePropertyAll(
                                       Colors.red[100]
                                     ),
                                   ),
@@ -562,20 +562,20 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                             height: screenSize.height * .06,
                             child: ElevatedButton(
                               style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
+                                shape: WidgetStateProperty.all(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)
                                   )
                                 ),
-                                padding: MaterialStateProperty.all(
+                                padding: WidgetStateProperty.all(
                                   EdgeInsets.symmetric(
                                     vertical: screenSize.height * 0.012
                                   )
                                 ),
-                                backgroundColor: MaterialStateProperty.all(
+                                backgroundColor: WidgetStateProperty.all(
                                   const Color.fromARGB(255, 55, 111, 60)
                                 ),
-                                overlayColor: MaterialStateProperty.all(
+                                overlayColor: WidgetStateProperty.all(
                                   Colors.green[600]
                                 )
                               ),
@@ -600,20 +600,20 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                             height: screenSize.height * .06,
                             child: ElevatedButton(
                               style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
+                                shape: WidgetStateProperty.all(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10)
                                   )
                                 ),
-                                padding: MaterialStateProperty.all(
+                                padding: WidgetStateProperty.all(
                                   EdgeInsets.symmetric(
                                     vertical: screenSize.height * 0.012
                                   )
                                 ),
-                                backgroundColor: MaterialStateProperty.all(
+                                backgroundColor: WidgetStateProperty.all(
                                   const Color.fromARGB(255, 232, 0, 0)
                                 ),
-                                overlayColor: MaterialStateProperty.all(
+                                overlayColor: WidgetStateProperty.all(
                                   Colors.red[500]
                                 )
                               ),

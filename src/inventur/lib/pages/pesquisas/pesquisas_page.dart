@@ -66,70 +66,68 @@ class _PesquisasPageState extends State<PesquisasPage> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.sizeOf(context);
 
-    return Padding(
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: ListenableBuilder(
-              listenable: _pesquisaController,
-              builder: (context, child) {
-                return _pesquisaController.pesquisas.isEmpty
-                ? const Center(
-                  child: Text("Nehuma Pesquisa Cadastrada"),
-                )
-                : ListView.builder(
-                  itemCount: _pesquisaController.pesquisas.length,
-                  itemBuilder: (context, index) {
-                    return PesquisaCard(
-                      pesquisa: _pesquisaController.pesquisas[index],
-                      pesquisaController: _pesquisaController,
-                    );
-                  },
-                );
-              },
-            ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          child: ListenableBuilder(
+            listenable: _pesquisaController,
+            builder: (context, child) {
+              return _pesquisaController.pesquisas.isEmpty
+              ? const Center(
+                child: Text("Nehuma Pesquisa Cadastrada"),
+              )
+              : ListView.builder(
+                padding: const EdgeInsets.all(10),
+                itemCount: _pesquisaController.pesquisas.length,
+                itemBuilder: (context, index) {
+                  return PesquisaCard(
+                    pesquisa: _pesquisaController.pesquisas[index],
+                    pesquisaController: _pesquisaController,
+                  );
+                },
+              );
+            },
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: SizedBox(
-              height: screenSize.height * .06,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10)
-                    )
-                  ),
-                  padding: MaterialStateProperty.all(
-                    EdgeInsets.symmetric(
-                      vertical: screenSize.height * 0.012
-                    )
-                  ),
-                  backgroundColor: MaterialStateProperty.all(
-                    const Color.fromARGB(255, 55, 111, 60)
-                  ),
-                  overlayColor: MaterialStateProperty.all(
-                    Colors.green[600]
+        ),
+        Padding(
+          padding: const EdgeInsets.all(10),
+          child: SizedBox(
+            height: screenSize.height * .06,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                shape: WidgetStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)
                   )
                 ),
-                onPressed: () {
-                  Navigator.pushNamed(context, '/RegisterPesquisa');
-                }, 
-                child: Text(
-                  'Cadastrar Nova Pesquisa',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: screenSize.height * .03
-                  ),
+                padding: WidgetStateProperty.all(
+                  EdgeInsets.symmetric(
+                    vertical: screenSize.height * 0.012
+                  )
+                ),
+                backgroundColor: WidgetStateProperty.all(
+                  const Color.fromARGB(255, 55, 111, 60)
+                ),
+                overlayColor: WidgetStateProperty.all(
+                  Colors.green[600]
                 )
+              ),
+              onPressed: () {
+                Navigator.pushNamed(context, '/RegisterPesquisa');
+              }, 
+              child: Text(
+                'Cadastrar Nova Pesquisa',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: screenSize.height * .03
+                ),
               )
-            ),
+            )
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

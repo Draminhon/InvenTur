@@ -33,7 +33,7 @@ class _AccountPageState extends State<AccountPage> {
         leading: IconButton(
           tooltip: 'Voltar',
           style: ButtonStyle(
-            overlayColor: MaterialStatePropertyAll(
+            overlayColor: WidgetStatePropertyAll(
               Colors.green[100]
             )
           ),

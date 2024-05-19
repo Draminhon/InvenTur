@@ -102,9 +102,9 @@ class _UserManagementDialogState extends State<UserManagementDialog> with Single
                           _userController.unselectAllUsers();
                         },
                         style: ButtonStyle(
-                          backgroundColor: MaterialStatePropertyAll(Colors.red[700]),
-                          shadowColor: const MaterialStatePropertyAll(Colors.white),
-                          overlayColor: MaterialStatePropertyAll(Colors.red[500]),
+                          backgroundColor: WidgetStatePropertyAll(Colors.red[700]),
+                          shadowColor: const WidgetStatePropertyAll(Colors.white),
+                          overlayColor: WidgetStatePropertyAll(Colors.red[500]),
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap
                         ),
                         icon: const Icon(
@@ -153,18 +153,18 @@ class _UserManagementDialogState extends State<UserManagementDialog> with Single
                     height: 40,
                     child: OutlinedButton(
                       style: ButtonStyle(
-                        shape: MaterialStatePropertyAll(
+                        shape: WidgetStatePropertyAll(
                           RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)
                           ),
                         ),
-                        side: const MaterialStatePropertyAll(
+                        side: const WidgetStatePropertyAll(
                           BorderSide(
                             width: 2,
                             color: Colors.red
                           )
                         ),
-                        overlayColor: MaterialStatePropertyAll(
+                        overlayColor: WidgetStatePropertyAll(
                           Colors.red[100]
                         )
                       ),

@@ -26,12 +26,12 @@ class OptionsDrawer extends StatelessWidget {
           ),
           TextButton(
             style: ButtonStyle(
-              shape: const MaterialStatePropertyAll(
+              shape: const WidgetStatePropertyAll(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero,
                 )
               ),
-              foregroundColor: MaterialStatePropertyAll(Colors.green[800]),
+              foregroundColor: WidgetStatePropertyAll(Colors.green[800]),
             ),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
@@ -70,13 +70,13 @@ class OptionsDrawer extends StatelessWidget {
           ),
           TextButton(
             style: ButtonStyle(
-              shape: const MaterialStatePropertyAll(
+              shape: const WidgetStatePropertyAll(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.zero,
                 )
               ),
-              foregroundColor: const MaterialStatePropertyAll(Colors.red),
-              overlayColor: MaterialStatePropertyAll(Colors.red[100])
+              foregroundColor: const WidgetStatePropertyAll(Colors.red),
+              overlayColor: WidgetStatePropertyAll(Colors.red[100])
             ),
             onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
             child: const Row(

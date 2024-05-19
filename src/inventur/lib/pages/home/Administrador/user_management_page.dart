@@ -35,9 +35,9 @@ class _UserManagementPageState extends State<UserManagementPage> {
           child: SearchBar(
             hintText: 'Pesquisar',
             controller: _searchController,
-            backgroundColor: MaterialStateProperty.all(Colors.white),
-            surfaceTintColor: MaterialStateProperty.all(Colors.white),
-            elevation: MaterialStateProperty.all(2),
+            backgroundColor: WidgetStateProperty.all(Colors.white),
+            surfaceTintColor: WidgetStateProperty.all(Colors.white),
+            elevation: WidgetStateProperty.all(2),
             trailing: [
               IconButton(
                 onPressed: () {

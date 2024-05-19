@@ -80,20 +80,20 @@ class _LoginPageState extends State<LoginPage> {
                           height: screenSize.height * .07,
                           child: ElevatedButton(
                             style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
+                              shape: WidgetStateProperty.all(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)
                                 )
                               ),
-                              padding: MaterialStateProperty.all(
+                              padding: WidgetStateProperty.all(
                                 EdgeInsets.symmetric(
                                   vertical: screenSize.height * 0.012
                                 )
                               ),
-                              backgroundColor: MaterialStateProperty.all(
+                              backgroundColor: WidgetStateProperty.all(
                                 const Color.fromARGB(255, 55, 111, 60)
                               ),
-                              overlayColor: MaterialStateProperty.all(
+                              overlayColor: WidgetStateProperty.all(
                                 Colors.green[600]
                               )
                             ),
@@ -137,18 +137,18 @@ class _LoginPageState extends State<LoginPage> {
                           height: screenSize.height * .07,
                           child: OutlinedButton(
                             style: ButtonStyle(
-                              shape: MaterialStatePropertyAll(
+                              shape: WidgetStatePropertyAll(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)
                                 )
                               ),
-                              side: const MaterialStatePropertyAll(
+                              side: const WidgetStatePropertyAll(
                                 BorderSide(
                                   width: 2,
                                   color: Color.fromARGB(255, 55, 111, 60),
                                 )
                               ),
-                              padding: MaterialStatePropertyAll(
+                              padding: WidgetStatePropertyAll(
                                 EdgeInsets.symmetric(vertical: screenSize.height * .012)
                               )
                             ),

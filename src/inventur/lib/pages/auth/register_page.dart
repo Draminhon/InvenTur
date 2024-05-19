@@ -108,20 +108,20 @@ class RegisterPage extends StatelessWidget {
                               height: screenSize.height * .07,
                               child: ElevatedButton(
                                 style: ButtonStyle(
-                                  shape: MaterialStateProperty.all(
+                                  shape: WidgetStateProperty.all(
                                     RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(10)
                                     )
                                   ),
-                                  padding: MaterialStateProperty.all(
+                                  padding: WidgetStateProperty.all(
                                     EdgeInsets.symmetric(
                                       vertical: screenSize.height * 0.012
                                     )
                                   ),
-                                  backgroundColor: MaterialStateProperty.all(
+                                  backgroundColor: WidgetStateProperty.all(
                                     const Color.fromARGB(255, 55, 111, 60)
                                   ),
-                                  overlayColor: MaterialStateProperty.all(
+                                  overlayColor: WidgetStateProperty.all(
                                     Colors.green[600]
                                   )
                                 ),
@@ -159,7 +159,7 @@ class RegisterPage extends StatelessWidget {
                     child: IconButton(
                       tooltip: 'Voltar',
                       style: ButtonStyle(
-                        overlayColor: MaterialStatePropertyAll(
+                        overlayColor: WidgetStatePropertyAll(
                           Colors.green[100]
                         )
                       ),
