@@ -358,7 +358,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                       constraints: const BoxConstraints(maxHeight: 200),
                                       child: ListView.separated(
                                         shrinkWrap: true,
-                                        padding: EdgeInsets.zero,
+                                        padding: const EdgeInsets.symmetric(horizontal: 10),
                                         itemCount: options.length,
                                         separatorBuilder: (context, index) => const Divider(
                                           height: 0,
@@ -387,7 +387,11 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                               _nomePesquisadorController.text = option.nome;
                                             },
                                             child: Padding(
-                                              padding: const EdgeInsets.all(16),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 6,
+                                                vertical: 10,
+                                              ),
                                               child: Text(
                                                 "${option.cpf}\n${option.nome}",
                                                 style: const TextStyle(

@@ -42,7 +42,7 @@ class AutocompleteTextField extends StatelessWidget {
               width: constraints.biggest.width,
               child: ListView.separated(
                 shrinkWrap: true,
-                padding: EdgeInsets.zero,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 itemCount: options.length,
                 separatorBuilder: (context, index) {
                   return const Divider(
@@ -68,7 +68,10 @@ class AutocompleteTextField extends StatelessWidget {
                         : null,
                     onTap: () => onSelected(option),
                     child: Padding(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 16,
+                      ),
                       child: Text(
                         option,
                         style: const TextStyle(
