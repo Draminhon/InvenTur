@@ -20,8 +20,6 @@ class _PesquisaCardState extends State<PesquisaCard> {
   late Pesquisa _pesquisa;
   late PesquisaController _pesquisaController;
 
-  bool _opened = false;
-
   @override
   void initState() {
     super.initState();
@@ -147,77 +145,6 @@ class _PesquisaCardState extends State<PesquisaCard> {
                     ],
                   ),
                 ],
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 10),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  width: 2,
-                  color: const Color.fromARGB(255, 55, 111, 60),
-                ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: PopupMenuButton(
-                enableFeedback: true,
-                color: Colors.white,
-                tooltip: 'Status da Pesquisa',
-                position: PopupMenuPosition.under,
-                initialValue: _pesquisa.status,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)
-                ),
-                itemBuilder: (context) {
-                  return _pesquisaController.statusItems.map<PopupMenuItem<String>>(
-                    (String value) {
-                      return PopupMenuItem(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }
-                  ).toList();
-                },
-                onSelected: (String value) {
-                  setState(() {
-                    _pesquisaController.setPesquisaStatus(value, _pesquisa);
-                    _opened = !_opened;
-                  });
-                },
-                onOpened: () => setState(() {
-                  _opened = !_opened;
-                }),
-                onCanceled: () => setState(() {
-                  _opened = !_opened;
-                }),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Status',
-                        style: TextStyle(
-                          color: _pesquisaController.statusColor(_pesquisa.status),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ),
-                      ),
-                      Text(
-                        _pesquisa.status,
-                        style: TextStyle(
-                          color: _pesquisaController.statusColor(_pesquisa.status),
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                      Icon(
-                        _opened
-                        ? Icons.keyboard_arrow_up_rounded
-                        : Icons.keyboard_arrow_down_rounded,
-                        color: _pesquisaController.statusColor(_pesquisa.status),
-                      ),
-                    ],
-                  ),
-                ),
               ),
             ),
           ],

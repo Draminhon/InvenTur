@@ -6,6 +6,7 @@ import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/pesquisas/widgets/user_pesquisa_card_widget.dart';
 import 'package:inventur/pages/widgets/auto_complete_text_field.dart';
+import 'package:inventur/validators/date_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class RegisterPesquisa extends StatefulWidget {
@@ -16,7 +17,10 @@ class RegisterPesquisa extends StatefulWidget {
 }
 
 class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerProviderStateMixin {
+  bool _opened = false;
   bool _tileExpanded = false;
+
+  String statusSelecioando = 'Não Iniciado';
 
   List<User> users = [
     User(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
@@ -43,6 +47,8 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
   final TextEditingController _terminoController = TextEditingController();
   final TextEditingController _codigIbgeController = TextEditingController();
   final TextEditingController _nomePesquisadorController = TextEditingController();
+
+  final DateValidator _dateValidator = DateValidator();
 
   final _cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
   final _dataInicialMask = MaskTextInputFormatter(mask: '##/##/####');
@@ -157,9 +163,8 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                         ),
                                       ),
                                     ),
-                                    validator: (value) {
-                                      if (value == '') return "Informe a Data de Inicio";
-                                      return null;
+                                    validator: (date) {
+                                      return _dateValidator.validate(date: date);
                                     },
                                   ),
                                 ),
@@ -193,9 +198,8 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                         ),
                                       ),
                                     ),
-                                    validator: (value) {
-                                      if (value == '') return "Informe a Data de Término";
-                                      return null;
+                                    validator: (date) {
+                                      return _dateValidator.validate(date: date);
                                     },
                                   ),
                                 ),
@@ -298,6 +302,78 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                               },
                             ),
                           ],
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 2,
+                            color: const Color.fromARGB(255, 55, 111, 60),
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: PopupMenuButton(
+                          enableFeedback: true,
+                          color: Colors.white,
+                          tooltip: 'Status da Pesquisa',
+                          position: PopupMenuPosition.under,
+                          // initialValue: _pesquisa.status,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)
+                          ),
+                          itemBuilder: (context) {
+                            return _pesquisaController.statusItems.map<PopupMenuItem<String>>(
+                              (String value) {
+                                return PopupMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }
+                            ).toList();
+                          },
+                          onSelected: (String value) {
+                            setState(() {
+                              // _pesquisaController.setPesquisaStatus(value, _pesquisa);
+                              statusSelecioando = value;
+                              _opened = !_opened;
+                            });
+                          },
+                          onOpened: () => setState(() {
+                            _opened = !_opened;
+                          }),
+                          onCanceled: () => setState(() {
+                            _opened = !_opened;
+                          }),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Status',
+                                  style: TextStyle(
+                                    color: _pesquisaController.statusColor(statusSelecioando),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                                Text(
+                                  statusSelecioando,
+                                  style: TextStyle(
+                                    color: _pesquisaController.statusColor(statusSelecioando),
+                                    fontWeight: FontWeight.bold
+                                  ),
+                                ),
+                                Icon(
+                                  _opened
+                                  ? Icons.keyboard_arrow_up_rounded
+                                  : Icons.keyboard_arrow_down_rounded,
+                                  color: _pesquisaController.statusColor(statusSelecioando),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                       Container(
