@@ -5,6 +5,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/pages/auth/login_page.dart';
 import 'package:inventur/pages/auth/register_page.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%C3%A7a.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsC/hidrografia.dart';
 import 'package:inventur/pages/pesquisas/register_pesquisa_page.dart';
 import 'package:inventur/pages/recover/changepasswordsucess_page.dart';
 import 'package:inventur/pages/home/Pesquisador/choose/choosebetween.dart';
@@ -21,7 +25,18 @@ import 'package:inventur/pages/home/Pesquisador/alterarDados-pesquisador.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosDeHospedagem.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/placeholder.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas.dart';
-void main() {
+ import 'dart:io';
+import 'pages/home/Pesquisador/forms/formsC/zonaCosteira.dart';
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
+void main() async {
+  
+ HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(const MyApp());
@@ -63,6 +78,11 @@ class MyApp extends StatelessWidget {
         '/MeiosDeHospedagem': (_) => MeiosDeHospedagem(),
         '/Placeholder': (_) => PlaceHolder(),
         '/AlimentosEbebidas': (_) => AlimentoseBebidas(),
+        '/Rodovia': (_) => Rodovia(),
+        '/SistemaDeSeguranca': (_) => SistemaDeSeguranca(),
+        '/ZonaCosteira': (_) => ZonaCosteira(),
+        '/Hidrografia': (_) => Hidrografia(),
+        '/SendedForm': (_) => SendedFormPage(),
       },
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,

@@ -22,7 +22,8 @@ class CustomTextField extends StatelessWidget {
             // child: Padding(
             //   padding: EdgeInsets.only(
             //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
-            child: TextFormField(//String? Function(String?)
+            child: TextFormField(
+              style: const TextStyle(color: Colors.black),//String? Function(String?)
             onSaved: (newValue) {
               getValue(newValue!);
             },
@@ -33,11 +34,13 @@ class CustomTextField extends StatelessWidget {
                 ),
                 isDense: true,
                 hintText: name,
-                hintStyle: TextStyle(color: Colors.grey),
+                hintStyle: const TextStyle(color: Colors.grey),
                 contentPadding: EdgeInsets.only(
                     top: sizeScreen.height * 0.03,
                     left: sizeScreen.width * 0.05),
                  //errorBorder: UnderlineInputBorder()
+                fillColor: Colors.white,
+                filled: true,
               ),
               
             ));
@@ -84,8 +87,9 @@ class CustomTextNumber extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 hintText: labelText,
-                
-                hintStyle: TextStyle(color: Colors.grey),
+                     fillColor: Colors.white,
+                filled: true,
+                hintStyle: const TextStyle(color: Colors.grey),
                 contentPadding: EdgeInsets.only(
                     top: sizeScreen.height * 0.03,
                     left: sizeScreen.width * 0.05),
@@ -131,16 +135,19 @@ class CustomTextDate extends StatelessWidget {
               //   return null;
                 
               // },
+
                onSaved: (newValue) {
               getValue(newValue!);
             },
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
+
                 ),
                 hintText: '__/__/__',
-                
-                hintStyle: TextStyle(color: Colors.grey),
+                     fillColor: Colors.white,
+                filled: true,
+                hintStyle: const TextStyle(color: Colors.grey),
                 contentPadding: EdgeInsets.only(
                     top: sizeScreen.height * 0.03,
                     left: sizeScreen.width * 0.05),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class ContainerA extends StatelessWidget {
-  final String form;
-  const ContainerA({required this.form});
+  final String form, routeName;
+  const ContainerA({required this.form, required this.routeName});
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
@@ -37,7 +37,7 @@ class ContainerA extends StatelessWidget {
           ),
           Expanded(
               child: IconButton(
-            onPressed: () => print(''),
+            onPressed: () => Navigator.pushNamed(context, routeName),
             icon: Icon(
               Icons.arrow_forward,
               size: sizeScreen.height * 0.029,

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 
-
 enum opcoes { a, b, c, d, e, f, g, h, i, j }
 
 class RadioB extends StatefulWidget {
-  const RadioB({super.key});
-
+  const RadioB({super.key, required this.name, required this.getValue});
+  final String name;
+  final Function(String) getValue;
   @override
   State<RadioB> createState() => _RadioState();
 }
@@ -20,13 +20,14 @@ class _RadioState extends State<RadioB> {
     return Column(
       children: <Widget>[
         ListTile(
-            title: const Text('Hotelaria e de apoio'),
+            title: Text(widget.name),
             leading: Radio<opcoes>(
               value: opcoes.a,
               groupValue: _opcoes,
               onChanged: (opcoes? value) {
                 setState(() {
                   _opcoes = value;
+                  widget.getValue(widget.name);
                 });
               },
               toggleable: true,
@@ -37,7 +38,11 @@ class _RadioState extends State<RadioB> {
 }
 
 class RadioC extends StatefulWidget {
-  const RadioC({super.key, required this.number, required this.options, required this.getValue});
+  const RadioC(
+      {super.key,
+      required this.number,
+      required this.options,
+      required this.getValue});
   final List<String> options;
   final int number;
   final Function(String) getValue;
@@ -50,7 +55,6 @@ class _RadioStateC extends State<RadioC> {
 
   @override
   Widget build(BuildContext context) {
-    
     int half = (widget.number / 2).ceil().toInt();
     final sizeScreen = MediaQuery.sizeOf(context);
     List<Widget> radioButtons = [];
@@ -77,7 +81,7 @@ class _RadioStateC extends State<RadioC> {
                         if (value != null) {
                           _groupValue = value;
                         }
-                         widget.getValue(widget.options[i]);
+                        widget.getValue(widget.options[i]);
                       });
                     },
             )));
@@ -103,7 +107,7 @@ class _RadioStateC extends State<RadioC> {
                         if (value != null) {
                           _groupValue = value;
                         }
-                         widget.getValue(widget.options[i]);
+                        widget.getValue(widget.options[i]);
                       });
                     },
             )));
@@ -115,37 +119,43 @@ class _RadioStateC extends State<RadioC> {
       ));
     }
 
-    
-    return ExpansionTile(tilePadding: EdgeInsets.only(left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
-        shape: const Border(),
-      
-        title: const Text(
-          'opções',
-          style: TextStyle(color: Color.fromARGB(255, 55, 111, 60)),
-        ),
-        children: [
-          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            Expanded(
-              child: Column(
-                children: radioButtons.take(half).toList(),
-              ),
+    return ExpansionTile(
+      tilePadding: EdgeInsets.only(
+          left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
+      shape: const Border(),
+      title: const Text(
+        'opções',
+        style: TextStyle(color: Color.fromARGB(255, 55, 111, 60)),
+      ),
+      children: [
+        Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Expanded(
+            child: Column(
+              children: radioButtons.take(half).toList(),
             ),
-            Expanded(
-              child: Column(
-                children: radioButtons.skip(half).toList(),
-              ),
+          ),
+          Expanded(
+            child: Column(
+              children: radioButtons.skip(half).toList(),
             ),
-          ]),
-              _groupValue == widget.options.indexOf('outro')
-            ?  CustomTextField(name: 'qual?', validat: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Preencha o campo';
-                              }
-                              return null;
-                            }, getValue: (newValue) { widget.getValue('outro: $newValue'); },)
+          ),
+        ]),
+        _groupValue == widget.options.indexOf('outro')
+            ? CustomTextField(
+                name: 'qual?',
+                validat: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Preencha o campo';
+                  }
+                  return null;
+                },
+                getValue: (newValue) {
+                  widget.getValue('outro: $newValue');
+                },
+              )
             : Container()
-        ], );
-        
+      ],
+    );
   }
 }
 
@@ -166,13 +176,14 @@ class _RadioStateD extends State<RadioD> {
     return Column(
       children: [
         ExpansionTile(
-       
+          
             shape: const Border(),
             title: const Text(
               'opções',
               style: TextStyle(color: Color.fromARGB(255, 55, 111, 60)),
             ),
-            tilePadding: EdgeInsets.only(left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
+            tilePadding: EdgeInsets.only(
+                left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
             children: [
               for (int i = 0; i < widget.options.length; i++)
                 ListTile(
@@ -190,24 +201,27 @@ class _RadioStateD extends State<RadioD> {
                               setState(() {
                                 if (value != null) {
                                   _value = value;
-                                 
                                 }
-                                   widget.getValue(widget.options[i]);
+                                widget.getValue(widget.options[i]);
                               });
                             },
-                       
                       toggleable: true,
                     )),
-                
             ]),
         _value == widget.options.indexOf('outro')
-            ?  CustomTextField(name: 'qual?', validat: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Preencha o campo';
-                              }
-                              
-                              return null;
-                            }, getValue: (newValue) { widget.getValue('outro: $newValue'); },)
+            ? CustomTextField(
+                name: 'qual?',
+                validat: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Preencha o campo';
+                  }
+
+                  return null;
+                },
+                getValue: (newValue) {
+                  widget.getValue('outro: $newValue');
+                },
+              )
             : Container(),
       ],
     );
