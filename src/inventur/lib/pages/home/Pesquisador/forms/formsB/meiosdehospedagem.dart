@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/apis/estados.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
@@ -732,12 +733,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              CheckC(nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
+              const CheckC(nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
               const textLabel(name: 'Informativos impressos:'),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              CheckC(nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
+              const CheckC(nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
@@ -804,7 +805,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              CheckC(
+              const CheckC(
                   nomes: ['Crianças', 'Fumantes', 'Animais', 'outro'],),
               const textLabel(name: 'Outras regras e informações:'),
 
@@ -854,7 +855,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.01,
               ),
 
-               CheckC( nomes: [
+               const CheckC( nomes: [
                 'Janeiro',
                 'Fevereiro',
                 'Março',
@@ -870,7 +871,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Ano Inteiro'
               ], ),
               const textLabel(name: 'Origem dos visitantes/turistas:'),
-             CheckC(nomes: [
+             const CheckC(nomes: [
                 'Entorno municipal',
                 'Estadual',
                 'Nacional',
@@ -881,11 +882,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const Estados(),
-              const Estados(),
-              const Estados(),
-              const Estados(),
-              const Estados(),
+           const Estados(),
+                 const Estados(),
+                   const Estados(),
+                   const Estados(),
+                         const Estados(),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
@@ -917,13 +918,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
 SizedBox(height: sizeScreen.height * 0.02,),
       
-             const textLabel(name: 'Unidades habitacionais (UH)'),
+             const textLabel(name: 'Unidades habitacionais (UH):'),
              SizedBox(height: sizeScreen.height * 0.02,),
 
               Column(children: [
                 Row(
                   children: [
-                    SizedBox(width: sizeScreen.width * 0.04,),
+                  
                     const textLabel(name: 'Total de UH nº'),
                     
                     SizedBox(
@@ -931,7 +932,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                     ),
                     
                     SizedBox(
-                        width: sizeScreen.width * 0.6,
+                        width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           validat: (value) {
@@ -940,20 +941,20 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
                   SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
-                       SizedBox(width: sizeScreen.width * 0.04,),
+                      
                     const textLabel(name: 'Total de leitos nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.005,
                     ),
                     SizedBox(
-                        width: sizeScreen.width * 0.6,
+                        width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           validat: (value) {
@@ -962,20 +963,20 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
                   SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
-                       SizedBox(width: sizeScreen.width * 0.04,),
+                      
                     const textLabel(name: 'Uh adaptadas\npara PCD nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.071,
                     ),
                     SizedBox(
-                        width: sizeScreen.width * 0.6,
+                        width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           validat: (value) {
@@ -984,7 +985,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
@@ -994,7 +995,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                     left: sizeScreen.width * 0.02,
                     top: sizeScreen.height * 0.03,
                     bottom: sizeScreen.height * 0.03),
-                child: const textLabel(name: 'Produtos de higiene pessoal'),
+                child: const textLabel(name: 'Produtos de higiene pessoal:'),
               ),
               const CheckC(nomes: [
                 'Shampoo',
@@ -1013,9 +1014,9 @@ SizedBox(height: sizeScreen.height * 0.02,),
                     left: sizeScreen.width * 0.005,
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Equipamentos e Serviços'),
+                child: const textLabel(name: 'Equipamentos e Serviços:'),
               ),
-            RadioC(number: 23, options: [
+            const CheckC(nomes: [
                 'Aparelho de vídeo',
                 'DVD',
                 'TV com canal pago',
@@ -1039,35 +1040,35 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Controle de Iluminação',
                 'Luminária para leitura',
                 'outro'
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                     right: sizeScreen.width * 0.05,
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'INSTALAÇÕES'),
+                child: const textLabel(name: 'Instalações:'),
               ),
               Padding(
                 padding: EdgeInsets.only(
                    
                     top: sizeScreen.height * 0.03,
                     bottom: sizeScreen.height * 0.03),
-                child: const textLabel(name: 'Estacionamento'),
+                child: const textLabel(name: 'Estacionamento:'),
               ),
-              RadioD(
-                options: ['Pago', 'Gratuito', 'Coberto', 'Descoberto'], getValue: (String ) {  },
+              const CheckC(
+             nomes: ['Pago', 'Gratuito', 'Coberto', 'Descoberto'], 
               ),
 
               Column(children: [
                 Row(
                   children: [
-                    SizedBox(width: sizeScreen.width * 0.05,),
+                   
                     const textLabel(name: 'Capacidade de\nveículos nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.01,
                     ),
                     SizedBox(
-                        width: sizeScreen.width * 0.6,
+                        width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           validat: (value) {
@@ -1076,20 +1077,20 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
                   SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
-                            SizedBox(width: sizeScreen.width * 0.052,),
+                      
                     const textLabel(name: 'Automóveis nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.005,
                     ),
                     SizedBox(
-                        width: sizeScreen.width * 0.6,
+                        width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           validat: (value) {
@@ -1098,20 +1099,20 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
                   SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
-                            SizedBox(width: sizeScreen.width * 0.05,),
+                  
                     const textLabel(name: 'Ônibus nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.1,
                     ),
                     SizedBox(
-                        width: sizeScreen.width * 0.6,
+                        width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           validat: (value) {
@@ -1120,22 +1121,22 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
               ]),
               SizedBox(height: sizeScreen.height * 0.03,),
-              const textLabel(name: 'OUTRAS INSTALAÇÕES E ESTRUTURAS'),
+              const textLabel(name: 'Outras instalações e estruturas:'),
              SizedBox(height: sizeScreen.height * 0.02,),
-               const textLabel(name: 'Energia  elétrica'),
+               const textLabel(name: 'Energia  elétrica:'),
                   SizedBox(height: sizeScreen.height * 0.02,),
               RadioD(
                   options: ['110 volts', '220 volts', '110/220 volts'], getValue: (String ) {  },),
                       SizedBox(height: sizeScreen.height * 0.02,),
               Row(
                 children: [
-                      SizedBox(width: sizeScreen.width * 0.05,),
+                     
                   const textLabel(name: 'Capacidade\nem KVA'),
                   SizedBox(
                     width: sizeScreen.width * 0.005,
@@ -1150,18 +1151,18 @@ SizedBox(height: sizeScreen.height * 0.02,),
                           }
                           return null;
                         },
-                        name: '', getValue: (String ) {  },
+                        name: 'KVA', getValue: (String ) {  },
                       ))
                 ],
               ),
                   SizedBox(height: sizeScreen.height * 0.02,),
-              const textLabel(name: 'Gerador de emergência'),
+              const textLabel(name: 'Gerador de emergência:'),
          SizedBox(height: sizeScreen.height * 0.032,),
                ExpansionTileYoN(getValue: (String ) {  },),
                   SizedBox(height: sizeScreen.height * 0.02,),
               Row(
                 children: [
-                      SizedBox(width: sizeScreen.width * 0.05,),
+                     
                   const textLabel(name: 'Capacidade\nem KVA'),
                   SizedBox(
                     width: sizeScreen.width * 0.005,
@@ -1176,27 +1177,27 @@ SizedBox(height: sizeScreen.height * 0.02,),
                           }
                           return null;
                         },
-                        name: '', getValue: (String ) {  },
+                        name: 'KVA', getValue: (String ) {  },
                       ))
                 ],
               ),
               SizedBox(height: sizeScreen.height * 0.03,),
-            const textLabel(name: 'ÁREA DE ALIMENTAÇÃO'),
+            const textLabel(name: 'Área de alimentação:'),
 SizedBox(height: sizeScreen.height * 0.02,),
-               const textLabel(name: 'Restaurante'),
+               const textLabel(name: 'Restaurante:'),
               SizedBox(height: sizeScreen.height * 0.02,)
-,              RadioD(options: [
+,              const CheckC(nomes: [
                 'Não',
                 'Apenas para hóspedes',
                 'Aberto ao público',
                 'Adaptado para PCD'
-              ], getValue: (String ) {  },),
-               const textLabel(name: 'Capacidade de atendimento'),
+              ], ),
+               const textLabel(name: 'Capacidade de atendimento:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
               Column(children: [
                 Row(
                   children: [
-                      SizedBox(width: sizeScreen.width * 0.05,),
+                      
                     const textLabel(name: 'Capacidade\nInstalada\npor dia nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.01,
@@ -1211,16 +1212,14 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
                   SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.04,
-                    ),
+                  
                     const textLabel(name: 'Pessoas\natendidas\nsentadas nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.005,
@@ -1235,14 +1234,14 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
                   SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
-                      SizedBox(width: sizeScreen.width * 0.04,),
+                      
                     const textLabel(name: 'Capacidade\nsimultânea nº'),
                     SizedBox(
                         width: sizeScreen.width * 0.6,
@@ -1254,15 +1253,13 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
                 Row(
                   children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
+                   
                     const textLabel(name: 'Pessoas\natendidas\nsentadas nº'),
                     SizedBox(
                         width: sizeScreen.width * 0.6,
@@ -1274,24 +1271,24 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
                 SizedBox(height: sizeScreen.height * 0.02,),
-           const textLabel(name: 'Lanchonete'),
+           const textLabel(name: 'Lanchonete:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
               ]),
-              RadioD(options: [
+              const CheckC(nomes: [
                 'Não',
                 'Apenas para hóspedes',
                 'Aberto ao público',
                 'Adaptado para PCD'
-              ], getValue: (String ) {  },),
+              ], ),
               Column(children: [
                 Row(
                   children: [
-                    SizedBox(width: sizeScreen.width * 0.05,),
+                   
                     const textLabel(name: 'Capacidade\nInstalada\npor dia nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.01,
@@ -1306,7 +1303,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
@@ -1314,9 +1311,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                  
                 Row(
                   children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
+                   
                     const textLabel(name: 'Pessoas\natendidas\nsentadas nº'),
                     SizedBox(
                       width: sizeScreen.width * 0.005,
@@ -1331,7 +1326,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
@@ -1339,7 +1334,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
-                    SizedBox(width: sizeScreen.width * 0.02,),
+                 
                     const textLabel(name: 'Capacidade\nsimultânea nº'),
                     SizedBox(
                         width: sizeScreen.width * 0.6,
@@ -1351,16 +1346,14 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
                 SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
+                   
                     const textLabel(name: 'Pessoas\natendidas\nsentadas nº'),
                     SizedBox(
                         width: sizeScreen.width * 0.6,
@@ -1372,7 +1365,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                             }
                             return null;
                           },
-                          name: '', getValue: (String ) {  },
+                          name: 'nº', getValue: (String ) {  },
                         ))
                   ],
                 ),
@@ -1380,9 +1373,11 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ]),
              const textLabel(
                     name:
-                    'ÁREA DE RECREAÇÃO E LAZER\n\n\n   Instalações e espaços'),
+                    'Área de recreação e lazer:'),
                SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+               const textLabel(name: 'Instalações e espaços:'),
+               SizedBox(height: sizeScreen.height * 0.02,),
+              const CheckC(nomes: [
                 'Piscina',
                 'Toboágua',
                 'Quadra de tênis',
@@ -1398,12 +1393,12 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Quadra poliesportiva',
                 'Pista de cooper',
                 'outro'
-              ], getValue: (String ) {  },),
+              ], ),
             
               const textLabel(
-                    name: 'Outros espaços,\nequipamentos e atividades'),
+                    name: 'Outros espaços, equipamentos e atividades:'),
                SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+              const CheckC(nomes: [
                 'Observação da fauna',
                 'Visita a produção agrícola',
                 'Atividades pedagógicas',
@@ -1436,16 +1431,18 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Centro equestre',
                 'Retiros espirituais',
                 'outro'
-              ], getValue: (String ) {  },),
+              ], ),
                SizedBox(height: sizeScreen.height * 0.02,),
             const textLabel(
-                    name: 'ÁREA PARA EVENTOS\n\n\nInstalações'),
+                    name: 'Área para eventos:'),
                SizedBox(height: sizeScreen.height * 0.04,),
+               const textLabel(name: 'Instalações:'),
+                SizedBox(height: sizeScreen.height * 0.04,),
               const TabelaT3(),
                SizedBox(height: sizeScreen.height * 0.02,),
-           const textLabel(name: 'Serviços'),
+           const textLabel(name: 'Serviços:'),
                SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+              CheckC(nomes: [
                 'Realização de eventos próprios',
                 'Aluguel de equipamentos',
                 'Aluguel de espaço para terceiros',
@@ -1453,10 +1450,10 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Organização de eventos',
                 'Serviços de som',
                 'outro',
-              ], getValue: (String ) {  },),
-               const textLabel(name: 'Equipamentos'),
+              ], ),
+               const textLabel(name: 'Equipamentos:'),
                SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+              CheckC(nomes: [
                 'Cadeira com prancheta',
                 'Copa',
                 'Vídeo',
@@ -1480,11 +1477,11 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Videoconferência',
                 'Palco',
                 'outro'
-              ], getValue: (String ) {  },),
+              ], ),
              
-              const textLabel(name: 'Facilidades e serviços'),
+              const textLabel(name: 'Facilidades e serviços:'),
                SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+              CheckC(nomes: [
                 'Adaptador de voltagem',
                 'Calefação',
                 'Telefones públicos',
@@ -1533,10 +1530,10 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Equipamento de ginástica',
                 'Exposição de arte/artesanato',
                 'outro'
-              ], getValue: (String ) {  },),
-            const textLabel(name: 'Facilidades para executivos'),
+              ], ),
+            const textLabel(name: 'Facilidades para executivos:'),
                SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+             CheckC(nomes: [
                 'Apartamentos em andares especiais',
                 'Café da manhã em ambiente privativo',
                 'Jornais diários no apartamento',
@@ -1559,7 +1556,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Refrigerante / sucos',
                 'Lavagem e passagem de roupa no período noturno',
                 'outro'
-              ], getValue: (String ) {  },),
+              ],),
                SizedBox(height: sizeScreen.height * 0.02,),
               Container(
                 color: const Color.fromARGB(255, 55, 111, 60),
@@ -1577,7 +1574,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 height: sizeScreen.height * 0.05,
               ),
               Row(children: [
-                 SizedBox(width: sizeScreen.width * 0.05,),
+                 
                 const textLabel(name: 'Do equipamento/espaço:'),
                 SizedBox(
                   width: sizeScreen.width * 0.04,
@@ -1795,7 +1792,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 height: sizeScreen.height * 0.05,
               ),
               Row(children: [
-                 SizedBox(width: sizeScreen.width * 0.05,),
+                 
                 const textLabel(
                   
                     name:
@@ -2053,7 +2050,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                SizedBox(height: sizeScreen.height * 0.02,),
               const textLabel(
                     name:
-                        'Possui alguma facilidade\npara pessoas com\ndeficiência ou mobilidade\nreduzida?'),
+                        'Possui alguma facilidade para pessoas com deficiência ou mobilidade reduzida?'),
                SizedBox(height: sizeScreen.height * 0.04,),
                ExpansionTileYoN(getValue: (String ) {  },),
  SizedBox(height: sizeScreen.height * 0.02,),
@@ -2061,19 +2058,19 @@ SizedBox(height: sizeScreen.height * 0.02,),
                     name: 'obs: responder às questões seguintes'),
           SizedBox(height: sizeScreen.height * 0.02,),
  const textLabel(
-                    name: 'Pessoal capacitado para receber PCD'),
+                    name: 'Pessoal capacitado para receber PCD:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+              CheckC(nomes: [
                 'Não',
                 'Física',
                 'Auditiva',
                 'Visual',
                 'Mental',
                 'Múltipla'
-              ], getValue: (String ) {  },),
-             const textLabel(name: 'Rota externa acessível'),
+              ], ),
+             const textLabel(name: 'Rota externa acessível:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+              CheckC(nomes: [
                 'Não',
                 'Estacionamento',
                 'Calçada rebaixada',
@@ -2084,15 +2081,10 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Piso regular antiderrapante',
                 'Livre de obstáculos',
                 'outro'
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                   
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Símbolo internacional de acesso'),
-              ),
-              RadioD(options: [
+              ],),
+            const textLabel(name: 'Símbolo internacional de acesso:'),
+              
+              CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Área reservada',
@@ -2100,126 +2092,81 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Área de embarque e desembarque',
                 'Sanitário',
                 'Saída de emergência',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                   
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Local de embarque e desembarque'),
-              ),
-              RadioD(
-                  options: ['Não', 'Sinalizado', 'Com acesso em nível'], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                  
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Vaga em estacionamento'),
-              ),
-              RadioD(options: [
+              ], ),
+              const textLabel(name: 'Local de embarque e desembarque'),
+              
+              CheckC(
+                 nomes: ['Não', 'Sinalizado', 'Com acesso em nível'],),
+              const textLabel(name: 'Vaga em estacionamento:'),
+              
+              CheckC(nomes: [
                 'Não',
                 'Sinalizado',
                 'Com acesso em nível',
                 'Alargada para cadeira de rodas',
                 'Rampa de acesso á calçada'
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                   
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
+              ], ),
+              const textLabel(
                     name:
-                        'Área de circulação / acesso interno\npara cadeira de rodas'),
-              ),
-              RadioD(options: [
+                        'Área de circulação / acesso interno\npara cadeira de rodas:'),
+              
+              CheckC(nomes: [
                 'Não',
                 'Rampa',
                 'Elevador',
                 'Plataforma elevatória',
                 'Porta larga',
                 'Piso regular / antiderrapante'
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-        
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Escada'),
-              ),
-              RadioD(options: [
+              ], ),
+              const textLabel(name: 'Escada:'),
+              
+              CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
                 'Sinalização tátil de alerta',
                 'Piso antiderrapante',
-              ], getValue: (String ) {  },),
+              ], ),
 
-              Padding(
-                padding: EdgeInsets.only(
-            
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Rampa'),
-              ),
-              RadioD(options: [
+         const textLabel(name: 'Rampa:'),
+              
+              CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
                 'Sinalização tátil de alerta',
                 'Piso antiderrapante',
                 'Inclinação adequada',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                  
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Piso'),
-              ),
-              RadioD(options: [
+              ],),
+               const textLabel(name: 'Piso:'),
+              
+                 CheckC(nomes: [
                 'Não',
                 'Tátil',
                 'Sem obstáculos',
                 'Antiderrapante/deslizante',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                  
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Elevador'),
-              ),
-               RadioD(options: [
+              ],),
+               const textLabel(name: 'Elevador:'),
+              
+               CheckC(nomes: [
                 'Não',
                 'Sinalizado em braile',
                 'Dispositivo sonoro',
                 'Dispositivo luminoso',
                 'Sensor eletrônico (porta)'
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                   
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
+              ], ),
+            const textLabel(
                     name:
-                        '  Equipamento motorizado\npara deslocamento interno'),
-              ),
-              RadioD(options: [
+                        'Equipamento motorizado para deslocamento interno:'),
+           
+                 CheckC(nomes: [
                 'Não',
                 'Cadeira',
                 'Carrinho',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                 
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sinalização visual'),
-              ),
-               RadioD(options: [
+              ], ),
+             const textLabel(name: 'Sinalização visual:'),
+              
+                   CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -2229,15 +2176,10 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Restaurante',
                 'Área de lazer',
                 'Área de resgate',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                  
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sinalização tátil'),
-              ),
-               RadioD(options: [
+              ],),
+             const textLabel(name: 'Sinalização tátil:'),
+              
+                   CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -2247,65 +2189,40 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Restaurante',
                 'Área de lazer',
                 'Área de resgate',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Alarme de emergência'),
-              ),
-              RadioD(options: [
+              ], ),
+             const textLabel(name: 'Alarme de emergência:'),
+              
+                 CheckC(nomes: [
                 'Não',
                 'Sonoro',
                 'Visual',
                 'Vibratório',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                  
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Comunicação'),
-              ),
-               RadioD(options: [
+              ], ),
+            const textLabel(name: 'Comunicação:'),
+              
+                    CheckC(nomes: [
                 'Não',
                 'Texto informativo em braile',
                 'Texto informativo em fonte ampliada',
                 'Intérprete em libras',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                    
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Balcão de atendimento'),
-              ),
-              RadioD(options: [
+              ], ),
+             const textLabel(name: 'Balcão de atendimento:'),
+              
+               CheckC(nomes: [
                 'Não',
                 'Rebaixado',
                 'Preferencial para PCD ou com deficiência ou mobilidade reduzida',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                    
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Mobiliário'),
-              ),
-             RadioD(options: [
+              ], ),
+             const textLabel(name: 'Mobiliário:'),
+              
+                 CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Recuo adequado',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sanitário'),
-              ),
-               RadioD(options: [
+              ], ),
+               const textLabel(name: 'Sanitário:'),
+              
+                   CheckC(nomes: [
                 'Não',
                 'Porta larga suficiente para entrada de cadeira de rodas ',
                 'Acesso para cadeira de rodas',
@@ -2315,32 +2232,23 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Giro para cadeira de rodas',
                 'Pia rebaixada',
                 'Boxe ou banheira daptada',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-               
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Telefone'),
-              ),
-              RadioD(options: [
+              ], ),
+              const textLabel(name: 'Telefone:'),
+              
+                  CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Para surdos (TPS ou TTS)',
-              ], getValue: (String ) {  },),
-              Padding(
-                padding: EdgeInsets.only(
-                    top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.04),
-                child: const textLabel(
+              ], ),
+               const textLabel(
                     name:
-                        'Sinalização indicativa de\natendimento preferencial para pessoas com deficiência ou mobilidade reduzida'),
-              ),
+                        'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida:'),
+              SizedBox(height: 50,),
 
                ExpansionTileYoN(getValue: (String ) {  },),
               SizedBox(height: sizeScreen.height * 0.02,),              Row(
                 children: [
-                  SizedBox(width: sizeScreen.width * 0.05,),
+                
                   const textLabel(name: 'Outros'),
                   SizedBox(
                     width: sizeScreen.width * 0.1,

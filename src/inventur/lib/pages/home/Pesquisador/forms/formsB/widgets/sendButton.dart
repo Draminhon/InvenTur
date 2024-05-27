@@ -18,7 +18,7 @@ class SendButton extends StatelessWidget {
           //   ScaffoldMessenger.of(context).showSnackBar(
           //       const SnackBar(content: Text('preencha os dados!')));
           // }
-          Navigator.pushNamed(context, '/SendedForm');
+          Navigator.pushReplacementNamed(context, '/SendedForm');
         },
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.green[800],
