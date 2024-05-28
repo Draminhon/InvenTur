@@ -4,6 +4,7 @@ import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 
 import '../../widgets/expandedTileYoN.dart';
+import 'widgets/checkBox.dart';
 import 'widgets/sendButton.dart';
 import 'widgets/tabela.dart';
 
@@ -277,6 +278,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     },
                   ),
                 ),
+                textLabel(name: 'Tipo:'),
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
@@ -361,7 +363,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 Column(
                   children: [
-                    const textLabel(name: 'natureza'),
+                    const textLabel(name: 'Natureza:'),
                     SizedBox(
                       height: sizeScreen.height * 0.03,
                     ),
@@ -377,7 +379,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 Column(
                   children: [
-                    const textLabel(name: 'tipo de organização/instituição'),
+                    const textLabel(name: 'Tipo de organização/instituição:'),
                     SizedBox(
                       height: sizeScreen.height * 0.03,
                     ),
@@ -400,9 +402,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 Row(
                   children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
+                 
                     const textLabel(name: 'início da atividade:'),
                     SizedBox(
                       width: sizeScreen.width * 0.1,
@@ -418,16 +418,14 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Quantidade de Funcionários'),
+                const textLabel(name: 'Quantidade de Funcionários:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 Column(children: [
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(name: 'Permanentes'),
                       SizedBox(
                         width: sizeScreen.width * 0.026,
@@ -452,9 +450,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                    
                       const textLabel(name: 'Temporários'),
                       SizedBox(
                         width: sizeScreen.width * 0.038,
@@ -477,9 +473,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   SizedBox(height: sizeScreen.height * 0.02),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                     
                       const textLabel(name: 'Pessoas com\ndefiicência (%)'),
                       SizedBox(
                           width: sizeScreen.width * 0.6,
@@ -500,7 +494,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'localização:'),
+                const textLabel(name: 'Localização:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -513,16 +507,14 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Coordenadas Geográficas'),
+                const textLabel(name: 'Coordenadas Geográficas:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 Column(children: [
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                    
                       const textLabel(name: 'Latitude'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
@@ -546,9 +538,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.053,
-                      ),
+                      
                       const textLabel(name: 'Longitude'),
                       SizedBox(
                           width: sizeScreen.width * 0.6,
@@ -568,7 +558,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'endereço:'),
+                const textLabel(name: 'Endereço:'),
                 CustomTextField(
                   validat: (value) {
                     return null;
@@ -612,9 +602,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 Column(children: [
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                    
                       const textLabel(name: 'Telefone'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
@@ -648,9 +636,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
 
                 Row(
                   children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
+                   
                     const textLabel(name: 'Endereço eletrônico\n(e-mail)'),
                     SizedBox(
                         width: sizeScreen.width * 0.5,
@@ -671,11 +657,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 Row(
                   children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
+                   
                     const textLabel(
-                        name: '  Sítio eletrônico\n(site/página web)'),
+                        name: 'Sítio eletrônico\n(site/página web)'),
                     SizedBox(
                       width: sizeScreen.width * 0.045,
                     ),
@@ -697,14 +681,12 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'sinalização:'),
+                const textLabel(name: 'Sinalização:'),
                 SizedBox(
                   height: sizeScreen.height * 0.04,
                 ),
                 Row(children: [
-                  SizedBox(
-                    width: sizeScreen.width * 0.05,
-                  ),
+                 
                   const textLabel(name: 'de acessso -'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
@@ -722,9 +704,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   height: sizeScreen.height * 0.02,
                 ),
                 Row(children: [
-                  SizedBox(
-                    width: sizeScreen.width * 0.05,
-                  ),
+                  
                   const textLabel(name: 'turística -'),
                   SizedBox(
                     width: sizeScreen.width * 0.14,
@@ -745,13 +725,13 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'proximidades:'),
+                const textLabel(name: 'Proximidades:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 //  RadioD(number: 6, options: options)
-                RadioD(
-                  options: const [
+                CheckC(
+                  nomes: const [
                     'Restaurante',
                     'Centro de Convenções exposições',
                     'Shopping',
@@ -760,11 +740,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     'Galeria/rua comercial',
                     'outro'
                   ],
-                  getValue: (newValue) {
-                    valoresjson['Proximidades'] = newValue;
-                  },
+                  // getValue: (newValue) {
+                  //   valoresjson['Proximidades'] = newValue;
+                  // },
                 ),
-                const textLabel(name: 'pontos de referência:'),
+                const textLabel(name: 'Pontos de referência:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -866,79 +846,76 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'ESTRUTURA DE FUNCIONAMENTO'),
+                const textLabel(name: 'Estrutura de funcionamento:'),
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                const textLabel(name: 'Formas de pagamento'),
+                const textLabel(name: 'Formas de pagamento:'),
 
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                RadioD(
-                  options: const [
+               CheckC(nomes: const [
                     'Dinheiro',
                     'Cheque',
                     'Cheque de outra praça',
                     'Cartão de Crédito',
                     'Cartão de Débito'
                   ],
-                  getValue: (newValue) {
-                    valoresjson['FormaPagamento'] = newValue;
-                  },
+                  // getValue: (newValue) {
+                  //   valoresjson['FormaPagamento'] = newValue;
+                  // },
                 ),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Vendas e Reservas'),
+                const textLabel(name: 'Vendas e Reservas:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                RadioC(
-                    number: 5,
-                    options: const [
+                CheckC(
+                  nomes: const [
                       'Balcão',
                       'Telefone',
                       'Fax',
                       'Internet',
                       'outro'
                     ],
-                    getValue: (newValue) {
-                      valoresjson['VendaseReservas'] = newValue;
-                    }),
+                  ),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const Divider(),
-                const textLabel(name: 'ATENDIMENTO AO PÚBLICO'),
+          
+                const textLabel(name: 'Atendimento ao público:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Atendimento em língua estrangeira'),
+                const textLabel(name: 'Atendimento em língua estrangeira:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                RadioD(
-                    options: const ['Não', 'Inglês', 'Espanhol', 'outro'],
-                    getValue: (newValue) {
-                      valoresjson['LinguaEstrangeira'] = newValue;
-                    }),
+              CheckC(nomes:
+                     const ['Não', 'Inglês', 'Espanhol', 'outro'],
+                    // getValue: (newValue) {
+                    //   valoresjson['LinguaEstrangeira'] = newValue;
+                    // }
+                    ),
 
-                const textLabel(name: 'Informativos impressos'),
+                const textLabel(name: 'Informativos impressos:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                RadioD(
-                  options: const [
+                CheckC(
+                nomes: const [
                     'Não',
                     'Inglês',
                     'Espanhol',
                     'Português',
                     'outro'
                   ],
-                  getValue: (newValue) {
-                    valoresjson['InformativosImpressos'] = newValue;
-                  },
+                  // getValue: (newValue) {
+                  //   valoresjson['InformativosImpressos'] = newValue;
+                  // },
                 ),
                 SizedBox(
                   height: sizeScreen.height * 0.05,
@@ -961,13 +938,12 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Período'),
+                const textLabel(name: 'Período:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                RadioC(
-                  number: 13,
-                  options: const [
+                CheckC(
+             nomes: const [
                     'Janeiro',
                     'Fevereiro',
                     'Março',
@@ -982,179 +958,19 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     'Dezembro',
                     'Ano Inteiro'
                   ],
-                  getValue: (newValue) {
-                    valoresjson['PeriodoFuncionamento'] = newValue;
-                  },
+                  
                 ),
-                const textLabel(name: 'Horário'),
+                const textLabel(name: 'Horário:'),
                 SizedBox(
                   height: sizeScreen.height * 0.01,
                 ),
 
-                Table(
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  border: TableBorder.all(),
-                  children: [
-                    const TableRow(children: [
-                      Text('2º FEIRA'),
-                      Text('3º FEIRA'),
-                      Text('4º FEIRA'),
-                      Text('5º FEIRA'),
-                      Text('6º FEIRA'),
-                      Text('SABADO'),
-                      Text('DOMINGO'),
-                    ]),
-                    TableRow(children: [
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Segunda-Feira_abertura'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Terça-Feira_abertura'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Quarta-Feira_abertura'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Quinta-Feira_abertura'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Sexta-Feira_abertura'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Sabado_abertura'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Domingo_abertura'] = newValue;
-                        },
-                      )
-                    ]),
-                    TableRow(children: [
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Segunda-Feira_encerramento'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Terça-Feira_encerramento'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Quarta-Feira_encerramento'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Quinta-Feira_encerramento'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Sexta-Feira_encerramento'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Sabado_encerramento'] = newValue;
-                        },
-                      ),
-                      TextFormField(
-                        decoration: const InputDecoration(
-                            labelText: '',
-                            border: InputBorder.none,
-                            fillColor: Colors.white,
-                            filled: true),
-                        onSaved: (newValue) {
-                          valoresjson['Domingo_encerramento'] = newValue;
-                        },
-                      )
-                    ]),
-                  ],
-                ),
+               TabelaT2(getValues: (value){},),
 
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                const textLabel(name: 'Funcionamento 24 horas'),
+                const textLabel(name: 'Funcionamento 24 horas:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -1163,7 +979,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     valoresjson['Funcionamento24h'] = newValue;
                   },
                 ),
-                const textLabel(name: 'Funcionamento em feriados'),
+                const textLabel(name: 'Funcionamento em feriados:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
@@ -1172,15 +988,15 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     valoresjson['FuncionamentoEmFeriados'] = newValue;
                   },
                 ),
-                const textLabel(name: 'Restrições'),
+                const textLabel(name: 'Restrições:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                RadioD(
-                  options: const ['Crianças', 'Fumantes', 'Animais', 'outro'],
-                  getValue: (newValue) {},
+              CheckC(
+                  nomes: const ['Crianças', 'Fumantes', 'Animais', 'outro'],
+                  //getValue: (newValue) {},
                 ),
-                const textLabel(name: 'Outras regras e informações'),
+                const textLabel(name: 'Outras regras e informações:'),
 
                 CustomTextField(
                   validat: (value) {
@@ -1197,11 +1013,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'CAPACIDADE DE ATENDIMENTO'),
+                const textLabel(name: 'Capacidade de atendimento:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Capacidade instalada por dia nº'),
+                const textLabel(name: 'Capacidade instalada por dia nº:'),
 
                 CustomTextField(
                   validat: (value) {
@@ -1215,7 +1031,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     valoresjson['CapInstaladaPdia'] = newValue;
                   },
                 ),
-                const textLabel(name: 'Pessoas atendidas sentadas nº'),
+                const textLabel(name: 'Pessoas atendidas sentadas nº:'),
 
                 CustomTextField(
                   validat: (value) {
@@ -1229,7 +1045,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     valoresjson['CapSentadas'] = newValue;
                   },
                 ),
-                const textLabel(name: 'Capacidade simultânea nº'),
+                const textLabel(name: 'Capacidade simultânea nº:'),
 
                 CustomTextField(
                   validat: (value) {
@@ -1264,31 +1080,26 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'INSTALAÇÕES'),
+                const textLabel(name: 'Instalações:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Estacionamento'),
+                const textLabel(name: 'Estacionamento:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                RadioD(
-                    options: const [
+          CheckC(    nomes: const [
                       'Pago',
                       'Gratuito',
                       'Coberto',
                       'Descoberto'
                     ],
-                    getValue: (newValue) {
-                      valoresjson['Estacionamento'] = newValue;
-                    }),
+                   ),
 
                 Column(children: [
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(name: 'Capacidade de\nveículos nº'),
                       SizedBox(
                         width: sizeScreen.width * 0.01,
@@ -1314,9 +1125,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.052,
-                      ),
+                    
                       const textLabel(name: 'Automóveis nº'),
                       SizedBox(
                         width: sizeScreen.width * 0.005,
@@ -1342,9 +1151,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                     
                       const textLabel(name: 'Ônibus nº'),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
@@ -1369,12 +1176,12 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Serviços e Equipamentos'),
+                const textLabel(name: 'Serviços e Equipamentos:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                RadioD(
-                    options: const [
+              CheckC(
+                    nomes: const [
                       'Música ao vivo',
                       'Atendimento a grupos',
                       'Ventilador',
@@ -1395,18 +1202,16 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       'Sanitário próprio',
                       'outro',
                     ],
-                    getValue: (newValue) {
-                      valoresjson['ServiçoseEquipamentos'] = newValue;
-                    }),
+                  ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Espeficiação da gastronomia'),
+                const textLabel(name: 'Espeficiação da gastronomia:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                RadioD(
-                    options: const [
+                CheckC(
+                    nomes: const [
                       'Não',
                       'Argentina',
                       'Coreana',
@@ -1436,18 +1241,16 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       'Tailandesa',
                       'outro',
                     ],
-                    getValue: (newValue) {
-                      valoresjson['EspecificaçãoDaGastronomia'] = newValue;
-                    }),
+                   ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Se for Brasileira, por região'),
+                const textLabel(name: 'Se for Brasileira, por região:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                RadioD(
-                    options: const [
+                CheckC(
+                    nomes: const [
                       'Não',
                       'Amazônica',
                       'Campeira gaúcha',
@@ -1460,18 +1263,16 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       'Paulista',
                       'outro'
                     ],
-                    getValue: (newValue) {
-                      valoresjson['SeForBrasileira'] = newValue;
-                    }),
+                   ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Por especialização'),
+                const textLabel(name: 'Por especialização:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                RadioD(
-                    options: const [
+                CheckC(
+                    nomes: const [
                       'Não',
                       'cachaçaria',
                       'cafeteria',
@@ -1495,9 +1296,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       'sorveteria',
                       'outros'
                     ],
-                    getValue: (newValue) {
-                      valoresjson['PorEspecialização'] = newValue;
-                    }),
+                 ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
@@ -1519,9 +1318,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   height: sizeScreen.height * 0.05,
                 ),
                 Row(children: [
-                  SizedBox(
-                    width: sizeScreen.width * 0.05,
-                  ),
+                  
                   const textLabel(name: 'Do equipamento/espaço:'),
                   SizedBox(
                     width: sizeScreen.width * 0.04,
@@ -1914,11 +1711,12 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                    
                    SizedBox(height: sizeScreen.height * 0.05,),
-                   textLabel(name: 'Da área ou edificação em que está localizado/instalado'),
+                   textLabel(name: 'Da área ou edificação em que está localizado/instalado:'),
                   SizedBox(height: sizeScreen.height * 0.03,),
                   ExpansionTileYoN(getValue: (newValue){
                     valoresjson['DaÁreaOuEdificação'] = newValue;
                   }),
+                   SizedBox(height: sizeScreen.height * 0.03,),
                     TabelaT4(
                   column01: const [
                     Text('Categoria'),
@@ -2328,7 +2126,7 @@ SizedBox(height: sizeScreen.height * 0.05,),
                 SizedBox(height: sizeScreen.height * 0.02,),
               const textLabel(
                     name:
-                        'Possui alguma facilidade\npara pessoas com\ndeficiência ou mobilidade\nreduzida?'),
+                        'Possui alguma facilidade para pessoas com deficiência ou mobilidade reduzida?'),
                SizedBox(height: sizeScreen.height * 0.04,),
                ExpansionTileYoN(getValue: (newValue) {valoresjson['PossuiFacilidade'] = newValue;  },),
  SizedBox(height: sizeScreen.height * 0.02,),
@@ -2336,19 +2134,19 @@ SizedBox(height: sizeScreen.height * 0.05,),
                     name: 'obs: responder às questões seguintes'),
           SizedBox(height: sizeScreen.height * 0.02,),
  const textLabel(
-                    name: 'Pessoal capacitado para receber PCD'),
+                    name: 'Pessoal capacitado para receber PCD:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+             CheckC(nomes: [
                 'Não',
                 'Física',
                 'Auditiva',
                 'Visual',
                 'Mental',
                 'Múltipla'
-              ], getValue: (newValue) { valoresjson['PessoalCapacitadoParaReceberPCD'] = newValue; },),
-             const textLabel(name: 'Rota externa acessível'),
+              ], ),
+             const textLabel(name: 'Rota externa acessível:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+                CheckC(nomes: [
                 'Não',
                 'Estacionamento',
                 'Calçada rebaixada',
@@ -2359,15 +2157,15 @@ SizedBox(height: sizeScreen.height * 0.05,),
                 'Piso regular antiderrapante',
                 'Livre de obstáculos',
                 'outro'
-              ], getValue: (newValue ) {valoresjson['RotaExternaAcessível'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Símbolo internacional de acesso'),
+                child: const textLabel(name: 'Símbolo internacional de acesso:'),
               ),
-              RadioD(options: [
+                CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Área reservada',
@@ -2375,30 +2173,29 @@ SizedBox(height: sizeScreen.height * 0.05,),
                 'Área de embarque e desembarque',
                 'Sanitário',
                 'Saída de emergência',
-              ], getValue: (newValue) {valoresjson['SimboloInternacionalDeAcesso'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Local de embarque e desembarque'),
+                child: const textLabel(name: 'Local de embarque e desembarque:'),
               ),
-              RadioD(
-                  options: ['Não', 'Sinalizado', 'Com acesso em nível'], getValue: (newValue) { valoresjson['LocalDeEmbarqueEDesembarque'] = newValue; },),
+                CheckC(nomes:  ['Não', 'Sinalizado', 'Com acesso em nível'],),
               Padding(
                 padding: EdgeInsets.only(
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Vaga em estacionamento'),
+                child: const textLabel(name: 'Vaga em estacionamento:'),
               ),
-              RadioD(options: [
+                CheckC(nomes: [
                 'Não',
                 'Sinalizado',
                 'Com acesso em nível',
                 'Alargada para cadeira de rodas',
                 'Rampa de acesso á calçada'
-              ], getValue: (newValue) {valoresjson['VagaEmEstacionamento'] = newValue;  },),
+              ],),
               Padding(
                 padding: EdgeInsets.only(
                    
@@ -2406,73 +2203,73 @@ SizedBox(height: sizeScreen.height * 0.05,),
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(
                     name:
-                        'Área de circulação / acesso interno\npara cadeira de rodas'),
+                        'Área de circulação / acesso interno para cadeira de rodas:'),
               ),
-              RadioD(options: [
+               CheckC(nomes: [
                 'Não',
                 'Rampa',
                 'Elevador',
                 'Plataforma elevatória',
                 'Porta larga',
                 'Piso regular / antiderrapante'
-              ], getValue: (newValue ) {valoresjson['ÁreaDeCirculação'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
         
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Escada'),
+                child: const textLabel(name: 'Escada:'),
               ),
-              RadioD(options: [
+                CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
                 'Sinalização tátil de alerta',
                 'Piso antiderrapante',
-              ], getValue: (newValue ) {valoresjson['Escada'] = newValue;  },),
+              ], ),
 
               Padding(
                 padding: EdgeInsets.only(
             
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Rampa'),
+                child: const textLabel(name: 'Rampa:'),
               ),
-              RadioD(options: [
+                 CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
                 'Sinalização tátil de alerta',
                 'Piso antiderrapante',
                 'Inclinação adequada',
-              ], getValue: (newValue ) {valoresjson['Rampa'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Piso'),
+                child: const textLabel(name: 'Piso:'),
               ),
-              RadioD(options: [
+                 CheckC(nomes: [
                 'Não',
                 'Tátil',
                 'Sem obstáculos',
                 'Antiderrapante/deslizante',
-              ], getValue: (newValue ) {valoresjson['Piso'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Elevador'),
+                child: const textLabel(name: 'Elevador:'),
               ),
-               RadioD(options: [
+                  CheckC(nomes: [
                 'Não',
                 'Sinalizado em braile',
                 'Dispositivo sonoro',
                 'Dispositivo luminoso',
                 'Sensor eletrônico (porta)'
-              ], getValue: (newValue) {valoresjson['Elevador'] = newValue; },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                    
@@ -2480,21 +2277,21 @@ SizedBox(height: sizeScreen.height * 0.05,),
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(
                     name:
-                        '  Equipamento motorizado\npara deslocamento interno'),
+                        'Equipamento motorizado para deslocamento interno:'),
               ),
-              RadioD(options: [
+               CheckC(nomes: [
                 'Não',
                 'Cadeira',
                 'Carrinho',
-              ], getValue: (newValue ) {valoresjson['EquipamentoMotorizado'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                  
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sinalização visual'),
+                child: const textLabel(name: 'Sinalização visual:'),
               ),
-               RadioD(options: [
+                  CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -2504,15 +2301,15 @@ SizedBox(height: sizeScreen.height * 0.05,),
                 'Restaurante',
                 'Área de lazer',
                 'Área de resgate',
-              ], getValue: (newValue ) {valoresjson['SinalizaçãoVisual'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sinalização tátil'),
+                child: const textLabel(name: 'Sinalização tátil:'),
               ),
-               RadioD(options: [
+                  CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -2522,65 +2319,65 @@ SizedBox(height: sizeScreen.height * 0.05,),
                 'Restaurante',
                 'Área de lazer',
                 'Área de resgate',
-              ], getValue: (newValue ) {valoresjson['SinalizaçãoTátil'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                 
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Alarme de emergência'),
+                child: const textLabel(name: 'Alarme de emergência:'),
               ),
-              RadioD(options: [
+                CheckC(nomes: [
                 'Não',
                 'Sonoro',
                 'Visual',
                 'Vibratório',
-              ], getValue: (newValue) {valoresjson['AlarmeDeEmemergência'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Comunicação'),
+                child: const textLabel(name: 'Comunicação:'),
               ),
-               RadioD(options: [
+                  CheckC(nomes: [
                 'Não',
                 'Texto informativo em braile',
                 'Texto informativo em fonte ampliada',
                 'Intérprete em libras',
-              ], getValue: (newValue) {valoresjson['Comunicação'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                     
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Balcão de atendimento'),
+                child: const textLabel(name: 'Balcão de atendimento:'),
               ),
-              RadioD(options: [
+                 CheckC(nomes: [
                 'Não',
                 'Rebaixado',
                 'Preferencial para PCD ou com deficiência ou mobilidade reduzida',
-              ], getValue: (newValue ) {valoresjson['BalcãoDeAtendimento'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                     
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Mobiliário'),
+                child: const textLabel(name: 'Mobiliário:'),
               ),
-             RadioD(options: [
+               CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Recuo adequado',
-              ], getValue: (newValue) {valoresjson['Mobiliário'] = newValue;  },),
+              ],),
               Padding(
                 padding: EdgeInsets.only(
                 
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sanitário'),
+                child: const textLabel(name: 'Sanitário:'),
               ),
-               RadioD(options: [
+                 CheckC(nomes: [
                 'Não',
                 'Porta larga suficiente para entrada de cadeira de rodas ',
                 'Acesso para cadeira de rodas',
@@ -2590,26 +2387,26 @@ SizedBox(height: sizeScreen.height * 0.05,),
                 'Giro para cadeira de rodas',
                 'Pia rebaixada',
                 'Boxe ou banheira daptada',
-              ], getValue: (newValue) {valoresjson['Sanitário'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Telefone'),
+                child: const textLabel(name: 'Telefone:'),
               ),
-              RadioD(options: [
+               CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Para surdos (TPS ou TTS)',
-              ], getValue: (newValue) {valoresjson['Telefone'] = newValue;  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.04),
                 child: const textLabel(
                     name:
-                        'Sinalização indicativa de\natendimento preferencial para pessoas com deficiência ou mobilidade reduzida'),
+                        'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida:'),
               ),
 
                ExpansionTileYoN(getValue: (newValue ) {
@@ -2617,7 +2414,7 @@ SizedBox(height: sizeScreen.height * 0.05,),
                  },),
               SizedBox(height: sizeScreen.height * 0.02,),              Row(
                 children: [
-                  SizedBox(width: sizeScreen.width * 0.05,),
+                 
                   const textLabel(name: 'Outros'),
                   SizedBox(
                     width: sizeScreen.width * 0.1,
