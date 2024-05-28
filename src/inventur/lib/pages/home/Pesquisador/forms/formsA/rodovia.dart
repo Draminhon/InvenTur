@@ -4,6 +4,7 @@ import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import '../../widgets/customTextField.dart';
 import '../../widgets/expandedTileYoN.dart';
 import '../../widgets/radioButton.dart';
+import '../formsB/widgets/checkBox.dart';
 import '../formsB/widgets/sendButton.dart';
 
 class Rodovia extends StatefulWidget {
@@ -147,7 +148,7 @@ class _RodoviaState extends State<Rodovia> {
                 valoresjson['Tipo'] = newValue;
               },
             ),
-            const textLabel(name: 'Subtipos'),
+            const textLabel(name: 'Subtipos:'),
             RadioD(
                 options: const ['Estação rodoviária'],
                 getValue: (newValue) {
@@ -191,19 +192,19 @@ class _RodoviaState extends State<Rodovia> {
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Jurisdição'),
+            textLabel(name: 'Jurisdição:'),
             RadioD(
                 options: ['Federal', 'Estadual', 'Municipal'],
                 getValue: (newValue) {
                   valoresjson['Jurisdição'] = newValue;
                 }),
-            const textLabel(name: 'Natureza'),
+            const textLabel(name: 'Natureza:'),
             RadioD(
                 options: const ['Pública', 'Privada', 'outro'],
                 getValue: (newValue) {
                   valoresjson['Natureza'] = newValue;
                 }),
-            const textLabel(name: 'Tipo de organização/Instituição'),
+            const textLabel(name: 'Tipo de organização/Instituição:'),
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),
@@ -222,7 +223,7 @@ class _RodoviaState extends State<Rodovia> {
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Extensão da rodovia no âmbito do município'),
+            textLabel(name: 'Extensão da rodovia no âmbito do município:'),
             CustomTextField(
                 name: 'Extensão',
                 validat: (value) {
@@ -234,7 +235,7 @@ class _RodoviaState extends State<Rodovia> {
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Faixas de rolamento'),
+            textLabel(name: 'Faixas de rolamento:'),
             RadioD(
                 options: [
                   'Duas',
@@ -250,7 +251,7 @@ class _RodoviaState extends State<Rodovia> {
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Pavimentação'),
+            textLabel(name: 'Pavimentação:'),
             RadioD(
                 options: [
                   'Asfalto',
@@ -267,14 +268,23 @@ class _RodoviaState extends State<Rodovia> {
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Pedágio'),
-            SizedBox(
-              height: sizeScreen.height * 0.03,
-            ),
-            ExpansionTileYoN(getValue: (newValue) {
-              valoresjson['Pedágio'] = newValue;
-            }),
-            textLabel(name: 'Municípios vizinhos interligados por rodovia'),
+           Row(children: [
+              
+              const textLabel(name: 'Pedágio:'),
+              SizedBox(
+                width: sizeScreen.width * 0.09,
+              ),
+              SizedBox(
+                  // width: sizeScreen.width * 0.5,
+                  //  //height: sizeScreen.height * 0.07,
+                  child: ExpansionTileYoN(
+                getValue: (newValue) {
+                  valoresjson['SinalizaçãoDeAcesso'] = newValue;
+                },
+              ))
+            ]),
+            SizedBox(height: sizeScreen.height * 0.05,),
+            textLabel(name: 'Municípios vizinhos interligados por rodovia:'),
             CustomTextField(
                 name: 'Municípios vizinhos',
                 validat: (value) {
@@ -288,10 +298,8 @@ class _RodoviaState extends State<Rodovia> {
             ),
             Row(
               children: [
-                SizedBox(
-                  width: sizeScreen.width * 0.05,
-                ),
-                const textLabel(name: 'início da atividade:'),
+               
+                const textLabel(name: 'Início da atividade:'),
                 SizedBox(
                   width: sizeScreen.width * 0.1,
                 ),
@@ -318,9 +326,7 @@ class _RodoviaState extends State<Rodovia> {
             ),
             Row(
               children: [
-                SizedBox(
-                  width: sizeScreen.width * 0.05,
-                ),
+                
                 const textLabel(name: 'Endereço eletrônico\n(e-mail)'),
                 SizedBox(
                     width: sizeScreen.width * 0.5,
@@ -341,10 +347,8 @@ class _RodoviaState extends State<Rodovia> {
             ),
             Row(
               children: [
-                SizedBox(
-                  width: sizeScreen.width * 0.05,
-                ),
-                const textLabel(name: '  Sítio eletrônico\n(site/página web)'),
+               
+                const textLabel(name: 'Sítio eletrônico\n(site/página web)'),
                 SizedBox(
                   width: sizeScreen.width * 0.045,
                 ),
@@ -365,14 +369,12 @@ class _RodoviaState extends State<Rodovia> {
             SizedBox(
               height: sizeScreen.height * 0.02,
             ),
-            const textLabel(name: 'sinalização:'),
+            const textLabel(name: 'Sinalização:'),
             SizedBox(
               height: sizeScreen.height * 0.04,
             ),
             Row(children: [
-              SizedBox(
-                width: sizeScreen.width * 0.05,
-              ),
+              
               const textLabel(name: 'de acessso -'),
               SizedBox(
                 width: sizeScreen.width * 0.09,
@@ -390,9 +392,7 @@ class _RodoviaState extends State<Rodovia> {
               height: sizeScreen.height * 0.02,
             ),
             Row(children: [
-              SizedBox(
-                width: sizeScreen.width * 0.05,
-              ),
+              
               const textLabel(name: 'turística -'),
               SizedBox(
                 width: sizeScreen.width * 0.14,
@@ -425,27 +425,29 @@ class _RodoviaState extends State<Rodovia> {
             SizedBox(
               height: sizeScreen.height * 0.02,
             ),
-            textLabel(name: 'Equipamentos e serviçõs ao longo da rodovia'),
+            textLabel(name: 'Equipamentos e serviçõs ao longo da rodovia:'),
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Posto de combustível'),
-            RadioD(
-                options: [
+            textLabel(name: 'Posto de combustível:'),
+            SizedBox(
+              height: sizeScreen.height * 0.02,
+            ),
+           CheckC(nomes: [
                   'Álcool',
                   'Gasolina',
                   'Diesel',
                   'Gás natural veicular'
                 ],
-                getValue: (newValue) {
-                  valoresjson['PostoDeCombustível'] = newValue;
-                }),
+              ),
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Outros serviços'),
-            RadioD(
-                options: [
+            textLabel(name: 'Outros serviços:'),
+            SizedBox(
+              height: sizeScreen.height * 0.02,
+            ),
+          CheckC(nomes: [
                   'Alimentação',
                   'Hospedagem',
                   'Posto de informação',
@@ -460,18 +462,15 @@ class _RodoviaState extends State<Rodovia> {
                   'Supermercado',
                   'outro'
                 ],
-                getValue: (newValue) {
-                  valoresjson['OutrosServiços'] = newValue;
-                }),
+               ),
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Estruturas ao longo da via'),
+            textLabel(name: 'Estruturas ao longo da via:'),
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            RadioD(
-                options: [
+           CheckC(nomes: [
                   'Ponte',
                   'Passarela',
                   'Viaduto',
@@ -479,21 +478,30 @@ class _RodoviaState extends State<Rodovia> {
                   'Atrativo turístico natural',
                   'outro'
                 ],
+               ),
+            SizedBox(
+              height: sizeScreen.height * 0.03,
+            ),
+            textLabel(name: 'Questões ambientais/sociais:'),
+            SizedBox(
+              height: sizeScreen.height * 0.03,
+            ),
+            Row(children: [
+              
+              const textLabel(name: 'Poluição:'),
+              SizedBox(
+                width: sizeScreen.width * 0.09,
+              ),
+              SizedBox(
+                  // width: sizeScreen.width * 0.5,
+                  //  //height: sizeScreen.height * 0.07,
+                  child: ExpansionTileYoN(
                 getValue: (newValue) {
-                  valoresjson['EstruturasAoLongoDaVia'] = newValue;
-                }),
-            SizedBox(
-              height: sizeScreen.height * 0.03,
-            ),
-            textLabel(name: 'Questões ambientais/sociais'),
-            SizedBox(
-              height: sizeScreen.height * 0.03,
-            ),
-            textLabel(name: 'Poluição'),
+                  valoresjson['SinalizaçãoDeAcesso'] = newValue;
+                },
+              ))
+            ]),
             SizedBox(height: sizeScreen.height * 0.03,),
-            ExpansionTileYoN(getValue: (newValue) {
-              valoresjson['Poluição'] = newValue;
-            }),
             CustomTextField(
                 name: 'Especificação',
                 validat: (value) {
@@ -507,11 +515,21 @@ class _RodoviaState extends State<Rodovia> {
                  SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Lixo'),
-            SizedBox(height: sizeScreen.height * 0.03,),
-            ExpansionTileYoN(getValue: (newValue) {
-              valoresjson['Lixo'] = newValue;
-            }),
+           Row(children: [
+              
+              const textLabel(name: 'Lixo:'),
+              SizedBox(
+                width: sizeScreen.width * 0.09,
+              ),
+              SizedBox(
+                  // width: sizeScreen.width * 0.5,
+                  //  //height: sizeScreen.height * 0.07,
+                  child: ExpansionTileYoN(
+                getValue: (newValue) {
+                  valoresjson['SinalizaçãoDeAcesso'] = newValue;
+                },
+              ))
+            ]),
             CustomTextField(
                 name: 'Especificação',
                 validat: (value) {
@@ -524,11 +542,21 @@ class _RodoviaState extends State<Rodovia> {
                  SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Desmatamento'),
-            SizedBox(height: sizeScreen.height * 0.03,),
-            ExpansionTileYoN(getValue: (newValue) {
-              valoresjson['Desmatamento'] = newValue;
-            }),
+        Row(children: [
+              
+              const textLabel(name: 'Desmatamento:'),
+              SizedBox(
+                width: sizeScreen.width * 0.09,
+              ),
+              SizedBox(
+                  // width: sizeScreen.width * 0.5,
+                  //  //height: sizeScreen.height * 0.07,
+                  child: ExpansionTileYoN(
+                getValue: (newValue) {
+                  valoresjson['SinalizaçãoDeAcesso'] = newValue;
+                },
+              ))
+            ]),
             CustomTextField(
                 name: 'Especificação',
                 validat: (value) {
@@ -541,11 +569,21 @@ class _RodoviaState extends State<Rodovia> {
                  SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Queimadas'),
-            SizedBox(height: sizeScreen.height * 0.03,),
-            ExpansionTileYoN(getValue: (newValue) {
-              valoresjson['Queimadas'] = newValue;
-            }),
+          Row(children: [
+              
+              const textLabel(name: 'Queimadas:'),
+              SizedBox(
+                width: sizeScreen.width * 0.09,
+              ),
+              SizedBox(
+                  // width: sizeScreen.width * 0.5,
+                  //  //height: sizeScreen.height * 0.07,
+                  child: ExpansionTileYoN(
+                getValue: (newValue) {
+                  valoresjson['SinalizaçãoDeAcesso'] = newValue;
+                },
+              ))
+            ]),
             CustomTextField(
                 name: 'Especificação',
                 validat: (value) {
@@ -558,11 +596,21 @@ class _RodoviaState extends State<Rodovia> {
                  SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Insegurança'),
-            SizedBox(height: sizeScreen.height * 0.03,),
-            ExpansionTileYoN(getValue: (newValue) {
-              valoresjson['Insegurança'] = newValue;
-            }),
+           Row(children: [
+              
+              const textLabel(name: 'Insegurança:'),
+              SizedBox(
+                width: sizeScreen.width * 0.09,
+              ),
+              SizedBox(
+                  // width: sizeScreen.width * 0.5,
+                  //  //height: sizeScreen.height * 0.07,
+                  child: ExpansionTileYoN(
+                getValue: (newValue) {
+                  valoresjson['SinalizaçãoDeAcesso'] = newValue;
+                },
+              ))
+            ]),
             CustomTextField(
                 name: 'Especificação',
                 validat: (value) {
@@ -575,11 +623,21 @@ class _RodoviaState extends State<Rodovia> {
                  SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Extrativismo'),
-            SizedBox(height: sizeScreen.height * 0.03,),
-            ExpansionTileYoN(getValue: (newValue) {
-              valoresjson['Extrativismo'] = newValue;
-            }),
+            Row(children: [
+              
+              const textLabel(name: 'Extrativismo:'),
+              SizedBox(
+                width: sizeScreen.width * 0.09,
+              ),
+              SizedBox(
+                  // width: sizeScreen.width * 0.5,
+                  //  //height: sizeScreen.height * 0.07,
+                  child: ExpansionTileYoN(
+                getValue: (newValue) {
+                  valoresjson['SinalizaçãoDeAcesso'] = newValue;
+                },
+              ))
+            ]),
             CustomTextField(
                 name: 'Especificação',
                 validat: (value) {
@@ -592,11 +650,21 @@ class _RodoviaState extends State<Rodovia> {
                  SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Prostituição'),
-            SizedBox(height: sizeScreen.height * 0.03,),
-            ExpansionTileYoN(getValue: (newValue) {
-              valoresjson['Prostituição'] = newValue;
-            }),
+            Row(children: [
+              
+              const textLabel(name: 'Prostituição:'),
+              SizedBox(
+                width: sizeScreen.width * 0.09,
+              ),
+              SizedBox(
+                  // width: sizeScreen.width * 0.5,
+                  //  //height: sizeScreen.height * 0.07,
+                  child: ExpansionTileYoN(
+                getValue: (newValue) {
+                  valoresjson['SinalizaçãoDeAcesso'] = newValue;
+                },
+              ))
+            ]),
             CustomTextField(
                 name: 'Especificação',
                 validat: (value) {
@@ -609,11 +677,21 @@ class _RodoviaState extends State<Rodovia> {
                  SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            textLabel(name: 'Ocupações irregulares/invasão'),
-            SizedBox(height: sizeScreen.height * 0.03,),
-            ExpansionTileYoN(getValue: (newValue) {
-              valoresjson['OcupaçõesIrregulares/invasão'] = newValue;
-            }),
+          Row(children: [
+              
+              const textLabel(name: 'Ocupações\nirregulares/invasão'),
+              SizedBox(
+                width: sizeScreen.width * 0.09,
+              ),
+              SizedBox(
+                  // width: sizeScreen.width * 0.5,
+                  //  //height: sizeScreen.height * 0.07,
+                  child: ExpansionTileYoN(
+                getValue: (newValue) {
+                  valoresjson['SinalizaçãoDeAcesso'] = newValue;
+                },
+              ))
+            ]),
             CustomTextField(
                 name: 'Especificação',
                 validat: (value) {
@@ -624,11 +702,21 @@ class _RodoviaState extends State<Rodovia> {
                 }),
                 SizedBox(height: sizeScreen.height * 0.03,),
 
-                   textLabel(name: 'Outras'),
-            SizedBox(height: sizeScreen.height * 0.03,),
-            ExpansionTileYoN(getValue: (newValue) {
-              valoresjson['Outras'] = newValue;
-            }),
+                  Row(children: [
+              
+              const textLabel(name: 'Outras:'),
+              SizedBox(
+                width: sizeScreen.width * 0.09,
+              ),
+              SizedBox(
+                  // width: sizeScreen.width * 0.5,
+                  //  //height: sizeScreen.height * 0.07,
+                  child: ExpansionTileYoN(
+                getValue: (newValue) {
+                  valoresjson['SinalizaçãoDeAcesso'] = newValue;
+                },
+              ))
+            ]),
             CustomTextField(
                 name: 'Especificação',
                 validat: (value) {
