@@ -108,7 +108,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Subtipos'),
+                  const textLabel(name: 'Subtipos:'),
                   RadioC(
                       number: 13,
                       options: const [
