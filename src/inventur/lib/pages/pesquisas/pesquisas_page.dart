@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/models/pesquisa_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/pesquisas/widgets/pesquisa_card_widget.dart';
 
@@ -13,53 +12,10 @@ class PesquisasPage extends StatefulWidget {
 class _PesquisasPageState extends State<PesquisasPage> {
   final PesquisaController _pesquisaController = PesquisaController();
 
-  List<Pesquisa> pesquisas = [
-    Pesquisa(
-      codigoIBGE: 11111,
-      estado: "CE",
-      municipio: "Tianguá",
-      dataInicio: "01/01/2024",
-      dataTermino: "01/01/2024",
-      quantidadeLocais: 23,
-      quantidadePesquisadores: 5,
-      status: "Não Iniciado"
-    ),
-    Pesquisa(
-      codigoIBGE: 22222,
-      estado: "CE",
-      municipio: "Viçosa do Ceará",
-      dataInicio: "01/01/2024",
-      dataTermino: "01/01/2024",
-      quantidadeLocais: 23,
-      quantidadePesquisadores: 5,
-      status: "Não Iniciado"
-    ),
-    Pesquisa(
-      codigoIBGE: 33333,
-      estado: "CE",
-      municipio: "Tianguá",
-      dataInicio: "01/01/2024",
-      dataTermino: "01/01/2024",
-      quantidadeLocais: 23,
-      quantidadePesquisadores: 5,
-      status: "Não Iniciado"
-    ),
-    Pesquisa(
-      codigoIBGE: 44444,
-      estado: "CE",
-      municipio: "Viçosa do Ceará",
-      dataInicio: "01/01/2024",
-      dataTermino: "01/01/2024",
-      quantidadeLocais: 23,
-      quantidadePesquisadores: 5,
-      status: "Não Iniciado"
-    ),
-  ];
-
   @override
   void initState() {
     super.initState();
-    _pesquisaController.setPesquisas = pesquisas;
+    _pesquisaController.setPesquisas();
   }
 
   @override

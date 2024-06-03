@@ -32,8 +32,50 @@ class PesquisaController extends ChangeNotifier {
   List<User> _pesquisadores = [];
   List<Municipio> _municipios = [];
 
-  set setPesquisas(List<Pesquisa> pesquisas) {
-    _pesquisas = pesquisas;
+  void setPesquisas() async {
+    _pesquisas = [
+      Pesquisa(
+        codigoIBGE: 11111,
+        estado: "CE",
+        municipio: "Tianguá",
+        dataInicio: "01/01/2024",
+        dataTermino: "01/01/2024",
+        quantidadeLocais: 23,
+        quantidadePesquisadores: 5,
+        status: "Não Iniciado"
+      ),
+      Pesquisa(
+        codigoIBGE: 22222,
+        estado: "CE",
+        municipio: "Viçosa do Ceará",
+        dataInicio: "01/01/2024",
+        dataTermino: "01/01/2024",
+        quantidadeLocais: 23,
+        quantidadePesquisadores: 5,
+        status: "Não Iniciado"
+      ),
+      Pesquisa(
+        codigoIBGE: 33333,
+        estado: "CE",
+        municipio: "Tianguá",
+        dataInicio: "01/01/2024",
+        dataTermino: "01/01/2024",
+        quantidadeLocais: 23,
+        quantidadePesquisadores: 5,
+        status: "Não Iniciado"
+      ),
+      Pesquisa(
+        codigoIBGE: 44444,
+        estado: "CE",
+        municipio: "Viçosa do Ceará",
+        dataInicio: "01/01/2024",
+        dataTermino: "01/01/2024",
+        quantidadeLocais: 23,
+        quantidadePesquisadores: 5,
+        status: "Não Iniciado"
+      ),
+    ];
+    notifyListeners();
   }
 
   set setPesquisadores(List<User> pesquisadores) {

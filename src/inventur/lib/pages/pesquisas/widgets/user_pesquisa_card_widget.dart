@@ -55,7 +55,7 @@ class UserPesquisaCard extends StatelessWidget {
                 },
                 icon: const Icon(
                   Icons.close_rounded,
-                  color: Color.fromARGB(255, 232, 0, 0),
+                  color: Color.fromARGB(255, 12, 9, 9),
                   size: 36,
                 ),
               ),
