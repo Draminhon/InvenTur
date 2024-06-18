@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 class AutocompleteTextField extends StatelessWidget {
   final String label;
   final TextInputType? keyboardType;
+  final TextEditingValue? initialValue;
   final Function(String value)? onChanged;
   final Function(String option) onSelected;
   final String? Function(String?)? validator;
@@ -16,6 +17,7 @@ class AutocompleteTextField extends StatelessWidget {
     this.onChanged,
     this.validator,
     this.keyboardType,
+    this.initialValue,
     this.onStateChanged,
     this.inputFormatters,
     required this.label, 
@@ -27,8 +29,8 @@ class AutocompleteTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) => Autocomplete<String>(
-        optionsBuilder: (textEditingValue) => optionsBuilder(textEditingValue),
         onSelected: onSelected,
+        optionsBuilder: (textEditingValue) => optionsBuilder(textEditingValue),
         optionsViewBuilder: (context, onSelected, options) => Align(
           alignment: Alignment.topLeft,
           child: Material(

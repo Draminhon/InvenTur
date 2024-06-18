@@ -100,6 +100,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
     title: const Text('Cadastrar Nova Pesquisa'),
     foregroundColor: const Color.fromARGB(255, 55, 111, 60),
     backgroundColor: Colors.white,
+    leading: Container(),
   );
 
   @override
@@ -307,8 +308,9 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                       Container(
                         margin: const EdgeInsets.only(top: 10),
                         decoration: BoxDecoration(
+                          color: Colors.white,
                           border: Border.all(
-                            width: 2,
+                            width: 1.2,
                             color: const Color.fromARGB(255, 55, 111, 60),
                           ),
                           borderRadius: BorderRadius.circular(10),
@@ -698,7 +700,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                 )
                               ),
                               onPressed: () {
-                                
+                                Navigator.pop(context);
                               },
                               child: Text(
                                 "Cancelar",

@@ -45,7 +45,9 @@ class _PesquisaCardState extends State<PesquisaCard> {
               children: [
                 IconButton(
                   tooltip: 'Editar Pesquisa',
-                  onPressed: () {}, 
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/RegisterPesquisa');
+                  }, 
                   icon: Icon(
                     Icons.edit_rounded,
                     color: Colors.green[700],
@@ -142,6 +144,16 @@ class _PesquisaCardState extends State<PesquisaCard> {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(widget.pesquisa.quantidadePesquisadores.toString())
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Status da Pesquisa:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(widget.pesquisa.status)
                     ],
                   ),
                 ],

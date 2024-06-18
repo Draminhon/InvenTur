@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/home/Administrador/account_page.dart';
 import 'package:inventur/pages/controllers/user_controller.dart';
 
@@ -45,11 +44,55 @@ class OptionsDrawer extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    Icon(FontAwesomeIcons.solidUser),
+                    Icon(Icons.edit_rounded),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       child: Text(
-                        "Meus Dados",
+                        "Editar meus Dados",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Icon(Icons.arrow_forward_ios_rounded),
+              ],
+            ),
+          ),
+          const SizedBox(height: 5),
+          TextButton(
+            style: ButtonStyle(
+              shape: const WidgetStatePropertyAll(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                )
+              ),
+              foregroundColor: WidgetStatePropertyAll(Colors.red[800]),
+              overlayColor: WidgetStatePropertyAll(Colors.red[100]),
+            ),
+            onPressed: () {
+              showAdaptiveDialog(
+                context: context,
+                builder: (context) => AlertDialog.adaptive(
+                  title: const Text('Antenção'),
+                  actions: [
+                    TextButton(onPressed: () {}, child: const Text('OK'))
+                  ],
+                ),
+              );
+            },
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Icon(Icons.person_remove_rounded),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      child: Text(
+                        "Excluir Perfil",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold

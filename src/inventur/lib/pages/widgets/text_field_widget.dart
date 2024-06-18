@@ -51,7 +51,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
         isDense: true,
         errorMaxLines: 3,
         labelText: widget.labelText,
-        contentPadding: EdgeInsets.symmetric(vertical: screenSize.height * .02),
+        contentPadding: EdgeInsets.symmetric(
+          vertical: screenSize.height * .02, 
+          horizontal: 10,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10)
         ),
