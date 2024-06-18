@@ -17,13 +17,11 @@ class PesquisaCard extends StatefulWidget {
 }
 
 class _PesquisaCardState extends State<PesquisaCard> {
-  late Pesquisa _pesquisa;
   late PesquisaController _pesquisaController;
 
   @override
   void initState() {
     super.initState();
-    _pesquisa = widget.pesquisa;
     _pesquisaController = widget.pesquisaController;
   }
 
@@ -56,7 +54,7 @@ class _PesquisaCardState extends State<PesquisaCard> {
                 IconButton(
                   tooltip: 'Excluir Pesquisa',
                   onPressed: () {
-                    _pesquisaController.deletePesquisa(_pesquisa);
+                    _pesquisaController.deletePesquisa(widget.pesquisa);
                   }, 
                   icon: Icon(
                     Icons.delete_rounded,
