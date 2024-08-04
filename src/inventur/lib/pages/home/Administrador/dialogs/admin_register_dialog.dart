@@ -67,6 +67,8 @@ class _RegisterAdminDialogState extends State<RegisterAdminDialog> with SingleTi
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
 
+  final _formRegisterKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -113,6 +115,7 @@ class _RegisterAdminDialogState extends State<RegisterAdminDialog> with SingleTi
                   borderRadius: BorderRadius.circular(20)
                 ),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Row(
                       children: [
@@ -182,10 +185,43 @@ class _RegisterAdminDialogState extends State<RegisterAdminDialog> with SingleTi
                         ],
                       ),
                     ),
-                    ResgistrationForm(
-                      userLevel: _userController.primaryLevel,
+                    RegisterForm(
                       userController: _userController,
-                    )
+                      formRegisterKey: _formRegisterKey,
+                    ),
+                    SizedBox(
+                      height: screenSize.height * .07,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          shape: WidgetStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)
+                            )
+                          ),
+                          padding: WidgetStateProperty.all(
+                            EdgeInsets.symmetric(
+                              vertical: screenSize.height * .012
+                            )
+                          ),
+                          backgroundColor: WidgetStateProperty.all(
+                            const Color.fromARGB(255, 55, 111, 60)
+                          ),
+                          overlayColor: WidgetStateProperty.all(
+                            Colors.green[600]
+                          )
+                        ),
+                        onPressed: () {
+                          if (_formRegisterKey.currentState!.validate()){}
+                        },
+                        child: Text(
+                          'Cadastrar',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: screenSize.height * .03
+                          ),
+                        )
+                      ),
+                    ),
                   ],
                 ),
               ),

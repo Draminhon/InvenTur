@@ -61,50 +61,50 @@ class OptionsDrawer extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 5),
-          TextButton(
-            style: ButtonStyle(
-              shape: const WidgetStatePropertyAll(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
-                )
-              ),
-              foregroundColor: WidgetStatePropertyAll(Colors.red[800]),
-              overlayColor: WidgetStatePropertyAll(Colors.red[100]),
-            ),
-            onPressed: () {
-              showAdaptiveDialog(
-                context: context,
-                builder: (context) => AlertDialog.adaptive(
-                  title: const Text('Antenção'),
-                  actions: [
-                    TextButton(onPressed: () {}, child: const Text('OK'))
-                  ],
-                ),
-              );
-            },
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.person_remove_rounded),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      child: Text(
-                        "Excluir Perfil",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Icon(Icons.arrow_forward_ios_rounded),
-              ],
-            ),
-          ),
+          // const SizedBox(height: 5),
+          // TextButton(
+          //   style: ButtonStyle(
+          //     shape: const WidgetStatePropertyAll(
+          //       RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.zero,
+          //       )
+          //     ),
+          //     foregroundColor: WidgetStatePropertyAll(Colors.red[800]),
+          //     overlayColor: WidgetStatePropertyAll(Colors.red[100]),
+          //   ),
+          //   onPressed: () {
+          //     showAdaptiveDialog(
+          //       context: context,
+          //       builder: (context) => AlertDialog.adaptive(
+          //         title: const Text('Antenção'),
+          //         actions: [
+          //           TextButton(onPressed: () {}, child: const Text('OK'))
+          //         ],
+          //       ),
+          //     );
+          //   },
+          //   child: const Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Row(
+          //         children: [
+          //           Icon(Icons.person_remove_rounded),
+          //           Padding(
+          //             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          //             child: Text(
+          //               "Excluir Perfil",
+          //               style: TextStyle(
+          //                 fontSize: 18,
+          //                 fontWeight: FontWeight.bold
+          //               ),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
+          //       Icon(Icons.arrow_forward_ios_rounded),
+          //     ],
+          //   ),
+          // ),
           Expanded(child: Container()),
           Divider(
             height: 0,

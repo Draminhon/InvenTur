@@ -48,8 +48,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
       inputFormatters: widget.inputFormatters,
       obscuringCharacter: widget.obscuringCharacter,
       decoration: InputDecoration(
+        filled: true,
         isDense: true,
         errorMaxLines: 3,
+        fillColor: Colors.white,
         labelText: widget.labelText,
         contentPadding: EdgeInsets.symmetric(
           vertical: screenSize.height * .02, 
