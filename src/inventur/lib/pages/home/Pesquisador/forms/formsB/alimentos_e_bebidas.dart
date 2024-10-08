@@ -383,8 +383,8 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     SizedBox(
                       height: sizeScreen.height * 0.03,
                     ),
-                    RadioD(
-                        options: const [
+                   CheckC(
+                        nomes: const [
                           'associação',
                           'sindicato',
                           'cooperativa',
@@ -392,9 +392,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           'empresa',
                           'outro'
                         ],
-                        getValue: (newValue) {
-                          valoresjson['tipoDeOrganizacao'] = newValue;
-                        })
+                      )
                   ],
                 ),
                 SizedBox(
@@ -603,7 +601,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Row(
                     children: [
                     
-                      const textLabel(name: 'Telefone'),
+                      const textLabel(name: 'Whatsapp'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -618,17 +616,24 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           ))
                     ],
                   ),
-                  Padding(
-                      padding: EdgeInsets.only(left: sizeScreen.width * 0.09),
-                      child: SizedBox(
+                  Row(
+                    children: [
+                    
+                      const textLabel(name: 'Instagram'),
+                      SizedBox(
+                        width: sizeScreen.width * 0.03,
+                      ),
+                      SizedBox(
                           width: sizeScreen.width * 0.6,
                           //height: sizeScreen.height * 0.07,
                           child: CustomTextNumber(
-                            labelText: 'Telefone secundário',
+                            labelText: '@',
                             getValue: (newValue) {
-                              valoresjson['TelefoneSecundario'] = newValue;
+                              valoresjson['TelefonePrincipal'] = newValue;
                             },
-                          ))),
+                          ))
+                    ],
+                  ),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -637,7 +642,10 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 Row(
                   children: [
                    
-                    const textLabel(name: 'Endereço eletrônico\n(e-mail)'),
+                    const textLabel(name: 'E-mail'),
+                     SizedBox(
+                      width: sizeScreen.width * 0.04,
+                    ),
                     SizedBox(
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
@@ -659,9 +667,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   children: [
                    
                     const textLabel(
-                        name: 'Sítio eletrônico\n(site/página web)'),
+                        name: 'Site'),
                     SizedBox(
-                      width: sizeScreen.width * 0.045,
+                      width: sizeScreen.width * 0.1,
                     ),
                     SizedBox(
                         width: sizeScreen.width * 0.5,
@@ -857,8 +865,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                CheckC(nomes: const [
                     'Dinheiro',
-                    'Cheque',
-                    'Cheque de outra praça',
+                    'Pix',
                     'Cartão de Crédito',
                     'Cartão de Débito'
                   ],
@@ -876,9 +883,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 CheckC(
                   nomes: const [
                       'Balcão',
-                      'Telefone',
-                      'Fax',
-                      'Internet',
+                      'Whatsapp',
+                      'Site',
+                      'Instagram',
                       'outro'
                     ],
                   ),
@@ -1190,7 +1197,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       'Cardápio em língua estrangeira',
                       'Música ambiente',
                       'Manobrista',
-                      'Calefação',
                       'Internet sem fio',
                       'Área para fumantes',
                       'Carta de vinhos',

@@ -11,8 +11,8 @@ class AlterarCadastro extends StatelessWidget {
             padding: EdgeInsets.only(top: sizeScreen.height * 0.15),
             child: Padding(
                 padding: EdgeInsets.only(
-                  left: sizeScreen.width * 0.15,
-                  right: sizeScreen.width * 0.15,
+                  left: sizeScreen.width * 0.05,
+                  right: sizeScreen.width * 0.05,
                 ),
                 child: Container(
                   child: Form(
@@ -25,8 +25,10 @@ class AlterarCadastro extends StatelessWidget {
                               color: Color.fromARGB(255, 55, 111, 60),
                             ),
                             enabledBorder: OutlineInputBorder(
+
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
+                                  width: 2,
                                     color: Color.fromARGB(255, 55, 111, 60),
                                     style: BorderStyle.solid)),
                             hintText: 'nome',
@@ -48,6 +50,7 @@ class AlterarCadastro extends StatelessWidget {
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
+                                   width: 2,
                                     color: Color.fromARGB(255, 55, 111, 60),
                                     style: BorderStyle.solid)),
                             hintText: 'cpf',
@@ -67,8 +70,10 @@ class AlterarCadastro extends StatelessWidget {
                               color: Color.fromARGB(255, 55, 111, 60),
                             ),
                             enabledBorder: OutlineInputBorder(
+                              
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
+                                   width: 2,
                                     color: Color.fromARGB(255, 55, 111, 60))),
                             hintText: 'email',
                             isDense: true,
@@ -87,8 +92,10 @@ class AlterarCadastro extends StatelessWidget {
                               color: Color.fromARGB(255, 55, 111, 60),
                             ),
                             enabledBorder: OutlineInputBorder(
+                              
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
+                                   width: 2,
                                     color: Color.fromARGB(255, 55, 111, 60))),
                             hintText: 'nova senha',
                             isDense: true,
@@ -109,6 +116,7 @@ class AlterarCadastro extends StatelessWidget {
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: const BorderSide(
+                                 width: 2,
                                   color: Color.fromARGB(255, 55, 111, 60)),
                             ),
                             hintText: 'confirmar senha',
@@ -119,10 +127,11 @@ class AlterarCadastro extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10))),
                       ),
                       SizedBox(
-                        height: sizeScreen.height * 0.1,
+                        height: sizeScreen.height * 0.15,
                       ),
                       SizedBox(
-                          width: sizeScreen.width * 0.68,
+                          width: sizeScreen.width * 1,
+                                height: sizeScreen.height * 0.06,
                           child: OutlinedButton(
                               onPressed: () => showDialog(
                                   context: context,
@@ -147,10 +156,11 @@ class AlterarCadastro extends StatelessWidget {
                                 style: TextStyle(color: Colors.white),
                               ))),
                       SizedBox(
-                        height: sizeScreen.height * 0.01,
+                        height: sizeScreen.height * 0.03,
                       ),
                       SizedBox(
-                          width: sizeScreen.width * 0.68,
+                        height: sizeScreen.height * 0.06,
+                          width: sizeScreen.width * 1,
                           child: OutlinedButton(
                               onPressed: () => Navigator.pop(context),
                               child: const Text(

@@ -63,7 +63,8 @@ class ContaPesquisador extends StatelessWidget {
           ,
           SizedBox(height: screenSize.height * 0.2,),
           SizedBox(
-              width: 250,
+              width: screenSize.width * 0.9,
+              height: screenSize.height * 0.06,
               child: OutlinedButton(
                 onPressed: () => Navigator.pushNamed(context, '/AlterarDados'),
                 style: OutlinedButton.styleFrom(

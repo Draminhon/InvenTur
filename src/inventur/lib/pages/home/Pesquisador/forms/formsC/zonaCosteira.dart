@@ -578,7 +578,8 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Endereço eletrônico\n(e-mail)'),
+                      const textLabel(name: 'E-mail'),
+                      SizedBox(width: sizeScreen.width * 0.05,),
                       SizedBox(
                           width: sizeScreen.width * 0.5,
                           //height: sizeScreen.height * 0.07,
@@ -602,9 +603,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     children: [
                      
                       const textLabel(
-                          name: '  Sítio eletrônico\n(site/página web)'),
+                          name: 'Site'),
                       SizedBox(
-                        width: sizeScreen.width * 0.045,
+                        width: sizeScreen.width * 0.11,
                       ),
                       SizedBox(
                           width: sizeScreen.width * 0.5,
@@ -1147,12 +1148,13 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: const Color.fromARGB(255, 55, 111, 60)),children: [
                         Text(
-                          'Nome dos principais roteiros (até 5)',
+                          'Nome dos principais\nroteiros (até 5)',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
-                        Text('E-mail', textAlign: TextAlign.center)
+                        Text('E-mail', textAlign: TextAlign.center,   style: TextStyle(color: Colors.white),)
                       ]),
                       TableRow(children: [
                         TextFormField(
@@ -1230,12 +1232,13 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: const Color.fromARGB(255, 55, 111, 60)),children: [
                         Text(
                           'Nome dos principais guias impressos (até 5)',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
-                        Text('E-mail', textAlign: TextAlign.center)
+                        Text('E-mail', textAlign: TextAlign.center,     style: TextStyle(color: Colors.white),)
                       ]),
                       TableRow(children: [
                         TextFormField(
@@ -3098,22 +3101,26 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: const Color.fromARGB(255, 55, 111, 60),),children: [
                         Text(
                           'Empresa',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'Telefone',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'E-mail',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'Site',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
                       ]),
                       TableRow(children: [
@@ -3200,26 +3207,30 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: const Color.fromARGB(255, 55, 111, 60),),children: [
                         Text(
                           'Empresa',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'Tipo de transporte',
                           textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'Telefone',
                           textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'Site',
                           textAlign: TextAlign.center,
+                                style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'E-mail',
-                          textAlign: TextAlign.center,
+                          textAlign: TextAlign.center,      style: TextStyle(color: Colors.white),
                         ),
                       ]),
                       TableRow(children: [
@@ -3353,7 +3364,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: Colors.white), children: [
                         Text(
                           'Categoria',
                           textAlign: TextAlign.center,
@@ -3371,7 +3382,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                           textAlign: TextAlign.center,
                         ),
                       ]),
-                      TableRow(children: [
+                      TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Municipal',
                           textAlign: TextAlign.center,
@@ -3437,7 +3448,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Estadual/Distrital',
                           textAlign: TextAlign.center,
@@ -3503,7 +3514,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Federal',
                           textAlign: TextAlign.center,
@@ -3569,7 +3580,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Internacional',
                           textAlign: TextAlign.center,
@@ -3656,7 +3667,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                      Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         Text(
                           'Categoria',
                           textAlign: TextAlign.center,
@@ -3674,7 +3685,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                           textAlign: TextAlign.center,
                         ),
                       ]),
-                      TableRow(children: [
+                      TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Municipal',
                           textAlign: TextAlign.center,
@@ -3740,7 +3751,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Estadual/Distrital',
                           textAlign: TextAlign.center,
@@ -3806,7 +3817,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Federal',
                           textAlign: TextAlign.center,
@@ -3872,7 +3883,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Internacional',
                           textAlign: TextAlign.center,

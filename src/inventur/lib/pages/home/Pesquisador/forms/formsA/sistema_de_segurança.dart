@@ -37,17 +37,15 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
       'Email03': null,
       'Email04': null,
     },
-     'Tabela02': <String, dynamic>{
+    'Tabela02': <String, dynamic>{
       'Email01': null,
       'Email02': null,
       'Email03': null,
       'Email04': null,
-
       'Serviços01': null,
       'Serviços02': null,
       'Serviços03': null,
       'Serviços04': null,
-
       'OutrasInfo01': null,
       'OutrasInfo02': null,
       'OutrasInfo03': null,
@@ -61,8 +59,6 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
     'Coordenador': null,
     'TelefoneCoordenador': null,
     'E-mailCoordenador': null,
-
-
   };
   @override
   Widget build(BuildContext context) {
@@ -78,418 +74,497 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
         body: SingleChildScrollView(
             child: Form(
                 key: _formKey,
-                child: Column(children: [
-                  Padding(
+                child: Column(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(
+                            top: sizeScreen.height * 0.05,
+                            left: sizeScreen.width * 0.05),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                                width: sizeScreen.width * 0.3,
+                                height: sizeScreen.height * 0.045,
+                                child: TextFormField(
+                                  validator: (value) {
+                                    return null;
+                                  },
+                                  onSaved: (newValue) {
+                                    valoresjson['uf'] = newValue;
+                                  },
+                                  decoration: const InputDecoration(
+                                    hintText: 'UF',
+                                  ),
+                                )),
+                            SizedBox(
+                              width: sizeScreen.width * 0.09,
+                            ),
+                            SizedBox(
+                                width: sizeScreen.width * 0.5,
+                                height: sizeScreen.height * 0.045,
+                                child: TextFormField(
+                                  validator: (value) {
+                                    return null;
+                                  },
+                                  onSaved: (newValue) {
+                                    valoresjson['RG'] = newValue;
+                                  },
+                                  decoration: const InputDecoration(
+                                      hintText: 'Região Turística'),
+                                ))
+                          ],
+                        )),
+                    Padding(
                       padding: EdgeInsets.only(
-                          top: sizeScreen.height * 0.05,
-                          left: sizeScreen.width * 0.05),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                              width: sizeScreen.width * 0.3,
-                              height: sizeScreen.height * 0.045,
-                              child: TextFormField(
-                                validator: (value) {
-                                  return null;
-                                },
-                                onSaved: (newValue) {
-                                  valoresjson['uf'] = newValue;
-                                },
-                                decoration: const InputDecoration(
-                                  hintText: 'UF',
-                                ),
-                              )),
-                          SizedBox(
-                            width: sizeScreen.width * 0.09,
-                          ),
-                          SizedBox(
-                              width: sizeScreen.width * 0.5,
-                              height: sizeScreen.height * 0.045,
-                              child: TextFormField(
-                                validator: (value) {
-                                  return null;
-                                },
-                                onSaved: (newValue) {
-                                  valoresjson['RG'] = newValue;
-                                },
-                                decoration: const InputDecoration(
-                                    hintText: 'Região Turística'),
-                              ))
-                        ],
-                      )),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: sizeScreen.width * 0.05,
-                        right: sizeScreen.width * 0.1,
-                        top: sizeScreen.height * 0.01),
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        isDense: true,
-                        hintText: 'Municipio',
+                          left: sizeScreen.width * 0.05,
+                          right: sizeScreen.width * 0.1,
+                          top: sizeScreen.height * 0.01),
+                      child: TextFormField(
+                        decoration: const InputDecoration(
+                          isDense: true,
+                          hintText: 'Municipio',
+                        ),
+                        onSaved: (newValue) {
+                          valoresjson['Municipio'] = newValue;
+                        },
                       ),
-                      onSaved: (newValue) {
-                        valoresjson['Municipio'] = newValue;
+                    ),
+                    SizedBox(
+                      height: sizeScreen.height * 0.05,
+                    ),
+                    const textLabel(name: 'Tipo:'),
+                    RadioC(
+                      options: const [
+                        'Polícia Civil',
+                        'Polícia Militar',
+                        'Polícia Rodoviária',
+                        'Corpo de Bombeiros',
+                        'Serviços de busca e salvamento',
+                        'Serviços de Polícia',
+                        'Marítima/Aérea/de Fronteiras',
+                        'Guarda Municipal',
+                        'Defesa Civil',
+                        'outro'
+                      ],
+                      getValue: (newValue) {
+                        valoresjson['Tipos'] = newValue;
+                      },
+                      number: 10,
+                    ),
+                    SizedBox(
+                      height: sizeScreen.height * 0.03,
+                    ),
+                    Container(
+                      color: const Color.fromARGB(255, 55, 111, 60),
+                      height: sizeScreen.height * 0.06,
+                      width: sizeScreen.width,
+                      padding: EdgeInsets.only(
+                          top: sizeScreen.height * 0.008,
+                          left: sizeScreen.width * 0.04),
+                      child: Text(
+                        'Informações Gerais',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: sizeScreen.height * 0.03),
+                      ),
+                    ),
+                    SizedBox(
+                      height: sizeScreen.height * 0.05,
+                    ),
+                    Table(
+                      border: TableBorder.all(),
+                      children: [
+                        TableRow(
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 55, 111, 60),
+                              
+                            ),
+                            children: [
+                              Text(
+                                'Nome',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                'Endereço',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                'Telefones',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                'E-Mail',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ]),
+                        TableRow(
+                            decoration: BoxDecoration(color: Colors.white),
+                            children: [
+                              TextFormField(
+                                onSaved: (newValue) {
+                                  valoresjson['Tabela01']['Nome01'] = newValue;
+                                },
+                              ),
+                              TextFormField(
+                                onSaved: (newValue) {
+                                  valoresjson['Tabela01']['Endereço01'] =
+                                      newValue;
+                                },
+                              ),
+                              TextFormField(
+                                onSaved: (newValue) {
+                                  valoresjson['Tabela01']['Telefones01'] =
+                                      newValue;
+                                },
+                              ),
+                              TextFormField(
+                                onSaved: (newValue) {
+                                  valoresjson['Tabela01']['Email01'] = newValue;
+                                },
+                              ),
+                            ]),
+                        TableRow(children: [
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Nome02'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Endereço02'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Telefones02'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Email02'] = newValue;
+                            },
+                          ),
+                        ]),
+                        TableRow(children: [
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Nome03'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Endereço03'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Telefones03'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Email03'] = newValue;
+                            },
+                          ),
+                        ]),
+                        TableRow(children: [
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Nome04'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Endereço04'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Telefones04'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela01']['Email04'] = newValue;
+                            },
+                          ),
+                        ]),
+                      ],
+                    ),
+                    SizedBox(
+                      height: sizeScreen.height * 0.05,
+                    ),
+                    Table(
+                      border: TableBorder.all(),
+                      children: [
+                        TableRow(
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 55, 111, 60),
+                            ),
+                            children: [
+                              Text(
+                                'E-mail',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                'Serviços especializados',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                              Text(
+                                'Outras informações',
+                                style: TextStyle(color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            ]),
+                        TableRow(
+                            decoration: BoxDecoration(color: Colors.white),
+                            children: [
+                              TextFormField(
+                                onSaved: (newValue) {
+                                  valoresjson['Tabela02']['Email01'] = newValue;
+                                },
+                              ),
+                              TextFormField(
+                                onSaved: (newValue) {
+                                  valoresjson['Tabela02']['Serviços01'] =
+                                      newValue;
+                                },
+                              ),
+                              TextFormField(
+                                onSaved: (newValue) {
+                                  valoresjson['Tabela02']['OutrasInfo01'] =
+                                      newValue;
+                                },
+                              ),
+                            ]),
+                        TableRow(children: [
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela02']['Email02'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela02']['Serviços02'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela02']['OutrasInfo02'] =
+                                  newValue;
+                            },
+                          ),
+                        ]),
+                        TableRow(children: [
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela02']['Email03'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela02']['Serviços03'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela02']['OutrasInfo03'] =
+                                  newValue;
+                            },
+                          ),
+                        ]),
+                        TableRow(children: [
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela02']['Email04'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela02']['Serviços04'] = newValue;
+                            },
+                          ),
+                          TextFormField(
+                            onSaved: (newValue) {
+                              valoresjson['Tabela02']['OutrasInfo04'] =
+                                  newValue;
+                            },
+                          ),
+                        ]),
+                      ],
+                    ),
+                    SizedBox(
+                      height: sizeScreen.height * 0.05,
+                    ),
+                    Container(
+                      color: const Color.fromARGB(255, 55, 111, 60),
+                      height: sizeScreen.height * 0.06,
+                      width: sizeScreen.width,
+                      padding: EdgeInsets.only(
+                          top: sizeScreen.height * 0.008,
+                          left: sizeScreen.width * 0.04),
+                      child: Text(
+                        'Observações',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: sizeScreen.height * 0.03),
+                      ),
+                    ),
+                    CustomTextField(
+                      validat: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      name: '',
+                      getValue: (newValue) {
+                        valoresjson['Observações'] = newValue;
                       },
                     ),
-                  ),
-                  SizedBox(
-                    height: sizeScreen.height * 0.05,
-                  ),
-                  const textLabel(name: 'Tipo:'),
-                  RadioC(
-                    options: const [
-                      'Polícia Civil',
-                      'Polícia Militar',
-                      'Polícia Rodoviária',
-                      'Corpo de Bombeiros',
-                      'Serviços de busca e salvamento',
-                      'Serviços de Polícia',
-                      'Marítima/Aérea/de Fronteiras',
-                      'Guarda Municipal',
-                      'Defesa Civil',
-                      'outro'
-                    ],
-                    getValue: (newValue) {
-                      valoresjson['Tipos'] = newValue;
-                    },
-                    number: 10,
-                  ),
-                  SizedBox(
-                    height: sizeScreen.height * 0.03,
-                  ),
-                  Container(
-                    color: const Color.fromARGB(255, 55, 111, 60),
-                    height: sizeScreen.height * 0.06,
-                    width: sizeScreen.width,
-                    padding: EdgeInsets.only(
-                        top: sizeScreen.height * 0.008,
-                        left: sizeScreen.width * 0.04),
-                    child: Text(
-                      'Informações Gerais',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: sizeScreen.height * 0.03),
+                    SizedBox(
+                      height: sizeScreen.height * 0.05,
                     ),
-                  ),
-                  SizedBox(
-                    height: sizeScreen.height * 0.05,
-                  ),
-                  Table(
-                    border: TableBorder.all(),
-                    children: [
-                      TableRow(children: [
-                        Text('Nome'),
-                        Text('Endereço'),
-                        Text('Telefones'),
-                        Text('E-Mail'),
-                      ]),
-                      TableRow(children: [
-                        TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Nome01'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Endereço01'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Telefones01'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Email01'] = newValue;
-                          },
-                        ),
-                      ]),
-                      TableRow(children: [
-
-                              TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Nome02'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Endereço02'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Telefones02'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Email02'] = newValue;
-                          },
-                        ),
-
-
-
-                      ]),
-                      TableRow(children: [
-
-                              TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Nome03'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Endereço03'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Telefones03'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Email03'] = newValue;
-                          },
-                        ),
-
-
-
-                      ]),
-                      TableRow(children: [
-
-                              TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Nome04'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Endereço04'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Telefones04'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela01']['Email04'] = newValue;
-                          },
-                        ),
-
-
-
-                      ]),
-                    ],
-                  ),
-                  SizedBox(height: sizeScreen.height * 0.05,),
-                        Table(
-                    border: TableBorder.all(),
-                    children: [
-                      TableRow(children: [
-                        Text('E-mail'),
-                        Text('Serviços especializados'),
-                        Text('Outras informações'),
-    
-                      ]),
-                      TableRow(children: [
-                        TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['Email01'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['Serviços01'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['OutrasInfo01'] = newValue;
-                          },
-                        ),
-                      
-                      ]),
-                      TableRow(children: [
-
-                              TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['Email02'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['Serviços02'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['OutrasInfo02'] = newValue;
-                          },
-                        ), 
-
-
-
-                      ]),
-                      TableRow(children: [
-
-                              TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['Email03'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['Serviços03'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['OutrasInfo03'] = newValue;
-                          },
-                        ),  
-
-
-
-                      ]),
-                     TableRow(children: [
-
-                              TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['Email04'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['Serviços04'] = newValue;
-                          },
-                        ),  TextFormField(
-                          onSaved: (newValue) {
-                            valoresjson['Tabela02']['OutrasInfo04'] = newValue;
-                          },
-                        ),  
-
-
-
-                      ]),
-                    ],
-                  ),
-                  SizedBox(height: sizeScreen.height * 0.05,)
-,                       Container(
-                color: const Color.fromARGB(255, 55, 111, 60),
-                height: sizeScreen.height * 0.06,
-                width: sizeScreen.width,
-                padding: EdgeInsets.only(
-                    top: sizeScreen.height * 0.008,
-                    left: sizeScreen.width * 0.04),
-                child: Text(
-                  'Observações',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: sizeScreen.height * 0.03),
-                ),
-              ),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['Observações'] = newValue;  },),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-               Container(
-                color: const Color.fromARGB(255, 55, 111, 60),
-                height: sizeScreen.height * 0.06,
-                width: sizeScreen.width,
-                padding: EdgeInsets.only(
-                    top: sizeScreen.height * 0.008,
-                    left: sizeScreen.width * 0.04),
-                child: Text(
-                  'Referências',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: sizeScreen.height * 0.03),
-                ),
-              ),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {  valoresjson['Referências'] = newValue;},),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-               Container(
-                color: const Color.fromARGB(255, 55, 111, 60),
-                height: sizeScreen.height * 0.06,
-                width: sizeScreen.width,
-                padding: EdgeInsets.only(
-                    top: sizeScreen.height * 0.008,
-                    left: sizeScreen.width * 0.04),
-                child: Text(
-                  'Equipe Responsável',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: sizeScreen.height * 0.03),
-                ),
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-              const textLabel(
-                  name: 'Responsável pelo atendimento (Pesquisador)'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['Pesquisador'] = newValue;  },),
-              const textLabel(name: 'Telefone'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['TelefonePesquisador'] = newValue;  },),
-              const textLabel(name: 'E-mail'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['E-mailPesquisador'] = valoresjson; },),
-              const textLabel(
-                  name: 'Responsável pelo atendimento (Coordenador)'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['Coordenador'] = newValue;  },),
-              const textLabel(name: 'Telefone'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['TelefoneCoordenador'] = newValue;  },),
-              const textLabel(name: 'E-mail'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['E-mailCoordenador'] = newValue;  },),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-                SendButton(),
-                SizedBox(height: 15,),
-          ],
+                    Container(
+                      color: const Color.fromARGB(255, 55, 111, 60),
+                      height: sizeScreen.height * 0.06,
+                      width: sizeScreen.width,
+                      padding: EdgeInsets.only(
+                          top: sizeScreen.height * 0.008,
+                          left: sizeScreen.width * 0.04),
+                      child: Text(
+                        'Referências',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: sizeScreen.height * 0.03),
+                      ),
+                    ),
+                    CustomTextField(
+                      validat: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      name: '',
+                      getValue: (newValue) {
+                        valoresjson['Referências'] = newValue;
+                      },
+                    ),
+                    SizedBox(
+                      height: sizeScreen.height * 0.05,
+                    ),
+                    Container(
+                      color: const Color.fromARGB(255, 55, 111, 60),
+                      height: sizeScreen.height * 0.06,
+                      width: sizeScreen.width,
+                      padding: EdgeInsets.only(
+                          top: sizeScreen.height * 0.008,
+                          left: sizeScreen.width * 0.04),
+                      child: Text(
+                        'Equipe Responsável',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: sizeScreen.height * 0.03),
+                      ),
+                    ),
+                    SizedBox(
+                      height: sizeScreen.height * 0.05,
+                    ),
+                    const textLabel(
+                        name: 'Responsável pelo atendimento (Pesquisador)'),
+                    CustomTextField(
+                      validat: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      name: '',
+                      getValue: (newValue) {
+                        valoresjson['Pesquisador'] = newValue;
+                      },
+                    ),
+                    const textLabel(name: 'Telefone'),
+                    CustomTextField(
+                      validat: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      name: '',
+                      getValue: (newValue) {
+                        valoresjson['TelefonePesquisador'] = newValue;
+                      },
+                    ),
+                    const textLabel(name: 'E-mail'),
+                    CustomTextField(
+                      validat: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      name: '',
+                      getValue: (newValue) {
+                        valoresjson['E-mailPesquisador'] = valoresjson;
+                      },
+                    ),
+                    const textLabel(
+                        name: 'Responsável pelo atendimento (Coordenador)'),
+                    CustomTextField(
+                      validat: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      name: '',
+                      getValue: (newValue) {
+                        valoresjson['Coordenador'] = newValue;
+                      },
+                    ),
+                    const textLabel(name: 'Telefone'),
+                    CustomTextField(
+                      validat: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      name: '',
+                      getValue: (newValue) {
+                        valoresjson['TelefoneCoordenador'] = newValue;
+                      },
+                    ),
+                    const textLabel(name: 'E-mail'),
+                    CustomTextField(
+                      validat: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      name: '',
+                      getValue: (newValue) {
+                        valoresjson['E-mailCoordenador'] = newValue;
+                      },
+                    ),
+                    SizedBox(
+                      height: sizeScreen.height * 0.05,
+                    ),
+                    SendButton(),
+                    SizedBox(
+                      height: 15,
+                    ),
+                  ],
                 ))));
   }
 }

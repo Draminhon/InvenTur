@@ -208,8 +208,8 @@ class _RodoviaState extends State<Rodovia> {
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),
-            RadioD(
-                options: const [
+            CheckC(
+                nomes: const [
                   'Associação',
                   'Sindicato',
                   'Cooperativa',
@@ -217,9 +217,7 @@ class _RodoviaState extends State<Rodovia> {
                   'Empresa',
                   'outro'
                 ],
-                getValue: (newValue) {
-                  valoresjson['TipoDeOrganização'] = newValue;
-                }),
+                ),
             SizedBox(
               height: sizeScreen.height * 0.03,
             ),

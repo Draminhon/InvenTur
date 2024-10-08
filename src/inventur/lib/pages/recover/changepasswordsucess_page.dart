@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:inventur/validators/password_validator.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 
 class ConfirmacaoNovaSenha extends StatelessWidget {
 
@@ -10,14 +9,13 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.of(context).size;
     return Scaffold(
-        body: SingleChildScrollView(
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        body: 
+                Column(children: [
       Padding(
           padding: const EdgeInsets.only(top: 150, left: 45, right: 45, bottom: 145),
           child: Center(
           child: Container(
-              padding: const EdgeInsets.all(35),
+             
               height: sizeScreen.height * 0.23,
               width: sizeScreen.width * 0.7,
               decoration: BoxDecoration(
@@ -25,6 +23,8 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
                   borderRadius: BorderRadius.circular(15)),
               
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Image.asset(
                     'assets/images/check1.png',
@@ -32,12 +32,12 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
                     width: sizeScreen.width,
                   ),
                   const Padding(
-                    padding: EdgeInsets.only(top: 20),
+                    padding: EdgeInsets.all(15),
                     child: Text(
                       'Sua senha foi alterada com sucesso',
                       overflow: TextOverflow.visible,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15),
+                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                     ),
                   )
                 ],
@@ -58,6 +58,6 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
                     fontSize: 20,
                     fontWeight: FontWeight.w300),
               )))
-    ])));
+    ]));
   }
 }

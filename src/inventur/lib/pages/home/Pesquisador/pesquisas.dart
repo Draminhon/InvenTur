@@ -39,7 +39,7 @@ class _A extends State<A> {
         body: PageView(
           controller: pc,
           onPageChanged: setPaginaAtual,
-          children: [FormularioA(), FormularioB(), FormularioC()],
+          children: [FormularioA(), FormularioB(), const FormularioC()],
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: paginaAtual,
@@ -74,7 +74,7 @@ class Pesquisas extends StatelessWidget {
       appBar: AppBar(
         actions: [
           Container(
-              padding: EdgeInsets.only(right: sizeScreen.width * 0.15),
+              padding: EdgeInsets.only(right: sizeScreen.width * 0.17),
               child: TextButton.icon(
                 onPressed: () => Navigator.pushNamed(context, '/A'),
                 icon: const Icon(FontAwesomeIcons.plus),
@@ -92,10 +92,13 @@ class Pesquisas extends StatelessWidget {
               padding: EdgeInsets.symmetric(vertical: sizeScreen.height * 0.01),
               child: Column(
                 children: [
-                  Text('LOCAIS CADASTRADOS',
-                      style: TextStyle(
-                          color: const Color.fromARGB(255, 55, 111, 60),
-                          fontSize: sizeScreen.width * 0.06)),
+                  Text(
+                    'LOCAIS CADASTRADOS',
+                    style: TextStyle(
+                        color: const Color.fromARGB(255, 55, 111, 60),
+                        fontSize: sizeScreen.width * 0.06,
+                        fontWeight: FontWeight.w500),
+                  ),
                   Divider(
                     color: const Color.fromARGB(255, 55, 111, 60),
                     indent: sizeScreen.width * 0.1,
@@ -105,15 +108,13 @@ class Pesquisas extends StatelessWidget {
               )),
           Center(
             child: Padding(
-              padding: EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(15.0),
               child: Table(
-                columnWidths: {
-                  1: FlexColumnWidth(sizeScreen.width * 0.001)
-                },
+                columnWidths: {1: FlexColumnWidth(sizeScreen.width * 0.001)},
                 border: TableBorder.all(),
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                children:  [
-                  const TableRow(
+                children: const [
+                  TableRow(
                       decoration: BoxDecoration(
                           color: Color.fromARGB(255, 55, 111, 50)),
                       children: [
@@ -135,14 +136,13 @@ class Pesquisas extends StatelessWidget {
                             child: Text(
                               'CATEGORIA',
                               style: TextStyle(color: Colors.white),
-                                   textAlign: TextAlign.center,
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         )
                       ]),
-                      TableRow(
-                      decoration: BoxDecoration(
-                          color: Colors.grey[300]),
+                  TableRow(
+                      decoration: BoxDecoration(color: Colors.white),
                       children: [
                         TableCell(
                             verticalAlignment:
@@ -150,8 +150,8 @@ class Pesquisas extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                '',
-                                style: TextStyle(color: Colors.white),
+                                'Castelo de Pedra',
+                                style: TextStyle(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
                             )),
@@ -160,16 +160,15 @@ class Pesquisas extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
-                              '',
-                              style: TextStyle(color: Colors.white),
-                                   textAlign: TextAlign.center,
+                              'C',
+                              style: TextStyle(color: Colors.black),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         )
                       ]),
-                       TableRow(
-                      decoration: BoxDecoration(
-                          color: Colors.grey[300]),
+                  TableRow(
+                      decoration: BoxDecoration(color: Colors.white),
                       children: [
                         TableCell(
                             verticalAlignment:
@@ -177,8 +176,8 @@ class Pesquisas extends StatelessWidget {
                             child: Padding(
                               padding: EdgeInsets.all(8.0),
                               child: Text(
-                                '',
-                                style: TextStyle(color: Colors.white),
+                                'Pedra do Machado',
+                                style: TextStyle(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
                             )),
@@ -187,9 +186,61 @@ class Pesquisas extends StatelessWidget {
                           child: Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
-                              '',
-                              style: TextStyle(color: Colors.white),
-                                   textAlign: TextAlign.center,
+                              'C',
+                              style: TextStyle(color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      ]),
+                  TableRow(
+                      decoration: BoxDecoration(color: Colors.white),
+                      children: [
+                        TableCell(
+                            verticalAlignment:
+                                TableCellVerticalAlignment.middle,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'Casa dos Licores',
+                                style: TextStyle(color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                            )),
+                        TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'B',
+                              style: TextStyle(color: Colors.black),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        )
+                      ]),
+                  TableRow(
+                      decoration: BoxDecoration(color: Colors.white),
+                      children: [
+                        TableCell(
+                            verticalAlignment:
+                                TableCellVerticalAlignment.middle,
+                            child: Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: Text(
+                                'Cachoeira do Itarumã',
+                                style: TextStyle(color: Colors.black),
+                                textAlign: TextAlign.center,
+                              ),
+                            )),
+                        TableCell(
+                          verticalAlignment: TableCellVerticalAlignment.middle,
+                          child: Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              'C',
+                              style: TextStyle(color: Colors.black),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         )
@@ -197,6 +248,11 @@ class Pesquisas extends StatelessWidget {
                 ],
               ),
             ),
+          ),
+          Divider(
+            color: Colors.grey,
+             indent: sizeScreen.width * 0.1,
+                    endIndent: sizeScreen.width * 0.1,
           )
         ],
       ),

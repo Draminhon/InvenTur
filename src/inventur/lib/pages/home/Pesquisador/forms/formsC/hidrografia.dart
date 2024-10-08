@@ -147,9 +147,7 @@ class _HidrografiaState extends State<Hidrografia> {
                           fontSize: sizeScreen.height * 0.03),
                     ),
                   ),
-                  SizedBox(
-                    height: sizeScreen.height * 0.05,
-                  ),
+                 
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -181,7 +179,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     padding: EdgeInsets.only(
                         right: sizeScreen.width * 0.05,
                         bottom: sizeScreen.height * 0.02),
-                    child: const textLabel(name: 'natureza'),
+                    child: const textLabel(name: 'Natureza:'),
                   ),
                   Column(
                     children: [
@@ -194,7 +192,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     ],
                   ),
                   const textLabel(
-                    name: 'tipo de organização/instituição',
+                    name: 'Tipo de organização/instituição:',
                   ),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
@@ -208,7 +206,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     'outro'
                   ]),
 
-                  const textLabel(name: 'localização:'),
+                  const textLabel(name: 'Localização:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -218,16 +216,14 @@ class _HidrografiaState extends State<Hidrografia> {
                       valoresjson['Localização'] = newValue;
                     },
                   ),
-                  const textLabel(name: 'Coordenadas Geográficas'),
+                  const textLabel(name: 'Coordenadas Geográficas:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   Column(children: [
                     Row(
                       children: [
-                        SizedBox(
-                          width: sizeScreen.width * 0.05,
-                        ),
+                        
                         const textLabel(name: 'Latitude'),
                         SizedBox(
                           width: sizeScreen.width * 0.032,
@@ -254,9 +250,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          width: sizeScreen.width * 0.053,
-                        ),
+                        
                         const textLabel(name: 'Longitude'),
                         SizedBox(
                             width: sizeScreen.width * 0.6,
@@ -279,7 +273,7 @@ class _HidrografiaState extends State<Hidrografia> {
                       height: sizeScreen.height * 0.02,
                     ),
                   ]),
-                  const textLabel(name: 'endereço:'),
+                  const textLabel(name: 'Endereço:'),
                   CustomTextField(
                     validat: (value) {
                       if (value == null || value.isEmpty) {
@@ -322,14 +316,12 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'sinalização:'),
+                  const textLabel(name: 'Sinalização:'),
                   SizedBox(
                     height: sizeScreen.height * 0.04,
                   ),
                   Row(children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
+                   
                     const textLabel(name: 'de acessso -'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
@@ -347,9 +339,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     height: sizeScreen.height * 0.02,
                   ),
                   Row(children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
+                    
                     const textLabel(name: 'turística -'),
                     SizedBox(
                       width: sizeScreen.width * 0.14,
@@ -363,7 +353,7 @@ class _HidrografiaState extends State<Hidrografia> {
                       },
                     ))
                   ]),
-                  const textLabel(name: 'proximidades:'),
+                  const textLabel(name: 'Proximidades:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -388,9 +378,7 @@ class _HidrografiaState extends State<Hidrografia> {
 
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(name: 'Aeroporto:'),
                       SizedBox(
                         width: sizeScreen.width * 0.06,
@@ -414,9 +402,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(name: 'Estação\nferroviária:'),
                       SizedBox(
                         width: sizeScreen.width * 0.06,
@@ -441,9 +427,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(name: 'Estação\nmarítima\n/fluvial:'),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
@@ -468,9 +452,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                     
                       const textLabel(name: 'Estação\nmetroviária:'),
                       SizedBox(
                         width: sizeScreen.width * 0.045,
@@ -495,9 +477,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(name: 'Ponto\nde ônibus'),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
@@ -521,9 +501,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(name: 'Ponto\n de taxi'),
                       SizedBox(
                         width: sizeScreen.width * 0.14,
@@ -547,9 +525,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(name: 'Estação\nrodoviária'),
                       SizedBox(
                         width: sizeScreen.width * 0.09,
@@ -574,9 +550,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(name: 'Sede\ndo município'),
                       SizedBox(
                         width: sizeScreen.width * 0.06,
@@ -602,9 +576,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(name: 'Localidade\nmais próxima'),
                       SizedBox(
                         width: sizeScreen.width * 0.06,
@@ -630,9 +602,7 @@ class _HidrografiaState extends State<Hidrografia> {
                  
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(name: 'Outras:'),
                       SizedBox(
                         width: sizeScreen.width * 0.15,
@@ -654,7 +624,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'pontos de referência:'),
+                  const textLabel(name: 'Pontos de referência:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -673,11 +643,11 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Entidade Mantedora'),
+                  const textLabel(name: 'Entidade Mantedora:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  textLabel(name: 'Esfera administrativa'),
+                  textLabel(name: 'Esfera administrativa:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -687,10 +657,9 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
-                      const textLabel(name: 'Endereço eletrônico\n(e-mail)'),
+                      
+                      const textLabel(name: 'E-mail'),
+                       SizedBox(width: sizeScreen.width * 0.045,),
                       SizedBox(
                           width: sizeScreen.width * 0.5,
                           //height: sizeScreen.height * 0.07,
@@ -712,13 +681,11 @@ class _HidrografiaState extends State<Hidrografia> {
 
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.05,
-                      ),
+                      
                       const textLabel(
-                          name: '  Sítio eletrônico\n(site/página web)'),
+                          name: 'Site'),
                       SizedBox(
-                        width: sizeScreen.width * 0.045,
+                        width: sizeScreen.width * 0.11,
                       ),
                       SizedBox(
                           width: sizeScreen.width * 0.5,
@@ -754,11 +721,11 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Estrutura de funcionamento'),
+                  const textLabel(name: 'Estrutura de funcionamento:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Visitação'),
+                  const textLabel(name: 'Visitação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -768,7 +735,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Finalidade da visitação'),
+                  const textLabel(name: 'Finalidade da visitação:'),
                   const CheckC(nomes: [
                    'Passeio',
                    'Aventura',
@@ -780,7 +747,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Agendada'),
+                  const textLabel(name: 'Agendada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -792,7 +759,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Autoguiada'),
+                  const textLabel(name: 'Autoguiada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -804,7 +771,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Guiada'),
+                  const textLabel(name: 'Guiada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -816,105 +783,167 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Entrada'),
+                  const textLabel(name: 'Entrada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Gratuita'),
+                  Row(children: [
+                    
+                    const textLabel(name: 'Gratuita:'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
+                  SizedBox(
+                    height: sizeScreen.height * 0.05,
+                  ),
+                  Row(children: [
+                    
+                    const textLabel(name: 'Paga:'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  ExpansionTileYoN(getValue: (newValue) {
-                    valoresjson['gratuita'] = newValue;
-                  }),
+                  const textLabel(name: 'Instalações de entrada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Paga'),
+                  Row(children: [
+                    
+                    const textLabel(name: 'Centro de recepção:'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
+                  SizedBox(
+                    height: sizeScreen.height * 0.05,
+                  ),
+                  Row(children: [
+                    
+                    const textLabel(name: 'Posto de informação:'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
+                  SizedBox(
+                    height: sizeScreen.height * 0.05,
+                  ),
+                 Row(children: [
+                    
+                    const textLabel(name: 'Portaria principal:'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
+                  SizedBox(height: sizeScreen.height * 0.05,),
+                  Row(children: [
+                    
+                    const textLabel(name: 'Guarita:'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
+                  SizedBox(
+                    height: sizeScreen.height * 0.05,
+                  ),
+                  Row(children: [
+                    
+                    const textLabel(name: 'Bilheteria:'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
+                  SizedBox(
+                    height: sizeScreen.height * 0.05,
+                  ),
+                 Row(children: [
+                    
+                    const textLabel(name: 'Outras:'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  ExpansionTileYoN(getValue: (newValue) {
-                    valoresjson['Paga'] = newValue;
-                  }),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  const textLabel(name: 'Instalações de entrada'),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  const textLabel(name: 'Centro de recepção'),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  ExpansionTileYoN(getValue: (newValue) {
-                    valoresjson['CentroDeRecepção'] = newValue;
-                  }),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  const textLabel(name: 'Posto de informação'),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  ExpansionTileYoN(getValue: (newValue) {
-                    valoresjson['PostoDeInformação'] = newValue;
-                  }),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  const textLabel(name: 'Portaria principal'),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  ExpansionTileYoN(getValue: (newValue) {
-                    valoresjson['PortariaPrincipal'] = newValue;
-                  }),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  const textLabel(name: 'Guarita'),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  ExpansionTileYoN(getValue: (newValue) {
-                    valoresjson['Guarita'] = newValue;
-                  }),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  const textLabel(name: 'Bilheteria'),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  ExpansionTileYoN(getValue: (newValue) {
-                    valoresjson['Bilheteria'] = newValue;
-                  }),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  const textLabel(name: 'Outras'),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  ExpansionTileYoN(getValue: (newValue) {
-                    valoresjson['Outras'] = newValue;
-                  }),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  const textLabel(name: 'ATENDIMENTO AO PÚBLICO'),
+                  const textLabel(name: 'Atendimento ao público:'),
                   SizedBox(
                     height: sizeScreen.height * 0.04,
                   ),
 
-                  const textLabel(name: 'Atendimento em língua estrangeira'),
+                  const textLabel(name: 'Atendimento em língua estrangeira:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   const CheckC(nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
-                  const textLabel(name: 'Informativos impressos'),
+                  const textLabel(name: 'Informativos impressos:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -948,7 +977,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Período'),
+                  const textLabel(name: 'Período:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -973,125 +1002,8 @@ class _HidrografiaState extends State<Hidrografia> {
                       valoresjson['Periodo'] = newValue;
                     },
                   ),
-                  const textLabel(name: 'Horário'),
-                  Table(
-                    defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                    border: TableBorder.all(),
-                    children: [
-                      const TableRow(children: [
-                        Text('2º FEIRA'),
-                        Text('3º FEIRA'),
-                        Text('4º FEIRA'),
-                        Text('5º FEIRA'),
-                        Text('6º FEIRA'),
-                        Text('SABADO'),
-                        Text('DOMINGO'),
-                      ]),
-                      TableRow(children: [
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Segunda-Feira_abertura'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Terça-Feira_abertura'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Quarta-Feira_abertura'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Quinta-Feira_abertura'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Sexta-Feira_abertura'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Sabado_abertura'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Domingo_abertura'] = newValue;
-                          },
-                        )
-                      ]),
-                      TableRow(children: [
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Segunda-Feira_encerramento'] =
-                                newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Terça-Feira_encerramento'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Quarta-Feira_encerramento'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Quinta-Feira_encerramento'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Sexta-Feira_encerramento'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Sabado_encerramento'] = newValue;
-                          },
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              labelText: '', border: InputBorder.none),
-                          onSaved: (newValue) {
-                            valoresjson['Domingo_encerramento'] = newValue;
-                          },
-                        )
-                      ]),
-                    ],
-                  ),
+                  const textLabel(name: 'Horário:'),
+                  TabelaT2(getValues: (newValue){},),
                   SizedBox(
                     height: sizeScreen.height * 0.01,
                   ),
@@ -1099,32 +1011,45 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Funcionamento 24 horas'),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  ExpansionTileYoN(
-                    getValue: (newValue) {
-                      valoresjson['Funcionamento24H'] = newValue;
-                    },
-                  ),
-                  const textLabel(name: 'Funcionamento em feriados'),
-                  SizedBox(
-                    height: sizeScreen.height * 0.03,
-                  ),
-                  ExpansionTileYoN(
-                    getValue: (newValue) {
-                      valoresjson['FuncionamentoEmFeriados'] = newValue;
-                    },
-                  ),
-                  const textLabel(name: 'Restrições'),
+                  Row(children: [
+                    
+                    const textLabel(name: 'Funcionamento\n24 horas'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
+                  SizedBox(height: sizeScreen.height * 0.05,),
+                   Row(children: [
+                    
+                    const textLabel(name: 'Funcionamento\nem feriados'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
+                  const textLabel(name: 'Restrições:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   const CheckC(
                     nomes: ['Crianças', 'Fumantes', 'Animais', 'outro'],
                   ),
-                  const textLabel(name: 'Outras regras e informações'),
+                  const textLabel(name: 'Outras regras e informações:'),
 
                   CustomTextField(
                     validat: (value) {
@@ -1141,15 +1066,15 @@ class _HidrografiaState extends State<Hidrografia> {
                       SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'CARACTERIZAÇÃO DO FLUXO TURÍSTICO'),
+                  const textLabel(name: 'Caracterização do fluxo turístico:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Dados da visitação'),
+                  const textLabel(name: 'Dados da visitação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Total anual de visitantes (nº)'),
+                  const textLabel(name: 'Total anual de visitantes (nº):'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -1163,7 +1088,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     height: sizeScreen.height * 0.03,
                   ),
                   const textLabel(
-                      name: 'Total de visitantes alta temporada(nº)'),
+                      name: 'Total de visitantes alta temporada(nº):'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -1176,7 +1101,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Meses de alta temporada'),
+                  const textLabel(name: 'Meses de alta temporada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.01,
                   ),
@@ -1203,7 +1128,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Origem dos visitantes/turistas'),
+                  const textLabel(name: 'Origem dos visitantes/turistas:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -1230,7 +1155,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     height: sizeScreen.height * 0.03,
                   ),
                   const textLabel(
-                      name: 'Origem dos turistas internacionais (5 estados)'),
+                      name: 'Origem dos turistas internacionais (5 países)'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -1242,7 +1167,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Ano-base'),
+                  const textLabel(name: 'Ano-base:'),
 
                   CustomTextField(
                       name: 'Ano-base',
@@ -1253,7 +1178,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Principal público frequentador'),
+                  const textLabel(name: 'Principal público frequentador:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -1265,16 +1190,14 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Apoio à comercialização'),
+                  const textLabel(name: 'Apoio à comercialização:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
                   Row(children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
+                    
                     const textLabel(
-                        name: 'Integra roteiros turísticos\ncomercializados'),
+                        name: 'Integra roteiros turísticos\ncomercializados:'),
                     SizedBox(
                       width: sizeScreen.width * 0.04,
                     ),
@@ -1293,12 +1216,13 @@ class _HidrografiaState extends State<Hidrografia> {
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: const Color.fromARGB(255, 55, 111, 60),),children: [
                         Text(
-                          'Nome dos principais roteiros (até 5)',
+                          'Nome dos principais\nroteiros (até 5)',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
-                        Text('E-mail', textAlign: TextAlign.center)
+                        Text('E-mail', textAlign: TextAlign.center,style: TextStyle(color: Colors.white),)
                       ]),
                       TableRow(children: [
                         TextFormField(
@@ -1356,10 +1280,8 @@ class _HidrografiaState extends State<Hidrografia> {
                     height: sizeScreen.height * 0.03,
                   ),
                   Row(children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
-                    const textLabel(name: 'Integra guia turístico'),
+                  
+                    const textLabel(name: 'Integra guia turístico:'),
                     SizedBox(
                       width: sizeScreen.width * 0.04,
                     ),
@@ -1378,12 +1300,13 @@ class _HidrografiaState extends State<Hidrografia> {
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: const Color.fromARGB(255, 55, 111, 60),),children: [
                         Text(
                           'Nome dos principais guias impressos (até 5)',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
-                        Text('E-mail', textAlign: TextAlign.center)
+                        Text('E-mail', textAlign: TextAlign.center,     style: TextStyle(color: Colors.white),)
                       ]),
                       TableRow(children: [
                         TextFormField(
@@ -1462,13 +1385,13 @@ class _HidrografiaState extends State<Hidrografia> {
                         right: sizeScreen.width * 0.05,
                         top: sizeScreen.height * 0.02,
                         bottom: sizeScreen.height * 0.02),
-                    child: const textLabel(name: 'INSTALAÇÕES'),
+                    child: const textLabel(name: 'Instalações:'),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
                         top: sizeScreen.height * 0.03,
                         bottom: sizeScreen.height * 0.03),
-                    child: const textLabel(name: 'Estacionamento'),
+                    child: const textLabel(name: 'Estacionamento:'),
                   ),
                   const CheckC(
                       nomes: ['Pago', 'Gratuito', 'Coberto', 'Descoberto']),
@@ -1476,9 +1399,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   Column(children: [
                     Row(
                       children: [
-                        SizedBox(
-                          width: sizeScreen.width * 0.05,
-                        ),
+                        
                         const textLabel(name: 'Capacidade de\nveículos nº'),
                         SizedBox(
                           width: sizeScreen.width * 0.01,
@@ -1505,9 +1426,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          width: sizeScreen.width * 0.052,
-                        ),
+                        
                         const textLabel(name: 'Automóveis nº'),
                         SizedBox(
                           width: sizeScreen.width * 0.005,
@@ -1534,9 +1453,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     ),
                     Row(
                       children: [
-                        SizedBox(
-                          width: sizeScreen.width * 0.05,
-                        ),
+                        
                         const textLabel(name: 'Ônibus nº'),
                         SizedBox(
                           width: sizeScreen.width * 0.1,
@@ -1562,7 +1479,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Outras e instalações e equipamentos'),
+                  const textLabel(name: 'Outras e instalações e equipamentos:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -1584,12 +1501,12 @@ class _HidrografiaState extends State<Hidrografia> {
                     height: sizeScreen.height * 0.03,
                   ),
              
-                  const textLabel(name: 'ATIVIDADES'),
+                  const textLabel(name: 'Atividades:'),
 
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Atividades culturais'),
+                  const textLabel(name: 'Atividades culturais:'),
 
                   RadioD(
                       options: const [
@@ -1603,7 +1520,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Atividades pedagógicas'),
+                  const textLabel(name: 'Atividades pedagógicas:'),
 
                   RadioD(
                       options: const [
@@ -1617,7 +1534,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Boia-cross'),
+                  const textLabel(name: 'Boia-cross:'),
 
                   RadioD(
                       options: const [
@@ -1632,7 +1549,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Bungee-jump'),
+                  const textLabel(name: 'Bungee-jump:'),
 
                   RadioD(
                       options: const [
@@ -1646,7 +1563,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Canoagem'),
+                  const textLabel(name: 'Canoagem:'),
 
                   RadioD(
                       options: const [
@@ -1660,7 +1577,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Ginástica'),
+                  const textLabel(name: 'Ginástica:'),
 
                   RadioD(
                       options: const [
@@ -1674,7 +1591,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Kitesurf'),
+                  const textLabel(name: 'Kitesurf:'),
 
                   RadioD(
                       options: const [
@@ -1688,7 +1605,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Mergulho'),
+                  const textLabel(name: 'Mergulho:'),
 
                   RadioD(
                       options: const [
@@ -1702,7 +1619,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Observação'),
+                  const textLabel(name: 'Observação:'),
 
                   RadioD(
                       options: const [
@@ -1716,7 +1633,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Pesca'),
+                  const textLabel(name: 'Pesca:'),
 
                   RadioD(
                       options: const [
@@ -1730,7 +1647,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Rafting'),
+                  const textLabel(name: 'Rafting:'),
 
                   RadioD(
                       options: const [
@@ -1744,7 +1661,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Remo'),
+                  const textLabel(name: 'Remo:'),
 
                   RadioD(
                       options: const [
@@ -1758,7 +1675,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Vela'),
+                  const textLabel(name: 'Vela:'),
 
                   RadioD(
                       options: const [
@@ -1772,7 +1689,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Windsurft'),
+                  const textLabel(name: 'Windsurft:'),
 
                   RadioD(
                       options: const [
@@ -1786,7 +1703,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Trilha'),
+                  const textLabel(name: 'Trilha:'),
 
                   RadioD(
                       options: const [
@@ -1800,7 +1717,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Canionismo'),
+                  const textLabel(name: 'Canionismo:'),
 
                   RadioD(
                       options: const [
@@ -1814,7 +1731,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Cachoeirismo'),
+                  const textLabel(name: 'Cachoeirismo:'),
 
                   RadioD(
                       options: const [
@@ -1828,7 +1745,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Outras'),
+                  const textLabel(name: 'Outras:'),
 
                   RadioD(
                       options: const [
@@ -1844,15 +1761,13 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                 
 
-                  const textLabel(name: 'ASPECTOS GERAIS'),
+                  const textLabel(name: 'Aspectos gerais:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.08,
-                      ),
+                      
                       const textLabel(name: 'Extensão\n(m ou km)'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
@@ -1879,9 +1794,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                    Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.08,
-                      ),
+                      
                       const textLabel(name: 'Altura (m)'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
@@ -1908,9 +1821,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                    Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.08,
-                      ),
+                      
                       const textLabel(name: 'Largura\nmédia (m)'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
@@ -1937,9 +1848,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                    Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.08,
-                      ),
+                      
                       const textLabel(name: 'Volume (m³)'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
@@ -1966,9 +1875,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                    Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.08,
-                      ),
+                      
                       const textLabel(name: 'Profundidade\nmédia (m)'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
@@ -1993,27 +1900,45 @@ class _HidrografiaState extends State<Hidrografia> {
                    SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                    textLabel(name: 'Ilhas'),
-                       SizedBox(
-                    height: sizeScreen.height * 0.03,
-                  ),
-                    ExpansionTileYoN(getValue: (newValue){}),
+                   Row(children: [
+                    
+                    const textLabel(name: 'Ilhas:'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
                      SizedBox(
-                    height: sizeScreen.height * 0.03,
+                    height: sizeScreen.height * 0.05,
                   ),
-                    textLabel(name: 'Praias'),
-                       SizedBox(
-                    height: sizeScreen.height * 0.03,
-                  ),
-                    ExpansionTileYoN(getValue: (newValue){}),
+                   Row(children: [
+                    
+                    const textLabel(name: 'Praias:'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.14,
+                    ),
+                    SizedBox(
+                        //width: sizeScreen.width * 0.5,
+                        //  //height: sizeScreen.height * 0.07,
+                        child: ExpansionTileYoN(
+                      getValue: (newValue) {
+                        valoresjson['SinalizaçãoTurística'] = newValue;
+                      },
+                    ))
+                  ]),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
                    Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.08,
-                      ),
+                      
                       const textLabel(name: 'Extensão\n(m ou km)'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
@@ -2035,21 +1960,22 @@ class _HidrografiaState extends State<Hidrografia> {
                           ))]),
                           SizedBox(height: sizeScreen.height * 0.05,),
                     Row(children: [
+                    
+                   Row(children: [
+                    
+                    const textLabel(name: 'Arenoso:'),
                     SizedBox(
-                      width: sizeScreen.width * 0.05,
+                      width: sizeScreen.width * 0.14,
                     ),
-                    const textLabel(name: 'Arenoso'),
                     SizedBox(
-                      width: sizeScreen.width * 0.09,
-                    ),
-                    SizedBox(
-                        // width: sizeScreen.width * 0.5,
+                        //width: sizeScreen.width * 0.5,
                         //  //height: sizeScreen.height * 0.07,
                         child: ExpansionTileYoN(
                       getValue: (newValue) {
-                        valoresjson['Rochoso'] = newValue;
+                        valoresjson['SinalizaçãoTurística'] = newValue;
                       },
-                    )),
+                    ))
+                  ]),
                     SizedBox(
                       height: sizeScreen.height * 0.02,
                     ),
@@ -2058,7 +1984,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Areia'),
+                  const textLabel(name: 'Areia:'),
                   const CheckC(nomes: [
                     'Fina',
                     'Grossa',
@@ -2068,10 +1994,8 @@ class _HidrografiaState extends State<Hidrografia> {
                     'outro'
                   ]),
                   Row(children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
-                    const textLabel(name: 'Rochoso'),
+                    
+                    const textLabel(name: 'Rochoso:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -2087,11 +2011,11 @@ class _HidrografiaState extends State<Hidrografia> {
                       height: sizeScreen.height * 0.02,
                     ),
                   ]),
-                  const textLabel(name: 'Água'),
+                  const textLabel(name: 'Água:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Característica'),
+                  const textLabel(name: 'Característica:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -2114,7 +2038,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Utilização'),
+                  const textLabel(name: 'Utilização:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -2128,7 +2052,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Finalidade'),
+                  const textLabel(name: 'Finalidade:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -2137,7 +2061,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Tipo'),
+                  const textLabel(name: 'Tipo:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -2146,7 +2070,7 @@ class _HidrografiaState extends State<Hidrografia> {
                       getValue: (newValue) {
                         valoresjson['tipo'] = newValue;
                       }),
-                  const textLabel(name: 'Propriedade'),
+                  const textLabel(name: 'Propriedade:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -2166,7 +2090,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Volume'),
+                  const textLabel(name: 'Volume:'),
                   RadioD(
                       options: const [
                         'Grande',
@@ -2183,9 +2107,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.07,
-                      ),
+                      
                       const textLabel(name: 'Encontro\nde águas'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
@@ -2203,9 +2125,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.08,
-                      ),
+                      
                       const textLabel(name: 'Encontro\ncom o rio'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
@@ -2230,7 +2150,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Foz'),
+                  const textLabel(name: 'Foz:'),
                   RadioD(
                       options: const ['Estuário', 'Delta', 'Estuário deltaico'],
                       getValue: (newValue) {
@@ -2240,7 +2160,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     height: sizeScreen.height * 0.05,
                   ),
                
-                 textLabel(name: 'Relevo'),
+                 textLabel(name: 'Relevo:'),
                    SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
@@ -2252,11 +2172,11 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
 
                 
-                  const textLabel(name: 'FLORA'),
+                  const textLabel(name: 'Flora:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Vegetação'),
+                  const textLabel(name: 'Vegetação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2278,15 +2198,13 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Espécies'),
+                  const textLabel(name: 'Espécies:'),
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.1,
-                      ),
+                      
                       const SizedBox(
                         child: textLabel(name: 'Endêmica'),
                       ),
@@ -2303,7 +2221,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação'),
+                  const textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2327,9 +2245,7 @@ class _HidrografiaState extends State<Hidrografia> {
 
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.1,
-                      ),
+                     
                       const SizedBox(
                         child: textLabel(name: 'Rara'),
                       ),
@@ -2347,7 +2263,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     height: sizeScreen.height * 0.03,
                   ),
 
-                  const textLabel(name: 'Melhores meses de observação'),
+                  const textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2370,11 +2286,9 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.1,
-                      ),
+                      
                       const SizedBox(
-                        child: textLabel(name: 'Em extinção'),
+                        child: textLabel(name: 'Em extinção:'),
                       ),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
@@ -2389,7 +2303,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação'),
+                  const textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2410,11 +2324,9 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(height: sizeScreen.height * 0.035),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.1,
-                      ),
+                      
                       const SizedBox(
-                        child: textLabel(name: 'Exótica'),
+                        child: textLabel(name: 'Exótica:'),
                       ),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
@@ -2429,7 +2341,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação'),
+                  const textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2450,7 +2362,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Outras'),
+                  const textLabel(name: 'Outras:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2463,7 +2375,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação'),
+                  const textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2484,21 +2396,19 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'FAUNA'),
+                  const textLabel(name: 'Fauna:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Espécies'),
+                  const textLabel(name: 'Espécies:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.1,
-                      ),
+                      
                       const SizedBox(
-                        child: textLabel(name: 'Endêmica'),
+                        child: textLabel(name: 'Endêmica:'),
                       ),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
@@ -2513,7 +2423,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação'),
+                  const textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2537,11 +2447,9 @@ class _HidrografiaState extends State<Hidrografia> {
 
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.1,
-                      ),
+                      
                       const SizedBox(
-                        child: textLabel(name: 'Rara'),
+                        child: textLabel(name: 'Rara:'),
                       ),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
@@ -2557,7 +2465,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     height: sizeScreen.height * 0.03,
                   ),
 
-                  const textLabel(name: 'Melhores meses de observação'),
+                  const textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2580,11 +2488,9 @@ class _HidrografiaState extends State<Hidrografia> {
                   ),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.1,
-                      ),
+                    
                       const SizedBox(
-                        child: textLabel(name: 'Em extinção'),
+                        child: textLabel(name: 'Em extinção:'),
                       ),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
@@ -2599,7 +2505,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação'),
+                  const textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2620,11 +2526,9 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(height: sizeScreen.height * 0.035),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.1,
-                      ),
+                      
                       const SizedBox(
-                        child: textLabel(name: 'Exótica'),
+                        child: textLabel(name: 'Exótica:'),
                       ),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
@@ -2639,7 +2543,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação'),
+                  const textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2660,7 +2564,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Outras'),
+                  const textLabel(name: 'Outras:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2673,7 +2577,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação'),
+                  const textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2694,11 +2598,11 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'ATIVIDADE ECONÔMICA'),
+                  const textLabel(name: 'Atividade econômica:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Agropecuária'),
+                  const textLabel(name: 'Agropecuária:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2713,7 +2617,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Industrial'),
+                  const textLabel(name: 'Industrial:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2732,7 +2636,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Extrativista'),
+                  const textLabel(name: 'Extrativista:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2741,7 +2645,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     height: sizeScreen.height * 0.03,
                   ),
                   const textLabel(
-                      name: 'Descritivo das especificidades do atrativo'),
+                      name: 'Descritivo das especificidades do atrativo:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2752,15 +2656,15 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'ACESSO AO ATRATIVO'),
+                  const textLabel(name: 'Acesso ao atrativo:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'A pé'),
+                  const textLabel(name: 'A pé:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Trilha de acesso'),
+                  const textLabel(name: 'Trilha de acesso:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2769,9 +2673,7 @@ class _HidrografiaState extends State<Hidrografia> {
                       getValue: (newValue) {}),
                   Row(
                     children: [
-                      SizedBox(
-                        width: sizeScreen.width * 0.08,
-                      ),
+                     
                       const textLabel(name: 'Extensão\n(m ou km)'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
@@ -2796,37 +2698,41 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Grau de dificuldade'),
+                  const textLabel(name: 'Grau de dificuldade:'),
                   RadioD(
                       options: const ['Leve', 'Semipesada', 'Pesada'],
                       getValue: (newValue) {}),
-                  const textLabel(name: 'Transporte'),
+                  const textLabel(name: 'Transporte:'),
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Regular'),
+                  const textLabel(name: 'Regular:'),
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: const Color.fromARGB(255, 55, 111, 60)), children: [
                         Text(
                           'Empresa',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'Telefone',
                           textAlign: TextAlign.center,
+                                        style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'E-mail',
                           textAlign: TextAlign.center,
+                                        style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'Site',
                           textAlign: TextAlign.center,
+                                        style: TextStyle(color: Colors.white),
                         ),
                       ]),
                       TableRow(children: [
@@ -2906,33 +2812,38 @@ class _HidrografiaState extends State<Hidrografia> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Fretado'),
+                  const textLabel(name: 'Fretado:'),
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: const Color.fromARGB(255, 55, 111, 60)),children: [
                         Text(
                           'Empresa',
                           textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'Tipo de transporte',
                           textAlign: TextAlign.center,
+                           style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'Telefone',
                           textAlign: TextAlign.center,
+                           style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'Site',
                           textAlign: TextAlign.center,
+                           style: TextStyle(color: Colors.white),
                         ),
                         Text(
                           'E-mail',
                           textAlign: TextAlign.center,
+                           style: TextStyle(color: Colors.white),
                         ),
                       ]),
                       TableRow(children: [
@@ -3046,10 +2957,8 @@ class _HidrografiaState extends State<Hidrografia> {
                     height: sizeScreen.height * 0.05,
                   ),
                   Row(children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
-                    const textLabel(name: 'Do atrativo'),
+                    
+                    const textLabel(name: 'Do atrativo:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -3068,7 +2977,7 @@ class _HidrografiaState extends State<Hidrografia> {
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         Text(
                           'Categoria',
                           textAlign: TextAlign.center,
@@ -3086,7 +2995,7 @@ class _HidrografiaState extends State<Hidrografia> {
                           textAlign: TextAlign.center,
                         ),
                       ]),
-                      TableRow(children: [
+                      TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Municipal',
                           textAlign: TextAlign.center,
@@ -3152,7 +3061,7 @@ class _HidrografiaState extends State<Hidrografia> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Estadual/Distrital',
                           textAlign: TextAlign.center,
@@ -3218,7 +3127,7 @@ class _HidrografiaState extends State<Hidrografia> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Federal',
                           textAlign: TextAlign.center,
@@ -3284,7 +3193,7 @@ class _HidrografiaState extends State<Hidrografia> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Internacional',
                           textAlign: TextAlign.center,
@@ -3353,9 +3262,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     ],
                   ),SizedBox(height: sizeScreen.height * 0.05,),
                     Row(children: [
-                    SizedBox(
-                      width: sizeScreen.width * 0.05,
-                    ),
+                    
                     const textLabel(name: 'Da área em que está\nlocalizado/instalado'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
@@ -3373,7 +3280,7 @@ class _HidrografiaState extends State<Hidrografia> {
                      Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(children: [
+                      const TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         Text(
                           'Categoria',
                           textAlign: TextAlign.center,
@@ -3391,7 +3298,7 @@ class _HidrografiaState extends State<Hidrografia> {
                           textAlign: TextAlign.center,
                         ),
                       ]),
-                      TableRow(children: [
+                      TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Municipal',
                           textAlign: TextAlign.center,
@@ -3457,7 +3364,7 @@ class _HidrografiaState extends State<Hidrografia> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Estadual/Distrital',
                           textAlign: TextAlign.center,
@@ -3523,7 +3430,7 @@ class _HidrografiaState extends State<Hidrografia> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Federal',
                           textAlign: TextAlign.center,
@@ -3589,7 +3496,7 @@ class _HidrografiaState extends State<Hidrografia> {
                           ],
                         )
                       ]),
-                         TableRow(children: [
+                         TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         const Text(
                           'Internacional',
                           textAlign: TextAlign.center,
@@ -3703,7 +3610,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     SizedBox(height: sizeScreen.height * 0.02,),
               const textLabel(
                     name:
-                        'Possui alguma facilidade\npara pessoas com\ndeficiência ou mobilidade\nreduzida?'),
+                        'Possui alguma facilidade para pessoas com deficiência ou mobilidade reduzida?'),
                SizedBox(height: sizeScreen.height * 0.04,),
                ExpansionTileYoN(getValue: (String ) {  },),
  SizedBox(height: sizeScreen.height * 0.02,),
@@ -3711,19 +3618,19 @@ class _HidrografiaState extends State<Hidrografia> {
                     name: 'obs: responder às questões seguintes'),
           SizedBox(height: sizeScreen.height * 0.02,),
  const textLabel(
-                    name: 'Pessoal capacitado para receber PCD'),
+                    name: 'Pessoal capacitado para receber PCD:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+             CheckC(nomes: [
                 'Não',
                 'Física',
                 'Auditiva',
                 'Visual',
                 'Mental',
                 'Múltipla'
-              ], getValue: (String ) {  },),
-             const textLabel(name: 'Rota externa acessível'),
+              ], ),
+             const textLabel(name: 'Rota externa acessível:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
-              RadioD(options: [
+                CheckC(nomes: [
                 'Não',
                 'Estacionamento',
                 'Calçada rebaixada',
@@ -3734,15 +3641,15 @@ class _HidrografiaState extends State<Hidrografia> {
                 'Piso regular antiderrapante',
                 'Livre de obstáculos',
                 'outro'
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Símbolo internacional de acesso'),
+                child: const textLabel(name: 'Símbolo internacional de acesso:'),
               ),
-              RadioD(options: [
+                CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Área reservada',
@@ -3750,30 +3657,29 @@ class _HidrografiaState extends State<Hidrografia> {
                 'Área de embarque e desembarque',
                 'Sanitário',
                 'Saída de emergência',
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Local de embarque e desembarque'),
+                child: const textLabel(name: 'Local de embarque e desembarque:'),
               ),
-              RadioD(
-                  options: ['Não', 'Sinalizado', 'Com acesso em nível'], getValue: (String ) {  },),
+                CheckC(nomes:  ['Não', 'Sinalizado', 'Com acesso em nível'],),
               Padding(
                 padding: EdgeInsets.only(
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Vaga em estacionamento'),
+                child: const textLabel(name: 'Vaga em estacionamento:'),
               ),
-              RadioD(options: [
+                CheckC(nomes: [
                 'Não',
                 'Sinalizado',
                 'Com acesso em nível',
                 'Alargada para cadeira de rodas',
                 'Rampa de acesso á calçada'
-              ], getValue: (String ) {  },),
+              ],),
               Padding(
                 padding: EdgeInsets.only(
                    
@@ -3781,73 +3687,73 @@ class _HidrografiaState extends State<Hidrografia> {
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(
                     name:
-                        'Área de circulação / acesso interno\npara cadeira de rodas'),
+                        'Área de circulação / acesso interno para cadeira de rodas:'),
               ),
-              RadioD(options: [
+               CheckC(nomes: [
                 'Não',
                 'Rampa',
                 'Elevador',
                 'Plataforma elevatória',
                 'Porta larga',
                 'Piso regular / antiderrapante'
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
         
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Escada'),
+                child: const textLabel(name: 'Escada:'),
               ),
-              RadioD(options: [
+                CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
                 'Sinalização tátil de alerta',
                 'Piso antiderrapante',
-              ], getValue: (String ) {  },),
+              ], ),
 
               Padding(
                 padding: EdgeInsets.only(
             
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Rampa'),
+                child: const textLabel(name: 'Rampa:'),
               ),
-              RadioD(options: [
+                 CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
                 'Sinalização tátil de alerta',
                 'Piso antiderrapante',
                 'Inclinação adequada',
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Piso'),
+                child: const textLabel(name: 'Piso:'),
               ),
-              RadioD(options: [
+                 CheckC(nomes: [
                 'Não',
                 'Tátil',
                 'Sem obstáculos',
                 'Antiderrapante/deslizante',
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Elevador'),
+                child: const textLabel(name: 'Elevador:'),
               ),
-               RadioD(options: [
+                  CheckC(nomes: [
                 'Não',
                 'Sinalizado em braile',
                 'Dispositivo sonoro',
                 'Dispositivo luminoso',
                 'Sensor eletrônico (porta)'
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                    
@@ -3855,21 +3761,21 @@ class _HidrografiaState extends State<Hidrografia> {
                     bottom: sizeScreen.height * 0.02),
                 child: const textLabel(
                     name:
-                        '  Equipamento motorizado\npara deslocamento interno'),
+                        'Equipamento motorizado para deslocamento interno:'),
               ),
-              RadioD(options: [
+               CheckC(nomes: [
                 'Não',
                 'Cadeira',
                 'Carrinho',
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                  
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sinalização visual'),
+                child: const textLabel(name: 'Sinalização visual:'),
               ),
-               RadioD(options: [
+                  CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -3879,15 +3785,15 @@ class _HidrografiaState extends State<Hidrografia> {
                 'Restaurante',
                 'Área de lazer',
                 'Área de resgate',
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sinalização tátil'),
+                child: const textLabel(name: 'Sinalização tátil:'),
               ),
-               RadioD(options: [
+                  CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -3897,65 +3803,65 @@ class _HidrografiaState extends State<Hidrografia> {
                 'Restaurante',
                 'Área de lazer',
                 'Área de resgate',
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                 
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Alarme de emergência'),
+                child: const textLabel(name: 'Alarme de emergência:'),
               ),
-              RadioD(options: [
+                CheckC(nomes: [
                 'Não',
                 'Sonoro',
                 'Visual',
                 'Vibratório',
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Comunicação'),
+                child: const textLabel(name: 'Comunicação:'),
               ),
-               RadioD(options: [
+                  CheckC(nomes: [
                 'Não',
                 'Texto informativo em braile',
                 'Texto informativo em fonte ampliada',
                 'Intérprete em libras',
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                     
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Balcão de atendimento'),
+                child: const textLabel(name: 'Balcão de atendimento:'),
               ),
-              RadioD(options: [
+                 CheckC(nomes: [
                 'Não',
                 'Rebaixado',
                 'Preferencial para PCD ou com deficiência ou mobilidade reduzida',
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                     
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Mobiliário'),
+                child: const textLabel(name: 'Mobiliário:'),
               ),
-             RadioD(options: [
+               CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Recuo adequado',
-              ], getValue: (String ) {  },),
+              ],),
               Padding(
                 padding: EdgeInsets.only(
                 
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sanitário'),
+                child: const textLabel(name: 'Sanitário:'),
               ),
-               RadioD(options: [
+                 CheckC(nomes: [
                 'Não',
                 'Porta larga suficiente para entrada de cadeira de rodas ',
                 'Acesso para cadeira de rodas',
@@ -3965,32 +3871,34 @@ class _HidrografiaState extends State<Hidrografia> {
                 'Giro para cadeira de rodas',
                 'Pia rebaixada',
                 'Boxe ou banheira daptada',
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Telefone'),
+                child: const textLabel(name: 'Telefone:'),
               ),
-              RadioD(options: [
+               CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Para surdos (TPS ou TTS)',
-              ], getValue: (String ) {  },),
+              ], ),
               Padding(
                 padding: EdgeInsets.only(
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.04),
                 child: const textLabel(
                     name:
-                        'Sinalização indicativa de\natendimento preferencial para pessoas com deficiência ou mobilidade reduzida'),
+                        'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida:'),
               ),
 
-               ExpansionTileYoN(getValue: (String ) {  },),
+               ExpansionTileYoN(getValue: (newValue ) {
+                valoresjson['SinalizaçãoIndicativa'] = newValue;
+                 },),
               SizedBox(height: sizeScreen.height * 0.02,),              Row(
                 children: [
-                  SizedBox(width: sizeScreen.width * 0.05,),
+                 
                   const textLabel(name: 'Outros'),
                   SizedBox(
                     width: sizeScreen.width * 0.1,
@@ -4005,7 +3913,7 @@ class _HidrografiaState extends State<Hidrografia> {
                           }
                           return null;
                         },
-                        name: '', getValue: (String ) {  },
+                        name: '', getValue: (newValue) {valoresjson['OutrosAcessibilidade'] = newValue;  },
                       ))
                 ],
               ),
@@ -4032,7 +3940,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     }
                     return null;
                   },
-                  name: '', getValue: (String ) {  },),
+                  name: '', getValue: (newValue) {valoresjson['Observações'] = newValue;  },),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
@@ -4057,7 +3965,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     }
                     return null;
                   },
-                  name: '', getValue: (String ) {  },),
+                  name: '', getValue: (newValue) {  valoresjson['Referências'] = newValue;},),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
@@ -4086,7 +3994,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     }
                     return null;
                   },
-                  name: '', getValue: (String ) {  },),
+                  name: '', getValue: (newValue) {valoresjson['Pesquisador'] = newValue;  },),
               const textLabel(name: 'Telefone'),
               CustomTextField(
                   validat: (value) {
@@ -4095,7 +4003,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     }
                     return null;
                   },
-                  name: '', getValue: (String ) {  },),
+                  name: '', getValue: (newValue) {valoresjson['TelefonePesquisador'] = newValue;  },),
               const textLabel(name: 'E-mail'),
               CustomTextField(
                   validat: (value) {
@@ -4104,7 +4012,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     }
                     return null;
                   },
-                  name: '', getValue: (String ) {  },),
+                  name: '', getValue: (newValue) {valoresjson['E-mail'];  },),
               const textLabel(
                   name: 'Responsável pelo atendimento (Coordenador)'),
               CustomTextField(
@@ -4114,7 +4022,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     }
                     return null;
                   },
-                  name: '', getValue: (String ) {  },),
+                  name: '', getValue: (newValue) {valoresjson['Coordenador'];  },),
               const textLabel(name: 'Telefone'),
               CustomTextField(
                   validat: (value) {
@@ -4123,7 +4031,7 @@ class _HidrografiaState extends State<Hidrografia> {
                     }
                     return null;
                   },
-                  name: '', getValue: (String ) {  },),
+                  name: '', getValue: (newValue) {valoresjson['TelefoneCoordenador'] = newValue;  },),
               const textLabel(name: 'E-mail'),
               CustomTextField(
                   validat: (value) {
@@ -4132,16 +4040,15 @@ class _HidrografiaState extends State<Hidrografia> {
                     }
                     return null;
                   },
-                  name: '', getValue: (String ) {  },),
+                  name: '', getValue: (newValue) {valoresjson['E-mailCoordenador'] = newValue;  },),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-              SendButton(),
-
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              )
-            ]),
-                )));
+               SendButton(),
+               SizedBox(height: 15,)
+              ],
+            )),
+          ),
+        );
   }
 }

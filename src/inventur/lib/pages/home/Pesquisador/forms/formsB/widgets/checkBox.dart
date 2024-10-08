@@ -114,6 +114,7 @@ class _CheckCState extends State<CheckC> {
                         overflow: TextOverflow.ellipsis,
                       )),
                   leading: Checkbox(
+                 
                       value: isChecked[index],
                       onChanged: (bool? value) {
                         setState(() {

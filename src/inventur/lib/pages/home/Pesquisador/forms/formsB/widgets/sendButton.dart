@@ -72,7 +72,7 @@ class SendedFormPage extends StatelessWidget {
           const SizedBox(height: 150),
           GestureDetector(
             onTap: () {
-              Navigator.pushNamed(context, '/PesquisadorHome');
+              Navigator.pushReplacementNamed(context, '/PesquisadorHome');
             },
             child: Container(
               height: 55,

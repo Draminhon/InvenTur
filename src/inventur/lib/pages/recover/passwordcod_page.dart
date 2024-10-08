@@ -67,15 +67,28 @@ class ConfirmarCodigo extends StatelessWidget {
                 ],
               )))),
               SizedBox(height: sizeScreen.height * 0.03,),
-               Padding(
-          padding: EdgeInsets.all(25),
-          child: CustomTextField(name: 'Código', validat: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Preencha o campo';
-                              }
-                              return null;
-                            }, getValue: (String ) {  },)
-                          ),
+                  Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: SizedBox(
+                    height: sizeScreen.height * 0.07,
+                    child: TextFormField(
+  decoration: InputDecoration(
+    fillColor: Colors.white,
+    filled: true,
+    prefixIcon: const Icon(
+      Icons.pin,
+      color: Color.fromARGB(255, 55, 111, 60),
+    ),
+    labelText: 'Código',
+    enabledBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: BorderSide(color: const Color.fromARGB(255, 55, 111, 60), width: 2)
+    ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: BorderSide(color: const Color.fromARGB(255, 55, 111, 60), width: 2)
+    ),
+                  )))),
            
                SizedBox(height: sizeScreen.height * 0.13,),
            SizedBox(

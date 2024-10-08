@@ -17,51 +17,105 @@ class ContainerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
 
-    return Container(
-        padding: EdgeInsets.only(
-            left: sizeScreen.width * 0.03, top: sizeScreen.height * 0.03),
-        margin: EdgeInsets.only(top: sizeScreen.height * 0.05),
-        height: sizeScreen.height * 0.30,
-        decoration: BoxDecoration(
-            color: Color.fromARGB(255, 255, 255, 255),
-            borderRadius: BorderRadius.circular(10),
-            border:
-                Border.all(color: Color.fromARGB(255, 55, 111, 60), width: 2),
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  blurRadius: 5,
-                  spreadRadius: 2,
-                  offset: const Offset(0, 3))
-            ]),
-        child:
-            Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-          RichText(
-            text: TextSpan(
-              text: 'Código IBGE do município: $codIBGE\n'
-                  'Estado: $estado\n'
-                  'Município: $municipio\n'
-                  'Data de início: $dataI\n'
-                  'Data de término: $dataT\n'
-                  'Quantidade de locais cadastrados: $qtdeL\n'
-                  'Quantidade de pesquisadores: $qtdeP',
-              style: TextStyle(
-                  fontSize: sizeScreen.height * 0.02,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black,
-                  height: sizeScreen.height * 0.002),
-            ),
-          ),
-          Padding(
-              padding: EdgeInsets.only(left: sizeScreen.width * 0.7),
-              child: SizedBox(
-                  height: sizeScreen.height * 0.03,
-                  child: IconButton(
-                    onPressed: () =>
-                        {Navigator.pushNamed(context, '/Pesquisas')},
-                    icon: Icon(Icons.arrow_forward),
-                    padding: EdgeInsets.only(bottom: sizeScreen.height * 0.005),
-                  )))
-        ]));
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, '/Pesquisas');
+      },
+      child: Container(
+          padding: EdgeInsets.only(
+              left: sizeScreen.width * 0.03,
+              top: sizeScreen.height * 0.03,
+              bottom: sizeScreen.height * 0.03,
+              right: sizeScreen.width * 0.05),
+          margin: EdgeInsets.only(top: sizeScreen.height * 0.05),
+          height: sizeScreen.height * 0.35,
+          decoration: BoxDecoration(
+              color: Color.fromARGB(255, 255, 255, 255),
+              borderRadius: BorderRadius.circular(10),
+              border:
+                  Border.all(color: Color.fromARGB(255, 55, 111, 60), width: 2),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    blurRadius: 5,
+                    spreadRadius: 2,
+                    offset: const Offset(0, 3))
+              ]),
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Código IBGE:',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text('$codIBGE')
+                  ],
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Estado:',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text('$estado')
+                  ],
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Município:',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text('$municipio')
+                  ],
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Início da pesquisa:',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text('$dataI')
+                  ],
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Fim da pesquisa:',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text('$dataT')
+                  ],
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Quantidade de locais:',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text('$qtdeL')
+                  ],
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Quantidade de pesquisadores:',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    Text('$qtdeP')
+                  ],
+                ),
+              ])),
+    );
   }
 }

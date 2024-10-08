@@ -86,12 +86,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     },
                     decoration: const InputDecoration(hintText: 'Município'),
                   )),
-            textLabel(name: 'Tipo:'),
+            const textLabel(name: 'Tipo:'),
               Padding(
                 padding: EdgeInsets.only(left: sizeScreen.width * 0.12),
                 child:  RadioB(name: 'Hotelaria e apoio', getValue: (newValue ) {  },),
               ),
-              textLabel(name: 'Subtipos:'),
+              const textLabel(name: 'Subtipos:'),
 
               RadioC(number: 18, options: const [
                 'Hotel',
@@ -219,15 +219,15 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              RadioD(
-                options: const [
+            const CheckC(
+                nomes: [
                   'associação',
                   'sindicato',
                   'cooperativa',
                   'sistema S',
                   'empresa',
                   'outro'
-                ], getValue: (String ) {  },
+                ],
               ),
               Row(
                 children: [
@@ -422,7 +422,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   children: [
                    
                   
-                    const textLabel(name: 'Telefone'),
+                    const textLabel(name: 'Whatsapp'),
                     SizedBox(
                       width: sizeScreen.width * 0.03,
                     ),
@@ -440,26 +440,36 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         ))
                   ],
                 ),
-                Padding(
-                    padding: EdgeInsets.only(left: sizeScreen.width * 0.13),
-                    child: SizedBox(
+              Row(
+                  children: [
+                   
+                  
+                    const textLabel(name: 'Instagram'),
+                    SizedBox(
+                      width: sizeScreen.width * 0.03,
+                    ),
+                    SizedBox(
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
-                            validat: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Preencha o campo';
-                              }
-                              return null;
-                            },
-                            name: 'Telefone secundário', getValue: (String ) {  },))),
+                          validat: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Preencha o campo';
+                            }
+                            return null;
+                          },
+                          name: '@', getValue: (String ) {  },
+                        ))
+                  ],
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(
                   children: [
-                
-                    const textLabel(name: 'Endereço eletrônico\n(e-mail)'),
+              
+                    const textLabel(name: 'E-mail'),
+                      SizedBox(width: sizeScreen.width * 0.03,),
                     SizedBox(
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
@@ -481,7 +491,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   children: [
                    
                     const textLabel(
-                        name: '  Sítio eletrônico\n(site/página web)'),
+                        name: 'Site'),
+                          SizedBox(width: sizeScreen.width * 0.05,),
                     SizedBox(
                       width: sizeScreen.width * 0.045,
                     ),
@@ -683,8 +694,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
              
                 nomes: [
                   'Dinheiro',
-                  'Cheque',
-                  'Cheque de outra praça',
+                  'Pix',
                   'Cartão de Crédito',
                   'Cartão de Débito'
                 ],
@@ -700,11 +710,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 
                 nomes: [
                   'Balcão',
-                  'Telefone',
-                  'Fax',
-                  'Internet',
+                  'Whatsapp',
+                  'Instagram',
+                  'Site',
                   'Agência de turismo',
-                  'Com sinal',
                   'Antecipado'
                 ], 
               ),
@@ -1004,14 +1013,9 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 child: const textLabel(name: 'Equipamentos e Serviços:'),
               ),
             const CheckC(nomes: [
-                'Aparelho de vídeo',
-                'DVD',
-                'TV com canal pago',
-                'Rádio',
+                'TV',
                 'Internet',
                 'Ar-Condicionado',
-                'Calefação',
-                'Mesa',
                 'Cama King Size',
                 'Cama Queen Size',
                 'Panelas e louças',
@@ -1019,7 +1023,6 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Forno Elétrico',
                 'Cofre',
                 'Academia',
-                'Ofurô',
                 'Hidromassagem',
                 'Sauna seca',
                 'Room - service',
@@ -1429,7 +1432,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                SizedBox(height: sizeScreen.height * 0.02,),
            const textLabel(name: 'Serviços:'),
                SizedBox(height: sizeScreen.height * 0.02,),
-              CheckC(nomes: const [
+              const CheckC(nomes: [
                 'Realização de eventos próprios',
                 'Aluguel de equipamentos',
                 'Aluguel de espaço para terceiros',
@@ -1440,38 +1443,24 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
                const textLabel(name: 'Equipamentos:'),
                SizedBox(height: sizeScreen.height * 0.02,),
-              CheckC(nomes: const [
-                'Cadeira com prancheta',
-                'Copa',
-                'Vídeo',
-                'Tela fixa',
-                'Telefonia',
-                'Internet sem fio',
-                'Sonorização',
+              const CheckC(nomes: [
+                'Internet',
                 'Elevador',
                 'Poltronas',
                 'Tv com canal aberto',
-                'DVD',
                 'Projetor',
                 'Computador',
                 'Equipamento de tradução simultânea',
                 'Parabólica',
                 'Ar condicionado central',
-                'TV com canal por assinatura',
-                'Tela móvel',
-                'Retroprojetor',
-                'Internet',
-                'Videoconferência',
                 'Palco',
                 'outro'
               ], ),
              
               const textLabel(name: 'Facilidades e serviços:'),
                SizedBox(height: sizeScreen.height * 0.02,),
-              CheckC(nomes: const [
+              const CheckC(nomes: [
                 'Adaptador de voltagem',
-                'Calefação',
-                'Telefones públicos',
                 'Impressora',
                 'Micro - ondas',
                 'Adega climatizada',
@@ -1520,7 +1509,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
             const textLabel(name: 'Facilidades para executivos:'),
                SizedBox(height: sizeScreen.height * 0.02,),
-             CheckC(nomes: const [
+             const CheckC(nomes: [
                 'Apartamentos em andares especiais',
                 'Café da manhã em ambiente privativo',
                 'Jornais diários no apartamento',
@@ -2047,7 +2036,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
  const textLabel(
                     name: 'Pessoal capacitado para receber PCD:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
-              CheckC(nomes: const [
+              const CheckC(nomes: [
                 'Não',
                 'Física',
                 'Auditiva',
@@ -2057,7 +2046,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
              const textLabel(name: 'Rota externa acessível:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
-              CheckC(nomes: const [
+              const CheckC(nomes: [
                 'Não',
                 'Estacionamento',
                 'Calçada rebaixada',
@@ -2071,7 +2060,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ],),
             const textLabel(name: 'Símbolo internacional de acesso:'),
               
-              CheckC(nomes: const [
+              const CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Área reservada',
@@ -2082,11 +2071,11 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
               const textLabel(name: 'Local de embarque e desembarque'),
               
-              CheckC(
-                 nomes: const ['Não', 'Sinalizado', 'Com acesso em nível'],),
+              const CheckC(
+                 nomes: ['Não', 'Sinalizado', 'Com acesso em nível'],),
               const textLabel(name: 'Vaga em estacionamento:'),
               
-              CheckC(nomes: const [
+              const CheckC(nomes: [
                 'Não',
                 'Sinalizado',
                 'Com acesso em nível',
@@ -2097,7 +2086,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                     name:
                         'Área de circulação / acesso interno\npara cadeira de rodas:'),
               
-              CheckC(nomes: const [
+              const CheckC(nomes: [
                 'Não',
                 'Rampa',
                 'Elevador',
@@ -2107,7 +2096,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
               const textLabel(name: 'Escada:'),
               
-              CheckC(nomes: const [
+              const CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
@@ -2117,7 +2106,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
 
          const textLabel(name: 'Rampa:'),
               
-              CheckC(nomes: const [
+              const CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
@@ -2127,7 +2116,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ],),
                const textLabel(name: 'Piso:'),
               
-                 CheckC(nomes: const [
+                 const CheckC(nomes: [
                 'Não',
                 'Tátil',
                 'Sem obstáculos',
@@ -2135,7 +2124,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ],),
                const textLabel(name: 'Elevador:'),
               
-               CheckC(nomes: const [
+               const CheckC(nomes: [
                 'Não',
                 'Sinalizado em braile',
                 'Dispositivo sonoro',
@@ -2146,14 +2135,14 @@ SizedBox(height: sizeScreen.height * 0.02,),
                     name:
                         'Equipamento motorizado para deslocamento interno:'),
            
-                 CheckC(nomes: const [
+                 const CheckC(nomes: [
                 'Não',
                 'Cadeira',
                 'Carrinho',
               ], ),
              const textLabel(name: 'Sinalização visual:'),
               
-                   CheckC(nomes: const [
+                   const CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -2166,7 +2155,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ],),
              const textLabel(name: 'Sinalização tátil:'),
               
-                   CheckC(nomes: const [
+                   const CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -2179,7 +2168,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
              const textLabel(name: 'Alarme de emergência:'),
               
-                 CheckC(nomes: const [
+                 const CheckC(nomes: [
                 'Não',
                 'Sonoro',
                 'Visual',
@@ -2187,7 +2176,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
             const textLabel(name: 'Comunicação:'),
               
-                    CheckC(nomes: const [
+                    const CheckC(nomes: [
                 'Não',
                 'Texto informativo em braile',
                 'Texto informativo em fonte ampliada',
@@ -2195,21 +2184,21 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
              const textLabel(name: 'Balcão de atendimento:'),
               
-               CheckC(nomes: const [
+               const CheckC(nomes: [
                 'Não',
                 'Rebaixado',
                 'Preferencial para PCD ou com deficiência ou mobilidade reduzida',
               ], ),
              const textLabel(name: 'Mobiliário:'),
               
-                 CheckC(nomes: const [
+                 const CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Recuo adequado',
               ], ),
                const textLabel(name: 'Sanitário:'),
               
-                   CheckC(nomes: const [
+                   const CheckC(nomes: [
                 'Não',
                 'Porta larga suficiente para entrada de cadeira de rodas ',
                 'Acesso para cadeira de rodas',
@@ -2222,7 +2211,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
               const textLabel(name: 'Telefone:'),
               
-                  CheckC(nomes: const [
+                  const CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Para surdos (TPS ou TTS)',
@@ -2230,7 +2219,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                const textLabel(
                     name:
                         'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida:'),
-              SizedBox(height: 50,),
+              const SizedBox(height: 50,),
 
                ExpansionTileYoN(getValue: (String ) {  },),
               SizedBox(height: sizeScreen.height * 0.02,),              Row(

@@ -267,13 +267,14 @@ class TabelaT3 extends StatelessWidget {
       border: TableBorder.all(),
       children: [
         TableRow(
-            decoration: BoxDecoration(border: Border.all()),
+            decoration: BoxDecoration(border: Border.all(), color: const Color.fromARGB(255, 55, 111, 60),),
             children: const [
               TableCell(
                   child: SizedBox(
                 child: Text(
                   'espaço',
                   textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white),
                 ),
               )),
               TableCell(
@@ -281,6 +282,7 @@ class TabelaT3 extends StatelessWidget {
                 child: Text(
                   'quantidade',
                   textAlign: TextAlign.center,
+                       style: TextStyle(color: Colors.white),
                 ),
               )),
               TableCell(
@@ -288,6 +290,7 @@ class TabelaT3 extends StatelessWidget {
                 child: Text(
                   'Área total(m²)',
                   textAlign: TextAlign.center,
+                       style: TextStyle(color: Colors.white),
                 ),
               )),
               TableCell(
@@ -295,10 +298,11 @@ class TabelaT3 extends StatelessWidget {
                 child: Text(
                   'Capacidade nº\npessoas',
                   textAlign: TextAlign.center,
+                       style: TextStyle(color: Colors.white),
                 ),
               ))
             ]),
-        TableRow(children: [
+        TableRow(decoration: BoxDecoration(color: Colors.white),children: [
           const TableCell(
               child: SizedBox(
             child: Text(
@@ -466,6 +470,7 @@ class TabelaT4 extends StatelessWidget {
     List<Widget> tableRows = [];
     for (int i = 0; i < column01.length; i++) {
       tableRows.add(Table(
+        
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         border: TableBorder.all(),
         children: [
@@ -473,6 +478,7 @@ class TabelaT4 extends StatelessWidget {
               decoration: const BoxDecoration(color: Colors.white),
               children: [
                 TableCell(
+                
                     verticalAlignment: TableCellVerticalAlignment.middle,
                     child: Padding(
                         padding: const EdgeInsets.all(8.0),
