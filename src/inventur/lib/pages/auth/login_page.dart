@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
-import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/pages/widgets/divider_text_widget.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('acess_token');
+}
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,7 +34,52 @@ class _LoginPageState extends State<LoginPage> {
   final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _cpfController.dispose();
+    _passwordController.dispose();
+  }
+
+
+  @override
   Widget build(BuildContext context) {
+
+    Future<void> loginUser(String cpf, String password) async {
+        final url = Uri.parse('http://10.0.2.2:8000/api/v1/login/');
+
+        final response = await http.post(
+          url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode(<String, String>{
+              'CPF': cpf,
+              'password': password,
+          })
+        );
+
+        if (response.statusCode == 200){
+
+          final Map<String, dynamic> responseData = json.decode(response.body);
+
+          String acessToken = responseData['access'];
+
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('acess_token', acessToken);
+
+          print("TOKEN ARMAZENADO:  $acessToken");
+
+
+
+
+        }else{
+          print("Usário nao logado ${response.body}");
+        }
+
+    }
+
+
     final screenSize = MediaQuery.sizeOf(context);
 
     return Scaffold(
@@ -81,27 +135,30 @@ class _LoginPageState extends State<LoginPage> {
                           height: screenSize.height * .07,
                           child: ElevatedButton(
                             style: ButtonStyle(
-                              shape: MaterialStateProperty.all(
+                              shape: WidgetStateProperty.all(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)
                                 )
                               ),
-                              padding: MaterialStateProperty.all(
+                              padding: WidgetStateProperty.all(
                                 EdgeInsets.symmetric(
                                   vertical: screenSize.height * 0.012
                                 )
                               ),
-                              backgroundColor: MaterialStateProperty.all(
+                              backgroundColor: WidgetStateProperty.all(
                                 const Color.fromARGB(255, 55, 111, 60)
                               ),
-                              overlayColor: MaterialStateProperty.all(
+                              overlayColor: WidgetStateProperty.all(
                                 Colors.green[600]
                               )
                             ),
                             onPressed: () {
-                              // if (_formLoginKey.currentState!.validate()) {
-                              //   Navigator.pushNamed(context, '/AdminHome');
-                              // }
+                              if (_formLoginKey.currentState!.validate()) {
+
+
+                                final cpf = _cpfController.text.replaceAll('.','').replaceAll('-', '');
+                                final password = _passwordController.text;
+                                  }
                               Navigator.pushNamed(context, '/Choose');
                             }, 
                             child: const Text(
@@ -138,18 +195,18 @@ class _LoginPageState extends State<LoginPage> {
                           height: screenSize.height * .07,
                           child: OutlinedButton(
                             style: ButtonStyle(
-                              shape: MaterialStatePropertyAll(
+                              shape: WidgetStatePropertyAll(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10)
                                 )
                               ),
-                              side: const MaterialStatePropertyAll(
+                              side: const WidgetStatePropertyAll(
                                 BorderSide(
                                   width: 2,
                                   color: Color.fromARGB(255, 55, 111, 60),
                                 )
                               ),
-                              padding: MaterialStatePropertyAll(
+                              padding: WidgetStatePropertyAll(
                                 EdgeInsets.symmetric(vertical: screenSize.height * .012)
                               )
                             ),
