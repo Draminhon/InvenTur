@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import CustomUser
 
-
+ 
 class CustomUserAdmin(admin.ModelAdmin):
     list_display = ['username', 'email', 'CPF', 'is_staff', 'is_active']  # Campos exibidos na lista
     search_fields = ['username', 'email', 'CPF']  # Campos usados na pesquisa

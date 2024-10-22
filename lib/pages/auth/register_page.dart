@@ -46,7 +46,7 @@ class RegisterPage extends StatelessWidget {
         'email': email,
         'password': password
       })
-    );
+    ); 
 
 
     if(response.statusCode == 201){

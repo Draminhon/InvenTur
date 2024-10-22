@@ -39,7 +39,7 @@ def UsuarioLoginView(request):
             password = request.POST.get("password")
 
         print(str(CPF) + " n")
-        print(password + " s")
+        print(password + " s")  
 
         user = authenticate(request, CPF = CPF, password = password)
         if user is not None:

@@ -11,7 +11,7 @@ class EmailValidatorPage extends StatefulWidget {
   State<EmailValidatorPage> createState() => _EmailValidatorPageState();
 }
 
-class _EmailValidatorPageState extends State<EmailValidatorPage> {
+class _EmailValidatorPageState extends State<EmailValidatorPage> { 
   // int _codeSendLimit = 5;
   // int _codeShippingAmount = 0;
   int _timeRemaining = 1 * 30;

@@ -17,4 +17,4 @@ class UserSerializer(serializers.ModelSerializer):
     
     def validate_CPF(self, value):
         validate_cpf(value)
-        return value
+        return value 
