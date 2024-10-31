@@ -177,7 +177,7 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                         const TableRow(
                             decoration: BoxDecoration(
                               color: Color.fromARGB(255, 55, 111, 60),
-                              
+
                             ),
                             children: [
                               Text(
@@ -560,7 +560,36 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                     SizedBox(
                       height: sizeScreen.height * 0.05,
                     ),
-                    const SendButton(),
+                   SizedBox(
+      height: 50,
+      width: 300,
+      child: ElevatedButton(
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('processing data')));
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('preencha os dados!')));
+                          }
+          print(valoresjson);
+
+         // Navigator.pushReplacementNamed(context, '/SendedForm');
+        },
+        style: OutlinedButton.styleFrom(
+          backgroundColor: Colors.green[800],
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        ),
+        child: const Text(
+          'Enviar',
+          style: TextStyle(
+              color: Colors.white, fontSize: 25), // Use um fontSize fixo
+        ),
+      ),
+    ),
                     const SizedBox(
                       height: 15,
                     ),

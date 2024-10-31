@@ -180,7 +180,7 @@ class _RadioStateD extends State<RadioD> {
             shape: const Border(),
             title: const Text(
               'opções',
-              style: TextStyle(color: Color.fromARGB(255, 55, 111, 60)),
+              style: TextStyle(color: Color.fromARGB(255, 55, 111, 60), fontWeight: FontWeight.bold),
             ),
             tilePadding: EdgeInsets.only(
                 left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
@@ -199,10 +199,11 @@ class _RadioStateD extends State<RadioD> {
                           ? null
                           : (value) {
                               setState(() {
-                                if (value != null) {
+                                if (value != i) {
+                                  _value = null;
+                                }else{
                                   _value = value;
-                                }
-                                widget.getValue(widget.options[i]);
+                                widget.getValue(widget.options[i]);}
                               });
                             },
                       toggleable: true,

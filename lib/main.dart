@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
+//import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/pages/auth/login_page.dart';
 import 'package:inventur/pages/auth/register_page.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
           seedColor: Colors.green,
           surfaceTint: Colors.white,
         ),
-        fontFamily: GoogleFonts.aBeeZee().fontFamily,
+        fontFamily: 'AbeeZee',
       ),
       routes: {
         '/Login': (_) => const LoginPage(),
@@ -65,18 +65,18 @@ class MyApp extends StatelessWidget {
         '/PassWordRecover': (_) => RecuperarSenha(),
         '/ConfirmarCodigo': (_) => ConfirmarCodigo(),
         '/MudarSenha': (_) => MudarSenha(),
-        '/NewPassword': (_) => ConfirmacaoNovaSenha(),
-        '/Choose': (_) => Choose(),
-        '/PesquisadorHome': (_) => PesquisadorHome(),
+        '/NewPassword': (_) => const ConfirmacaoNovaSenha(),
+        '/Choose': (_) => const Choose(),
+        '/PesquisadorHome': (_) => const PesquisadorHome(),
         '/Pesquisas': (_) => const Pesquisas(),
-        '/FormA': (_) => FormularioA(),
-        '/FormB': (_) => FormularioB(),
+        '/FormA': (_) => const FormularioA(),
+        '/FormB': (_) => const FormularioB(),
         '/FormC': (_) => const FormularioC(),
-        '/A': (_) => A(),
+        '/A': (_) => const A(),
         '/PerfilPesquisador': (_) => const ContaPesquisador(),
-        '/AlterarDados': (_) => AlterarCadastro(),
+        '/AlterarDados': (_) => const AlterarCadastro(),
         '/MeiosDeHospedagem': (_) => const MeiosDeHospedagem(),
-        '/Placeholder': (_) => PlaceHolder(),
+        '/Placeholder': (_) => const PlaceHolder(),
         '/AlimentosEbebidas': (_) => const AlimentoseBebidas(),
         '/Rodovia': (_) => const Rodovia(),
         '/SistemaDeSeguranca': (_) => const SistemaDeSeguranca(),

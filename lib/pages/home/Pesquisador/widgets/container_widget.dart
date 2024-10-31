@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 
 class ContainerWidget extends StatelessWidget {
   final codIBGE;

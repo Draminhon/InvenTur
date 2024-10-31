@@ -77,10 +77,10 @@ class CheckC extends StatefulWidget {
   const CheckC({super.key, required this.nomes});
   final List<String> nomes;
   @override
-  State<CheckC> createState() => _CheckCState();
+  State<CheckC> createState() => CheckCState();
 }
 
-class _CheckCState extends State<CheckC> {
+class CheckCState extends State<CheckC> {
   late List<bool> isChecked;
   late Queue<int> positions;
   int size = 0;
@@ -89,6 +89,16 @@ class _CheckCState extends State<CheckC> {
     super.initState();
     isChecked = List.generate(widget.nomes.length, (_) => false);
     positions = Queue<int>();
+  }
+
+  List<String> getSelectedValues(){
+    List<String> selectedValues = [];
+    for(int i = 0; i<isChecked.length; i++){
+      if(isChecked[i]){
+        selectedValues.add(widget.nomes[i]);
+      }
+    }
+    return selectedValues;
   }
 
   @override
@@ -116,7 +126,7 @@ class _CheckCState extends State<CheckC> {
                         overflow: TextOverflow.ellipsis,
                       )),
                   leading: Checkbox(
-                 
+                      
                       value: isChecked[index],
                       onChanged: (bool? value) {
                         setState(() {
@@ -125,6 +135,7 @@ class _CheckCState extends State<CheckC> {
                           }
                         });
                       })),
+                      
               widget.nomes[index] == 'outro' && isChecked[index] == true
                   ?  CustomTextField(name: 'qual?', validat: (value) {
                               if (value == null || value.isEmpty) {

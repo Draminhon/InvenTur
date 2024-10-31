@@ -42,7 +42,7 @@ class _A extends State<A> {
         body: PageView(
           controller: pc,
           onPageChanged: setPaginaAtual,
-          children: [FormularioA(), FormularioB(), const FormularioC()],
+          children: const [FormularioA(), FormularioB(), FormularioC()],
         ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: paginaAtual,

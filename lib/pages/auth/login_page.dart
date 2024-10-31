@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,7 +8,6 @@ import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 // Future<String?> getToken() async {
@@ -73,6 +71,7 @@ class _LoginPageState extends State<LoginPage> {
 
     Future<void> loginUser(String cpf, String password) async {
         final url = Uri.parse('http://10.0.2.2:8000/api/v1/login/');
+       // final url = Uri.parse('http://172.31.0.127:8000/api/v1/login/');
 
         final response = await http.post(
           url,
@@ -96,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
 
           // print("TOKEN ARMAZENADO:  $acessToken");
 
-
+          Navigator.pushNamed(context, '/Choose');
  
           print("Usuario logado com sucesso");
         }else{
@@ -181,7 +180,6 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () {
                               if (_formLoginKey.currentState!.validate()) {
 
-                                      print("AAAAAAAAAAAA");
                                 final cpf = _cpfController.text.replaceAll('.','').replaceAll('-', '');
                                 final password = _passwordController.text;
 

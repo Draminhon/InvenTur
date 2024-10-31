@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/pages/auth/email_validator_page.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/email_validator.dart';
@@ -48,7 +47,8 @@ class RegisterPage extends StatelessWidget {
       })
     ); 
 
-
+     
+    
     if(response.statusCode == 201){
       print('Usuario registrado com sucesso');
     }else{
@@ -109,9 +109,9 @@ class RegisterPage extends StatelessWidget {
                                 labelText: 'Nome Completo',
                                 controller: _nameController,
                                 prefixIcon: Icons.person,
-                                validator: (name) {
-                                  return _nameValidator.validate(name: name);
-                                },
+                                // validator: (name) {
+                                //   return _nameValidator.validate(name: name);
+                                // },
                               ),
                               SizedBox(height: paddingBottomTextField),
                               CustomTextField(
@@ -119,9 +119,9 @@ class RegisterPage extends StatelessWidget {
                                 controller: _cpfController,
                                 keyboardType: TextInputType.number,
                                 prefixIcon: FontAwesomeIcons.solidAddressCard,
-                                validator: (cpf) {
-                                  return _cpfValidator.validate(cpf: cpf);
-                                },
+                                // validator: (cpf) {
+                                //   return _cpfValidator.validate(cpf: cpf);
+                                // },
                                 inputFormatters: [cpfMask],
                               ),
                               SizedBox(height: paddingBottomTextField),
@@ -130,9 +130,9 @@ class RegisterPage extends StatelessWidget {
                                 controller: _emailController,
                                 prefixIcon: FontAwesomeIcons.solidEnvelope,
                                 keyboardType: TextInputType.emailAddress,
-                                validator: (email) {
-                                  return _emailValidator.validate(email: email);
-                                },
+                                // validator: (email) {
+                                //   return _emailValidator.validate(email: email);
+                                // },
                               ),
                               SizedBox(height: paddingBottomTextField),
                               CustomTextField(
@@ -140,9 +140,9 @@ class RegisterPage extends StatelessWidget {
                                 prefixIcon: Icons.lock, 
                                 controller: _passwordController, 
                                 isSecret: true,
-                                validator: (password) {
-                                  return _passwordValidator.validate(password: password);
-                                }, 
+                                // validator: (password) {
+                                //   return _passwordValidator.validate(password: password);
+                                // }, 
                               ),
                               SizedBox(height: paddingBottomTextField),
                               SizedBox(

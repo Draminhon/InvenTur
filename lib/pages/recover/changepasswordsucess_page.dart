@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:inventur/validators/password_validator.dart';
 
 
 class ConfirmacaoNovaSenha extends StatelessWidget {

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 
  
 def validate_cpf(cpf):
@@ -25,8 +26,119 @@ def validate_cpf(cpf):
     
 class CustomUser(AbstractUser):
     CPF = models.CharField(max_length=11, unique=True)
+    username = models.CharField(
+        max_length = 150,
+        unique=True,
+         validators=[
+            RegexValidator(
+                regex=r'^[\w\sáéíóúãõâêîôûçÁÉÍÓÚÃÕÂÊÎÔÛÇ]+$',
+                message="O nome de usuário pode conter letras, números e espaços."
+            )
+        ],
+    )
 
     def clean(self):
         super().clean()
         validate_cpf(self.CPF)
 # Create your models here.
+
+
+class Base(models.Model):
+
+
+    uf = models.CharField(max_length=255)
+    regiao_turistica = models.CharField(max_length=255)
+    municipio = models.CharField(max_length=255)
+
+    tipo = models.CharField(max_length=255)
+    subtipos = models.CharField(max_length=255)
+
+    nome_oficial = models.CharField(max_length=255)
+    nome_popular = models.CharField(max_length=255)
+
+
+
+class Rodovia(Base):
+    jurisdicao = models.CharField(max_length=50)
+    natureza = models.CharField(max_length=50)
+   
+    
+    tipo_de_organizacao_instituicao = models.TextField()
+    
+ 
+
+
+    extensao_rodovia_municipio = models.DecimalField(max_digits=10, decimal_places=2)
+
+    faixas_de_rolamento = models.CharField(max_length=50)
+
+    pavimentacao = models.CharField(max_length=50)
+
+    pedagio = models.CharField(max_length=10)
+
+    municipios_vizinhos_interligados_rodovia = models.TextField()
+
+    inicio_atividade = models.DateField()
+
+    ##Entidade mantedora
+
+    whatsapp = models.CharField(max_length=50)
+    instagram = models.CharField(max_length=50)
+
+    ##Sinalização
+
+    sinalizacao_de_acesso = models.CharField(max_length=10)
+    sinalizacao_turistica = models.CharField(max_length=10)
+
+    ##Características
+
+    posto_de_combustivel = models.TextField()
+    outros_servicos = models.TextField()
+    estruturas_ao_longo_da_via = models.TextField()
+
+    ##Questões ambientais/Sociais
+
+    poluicao = models.CharField(max_length=10)
+    poluicao_especificacao = models.TextField()
+
+    lixo = models.CharField(max_length=10)
+    lixo_especificacao = models.TextField()
+
+    desmatamento = models.CharField(max_length=10)
+    desmatamento_especificacao = models.TextField()
+
+    queimadas = models.CharField(max_length=10)
+    queimadas_especificacao = models.TextField()
+
+    inseguranca = models.CharField(max_length=10)
+    inseguranca_especificacao = models.TextField()
+
+    extrativismo = models.CharField(max_length=10)
+    extrativismo_especificacao = models.TextField()
+
+    prostituicao = models.CharField(max_length=10)
+    prostituicao_especificacao = models.TextField()
+
+    ocupacao_irregular_invasao = models.CharField(max_length=10)
+    ocupacao_irregular_invasao_especificacao = models.TextField()
+
+    outras = models.CharField(max_length=10)
+    outras_especificacao = models.TextField()
+
+    ##Estado geral de conservação
+
+    estado_geral_de_conservacao = models.CharField(max_length=20)
+
+    ##Observações
+
+    observacoes = models.TextField()
+    referencias = models.TextField()
+
+    nome_pesquisador = models.CharField(max_length=255)
+    telefone_pesquisador = models.CharField(max_length=255)
+    email_pesquisador = models.CharField(max_length=255)
+
+    nome_coordenador = models.CharField(max_length=255)
+    telefone_coordenador = models.CharField(max_length=255)
+    email_coordenador = models.CharField(max_length=255)
+

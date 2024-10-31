@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/validators/email_validator.dart';
 
-import 'package:inventur/pages/auth/email_validator_page.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
 class ConfirmarCodigo extends StatelessWidget {

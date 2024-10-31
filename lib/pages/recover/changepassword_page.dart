@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/validators/password_validator.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MudarSenha extends StatelessWidget {
   final PasswordValidator _passwordValidator = PasswordValidator();

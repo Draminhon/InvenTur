@@ -1,6 +1,7 @@
 from rest_framework import generics
 from .serializers import UserSerializer
-from .models import CustomUser
+from .models import CustomUser, Rodovia
+from .serializers import RodoviaSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
@@ -52,3 +53,13 @@ def UsuarioLoginView(request):
          
             print("Nao logado")
             return HttpResponse("Invalid credentials", status = 400)
+        
+class RodoviaListCreateAPIView(generics.ListCreateAPIView):
+    queryset = Rodovia.objects.all()
+    serializer_class = RodoviaSerializer
+
+class RodoviaListView(generics.ListAPIView):
+    queryset = Rodovia.objects.all()
+    serializer_class = RodoviaSerializer
+
+ 
