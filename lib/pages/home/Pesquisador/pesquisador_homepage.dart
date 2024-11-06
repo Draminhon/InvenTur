@@ -18,6 +18,12 @@ class PesquisadorHome extends StatelessWidget {
       appBar: AppBar(
         foregroundColor: const Color.fromARGB(255, 55, 111, 60),
         backgroundColor: Colors.white,
+        title:  Text('Minhas Pesquisas',
+                  style: TextStyle(
+                      color: const Color.fromARGB(255, 55, 111, 60),
+                      fontSize: sizeScreen.width * 0.06),
+                ),centerTitle: true,
+                
       ),
       drawer: Drawer(
         width: sizeScreen.width * 0.6,

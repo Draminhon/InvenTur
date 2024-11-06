@@ -45,6 +45,8 @@ class CustomUser(AbstractUser):
 
 class Base(models.Model):
 
+    criacao = models.DateField(auto_now_add=True)
+    atualizacao = models.DateTimeField(auto_now = True)
 
     uf = models.CharField(max_length=255)
     regiao_turistica = models.CharField(max_length=255)

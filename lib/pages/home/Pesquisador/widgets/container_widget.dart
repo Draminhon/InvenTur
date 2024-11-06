@@ -26,8 +26,8 @@ class ContainerWidget extends StatelessWidget {
               top: sizeScreen.height * 0.03,
               bottom: sizeScreen.height * 0.03,
               right: sizeScreen.width * 0.05),
-          margin: EdgeInsets.only(top: sizeScreen.height * 0.05),
-          height: sizeScreen.height * 0.35,
+          margin: EdgeInsets.only(top: sizeScreen.height * 0.03),
+          height: sizeScreen.height * 0.25,
           decoration: BoxDecoration(
               color: const Color.fromARGB(255, 255, 255, 255),
               borderRadius: BorderRadius.circular(10),

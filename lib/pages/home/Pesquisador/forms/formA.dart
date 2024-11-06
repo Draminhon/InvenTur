@@ -8,7 +8,7 @@ class FormularioA extends StatelessWidget {
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
-        backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+        backgroundColor:Colors.white,
         body: Column(children: [
           Padding(
               padding: EdgeInsets.only(
@@ -30,7 +30,8 @@ class FormularioA extends StatelessWidget {
                   'CATEGORIA A',
                   style: TextStyle(
                       color: const Color.fromARGB(255, 55, 111, 60),
-                      fontSize: sizeScreen.width * 0.06),
+                      fontSize: sizeScreen.width * 0.06,
+                      fontWeight: FontWeight.bold),
                 ),
                 Divider(
                   color: const Color.fromARGB(255, 55, 111, 60),
@@ -51,6 +52,7 @@ class FormularioA extends StatelessWidget {
             // const ContainerA(form: 'Locadoras de imóveis para temporadas'),
             // const ContainerA(form: 'Compras especiais'),
             const ContainerA(form: 'Comércio turístico', routeName: '/Placeholder',),
+            
             // const ContainerA(form: 'Representações diplomáticas'),
             // ExpansionTileA(titulo: 'Serviços', minhaLista: [
             //   Tilee(texto: 'Serviços bancários', routeName: '/Placeholder'),

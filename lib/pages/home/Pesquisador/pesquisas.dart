@@ -40,23 +40,28 @@ class _A extends State<A> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: PageView(
+          
           controller: pc,
           onPageChanged: setPaginaAtual,
           children: const [FormularioA(), FormularioB(), FormularioC()],
         ),
         bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: const Color.fromARGB(255, 55, 111, 60),
           currentIndex: paginaAtual,
+ 
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(FontAwesomeIcons.a),
+              icon: Icon(FontAwesomeIcons.a,color: Colors.white,),
               label: 'Categoria A',
+              
             ),
             BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.b), label: 'Categoria B'),
+                icon: Icon(FontAwesomeIcons.b,color: Colors.white,), label: 'Categoria B'),
             BottomNavigationBarItem(
-                icon: Icon(FontAwesomeIcons.c), label: 'Categoria C')
+                icon: Icon(FontAwesomeIcons.c,color: Colors.white,), label: 'Categoria C')
           ],
-          selectedItemColor: const Color.fromARGB(255, 55, 111, 60),
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white,
           onTap: (pagina) {
             pc.animateToPage(pagina,
                 duration: const Duration(milliseconds: 400),
