@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
+import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/email_validator.dart';
 import 'package:inventur/validators/name_validator.dart';
@@ -31,7 +32,7 @@ class RegisterPage extends StatelessWidget {
 
   Future<void> registerUser(String username, String CPF, String email, String password) async{
 
-    final url = Uri.parse('http://10.0.2.2:8000/api/v1/cadastro/');
+    final url = Uri.parse(AppConstants.BASE_URI + AppConstants.REGISTER_URI);
 
   try{
       final response = await http.post(

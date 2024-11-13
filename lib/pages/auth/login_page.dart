@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/pages/widgets/divider_text_widget.dart';
+import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -15,29 +16,6 @@ import 'package:http/http.dart' as http;
 //     return prefs.getString('acess_token');
 // }
 
-
-Future<void> loginUser(String CPF, String password) async {
-  final url = Uri.parse('http://10.0.2.2:8000/api/v1/login');
-
-  try{
-    final response = await http.post(url,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: json.encode(<String, String>{
-       'CPF': CPF,
-      'password': password,
-    }),
-    );
-    if(response.statusCode == 200){
-      print('Usuario registrado com sucesso');
-    }else{
-      print('Erro ao registrar o usuário: ${response.body}');    }
-
-     }catch(e){
-      print('Erro: $e');
-     }
-  }
 
 
 class LoginPage extends StatefulWidget {
@@ -56,7 +34,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
-
+  
   @override
   void dispose() {
     // TODO: implement dispose
@@ -70,9 +48,9 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
 
     Future<void> loginUser(String cpf, String password) async {
-        final url = Uri.parse('http://10.0.2.2:8000/api/v1/login/');
+        final url = Uri.parse(AppConstants.BASE_URI + AppConstants.LOGIN_URI);
        // final url = Uri.parse('http://172.31.0.127:8000/api/v1/login/');
-
+  try{
         final response = await http.post(
           url,
           headers: <String, String>{
@@ -100,6 +78,8 @@ class _LoginPageState extends State<LoginPage> {
           print("Usuario logado com sucesso");
         }else{
           print("Usário nao logado ${response.body}");
+        }}catch(e){
+            print(e);
         }
 
     }
@@ -140,9 +120,9 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _cpfController,
                           keyboardType: TextInputType.number,
                           prefixIcon: FontAwesomeIcons.solidAddressCard,
-                          validator: (cpf) {
-                            return _cpfValidator.validate(cpf: cpf);
-                          },
+                          // validator: (cpf) {
+                          //   return _cpfValidator.validate(cpf: cpf);
+                          // },
                           inputFormatters: [cpfMask],
                         ),
                         SizedBox(height: screenSize.height * 0.02),
@@ -183,7 +163,9 @@ class _LoginPageState extends State<LoginPage> {
                                 final cpf = _cpfController.text.replaceAll('.','').replaceAll('-', '');
                                 final password = _passwordController.text;
 
-                                loginUser(cpf, password);
+                                  final cpf2 = '07399207313';
+                                  final password2 = 'Murilo159753@';
+                                loginUser(cpf2, password2);
                                   }
                             //  Navigator.pushNamed(context, '/Choose');
                             }, 

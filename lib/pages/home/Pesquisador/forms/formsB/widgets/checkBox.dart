@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
@@ -28,10 +29,11 @@ class _CheckBState extends State<CheckB> {
     return 
     
     SizedBox(
-        width: sizeScreen.width,
-        height: sizeScreen.height * 0.3,
+        //width: sizeScreen.width,
+       // height:  0.2.h,
         child: RawScrollbar(
 thumbColor: const Color.fromARGB(255, 55, 111, 60),
+
           controller: firstController,
           thumbVisibility: true,
             child: ListView.builder(
@@ -74,8 +76,9 @@ thumbColor: const Color.fromARGB(255, 55, 111, 60),
 }
 
 class CheckC extends StatefulWidget {
-  const CheckC({super.key, required this.nomes});
+  const CheckC({super.key, required this.nomes, this.nomesModel });
   final List<String> nomes;
+  final List<String>? nomesModel;
   @override
   State<CheckC> createState() => CheckCState();
 }
@@ -89,6 +92,12 @@ class CheckCState extends State<CheckC> {
     super.initState();
     isChecked = List.generate(widget.nomes.length, (_) => false);
     positions = Queue<int>();
+    if(widget.nomesModel != null){
+    for(int i = 0; i<widget.nomes.length; i++){
+      if(widget.nomesModel!.contains(widget.nomes[i])){
+          isChecked[i] = true;
+      }
+    }}
   }
 
   List<String> getSelectedValues(){
@@ -114,6 +123,7 @@ class CheckCState extends State<CheckC> {
         controller: firstController,
         thumbVisibility: true,
         child: ListView.builder(
+          
           controller: firstController,
           itemCount: widget.nomes.length,
           itemBuilder: (context, index) {

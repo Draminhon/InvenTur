@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 class ContainerWidget extends StatelessWidget {
   final codIBGE;
   final estado;
@@ -15,19 +15,19 @@ class ContainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
-
+    print(sizeScreen);
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, '/Pesquisas');
       },
       child: Container(
           padding: EdgeInsets.only(
-              left: sizeScreen.width * 0.03,
-              top: sizeScreen.height * 0.03,
-              bottom: sizeScreen.height * 0.03,
-              right: sizeScreen.width * 0.05),
-          margin: EdgeInsets.only(top: sizeScreen.height * 0.03),
-          height: sizeScreen.height * 0.25,
+              left: 40.32.w,    
+              top: 87.66.h,
+              bottom: 87.66.h,
+              right: 40.32.w),
+          margin: EdgeInsets.only(top: 87.66.h),
+          height: 880.h,
           decoration: BoxDecoration(
               color: const Color.fromARGB(255, 255, 255, 255),
               borderRadius: BorderRadius.circular(10),

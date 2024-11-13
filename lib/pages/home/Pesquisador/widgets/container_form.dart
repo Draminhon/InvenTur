@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ContainerA extends StatelessWidget {
   final String form, routeName;
@@ -12,8 +13,8 @@ class ContainerA extends StatelessWidget {
         Navigator.pushReplacementNamed(context, routeName);
       },
       child: Container(
-          margin: EdgeInsets.only(bottom: sizeScreen.height * 0.01, left: sizeScreen.width * 0.1, right: sizeScreen.width * 0.1),
-          height: sizeScreen.height * 0.06,
+          margin: EdgeInsets.only(bottom: 29.92.h, left: 134.4.w, right: 134.4.w),
+          height: 200.52.h,
           decoration: BoxDecoration(
             gradient: LinearGradient(colors: [const Color.fromARGB(255, 55, 111, 60), const Color.fromARGB(255, 77, 156, 84)]),
             borderRadius: BorderRadius.circular(10),
@@ -55,8 +56,8 @@ class Tilee extends StatelessWidget {
         Navigator.pushReplacementNamed(context, routeName);
       },
       child: Container(
-            margin: EdgeInsets.only(bottom: sizeScreen.height * 0.01,),
-            height: sizeScreen.height * 0.06,
+            margin: EdgeInsets.only(bottom: 29.92.h),
+            height: 179.52.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
@@ -72,7 +73,7 @@ class Tilee extends StatelessWidget {
                     texto,
                     textAlign: TextAlign.center,
                     style:  TextStyle(
-                  fontSize: sizeScreen.width * 0.037,
+                  fontSize: 49.72.w,
                        
                         color: const Color.fromARGB(255, 55, 111, 60),
                         fontWeight: FontWeight.w900),
@@ -103,11 +104,12 @@ class _ExpansionTileA extends State<ExpansionTileA> {
   children: [
     Container(
       margin: EdgeInsets.only(
-        bottom: sizeScreen.height * 0.01,
-        left: sizeScreen.width * 0.1,
-        right: sizeScreen.width * 0.1,
+        bottom: 29.92.h,
+        left: 134.4.w,
+        right: 134.4.w,
       ),
       decoration: BoxDecoration(
+        
         borderRadius: BorderRadius.circular(10),
         border: Border.all(width: 0.5),
         color: const Color.fromARGB(255, 55, 111, 60),
@@ -126,9 +128,12 @@ class _ExpansionTileA extends State<ExpansionTileA> {
         ),
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: sizeScreen.width * 0.05, // Alinha título e ícone com os filhos
+            horizontal: 67.2.w, // Alinha título e ícone com os filhos
           ),
           child: ExpansionTile(
+ 
+            minTileHeight:    200.52.h,
+            dense: true,
             collapsedIconColor: Colors.white,
             iconColor: Colors.white,
             title: Center(
@@ -137,11 +142,11 @@ class _ExpansionTileA extends State<ExpansionTileA> {
                 style: TextStyle(
                   color: Colors.white, // Cor do texto para combinar com o botão
                   fontWeight: FontWeight.w900,
-                  fontSize: sizeScreen.width * 0.037,
+                  fontSize: 49.728.w,
                 ),
               ),
             ),
-            tilePadding: EdgeInsets.only(right: sizeScreen.width * 0.01),
+            tilePadding: EdgeInsets.only(right: 13.44.w),
             collapsedBackgroundColor: Colors.transparent,
             backgroundColor: Colors.transparent,
             childrenPadding: EdgeInsets.zero, // Mantém alinhado com o título

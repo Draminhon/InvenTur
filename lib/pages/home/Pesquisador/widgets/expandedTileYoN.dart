@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class ExpansionTileYoN extends StatefulWidget {
-  const ExpansionTileYoN({super.key, required this.getValue});
+  const ExpansionTileYoN({super.key, required this.getValue, this.optionModel});
   final Function(String) getValue;
+  final String? optionModel;
   @override
   State<ExpansionTileYoN> createState() => _ExpansionTileYoNState();
 }
@@ -15,6 +16,8 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
     // TODO: implement initState
     super.initState();
     widget.getValue(_option);
+    if(widget.optionModel!=null)
+    _option = widget.optionModel!;
   }
 
   @override

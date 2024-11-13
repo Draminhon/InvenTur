@@ -61,4 +61,10 @@ class RodoviaListView(generics.ListAPIView):
     queryset = Rodovia.objects.all()
     serializer_class = RodoviaSerializer
 
- 
+class RodoviaUpdateAPIView(generics.UpdateAPIView):
+    queryset = Rodovia.objects.all()
+    serializer_class = RodoviaSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)

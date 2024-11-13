@@ -109,7 +109,8 @@ class CustomTextNumber extends StatelessWidget {
 }
 
 class CustomTextDate extends StatelessWidget {
-  CustomTextDate({super.key, required this.getValue});
+  final TextEditingController? dateController;
+  CustomTextDate({super.key, required this.getValue, this.dateController});
 
   final Function(String) getValue;
   final dateFormat = DateFormat('yyyy-MM-dd');  // formato para enviar ao backend
@@ -126,6 +127,7 @@ class CustomTextDate extends StatelessWidget {
         top: sizeScreen.height * 0.023,
       ),
       child: TextFormField(
+        controller: dateController,
         inputFormatters: [
           FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]')),
           MaskTextInputFormatter(mask: '##/##/####'),

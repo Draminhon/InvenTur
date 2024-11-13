@@ -44,10 +44,10 @@ class CustomUser(AbstractUser):
 
 
 class Base(models.Model):
-
+    
     criacao = models.DateField(auto_now_add=True)
     atualizacao = models.DateTimeField(auto_now = True)
-
+    tipo_formulario = models.CharField(max_length=100)
     uf = models.CharField(max_length=255)
     regiao_turistica = models.CharField(max_length=255)
     municipio = models.CharField(max_length=255)
@@ -65,7 +65,7 @@ class Rodovia(Base):
     natureza = models.CharField(max_length=50)
    
     
-    tipo_de_organizacao_instituicao = models.TextField()
+    tipo_de_organizacao_instituicao = models.JSONField()
     
  
 
@@ -94,9 +94,9 @@ class Rodovia(Base):
 
     ##Características
 
-    posto_de_combustivel = models.TextField()
-    outros_servicos = models.TextField()
-    estruturas_ao_longo_da_via = models.TextField()
+    posto_de_combustivel = models.JSONField()
+    outros_servicos = models.JSONField()
+    estruturas_ao_longo_da_via = models.JSONField()
 
     ##Questões ambientais/Sociais
 

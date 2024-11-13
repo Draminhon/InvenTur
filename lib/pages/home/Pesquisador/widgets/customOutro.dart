@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class textLabel extends StatelessWidget {
   final String name;
@@ -12,11 +13,11 @@ class textLabel extends StatelessWidget {
       
   alignment: Alignment.centerLeft,
   child: Padding(
-    padding: EdgeInsets.only(top: sizeScreen.height * 0.03, left: sizeScreen.width * 0.06),
+    padding: EdgeInsets.only(top:  30.h, left: 80.w),
     child: Text(
       name,
       style: TextStyle(
-        fontSize: sizeScreen.width * 0.04,
+        fontSize:  59.w,
         // fontWeight: FontWeight.w600
       ),
       textAlign: TextAlign.left,

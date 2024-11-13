@@ -160,8 +160,9 @@ class _RadioStateC extends State<RadioC> {
 }
 
 class RadioD extends StatefulWidget {
-  const RadioD({super.key, required this.options, required this.getValue});
+  const RadioD({super.key, required this.options, required this.getValue, this.indexModel});
   final List<String> options;
+  final String? indexModel;
   final Function(String) getValue;
   @override
   State<RadioD> createState() => _RadioStateD();
@@ -170,13 +171,29 @@ class RadioD extends StatefulWidget {
 class _RadioStateD extends State<RadioD> {
   int? _value;
   opcoes? options = opcoes.a;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    if(widget.indexModel != null){
+    _value = widget.options.indexOf(widget.indexModel!);
+    widget.getValue(widget.indexModel!);
+     // widget.getValue(widget.options[i]);
+        if(_value == -1){
+          _value = null;
+        }
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
     return Column(
       children: [
         ExpansionTile(
-          
             shape: const Border(),
             title: const Text(
               'opções',
@@ -186,6 +203,7 @@ class _RadioStateD extends State<RadioD> {
                 left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
             children: [
               for (int i = 0; i < widget.options.length; i++)
+              
                 ListTile(
                     dense: true,
                     title: Text(
@@ -204,11 +222,13 @@ class _RadioStateD extends State<RadioD> {
                                 }else{
                                   _value = value;
                                 widget.getValue(widget.options[i]);}
+                                
                               });
                             },
                       toggleable: true,
                     )),
             ]),
+           
         _value == widget.options.indexOf('outro')
             ? CustomTextField(
                 name: 'qual?',

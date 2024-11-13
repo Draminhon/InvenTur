@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/utils/app_constants.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../widgets/customTextField.dart';
 import '../../widgets/expandedTileYoN.dart';
 import '../../widgets/radioButton.dart';
 import '../formsB/widgets/checkBox.dart';
 import '../formsB/widgets/sendButton.dart';
 import 'dart:convert';
+import 'package:inventur/models/rodovia_model.dart';
 import 'package:http/http.dart' as http;
 
 final GlobalKey<CheckCState> checkCKey = GlobalKey<CheckCState>();
@@ -15,15 +16,15 @@ final GlobalKey<CheckCState> postoCombustivel = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState>  outrosServicos = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> estruturasAoLongoDaVia = GlobalKey<CheckCState>();
 
-class Rodovia extends StatefulWidget {
-  const Rodovia({super.key});
-
+class RodoviaEdit extends StatefulWidget {
+  final RodoviaModel? rodoviaModel;
+   const RodoviaEdit({super.key, this.rodoviaModel});
   @override
-  State<Rodovia> createState() => _RodoviaState();
+  State<RodoviaEdit> createState() => _RodoviaState();
 }
 
 
-class _RodoviaState extends State<Rodovia> {
+class _RodoviaState extends State<RodoviaEdit> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Rodovia',
@@ -79,6 +80,13 @@ class _RodoviaState extends State<Rodovia> {
     'email_coordenador': null,
   };
 
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    autoFillForm();
+
+  }
     final TextEditingController uf = TextEditingController();
       TextEditingController regiao_turistica = TextEditingController();
     TextEditingController municipio = TextEditingController();
@@ -131,56 +139,304 @@ class _RodoviaState extends State<Rodovia> {
     TextEditingController email_coordenador = TextEditingController();
 
   void autoFillForm() {
-    uf.text = 'CE';
-    regiao_turistica.text = 'Flores e Mel';
-    municipio.text = 'Viçosa do Ceará';
-    tipo.text = 'Rodovia';
-    subtipos.text = 'Principal';
-    nome_oficial.text = 'Flores e Mel';
-    nome_popular.text = 'Flores e Mel';
-    jurisdicao.text = 'Municipal';
-    natureza.text = 'Estadual';
-    tipo_de_organizacao_instituicao.text = 'Instituição Pública';
-    extensao_rodovia_municipio.text = '1000';
-    faixas_de_rolamento.text = 'Duas';
-    pavimentacao.text = 'Asfalto';
-    pedagio.text = 'Não';
-    municipios_vizinhos_interligados_rodovia.text = 'Tianguá, Carnaubal';
-    inicio_atividade.text = '17012004';
-    whatsapp.text = 'José';
-    instagram.text = 'jose@gmail.com';
-    sinalizacao_de_acesso.text = 'Adequada';
-    sinalizacao_turistica.text = 'Presente';
-    posto_de_combustivel.text = 'Álcool, Gasolina';
-    outros_servicos.text = 'Alimentação, Polícia rodoviária, WiFi livre';
-    estruturas_ao_longo_da_via.text = 'Ponte, Viaduto';
-    poluicao.text = 'Sim';
-    poluicao_especificacao.text = 'sonora';
-    lixo.text = 'Sim';
-    lixo_especificacao.text = 'sobras';
-    desmatamento.text = 'Sim';
-    desmatamento_especificacao.text = 'familiar';
-    queimadas.text = 'Sim';
-    queimadas_especificacao.text = 'familiar';
-    inseguranca.text = 'Sim';
-    inseguranca_especificacao.text = 'roubo';
-    extrativismo.text = 'Sim';
-    extrativismo_especificacao.text = 'familiar';
-    prostituicao.text = 'Sim';
-    prostituicao_especificacao.text = 'clandestina';
-    ocupacao_irregular_invasao.text = 'poucas';
-    ocupacao_irregular_invasao_especificacao.text = 'nenhum';
-    outras.text = 'nenhum';
-    outras_especificacao.text = 'nenhum';
-    estado_geral_de_conservacao.text = 'Bom';
-    observacoes.text = 'ABCDEFGHIJKLMNOPQRSTUVWXZ';
-    referencias.text = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    nome_pesquisador.text = 'Murilo';
-    telefone_pesquisador.text = '40028922';
-    email_pesquisador.text = 'murilo@gmail.com';
-    nome_coordenador.text = 'Raquel';
-    telefone_coordenador.text = '202115599';
-    email_coordenador.text = 'raquelsilveira@gmail.com';
+    if(widget.rodoviaModel!.uf != null){
+    uf.text = widget.rodoviaModel!.uf!;
+    }else{
+      uf.text = '';
+    }
+ if (widget.rodoviaModel!.regiaoTuristica != null) {
+  regiao_turistica.text = widget.rodoviaModel!.regiaoTuristica!;
+} else {
+  regiao_turistica.text = '';
+}
+
+if (widget.rodoviaModel!.municipio != null) {
+  municipio.text = widget.rodoviaModel!.municipio!;
+} else {
+  municipio.text = '';
+}
+
+if (widget.rodoviaModel!.tipo != null) {
+  tipo.text = widget.rodoviaModel!.tipo!;
+} else {
+  tipo.text = '';
+}
+
+if (widget.rodoviaModel!.subtipos != null) {
+  subtipos.text = widget.rodoviaModel!.subtipos!;
+} else {
+  subtipos.text = '';
+}
+
+if (widget.rodoviaModel!.nomeOficial != null) {
+  nome_oficial.text = widget.rodoviaModel!.nomeOficial!;
+} else {
+  nome_oficial.text = '';
+}
+
+if (widget.rodoviaModel!.nomePopular != null) {
+  nome_popular.text = widget.rodoviaModel!.nomePopular!;
+} else {
+  nome_popular.text = '';
+}
+
+if (widget.rodoviaModel!.jurisdicao != null) {
+  jurisdicao.text = widget.rodoviaModel!.jurisdicao!;
+} else {
+  jurisdicao.text = '';
+}
+
+if (widget.rodoviaModel!.natureza != null) {
+  natureza.text = widget.rodoviaModel!.natureza!;
+} else {
+  natureza.text = '';
+}
+
+// if (widget.rodoviaModel!.tipoDeOrganizacaoInstituicao != null) {
+//   tipo_de_organizacao_instituicao.text = widget.rodoviaModel!.tipoDeOrganizacaoInstituicao!;
+// } else {
+//   tipo_de_organizacao_instituicao.text = '';
+// }
+
+if (widget.rodoviaModel!.extensaoRodoviaMunicipio != null) {
+  extensao_rodovia_municipio.text = widget.rodoviaModel!.extensaoRodoviaMunicipio!;
+} else {
+  extensao_rodovia_municipio.text = '';
+}
+
+if (widget.rodoviaModel!.faixasDeRolamento != null) {
+  faixas_de_rolamento.text = widget.rodoviaModel!.faixasDeRolamento!;
+} else {
+  faixas_de_rolamento.text = '';
+}
+
+if (widget.rodoviaModel!.pavimentacao != null) {
+  pavimentacao.text = widget.rodoviaModel!.pavimentacao!;
+} else {
+  pavimentacao.text = '';
+}
+
+if (widget.rodoviaModel!.pedagio != null) {
+  pedagio.text = widget.rodoviaModel!.pedagio!;
+} else {
+  pedagio.text = '';
+}
+
+if (widget.rodoviaModel!.municipiosVizinhosInterligadosRodovia != null) {
+  municipios_vizinhos_interligados_rodovia.text = widget.rodoviaModel!.municipiosVizinhosInterligadosRodovia!;
+} else {
+  municipios_vizinhos_interligados_rodovia.text = '';
+}
+
+if (widget.rodoviaModel!.inicioAtividade != null) {
+  inicio_atividade.text = widget.rodoviaModel!.inicioAtividade!;
+} else {
+  inicio_atividade.text = '';
+}
+
+if (widget.rodoviaModel!.whatsapp != null) {
+  whatsapp.text = widget.rodoviaModel!.whatsapp!;
+} else {
+  whatsapp.text = '';
+}
+
+if (widget.rodoviaModel!.instagram != null) {
+  instagram.text = widget.rodoviaModel!.instagram!;
+} else {
+  instagram.text = '';
+}
+
+if (widget.rodoviaModel!.sinalizacaoDeAcesso != null) {
+  sinalizacao_de_acesso.text = widget.rodoviaModel!.sinalizacaoDeAcesso!;
+} else {
+  sinalizacao_de_acesso.text = '';
+}
+
+if (widget.rodoviaModel!.sinalizacaoTuristica != null) {
+  sinalizacao_turistica.text = widget.rodoviaModel!.sinalizacaoTuristica!;
+} else {
+  sinalizacao_turistica.text = '';
+}
+
+// if (widget.rodoviaModel!.postoDeCombustivel != null) {
+//   posto_de_combustivel.text = widget.rodoviaModel!.postoDeCombustivel!;
+// } else {
+//   posto_de_combustivel.text = '';
+// }
+
+// if (widget.rodoviaModel!.outrosServicos != null) {
+//   outros_servicos.text = widget.rodoviaModel!.outrosServicos!;
+// } else {
+//   outros_servicos.text = '';
+// }
+
+// if (widget.rodoviaModel!.estruturasAoLongoDaVia != null) {
+//   estruturas_ao_longo_da_via.text = widget.rodoviaModel!.estruturasAoLongoDaVia!;
+// } else {
+//   estruturas_ao_longo_da_via.text = '';
+// }
+
+if (widget.rodoviaModel!.poluicao != null) {
+  poluicao.text = widget.rodoviaModel!.poluicao!;
+} else {
+  poluicao.text = '';
+}
+
+if (widget.rodoviaModel!.poluicaoEspecificacao != null) {
+  poluicao_especificacao.text = widget.rodoviaModel!.poluicaoEspecificacao!;
+} else {
+  poluicao_especificacao.text = '';
+}
+
+if (widget.rodoviaModel!.lixo != null) {
+  lixo.text = widget.rodoviaModel!.lixo!;
+} else {
+  lixo.text = '';
+}
+
+if (widget.rodoviaModel!.lixoEspecificacao != null) {
+  lixo_especificacao.text = widget.rodoviaModel!.lixoEspecificacao!;
+} else {
+  lixo_especificacao.text = '';
+}
+
+if (widget.rodoviaModel!.desmatamento != null) {
+  desmatamento.text = widget.rodoviaModel!.desmatamento!;
+} else {
+  desmatamento.text = '';
+}
+
+if (widget.rodoviaModel!.desmatamentoEspecificacao != null) {
+  desmatamento_especificacao.text = widget.rodoviaModel!.desmatamentoEspecificacao!;
+} else {
+  desmatamento_especificacao.text = '';
+}
+
+if (widget.rodoviaModel!.queimadas != null) {
+  queimadas.text = widget.rodoviaModel!.queimadas!;
+} else {
+  queimadas.text = '';
+}
+
+if (widget.rodoviaModel!.queimadasEspecificacao != null) {
+  queimadas_especificacao.text = widget.rodoviaModel!.queimadasEspecificacao!;
+} else {
+  queimadas_especificacao.text = '';
+}
+
+if (widget.rodoviaModel!.inseguranca != null) {
+  inseguranca.text = widget.rodoviaModel!.inseguranca!;
+} else {
+  inseguranca.text = '';
+}
+
+if (widget.rodoviaModel!.insegurancaEspecificacao != null) {
+  inseguranca_especificacao.text = widget.rodoviaModel!.insegurancaEspecificacao!;
+} else {
+  inseguranca_especificacao.text = '';
+}
+
+if (widget.rodoviaModel!.extrativismo != null) {
+  extrativismo.text = widget.rodoviaModel!.extrativismo!;
+} else {
+  extrativismo.text = '';
+}
+
+if (widget.rodoviaModel!.extrativismoEspecificacao != null) {
+  extrativismo_especificacao.text = widget.rodoviaModel!.extrativismoEspecificacao!;
+} else {
+  extrativismo_especificacao.text = '';
+}
+
+if (widget.rodoviaModel!.prostituicao != null) {
+  prostituicao.text = widget.rodoviaModel!.prostituicao!;
+} else {
+  prostituicao.text = '';
+}
+
+if (widget.rodoviaModel!.prostituicaoEspecificacao != null) {
+  prostituicao_especificacao.text = widget.rodoviaModel!.prostituicaoEspecificacao!;
+} else {
+  prostituicao_especificacao.text = '';
+}
+
+if (widget.rodoviaModel!.ocupacaoIrregularInvasao != null) {
+  ocupacao_irregular_invasao.text = widget.rodoviaModel!.ocupacaoIrregularInvasao!;
+} else {
+  ocupacao_irregular_invasao.text = '';
+}
+
+if (widget.rodoviaModel!.ocupacaoIrregularInvasaoEspecificacao != null) {
+  ocupacao_irregular_invasao_especificacao.text = widget.rodoviaModel!.ocupacaoIrregularInvasaoEspecificacao!;
+} else {
+  ocupacao_irregular_invasao_especificacao.text = '';
+}
+
+if (widget.rodoviaModel!.outras != null) {
+  outras.text = widget.rodoviaModel!.outras!;
+} else {
+  outras.text = '';
+}
+
+if (widget.rodoviaModel!.outrasEspecificacao != null) {
+  outras_especificacao.text = widget.rodoviaModel!.outrasEspecificacao!;
+} else {
+  outras_especificacao.text = '';
+}
+
+if (widget.rodoviaModel!.estadoGeralDeConservacao != null) {
+  estado_geral_de_conservacao.text = widget.rodoviaModel!.estadoGeralDeConservacao!;
+} else {
+  estado_geral_de_conservacao.text = '';
+}
+
+if (widget.rodoviaModel!.observacoes != null) {
+  observacoes.text = widget.rodoviaModel!.observacoes!;
+} else {
+  observacoes.text = '';
+}
+
+if (widget.rodoviaModel!.referencias != null) {
+  referencias.text = widget.rodoviaModel!.referencias!;
+} else {
+  referencias.text = '';
+}
+
+if (widget.rodoviaModel!.nomePesquisador != null) {
+  nome_pesquisador.text = widget.rodoviaModel!.nomePesquisador!;
+} else {
+  nome_pesquisador.text = '';
+}
+
+if (widget.rodoviaModel!.telefonePesquisador != null) {
+  telefone_pesquisador.text = widget.rodoviaModel!.telefonePesquisador!;
+} else {
+  telefone_pesquisador.text = '';
+}
+
+if (widget.rodoviaModel!.emailPesquisador != null) {
+  email_pesquisador.text = widget.rodoviaModel!.emailPesquisador!;
+} else {
+  email_pesquisador.text = '';
+}
+
+if (widget.rodoviaModel!.nomeCoordenador != null) {
+  nome_coordenador.text = widget.rodoviaModel!.nomeCoordenador!;
+} else {
+  nome_coordenador.text = '';
+}
+
+if (widget.rodoviaModel!.telefoneCoordenador != null) {
+  telefone_coordenador.text = widget.rodoviaModel!.telefoneCoordenador!;
+} else {
+  telefone_coordenador.text = '';
+}
+
+if (widget.rodoviaModel!.emailCoordenador != null) {
+  email_coordenador.text = widget.rodoviaModel!.emailCoordenador!;
+} else {
+  email_coordenador.text = '';
+}
 }
 
 @override
@@ -239,35 +495,33 @@ void dispose() {
     super.dispose();
 }
 
+
   @override
   Widget build(BuildContext context) {
+    
+    Future<void> updateRodovia(int rodoviaId, Map<String, dynamic> data) async{
 
-
-
-    Future<void> sendForm(Map<String, dynamic> valoresjson) async{
-
-      final url = Uri.parse(AppConstants.BASE_URI + AppConstants.RODOVIA_CREATE);
+      final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/rodovia/update/$rodoviaId');
 
 
       try{
-        final response = await http.post(
-          url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: json.encode(valoresjson)
-        );
-        if(response.statusCode == 201){
-          debugPrint("Formulário enviado com sucesso!");
-                  }else{
-                    debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
-                  }
+      final response = await http.patch(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(data),
+      );
+      if(response.statusCode == 200){
+        print("Atualização bem-sucedida");
+      }else{
+        print("Erro na atualização: ${response.statusCode}");
+      }
       }catch(e){
         print('Erro: $e');
       }
 
     }
-
 
 
     final sizeScreen = MediaQuery.sizeOf(context);
@@ -350,13 +604,16 @@ void dispose() {
                   getValue: (newValue) {
                     valoresjson['tipo'] = newValue;
                   },
+                  indexModel: widget.rodoviaModel!.tipo,
                 ),
                 const textLabel(name: 'Subtipos:'),
                 RadioD(
                     options: const ['Estação rodoviária'],
                     getValue: (newValue) {
                       valoresjson['subtipos'] = newValue;
-                    }),
+                    },
+                    indexModel: widget.rodoviaModel!.subtipos,
+                    ),
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
@@ -403,19 +660,23 @@ void dispose() {
                     options: const ['Federal', 'Estadual', 'Municipal'],
                     getValue: (newValue) {
                       valoresjson['jurisdicao'] = newValue;
-                    }),
+                    },
+                    indexModel: widget.rodoviaModel!.jurisdicao,),
                 const textLabel(name: 'Natureza:'),
                 RadioD(
                     options: const ['Pública', 'Privada', 'outro'],
                     getValue: (newValue) {
                       valoresjson['natureza'] = newValue;
-                    }),
+                    },
+                    indexModel: widget.rodoviaModel!.natureza,
+                    ),
                 const textLabel(name: 'Tipo de organização/Instituição:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
                  CheckC(
                   key: checkCKey,
+                  nomesModel: widget.rodoviaModel!.tipoDeOrganizacaoInstituicao,
                   nomes: const [
                     'Associação',
                     'Sindicato',
@@ -454,7 +715,8 @@ void dispose() {
                     ],
                     getValue: (newValue) {
                       valoresjson['faixas_de_rolamento'] = newValue;
-                    }),
+                    },
+                    indexModel: widget.rodoviaModel!.faixasDeRolamento,),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
@@ -471,7 +733,8 @@ void dispose() {
                     ],
                     getValue: (newValue) {
                       valoresjson['pavimentacao'] = newValue;
-                    }),
+                    },
+                    indexModel: widget.rodoviaModel!.pavimentacao,),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
@@ -484,6 +747,7 @@ void dispose() {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.rodoviaModel!.pedagio,
                     getValue: (newValue) {
                       valoresjson['pedagio'] = newValue;
                     },
@@ -517,7 +781,8 @@ void dispose() {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextDate(getValue: (newValue) {
                           valoresjson['inicio_atividade'] = newValue;
-                        }))
+                        }, 
+                        dateController: inicio_atividade,))
                   ],
                 ),
                 SizedBox(
@@ -591,6 +856,7 @@ void dispose() {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.rodoviaModel!.sinalizacaoDeAcesso,
                     getValue: (newValue) {
                       valoresjson['sinalizacao_de_acesso'] = newValue;
                     },
@@ -608,6 +874,7 @@ void dispose() {
                       //width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.rodoviaModel!.sinalizacaoTuristica,
                     getValue: (newValue) {
                       valoresjson['sinalizacao_turistica'] = newValue;
                     },
@@ -643,17 +910,19 @@ void dispose() {
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
+                  nomesModel: widget.rodoviaModel!.postoDeCombustivel,
                   key: postoCombustivel,
                   nomes: const ['Álcool', 'Gasolina', 'Diesel'],
                 ),
                 SizedBox(
-                  height: sizeScreen.height * 0.03,
+                  height: 0.05.h,
                 ),
                 const textLabel(name: 'Outros serviços:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
+                  nomesModel: widget.rodoviaModel!.outrosServicos,
                   key: outrosServicos,
                   nomes: const [
                     'Alimentação',
@@ -679,6 +948,7 @@ void dispose() {
                 ),
                 CheckC(
                   key: estruturasAoLongoDaVia,
+                  nomesModel: widget.rodoviaModel!.estruturasAoLongoDaVia,
                   nomes: const [
                     'Ponte',
                     'Passarela',
@@ -704,6 +974,7 @@ void dispose() {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.rodoviaModel!.poluicao,
                     getValue: (newValue) {
                       valoresjson['poluicao'] = newValue;
                     },
@@ -736,6 +1007,7 @@ void dispose() {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.rodoviaModel!.lixo,
                     getValue: (newValue) {
                       valoresjson['lixo'] = newValue;
                     },
@@ -765,6 +1037,7 @@ void dispose() {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.rodoviaModel!.desmatamento,
                     getValue: (newValue) {
                       valoresjson['desmatamento'] = newValue;
                     },
@@ -794,6 +1067,7 @@ void dispose() {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.rodoviaModel!.queimadas,
                     getValue: (newValue) {
                       valoresjson['queimadas'] = newValue;
                     },
@@ -823,6 +1097,7 @@ void dispose() {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.rodoviaModel!.inseguranca,
                     getValue: (newValue) {
                       valoresjson['inseguranca'] = newValue;
                     },
@@ -852,6 +1127,7 @@ void dispose() {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.rodoviaModel!.extrativismo,
                     getValue: (newValue) {
                       valoresjson['extrativismo'] = newValue;
                     },
@@ -881,6 +1157,7 @@ void dispose() {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.rodoviaModel!.prostituicao,
                     getValue: (newValue) {
                       valoresjson['prostituicao'] = newValue;
                     },
@@ -910,6 +1187,7 @@ void dispose() {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.rodoviaModel!.ocupacaoIrregularInvasao,
                     getValue: (newValue) {
                       valoresjson['ocupacao_irregular_invasao'] = newValue;
                     },
@@ -930,6 +1208,7 @@ void dispose() {
                 ),
                 Row(children: [
                   const textLabel(name: 'Outras:'),
+
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -937,6 +1216,7 @@ void dispose() {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                       optionModel: widget.rodoviaModel!.outras, 
                     getValue: (newValue) {
                       valoresjson['outras'] = newValue;
                     },
@@ -975,7 +1255,8 @@ void dispose() {
                     options: const ['Muito bom', 'Bom', 'Ruim'],
                     getValue: (newValue) {
                       valoresjson['estado_geral_de_conservacao'] = newValue;
-                    }),
+                    },
+                    indexModel: widget.rodoviaModel!.estadoGeralDeConservacao,),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
@@ -1150,7 +1431,7 @@ void dispose() {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () {
-                      List<String> selectedValues = checkCKey.currentState!.getSelectedValues();
+                    List<String> selectedValues = checkCKey.currentState!.getSelectedValues();
                       List<String> posto = postoCombustivel.currentState!.getSelectedValues();
                       List<String> outrosServicoss = outrosServicos.currentState!.getSelectedValues();
                       List<String> estruturas = estruturasAoLongoDaVia.currentState!.getSelectedValues();
@@ -1164,20 +1445,19 @@ void dispose() {
                       valoresjson['posto_de_combustivel'] = posto;
                       valoresjson['outros_servicos'] = outrosServicoss;
                       valoresjson['estruturas_ao_longo_da_via'] = estruturas;
-                      autoFillForm();
-                      if (_formKey.currentState!.validate()) {
+                       if (_formKey.currentState!.validate()) {
                         //  ScaffoldMessenger.of(context).showSnackBar(
                         //      const SnackBar(content: Text('processing data')));
-                        
+                       
                         _formKey.currentState!.save();
-                        debugPrint(valoresjson.toString(), wrapWidth: 1024);
-                        sendForm(valoresjson);
+                        updateRodovia(widget.rodoviaModel!.id!, valoresjson);
+                   Navigator.pushReplacementNamed(context, '/UpdatedForm');
+
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text('preencha os dados!')));
                       }
-                      Navigator.pushReplacementNamed(context, '/SendedForm');
                     },
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Colors.green[800],
@@ -1185,7 +1465,7 @@ void dispose() {
                           borderRadius: BorderRadius.circular(10)),
                     ),
                     child: const Text(
-                      'Enviar',
+                      'Salvar Edições',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 25), // Use um fontSize fixo
