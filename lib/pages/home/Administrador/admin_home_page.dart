@@ -1,9 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/user_controller.dart';
 import 'package:inventur/pages/home/Administrador/user_management_page.dart';
 import 'package:inventur/pages/pesquisas/pesquisas_page.dart';
 import 'package:inventur/pages/widgets/options_drawer_widget.dart';
+import 'package:inventur/models/user_model.dart';
+import 'package:inventur/utils/app_constants.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
@@ -13,28 +19,20 @@ class AdminHomePage extends StatefulWidget {
 }
 
 class _AdminHomePageState extends State<AdminHomePage> {
+
+  static Future<List<User>> getUsers() async {
+    var url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_USERS);
+    final response = await http.get(url, headers: {"Content-Type": "application/json"});
+    final List body = json.decode(utf8.decode(response.bodyBytes));
+    return body.map((e) => User.fromJson(e)).toList();
+  }
   int currentPageIndex = 0;
 
   late PageController pageController;
 
   final UserController _userController = UserController();
   
-  final List<User> users = [
-    User(nome: "Tiago Alves de Lima", cpf: "015.235.444-05", email: "tiago@teste.com", accessLevel: 'Administrador'),
-    User(nome: "Fulano de Tal da Silva", cpf: "245.555.48-90", email: "fulano@teste.com", accessLevel: 'Administrador'),
-    User(nome: "Fulano Silva da Costa", cpf: "789.214.878-02", email: "fulanosilva@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
-    User(nome: "Ciclano Fonseca Silva", cpf: "584.978.010-80", email: "ciclano@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
-    User(nome: "Beltrano Alves Oliveira", cpf: "785.441.210-70", email: "beltrano@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
-    User(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
-    User(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
-    User(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
-    User(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Ativo", accessLevel: 'Pesquisador'),
-    User(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
-    User(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Não Ativo", accessLevel: 'Pesquisador'),
-    User(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
-    User(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
-    User(nome: "Tiago Alves de Lima", cpf: "000.000.000-00", email: "teste@teste.com", status: "Aguardando Aprovação", accessLevel: 'Pesquisador'),
-  ];
+  
 
   final Map<int, String> pageTitle = {
     0: 'Andamento das Pesquisas',
@@ -46,12 +44,16 @@ class _AdminHomePageState extends State<AdminHomePage> {
   void initState() {
     super.initState();
     pageController = PageController(initialPage: currentPageIndex);
-    _userController.setUsers(users);
-    _userController.populateFilteredUsers();
   }
 
   @override
   Widget build(BuildContext context) {
+    Future<void> loadUsers() async{
+    List<User> users = await getUsers();
+    _userController.setUsers(users);
+    _userController.populateFilteredUsers();
+    }
+    loadUsers();
     return DefaultTabController(
       length: 2,
       child: Scaffold(

@@ -32,14 +32,14 @@ class UserPesquisaCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text("Nome:", style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(user.nome)
+                      Text(user.username!)
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text("CPF:", style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(user.cpf)
+                      Text(user.CPF!)
                     ],
                   ),
                 ],

@@ -491,7 +491,6 @@ void dispose() {
     nome_coordenador.dispose();
     telefone_coordenador.dispose();
     email_coordenador.dispose();
-
     super.dispose();
 }
 

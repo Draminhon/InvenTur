@@ -36,7 +36,8 @@ class CustomUser(AbstractUser):
             )
         ],
     )
-
+    acessLevel = models.CharField(max_length=22, default='Pesquisador');
+    status = models.CharField(max_length=50, default='Aguardando Aprovação')
     def clean(self):
         super().clean()
         validate_cpf(self.CPF)

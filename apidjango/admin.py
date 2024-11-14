@@ -3,7 +3,7 @@ from .models import CustomUser, Rodovia
 
  
 class CustomUserAdmin(admin.ModelAdmin):
-    list_display = ['id','username', 'email', 'CPF', 'is_staff', 'is_active']  # Campos exibidos na lista
+    list_display = ['id','username', 'email', 'CPF', 'acessLevel', 'status', 'is_staff', 'is_active']  # Campos exibidos na lista
     search_fields = ['username', 'email', 'CPF']  # Campos usados na pesquisa
     list_filter = ['is_staff', 'is_active']  # Filtros na barra lateral
     ordering = ['username']  # Ordem de exibição

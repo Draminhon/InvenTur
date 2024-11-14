@@ -146,11 +146,11 @@ class Pesquisas extends StatelessWidget {
                 
                   final rodovias = snapshot.data!;
                   if (rodovias.isEmpty) {
-                    return const Text("No data avaliable");
+                    return const Text("Não há equipamentos inventariados");
                   }
                   return showRodovias(rodovias);
                 } else {
-                  return const Text("No data avaliable");
+                  return const Text("Não há equipamentos inventariados");
                 }
               },
             )),

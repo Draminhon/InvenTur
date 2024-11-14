@@ -7,6 +7,7 @@ import 'package:inventur/models/municipio_model.dart';
 class BrasilService {
   
   Future<List<Estado>> fetchEstados() async {
+    try{
     final response = await http.get(
       Uri.parse('https://servicodados.ibge.gov.br/api/v1/localidades/estados')
     );
@@ -18,7 +19,11 @@ class BrasilService {
     } else {
       throw Exception('Falha ao Carregar Estados');
     }
-  }
+  }catch(e){
+      //throw Exception('Falha ao carregar estados');
+      print('Erro ao carregar os estados $e');
+      return [];
+  }}
 
   Future<List<Municipio>> fetchMunicipiosUF(int ufId) async {
     final response = await http.get(

@@ -6,7 +6,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'CPF', 'email', 'password']
+        fields = ['username', 'CPF', 'email', 'password', 'acessLevel', 'status']
         exxtra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):

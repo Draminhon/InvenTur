@@ -1,16 +1,27 @@
 class User {
-  String cpf;
-  String nome;
-  String email;
-  String? status;
-  String accessLevel;
-  bool isSelected = false;
+  int? id;
+  String CPF = '';
+  String username = '';
+  String email = '';
+  String status = '';
+  String accessLevel = '';
+   bool isSelected = false;
   
   User({
-    this.status,
-    required this.cpf,
-    required this.nome,
-    required this.email,
-    required this.accessLevel,
+    this.id,
+    this.status = '',
+    this.CPF = '',
+    this.username = '',
+     this.email = '',
+     this.accessLevel = '',
   });
+  User.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    CPF = json['CPF'];
+    username = json['username'];
+    email = json['email'];
+    accessLevel = json['acessLevel'];
+    status = json['status'];
+
+  }
 }

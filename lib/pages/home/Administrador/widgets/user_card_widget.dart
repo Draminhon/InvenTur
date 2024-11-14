@@ -90,7 +90,7 @@ class _UserCardState extends State<UserCard> {
                       SizedBox(
                         width: 200,
                         child: Text(
-                          _user.nome,
+                          _user.username!,
                           textAlign: TextAlign.end,
                           style: const TextStyle(overflow: TextOverflow.ellipsis),
                         ),
@@ -104,7 +104,7 @@ class _UserCardState extends State<UserCard> {
                         'CPF:',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      Text(_user.cpf)
+                      Text(_user.CPF)
                     ],
                   ),
                   Row(

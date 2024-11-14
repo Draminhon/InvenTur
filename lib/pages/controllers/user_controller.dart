@@ -153,11 +153,11 @@ class UserController extends ChangeNotifier {
     
     text = text.toLowerCase();
     for (User user in _filteredUsers) {
-      if (user.nome.toLowerCase().contains(text)) {
+      if (user.username!.toLowerCase().contains(text)) {
         auxUsers.add(user);
-      } else if (user.cpf.contains(text)) {
+      } else if (user.CPF!.contains(text)) {
         auxUsers.add(user);
-      } else if (user.email.toLowerCase().contains(text)) {
+      } else if (user.email!.toLowerCase().contains(text)) {
         auxUsers.add(user);
       }
     }
