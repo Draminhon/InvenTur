@@ -21,10 +21,15 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
 
   static Future<List<User>> getUsers() async {
+    try{
     var url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_USERS);
     final response = await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(utf8.decode(response.bodyBytes));
     return body.map((e) => User.fromJson(e)).toList();
+    }catch(e){
+      print('Falha ao carregar usuários');
+      return [];
+    }
   }
   int currentPageIndex = 0;
 
@@ -48,6 +53,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    
     Future<void> loadUsers() async{
     List<User> users = await getUsers();
     _userController.setUsers(users);

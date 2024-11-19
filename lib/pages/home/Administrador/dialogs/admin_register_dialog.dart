@@ -164,13 +164,13 @@ class _RegisterAdminDialogState extends State<RegisterAdminDialog> with SingleTi
                             color: const Color.fromARGB(255, 55, 111, 60),
                           ),
                           SizedBox(height: screenSize.height * .02),
-                          Text(
-                            'Um e-mail com os dados cadastrados será enviado para o usuário',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: screenSize.height * .022,
-                            ),
-                          ),
+                          // Text(
+                          //   'Um e-mail com os dados cadastrados será enviado para o usuário',
+                          //   textAlign: TextAlign.center,
+                          //   style: TextStyle(
+                          //     fontSize: screenSize.height * .022,
+                          //   ),
+                          // ),
                           Text(
                             'O usuário terá acesso à todas as funcionalidades disponíveis ao perfil de nivel Administrador',
                             textAlign: TextAlign.center,

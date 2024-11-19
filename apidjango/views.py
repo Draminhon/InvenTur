@@ -1,7 +1,7 @@
 from rest_framework import generics
 from .serializers import UserSerializer
-from .models import CustomUser, Rodovia
-from .serializers import RodoviaSerializer
+from .models import *
+from .serializers import *
 from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
@@ -23,6 +23,38 @@ class UsuarioCreateView(generics.ListCreateAPIView):
 class UsuarioListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
+
+
+class PesquisaCreateView(generics.ListCreateAPIView):
+    queryset = Pesquisa.objects.all()
+    serializer_class = PesquisaSerializer
+
+class AdminUserCreateView(generics.ListCreateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+    def create(self, request, *args, **kwargs):
+        data = request.data.copy()
+        cpf = data.get('CPF')
+
+        user = CustomUser.objects.filter(CPF=cpf).first()
+
+        if user:
+           user.acessLevel = 'Administrador'
+           user.save()
+
+           return HttpResponse(
+               {"message": "Usuário atualizado com sucesso!", "id": user.id},
+                status=status.HTTP_200_OK
+            )
+        else:
+            data['acessLevel'] = 'Administrador'
+
+            serializer = self.get_serializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            self.perform_create(serializer)
+            headers = self.get_success_headers(serializer.data)
+            return HttpResponse(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 @csrf_exempt # Apenas para testes locais. Em produção, use o CSRF adequadamente
 def UsuarioLoginView(request):
@@ -68,3 +100,15 @@ class RodoviaUpdateAPIView(generics.UpdateAPIView):
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
+    
+class StatusUpdateAPIView(generics.UpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+    
+class DeleUserAPIView(generics.DestroyAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer

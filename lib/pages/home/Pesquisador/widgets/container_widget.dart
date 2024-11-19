@@ -27,7 +27,7 @@ class ContainerWidget extends StatelessWidget {
               bottom: 87.66.h,
               right: 40.32.w),
           margin: EdgeInsets.only(top: 87.66.h),
-          height: 880.h,
+          height: 1000.h,
           decoration: BoxDecoration(
               color: const Color.fromARGB(255, 255, 255, 255),
               borderRadius: BorderRadius.circular(10),

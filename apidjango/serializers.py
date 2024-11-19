@@ -1,13 +1,13 @@
 from rest_framework import serializers
-from .models import CustomUser, Rodovia
+from .models import *
 from apidjango.models import validate_cpf
 
 class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['username', 'CPF', 'email', 'password', 'acessLevel', 'status']
-        exxtra_kwargs = {'password': {'write_only': True}}
+        fields = ['id','username', 'CPF', 'email', 'password', 'acessLevel', 'status']
+        exxtra_kwargs = {'password': {'write_only': True,}}
 
     def create(self, validated_data):
         user = CustomUser(**validated_data)
@@ -18,7 +18,13 @@ class UserSerializer(serializers.ModelSerializer):
     def validate_CPF(self, value):
         validate_cpf(value)
         return value 
-    
+
+class PesquisaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Pesquisa
+        fields = '__all__'
+
 class RodoviaSerializer(serializers.ModelSerializer):
     # tipo_de_organizacao_instituicao = serializers.PrimaryKeyRelatedField(many=True, queryset=TipoOrganizacao.objects.all())
     # posto_de_combustivel = serializers.PrimaryKeyRelatedField(many=True, queryset=PostoDeCombustivel.objects.all())

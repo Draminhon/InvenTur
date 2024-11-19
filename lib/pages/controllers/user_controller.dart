@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/models/user_model.dart';
-
+import 'package:inventur/utils/app_constants.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 class UserController extends ChangeNotifier {
   static const String _allStatus = 'Todos';
   static const String _onStatus = 'Ativo';
@@ -27,6 +29,7 @@ class UserController extends ChangeNotifier {
 
   int _countSelectedUsers = 0;
   List<User> _users = [];
+  List<User> get users => _users;
   bool _allSelectedUsers = false;
   String _usersFilteredStatus = _allStatus;
   String _usersFilteredAccessLevel = _secondaryLevel;
@@ -45,6 +48,12 @@ class UserController extends ChangeNotifier {
 
   void setUsers(List<User> users) {
     _users = users;
+  }
+
+  void removeUser(User user){
+    _users.removeWhere((u)=>u.id == user.id);
+    populateFilteredUsers();
+    notifyListeners();
   }
 
   void setAllSelectedUsers(bool marked) {
@@ -117,9 +126,32 @@ class UserController extends ChangeNotifier {
     }
   }
 
-  void setUserStatus(String status, User user) {
+  void setUserStatus(String status, User user) async{
     user.status = status;
     notifyListeners();
+
+      var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/usuarios/status/update/${user.id}/');
+
+     try{
+     await http.patch(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'id': user.id,
+          'username': user.username,
+          'CPF': user.CPF,
+          'email': user.email,
+          'acessLevel': user.accessLevel,
+          'status': status
+        }),
+      );
+
+     
+    }catch(e){
+      print('Erro ao atualizar o status no banco: $e');
+    }
   }
 
   void changeSelectedUsersStatus(String status) {
@@ -153,11 +185,11 @@ class UserController extends ChangeNotifier {
     
     text = text.toLowerCase();
     for (User user in _filteredUsers) {
-      if (user.username!.toLowerCase().contains(text)) {
+      if (user.username.toLowerCase().contains(text)) {
         auxUsers.add(user);
-      } else if (user.CPF!.contains(text)) {
+      } else if (user.CPF.contains(text)) {
         auxUsers.add(user);
-      } else if (user.email!.toLowerCase().contains(text)) {
+      } else if (user.email.toLowerCase().contains(text)) {
         auxUsers.add(user);
       }
     }

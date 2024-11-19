@@ -73,7 +73,6 @@ class _LoginPageState extends State<LoginPage> {
 
           // print("TOKEN ARMAZENADO:  $acessToken");
 
-          Navigator.pushNamed(context, '/Choose');
  
           print("Usuario logado com sucesso");
         }else{
@@ -166,6 +165,8 @@ class _LoginPageState extends State<LoginPage> {
                                   final cpf2 = '07399207313';
                                   final password2 = 'Murilo159753@';
                                 loginUser(cpf2, password2);
+          Navigator.pushNamed(context, '/Choose');
+
                                   }
                             //  Navigator.pushNamed(context, '/Choose');
                             }, 

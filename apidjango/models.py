@@ -44,6 +44,19 @@ class CustomUser(AbstractUser):
 # Create your models here.
 
 
+
+class Pesquisa(models.Model):
+    criacao = models.DateField(auto_now_add=True)
+    atualizacao = models.DateTimeField(auto_now = True)
+
+    dataInicio = models.DateField()
+    dataTermino = models.DateField()
+
+    codigoIBGE = models.CharField(max_length=255)
+    estado = models.CharField(max_length=255)
+    municipio = models.CharField(max_length=255)
+
+
 class Base(models.Model):
     
     criacao = models.DateField(auto_now_add=True)

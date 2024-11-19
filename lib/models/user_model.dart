@@ -24,4 +24,15 @@ class User {
     status = json['status'];
 
   }
+
+   Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'username': username,
+      'CPF': CPF,
+      'email': email,
+      'accessLevel': accessLevel,
+      'status': status,
+    };
+  }
 }

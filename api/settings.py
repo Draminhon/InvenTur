@@ -47,7 +47,9 @@ AUTH_USER_MODEL =  'apidjango.CustomUser'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DATE_FORMAT': '%d/%m/%Y',
+    'DATETIME_FORMAT': '%d/%m/%Y %H:%M:%S',
 }
 
 
@@ -142,3 +144,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DEFAULT_CHARSET = 'utf-8'
+
+DATE_INPUT_FORMATS = [
+    '%d/%m/%Y',  # Dia/Mês/Ano
+]

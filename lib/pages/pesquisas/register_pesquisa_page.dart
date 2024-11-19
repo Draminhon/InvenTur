@@ -6,7 +6,9 @@ import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/pesquisas/widgets/user_pesquisa_card_widget.dart';
 import 'package:inventur/pages/widgets/auto_complete_text_field.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:inventur/utils/app_constants.dart';
 class RegisterPesquisa extends StatefulWidget {
   const RegisterPesquisa({super.key});
 
@@ -55,7 +57,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
     _animationController.reverse();
 
     if (selectedDate != null) {
-      return DateFormat('dd/MM/yyyy').format(selectedDate);
+      return DateFormat('yyyy-MM-dd').format(selectedDate);
     }
     return '';
   }
@@ -86,6 +88,41 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
     _animationController.dispose();
     super.dispose();
   }
+
+  Future<void> createPesquisa(String dataInicio, String dataTermino, String codIBGE, String estado, String municipio) async{
+
+    final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/create');
+
+  try{
+      final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(<String, String>{
+        'dataInicio':dataInicio,
+        'dataTermino':dataTermino,
+
+        'codigoIBGE':codIBGE,
+        'estado':estado,
+        'municipio':municipio
+      })
+    ); 
+
+     
+    
+    if(response.statusCode == 201){
+      print('Pesquisa criada com sucesso');
+    }else{
+      print('Erro ao criar pesquisa: ${response.body}');    }
+
+     }catch(e){
+      print('Erro: $e');
+     }
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -335,7 +372,11 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                       Colors.green[100]
                                     ),
                                   ),
-                                  onPressed: () {},
+                                  onPressed: () async{
+
+                                 
+
+                                  },
                                   child: const Row(
                                     children: [
                                       Text(
@@ -436,7 +477,18 @@ class _RegisterPesquisaState extends State<RegisterPesquisa> with SingleTickerPr
                                   Colors.green[600]
                                 )
                               ),
-                              onPressed: () {},
+                              onPressed: () async {
+
+
+                                   final dataInicio = _inicioController.text;
+                                    final dataTermino = _terminoController.text;
+                                    final codigoIBGE = _codigIbgeController.text;
+                                    final estado = _estadoSelecionado!.nome;
+                                    final municipio = _municipioSelecionado!.nome;
+
+
+                                    createPesquisa(dataInicio, dataTermino, codigoIBGE, estado, municipio);
+                              },
                               child: Text(
                                 "Confirmar",
                                 style: TextStyle(

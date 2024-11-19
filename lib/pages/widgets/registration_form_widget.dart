@@ -7,6 +7,10 @@ import 'package:inventur/validators/email_validator.dart';
 import 'package:inventur/validators/name_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:inventur/utils/app_constants.dart';
+
 
 class ResgistrationForm extends StatelessWidget {
   ResgistrationForm({
@@ -31,8 +35,43 @@ class ResgistrationForm extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
 
+
+  Future<void> registerUser(String username, String CPF, String email, String password) async{
+
+    final url = Uri.parse(AppConstants.BASE_URI + '/api/v1/usuarios/register/admin');
+
+  try{
+      final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(<String, String>{
+        'username': username,
+        'CPF': CPF,
+        'email': email,
+        'password': password
+      })
+    ); 
+
+     
+    
+    if(response.statusCode == 201){
+      print('Usuario registrado com sucesso');
+    }else{
+      print('Erro ao registrar o usuário: ${response.body}');    }
+
+     }catch(e){
+      print('Erro: $e');
+     }
+
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
+
     final screenSize = MediaQuery.sizeOf(context);
     
     double paddingBottomTextField = screenSize.height * 0.02;
@@ -103,8 +142,17 @@ class ResgistrationForm extends StatelessWidget {
                   Colors.green[600]
                 )
               ),
-              onPressed: () {
-                if (_formRegisterKey.currentState!.validate()){}
+              onPressed: () async{
+                if (_formRegisterKey.currentState!.validate()){
+                
+                                      final username = _nameController.text;
+                                      final cpf = _cpfController.text.replaceAll('.','').replaceAll('-', '');
+                                      final email = _emailController.text;
+                                      final password = _passwordController.text;
+
+                                      final result = await registerUser(username, cpf, email, password);
+                                      Navigator.pop(context);
+                }
               }, 
               child: Text(
                 userLevel == userController.primaryLevel
