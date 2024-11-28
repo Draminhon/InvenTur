@@ -80,13 +80,20 @@ class PesquisaController extends ChangeNotifier {
     notifyListeners();
   }
 
+
+
   void addUserPesquisa(User user) {
-    _usersPesquisas.add(user);
+
+    if(!_usersPesquisas.any((u) => u.id == user.id)){
+      _usersPesquisas.add(user);
     notifyListeners();
+
+    }
   }
 
   void removeUserPesquisa(User user) {
     _usersPesquisas.remove(user);
+    print(_usersPesquisas);
     notifyListeners();
   }
 

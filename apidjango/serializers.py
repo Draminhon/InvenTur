@@ -4,9 +4,10 @@ from apidjango.models import validate_cpf
 
 class UserSerializer(serializers.ModelSerializer):
 
+
     class Meta:
         model = CustomUser
-        fields = ['id','username', 'CPF', 'email', 'password', 'acessLevel', 'status']
+        fields = ['id','username', 'CPF', 'email', 'password', 'is_active',  'acessLevel', 'status', ]
         exxtra_kwargs = {'password': {'write_only': True,}}
 
     def create(self, validated_data):
@@ -21,9 +22,16 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PesquisaSerializer(serializers.ModelSerializer):
 
+    usuario = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), many=True)
+
     class Meta:
         model = Pesquisa
         fields = '__all__'
+
+
+
+
+    
 
 class RodoviaSerializer(serializers.ModelSerializer):
     # tipo_de_organizacao_instituicao = serializers.PrimaryKeyRelatedField(many=True, queryset=TipoOrganizacao.objects.all())

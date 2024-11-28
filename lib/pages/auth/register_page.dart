@@ -44,7 +44,7 @@ class RegisterPage extends StatelessWidget {
         'username': username,
         'CPF': CPF,
         'email': email,
-        'password': password
+        'password': password,
       })
     ); 
 

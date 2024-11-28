@@ -3,6 +3,9 @@ import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/user_controller.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:http/http.dart' as http;
+
+
+
 class UserCard extends StatelessWidget {
   final User user;
   final UserController userControllerNotifier;
@@ -47,27 +50,8 @@ class UserCard extends StatelessWidget {
                 IconButton(
                   onPressed: ()async {
 
-                    var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/usuarios/destroy/${user.id}');
-
-                    try{
-                      final response = await http.delete(url,
-                      headers: {
-                        'Content-Type': 'application/json',
-                      });
-
-                      if(response.statusCode == 204){
-                        print('Usuario deletado com sucesso');
-
-                          userControllerNotifier.removeUser(user);
+                         userControllerNotifier.removeUser(false, user);
                           userControllerNotifier.populateFilteredUsers();
-                      }
-                      else{
-                        print('Falha ao deletar: ${response.statusCode}');
-                      }
-                      }catch(e){
-                        print('Erro $e');
-                    }
-                    
 
 
                   }, 

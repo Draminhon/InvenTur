@@ -1,8 +1,11 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:inventur/models/user_model.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
 class UserController extends ChangeNotifier {
   static const String _allStatus = 'Todos';
   static const String _onStatus = 'Ativo';
@@ -15,11 +18,7 @@ class UserController extends ChangeNotifier {
   final List<User> _filteredUsers = [];
 
   final List<String> _accessLevels = [_secondaryLevel, _primaryLevel];
-  final List<String> statusItems = [
-    _waitingStatus,
-    _onStatus,
-    _offStatus
-  ];
+  final List<String> statusItems = [_waitingStatus, _onStatus, _offStatus];
   final List<String> _statusFilters = [
     _allStatus,
     _onStatus,
@@ -47,11 +46,35 @@ class UserController extends ChangeNotifier {
   bool get allSelectedUsers => _allSelectedUsers;
 
   void setUsers(List<User> users) {
+    
     _users = users;
   }
 
-  void removeUser(User user){
-    _users.removeWhere((u)=>u.id == user.id);
+  void removeUser(bool active, User user) async {
+    var url =
+        Uri.parse('${AppConstants.BASE_URI}/api/v1/usuarios/update/${user.id}');
+
+    try {
+      final response =  await http.patch(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'is_active': active
+        }),
+      );
+
+      if (response.statusCode == 204) {
+        print('Usuario deletado com sucesso');
+      } else {
+        print('Falha ao deletar: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro $e');
+    }
+
+    _users.removeWhere((u) => u.id == user.id);
     populateFilteredUsers();
     notifyListeners();
   }
@@ -126,14 +149,15 @@ class UserController extends ChangeNotifier {
     }
   }
 
-  void setUserStatus(String status, User user) async{
+  void setUserStatus(String status, User user) async {
     user.status = status;
     notifyListeners();
 
-      var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/usuarios/status/update/${user.id}/');
+    var url = Uri.parse(
+        '${AppConstants.BASE_URI}/api/v1/usuarios/status/update/${user.id}/');
 
-     try{
-     await http.patch(
+    try {
+      await http.patch(
         url,
         headers: {
           'Content-Type': 'application/json',
@@ -147,9 +171,7 @@ class UserController extends ChangeNotifier {
           'status': status
         }),
       );
-
-     
-    }catch(e){
+    } catch (e) {
       print('Erro ao atualizar o status no banco: $e');
     }
   }
@@ -182,7 +204,7 @@ class UserController extends ChangeNotifier {
     if (_selectedUsers.isNotEmpty) {
       unselectAllUsers();
     }
-    
+
     text = text.toLowerCase();
     for (User user in _filteredUsers) {
       if (user.username.toLowerCase().contains(text)) {
@@ -195,7 +217,7 @@ class UserController extends ChangeNotifier {
     }
 
     _filteredUsers.clear();
-    for (User user in auxUsers){
+    for (User user in auxUsers) {
       _filteredUsers.add(user);
     }
     notifyListeners();

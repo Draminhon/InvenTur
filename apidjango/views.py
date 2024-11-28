@@ -1,4 +1,5 @@
-from rest_framework import generics
+from rest_framework import generics, viewsets
+from rest_framework.decorators import action
 from .serializers import UserSerializer
 from .models import *
 from .serializers import *
@@ -8,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 import json
 from django.http import HttpResponse
+from django.db import transaction
 
 class UsuarioCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
@@ -21,13 +23,50 @@ class UsuarioCreateView(generics.ListCreateAPIView):
         return HttpResponse(serializer.data, status = status.HTTP_201_CREATED, headers=headers)
     
 class UsuarioListView(generics.ListAPIView):
+    queryset = CustomUser.objects.filter(is_active=True)
+    serializer_class = UserSerializer
+
+class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
 
+    @action(detail=True, methods=['post'])
+    def adicionar_pesquisa(self, request, pk=None):
+        user = self.get_object()
+        pesquisa_id = request.data.get('pesquisa_id')
+        try:
+            pesquisa = Pesquisa.objects.get(id=pesquisa_id)
+            user.pesquisas.add(pesquisa)
+            return Response({"status": "Pesquisa adicionada ao usuário"})
+        except Pesquisa.DoesNotExist:
+            return Response({"error": "Pesquisa não encontrada"}, status=400)
+        
+class PesquisaViewSet(viewsets.ModelViewSet):
+    queryset = Pesquisa.objects.all()
+    serializer_class = PesquisaSerializer
+
+class AlterUserAPIView(generics.UpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = UserSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
 
 class PesquisaCreateView(generics.ListCreateAPIView):
     queryset = Pesquisa.objects.all()
     serializer_class = PesquisaSerializer
+
+    def perform_create(self, serializer):
+        # Obtém os IDs dos usuários enviados na requisição
+        usuarios_ids = self.request.data.get('usuario', [])
+
+        pesquisa = serializer.save()
+
+          
+            
+        return pesquisa
+
 
 class AdminUserCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
@@ -109,6 +148,6 @@ class StatusUpdateAPIView(generics.UpdateAPIView):
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
     
-class DeleUserAPIView(generics.DestroyAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
+# class DeleUserAPIView(generics.DestroyAPIView):
+#     queryset = CustomUser.objects.all()
+#     serializer_class = UserSerializer

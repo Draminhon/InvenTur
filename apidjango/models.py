@@ -25,6 +25,9 @@ def validate_cpf(cpf):
         raise ValidationError("O CPF é inválido")
     
 class CustomUser(AbstractUser):
+
+    pesquisas = models.ManyToManyField("Pesquisa", related_name="pesquisas", blank=True)
+
     CPF = models.CharField(max_length=11, unique=True)
     username = models.CharField(
         max_length = 150,
@@ -38,6 +41,7 @@ class CustomUser(AbstractUser):
     )
     acessLevel = models.CharField(max_length=22, default='Pesquisador');
     status = models.CharField(max_length=50, default='Aguardando Aprovação')
+    
     def clean(self):
         super().clean()
         validate_cpf(self.CPF)
@@ -46,6 +50,11 @@ class CustomUser(AbstractUser):
 
 
 class Pesquisa(models.Model):
+
+    usuario = models.ManyToManyField("CustomUser", related_name="usuario")
+
+    
+
     criacao = models.DateField(auto_now_add=True)
     atualizacao = models.DateTimeField(auto_now = True)
 
@@ -57,10 +66,13 @@ class Pesquisa(models.Model):
     municipio = models.CharField(max_length=255)
 
 
+
+
 class Base(models.Model):
     
-    criacao = models.DateField(auto_now_add=True)
-    atualizacao = models.DateTimeField(auto_now = True)
+    pesquisa = models.ForeignKey(Pesquisa, on_delete=models.CASCADE)
+
+   
     tipo_formulario = models.CharField(max_length=100)
     uf = models.CharField(max_length=255)
     regiao_turistica = models.CharField(max_length=255)
@@ -72,17 +84,32 @@ class Base(models.Model):
     nome_oficial = models.CharField(max_length=255)
     nome_popular = models.CharField(max_length=255)
 
+    observacoes = models.TextField()
+    referencias = models.TextField()
 
+    nome_pesquisador = models.CharField(max_length=255)
+    telefone_pesquisador = models.CharField(max_length=255)
+    email_pesquisador = models.CharField(max_length=255)
+
+    nome_coordenador = models.CharField(max_length=255)
+    telefone_coordenador = models.CharField(max_length=255)
+    email_coordenador = models.CharField(max_length=255)
+
+class Inventariacao(models.Model):
+
+    usuarios = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+
+    equipamento = models.OneToOneField(Base, on_delete=models.SET_NULL, blank=True, null=True)
+
+    criacao = models.DateField(auto_now_add=True)
+    atualizacao = models.DateTimeField(auto_now = True)
 
 class Rodovia(Base):
     jurisdicao = models.CharField(max_length=50)
     natureza = models.CharField(max_length=50)
-   
     
     tipo_de_organizacao_instituicao = models.JSONField()
     
- 
-
 
     extensao_rodovia_municipio = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -146,15 +173,4 @@ class Rodovia(Base):
     estado_geral_de_conservacao = models.CharField(max_length=20)
 
     ##Observações
-
-    observacoes = models.TextField()
-    referencias = models.TextField()
-
-    nome_pesquisador = models.CharField(max_length=255)
-    telefone_pesquisador = models.CharField(max_length=255)
-    email_pesquisador = models.CharField(max_length=255)
-
-    nome_coordenador = models.CharField(max_length=255)
-    telefone_coordenador = models.CharField(max_length=255)
-    email_coordenador = models.CharField(max_length=255)
 

@@ -1,5 +1,7 @@
-from django.urls import path
+from django.urls import path, include
 from .views import *
+
+
 
 urlpatterns = [
     path('register/', UsuarioCreateView.as_view(), name = 'usuario-create'),
@@ -9,7 +11,7 @@ urlpatterns = [
     path('rodovia/get/', RodoviaListView.as_view(), name = 'rodovia-se' ),
     path('rodovia/update/<int:pk>', RodoviaUpdateAPIView.as_view(), name='rodovia-update'),
     path('usuarios/status/update/<int:pk>/', StatusUpdateAPIView.as_view(), name='status-update'),
-    path('usuarios/destroy/<int:pk>', DeleUserAPIView.as_view(), name = 'delete-user'),
+    path('usuarios/update/<int:pk>', AlterUserAPIView.as_view(), name = 'delete-user'),
     path('usuarios/register/admin', AdminUserCreateView.as_view(), name = 'create-admin'),
     path('pesquisa/create', PesquisaCreateView.as_view(), name = 'pesquisa-create'),
 ] 
