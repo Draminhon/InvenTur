@@ -52,7 +52,7 @@ class CustomUser(AbstractUser):
 class Pesquisa(models.Model):
 
     usuario = models.ManyToManyField("CustomUser", related_name="usuario")
-
+    admin = models.ForeignKey("CustomUser", on_delete=models.SET_NULL, null=True, blank=True, related_name="pesquisas_criadas", help_text="Administrador que criou esta pesquisa")
     
 
     criacao = models.DateField(auto_now_add=True)
@@ -65,7 +65,10 @@ class Pesquisa(models.Model):
     estado = models.CharField(max_length=255)
     municipio = models.CharField(max_length=255)
 
-
+    status = models.CharField(max_length=50, default='Não Iniciado');
+    
+    quantidadeLocais = models.IntegerField(default=10);
+    quantidadePesquisadores = models.IntegerField(default=10);
 
 
 class Base(models.Model):

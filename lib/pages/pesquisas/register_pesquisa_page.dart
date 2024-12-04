@@ -12,6 +12,7 @@ import 'dart:convert';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPesquisa extends StatefulWidget {
   const RegisterPesquisa({super.key});
@@ -113,27 +114,38 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
     super.dispose();
   }
 
+  Future<void> createPesquisa(
+      String dataInicio,
+      String dataTermino,
+      String codIBGE,
+      String estado,
+      String municipio,
+      Set<User> selectedUserss) async {
 
-  Future<void> createPesquisa(String dataInicio, String dataTermino,
-      String codIBGE, String estado, String municipio, Set<User> selectedUserss) async {
     final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/create');
-selectedUsers.forEach((user) {
-  print('ID: ${user.id}, CPF: ${user.CPF}, Username: ${user.username}, Email: ${user.email}');
-});
+final prefs = await SharedPreferences.getInstance();
+String? userDataString = prefs.getString('user_data');
+  Map<String, dynamic> userData = json.decode(userDataString!);
+  print("Nome do usuário: ${userData['id']}");
+    
+        selectedUsers.forEach((user) {
+      print(
+          'ID: ${user.id}, CPF: ${user.CPF}, Username: ${user.username}, Email: ${user.email}');
+    });
     try {
       final response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },
-
-          
           body: json.encode(<String, dynamic>{
+ 
+            'admin':  userData['id'],
             'dataInicio': dataInicio,
             'dataTermino': dataTermino,
             'codigoIBGE': codIBGE,
             'estado': estado,
             'municipio': municipio,
-            'usuario': selectedUserss.map((user)=>user.id).toList()
+            'usuario': selectedUserss.map((user) => user.id).toList()
           }));
 
       if (response.statusCode == 201) {
@@ -350,41 +362,50 @@ selectedUsers.forEach((user) {
                           ),
                           children: [
                             SizedBox(
-                            height: 150.h,
-                             child: TextField(decoration: InputDecoration(
-                              isDense: true,
-                              fillColor: Colors.white,
-                              filled: true,
-                              label: const Text("Procurar por nome"),
-                              enabledBorder: OutlineInputBorder(
-                              
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                  color: Color.fromARGB(255, 55, 111, 60),
-                                  width: 2.0,
-                                )
-                              ),
-                              focusedBorder:OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8),
-                                borderSide: const BorderSide(
-                                  color: Color.fromARGB(255, 55, 111, 60),
-                                  width: 2.0,
-                                )
-                              ),
-                              
-                              
-                              prefixIcon: const Icon(Icons.search, color: const Color.fromARGB(255, 55, 111, 60),),
-                             ),
-                             onChanged: (value) {
-                               setState((){
-                                    userFuture = getUsers().then((users) => users
-                                    .where((user)=>user.accessLevel == 'Pesquisador'
-                                     && (user.username.toLowerCase().contains(value.toLowerCase())??false)).toList());
-                               });
-                             },
-                             
-                             )),
-                          
+                                height: 150.h,
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                    isDense: true,
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                    label: const Text("Procurar por nome"),
+                                    enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: const BorderSide(
+                                          color:
+                                              Color.fromARGB(255, 55, 111, 60),
+                                          width: 2.0,
+                                        )),
+                                    focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: const BorderSide(
+                                          color:
+                                              Color.fromARGB(255, 55, 111, 60),
+                                          width: 2.0,
+                                        )),
+                                    prefixIcon: const Icon(
+                                      Icons.search,
+                                      color: const Color.fromARGB(
+                                          255, 55, 111, 60),
+                                    ),
+                                  ),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      userFuture = getUsers().then((users) =>
+                                          users
+                                              .where((user) =>
+                                                  user.accessLevel ==
+                                                      'Pesquisador' &&
+                                                  (user.username
+                                                          .toLowerCase()
+                                                          .contains(value
+                                                              .toLowerCase()) ??
+                                                      false))
+                                              .toList());
+                                    });
+                                  },
+                                )),
+
                             userSearchAndSelectSection(), // Aqui exibimos o campo de busca e os resultados.
                           ],
                           onExpansionChanged: (expanded) {
@@ -451,8 +472,13 @@ selectedUsers.forEach((user) {
                                 } else {
                                   estado = _estadoController.text;
                                 }
-                                createPesquisa(dataInicio, dataTermino,
-                                    codigoIBGE, estado, municipio, selectedUsers);
+                                createPesquisa(
+                                    dataInicio,
+                                    dataTermino,
+                                    codigoIBGE,
+                                    estado,
+                                    municipio,
+                                    selectedUsers);
                               },
                               child: Text(
                                 "Confirmar",
@@ -553,7 +579,6 @@ selectedUsers.forEach((user) {
               _pesquisaController.addUserPesquisa(post);
 
               setState(() {
-
                 if (isSelected) {
                   selectedUsers
                       .remove(post); // Remove se já estiver selecionado

@@ -13,7 +13,6 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.
 import 'package:inventur/pages/home/Pesquisador/forms/formsC/hidrografia.dart';
 import 'package:inventur/pages/pesquisas/register_pesquisa_page.dart';
 import 'package:inventur/pages/recover/changepasswordsucess_page.dart';
-import 'package:inventur/pages/home/Pesquisador/choose/choosebetween.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisas.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
@@ -77,7 +76,6 @@ class MyApp extends StatelessWidget {
           '/ConfirmarCodigo': (_) => ConfirmarCodigo(),
           '/MudarSenha': (_) => MudarSenha(),
           '/NewPassword': (_) => const ConfirmacaoNovaSenha(),
-          '/Choose': (_) => const Choose(),
           '/PesquisadorHome': (_) => const PesquisadorHome(),
           '/Pesquisas': (_) =>    Pesquisas(),
           '/FormA': (_) => const FormularioA(),

@@ -6,6 +6,7 @@ class AppConstants {
   static const String LOGIN_URI = "/api/v1/login/";
   static const String REGISTER_URI = "/api/v1/register/";
   static const String GET_USERS = "/api/v1/usuarios/";
+  static const  String GET_PESQUISAS = "/api/v1/pesquisa/create";
   static const String RODOVIA_CREATE = "/api/v1/rodovia/create/";
   static const String RODOVIA_GET = "/api/v1/rodovia/get";
   static const String TOKEN = "DBtoken";

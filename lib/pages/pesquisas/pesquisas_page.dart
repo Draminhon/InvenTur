@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:inventur/models/pesquisa_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/pesquisas/widgets/pesquisa_card_widget.dart';
+import 'package:inventur/utils/app_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PesquisasPage extends StatefulWidget {
   const PesquisasPage({super.key});
@@ -13,41 +17,55 @@ class PesquisasPage extends StatefulWidget {
 class _PesquisasPageState extends State<PesquisasPage> {
   final PesquisaController _pesquisaController = PesquisaController();
 
-  Pesquisa pm = Pesquisa(
-    codigoIBGE: 11111,
-    estado: "CE",
-    municipio: "Tianguá",
-    dataInicio: "01/01/2024",
-    dataTermino: "01/01/2024",
-    quantidadeLocais: 23,
-    quantidadePesquisadores: 5,
-    status: "Não Iniciado"
-  );
 
-  Pesquisa pm2 = Pesquisa(
-    codigoIBGE: 11111,
-    estado: "CE",
-    municipio: "Viçosa do Ceará",
-    dataInicio: "01/01/2024",
-    dataTermino: "01/01/2024",
-    quantidadeLocais: 23,
-    quantidadePesquisadores: 5,
-    status: "Não Iniciado"
-  );
+static Future<List<Pesquisa>> getPesquisas() async{
 
+  final prefs = await SharedPreferences.getInstance();
+  String? userDataString = prefs.getString('user_data');
+    if (userDataString == null) {
+    print("Nenhum dado do usuário encontrado no SharedPreferences.");
+    return [];
+  }
+
+  Map<String, dynamic> userData = json.decode(userDataString);
+  final url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_PESQUISAS);
+  int adminId = userData['id'];
+
+  try{
+    final response = await http.get(
+      url,
+       headers: {"Content-Type": "application/json"}
+    );
+
+    final List body = json.decode(utf8.decode(response.bodyBytes));
+   final List<Pesquisa> todasAsPesquisas = body.map((e) => Pesquisa.fromJson(e)).toList();
+    final List<Pesquisa> pesquisasFiltradas = todasAsPesquisas.where((pesquisa) => pesquisa.adminId == adminId).toList();
+    return pesquisasFiltradas;
+    
+  }catch(e){
+    print("Erro: $e");
+    return [];
+  }
+
+
+
+
+}
+
+Future<void> loadPesquisas() async{
+  List<Pesquisa> pesquisas = await getPesquisas();
+  _pesquisaController.addPesquisa(pesquisas);
+}
   @override
   void initState() {
     super.initState();
-    _pesquisaController.addPesquisa(pm);
-    _pesquisaController.addPesquisa(pm2);
-    _pesquisaController.addPesquisa(pm);
-    _pesquisaController.addPesquisa(pm2);
   }
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.sizeOf(context);
-
+    loadPesquisas()
+    ;
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(

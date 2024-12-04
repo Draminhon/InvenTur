@@ -1,5 +1,6 @@
 class Pesquisa {
-  int codigoIBGE;
+  int adminId;
+  String codigoIBGE;
   String estado;
   String municipio;
   String dataInicio;
@@ -9,6 +10,7 @@ class Pesquisa {
   String status;
 
   Pesquisa({
+    required this.adminId,
     required this.codigoIBGE,
     required this.estado,
     required this.municipio,
@@ -16,6 +18,33 @@ class Pesquisa {
     required this.dataTermino,
     required this.quantidadeLocais,
     required this.quantidadePesquisadores,
-    required this.status
+    required this.status,
   });
+
+  // Método para criar uma instância de Pesquisa a partir de JSON
+  Pesquisa.fromJson(Map<String, dynamic> json):
+        adminId = json['admin'],
+        codigoIBGE = json['codigoIBGE'],
+        estado = json['estado'],
+        municipio = json['municipio'],
+        dataInicio = json['dataInicio'],
+        dataTermino = json['dataTermino'],
+        quantidadeLocais = json['quantidadeLocais'],
+        quantidadePesquisadores = json['quantidadePesquisadores'],
+        status = json['status'];
+
+  // Método para converter uma instância de Pesquisa em JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'admin': adminId,
+      'codigoIBGE': codigoIBGE,
+      'estado': estado,
+      'municipio': municipio,
+      'dataInicio': dataInicio,
+      'dataTermino': dataTermino,
+      'quantidadeLocais': quantidadeLocais,
+      'quantidadePesquisadores': quantidadePesquisadores,
+      'status': status,
+    };
+  }
 }

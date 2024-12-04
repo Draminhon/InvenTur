@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
+import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/pages/widgets/divider_text_widget.dart';
 import 'package:inventur/utils/app_constants.dart';
@@ -9,14 +10,12 @@ import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
-
-// Future<String?> getToken() async {
-//     final prefs = await SharedPreferences.getInstance();
-//     return prefs.getString('acess_token');
-// }
-
-
+Future<String?> getToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('acess_token');
+}
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -34,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _cpfController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
-  
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -43,46 +42,51 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-
     Future<void> loginUser(String cpf, String password) async {
-        final url = Uri.parse(AppConstants.BASE_URI + AppConstants.LOGIN_URI);
-       // final url = Uri.parse('http://172.31.0.127:8000/api/v1/login/');
-  try{
-        final response = await http.post(
-          url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: json.encode(<String, String>{
+      final url = Uri.parse(AppConstants.BASE_URI + AppConstants.LOGIN_URI);
+      try {
+        final response = await http.post(url,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: json.encode(<String, String>{
               'CPF': cpf,
               'password': password,
-          })
-        );
+            }));
 
-        if (response.statusCode == 200){
+        if (response.statusCode == 200) {
+          final Map<String, dynamic> responseData = json.decode(response.body);
 
-          // final Map<String, dynamic> responseData = json.decode(response.body);
+          String acessToken = responseData['acess'];
+          String refreshToken = responseData['refresh'];
 
-          // String acessToken = responseData['access'];
+          final Map<String, dynamic> user = responseData['user'];
 
-          // final prefs = await SharedPreferences.getInstance();
-          // await prefs.setString('acess_token', acessToken);
+          
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setString('user_data', json.encode(user));
+          await prefs.setString('acess_token', acessToken);
+          await prefs.setString('refresh_token', refreshToken);
 
-          // print("TOKEN ARMAZENADO:  $acessToken");
+          print("token armazenado: $acessToken");
+          print("refresh token armazenado: $refreshToken");
+          print("Usuario logado com sucesso: ${json.encode(user)}");
 
- 
-          print("Usuario logado com sucesso");
-        }else{
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+            return user['acess_level'] == 'Pesquisador'
+                ? const PesquisadorHome()
+                : const AdminHomePage();
+          }));
+        } else {
           print("Usário nao logado ${response.body}");
-        }}catch(e){
-            print(e);
         }
-
+      } catch (e) {
+        print(e);
+      }
     }
-
 
     final screenSize = MediaQuery.sizeOf(context);
 
@@ -128,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                         CustomTextField(
                           isSecret: true,
                           labelText: 'Senha',
-                          controller: _passwordController, 
+                          controller: _passwordController,
                           prefixIcon: Icons.lock,
                           // validator: (password) {
                           //   return _passwordValidator.validate(password: password);
@@ -136,99 +140,83 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         SizedBox(height: screenSize.height * 0.02),
                         SizedBox(
-                          height: screenSize.height * .07,
-                          child: ElevatedButton(
-                            style: ButtonStyle(
-                              shape: WidgetStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                                )
-                              ),
-                              padding: WidgetStateProperty.all(
-                                EdgeInsets.symmetric(
-                                  vertical: screenSize.height * 0.012
-                                )
-                              ),
-                              backgroundColor: WidgetStateProperty.all(
-                                const Color.fromARGB(255, 55, 111, 60)
-                              ),
-                              overlayColor: WidgetStateProperty.all(
-                                Colors.green[600]
-                              )
-                            ),
-                            onPressed: () {
-                              if (_formLoginKey.currentState!.validate()) {
+                            height: screenSize.height * .07,
+                            child: ElevatedButton(
+                                style: ButtonStyle(
+                                    shape: WidgetStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    padding: WidgetStateProperty.all(
+                                        EdgeInsets.symmetric(
+                                            vertical:
+                                                screenSize.height * 0.012)),
+                                    backgroundColor: WidgetStateProperty.all(
+                                        const Color.fromARGB(255, 55, 111, 60)),
+                                    overlayColor: WidgetStateProperty.all(
+                                        Colors.green[600])),
+                                onPressed: () {
+                                  if (_formLoginKey.currentState!.validate()) {
+                                    final cpf = _cpfController.text
+                                        .replaceAll('.', '')
+                                        .replaceAll('-', '');
+                                    final password = _passwordController.text;
 
-                                final cpf = _cpfController.text.replaceAll('.','').replaceAll('-', '');
-                                final password = _passwordController.text;
-
-                                  final cpf2 = '07399207313';
-                                  final password2 = 'Murilo159753@';
-                                loginUser(cpf2, password2);
-          Navigator.pushNamed(context, '/Choose');
-
+                                    loginUser(cpf, password);
                                   }
-                            //  Navigator.pushNamed(context, '/Choose');
-                            }, 
-                            child: const Text(
-                              'Entrar',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22
-                              ),
-                            )
-                          )
-                        ),
+                                },
+                                child: const Text(
+                                  'Entrar',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 22),
+                                ))),
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: screenSize.height * .015),
+                          padding: EdgeInsets.symmetric(
+                              vertical: screenSize.height * .015),
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: TextButton(
-                              onPressed: () {Navigator.pushNamed(context, '/PassWordRecover');},
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, '/PassWordRecover');
+                              },
                               child: const Text(
                                 'Esqueceu sua senha?',
                                 style: TextStyle(
                                   color: Color.fromARGB(255, 55, 111, 60),
                                   decoration: TextDecoration.underline,
-                                  decorationColor: Color.fromARGB(255, 55, 111, 60),
+                                  decorationColor:
+                                      Color.fromARGB(255, 55, 111, 60),
                                 ),
                               ),
                             ),
                           ),
                         ),
                         const Padding(
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: DividerText(text: 'Solicite seu Registro')
-                        ),
+                            padding: EdgeInsets.only(bottom: 10),
+                            child: DividerText(text: 'Solicite seu Registro')),
                         SizedBox(
                           height: screenSize.height * .07,
                           child: OutlinedButton(
-                            style: ButtonStyle(
-                              shape: WidgetStatePropertyAll(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)
-                                )
-                              ),
-                              side: const WidgetStatePropertyAll(
-                                BorderSide(
-                                  width: 2,
-                                  color: Color.fromARGB(255, 55, 111, 60),
-                                )
-                              ),
-                              padding: WidgetStatePropertyAll(
-                                EdgeInsets.symmetric(vertical: screenSize.height * .012)
-                              )
-                            ),
-                            onPressed: () {
-                              Navigator.pushNamed(context, '/Register');
-                            }, 
-                            child: const Text(
-                              'Registre-se',
-                              style: TextStyle(
-                                fontSize: 22
-                              ),
-                            )
-                          ),
+                              style: ButtonStyle(
+                                  shape: WidgetStatePropertyAll(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10))),
+                                  side: const WidgetStatePropertyAll(BorderSide(
+                                    width: 2,
+                                    color: Color.fromARGB(255, 55, 111, 60),
+                                  )),
+                                  padding: WidgetStatePropertyAll(
+                                      EdgeInsets.symmetric(
+                                          vertical: screenSize.height * .012))),
+                              onPressed: () {
+                                Navigator.pushNamed(context, '/Register');
+                              },
+                              child: const Text(
+                                'Registre-se',
+                                style: TextStyle(fontSize: 22),
+                              )),
                         )
                       ],
                     ),

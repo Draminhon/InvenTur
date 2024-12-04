@@ -75,8 +75,9 @@ class PesquisaController extends ChangeNotifier {
     _municipios = await _brasilService.fetchMunicipiosUF(uf);
   }
 
-  void addPesquisa(Pesquisa pesquisa) {
-    _pesquisas.add(pesquisa);
+  void addPesquisa(List<Pesquisa> pesquisas) {
+    _pesquisas = pesquisas;
+    print(pesquisas);
     notifyListeners();
   }
 

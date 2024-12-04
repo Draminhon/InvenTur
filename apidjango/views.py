@@ -1,15 +1,14 @@
-from rest_framework import generics, viewsets
-from rest_framework.decorators import action
+from rest_framework import generics
 from .serializers import UserSerializer
 from .models import *
 from .serializers import *
-from rest_framework.response import Response
 from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 import json
-from django.http import HttpResponse
-from django.db import transaction
+from django.http import HttpResponse, JsonResponse
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.permissions import IsAuthenticated
 
 class UsuarioCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
@@ -25,25 +24,6 @@ class UsuarioCreateView(generics.ListCreateAPIView):
 class UsuarioListView(generics.ListAPIView):
     queryset = CustomUser.objects.filter(is_active=True)
     serializer_class = UserSerializer
-
-class UsuarioViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all()
-    serializer_class = UserSerializer
-
-    @action(detail=True, methods=['post'])
-    def adicionar_pesquisa(self, request, pk=None):
-        user = self.get_object()
-        pesquisa_id = request.data.get('pesquisa_id')
-        try:
-            pesquisa = Pesquisa.objects.get(id=pesquisa_id)
-            user.pesquisas.add(pesquisa)
-            return Response({"status": "Pesquisa adicionada ao usuário"})
-        except Pesquisa.DoesNotExist:
-            return Response({"error": "Pesquisa não encontrada"}, status=400)
-        
-class PesquisaViewSet(viewsets.ModelViewSet):
-    queryset = Pesquisa.objects.all()
-    serializer_class = PesquisaSerializer
 
 class AlterUserAPIView(generics.UpdateAPIView):
     queryset = CustomUser.objects.all()
@@ -63,10 +43,7 @@ class PesquisaCreateView(generics.ListCreateAPIView):
 
         pesquisa = serializer.save()
 
-          
-            
         return pesquisa
-
 
 class AdminUserCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
@@ -115,9 +92,22 @@ def UsuarioLoginView(request):
         user = authenticate(request, CPF = CPF, password = password)
         if user is not None:
          
-            login(request, user)
+            refresh = RefreshToken.for_user(user)
             print("Logado com sucesso")
-            return HttpResponse("login sucessful", status = 200)
+            print(str(refresh.access_token))
+
+            return JsonResponse({
+                'refresh': str(refresh),
+                'acess': str(refresh.access_token),
+                'user':{
+                    'id': user.id,
+                    'CPF': user.CPF,
+                    'name': user.username,
+                    'email': user.email,
+                    'acess_level': user.acessLevel,
+                    'status': user.status
+                }
+            }, status = 200)
     
         else:
          
