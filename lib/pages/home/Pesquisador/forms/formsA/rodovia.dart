@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
+import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/utils/app_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/customTextField.dart';
 import '../../widgets/expandedTileYoN.dart';
@@ -247,9 +249,12 @@ void dispose() {
     Future<void> sendForm(Map<String, dynamic> valoresjson) async{
 
       final url = Uri.parse(AppConstants.BASE_URI + AppConstants.RODOVIA_CREATE);
+    int? pesquisa_id = await getPesquisaId();
+
 
 
       try{
+        valoresjson['pesquisa'] = pesquisa_id;
         final response = await http.post(
           url,
           headers: <String, String>{
@@ -1177,7 +1182,7 @@ void dispose() {
                             const SnackBar(
                                 content: Text('preencha os dados!')));
                       }
-                      Navigator.pushReplacementNamed(context, '/SendedForm');
+                      //Navigator.pushReplacementNamed(context, '/SendedForm');
                     },
                     style: OutlinedButton.styleFrom(
                       backgroundColor: Colors.green[800],

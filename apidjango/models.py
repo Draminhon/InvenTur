@@ -80,7 +80,7 @@ class Pesquisa(models.Model):
 class Base(models.Model):
     
     pesquisa = models.ForeignKey(Pesquisa, on_delete=models.CASCADE)
-
+    
    
     tipo_formulario = models.CharField(max_length=100)
     uf = models.CharField(max_length=255)

@@ -92,9 +92,17 @@ class _A extends State<A> {
 }
 
 class Pesquisas extends StatelessWidget {
+  
   Pesquisas({super.key});
-  static Future<List<RodoviaModel>> getRodovias() async {
-    var url = Uri.parse(AppConstants.BASE_URI + AppConstants.RODOVIA_GET);
+ 
+  @override
+  Widget build(BuildContext context) {
+
+
+  Future<List<RodoviaModel>> getRodovias() async {
+            final arguments = ModalRoute.of(context)?.settings.arguments as Map;
+        final pesquisaId = arguments['pesquisa_id'];
+    var url = Uri.parse(AppConstants.BASE_URI + '/api/v1/rodovia/get/?pesquisa_id=$pesquisaId');
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(utf8.decode(response.bodyBytes));
@@ -102,8 +110,7 @@ class Pesquisas extends StatelessWidget {
   }
 
   Future<List<RodoviaModel>> rodoviasFuture = getRodovias();
-  @override
-  Widget build(BuildContext context) {
+
     final sizeScreen = MediaQuery.sizeOf(context);
 
     return Scaffold(

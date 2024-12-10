@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, permissions
 from .serializers import UserSerializer
 from .models import *
 from .serializers import *
@@ -9,7 +9,9 @@ import json
 from django.http import HttpResponse, JsonResponse
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
-
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 class UsuarioCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
@@ -53,6 +55,26 @@ class PesquisaCreateView(generics.ListCreateAPIView):
         pesquisa = serializer.save()
 
         return pesquisa
+
+class PesquisaUsuarioListView(generics.ListAPIView):
+
+    serializer_class = PesquisaSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+
+        return Pesquisa.objects.filter(usuario=user, is_active=True)
+    
+
+
+
+def get_admin_details(request, admin_id):
+    admin = get_object_or_404(CustomUser, id = admin_id)
+    return JsonResponse({
+        'id': admin.id,
+        'username': admin.username
+    })
 
 class PesquisaStatusUpdateAPIView(generics.UpdateAPIView):
     queryset = Pesquisa.objects.all()
@@ -136,9 +158,18 @@ class RodoviaListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = RodoviaSerializer
 
 class RodoviaListView(generics.ListAPIView):
-    queryset = Rodovia.objects.all()
     serializer_class = RodoviaSerializer
 
+    def get_queryset(self):
+        pesquisa_id = self.request.query_params.get('pesquisa_id')
+
+        if not pesquisa_id:
+            raise ValidationError({"detail": "O parâmetro  'pesquisa_id' é obrigatório."})
+        try:
+            return Rodovia.objects.filter(pesquisa__id=pesquisa_id)
+        except Rodovia.DoesNotExist:
+            return Rodovia.objects.none()
+        
 class RodoviaUpdateAPIView(generics.UpdateAPIView):
     queryset = Rodovia.objects.all()
     serializer_class = RodoviaSerializer

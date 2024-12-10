@@ -1,6 +1,7 @@
 class Pesquisa {
   int id;
   int adminId;
+  List<int> userId;
   String codigoIBGE;
   String estado;
   String municipio;
@@ -13,6 +14,7 @@ class Pesquisa {
   Pesquisa({
     required this.id,
     required this.adminId,
+    required this.userId,
     required this.codigoIBGE,
     required this.estado,
     required this.municipio,
@@ -27,12 +29,13 @@ class Pesquisa {
   Pesquisa.fromJson(Map<String, dynamic> json):
         id = json['id'],
         adminId = json['admin'],
+        userId = List<int>.from(json['usuario'] ?? []),
         codigoIBGE = json['codigoIBGE'],
         estado = json['estado'],
         municipio = json['municipio'],
         dataInicio = json['dataInicio'],
         dataTermino = json['dataTermino'],
-        quantidadeLocais = json['quantidadeLocais'],
+        quantidadeLocais = json['quantidadeLocais' ?? 0],
         quantidadePesquisadores = json['quantidadePesquisadores'],
         status = json['status'];
 
@@ -41,6 +44,7 @@ class Pesquisa {
     return {
       'id': id,
       'admin': adminId,
+      'usuario': userId,
       'codigoIBGE': codigoIBGE,
       'estado': estado,
       'municipio': municipio,
