@@ -163,21 +163,21 @@ class UserCard extends StatelessWidget {
                               'Status',
                               style: TextStyle(
                                 color:
-                                    userControllerNotifier.statusColor(user.status!),
+                                    userControllerNotifier.statusColor(user.status),
                                 fontWeight: FontWeight.bold,
                                 fontSize: 15,
                               ),
                             ),
                             Text(
-                              user.status!,
+                              user.status,
                               style: TextStyle(
                                   color:
-                                      userControllerNotifier.statusColor(user.status!),
+                                      userControllerNotifier.statusColor(user.status),
                                   fontWeight: FontWeight.bold),
                             ),
                             Icon(
                               Icons.keyboard_arrow_down_rounded,
-                              color: userControllerNotifier.statusColor(user.status!),
+                              color: userControllerNotifier.statusColor(user.status),
                             ),
                           ],
                         ),

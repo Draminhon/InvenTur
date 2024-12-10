@@ -18,6 +18,8 @@ urlpatterns = [
     path('usuarios/register/admin', AdminUserCreateView.as_view(), name = 'create-admin'),
 
     path('pesquisa/create', PesquisaCreateView.as_view(), name = 'pesquisa-create'),
+    path('pesquisa/update/<int:pk>', AlterPesquisaAPIView.as_view(), name = 'pesquisa-create'),
+    path('pesquisa/status/update/<int:pk>/', PesquisaStatusUpdateAPIView.as_view(), name = 'pesquisa-status-update'),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name = 'token_refresh')

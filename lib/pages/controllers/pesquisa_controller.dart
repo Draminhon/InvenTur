@@ -4,6 +4,9 @@ import 'package:inventur/models/municipio_model.dart';
 import 'package:inventur/models/pesquisa_model.dart';
 import 'package:inventur/models/user_model.dart';
 import 'package:inventur/services/brasil_service.dart';
+import 'package:inventur/utils/app_constants.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class PesquisaController extends ChangeNotifier {
   static const String _finished = "Concluído";
@@ -57,6 +60,37 @@ class PesquisaController extends ChangeNotifier {
     return estado;
   }
 
+    void removePesquisa(bool active, Pesquisa pesquisa) async {
+    var url =
+        Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/update/${pesquisa.id}');
+
+    try {
+      final response =  await http.patch(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'is_active': active
+        }),
+      );
+
+      if (response.statusCode == 204) {
+        print('Usuario deletado com sucesso');
+      } else {
+        print('Falha ao deletar: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro $e');
+    }
+
+    _pesquisas.removeWhere((u) => u.id == pesquisa.id);
+    notifyListeners();
+  }
+
+
+
+
   Municipio? getMunicipioByNome(String nome) {
     late Municipio? municipio;
 
@@ -98,9 +132,26 @@ class PesquisaController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void setPesquisaStatus(String status, Pesquisa pesquisa) {
+  void setPesquisaStatus(String status, Pesquisa pesquisa)async{
     pesquisa.status = status;
     notifyListeners();
+
+    var url = Uri.parse(
+      '${AppConstants.BASE_URI}/api/v1/pesquisa/status/update/${pesquisa.id}/');
+
+      try{
+        await http.patch(
+          url,
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: json.encode({
+            'status': status
+          })
+        );
+      }catch(e){
+        print("Erro ao atualizar o status no banco: $e");
+      }
   }
 
   Color? statusColor(String status) {

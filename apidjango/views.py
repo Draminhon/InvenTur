@@ -32,9 +32,18 @@ class AlterUserAPIView(generics.UpdateAPIView):
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
+    
+class AlterPesquisaAPIView(generics.UpdateAPIView):
+    queryset = Pesquisa.objects.all()
+    serializer_class = PesquisaSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+
 
 class PesquisaCreateView(generics.ListCreateAPIView):
-    queryset = Pesquisa.objects.all()
+    queryset = Pesquisa.objects.filter(is_active=True)
     serializer_class = PesquisaSerializer
 
     def perform_create(self, serializer):
@@ -44,6 +53,14 @@ class PesquisaCreateView(generics.ListCreateAPIView):
         pesquisa = serializer.save()
 
         return pesquisa
+
+class PesquisaStatusUpdateAPIView(generics.UpdateAPIView):
+    queryset = Pesquisa.objects.all()
+    serializer_class = PesquisaSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
 
 class AdminUserCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()

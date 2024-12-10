@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/models/pesquisa_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
+import 'package:inventur/pages/pesquisas/register_pesquisa_page.dart';
 
 class PesquisaCard extends StatefulWidget {
   final Pesquisa pesquisa;
@@ -46,14 +47,20 @@ class _PesquisaCardState extends State<PesquisaCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: () {}, 
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/RegisterPesquisa');
+                  }, 
                   icon: Icon(
                     Icons.edit_rounded,
                     color: Colors.green[700],
                   )
                 ),
                 IconButton(
-                  onPressed: () {}, 
+                  onPressed: () async {
+
+                    _pesquisaController.removePesquisa(false, _pesquisa);
+
+                  }, 
                   icon: Icon(
                     Icons.delete_rounded,
                     color: Colors.red[700],

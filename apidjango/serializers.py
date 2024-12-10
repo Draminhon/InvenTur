@@ -22,6 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PesquisaSerializer(serializers.ModelSerializer):
 
+    quantidadePesquisadores = serializers.IntegerField(source='usuario.count', read_only = True)
     usuario = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), many=True)
 
     class Meta:

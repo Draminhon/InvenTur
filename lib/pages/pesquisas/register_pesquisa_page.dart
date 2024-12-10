@@ -149,7 +149,9 @@ String? userDataString = prefs.getString('user_data');
           }));
 
       if (response.statusCode == 201) {
-        print('Pesquisa criada com sucesso');
+
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Pesquisa criada com sucesso!"),));
+        Navigator.pop(context);
       } else {
         print('Erro ao criar pesquisa: ${response.body}');
       }

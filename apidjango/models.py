@@ -65,10 +65,16 @@ class Pesquisa(models.Model):
     estado = models.CharField(max_length=255)
     municipio = models.CharField(max_length=255)
 
-    status = models.CharField(max_length=50, default='Não Iniciado');
+    status = models.CharField(max_length=50, default='Não Iniciado')
     
-    quantidadeLocais = models.IntegerField(default=10);
-    quantidadePesquisadores = models.IntegerField(default=10);
+    quantidadeLocais = models.IntegerField(default=10)
+
+    is_active = models.BooleanField(default=True)
+
+
+    @property
+    def quantidadePesquisadores(self):
+        return self.usuario.count
 
 
 class Base(models.Model):

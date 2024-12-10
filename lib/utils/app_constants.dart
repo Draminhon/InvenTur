@@ -9,5 +9,6 @@ class AppConstants {
   static const  String GET_PESQUISAS = "/api/v1/pesquisa/create";
   static const String RODOVIA_CREATE = "/api/v1/rodovia/create/";
   static const String RODOVIA_GET = "/api/v1/rodovia/get";
+  static const String SET_PESQUISA_STATUS = "/api/v1/pesquisa/status/update/<int:pk>/";
   static const String TOKEN = "DBtoken";
 }
