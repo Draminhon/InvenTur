@@ -76,6 +76,7 @@ class MyApp extends StatelessWidget {
           '/ConfirmarCodigo': (_) => ConfirmarCodigo(),
           '/MudarSenha': (_) => MudarSenha(),
           '/NewPassword': (_) => const ConfirmacaoNovaSenha(),
+          '/ConfirmarSenha':(_) =>  ConfirmarCodigo(),
           '/PesquisadorHome': (_) => const PesquisadorHome(),
           '/Pesquisas': (_) =>    Pesquisas(),
           '/FormA': (_) => const FormularioA(),

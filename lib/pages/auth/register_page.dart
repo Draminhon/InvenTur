@@ -12,23 +12,37 @@ import 'package:http/http.dart' as http;
 
 
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   RegisterPage({super.key});
-    final _formKey = GlobalKey<FormState>();
 
-  final _formRegisterKey = GlobalKey<FormState>();
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+    final _formKey = GlobalKey<FormState>();
+    final _formKey3 = GlobalKey<FormState>();
+
 
   final CPFValidator _cpfValidator = CPFValidator();
+
   final NameValidator _nameValidator = NameValidator();
+
   final EmailValidator _emailValidator = EmailValidator();
+
   final PasswordValidator _passwordValidator = PasswordValidator();
 
   final TextEditingController _cpfController = TextEditingController();
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
 
+  final TextEditingController _nameController = TextEditingController();
+
+  final TextEditingController _emailController = TextEditingController();
+
+  final TextEditingController _passwordController = TextEditingController();
+
+  final TextEditingController _passwordController2 = TextEditingController();
+
+  final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
 
   Future<void> registerUser(String username, String CPF, String email, String password) async{
 
@@ -61,9 +75,6 @@ class RegisterPage extends StatelessWidget {
 
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
@@ -73,7 +84,7 @@ class RegisterPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
-        key: _formKey,
+        key: _formKey3,
         child: SafeArea(
           child: SingleChildScrollView(
             reverse: true,
@@ -102,7 +113,7 @@ class RegisterPage extends StatelessWidget {
                           bottom: 20,
                         ),
                         child: Form(
-                          key: _formRegisterKey,
+                          key: _formKey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
@@ -110,9 +121,9 @@ class RegisterPage extends StatelessWidget {
                                 labelText: 'Nome Completo',
                                 controller: _nameController,
                                 prefixIcon: Icons.person,
-                                // validator: (name) {
-                                //   return _nameValidator.validate(name: name);
-                                // },
+                                 validator: (name) {
+                                   return _nameValidator.validate(name: name);
+                                 },
                               ),
                               SizedBox(height: paddingBottomTextField),
                               CustomTextField(
@@ -120,9 +131,9 @@ class RegisterPage extends StatelessWidget {
                                 controller: _cpfController,
                                 keyboardType: TextInputType.number,
                                 prefixIcon: FontAwesomeIcons.solidAddressCard,
-                                // validator: (cpf) {
-                                //   return _cpfValidator.validate(cpf: cpf);
-                                // },
+                                 validator: (cpf) {
+                                   return _cpfValidator.validate(cpf: cpf);
+                                 },
                                 inputFormatters: [cpfMask],
                               ),
                               SizedBox(height: paddingBottomTextField),
@@ -131,9 +142,9 @@ class RegisterPage extends StatelessWidget {
                                 controller: _emailController,
                                 prefixIcon: FontAwesomeIcons.solidEnvelope,
                                 keyboardType: TextInputType.emailAddress,
-                                // validator: (email) {
-                                //   return _emailValidator.validate(email: email);
-                                // },
+                                 validator: (email) {
+                                   return _emailValidator.validate(email: email);
+                                 },
                               ),
                               SizedBox(height: paddingBottomTextField),
                               CustomTextField(
@@ -141,11 +152,27 @@ class RegisterPage extends StatelessWidget {
                                 prefixIcon: Icons.lock, 
                                 controller: _passwordController, 
                                 isSecret: true,
-                                // validator: (password) {
-                                //   return _passwordValidator.validate(password: password);
-                                // }, 
+                                 validator: (password) {
+                                   return _passwordValidator.validate(password: password);
+                                 }, 
                               ),
                               SizedBox(height: paddingBottomTextField),
+                                CustomTextField(
+                                labelText: 'Confirmar Senha',
+                                prefixIcon: Icons.lock, 
+                                controller: _passwordController2, 
+                                isSecret: true,
+                                 validator: (value) {
+                                                    if (value == null || value.isEmpty) {
+                    return 'Insira uma senha válida';
+                  }else if(_passwordController.text != _passwordController2.text){
+                    return 'As senhas precisam ser iguais!';
+                  }
+                  return null;
+                                 }, 
+                              ),
+                              SizedBox(height: paddingBottomTextField),
+
                               SizedBox(
                                 height: screenSize.height * .07,
                                 child: ElevatedButton(
@@ -170,6 +197,7 @@ class RegisterPage extends StatelessWidget {
                                   onPressed: () async {
 
                                     if(_formKey.currentState!.validate()){
+                                      _formKey.currentState!.save();
 
                                       final username = _nameController.text;
                                       final cpf = _cpfController.text.replaceAll('.','').replaceAll('-', '');
@@ -177,10 +205,12 @@ class RegisterPage extends StatelessWidget {
                                       final password = _passwordController.text;
 
                                       final result = await registerUser(username, cpf, email, password);
+                                      await Future.delayed(const Duration(milliseconds: 500));
+                                       Navigator.pop(context);
+
                                     }
 
 
-                                   Navigator.pushReplacementNamed(context, '/Login');
                                   }, 
                                   child: Text(
                                     'Solicitar Cadastro',

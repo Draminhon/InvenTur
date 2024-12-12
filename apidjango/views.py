@@ -156,6 +156,59 @@ def UsuarioLoginView(request):
 class RodoviaListCreateAPIView(generics.ListCreateAPIView):
     queryset = Rodovia.objects.all()
     serializer_class = RodoviaSerializer
+@csrf_exempt
+def verificar_cpf(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            cpf = data.get('cpf', '').strip()
+
+            # Check for empty CPF
+            if not cpf:
+                return JsonResponse({'success': False, 'message': 'CPF cannot be empty'}, status=400)
+
+            # Validate CPF format (optional)
+            # You can add logic here to validate the CPF format using a regular expression
+            # or a third-party library. If validation fails, return an appropriate error response.
+
+            # Query the database for user with matching CPF
+            try:
+                user = CustomUser.objects.get(CPF=cpf)
+                return JsonResponse({
+                    'success': True,
+                    'user': {
+                        'id': user.id,
+                    }
+                })
+            except CustomUser.DoesNotExist:
+                return JsonResponse({'success': False, 'message': 'CPF not found'}, status=404)
+
+        except Exception as e:
+            print(f"Error verifying CPF: {e}")  # Log the error for debugging
+            return JsonResponse({'success': False, 'message': 'Internal server error'}, status=500)
+
+    return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
+
+class AlterPasswordView(generics.UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+    queryset = CustomUser.objects.all()
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+    
+        user = self.get_object()
+
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except serializers.ValidationError as e:
+            print("Validation errors:", e.detail)
+            return Response({"error": e.detail}, status=400)
+    
+        user.set_password(serializer.validated_data['new_password'])
+        user.save()
+
+        return Response({"sucess": "Password changed sucessfully"})
 
 class RodoviaListView(generics.ListAPIView):
     serializer_class = RodoviaSerializer

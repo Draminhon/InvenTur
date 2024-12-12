@@ -123,9 +123,9 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _cpfController,
                           keyboardType: TextInputType.number,
                           prefixIcon: FontAwesomeIcons.solidAddressCard,
-                          // validator: (cpf) {
-                          //   return _cpfValidator.validate(cpf: cpf);
-                          // },
+                           validator: (cpf) {
+                             return _cpfValidator.validate(cpf: cpf);
+                           },
                           inputFormatters: [cpfMask],
                         ),
                         SizedBox(height: screenSize.height * 0.02),
@@ -178,7 +178,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: TextButton(
                               onPressed: () {
                                 Navigator.pushNamed(
-                                    context, '/PassWordRecover');
+                                    context, '/ConfirmarSenha');
                               },
                               child: const Text(
                                 'Esqueceu sua senha?',
