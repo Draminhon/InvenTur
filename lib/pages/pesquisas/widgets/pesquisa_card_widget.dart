@@ -36,9 +36,7 @@ class _PesquisaCardState extends State<PesquisaCard> {
       elevation: 6,
       color: Colors.white,
       surfaceTintColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18)
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -47,25 +45,30 @@ class _PesquisaCardState extends State<PesquisaCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/RegisterPesquisa');
-                  }, 
-                  icon: Icon(
-                    Icons.edit_rounded,
-                    color: Colors.green[700],
-                  )
-                ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/EditPesquisa', arguments: {
+                        'id': _pesquisa.id,
+                        'data_inicio': _pesquisa.dataInicio,
+                        'data_termino': _pesquisa.dataTermino,
+                        'codigoIBGE': _pesquisa.codigoIBGE,
+                        'municipio': _pesquisa.municipio,
+                        'estado': _pesquisa.estado,
+
+                      });
+                      print(_pesquisa.municipio);
+                    },
+                    icon: Icon(
+                      Icons.edit_rounded,
+                      color: Colors.green[700],
+                    )),
                 IconButton(
-                  onPressed: () async {
-
-                    _pesquisaController.removePesquisa(false, _pesquisa);
-
-                  }, 
-                  icon: Icon(
-                    Icons.delete_rounded,
-                    color: Colors.red[700],
-                  )
-                ),
+                    onPressed: () async {
+                      _pesquisaController.removePesquisa(false, _pesquisa);
+                    },
+                    icon: Icon(
+                      Icons.delete_rounded,
+                      color: Colors.red[700],
+                    )),
               ],
             ),
             Container(
@@ -167,17 +170,15 @@ class _PesquisaCardState extends State<PesquisaCard> {
                 tooltip: 'Status da Pesquisa',
                 initialValue: _pesquisa.status,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)
-                ),
+                    borderRadius: BorderRadius.circular(10)),
                 itemBuilder: (context) {
-                  return _pesquisaController.statusItems.map<PopupMenuItem<String>>(
-                    (String value) {
-                      return PopupMenuItem(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }
-                  ).toList();
+                  return _pesquisaController.statusItems
+                      .map<PopupMenuItem<String>>((String value) {
+                    return PopupMenuItem(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList();
                 },
                 onSelected: (String value) {
                   setState(() {
@@ -192,14 +193,16 @@ class _PesquisaCardState extends State<PesquisaCard> {
                   _opened = !_opened;
                 }),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
                         'Status',
                         style: TextStyle(
-                          color: _pesquisaController.statusColor(_pesquisa.status),
+                          color:
+                              _pesquisaController.statusColor(_pesquisa.status),
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ),
@@ -207,15 +210,16 @@ class _PesquisaCardState extends State<PesquisaCard> {
                       Text(
                         _pesquisa.status,
                         style: TextStyle(
-                          color: _pesquisaController.statusColor(_pesquisa.status),
-                          fontWeight: FontWeight.bold
-                        ),
+                            color: _pesquisaController
+                                .statusColor(_pesquisa.status),
+                            fontWeight: FontWeight.bold),
                       ),
                       Icon(
                         _opened
-                        ? Icons.keyboard_arrow_up_rounded
-                        : Icons.keyboard_arrow_down_rounded,
-                        color: _pesquisaController.statusColor(_pesquisa.status),
+                            ? Icons.keyboard_arrow_up_rounded
+                            : Icons.keyboard_arrow_down_rounded,
+                        color:
+                            _pesquisaController.statusColor(_pesquisa.status),
                       ),
                     ],
                   ),

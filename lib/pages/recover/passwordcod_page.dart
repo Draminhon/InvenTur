@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/utils/app_constants.dart';
-import 'package:inventur/validators/cpf_validator.dart';
+import 'package:inventur/validators/email_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'dart:convert';
@@ -16,18 +16,17 @@ class ConfirmarCodigo extends StatefulWidget {
 
 class _ConfirmarCodigoState extends State<ConfirmarCodigo> {
   final _formLoginKey = GlobalKey<FormState>();
-  final CPFValidator _cpfValidator = CPFValidator();
-  final TextEditingController _cpfController = TextEditingController();
-  final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
+  final EmailValidator _emailValidator = EmailValidator();
+    final TextEditingController _emailController = TextEditingController();
+
 
  
 
   @override
   Widget build(BuildContext context) {
      Future<void> verificarCPF() async {
-    final cpf = _cpfController.text.replaceAll(RegExp(r'[^0-9]'), ''); // Remove máscara
 
-    var a = _cpfValidator.validate(cpf: cpf);
+      var email = _emailController.text;
     
 
     final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/verificarcpf/');
@@ -38,7 +37,7 @@ class _ConfirmarCodigoState extends State<ConfirmarCodigo> {
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: json.encode({
-          'cpf': cpf,
+          'email': email,
         }),
       );
 
@@ -46,9 +45,16 @@ class _ConfirmarCodigoState extends State<ConfirmarCodigo> {
         final responseData = json.decode(response.body);
           print(responseData['user']['id']);
           Navigator.pushNamed(context, '/MudarSenha', arguments: {'user_id': responseData['user']['id']});
-      } else {
+      }  else if(response.statusCode == 404){
+           ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('O Email informado não existe')),
+        );
+        } 
+      
+      else {
+      
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao verificar CPF. Tente novamente.')),
+          SnackBar(content: Text('Ocorreu um erro ao verificar o Email')),
         );
       }
     } catch (e) {
@@ -69,17 +75,15 @@ class _ConfirmarCodigoState extends State<ConfirmarCodigo> {
               padding: const EdgeInsets.all(25),
               child: Form(
                 key: _formLoginKey,
-                child: CustomTextField(
-                  labelText: 'Informe seu CPF',
-                  controller: _cpfController,
-                  keyboardType: TextInputType.number,
-                  prefixIcon: FontAwesomeIcons.solidAddressCard,
-                  inputFormatters: [cpfMask],
-                  validator: (value) {
-                    return _cpfValidator.validate(cpf: value);
-                  }
-                  
-                ),
+                child:      CustomTextField(
+                                labelText: 'Informe seu E-mail',
+                                controller: _emailController,
+                                prefixIcon: FontAwesomeIcons.solidEnvelope,
+                                keyboardType: TextInputType.emailAddress,
+                                 validator: (email) {
+                                   return _emailValidator.validate(email: email);
+                                 },
+                              ),
               ),
             ),
             SizedBox(height: sizeScreen.height * 0.13),

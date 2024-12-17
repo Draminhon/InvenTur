@@ -11,6 +11,7 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%C3%A7a.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsC/hidrografia.dart';
+import 'package:inventur/pages/pesquisas/edit_pesquisa.dart';
 import 'package:inventur/pages/pesquisas/register_pesquisa_page.dart';
 import 'package:inventur/pages/recover/changepasswordsucess_page.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
           '/Register': (_) => RegisterPage(),
           '/AdminHome': (_) => const AdminHomePage(),
           '/RegisterPesquisa': (_) => const RegisterPesquisa(),
+          '/EditPesquisa': (_) => const EditPesquisa(),
           '/PassWordRecover': (_) => RecuperarSenha(),
           '/ConfirmarCodigo': (_) => ConfirmarCodigo(),
           '/MudarSenha': (_) => MudarSenha(),

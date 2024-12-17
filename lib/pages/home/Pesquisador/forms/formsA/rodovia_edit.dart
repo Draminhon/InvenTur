@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/customTextField.dart';
 import '../../widgets/expandedTileYoN.dart';
 import '../../widgets/radioButton.dart';
@@ -500,8 +501,12 @@ void dispose() {
     
     Future<void> updateRodovia(int rodoviaId, Map<String, dynamic> data) async{
 
+      final prefs =  await SharedPreferences.getInstance();
+      String? token = prefs.getString('acess_token');
+
       final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/rodovia/update/$rodoviaId');
 
+  print('OSIADOAOSD ${token}');
 
       try{
       final response = await http.patch(

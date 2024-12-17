@@ -55,6 +55,7 @@ class PesquisaCreateView(generics.ListCreateAPIView):
         pesquisa = serializer.save()
 
         return pesquisa
+    
 
 class PesquisaUsuarioListView(generics.ListAPIView):
 
@@ -157,15 +158,15 @@ class RodoviaListCreateAPIView(generics.ListCreateAPIView):
     queryset = Rodovia.objects.all()
     serializer_class = RodoviaSerializer
 @csrf_exempt
-def verificar_cpf(request):
+def verificar_email(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            cpf = data.get('cpf', '').strip()
+            email = data.get('email', '').strip()
 
             # Check for empty CPF
-            if not cpf:
-                return JsonResponse({'success': False, 'message': 'CPF cannot be empty'}, status=400)
+            if not email:
+                return JsonResponse({'success': False, 'message': 'email cannot be empty'}, status=400)
 
             # Validate CPF format (optional)
             # You can add logic here to validate the CPF format using a regular expression
@@ -173,7 +174,7 @@ def verificar_cpf(request):
 
             # Query the database for user with matching CPF
             try:
-                user = CustomUser.objects.get(CPF=cpf)
+                user = CustomUser.objects.get(email=email)
                 return JsonResponse({
                     'success': True,
                     'user': {
@@ -181,7 +182,7 @@ def verificar_cpf(request):
                     }
                 })
             except CustomUser.DoesNotExist:
-                return JsonResponse({'success': False, 'message': 'CPF not found'}, status=404)
+                return JsonResponse({'success': False, 'message': 'email not found'}, status=404)
 
         except Exception as e:
             print(f"Error verifying CPF: {e}")  # Log the error for debugging

@@ -27,6 +27,6 @@ urlpatterns = [
 
     path('admin/<int:admin_id>/', get_admin_details, name = 'get_admin_details'),
 
-    path('verificarcpf/', verificar_cpf, name ='verificar-cpf'),
+    path('verificarcpf/', verificar_email, name ='verificar-cpf'),
     path('user/<int:pk>/change-password/', AlterPasswordView.as_view(), name ='alter password'),
 ] 

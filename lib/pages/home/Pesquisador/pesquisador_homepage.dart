@@ -9,6 +9,31 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
+Future<void> refreshToken() async {
+  final prefs = await SharedPreferences.getInstance();
+  String? refresh = prefs.getString('refresh_token');
+  
+  if (refresh != null) {
+    var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/api/token/refresh/');
+    var response = await http.post(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: json.encode({"refresh": refresh}),
+    );
+
+    if (response.statusCode == 200) {
+      var body = json.decode(response.body);
+      prefs.setString('acess_token', body['access']);
+      print('Token atualizado com sucesso.');
+    } else {
+      print('Erro ao atualizar token: ${response.body}');
+    }
+  }
+}
+
 class PesquisadorHome extends StatefulWidget {
   const PesquisadorHome({super.key});
 
@@ -22,13 +47,31 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
 
     String? token = await prefs.getString('acess_token');
     var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisas/usuario/');
-    final response =
+    var response =
         await http.get(url, headers: {
           
           "Authorization": "Bearer $token",
           "Content-Type": "application/json"});
-    final List body = json.decode(utf8.decode(response.bodyBytes));
+
+      if(response.statusCode == 401){
+        await  refreshToken();
+
+        token = prefs.getString('acess_token');
+
+        response = await http.get(url,  headers: {
+                "Authorization": "Bearer $token",
+            "Content-Type": "application/json"
+        });
+      }
+
+      if(response.statusCode == 200){
+   final List body = json.decode(utf8.decode(response.bodyBytes));
+    
     return body.map((e) => Pesquisa.fromJson(e)).toList();
+      }else{
+        return [];
+      }
+ 
   }
 
   Future<List<Pesquisa>> pesquisasFuture = getPesquisas();

@@ -5,17 +5,19 @@ class AutocompleteTextField extends StatelessWidget {
   final Function(String option) onSelected;
   final AutocompleteOptionsBuilder<String> optionsBuilder;
   final Function(String value)? onChanged;
-
+   final TextEditingController? controllerAuto;
   const AutocompleteTextField({
     super.key,
     this.onChanged,
     required this.label, 
     required this.onSelected,
     required this.optionsBuilder,
+    this.controllerAuto,
   });
 
   @override
   Widget build(BuildContext context) {
+
     return LayoutBuilder(
       builder: (context, constraints) => Autocomplete<String>(
         optionsBuilder: (textEditingValue) => optionsBuilder(textEditingValue),
@@ -75,7 +77,14 @@ class AutocompleteTextField extends StatelessWidget {
           ),
         ),
         fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
+          //extEditingController.text = controllerAuto!.text;
+          if(controllerAuto!=null && textEditingController.text.isEmpty){
+          textEditingController.text = controllerAuto!.text;
+
+          }
+            //final controller = controllerAuto?.text.isNotEmpty == true ? textEditingController : controllerAuto;
           return TextField(
+            
             focusNode: focusNode,
             textAlign: TextAlign.end,
             controller: textEditingController,
@@ -93,7 +102,15 @@ class AutocompleteTextField extends StatelessWidget {
                 borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
               ),
             ),
-            onChanged: onChanged,
+            onChanged: (value){
+              if (controllerAuto != null && controllerAuto!.text != value){
+                controllerAuto!.text = value;
+              }
+
+              if(onChanged!= null){
+                onChanged!(value);
+              }
+            }
           );
         },
       ),
