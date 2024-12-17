@@ -47,6 +47,8 @@ class _EditPesquisaState extends State<EditPesquisa>
   final TextEditingController _nomePesquisador = TextEditingController();
   final TextEditingController _cpfPesquisador = TextEditingController();
 
+  late List<int> _usersIds;
+
   static Future<List<User>> getUsers() async {
     var url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_USERS);
     final response =
@@ -87,12 +89,12 @@ class _EditPesquisaState extends State<EditPesquisa>
   @override
   void initState() {
     super.initState();
-   _inicioController = TextEditingController();
-   _terminoController = TextEditingController();
-   _codigIbgeController =TextEditingController();
-   _municipioController = TextEditingController();
-   _estadoController = TextEditingController();
-
+    _inicioController = TextEditingController();
+    _terminoController = TextEditingController();
+    _codigIbgeController = TextEditingController();
+    _municipioController = TextEditingController();
+    _estadoController = TextEditingController();
+    _usersIds = [];
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -103,7 +105,6 @@ class _EditPesquisaState extends State<EditPesquisa>
         Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _pesquisaController.setUsers = users;
     _pesquisaController.setEstados();
-
   }
 
   @override
@@ -111,13 +112,14 @@ class _EditPesquisaState extends State<EditPesquisa>
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
 
-     final args = ModalRoute.of(context)?.settings.arguments as Map?;
-    if (args!=null && args.containsKey('data_inicio')){
-    _inicioController.text = args['data_inicio'];
-    _terminoController.text = args['data_termino'];
-    _codigIbgeController.text = args['codigoIBGE'];
-    _municipioController.text = args['municipio'];
-    _estadoController.text = args['estado'];
+    final args = ModalRoute.of(context)?.settings.arguments as Map?;
+    if (args != null && args.containsKey('data_inicio')) {
+      _inicioController.text = args['data_inicio'];
+      _terminoController.text = args['data_termino'];
+      _codigIbgeController.text = args['codigoIBGE'];
+      _municipioController.text = args['municipio'];
+      _estadoController.text = args['estado'];
+      _usersIds.addAll(args['pesquisadores']);
     }
   }
 
@@ -141,14 +143,13 @@ class _EditPesquisaState extends State<EditPesquisa>
       String estado,
       String municipio,
       Set<User> selectedUserss) async {
-
     final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/create');
-final prefs = await SharedPreferences.getInstance();
-String? userDataString = prefs.getString('user_data');
-  Map<String, dynamic> userData = json.decode(userDataString!);
-  print("Nome do usuário: ${userData['id']}");
-    
-        selectedUsers.forEach((user) {
+    final prefs = await SharedPreferences.getInstance();
+    String? userDataString = prefs.getString('user_data');
+    Map<String, dynamic> userData = json.decode(userDataString!);
+    print("Nome do usuário: ${userData['id']}");
+
+    selectedUsers.forEach((user) {
       print(
           'ID: ${user.id}, CPF: ${user.CPF}, Username: ${user.username}, Email: ${user.email}');
     });
@@ -158,8 +159,7 @@ String? userDataString = prefs.getString('user_data');
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: json.encode(<String, dynamic>{
- 
-            'admin':  userData['id'],
+            'admin': userData['id'],
             'dataInicio': dataInicio,
             'dataTermino': dataTermino,
             'codigoIBGE': codIBGE,
@@ -169,8 +169,9 @@ String? userDataString = prefs.getString('user_data');
           }));
 
       if (response.statusCode == 201) {
-
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Pesquisa criada com sucesso!"),));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Pesquisa criada com sucesso!"),
+        ));
         Navigator.pop(context);
       } else {
         print('Erro ao criar pesquisa: ${response.body}');
@@ -182,7 +183,6 @@ String? userDataString = prefs.getString('user_data');
 
   @override
   Widget build(BuildContext context) {
-
     final Size screenSize = MediaQuery.sizeOf(context);
     final double screenHeight = screenSize.height -
         MediaQuery.paddingOf(context).top -
@@ -456,7 +456,9 @@ String? userDataString = prefs.getString('user_data');
                             ),
                           ),
                         ),
-                        selectedUsersSection(), // Aqui exibimos a lista dos usuários selecionados.
+                        selectedUsersSection(
+                            userId:
+                                _usersIds), // Aqui exibimos a lista dos usuários selecionados.
                       ],
                     ),
                   ),
@@ -572,18 +574,45 @@ String? userDataString = prefs.getString('user_data');
     );
   }
 
-  Widget selectedUsersSection() {
+  Widget selectedUsersSection({List<int>? userId}) {
+    userId ??= [];
+
+    
     return Expanded(
-      child: ListView.builder(
-        itemCount: selectedUsers.length,
-        itemBuilder: (context, index) {
-          final user = selectedUsers.elementAt(index);
-          return UserPesquisaCardList(
-            user: user,
-            pesquisaController: _pesquisaController,
-            xIsVisible: true,
-          );
+      child: FutureBuilder<List<User>>(
+        future: userFuture,
+        builder: (context, snapshot) {
+          if(snapshot.connectionState == ConnectionState.waiting){
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if(snapshot.hasError){
+            return Center(child: Text('Erro: ${snapshot.error}'));
+          }
+
+          if(snapshot.hasData){
+            List<User> users = snapshot.data!;
+           users.forEach((element) => print(element.id),);
+
+           var a = userId!.isNotEmpty?
+            users.where((element) => element.id == userId?.last).toList()
+            :[];
+            final user = a.last;
+            UserPesquisaCardList(user: user, pesquisaController: _pesquisaController, xIsVisible: true,);
+          }
+           return ListView.builder(
+          itemCount: selectedUsers.length,
+          itemBuilder: (context, index) {
+            final user = selectedUsers.elementAt(index);
+            return UserPesquisaCardList(
+              user: user,
+              pesquisaController: _pesquisaController,
+              xIsVisible: true,
+            );
+          },
+        );
         },
+       
       ),
     );
   }
