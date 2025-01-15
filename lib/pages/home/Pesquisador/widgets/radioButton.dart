@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 
@@ -52,7 +53,7 @@ class RadioC extends StatefulWidget {
 
 class _RadioStateC extends State<RadioC> {
   int? _groupValue;
-
+  bool _isExpanded = false;
   @override
   Widget build(BuildContext context) {
     int half = (widget.number / 2).ceil().toInt();
@@ -61,6 +62,7 @@ class _RadioStateC extends State<RadioC> {
     for (var i = 0; i < widget.number; i++) {
       if (i % 2 == 0) {
         radioButtons.add(ListTile(
+          
             dense: true,
             title: Tooltip(
                 message: widget.options[i],
@@ -68,7 +70,7 @@ class _RadioStateC extends State<RadioC> {
                     //width: sizeScreen.width * 0.4,
                     //height: sizeScreen.height * 0.056,
                     child: Text(widget.options[i],
-                        style: TextStyle(fontSize: sizeScreen.height * 0.02),
+                        style: TextStyle(fontSize: 70.h),
                         // textAlign: TextAlign.start,
                         overflow: TextOverflow.ellipsis))),
             leading: Radio<int>(
@@ -94,7 +96,7 @@ class _RadioStateC extends State<RadioC> {
                     //width: sizeScreen.width * 0.4,
                     //  height: sizeScreen.height * 0.056,
                     child: Text(widget.options[i],
-                        style: TextStyle(fontSize: sizeScreen.height * 0.02),
+                        style: TextStyle(fontSize: 70.h),
                         //textAlign: TextAlign.start,
                         overflow: TextOverflow.ellipsis))),
             leading: Radio<int>(
@@ -120,12 +122,22 @@ class _RadioStateC extends State<RadioC> {
     }
 
     return ExpansionTile(
+         trailing: Icon(_isExpanded ? Icons.expand_less : Icons.expand_circle_down, color: Color.fromARGB(255, 55, 111, 60),),
+          collapsedIconColor: Color.fromARGB(255, 55, 111, 60),
+          onExpansionChanged: (bool expanded){
+            setState(() {
+              _isExpanded = expanded;
+            });
+          },
+          collapsedBackgroundColor: Colors.grey[200],
       tilePadding: EdgeInsets.only(
           left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
       shape: const Border(),
-      title: const Text(
-        'opções',
-        style: TextStyle(color: Color.fromARGB(255, 55, 111, 60)),
+      title: Container(
+        child: const Text(
+          'opções',
+          style: TextStyle(color: Color.fromARGB(255, 55, 111, 60), fontWeight: FontWeight.bold),
+        ),
       ),
       children: [
         Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -171,6 +183,7 @@ class RadioD extends StatefulWidget {
 class _RadioStateD extends State<RadioD> {
   int? _value;
   opcoes? options = opcoes.a;
+    bool _isExpanded = false;
 
   @override
   void initState() {
@@ -192,41 +205,55 @@ class _RadioStateD extends State<RadioD> {
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ExpansionTile(
-            shape: const Border(),
+          shape: Border(),
+          trailing: Icon(_isExpanded ? Icons.expand_less : Icons.expand_circle_down, color: Color.fromARGB(255, 55, 111, 60),),
+          collapsedIconColor: Color.fromARGB(255, 55, 111, 60),
+          onExpansionChanged: (bool expanded){
+            setState(() {
+              _isExpanded = expanded;
+            });
+          },
+          collapsedBackgroundColor: Colors.grey[200],
             title: const Text(
-              'opções',
+              'OPÇÕES',
               style: TextStyle(color: Color.fromARGB(255, 55, 111, 60), fontWeight: FontWeight.bold),
             ),
             tilePadding: EdgeInsets.only(
                 left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
             children: [
+              Divider(color: Colors.grey),
               for (int i = 0; i < widget.options.length; i++)
               
-                ListTile(
-                    dense: true,
-                    title: Text(
-                      widget.options[i],
-                      style: TextStyle(fontSize: sizeScreen.height * 0.02),
-                    ),
-                    leading: Radio<int>(
-                      value: i,
-                      groupValue: _value,
-                      onChanged: i == widget.options.length
-                          ? null
-                          : (value) {
-                              setState(() {
-                                if (value != i) {
-                                  _value = null;
-                                }else{
-                                  _value = value;
-                                widget.getValue(widget.options[i]);}
-                                
-                              });
-                            },
-                      toggleable: true,
-                    )),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 5.0, ),
+                  child: ListTile(
+                      dense: true,
+                      title: Text(
+                        widget.options[i],
+                        style: TextStyle(fontSize: sizeScreen.height * 0.02,   fontWeight: FontWeight.bold),
+                      ),
+                      leading: Radio<int>(
+                        value: i,
+                        groupValue: _value,
+                        onChanged: i == widget.options.length
+                            ? null
+                            : (value) {
+                                setState(() {
+                                  if (value != i) {
+                                    _value = null;
+                                  }else{
+                                    _value = value;
+                                  widget.getValue(widget.options[i]);}
+                                  
+                                });
+                              },
+                        toggleable: true,
+                      )),
+                ),
+                Divider(color: Colors.grey)
             ]),
            
         _value == widget.options.indexOf('outro')

@@ -18,7 +18,7 @@ final GlobalKey<CheckCState>  outrosServicos = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> estruturasAoLongoDaVia = GlobalKey<CheckCState>();
 
 class Rodovia extends StatefulWidget {
-  const Rodovia({super.key});
+  Rodovia({super.key});
 
   @override
   State<Rodovia> createState() => _RodoviaState();
@@ -281,8 +281,8 @@ void dispose() {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 55, 111, 60),
-        title: const Text(
+        backgroundColor:  Color.fromARGB(255, 55, 111, 60),
+        title:  Text(
           'Identificação',
           style: TextStyle(color: Colors.white),
         ),
@@ -309,7 +309,7 @@ void dispose() {
                               onSaved: (newValue) {
                                  valoresjson['uf'] = newValue;
                               },
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                 hintText: 'UF',
                               ),
                             )),
@@ -327,7 +327,7 @@ void dispose() {
                               onSaved: (newValue) {
                                 valoresjson['regiao_turistica'] = newValue;
                               },
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   hintText: 'Região Turística'),
                             ))
                       ],
@@ -339,7 +339,7 @@ void dispose() {
                       top: sizeScreen.height * 0.01),
                   child: TextFormField(
                     controller: municipio,
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       isDense: true,
                       hintText: 'Municipio',
                     ),
@@ -351,16 +351,16 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                const textLabel(name: 'Tipo:'),
+                 textLabel(name: 'Tipo:'),
                 RadioD(
-                  options: const ['Rodoviário'],
+                  options:  ['Rodoviário'],
                   getValue: (newValue) {
                     valoresjson['tipo'] = newValue;
                   },
                 ),
-                const textLabel(name: 'Subtipos:'),
+                 textLabel(name: 'Subtipos:'),
                 RadioD(
-                    options: const ['Estação rodoviária'],
+                    options:  ['Estação rodoviária'],
                     getValue: (newValue) {
                       valoresjson['subtipos'] = newValue;
                     }),
@@ -368,7 +368,7 @@ void dispose() {
                   height: sizeScreen.height * 0.05,
                 ),
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color:  Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -405,25 +405,25 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Jurisdição:'),
+                 textLabel(name: 'Jurisdição:'),
                 RadioD(
-                    options: const ['Federal', 'Estadual', 'Municipal'],
+                    options:  ['Federal', 'Estadual', 'Municipal'],
                     getValue: (newValue) {
                       valoresjson['jurisdicao'] = newValue;
                     }),
-                const textLabel(name: 'Natureza:'),
+                 textLabel(name: 'Natureza:'),
                 RadioD(
-                    options: const ['Pública', 'Privada', 'outro'],
+                    options:  ['Pública', 'Privada', 'outro'],
                     getValue: (newValue) {
                       valoresjson['natureza'] = newValue;
                     }),
-                const textLabel(name: 'Tipo de organização/Instituição:'),
+                 textLabel(name: 'Tipo de organização/Instituição:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
                  CheckC(
                   key: checkCKey,
-                  nomes: const [
+                  nomes:  [
                     'Associação',
                     'Sindicato',
                     'Cooperativa',
@@ -435,7 +435,7 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(
+                 textLabel(
                     name: 'Extensão da rodovia no âmbito do município:'),
                 CustomTextField(
                   controller:  extensao_rodovia_municipio,
@@ -449,9 +449,9 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Faixas de rolamento:'),
+                 textLabel(name: 'Faixas de rolamento:'),
                 RadioD(
-                    options: const [
+                    options:  [
                       'Duas',
                       'Três',
                       'Quatro',
@@ -465,9 +465,9 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Pavimentação:'),
+                 textLabel(name: 'Pavimentação:'),
                 RadioD(
-                    options: const [
+                    options:  [
                       'Asfalto',
                       'Concreto',
                       'Paralelepipedo',
@@ -483,7 +483,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                  const textLabel(name: 'Pedágio:'),
+                   textLabel(name: 'Pedágio:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -499,7 +499,7 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                const textLabel(
+                 textLabel(
                     name: 'Municípios vizinhos interligados por rodovia:'),
                 CustomTextField(
                   controller: municipios_vizinhos_interligados_rodovia,
@@ -515,7 +515,7 @@ void dispose() {
                 ),
                 Row(
                   children: [
-                    const textLabel(name: 'Início da atividade:'),
+                     textLabel(name: 'Início da atividade:'),
                     SizedBox(
                       width: sizeScreen.width * 0.1,
                     ),
@@ -536,13 +536,13 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Entidade mantedora:'),
+                 textLabel(name: 'Entidade mantedora:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 Row(
                   children: [
-                    const textLabel(name: 'Whatsapp'),
+                     textLabel(name: 'Whatsapp'),
                     SizedBox(
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
@@ -563,7 +563,7 @@ void dispose() {
                 ),
                 Row(
                   children: [
-                    const textLabel(name: 'Instagram'),
+                     textLabel(name: 'Instagram'),
                     SizedBox(
                       width: sizeScreen.width * 0.045,
                     ),
@@ -585,12 +585,12 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Sinalização:'),
+                 textLabel(name: 'Sinalização:'),
                 SizedBox(
                   height: sizeScreen.height * 0.04,
                 ),
                 Row(children: [
-                  const textLabel(name: 'de acessso -'),
+                   textLabel(name: 'de acessso -'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -607,7 +607,7 @@ void dispose() {
                   height: sizeScreen.height * 0.02,
                 ),
                 Row(children: [
-                  const textLabel(name: 'turística -'),
+                   textLabel(name: 'turística -'),
                   SizedBox(
                     width: sizeScreen.width * 0.14,
                   ),
@@ -624,7 +624,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color:  Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -640,29 +640,29 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(
+                 textLabel(
                     name: 'Equipamentos e serviçõs ao longo da rodovia:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Posto de combustível:'),
+                 textLabel(name: 'Posto de combustível:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
                   key: postoCombustivel,
-                  nomes: const ['Álcool', 'Gasolina', 'Diesel'],
+                  nomes:  ['Álcool', 'Gasolina', 'Diesel'],
                 ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Outros serviços:'),
+                 textLabel(name: 'Outros serviços:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
                   key: outrosServicos,
-                  nomes: const [
+                  nomes:  [
                     'Alimentação',
                     'Hospedagem',
                     'Polícia rodoviária',
@@ -680,13 +680,13 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Estruturas ao longo da via:'),
+                 textLabel(name: 'Estruturas ao longo da via:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
                 CheckC(
                   key: estruturasAoLongoDaVia,
-                  nomes: const [
+                  nomes:  [
                     'Ponte',
                     'Passarela',
                     'Viaduto',
@@ -698,12 +698,12 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Questões ambientais/sociais:'),
+                 textLabel(name: 'Questões ambientais/sociais:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                  const textLabel(name: 'Poluição:'),
+                   textLabel(name: 'Poluição:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -735,7 +735,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                  const textLabel(name: 'Lixo:'),
+                   textLabel(name: 'Lixo:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -764,7 +764,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                  const textLabel(name: 'Desmatamento:'),
+                   textLabel(name: 'Desmatamento:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -793,7 +793,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                  const textLabel(name: 'Queimadas:'),
+                   textLabel(name: 'Queimadas:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -822,7 +822,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                  const textLabel(name: 'Insegurança:'),
+                   textLabel(name: 'Insegurança:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -851,7 +851,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                  const textLabel(name: 'Extrativismo:'),
+                   textLabel(name: 'Extrativismo:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -880,7 +880,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                  const textLabel(name: 'Prostituição:'),
+                   textLabel(name: 'Prostituição:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -909,7 +909,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                  const textLabel(name: 'Ocupações\nirregulares/invasão'),
+                   textLabel(name: 'Ocupações\nirregulares/invasão'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -936,7 +936,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                  const textLabel(name: 'Outras:'),
+                   textLabel(name: 'Outras:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -962,7 +962,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color:  Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -979,7 +979,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 RadioD(
-                    options: const ['Muito bom', 'Bom', 'Ruim'],
+                    options: ['Muito bom', 'Bom', 'Ruim'],
                     getValue: (newValue) {
                       valoresjson['estado_geral_de_conservacao'] = newValue;
                     }),
@@ -987,7 +987,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color: Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -1017,7 +1017,7 @@ void dispose() {
                   height: sizeScreen.height * 0.05,
                 ),
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color: Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -1047,7 +1047,7 @@ void dispose() {
                   height: sizeScreen.height * 0.05,
                 ),
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color: Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -1063,7 +1063,7 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                const textLabel(
+                textLabel(
                     name: 'Responsável pelo atendimento (Pesquisador)'),
                 CustomTextField(
                   controller: nome_pesquisador,
@@ -1078,7 +1078,7 @@ void dispose() {
                     valoresjson['nome_pesquisador'] = newValue;
                   },
                 ),
-                const textLabel(name: 'Telefone'),
+                textLabel(name: 'Telefone'),
                 CustomTextField(
                   controller: telefone_pesquisador,
                   validat: (value) {
@@ -1092,7 +1092,7 @@ void dispose() {
                     valoresjson['telefone_pesquisador'] = newValue;
                   },
                 ),
-                const textLabel(name: 'E-mail'),
+                textLabel(name: 'E-mail'),
                 CustomTextField(
                   controller: email_pesquisador,
                   validat: (value) {
@@ -1106,7 +1106,7 @@ void dispose() {
                     valoresjson['email_pesquisador'] = newValue;
                   },
                 ),
-                const textLabel(
+                textLabel(
                     name: 'Responsável pelo atendimento (Coordenador)'),
                 CustomTextField(
                   controller: nome_coordenador,
@@ -1121,7 +1121,7 @@ void dispose() {
                     valoresjson['nome_coordenador'] = newValue;
                   },
                 ),
-                const textLabel(name: 'Telefone'),
+                textLabel(name: 'Telefone'),
                 CustomTextField(
                   controller: telefone_coordenador,
                   validat: (value) {
@@ -1135,7 +1135,7 @@ void dispose() {
                     valoresjson['telefone_coordenador'] = newValue;
                   },
                 ),
-                const textLabel(name: 'E-mail'),
+                textLabel(name: 'E-mail'),
                 CustomTextField(
                   controller: email_coordenador,
                   validat: (value) {
@@ -1174,14 +1174,14 @@ void dispose() {
                       autoFillForm();
                       if (_formKey.currentState!.validate()) {
                         //  ScaffoldMessenger.of(context).showSnackBar(
-                        //      const SnackBar(content: Text('processing data')));
+                        //      SnackBar(content: Text('processing data')));
                         
                         _formKey.currentState!.save();
                         debugPrint(valoresjson.toString(), wrapWidth: 1024);
                         sendForm(valoresjson);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                                 content: Text('preencha os dados!')));
                       }
                       Navigator.pushReplacementNamed(context, '/SendedForm');
@@ -1191,7 +1191,7 @@ void dispose() {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
-                    child: const Text(
+                    child: Text(
                       'Enviar',
                       style: TextStyle(
                           color: Colors.white,
@@ -1200,7 +1200,7 @@ void dispose() {
                     
                   ),
                 ),
-                const SizedBox(
+                SizedBox(
                   height: 15,
                 )
               ],

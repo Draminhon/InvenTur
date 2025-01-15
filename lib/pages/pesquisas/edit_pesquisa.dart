@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditPesquisa extends StatefulWidget {
@@ -25,7 +26,7 @@ class _EditPesquisaState extends State<EditPesquisa>
   final Set<User> selectedUsers = {};
   late Estado? _estadoSelecionado = Estado(id: -1, sigla: '', nome: '');
   late Municipio? _municipioSelecionado = Municipio(id: -1, nome: '');
-
+late int adminId;
   List<User> users = [
     User(
         username: "Fulano Silva da Costa",
@@ -48,7 +49,7 @@ class _EditPesquisaState extends State<EditPesquisa>
   final TextEditingController _cpfPesquisador = TextEditingController();
 
   late List<int> _usersIds;
-
+ late int pesquisaId;
   static Future<List<User>> getUsers() async {
     var url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_USERS);
     final response =
@@ -57,9 +58,67 @@ class _EditPesquisaState extends State<EditPesquisa>
     return body.map((e) => User.fromJson(e)).toList();
   }
 
+
   Future<List<User>> userFuture = getUsers();
 
-  Future<String> selectDate() async {
+
+
+ 
+
+  @override
+  void initState() {
+    super.initState();
+      
+    _inicioController = TextEditingController();
+    _terminoController = TextEditingController();
+    _codigIbgeController = TextEditingController();
+    _municipioController = TextEditingController();
+    _estadoController = TextEditingController();
+    _usersIds = [];
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+      reverseDuration: const Duration(milliseconds: 500),
+    );
+
+    _scaleAnimation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
+    _pesquisaController.setUsers = users;
+    _pesquisaController.setEstados();
+  }
+
+@override
+void didChangeDependencies() {
+  super.didChangeDependencies();
+
+  final args = ModalRoute.of(context)?.settings.arguments as Map?;
+  if (args != null) {
+    // Atribui as datas apenas se o controlador estiver vazio
+    if (_inicioController.text.isEmpty && args.containsKey('data_inicio')) {
+      _inicioController.text = args['data_inicio'];
+    }
+    if (_terminoController.text.isEmpty && args.containsKey('data_termino')) {
+      _terminoController.text = args['data_termino'];
+    }
+
+    // Atribui outros valores apenas se o controlador estiver vazio
+    if (_codigIbgeController.text.isEmpty && args.containsKey('codigoIBGE')) {
+      _codigIbgeController.text = args['codigoIBGE'];
+    }
+    if (_municipioController.text.isEmpty && args.containsKey('municipio')) {
+      _municipioController.text = args['municipio'];
+    }
+    if (_estadoController.text.isEmpty && args.containsKey('estado')) {
+      _estadoController.text = args['estado'];
+    }
+
+    _usersIds.addAll(args['pesquisadores']);
+    alreadySelectedUsersSection(userId: _usersIds);
+  }
+}
+
+
+   Future<String> selectDate() async {
     late DateTime? selectedDate;
     final DateTime dateNow = DateTime.now();
 
@@ -86,42 +145,54 @@ class _EditPesquisaState extends State<EditPesquisa>
     return '';
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _inicioController = TextEditingController();
-    _terminoController = TextEditingController();
-    _codigIbgeController = TextEditingController();
-    _municipioController = TextEditingController();
-    _estadoController = TextEditingController();
-    _usersIds = [];
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 500),
-      reverseDuration: const Duration(milliseconds: 500),
+
+Future<void> atualizarPesquisa() async {
+  var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/${pesquisaId}/atualizar/');
+  
+  try {
+    // Formatar a data usando DateFormat para garantir que ela tenha o formato correto
+    DateFormat inputFormat = DateFormat('yyyy-MM-dd'); // Ajuste aqui
+    DateFormat outputFormat = DateFormat('yyyy-MM-dd'); // Para manter o mesmo formato
+    
+    // Converte a data do formato yyyy-MM-dd para yyyy-MM-dd (caso seja necessário)
+    String dataInicioFormatada = outputFormat.format(inputFormat.parse(_inicioController.text));
+    String dataTerminoFormatada = outputFormat.format(inputFormat.parse(_terminoController.text));
+    
+    var response = await http.patch(
+      url,
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: json.encode({
+        'admin': adminId,
+        'dataInicio': dataInicioFormatada,
+        'dataTermino': dataTerminoFormatada,
+        'codigoIBGE': _codigIbgeController.text,
+        'estado': _estadoController.text,
+        'municipio': _municipioController.text,
+        'usuario': selectedUsers.map((user) => user.id).toList()
+      }),
     );
 
-    _scaleAnimation =
-        Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
-    _pesquisaController.setUsers = users;
-    _pesquisaController.setEstados();
-  }
-
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-
-    final args = ModalRoute.of(context)?.settings.arguments as Map?;
-    if (args != null && args.containsKey('data_inicio')) {
-      _inicioController.text = args['data_inicio'];
-      _terminoController.text = args['data_termino'];
-      _codigIbgeController.text = args['codigoIBGE'];
-      _municipioController.text = args['municipio'];
-      _estadoController.text = args['estado'];
-      _usersIds.addAll(args['pesquisadores']);
+    // Verifique o código de status da resposta
+    if (response.statusCode == 200) {
+      // Requisição bem-sucedida
+      print("Pesquisa atualizada com sucesso!");
+      print("Resposta: ${response.body}");
+    } else {
+      // Se o status não for 200, printa o erro com detalhes
+      print("Erro ao atualizar pesquisa. Código de status: ${response.statusCode}");
+      print("Resposta do servidor: ${response.body}");
     }
+
+  } catch (e) {
+    // Captura e imprime o erro
+    print("Erro ao fazer a requisição: $e");
   }
+}
+
+
+
 
   var appbar = AppBar(
     title: const Text('Editar pesquisa'),
@@ -159,13 +230,13 @@ class _EditPesquisaState extends State<EditPesquisa>
             'Content-Type': 'application/json; charset=UTF-8',
           },
           body: json.encode(<String, dynamic>{
-            'admin': userData['id'],
+            'admin_id': userData['id'],
             'dataInicio': dataInicio,
             'dataTermino': dataTermino,
             'codigoIBGE': codIBGE,
             'estado': estado,
             'municipio': municipio,
-            'usuario': selectedUserss.map((user) => user.id).toList()
+            'pesquisadores': selectedUserss.map((user) => user.id).toList()
           }));
 
       if (response.statusCode == 201) {
@@ -183,6 +254,11 @@ class _EditPesquisaState extends State<EditPesquisa>
 
   @override
   Widget build(BuildContext context) {
+        final args = ModalRoute.of(context)?.settings.arguments as Map?;
+
+     pesquisaId = args!['id'];
+    adminId = args!['admin_id'];
+    print(_inicioController.text);
     final Size screenSize = MediaQuery.sizeOf(context);
     final double screenHeight = screenSize.height -
         MediaQuery.paddingOf(context).top -
@@ -456,9 +532,9 @@ class _EditPesquisaState extends State<EditPesquisa>
                             ),
                           ),
                         ),
+
                         selectedUsersSection(
-                            userId:
-                                _usersIds), // Aqui exibimos a lista dos usuários selecionados.
+                        ),
                       ],
                     ),
                   ),
@@ -483,29 +559,30 @@ class _EditPesquisaState extends State<EditPesquisa>
                                   overlayColor: WidgetStateProperty.all(
                                       Colors.green[600])),
                               onPressed: () async {
-                                String municipio;
-                                String estado;
-                                final dataInicio = _inicioController.text;
-                                final dataTermino = _terminoController.text;
-                                final codigoIBGE = _codigIbgeController.text;
-                                if (_municipioSelecionado!.nome != '') {
-                                  municipio = _municipioSelecionado!.nome;
-                                } else {
-                                  municipio = _municipioController.text;
-                                }
+                                // String municipio;
+                                // String estado;
+                                // final dataInicio = _inicioController.text;
+                                // final dataTermino = _terminoController.text;
+                                // final codigoIBGE = _codigIbgeController.text;
+                                // if (_municipioSelecionado!.nome != '') {
+                                //   municipio = _municipioSelecionado!.nome;
+                                // } else {
+                                //   municipio = _municipioController.text;
+                                // }
 
-                                if (_estadoSelecionado!.nome != '') {
-                                  estado = _estadoSelecionado!.nome;
-                                } else {
-                                  estado = _estadoController.text;
-                                }
-                                createPesquisa(
-                                    dataInicio,
-                                    dataTermino,
-                                    codigoIBGE,
-                                    estado,
-                                    municipio,
-                                    selectedUsers);
+                                // if (_estadoSelecionado!.nome != '') {
+                                //   estado = _estadoSelecionado!.nome;
+                                // } else {
+                                //   estado = _estadoController.text;
+                                // }
+                                // createPesquisa(
+                                //     dataInicio,
+                                //     dataTermino,
+                                //     codigoIBGE,
+                                //     estado,
+                                //     municipio,
+                                //     selectedUsers);
+                                atualizarPesquisa();
                               },
                               child: Text(
                                 "Confirmar",
@@ -574,33 +651,15 @@ class _EditPesquisaState extends State<EditPesquisa>
     );
   }
 
-  Widget selectedUsersSection({List<int>? userId}) {
-    userId ??= [];
+
+  Widget selectedUsersSection() {
 
     
     return Expanded(
-      child: FutureBuilder<List<User>>(
-        future: userFuture,
-        builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting){
-            return const Center(child: CircularProgressIndicator());
-          }
-
-          if(snapshot.hasError){
-            return Center(child: Text('Erro: ${snapshot.error}'));
-          }
-
-          if(snapshot.hasData){
-            List<User> users = snapshot.data!;
-           users.forEach((element) => print(element.id),);
-
-           var a = userId!.isNotEmpty?
-            users.where((element) => element.id == userId?.last).toList()
-            :[];
-            final user = a.last;
-            UserPesquisaCardList(user: user, pesquisaController: _pesquisaController, xIsVisible: true,);
-          }
-           return ListView.builder(
+ 
+        
+          
+            child:  ListView.builder(
           itemCount: selectedUsers.length,
           itemBuilder: (context, index) {
             final user = selectedUsers.elementAt(index);
@@ -610,12 +669,38 @@ class _EditPesquisaState extends State<EditPesquisa>
               xIsVisible: true,
             );
           },
-        );
-        },
-       
-      ),
-    );
-  }
+        ));
+        }
+
+
+//Retirar esta parte, redundância.
+   Future<void> alreadySelectedUsersSection({List<int>? userId})async {
+    userId ??= [];
+
+    print(userId);
+   
+
+        List<User> users =await userFuture;
+
+        // Filtrando os usuários com o mesmo ID do último `userId`
+        List<User> filteredUsers = userId!.isNotEmpty
+            ? users.where((element) => userId!.contains(element.id)).toList()
+            : [];
+
+        filteredUsers.forEach((element) => print(element.id),);
+        // Verifica se existem usuários filtrados
+        if (filteredUsers.isNotEmpty) {
+          setState(() {
+        selectedUsers.addAll(filteredUsers);
+
+          });
+          
+        }
+
+   
+      }
+      // Caso nenhum dado seja recebido
+
 
   Widget showUsers(List<User> posts) {
     return SizedBox(

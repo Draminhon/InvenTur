@@ -9,7 +9,7 @@ import 'widgets/sendButton.dart';
 import 'widgets/tabela.dart';
 
 class AlimentoseBebidas extends StatefulWidget {
-  const AlimentoseBebidas({super.key});
+   AlimentoseBebidas({super.key});
 
   @override
   State<AlimentoseBebidas> createState() => _AlimentoseBebidasState();
@@ -212,9 +212,10 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 55, 111, 60),
-          title: const Text(
+          backgroundColor:  Color.fromARGB(255, 55, 111, 60),
+          title:  Text(
             'Identificação',
             style: TextStyle(color: Colors.white),
           ),
@@ -241,7 +242,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                               onSaved: (newValue) {
                                 valoresjson['uf'] = newValue;
                               },
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                 hintText: 'UF',
                               ),
                             )),
@@ -258,7 +259,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                               onSaved: (newValue) {
                                 valoresjson['RG'] = newValue;
                               },
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   hintText: 'Região Turística'),
                             ))
                       ],
@@ -269,7 +270,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       right: sizeScreen.width * 0.1,
                       top: sizeScreen.height * 0.01),
                   child: TextFormField(
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                       isDense: true,
                       hintText: 'Municipio',
                     ),
@@ -278,12 +279,12 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     },
                   ),
                 ),
-                const textLabel(name: 'Tipo:'),
+                 textLabel(name: 'Tipo:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
                 RadioD(
-                  options: const [
+                  options:  [
                     'Restaurante',
                     'Bar',
                     'Lanchonete',
@@ -302,7 +303,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   height: sizeScreen.height * 0.05,
                 ),
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color:  Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -363,12 +364,13 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 Column(
                   children: [
-                    const textLabel(name: 'Natureza:'),
+                     textLabel(name: 'Natureza:', fontWeight: FontWeight.w600,),
+
                     SizedBox(
                       height: sizeScreen.height * 0.03,
                     ),
                     RadioD(
-                        options: const ['pública', 'privada', 'outro'],
+                        options:  ['pública', 'privada', 'outro'],
                         getValue: (newValue) {
                           valoresjson['natureza'] = newValue;
                         })
@@ -379,11 +381,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 Column(
                   children: [
-                    const textLabel(name: 'Tipo de organização/instituição:'),
+                     textLabel(name: 'Tipo de organização/instituição:', fontWeight: FontWeight.bold,),
                     SizedBox(
                       height: sizeScreen.height * 0.03,
                     ),
-                   const CheckC(
+                    CheckC(
                         nomes: [
                           'associação',
                           'sindicato',
@@ -401,7 +403,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 Row(
                   children: [
                  
-                    const textLabel(name: 'início da atividade:'),
+                     textLabel(name: 'início da atividade:', fontWeight: FontWeight.bold,),
                     SizedBox(
                       width: sizeScreen.width * 0.1,
                     ),
@@ -416,7 +418,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Quantidade de Funcionários:'),
+                 textLabel(name: 'Quantidade de Funcionários:', fontWeight: FontWeight.bold),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -424,7 +426,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Permanentes'),
+                       textLabel(name: 'Permanentes'),
                       SizedBox(
                         width: sizeScreen.width * 0.026,
                       ),
@@ -449,7 +451,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Row(
                     children: [
                     
-                      const textLabel(name: 'Temporários'),
+                       textLabel(name: 'Temporários'),
                       SizedBox(
                         width: sizeScreen.width * 0.038,
                       ),
@@ -472,7 +474,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Pessoas com\ndefiicência (%)'),
+                       textLabel(name: 'Pessoas com\ndefiicência (%)'),
                       SizedBox(
                           width: sizeScreen.width * 0.6,
                           //height: sizeScreen.height * 0.07,
@@ -492,12 +494,12 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Localização:'),
+                 textLabel(name: 'Localização:', fontWeight: FontWeight.bold),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 RadioD(
-                  options: const ['urbana', 'rural'],
+                  options:  ['urbana', 'rural'],
                   getValue: (newValue) {
                     valoresjson['localização'] = newValue;
                   },
@@ -505,7 +507,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Coordenadas Geográficas:'),
+                 textLabel(name: 'Coordenadas Geográficas:', fontWeight: FontWeight.bold),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -513,7 +515,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Row(
                     children: [
                     
-                      const textLabel(name: 'Latitude'),
+                       textLabel(name: 'Latitude'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
                       ),
@@ -537,7 +539,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Longitude'),
+                       textLabel(name: 'Longitude'),
                       SizedBox(
                           width: sizeScreen.width * 0.6,
                           //height: sizeScreen.height * 0.07,
@@ -556,7 +558,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Endereço:'),
+                 textLabel(name: 'Endereço:', fontWeight: FontWeight.bold,),
                 CustomTextField(
                   validat: (value) {
                     return null;
@@ -601,7 +603,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Row(
                     children: [
                     
-                      const textLabel(name: 'Whatsapp'),
+                       textLabel(name: 'Whatsapp', fontWeight: FontWeight.bold,),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -619,7 +621,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Row(
                     children: [
                     
-                      const textLabel(name: 'Instagram'),
+                       textLabel(name: 'Instagram', fontWeight: FontWeight.bold,),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -642,7 +644,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 Row(
                   children: [
                    
-                    const textLabel(name: 'E-mail'),
+                     textLabel(name: 'E-mail', fontWeight: FontWeight.bold,),
                      SizedBox(
                       width: sizeScreen.width * 0.04,
                     ),
@@ -663,39 +665,18 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                Row(
-                  children: [
-                   
-                    const textLabel(
-                        name: 'Site'),
-                    SizedBox(
-                      width: sizeScreen.width * 0.1,
-                    ),
-                    SizedBox(
-                        width: sizeScreen.width * 0.5,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          validat: (value) {
-                            return null;
-                          },
-                          name: 'www.endereço.com',
-                          getValue: (newvalue) {
-                            valoresjson['Site'] = newvalue;
-                          },
-                        ))
-                  ],
-                ),
+                
 
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Sinalização:'),
+                 textLabel(name: 'Sinalização:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.04,
                 ),
                 Row(children: [
                  
-                  const textLabel(name: 'de acessso -'),
+                   textLabel(name: 'de acessso -'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -713,7 +694,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 Row(children: [
                   
-                  const textLabel(name: 'turística -'),
+                   textLabel(name: 'turística -'),
                   SizedBox(
                     width: sizeScreen.width * 0.14,
                   ),
@@ -733,12 +714,12 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Proximidades:'),
+                 textLabel(name: 'Proximidades:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 //  RadioD(number: 6, options: options)
-                const CheckC(
+                 CheckC(
                   nomes: [
                     'Restaurante',
                     'Centro de Convenções exposições',
@@ -752,7 +733,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   //   valoresjson['Proximidades'] = newValue;
                   // },
                 ),
-                const textLabel(name: 'Pontos de referência:'),
+                 textLabel(name: 'Pontos de referência:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -773,7 +754,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
 
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color:  Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -789,7 +770,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                TabelaT1(column01: const [
+                TabelaT1(column01:  [
                   Text('Entidade/guia turístico'),
                   Text(
                     'Associações e sindicatos do setor de hospedagem',
@@ -799,37 +780,37 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Text('Guias Turísticos'),
                   Text('Outros'),
                 ], column02: [
-                  const Text('Categoria/tipo/classificação/número'),
-                  const Text('CADASTUR outros'),
+                   Text('Categoria/tipo/classificação/número'),
+                   Text('CADASTUR outros'),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                         labelText: '', border: InputBorder.none),
                     onSaved: (newValue) {
                       valoresjson['AssociaçõesDeTurismos'] = newValue;
                     },
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                         labelText: '', border: InputBorder.none),
                     onSaved: (newValue) {
                       valoresjson['AssociaçõesComerciais'] = newValue;
                     },
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                         labelText: '', border: InputBorder.none),
                     onSaved: (newValue) {
                       valoresjson['GuiasTurísticos'] = newValue;
                     },
                   ),
                   TextFormField(
-                    decoration: const InputDecoration(
+                    decoration:  InputDecoration(
                         labelText: '', border: InputBorder.none),
                     onSaved: (newValue) {
                       valoresjson['Outros'] = newValue;
                     },
                   ),
-                  const TextField(
+                   TextField(
                     decoration: InputDecoration(border: InputBorder.none),
                   ),
                 ]),
@@ -838,7 +819,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
 
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color:  Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -854,16 +835,16 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Estrutura de funcionamento:'),
+                 textLabel(name: 'Estrutura de funcionamento:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                const textLabel(name: 'Formas de pagamento:'),
+                 textLabel(name: 'Formas de pagamento:', fontWeight: FontWeight.bold,),
 
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-               const CheckC(nomes: [
+                CheckC(nomes: [
                     'Dinheiro',
                     'Pix',
                     'Cartão de Crédito',
@@ -876,11 +857,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Vendas e Reservas:'),
+                 textLabel(name: 'Vendas e Reservas:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const CheckC(
+                 CheckC(
                   nomes: [
                       'Balcão',
                       'Whatsapp',
@@ -893,26 +874,26 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   height: sizeScreen.height * 0.02,
                 ),
           
-                const textLabel(name: 'Atendimento ao público:'),
+                 textLabel(name: 'Atendimento ao público:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Atendimento em língua estrangeira:'),
+                 textLabel(name: 'Atendimento em língua estrangeira:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-              const CheckC(nomes:
+               CheckC(nomes:
                      ['Não', 'Inglês', 'Espanhol', 'outro'],
                     // getValue: (newValue) {
                     //   valoresjson['LinguaEstrangeira'] = newValue;
                     // }
                     ),
 
-                const textLabel(name: 'Informativos impressos:'),
+                 textLabel(name: 'Informativos impressos:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const CheckC(
+                 CheckC(
                 nomes: [
                     'Não',
                     'Inglês',
@@ -929,7 +910,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
 
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color:  Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -945,11 +926,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Período:'),
+                 textLabel(name: 'Período:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const CheckC(
+                 CheckC(
              nomes: [
                     'Janeiro',
                     'Fevereiro',
@@ -967,7 +948,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   ],
                   
                 ),
-                const textLabel(name: 'Horário:'),
+                 textLabel(name: 'Horário:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.01,
                 ),
@@ -977,7 +958,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                const textLabel(name: 'Funcionamento 24 horas:'),
+                 textLabel(name: 'Funcionamento 24 horas:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -986,7 +967,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     valoresjson['Funcionamento24h'] = newValue;
                   },
                 ),
-                const textLabel(name: 'Funcionamento em feriados:'),
+                 textLabel(name: 'Funcionamento em feriados:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
@@ -995,15 +976,15 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     valoresjson['FuncionamentoEmFeriados'] = newValue;
                   },
                 ),
-                const textLabel(name: 'Restrições:'),
+                 textLabel(name: 'Restrições:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-              const CheckC(
+               CheckC(
                   nomes: ['Crianças', 'Fumantes', 'Animais', 'outro'],
                   //getValue: (newValue) {},
                 ),
-                const textLabel(name: 'Outras regras e informações:'),
+                 textLabel(name: 'Outras regras e informações:', fontWeight: FontWeight.bold,),
 
                 CustomTextField(
                   validat: (value) {
@@ -1020,11 +1001,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Capacidade de atendimento:'),
+                 textLabel(name: 'Capacidade de atendimento:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Capacidade instalada por dia nº:'),
+                 textLabel(name: 'Capacidade instalada por dia nº:', fontWeight: FontWeight.bold,),
 
                 CustomTextField(
                   validat: (value) {
@@ -1038,7 +1019,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     valoresjson['CapInstaladaPdia'] = newValue;
                   },
                 ),
-                const textLabel(name: 'Pessoas atendidas sentadas nº:'),
+                 textLabel(name: 'Pessoas atendidas sentadas nº:', fontWeight: FontWeight.bold,),
 
                 CustomTextField(
                   validat: (value) {
@@ -1052,7 +1033,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     valoresjson['CapSentadas'] = newValue;
                   },
                 ),
-                const textLabel(name: 'Capacidade simultânea nº:'),
+                 textLabel(name: 'Capacidade simultânea nº:', fontWeight: FontWeight.bold,),
 
                 CustomTextField(
                   validat: (value) {
@@ -1071,7 +1052,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
 
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color:  Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -1087,15 +1068,15 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                const textLabel(name: 'Instalações:'),
+                 textLabel(name: 'Instalações:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Estacionamento:'),
+                 textLabel(name: 'Estacionamento:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-          const CheckC(    nomes: [
+           CheckC(    nomes: [
                       'Pago',
                       'Gratuito',
                       'Coberto',
@@ -1107,7 +1088,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Capacidade de\nveículos nº'),
+                       textLabel(name: 'Capacidade de\nveículos nº'),
                       SizedBox(
                         width: sizeScreen.width * 0.01,
                       ),
@@ -1133,7 +1114,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Row(
                     children: [
                     
-                      const textLabel(name: 'Automóveis nº'),
+                       textLabel(name: 'Automóveis nº'),
                       SizedBox(
                         width: sizeScreen.width * 0.005,
                       ),
@@ -1159,7 +1140,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Ônibus nº'),
+                       textLabel(name: 'Ônibus nº'),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
                       ),
@@ -1183,11 +1164,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Serviços e Equipamentos:'),
+                 textLabel(name: 'Serviços e Equipamentos:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-              const CheckC(
+               CheckC(
                     nomes: [
                       'Música ao vivo',
                       'Atendimento a grupos',
@@ -1212,11 +1193,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Espeficiação da gastronomia:'),
+                 textLabel(name: 'Espeficiação da gastronomia:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const CheckC(
+                 CheckC(
                     nomes: [
                       'Não',
                       'Argentina',
@@ -1251,11 +1232,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Se for Brasileira, por região:'),
+                 textLabel(name: 'Se for Brasileira, por região:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const CheckC(
+                 CheckC(
                     nomes: [
                       'Não',
                       'Amazônica',
@@ -1273,11 +1254,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const textLabel(name: 'Por especialização:'),
+                 textLabel(name: 'Por especialização:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                const CheckC(
+                 CheckC(
                     nomes: [
                       'Não',
                       'cachaçaria',
@@ -1307,7 +1288,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   height: sizeScreen.height * 0.03,
                 ),
                 Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color:  Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.15,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -1325,7 +1306,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 Row(children: [
                   
-                  const textLabel(name: 'Do equipamento/espaço:'),
+                   textLabel(name: 'Do equipamento/espaço:', fontWeight: FontWeight.bold,),
                   SizedBox(
                     width: sizeScreen.width * 0.04,
                   ),
@@ -1346,14 +1327,14 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
 
                 TabelaT4(
-                  column01: const [
+                  column01:  [
                     Text('Categoria'),
                     Text('Municipal'),
                     Text('Municipal'),
                     Text('Municipal'),
                     Text('Municipal'),
                   ],
-                  column02: const [
+                  column02:  [
                     Text('instrumento (nª)'),
                     Text('Lei/decreto'),
                     Text('Portaria/instrução/deliberação'),
@@ -1361,9 +1342,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     Text('Outros'),
                   ],
                   column03: [
-                    const Text('Nome/titulo/certificação/licenciamento/outro'),
+                     Text('Nome/titulo/certificação/licenciamento/outro'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal']
@@ -1371,7 +1352,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal']
@@ -1379,7 +1360,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal']
@@ -1387,7 +1368,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal']
@@ -1396,9 +1377,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     ),
                   ],
                   column04: [
-                    const Text('Entidade declaratória/tipo de declaração'),
+                     Text('Entidade declaratória/tipo de declaração'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal']
@@ -1406,7 +1387,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal']
@@ -1414,7 +1395,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal']
@@ -1422,7 +1403,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal']
@@ -1436,14 +1417,14 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
 
               TabelaT4(
-                  column01: const [
+                  column01:  [
                     Text('Categoria'),
                     Text('Estadual'),
                     Text('Estadual'),
                     Text('Estadual'),
                     Text('Estadual'),
                   ],
-                  column02: const [
+                  column02:  [
                     Text('instrumento (nª)'),
                     Text('Lei/decreto'),
                     Text('Portaria/instrução/deliberação'),
@@ -1451,9 +1432,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     Text('Outros'),
                   ],
                   column03: [
-                    const Text('Nome/titulo/certificação/licenciamento/outro'),
+                     Text('Nome/titulo/certificação/licenciamento/outro'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual']
@@ -1461,7 +1442,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual']
@@ -1469,7 +1450,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual']
@@ -1477,7 +1458,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual']
@@ -1486,9 +1467,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     ),
                   ],
                   column04: [
-                    const Text('Entidade declaratória/tipo de declaração'),
+                     Text('Entidade declaratória/tipo de declaração'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual']
@@ -1496,7 +1477,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual']
@@ -1504,7 +1485,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual']
@@ -1512,7 +1493,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual']
@@ -1525,14 +1506,14 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   height: sizeScreen.height * 0.05,
                 ),
                        TabelaT4(
-                  column01: const [
+                  column01:  [
                     Text('Categoria'),
                     Text('Federal'),
                     Text('Federal'),
                     Text('Federal'),
                     Text('Federal'),
                   ],
-                  column02: const [
+                  column02:  [
                     Text('instrumento (nª)'),
                     Text('Lei/decreto'),
                     Text('Portaria/instrução/deliberação'),
@@ -1540,9 +1521,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     Text('Outros'),
                   ],
                   column03: [
-                    const Text('Nome/titulo/certificação/licenciamento/outro'),
+                     Text('Nome/titulo/certificação/licenciamento/outro'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal']
@@ -1550,7 +1531,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal']
@@ -1558,7 +1539,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal']
@@ -1566,7 +1547,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal']
@@ -1575,9 +1556,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     ),
                   ],
                   column04: [
-                    const Text('Entidade declaratória/tipo de declaração'),
+                     Text('Entidade declaratória/tipo de declaração'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal']
@@ -1585,7 +1566,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal']
@@ -1593,7 +1574,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal']
@@ -1601,7 +1582,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal']
@@ -1612,7 +1593,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 SizedBox(height: sizeScreen.height * 0.05,),
                            TabelaT4(
-                  column01: const [
+                  column01:  [
                     Text('Categoria'),
                     Text('Internacional'),
                     Text('Internacional'),
@@ -1620,7 +1601,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     Text('Internacional'),
                     Text('Outras'),
                   ],
-                  column02: const [
+                  column02:  [
                     Text('instrumento (nª)'),
                     Text('Lei/decreto'),
                     Text('Portaria/instrução/deliberação'),
@@ -1629,9 +1610,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     Text(''),
                   ],
                   column03: [
-                    const Text('Nome/titulo/certificação/licenciamento/outro'),
+                     Text('Nome/titulo/certificação/licenciamento/outro'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional']
@@ -1639,7 +1620,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional']
@@ -1647,7 +1628,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional']
@@ -1655,7 +1636,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional']
@@ -1663,7 +1644,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                         TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional']
@@ -1672,9 +1653,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     ),
                   ],
                   column04: [
-                    const Text('Entidade declaratória/tipo de declaração'),
+                     Text('Entidade declaratória/tipo de declaração'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional']
@@ -1682,7 +1663,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional']
@@ -1690,7 +1671,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional']
@@ -1698,7 +1679,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional']
@@ -1706,7 +1687,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                         TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional']
@@ -1717,21 +1698,21 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                    
                    SizedBox(height: sizeScreen.height * 0.05,),
-                   const textLabel(name: 'Da área ou edificação em que está localizado/instalado:'),
+                    textLabel(name: 'Da área ou edificação em que está localizado/instalado:', fontWeight: FontWeight.bold,),
                   SizedBox(height: sizeScreen.height * 0.03,),
                   ExpansionTileYoN(getValue: (newValue){
                     valoresjson['DaÁreaOuEdificação'] = newValue;
                   }),
                    SizedBox(height: sizeScreen.height * 0.03,),
                     TabelaT4(
-                  column01: const [
+                  column01:  [
                     Text('Categoria'),
                     Text('Municipal'),
                     Text('Municipal'),
                     Text('Municipal'),
                     Text('Municipal'),
                   ],
-                  column02: const [
+                  column02:  [
                     Text('instrumento (nª)'),
                     Text('Lei/decreto'),
                     Text('Portaria/instrução/deliberação'),
@@ -1739,9 +1720,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     Text('Outros'),
                   ],
                   column03: [
-                    const Text('Nome/titulo/certificação/licenciamento/outro'),
+                     Text('Nome/titulo/certificação/licenciamento/outro'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal2']
@@ -1749,7 +1730,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal2']
@@ -1757,7 +1738,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal2']
@@ -1765,7 +1746,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal2']
@@ -1774,9 +1755,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     ),
                   ],
                   column04: [
-                    const Text('Entidade declaratória/tipo de declaração'),
+                     Text('Entidade declaratória/tipo de declaração'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal2']
@@ -1784,7 +1765,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal2']
@@ -1792,7 +1773,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal2']
@@ -1800,7 +1781,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategMunicipal2']
@@ -1814,14 +1795,14 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
 
                        TabelaT4(
-                  column01: const [
+                  column01:  [
                     Text('Categoria'),
                     Text('Estadual'),
                     Text('Estadual'),
                     Text('Estadual'),
                     Text('Estadual'),
                   ],
-                  column02: const [
+                  column02:  [
                     Text('instrumento (nª)'),
                     Text('Lei/decreto'),
                     Text('Portaria/instrução/deliberação'),
@@ -1829,9 +1810,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     Text('Outros'),
                   ],
                   column03: [
-                    const Text('Nome/titulo/certificação/licenciamento/outro'),
+                     Text('Nome/titulo/certificação/licenciamento/outro'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual2']
@@ -1839,7 +1820,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual2']
@@ -1847,7 +1828,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual2']
@@ -1855,7 +1836,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual2']
@@ -1864,9 +1845,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     ),
                   ],
                   column04: [
-                    const Text('Entidade declaratória/tipo de declaração'),
+                     Text('Entidade declaratória/tipo de declaração'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual2']
@@ -1874,7 +1855,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual2']
@@ -1882,7 +1863,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual2']
@@ -1890,7 +1871,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategEstadual2']
@@ -1903,14 +1884,14 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   height: sizeScreen.height * 0.05,
                 ),
                        TabelaT4(
-                  column01: const [
+                  column01:  [
                     Text('Categoria'),
                     Text('Federal'),
                     Text('Federal'),
                     Text('Federal'),
                     Text('Federal'),
                   ],
-                  column02: const [
+                  column02:  [
                     Text('instrumento (nª)'),
                     Text('Lei/decreto'),
                     Text('Portaria/instrução/deliberação'),
@@ -1918,9 +1899,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     Text('Outros'),
                   ],
                   column03: [
-                    const Text('Nome/titulo/certificação/licenciamento/outro'),
+                     Text('Nome/titulo/certificação/licenciamento/outro'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal2']
@@ -1928,7 +1909,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal2']
@@ -1936,7 +1917,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal2']
@@ -1944,7 +1925,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal2']
@@ -1953,9 +1934,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     ),
                   ],
                   column04: [
-                    const Text('Entidade declaratória/tipo de declaração'),
+                     Text('Entidade declaratória/tipo de declaração'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal2']
@@ -1963,7 +1944,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal2']
@@ -1971,7 +1952,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal2']
@@ -1979,7 +1960,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategFederal2']
@@ -1990,7 +1971,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 SizedBox(height: sizeScreen.height * 0.05,),
                            TabelaT4(
-                  column01: const [
+                  column01:  [
                     Text('Categoria'),
                     Text('Internacional'),
                     Text('Internacional'),
@@ -1998,7 +1979,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     Text('Internacional'),
                     Text('Outras'),
                   ],
-                  column02: const [
+                  column02:  [
                     Text('instrumento (nª)'),
                     Text('Lei/decreto'),
                     Text('Portaria/instrução/deliberação'),
@@ -2007,9 +1988,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     Text(''),
                   ],
                   column03: [
-                    const Text('Nome/titulo/certificação/licenciamento/outro'),
+                     Text('Nome/titulo/certificação/licenciamento/outro'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional2']
@@ -2017,7 +1998,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional2']
@@ -2025,7 +2006,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional2']
@@ -2033,7 +2014,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional2']
@@ -2041,7 +2022,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                         TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional2']
@@ -2050,9 +2031,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     ),
                   ],
                   column04: [
-                    const Text('Entidade declaratória/tipo de declaração'),
+                     Text('Entidade declaratória/tipo de declaração'),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional2']
@@ -2060,7 +2041,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional2']
@@ -2068,7 +2049,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional2']
@@ -2076,7 +2057,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                     TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional2']
@@ -2084,7 +2065,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       },
                     ),
                         TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                           labelText: '', border: InputBorder.none),
                       onSaved: (newValue) {
                         valoresjson['TabelaCategInternacional2']
@@ -2095,7 +2076,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
 SizedBox(height: sizeScreen.height * 0.05,),
                      Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color:  Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -2111,12 +2092,12 @@ SizedBox(height: sizeScreen.height * 0.05,),
    SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-              RadioD(options: const ['Muito bom', 'Bom', 'Ruim'], getValue: (newValue) {valoresjson['EstadoGeralDeConservação'] = newValue;  },),
+              RadioD(options:  ['Muito bom', 'Bom', 'Ruim'], getValue: (newValue) {valoresjson['EstadoGeralDeConservação'] = newValue;  },),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
               Container(
-                color: const Color.fromARGB(255, 55, 111, 60),
+                color:  Color.fromARGB(255, 55, 111, 60),
                 height: sizeScreen.height * 0.06,
                 width: sizeScreen.width,
                 padding: EdgeInsets.only(
@@ -2130,19 +2111,19 @@ SizedBox(height: sizeScreen.height * 0.05,),
               ),
                SizedBox(height: sizeScreen.height * 0.02,),
                 SizedBox(height: sizeScreen.height * 0.02,),
-              const textLabel(
+               textLabel(
                     name:
-                        'Possui alguma facilidade para pessoas com deficiência ou mobilidade reduzida?'),
+                        'Possui alguma facilidade para pessoas com deficiência ou mobilidade reduzida?', fontWeight: FontWeight.bold,),
                SizedBox(height: sizeScreen.height * 0.04,),
                ExpansionTileYoN(getValue: (newValue) {valoresjson['PossuiFacilidade'] = newValue;  },),
  SizedBox(height: sizeScreen.height * 0.02,),
-              const textLabel(
-                    name: 'obs: responder às questões seguintes'),
+               textLabel(
+                    name: 'obs: responder às questões seguintes', fontWeight: FontWeight.bold,),
           SizedBox(height: sizeScreen.height * 0.02,),
- const textLabel(
-                    name: 'Pessoal capacitado para receber PCD:'),
+  textLabel(
+                    name: 'Pessoal capacitado para receber PCD:', fontWeight: FontWeight.bold,),
                 SizedBox(height: sizeScreen.height * 0.02,),
-             const CheckC(nomes: [
+              CheckC(nomes: [
                 'Não',
                 'Física',
                 'Auditiva',
@@ -2150,9 +2131,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                 'Mental',
                 'Múltipla'
               ], ),
-             const textLabel(name: 'Rota externa acessível:'),
+              textLabel(name: 'Rota externa acessível:', fontWeight: FontWeight.bold,),
                 SizedBox(height: sizeScreen.height * 0.02,),
-                const CheckC(nomes: [
+                 CheckC(nomes: [
                 'Não',
                 'Estacionamento',
                 'Calçada rebaixada',
@@ -2169,9 +2150,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Símbolo internacional de acesso:'),
+                child:  textLabel(name: 'Símbolo internacional de acesso:', fontWeight: FontWeight.bold,),
               ),
-                const CheckC(nomes: [
+                 CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Área reservada',
@@ -2185,17 +2166,20 @@ SizedBox(height: sizeScreen.height * 0.05,),
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Local de embarque e desembarque:'),
+                child:  textLabel(name: 'Local de embarque e desembarque:', fontWeight: FontWeight.bold,),
               ),
-                const CheckC(nomes:  ['Não', 'Sinalizado', 'Com acesso em nível'],),
+                 CheckC(nomes:  ['Não',
+                  'Sinalizado',
+                   'Com acesso em nível'
+                   ],),
               Padding(
                 padding: EdgeInsets.only(
                   
-                    top: sizeScreen.height * 0.02,
+                
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Vaga em estacionamento:'),
+                child:  textLabel(name: 'Vaga em estacionamento:', fontWeight: FontWeight.bold,),
               ),
-                const CheckC(nomes: [
+                 CheckC(nomes: [
                 'Não',
                 'Sinalizado',
                 'Com acesso em nível',
@@ -2207,11 +2191,11 @@ SizedBox(height: sizeScreen.height * 0.05,),
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
+                child:  textLabel(
                     name:
-                        'Área de circulação / acesso interno para cadeira de rodas:'),
+                        'Área de circulação / acesso interno para cadeira de rodas:', fontWeight: FontWeight.bold,),
               ),
-               const CheckC(nomes: [
+                CheckC(nomes: [
                 'Não',
                 'Rampa',
                 'Elevador',
@@ -2224,9 +2208,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
         
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Escada:'),
+                child:  textLabel(name: 'Escada:', fontWeight: FontWeight.bold,),
               ),
-                const CheckC(nomes: [
+                 CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
@@ -2239,9 +2223,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
             
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Rampa:'),
+                child:  textLabel(name: 'Rampa:', fontWeight: FontWeight.bold,),
               ),
-                 const CheckC(nomes: [
+                  CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
@@ -2254,9 +2238,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Piso:'),
+                child:  textLabel(name: 'Piso:', fontWeight: FontWeight.bold,),
               ),
-                 const CheckC(nomes: [
+                  CheckC(nomes: [
                 'Não',
                 'Tátil',
                 'Sem obstáculos',
@@ -2267,9 +2251,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Elevador:'),
+                child:  textLabel(name: 'Elevador:', fontWeight: FontWeight.bold,),
               ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                 'Não',
                 'Sinalizado em braile',
                 'Dispositivo sonoro',
@@ -2281,11 +2265,11 @@ SizedBox(height: sizeScreen.height * 0.05,),
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
+                child:  textLabel(
                     name:
-                        'Equipamento motorizado para deslocamento interno:'),
+                        'Equipamento motorizado para deslocamento interno:', fontWeight: FontWeight.bold,),
               ),
-               const CheckC(nomes: [
+                CheckC(nomes: [
                 'Não',
                 'Cadeira',
                 'Carrinho',
@@ -2295,9 +2279,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                  
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sinalização visual:'),
+                child:  textLabel(name: 'Sinalização visual:', fontWeight: FontWeight.bold,),
               ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -2313,9 +2297,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sinalização tátil:'),
+                child:  textLabel(name: 'Sinalização tátil:', fontWeight: FontWeight.bold,),
               ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -2331,9 +2315,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                 
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Alarme de emergência:'),
+                child:  textLabel(name: 'Alarme de emergência:', fontWeight: FontWeight.bold,),
               ),
-                const CheckC(nomes: [
+                 CheckC(nomes: [
                 'Não',
                 'Sonoro',
                 'Visual',
@@ -2344,9 +2328,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Comunicação:'),
+                child:  textLabel(name: 'Comunicação:', fontWeight: FontWeight.bold,),
               ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                 'Não',
                 'Texto informativo em braile',
                 'Texto informativo em fonte ampliada',
@@ -2357,9 +2341,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                     
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Balcão de atendimento:'),
+                child:  textLabel(name: 'Balcão de atendimento:', fontWeight: FontWeight.bold,),
               ),
-                 const CheckC(nomes: [
+                  CheckC(nomes: [
                 'Não',
                 'Rebaixado',
                 'Preferencial para PCD ou com deficiência ou mobilidade reduzida',
@@ -2369,9 +2353,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                     
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Mobiliário:'),
+                child:  textLabel(name: 'Mobiliário:', fontWeight: FontWeight.bold,),
               ),
-               const CheckC(nomes: [
+                CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Recuo adequado',
@@ -2381,9 +2365,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                 
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sanitário:'),
+                child:  textLabel(name: 'Sanitário:, fontWeight: FontWeight.bold,'),
               ),
-                 const CheckC(nomes: [
+                  CheckC(nomes: [
                 'Não',
                 'Porta larga suficiente para entrada de cadeira de rodas ',
                 'Acesso para cadeira de rodas',
@@ -2399,9 +2383,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Telefone:'),
+                child:  textLabel(name: 'Telefone:', fontWeight: FontWeight.bold,),
               ),
-               const CheckC(nomes: [
+                CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Para surdos (TPS ou TTS)',
@@ -2410,9 +2394,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
                 padding: EdgeInsets.only(
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.04),
-                child: const textLabel(
+                child:  textLabel(
                     name:
-                        'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida:'),
+                        'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida:', fontWeight: FontWeight.bold,),
               ),
 
                ExpansionTileYoN(getValue: (newValue ) {
@@ -2421,7 +2405,7 @@ SizedBox(height: sizeScreen.height * 0.05,),
               SizedBox(height: sizeScreen.height * 0.02,),              Row(
                 children: [
                  
-                  const textLabel(name: 'Outros'),
+                   textLabel(name: 'Outros', fontWeight: FontWeight.bold,),
                   SizedBox(
                     width: sizeScreen.width * 0.1,
                   ),
@@ -2443,7 +2427,7 @@ SizedBox(height: sizeScreen.height * 0.05,),
                 height: sizeScreen.height * 0.05,
               ),
               Container(
-                color: const Color.fromARGB(255, 55, 111, 60),
+                color:  Color.fromARGB(255, 55, 111, 60),
                 height: sizeScreen.height * 0.06,
                 width: sizeScreen.width,
                 padding: EdgeInsets.only(
@@ -2468,7 +2452,7 @@ SizedBox(height: sizeScreen.height * 0.05,),
               ),
 
               Container(
-                color: const Color.fromARGB(255, 55, 111, 60),
+                color:  Color.fromARGB(255, 55, 111, 60),
                 height: sizeScreen.height * 0.06,
                 width: sizeScreen.width,
                 padding: EdgeInsets.only(
@@ -2491,83 +2475,9 @@ SizedBox(height: sizeScreen.height * 0.05,),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-              Container(
-                color: const Color.fromARGB(255, 55, 111, 60),
-                height: sizeScreen.height * 0.06,
-                width: sizeScreen.width,
-                padding: EdgeInsets.only(
-                    top: sizeScreen.height * 0.008,
-                    left: sizeScreen.width * 0.04),
-                child: Text(
-                  'Equipe Responsável',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: sizeScreen.height * 0.03),
-                ),
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-              const textLabel(
-                  name: 'Responsável pelo atendimento (Pesquisador)'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['Pesquisador'] = newValue;  },),
-              const textLabel(name: 'Telefone'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['TelefonePesquisador'] = newValue;  },),
-              const textLabel(name: 'E-mail'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['E-mail'];  },),
-              const textLabel(
-                  name: 'Responsável pelo atendimento (Coordenador)'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['Coordenador'];  },),
-              const textLabel(name: 'Telefone'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['TelefoneCoordenador'] = newValue;  },),
-              const textLabel(name: 'E-mail'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (newValue) {valoresjson['E-mailCoordenador'] = newValue;  },),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-               const SendButton(),
-               const SizedBox(height: 15,)
+             
+                SendButton(),
+                SizedBox(height: 15,)
               ],
             )),
           ),

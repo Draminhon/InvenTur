@@ -43,7 +43,10 @@ class PesquisaSerializer(serializers.ModelSerializer):
 
 
 
-    
+class SistemaDeSegurancaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SistemaDeSeguranca
+        fields = '__all__'
 
 class RodoviaSerializer(serializers.ModelSerializer):
     # tipo_de_organizacao_instituicao = serializers.PrimaryKeyRelatedField(many=True, queryset=TipoOrganizacao.objects.all())
@@ -54,3 +57,8 @@ class RodoviaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rodovia
         fields = '__all__'  # ou especifique os campos que você deseja incluir
+
+
+class EquipamentoSerializer(serializers.Serializer):
+    tipo = serializers.CharField()
+    dados = serializers.JSONField()

@@ -5,7 +5,7 @@ import 'package:inventur/services/admin_service.dart';
 class PesquisaPesquisadorCardWidget extends StatefulWidget {
   final Pesquisa pesquisa;
 
-  const PesquisaPesquisadorCardWidget({
+   PesquisaPesquisadorCardWidget({
     super.key,
     required this.pesquisa,
   });
@@ -35,110 +35,119 @@ class _PesquisaPesquisadorCardWidgetState extends State<PesquisaPesquisadorCardW
         borderRadius: BorderRadius.circular(18)
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding:  EdgeInsets.all(8.0),
         child: Column(
           children: [
        
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 10),
+              padding:  EdgeInsets.symmetric(vertical: 3, horizontal: 10),
               decoration: BoxDecoration(
                 border: Border.all(
                   width: 2,
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color:  Color.fromARGB(255, 55, 111, 60),
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
                 children: [
+                 Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Text(
+      'Coordenador da Pesquisa:  ',
+      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 50.w),
+    ),
+    Flexible(
+      child: FutureBuilder<String>(
+        future: AdminService.getAdminName(widget.pesquisa.adminId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return  Text('Carregando...');
+          } else if (snapshot.hasError) {
+            return  Text('Erro ao carregar');
+          } else if (snapshot.hasData) {
+            return Text(
+              snapshot.data!,
+              style: TextStyle(fontSize: 50.w),
+              overflow: TextOverflow.ellipsis, // Adiciona reticências se necessário
+            );
+          } else {
+            return  Text('Desconhecido');
+          }
+        },
+      ),
+    ),
+  ],
+),
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'Coordenador da Pesquisa:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      FutureBuilder<String>(future: AdminService.getAdminName(widget.pesquisa.adminId),
-                      builder: (context, snapshot) {
-                          if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text('Carregando...');
-        } else if (snapshot.hasError) {
-          return const Text('Erro ao carregar');
-        } else if (snapshot.hasData) {
-          return Text(snapshot.data!);
-        } else {
-          return const Text('Desconhecido');
-        }
-                      },)
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
+                       Text(
                         'Código IBGE:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50.w),
                       ),
-                      Text(widget.pesquisa.codigoIBGE.toString())
+                      Text(widget.pesquisa.codigoIBGE.toString(),style: TextStyle(fontSize: 50.w),)
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                       Text(
                         'Estado:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50.w),
                       ),
-                      Text(widget.pesquisa.estado)
+                      Text(widget.pesquisa.estado,style: TextStyle(fontSize: 50.w),)
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                       Text(
                         'Município:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50.w),
                       ),
-                      Text(widget.pesquisa.municipio)
+                      Text(widget.pesquisa.municipio,style: TextStyle(fontSize: 50.w),)
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                       Text(
                         'Data de Início:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50.w),
                       ),
-                      Text(widget.pesquisa.dataInicio)
+                      Text(widget.pesquisa.dataInicio,style: TextStyle(fontSize: 50.w),)
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                       Text(
                         'Data de Término:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50.w),
                       ),
-                      Text(widget.pesquisa.dataTermino)
+                      Text(widget.pesquisa.dataTermino,style: TextStyle(fontSize: 50.w),)
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                       Text(
                         'Quantidade de Locais Cadastrados:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50.w),
                       ),
-                      Text(widget.pesquisa.quantidadeLocais.toString())
+                      Text(widget.pesquisa.quantidadeLocais.toString(),style: TextStyle(fontSize: 50.w),)
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                       Text(
                         'Quantidade de Pesquisadores:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50.w),
                       ),
-                      Text(widget.pesquisa.quantidadePesquisadores.toString())
+                      Text(widget.pesquisa.quantidadePesquisadores.toString(),style: TextStyle(fontSize: 50.w),)
                     ],
                   ),
                 ],

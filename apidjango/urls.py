@@ -13,6 +13,8 @@ urlpatterns = [
     path('rodovia/create/', RodoviaListCreateAPIView.as_view(), name = 'rodovia-see' ),
     path('rodovia/get/', RodoviaListView.as_view(), name = 'rodovia-se' ),
     path('rodovia/update/<int:pk>', RodoviaUpdateAPIView.as_view(), name='rodovia-update'),
+    path('equipamentos/',  EquipamentosListView.as_view(), name='equipamento'),
+    path('sistemaseguranca/create/', SistemaDeSegurancaListCreateAPIView.as_view(), name = 'sistemaDeSeguranca-create'),
 
     path('usuarios/status/update/<int:pk>/', StatusUpdateAPIView.as_view(), name='status-update'),
     path('usuarios/update/<int:pk>', AlterUserAPIView.as_view(), name = 'delete-user'),
@@ -29,4 +31,8 @@ urlpatterns = [
 
     path('verificarcpf/', verificar_email, name ='verificar-cpf'),
     path('user/<int:pk>/change-password/', AlterPasswordView.as_view(), name ='alter password'),
+
+    path('pesquisa/<int:pk>/atualizar/', PesquisaPartialUpdateAPIView.as_view(), name ='pesquisa-partial-update'),
+
+    path('logout/', LogoutAPIView.as_view(), name ='logout'),
 ] 

@@ -11,7 +11,7 @@ import '../../widgets/radioButton.dart';
 import '../formsB/widgets/sendButton.dart';
 
 class ZonaCosteira extends StatefulWidget {
-  const ZonaCosteira({super.key});
+   ZonaCosteira({super.key});
 
   @override
   State<ZonaCosteira> createState() => _ZonaCosteiraState();
@@ -31,8 +31,8 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 55, 111, 60),
-          title: const Text(
+          backgroundColor:  Color.fromARGB(255, 55, 111, 60),
+          title:  Text(
             'Identificação',
             style: TextStyle(color: Colors.white),
           ),
@@ -57,7 +57,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                                 onSaved: (newValue) {
                                   valoresjson['uf'] = newValue;
                                 },
-                                decoration: const InputDecoration(
+                                decoration:  InputDecoration(
                                   hintText: 'UF',
                                 ),
                               )),
@@ -74,7 +74,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                                 onSaved: (newValue) {
                                   valoresjson['RG'] = newValue;
                                 },
-                                decoration: const InputDecoration(
+                                decoration:  InputDecoration(
                                     hintText: 'Região Turística'),
                               ))
                         ],
@@ -85,7 +85,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         right: sizeScreen.width * 0.1,
                         top: sizeScreen.height * 0.01),
                     child: TextFormField(
-                      decoration: const InputDecoration(
+                      decoration:  InputDecoration(
                         isDense: true,
                         hintText: 'Municipio',
                       ),
@@ -97,7 +97,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Tipo:'),
+                   textLabel(name: 'Tipo:'),
                   Padding(
                     padding: EdgeInsets.only(left: sizeScreen.width * 0.19),
                     child: RadioB(
@@ -110,10 +110,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Subtipos:'),
+                   textLabel(name: 'Subtipos:'),
                   RadioC(
                       number: 14,
-                      options: const [
+                      options:  [
                         'Restinga',
                         'Duna',
                         'Barreira',
@@ -136,7 +136,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     height: sizeScreen.height * 0.03,
                   ),
                   Container(
-                    color: const Color.fromARGB(255, 55, 111, 60),
+                    color:  Color.fromARGB(255, 55, 111, 60),
                     height: sizeScreen.height * 0.06,
                     width: sizeScreen.width,
                     padding: EdgeInsets.only(
@@ -181,25 +181,25 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     padding: EdgeInsets.only(
                         right: sizeScreen.width * 0.05,
                         bottom: sizeScreen.height * 0.02),
-                    child: const textLabel(name: 'Natureza:'),
+                    child:  textLabel(name: 'Natureza:'),
                   ),
                   Column(
                     children: [
                       RadioD(
-                        options: const ['pública', 'privada', 'outro'],
+                        options:  ['pública', 'privada', 'outro'],
                         getValue: (newValue) {
                           valoresjson['natureza'] = newValue;
                         },
                       ),
                     ],
                   ),
-                  const textLabel(
+                   textLabel(
                     name: 'tipo de organização/instituição:',
                   ),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'associação',
                     'sindicato',
                     'cooperativa',
@@ -208,17 +208,17 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     'outro'
                   ]),
 
-                  const textLabel(name: 'Localização:'),
+                   textLabel(name: 'Localização:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   RadioD(
-                    options: const ['urbana', 'rural'],
+                    options:  ['urbana', 'rural'],
                     getValue: (newValue) {
                       valoresjson['Localização'] = newValue;
                     },
                   ),
-                  const textLabel(name: 'Coordenadas Geográficas:'),
+                   textLabel(name: 'Coordenadas Geográficas:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -226,7 +226,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     Row(
                       children: [
                       
-                        const textLabel(name: 'Latitude'),
+                         textLabel(name: 'Latitude'),
                         SizedBox(
                           width: sizeScreen.width * 0.032,
                         ),
@@ -253,7 +253,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     Row(
                       children: [
                      
-                        const textLabel(name: 'Longitude'),
+                         textLabel(name: 'Longitude'),
                         SizedBox(
                             width: sizeScreen.width * 0.6,
                             //height: sizeScreen.height * 0.07,
@@ -275,7 +275,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                       height: sizeScreen.height * 0.02,
                     ),
                   ]),
-                  const textLabel(name: 'Endereço:'),
+                   textLabel(name: 'Endereço:'),
                   CustomTextField(
                     validat: (value) {
                       if (value == null || value.isEmpty) {
@@ -318,13 +318,13 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Sinalização:'),
+                   textLabel(name: 'Sinalização:'),
                   SizedBox(
                     height: sizeScreen.height * 0.04,
                   ),
                   Row(children: [
                     
-                    const textLabel(name: 'de acessso -'),
+                     textLabel(name: 'de acessso -'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -342,7 +342,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),
                   Row(children: [
                   
-                    const textLabel(name: 'turística -'),
+                     textLabel(name: 'turística -'),
                     SizedBox(
                       width: sizeScreen.width * 0.14,
                     ),
@@ -358,12 +358,12 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                    SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Proximidades:'),
+                   textLabel(name: 'Proximidades:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   //  RadioD(number: 6, options: options)
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Restaurante',
                     'Meio de hospedagem',
                     'Centro de Convenções exposições',
@@ -376,7 +376,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Distâncias (km):'),
+                   textLabel(name: 'Distâncias (km):'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -384,7 +384,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Aeroporto:'),
+                       textLabel(name: 'Aeroporto:'),
                       SizedBox(
                         width: sizeScreen.width * 0.06,
                       ),
@@ -408,7 +408,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                    
-                      const textLabel(name: 'Estação\nferroviária:'),
+                       textLabel(name: 'Estação\nferroviária:'),
                       SizedBox(
                         width: sizeScreen.width * 0.06,
                       ),
@@ -433,7 +433,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                     
-                      const textLabel(name: 'Estação\nmarítima\n/fluvial:'),
+                       textLabel(name: 'Estação\nmarítima\n/fluvial:'),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
                       ),
@@ -458,7 +458,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Estação\nmetroviária:'),
+                       textLabel(name: 'Estação\nmetroviária:'),
                       SizedBox(
                         width: sizeScreen.width * 0.045,
                       ),
@@ -483,7 +483,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                     
-                      const textLabel(name: 'Ponto\nde ônibus'),
+                       textLabel(name: 'Ponto\nde ônibus'),
                       SizedBox(
                         width: sizeScreen.width * 0.1,
                       ),
@@ -507,7 +507,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Ponto\n de taxi'),
+                       textLabel(name: 'Ponto\n de taxi'),
                       SizedBox(
                         width: sizeScreen.width * 0.15,
                       ),
@@ -531,7 +531,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Outras:'),
+                       textLabel(name: 'Outras:'),
                       SizedBox(
                         width: sizeScreen.width * 0.15,
                       ),
@@ -552,7 +552,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Pontos de referência:'),
+                   textLabel(name: 'Pontos de referência:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
@@ -571,14 +571,14 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Entidade Mantedora:'),
+                   textLabel(name: 'Entidade Mantedora:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   Row(
                     children: [
                      
-                      const textLabel(name: 'E-mail'),
+                       textLabel(name: 'E-mail'),
                       SizedBox(width: sizeScreen.width * 0.05,),
                       SizedBox(
                           width: sizeScreen.width * 0.5,
@@ -602,7 +602,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const textLabel(
+                       textLabel(
                           name: 'Site'),
                       SizedBox(
                         width: sizeScreen.width * 0.11,
@@ -625,7 +625,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     height: sizeScreen.height * 0.05,
                   ),
                   Container(
-                    color: const Color.fromARGB(255, 55, 111, 60),
+                    color:  Color.fromARGB(255, 55, 111, 60),
                     height: sizeScreen.height * 0.06,
                     width: sizeScreen.width,
                     padding: EdgeInsets.only(
@@ -641,13 +641,13 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Estrutura de funcionamento:'),
+                   textLabel(name: 'Estrutura de funcionamento:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                    Row(children: [
                     
-                    const textLabel(name: 'Visitação:'),
+                     textLabel(name: 'Visitação:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -663,11 +663,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Finalidade da visitação:'),
+                   textLabel(name: 'Finalidade da visitação:'),
                       SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Restaurante',
                     'Meio de hospedagem',
                     'Centro de Convenções exposições',
@@ -681,49 +681,49 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Agendada:'),
+                   textLabel(name: 'Agendada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   RadioD(
-                      options: const ['Não', 'Opcional', 'Obrigatória'],
+                      options:  ['Não', 'Opcional', 'Obrigatória'],
                       getValue: (newValue) {
                         valoresjson['Agendada'] = newValue;
                       }),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Autoguiada:'),
+                   textLabel(name: 'Autoguiada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   RadioD(
-                      options: const ['Não', 'Opcional', 'Obrigatória'],
+                      options:  ['Não', 'Opcional', 'Obrigatória'],
                       getValue: (newValue) {
                         valoresjson['Autoguiada'] = newValue;
                       }),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Guiada:'),
+                   textLabel(name: 'Guiada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   RadioD(
-                      options: const ['Não', 'Opcional', 'Obrigatória'],
+                      options:  ['Não', 'Opcional', 'Obrigatória'],
                       getValue: (newValue) {
                         valoresjson['Guiada'] = newValue;
                       }),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Entrada:'),
+                   textLabel(name: 'Entrada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   Row(children: [
                     
-                    const textLabel(name: 'Gratuita:'),
+                     textLabel(name: 'Gratuita:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -741,7 +741,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),
                    Row(children: [
                     
-                    const textLabel(name: 'Paga:'),
+                     textLabel(name: 'Paga:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -757,13 +757,13 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Instalações de entrada:'),
+                   textLabel(name: 'Instalações de entrada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   Row(children: [
                     
-                    const textLabel(name: 'Centro de recepção:'),
+                     textLabel(name: 'Centro de recepção:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -781,7 +781,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),
                    Row(children: [
                     
-                    const textLabel(name: 'Posto de informação:'),
+                     textLabel(name: 'Posto de informação:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -799,7 +799,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),
                    Row(children: [
                     
-                    const textLabel(name: 'Portaria principal:'),
+                     textLabel(name: 'Portaria principal:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -817,7 +817,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),
                     Row(children: [
                     
-                    const textLabel(name: 'Guarita:'),
+                     textLabel(name: 'Guarita:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -835,7 +835,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),
                   Row(children: [
                     
-                    const textLabel(name: 'Bilheteria:'),
+                     textLabel(name: 'Bilheteria:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -853,7 +853,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),
                     Row(children: [
                     
-                    const textLabel(name: 'Outras:'),
+                     textLabel(name: 'Outras:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -869,21 +869,21 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Atendimento ao público:'),
+                   textLabel(name: 'Atendimento ao público:'),
                   SizedBox(
                     height: sizeScreen.height * 0.04,
                   ),
 
-                  const textLabel(name: 'Atendimento em língua estrangeira:'),
+                   textLabel(name: 'Atendimento em língua estrangeira:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const CheckC(nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
-                  const textLabel(name: 'Informativos impressos:'),
+                   CheckC(nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
+                   textLabel(name: 'Informativos impressos:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Não',
                     'Inglês',
                     'Espanhol',
@@ -897,7 +897,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     height: sizeScreen.height * 0.05,
                   ),
                   Container(
-                    color: const Color.fromARGB(255, 55, 111, 60),
+                    color:  Color.fromARGB(255, 55, 111, 60),
                     height: sizeScreen.height * 0.06,
                     width: sizeScreen.width,
                     padding: EdgeInsets.only(
@@ -913,13 +913,13 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Período:'),
+                   textLabel(name: 'Período:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   RadioC(
                     number: 13,
-                    options: const [
+                    options:  [
                       'Janeiro',
                       'Fevereiro',
                       'Março',
@@ -938,8 +938,8 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                       valoresjson['Periodo'] = newValue;
                     },
                   ),
-                  const textLabel(name: 'Horário:'),
-                  const SizedBox(height: 15,),
+                   textLabel(name: 'Horário:'),
+                   SizedBox(height: 15,),
                   TabelaT2(getValues: (newValue){}),
                   SizedBox(
                     height: sizeScreen.height * 0.01,
@@ -950,7 +950,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),
                     Row(children: [
                     
-                    const textLabel(name: 'Funcionamento 24H:'),
+                     textLabel(name: 'Funcionamento 24H:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -966,7 +966,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(height: sizeScreen.height * 0.05,),
                  Row(children: [
                     
-                    const textLabel(name: 'Funcionamento em\nferiados:'),
+                     textLabel(name: 'Funcionamento em\nferiados:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -979,14 +979,14 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                       },
                     ))
                   ]),
-                  const textLabel(name: 'Restrições:'),
+                   textLabel(name: 'Restrições:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const CheckC(
+                   CheckC(
                     nomes: ['Crianças', 'Fumantes', 'Animais', 'outro'],
                   ),
-                  const textLabel(name: 'Outras regras e informações:'),
+                   textLabel(name: 'Outras regras e informações:'),
 
                   CustomTextField(
                     validat: (value) {
@@ -1003,11 +1003,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Dados da visitação:'),
+                   textLabel(name: 'Dados da visitação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Total anual de visitantes (nº):'),
+                   textLabel(name: 'Total anual de visitantes (nº):'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -1022,7 +1022,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(
+                   textLabel(
                       name: 'Total de visitantes alta temporada(nº):'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
@@ -1038,12 +1038,12 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Meses de alta temporada:'),
+                   textLabel(name: 'Meses de alta temporada:'),
                   SizedBox(
                     height: sizeScreen.height * 0.01,
                   ),
 
-                const CheckC(nomes:
+                 CheckC(nomes:
                      [
                       'Janeiro',
                       'Fevereiro',
@@ -1064,11 +1064,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Origem dos visitantes/turistas:'),
+                   textLabel(name: 'Origem dos visitantes/turistas:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Entorno municipal',
                     'Estadual',
                     'Nacional',
@@ -1077,33 +1077,33 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(
+                   textLabel(
                       name: 'Origem dos turistas nacionais (5 estados):'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const Estados(),
-                  const Estados(),
-                  const Estados(),
-                  const Estados(),
-                  const Estados(),
+                   Estados(),
+                   Estados(),
+                   Estados(),
+                   Estados(),
+                   Estados(),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(
+                   textLabel(
                       name: 'Origem dos turistas internacionais (5 países):'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const Paises(),
-                  const Paises(),
-                  const Paises(),
-                  const Paises(),
-                  const Paises(),
+                   Paises(),
+                   Paises(),
+                   Paises(),
+                   Paises(),
+                   Paises(),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Ano-base:'),
+                   textLabel(name: 'Ano-base:'),
 
                   CustomTextField(
                       name: 'Ano-base',
@@ -1116,25 +1116,25 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Principal público frequentador'),
+                   textLabel(name: 'Principal público frequentador'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
                   RadioD(
-                      options: const ['Turistas', 'Moradores'],
+                      options:  ['Turistas', 'Moradores'],
                       getValue: (newValue) {
                         valoresjson['PrincipalPúblico'] = newValue;
                       }),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Apoio à comercialização:'),
+                   textLabel(name: 'Apoio à comercialização:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
                   Row(children: [
                    
-                    const textLabel(
+                     textLabel(
                         name: 'Integra roteiros turísticos\ncomercializados:'),
                     SizedBox(
                       width: sizeScreen.width * 0.04,
@@ -1154,7 +1154,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(decoration: BoxDecoration(color: Color.fromARGB(255, 55, 111, 60)),children: [
+                       TableRow(decoration: BoxDecoration(color: Color.fromARGB(255, 55, 111, 60)),children: [
                         Text(
                           'Nome dos principais\nroteiros (até 5)',
                           textAlign: TextAlign.center,
@@ -1164,51 +1164,51 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
-                              fillColor: Colors.white, filled: true),
-                        ),
-                      ]),
-                      TableRow(children: [
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              fillColor: Colors.white, filled: true),
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
-                              fillColor: Colors.white, filled: true),
-                        ),
-                      ]),
-                      TableRow(children: [
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              fillColor: Colors.white, filled: true),
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
+                              fillColor: Colors.white, filled: true),
+                        ),
+                      ]),
+                      TableRow(children: [
+                        TextFormField(
+                          decoration:  InputDecoration(
+                              fillColor: Colors.white, filled: true),
+                        ),
+                        TextFormField(
+                          decoration:  InputDecoration(
+                              fillColor: Colors.white, filled: true),
+                        ),
+                      ]),
+                      TableRow(children: [
+                        TextFormField(
+                          decoration:  InputDecoration(
+                              fillColor: Colors.white, filled: true),
+                        ),
+                        TextFormField(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                       ]),
@@ -1219,7 +1219,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),
                   Row(children: [
                  
-                    const textLabel(name: 'Integra guia turístico:'),
+                     textLabel(name: 'Integra guia turístico:'),
                     SizedBox(
                       width: sizeScreen.width * 0.04,
                     ),
@@ -1238,7 +1238,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(decoration: BoxDecoration(color: Color.fromARGB(255, 55, 111, 60)),children: [
+                       TableRow(decoration: BoxDecoration(color: Color.fromARGB(255, 55, 111, 60)),children: [
                         Text(
                           'Nome dos principais guias impressos (até 5)',
                           textAlign: TextAlign.center,
@@ -1248,51 +1248,51 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
-                              fillColor: Colors.white, filled: true),
-                        ),
-                      ]),
-                      TableRow(children: [
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              fillColor: Colors.white, filled: true),
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
-                              fillColor: Colors.white, filled: true),
-                        ),
-                      ]),
-                      TableRow(children: [
-                        TextFormField(
-                          decoration: const InputDecoration(
-                              fillColor: Colors.white, filled: true),
-                        ),
-                        TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
+                              fillColor: Colors.white, filled: true),
+                        ),
+                      ]),
+                      TableRow(children: [
+                        TextFormField(
+                          decoration:  InputDecoration(
+                              fillColor: Colors.white, filled: true),
+                        ),
+                        TextFormField(
+                          decoration:  InputDecoration(
+                              fillColor: Colors.white, filled: true),
+                        ),
+                      ]),
+                      TableRow(children: [
+                        TextFormField(
+                          decoration:  InputDecoration(
+                              fillColor: Colors.white, filled: true),
+                        ),
+                        TextFormField(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                       ]),
@@ -1302,7 +1302,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     height: sizeScreen.height * 0.05,
                   ),
                   Container(
-                    color: const Color.fromARGB(255, 55, 111, 60),
+                    color:  Color.fromARGB(255, 55, 111, 60),
                     height: sizeScreen.height * 0.06,
                     width: sizeScreen.width,
                     padding: EdgeInsets.only(
@@ -1323,22 +1323,22 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         right: sizeScreen.width * 0.05,
                         top: sizeScreen.height * 0.02,
                         bottom: sizeScreen.height * 0.02),
-                    child: const textLabel(name: 'Instalações:'),
+                    child:  textLabel(name: 'Instalações:'),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
                         top: sizeScreen.height * 0.03,
                         bottom: sizeScreen.height * 0.03),
-                    child: const textLabel(name: 'Estacionamento:'),
+                    child:  textLabel(name: 'Estacionamento:'),
                   ),
-                  const CheckC(
+                   CheckC(
                       nomes: ['Pago', 'Gratuito', 'Coberto', 'Descoberto']),
 
                   Column(children: [
                     Row(
                       children: [
                        
-                        const textLabel(name: 'Capacidade de\nveículos nº'),
+                         textLabel(name: 'Capacidade de\nveículos nº'),
                         SizedBox(
                           width: sizeScreen.width * 0.01,
                         ),
@@ -1365,7 +1365,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     Row(
                       children: [
                         
-                        const textLabel(name: 'Automóveis nº'),
+                         textLabel(name: 'Automóveis nº'),
                         SizedBox(
                           width: sizeScreen.width * 0.005,
                         ),
@@ -1392,7 +1392,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     Row(
                       children: [
                         
-                        const textLabel(name: 'Ônibus nº'),
+                         textLabel(name: 'Ônibus nº'),
                         SizedBox(
                           width: sizeScreen.width * 0.1,
                         ),
@@ -1417,11 +1417,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Outras instalações e estruturas:'),
+                   textLabel(name: 'Outras instalações e estruturas:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Ambulatório médico',
                     'Espaço para festas e eventos',
                     'Loja de souvenir',
@@ -1445,11 +1445,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Estruturas e serviços:'),
+                   textLabel(name: 'Estruturas e serviços:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Hospedagem',
                     'Restaurante',
                     'Bar/lanchonete',
@@ -1465,15 +1465,15 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     height: sizeScreen.height * 0.03,
                   ),
 
-                  const textLabel(name: 'Atividades:'),
+                   textLabel(name: 'Atividades:'),
 
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Arvorismo:'),
+                   textLabel(name: 'Arvorismo:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1484,10 +1484,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Atividades culturais:'),
+                   textLabel(name: 'Atividades culturais:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1498,10 +1498,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Atividades pedagógicas:'),
+                   textLabel(name: 'Atividades pedagógicas:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1512,10 +1512,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Boia-cross:'),
+                   textLabel(name: 'Boia-cross:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1526,10 +1526,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Bungee-jump:'),
+                   textLabel(name: 'Bungee-jump:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1540,10 +1540,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Caminhada:'),
+                   textLabel(name: 'Caminhada:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1554,10 +1554,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Canoagem:'),
+                   textLabel(name: 'Canoagem:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1568,10 +1568,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Cavalgada:'),
+                   textLabel(name: 'Cavalgada:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1582,10 +1582,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Ciclismo:'),
+                   textLabel(name: 'Ciclismo:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1596,10 +1596,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Escalada:'),
+                   textLabel(name: 'Escalada:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1610,10 +1610,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Ginástica:'),
+                   textLabel(name: 'Ginástica:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1624,10 +1624,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Kitesurf:'),
+                   textLabel(name: 'Kitesurf:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1638,10 +1638,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Mergulho:'),
+                   textLabel(name: 'Mergulho:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1652,10 +1652,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Motocross:'),
+                   textLabel(name: 'Motocross:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1666,10 +1666,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Mountain bike:'),
+                   textLabel(name: 'Mountain bike:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1680,10 +1680,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Observação:'),
+                   textLabel(name: 'Observação:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1694,10 +1694,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Off road:'),
+                   textLabel(name: 'Off road:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1708,10 +1708,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Parapente/asa-delta:'),
+                   textLabel(name: 'Parapente/asa-delta:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1722,10 +1722,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Pesca:'),
+                   textLabel(name: 'Pesca:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1736,10 +1736,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Rafting:'),
+                   textLabel(name: 'Rafting:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1750,10 +1750,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Rapel:'),
+                   textLabel(name: 'Rapel:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1764,10 +1764,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Remo:'),
+                   textLabel(name: 'Remo:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1778,10 +1778,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'SafáriFotográfico:'),
+                   textLabel(name: 'SafáriFotográfico:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1792,10 +1792,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Skate:'),
+                   textLabel(name: 'Skate:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1806,10 +1806,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Vela:'),
+                   textLabel(name: 'Vela:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1820,10 +1820,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Voo livre:'),
+                   textLabel(name: 'Voo livre:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1834,10 +1834,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Windsurf:'),
+                   textLabel(name: 'Windsurf:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1848,10 +1848,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Trilha:'),
+                   textLabel(name: 'Trilha:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1862,10 +1862,10 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Outras:'),
+                   textLabel(name: 'Outras:'),
 
                   RadioD(
-                      options: const [
+                      options:  [
                         'Não',
                         'Sim',
                         'Disponibilidade de equipamentos'
@@ -1877,14 +1877,14 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     height: sizeScreen.height * 0.03,
                   ),
 
-                  const textLabel(name: 'Aspectos gerais:'),
+                   textLabel(name: 'Aspectos gerais:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Extensão\n(m ou km):'),
+                       textLabel(name: 'Extensão\n(m ou km):'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
                       ),
@@ -1908,22 +1908,22 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Recife:'),
+                   textLabel(name: 'Recife:'),
                   RadioD(
-                      options: const ['Arenítico', 'Coralígeno'],
+                      options:  ['Arenítico', 'Coralígeno'],
                       getValue: (newValue) {
                         valoresjson['Recife'] = newValue;
                       }),
                   SizedBox(
                     height: sizeScreen.height * 0.01,
                   ),
-                  const textLabel(name: 'Orla:'),
+                   textLabel(name: 'Orla:'),
                   SizedBox(
                     height: sizeScreen.height * 0.01,
                   ),
-                  const textLabel(name: 'Tipo:'),
+                   textLabel(name: 'Tipo:'),
                   RadioD(
-                      options: const [
+                      options:  [
                         'Mar aberto',
                         'Mar abrigado',
                         'Correntes fortes',
@@ -1935,13 +1935,13 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                       getValue: (newValue) {
                         valoresjson['orla'] = newValue;
                       }),
-                  const textLabel(name: 'Ocupação:'),
+                   textLabel(name: 'Ocupação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.01,
                   ),
-                  const textLabel(name: 'Tipo:'),
+                   textLabel(name: 'Tipo:'),
                   RadioD(
-                      options: const [
+                      options:  [
                         'Moradia de residentes',
                         'Moradia de veranistas',
                         'Sem ocupação'
@@ -1952,20 +1952,20 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.01,
                   ),
-                  const textLabel(name: 'Forma:'),
+                   textLabel(name: 'Forma:'),
                   RadioD(
-                      options: const ['Urbanizada', 'Não urbanizada'],
+                      options:  ['Urbanizada', 'Não urbanizada'],
                       getValue: (newValue) {
                         valoresjson['Forma'] = newValue;
                       }),
                   SizedBox(
                     height: sizeScreen.height * 0.01,
                   ),
-                  const textLabel(name: 'Praia:'),
+                   textLabel(name: 'Praia:'),
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Extensão\n(m ou km):'),
+                       textLabel(name: 'Extensão\n(m ou km):'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
                       ),
@@ -1991,7 +1991,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),
                   Row(children: [
                    
-                    const textLabel(name: 'de acessso -'),
+                     textLabel(name: 'de acessso -'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -2007,11 +2007,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Areia:'),
+                   textLabel(name: 'Areia:'),
                    SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Fina',
                     'Grossa',
                     'Branca',
@@ -2021,7 +2021,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ]),
                   Row(children: [
                     
-                    const textLabel(name: 'Rochoso:'),
+                     textLabel(name: 'Rochoso:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -2037,15 +2037,15 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                       height: sizeScreen.height * 0.02,
                     ),
                   ]),
-                  const textLabel(name: 'Água:'),
+                   textLabel(name: 'Água:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Característica:'),
+                   textLabel(name: 'Característica:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Transparente',
                     'Clara',
                     'Escura',
@@ -2064,11 +2064,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Utilização:'),
+                   textLabel(name: 'Utilização:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Banho',
                     'Ingestão',
                     'Navegação',
@@ -2078,29 +2078,29 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Finalidade:'),
+                   textLabel(name: 'Finalidade:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const CheckC(
+                   CheckC(
                       nomes: ['Terapêutica', 'Lazer', 'Comercial', 'outro']),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Tipo:'),
+                   textLabel(name: 'Tipo:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   RadioD(
-                      options: const ['Termal', 'Mineral'],
+                      options:  ['Termal', 'Mineral'],
                       getValue: (newValue) {
                         valoresjson['tipo'] = newValue;
                       }),
-                  const textLabel(name: 'Propriedade:'),
+                   textLabel(name: 'Propriedade:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Ferruginosa',
                     'Magnesiana',
                     'Sulforosa',
@@ -2116,9 +2116,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
-                  const textLabel(name: 'Volume:'),
+                   textLabel(name: 'Volume:'),
                   RadioD(
-                      options: const [
+                      options:  [
                         'Grande',
                         'Médio',
                         'Pequeno',
@@ -2134,7 +2134,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Encontro\nde águas:'),
+                       textLabel(name: 'Encontro\nde águas:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2152,7 +2152,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Encontro\ncom o rio:'),
+                       textLabel(name: 'Encontro\ncom o rio:'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
                       ),
@@ -2176,9 +2176,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Foz:'),
+                   textLabel(name: 'Foz:'),
                   RadioD(
-                      options: const ['Estuário', 'Delta', 'Estuário deltaico'],
+                      options:  ['Estuário', 'Delta', 'Estuário deltaico'],
                       getValue: (newValue) {
                         valoresjson['foz'] = newValue;
                       }),
@@ -2188,7 +2188,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Profundidade\nmédia (m):'),
+                       textLabel(name: 'Profundidade\nmédia (m):'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
                       ),
@@ -2212,14 +2212,14 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Hidrografia:'),
+                   textLabel(name: 'Hidrografia:'),
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Rio:'),
+                       textLabel(name: 'Rio:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2238,7 +2238,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Quedas\nd agua:'),
+                       textLabel(name: 'Quedas\nd agua:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2253,12 +2253,12 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Tipo:'),
+                   textLabel(name: 'Tipo:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   RadioD(
-                      options: const [
+                      options:  [
                         'Catarata',
                         'Cachoeira',
                         'Salto',
@@ -2274,7 +2274,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                     
-                      const textLabel(name: 'Riacho:'),
+                       textLabel(name: 'Riacho:'),
                       
                       SizedBox(
                           width: sizeScreen.width * 0.5,
@@ -2291,7 +2291,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Quedas\nd agua:'),
+                       textLabel(name: 'Quedas\nd agua:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2309,7 +2309,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Rio:'),
+                       textLabel(name: 'Rio:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2328,7 +2328,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Quedas\nd agua:'),
+                       textLabel(name: 'Quedas\nd agua:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2343,12 +2343,12 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Tipo:'),
+                   textLabel(name: 'Tipo:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   RadioD(
-                      options: const [
+                      options:  [
                         'Catarata',
                         'Cachoeira',
                         'Salto',
@@ -2364,7 +2364,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Córrego:'),
+                       textLabel(name: 'Córrego:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2383,7 +2383,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Quedas d agua:'),
+                       textLabel(name: 'Quedas d agua:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2401,7 +2401,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                     
-                      const textLabel(name: 'Rio:'),
+                       textLabel(name: 'Rio:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2420,7 +2420,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Quedas\nd agua:'),
+                       textLabel(name: 'Quedas\nd agua:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2435,12 +2435,12 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Tipo:'),
+                   textLabel(name: 'Tipo:'),
                   SizedBox(
                     height: sizeScreen.height * 0.02,
                   ),
                   RadioD(
-                      options: const [
+                      options:  [
                         'Catarata',
                         'Cachoeira',
                         'Salto',
@@ -2456,7 +2456,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Fonte:'),
+                       textLabel(name: 'Fonte:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2475,7 +2475,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Lago/lagoa\n/laguna:'),
+                       textLabel(name: 'Lago/lagoa\n/laguna:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2493,7 +2493,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const textLabel(name: 'Alagado:'),
+                       textLabel(name: 'Alagado:'),
                       SizedBox(
                         width: sizeScreen.width * 0.03,
                       ),
@@ -2511,7 +2511,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const textLabel(name: 'Outras'),
+                       textLabel(name: 'Outras'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
                       ),
@@ -2535,13 +2535,13 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Relevo:'),
+                   textLabel(name: 'Relevo:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
 
                   RadioC(
-                    options: const [
+                    options:  [
                       'Montanha',
                       'Serra',
                       'Monte/morro/colina',
@@ -2566,16 +2566,16 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Flora:'),
+                   textLabel(name: 'Flora:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Vegetação:'),
+                   textLabel(name: 'Vegetação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
                   RadioD(
-                      options: const [
+                      options:  [
                         'Floresta amazônica',
                         'Mata atlântica',
                         'Mata de araucária',
@@ -2592,14 +2592,14 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Espécies:'),
+                   textLabel(name: 'Espécies:'),
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
                   Row(
                     children: [
                      
-                      const SizedBox(
+                       SizedBox(
                         child: textLabel(name: 'Endêmica:'),
                       ),
                       SizedBox(
@@ -2615,11 +2615,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação:'),
+                   textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Janeiro',
                     'Fevereiro',
                     'Março',
@@ -2640,7 +2640,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const SizedBox(
+                       SizedBox(
                         child: textLabel(name: 'Rara:'),
                       ),
                       SizedBox(
@@ -2657,11 +2657,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     height: sizeScreen.height * 0.03,
                   ),
 
-                  const textLabel(name: 'Melhores meses de observação:'),
+                   textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Janeiro',
                     'Fevereiro',
                     'Março',
@@ -2681,7 +2681,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const SizedBox(
+                       SizedBox(
                         child: textLabel(name: 'Em extinção:'),
                       ),
                       SizedBox(
@@ -2697,11 +2697,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação:'),
+                   textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Janeiro',
                     'Fevereiro',
                     'Março',
@@ -2719,7 +2719,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const SizedBox(
+                       SizedBox(
                         child: textLabel(name: 'Exótica:'),
                       ),
                       SizedBox(
@@ -2735,11 +2735,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação:'),
+                   textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Janeiro',
                     'Fevereiro',
                     'Março',
@@ -2756,7 +2756,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Outras:'),
+                   textLabel(name: 'Outras:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2771,11 +2771,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação:'),
+                   textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Janeiro',
                     'Fevereiro',
                     'Março',
@@ -2792,18 +2792,18 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Fauna:'),
+                   textLabel(name: 'Fauna:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Espécies:'),
+                   textLabel(name: 'Espécies:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
                   Row(
                     children: [
                     
-                      const SizedBox(
+                       SizedBox(
                         child: textLabel(name: 'Endêmica:'),
                       ),
                       SizedBox(
@@ -2819,11 +2819,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação:'),
+                   textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Janeiro',
                     'Fevereiro',
                     'Março',
@@ -2844,7 +2844,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                      
-                      const SizedBox(
+                       SizedBox(
                         child: textLabel(name: 'Rara:'),
                       ),
                       SizedBox(
@@ -2861,11 +2861,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     height: sizeScreen.height * 0.03,
                   ),
 
-                  const textLabel(name: 'Melhores meses de observação:'),
+                   textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Janeiro',
                     'Fevereiro',
                     'Março',
@@ -2885,7 +2885,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const SizedBox(
+                       SizedBox(
                         child: textLabel(name: 'Em extinção:'),
                       ),
                       SizedBox(
@@ -2901,11 +2901,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação:'),
+                   textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Janeiro',
                     'Fevereiro',
                     'Março',
@@ -2923,7 +2923,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Row(
                     children: [
                       
-                      const SizedBox(
+                       SizedBox(
                         child: textLabel(name: 'Exótica:'),
                       ),
                       SizedBox(
@@ -2939,11 +2939,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação:'),
+                   textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Janeiro',
                     'Fevereiro',
                     'Março',
@@ -2960,7 +2960,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Outras:'),
+                   textLabel(name: 'Outras:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
@@ -2975,11 +2975,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Melhores meses de observação:'),
+                   textLabel(name: 'Melhores meses de observação:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Janeiro',
                     'Fevereiro',
                     'Março',
@@ -2996,15 +2996,15 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Atividade econômica:'),
+                   textLabel(name: 'Atividade econômica:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Agropecuária:'),
+                   textLabel(name: 'Agropecuária:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Não',
                     'Agricultura',
                     'Pecuária',
@@ -3015,11 +3015,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Industrial:'),
+                   textLabel(name: 'Industrial:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                     'Não',
                     'Petrolífera',
                     'Automobilística',
@@ -3034,15 +3034,15 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Extrativista:'),
+                   textLabel(name: 'Extrativista:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const CheckC(nomes: ['Não', 'Mineral', 'Vegetal', 'Animal']),
+                   CheckC(nomes: ['Não', 'Mineral', 'Vegetal', 'Animal']),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(
+                   textLabel(
                       name: 'Descritivo das especificidades do atrativo:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
@@ -3056,25 +3056,25 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Acesso ao atrativo:'),
+                   textLabel(name: 'Acesso ao atrativo:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'A pé:'),
+                   textLabel(name: 'A pé:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
-                  const textLabel(name: 'Trilha de acesso:'),
+                   textLabel(name: 'Trilha de acesso:'),
                   SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
                   RadioD(
-                      options: const ['Pavimentada', 'Não pavimentada'],
+                      options:  ['Pavimentada', 'Não pavimentada'],
                       getValue: (newValue) {}),
                   Row(
                     children: [
                     
-                      const textLabel(name: 'Extensão\n(m ou km):'),
+                       textLabel(name: 'Extensão\n(m ou km):'),
                       SizedBox(
                         width: sizeScreen.width * 0.032,
                       ),
@@ -3098,22 +3098,22 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Grau de dificuldade:'),
+                   textLabel(name: 'Grau de dificuldade:'),
                   RadioD(
-                      options: const ['Leve', 'Semipesada', 'Pesada'],
+                      options:  ['Leve', 'Semipesada', 'Pesada'],
                       getValue: (newValue) {}),
-                  const textLabel(name: 'Transporte:'),
+                   textLabel(name: 'Transporte:'),
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Regular:'),
+                   textLabel(name: 'Regular:'),
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(decoration: BoxDecoration(color: Color.fromARGB(255, 55, 111, 60),),children: [
+                       TableRow(decoration: BoxDecoration(color: Color.fromARGB(255, 55, 111, 60),),children: [
                         Text(
                           'Empresa',
                           textAlign: TextAlign.center,
@@ -3137,73 +3137,73 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         )
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         )
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         )
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         )
                       ]),
@@ -3212,14 +3212,14 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  const textLabel(name: 'Fretado:'),
+                   textLabel(name: 'Fretado:'),
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(decoration: BoxDecoration(color: Color.fromARGB(255, 55, 111, 60),),children: [
+                       TableRow(decoration: BoxDecoration(color: Color.fromARGB(255, 55, 111, 60),),children: [
                         Text(
                           'Empresa',
                           textAlign: TextAlign.center,
@@ -3247,89 +3247,89 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         )
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         )
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         )
                       ]),
                       TableRow(children: [
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         ),
                         TextFormField(
-                          decoration: const InputDecoration(
+                          decoration:  InputDecoration(
                               fillColor: Colors.white, filled: true),
                         )
                       ]),
@@ -3339,7 +3339,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     height: sizeScreen.height * 0.05,
                   ),
                   Container(
-                    color: const Color.fromARGB(255, 55, 111, 60),
+                    color:  Color.fromARGB(255, 55, 111, 60),
                     height: sizeScreen.height * 0.15,
                     width: sizeScreen.width,
                     padding: EdgeInsets.only(
@@ -3357,7 +3357,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),
                   Row(children: [
                   
-                    const textLabel(name: 'Do atrativo:'),
+                     textLabel(name: 'Do atrativo:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -3376,7 +3376,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(decoration: BoxDecoration(color: Colors.white), children: [
+                       TableRow(decoration: BoxDecoration(color: Colors.white), children: [
                         Text(
                           'Categoria',
                           textAlign: TextAlign.center,
@@ -3394,12 +3394,12 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                           textAlign: TextAlign.center,
                         ),
                       ]),
-                      TableRow(decoration: const BoxDecoration(color: Colors.white),children: [
-                        const Text(
+                      TableRow(decoration:  BoxDecoration(color: Colors.white),children: [
+                         Text(
                           'Municipal',
                           textAlign: TextAlign.center,
                         ),
-                        const Column(
+                         Column(
                           children: [
                             Text(
                               'Lei/Decreto\n',
@@ -3422,19 +3422,19 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
@@ -3442,30 +3442,30 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
                         )
                       ]),
-                         TableRow(decoration: const BoxDecoration(color: Colors.white),children: [
-                        const Text(
+                         TableRow(decoration:  BoxDecoration(color: Colors.white),children: [
+                         Text(
                           'Estadual/Distrital',
                           textAlign: TextAlign.center,
                         ),
-                        const Column(
+                         Column(
                           children: [
                             Text(
                               'Lei/Decreto\n',
@@ -3488,19 +3488,19 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
@@ -3508,30 +3508,30 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
                         )
                       ]),
-                         TableRow(decoration: const BoxDecoration(color: Colors.white),children: [
-                        const Text(
+                         TableRow(decoration:  BoxDecoration(color: Colors.white),children: [
+                         Text(
                           'Federal',
                           textAlign: TextAlign.center,
                         ),
-                        const Column(
+                         Column(
                           children: [
                             Text(
                               'Lei/Decreto\n',
@@ -3554,19 +3554,19 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
@@ -3574,30 +3574,30 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
                         )
                       ]),
-                         TableRow(decoration: const BoxDecoration(color: Colors.white),children: [
-                        const Text(
+                         TableRow(decoration:  BoxDecoration(color: Colors.white),children: [
+                         Text(
                           'Internacional',
                           textAlign: TextAlign.center,
                         ),
-                        const Column(
+                         Column(
                           children: [
                             Text(
                               'Lei/Decreto\n',
@@ -3620,19 +3620,19 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
@@ -3640,19 +3640,19 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
@@ -3662,7 +3662,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   ),SizedBox(height: sizeScreen.height * 0.05,),
                     Row(children: [
                   
-                    const textLabel(name: 'Da área em que está\nlocalizado/instalado:'),
+                     textLabel(name: 'Da área em que está\nlocalizado/instalado:'),
                     SizedBox(
                       width: sizeScreen.width * 0.09,
                     ),
@@ -3679,7 +3679,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                      Table(
                     border: TableBorder.all(),
                     children: [
-                      const TableRow(decoration: BoxDecoration(color: Colors.white),children: [
+                       TableRow(decoration: BoxDecoration(color: Colors.white),children: [
                         Text(
                           'Categoria',
                           textAlign: TextAlign.center,
@@ -3697,12 +3697,12 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                           textAlign: TextAlign.center,
                         ),
                       ]),
-                      TableRow(decoration: const BoxDecoration(color: Colors.white),children: [
-                        const Text(
+                      TableRow(decoration:  BoxDecoration(color: Colors.white),children: [
+                         Text(
                           'Municipal',
                           textAlign: TextAlign.center,
                         ),
-                        const Column(
+                         Column(
                           children: [
                             Text(
                               'Lei/Decreto\n',
@@ -3725,19 +3725,19 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
@@ -3745,30 +3745,30 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
                         )
                       ]),
-                         TableRow(decoration: const BoxDecoration(color: Colors.white),children: [
-                        const Text(
+                         TableRow(decoration:  BoxDecoration(color: Colors.white),children: [
+                         Text(
                           'Estadual/Distrital',
                           textAlign: TextAlign.center,
                         ),
-                        const Column(
+                         Column(
                           children: [
                             Text(
                               'Lei/Decreto\n',
@@ -3791,19 +3791,19 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
@@ -3811,30 +3811,30 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
                         )
                       ]),
-                         TableRow(decoration: const BoxDecoration(color: Colors.white),children: [
-                        const Text(
+                         TableRow(decoration:  BoxDecoration(color: Colors.white),children: [
+                         Text(
                           'Federal',
                           textAlign: TextAlign.center,
                         ),
-                        const Column(
+                         Column(
                           children: [
                             Text(
                               'Lei/Decreto\n',
@@ -3857,19 +3857,19 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
@@ -3877,30 +3877,30 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
                         )
                       ]),
-                         TableRow(decoration: const BoxDecoration(color: Colors.white),children: [
-                        const Text(
+                         TableRow(decoration:  BoxDecoration(color: Colors.white),children: [
+                         Text(
                           'Internacional',
                           textAlign: TextAlign.center,
                         ),
-                        const Column(
+                         Column(
                           children: [
                             Text(
                               'Lei/Decreto\n',
@@ -3923,19 +3923,19 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
@@ -3943,19 +3943,19 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                         Column(
                           children: [
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                             TextFormField(
-                              decoration: const InputDecoration(
+                              decoration:  InputDecoration(
                                   fillColor: Colors.white, filled: true),
                             ),
                           ],
@@ -3967,7 +3967,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     height: sizeScreen.height * 0.03,
                   ),
                   Container(
-                    color: const Color.fromARGB(255, 55, 111, 60),
+                    color:  Color.fromARGB(255, 55, 111, 60),
                     height: sizeScreen.height * 0.06,
                     width: sizeScreen.width,
                     padding: EdgeInsets.only(
@@ -3983,14 +3983,14 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   SizedBox(
                     height: sizeScreen.height * 0.05,
                   ),
-                  RadioD(options: const ['Muito bom', 'bom', 'ruim'], getValue: (newValue){
+                  RadioD(options:  ['Muito bom', 'bom', 'ruim'], getValue: (newValue){
 
                   }),
                    SizedBox(
                     height: sizeScreen.height * 0.03,
                   ),
                   Container(
-                    color: const Color.fromARGB(255, 55, 111, 60),
+                    color:  Color.fromARGB(255, 55, 111, 60),
                     height: sizeScreen.height * 0.06,
                     width: sizeScreen.width,
                     padding: EdgeInsets.only(
@@ -4007,19 +4007,19 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     height: sizeScreen.height * 0.05,
                   ),
                     SizedBox(height: sizeScreen.height * 0.02,),
-              const textLabel(
+               textLabel(
                     name:
                         'Possui alguma facilidade para pessoas com deficiência ou mobilidade reduzida?'),
                SizedBox(height: sizeScreen.height * 0.04,),
                ExpansionTileYoN(getValue: (String ) {  },),
  SizedBox(height: sizeScreen.height * 0.02,),
-         const textLabel(
+          textLabel(
                     name: 'obs: responder às questões seguintes'),
           SizedBox(height: sizeScreen.height * 0.02,),
- const textLabel(
+  textLabel(
                     name: 'Pessoal capacitado para receber PCD:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
-             const CheckC(nomes: [
+              CheckC(nomes: [
                 'Não',
                 'Física',
                 'Auditiva',
@@ -4027,9 +4027,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                 'Mental',
                 'Múltipla'
               ], ),
-             const textLabel(name: 'Rota externa acessível:'),
+              textLabel(name: 'Rota externa acessível:'),
                 SizedBox(height: sizeScreen.height * 0.02,),
-                const CheckC(nomes: [
+                 CheckC(nomes: [
                 'Não',
                 'Estacionamento',
                 'Calçada rebaixada',
@@ -4046,9 +4046,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Símbolo internacional de acesso:'),
+                child:  textLabel(name: 'Símbolo internacional de acesso:'),
               ),
-                const CheckC(nomes: [
+                 CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Área reservada',
@@ -4062,17 +4062,17 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Local de embarque e desembarque:'),
+                child:  textLabel(name: 'Local de embarque e desembarque:'),
               ),
-                const CheckC(nomes:  ['Não', 'Sinalizado', 'Com acesso em nível'],),
+                 CheckC(nomes:  ['Não', 'Sinalizado', 'Com acesso em nível'],),
               Padding(
                 padding: EdgeInsets.only(
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Vaga em estacionamento:'),
+                child:  textLabel(name: 'Vaga em estacionamento:'),
               ),
-                const CheckC(nomes: [
+                 CheckC(nomes: [
                 'Não',
                 'Sinalizado',
                 'Com acesso em nível',
@@ -4084,11 +4084,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
+                child:  textLabel(
                     name:
                         'Área de circulação / acesso interno para cadeira de rodas:'),
               ),
-               const CheckC(nomes: [
+                CheckC(nomes: [
                 'Não',
                 'Rampa',
                 'Elevador',
@@ -4101,9 +4101,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
         
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Escada:'),
+                child:  textLabel(name: 'Escada:'),
               ),
-                const CheckC(nomes: [
+                 CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
@@ -4116,9 +4116,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
             
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Rampa:'),
+                child:  textLabel(name: 'Rampa:'),
               ),
-                 const CheckC(nomes: [
+                  CheckC(nomes: [
                 'Não',
                 'Corrimão',
                 'Patamar para descanso',
@@ -4131,9 +4131,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Piso:'),
+                child:  textLabel(name: 'Piso:'),
               ),
-                 const CheckC(nomes: [
+                  CheckC(nomes: [
                 'Não',
                 'Tátil',
                 'Sem obstáculos',
@@ -4144,9 +4144,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Elevador:'),
+                child:  textLabel(name: 'Elevador:'),
               ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                 'Não',
                 'Sinalizado em braile',
                 'Dispositivo sonoro',
@@ -4158,11 +4158,11 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                    
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(
+                child:  textLabel(
                     name:
                         'Equipamento motorizado para deslocamento interno:'),
               ),
-               const CheckC(nomes: [
+                CheckC(nomes: [
                 'Não',
                 'Cadeira',
                 'Carrinho',
@@ -4172,9 +4172,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                  
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sinalização visual:'),
+                child:  textLabel(name: 'Sinalização visual:'),
               ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -4190,9 +4190,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sinalização tátil:'),
+                child:  textLabel(name: 'Sinalização tátil:'),
               ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                 'Não',
                 'Entrada',
                 'Recepção',
@@ -4208,9 +4208,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                 
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Alarme de emergência:'),
+                child:  textLabel(name: 'Alarme de emergência:'),
               ),
-                const CheckC(nomes: [
+                 CheckC(nomes: [
                 'Não',
                 'Sonoro',
                 'Visual',
@@ -4221,9 +4221,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                   
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Comunicação:'),
+                child:  textLabel(name: 'Comunicação:'),
               ),
-                  const CheckC(nomes: [
+                   CheckC(nomes: [
                 'Não',
                 'Texto informativo em braile',
                 'Texto informativo em fonte ampliada',
@@ -4234,9 +4234,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Balcão de atendimento:'),
+                child:  textLabel(name: 'Balcão de atendimento:'),
               ),
-                 const CheckC(nomes: [
+                  CheckC(nomes: [
                 'Não',
                 'Rebaixado',
                 'Preferencial para PCD ou com deficiência ou mobilidade reduzida',
@@ -4246,9 +4246,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Mobiliário:'),
+                child:  textLabel(name: 'Mobiliário:'),
               ),
-               const CheckC(nomes: [
+                CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Recuo adequado',
@@ -4258,9 +4258,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                 
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Sanitário:'),
+                child:  textLabel(name: 'Sanitário:'),
               ),
-                 const CheckC(nomes: [
+                  CheckC(nomes: [
                 'Não',
                 'Porta larga suficiente para entrada de cadeira de rodas ',
                 'Acesso para cadeira de rodas',
@@ -4276,9 +4276,9 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child: const textLabel(name: 'Telefone:'),
+                child:  textLabel(name: 'Telefone:'),
               ),
-               const CheckC(nomes: [
+                CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Para surdos (TPS ou TTS)',
@@ -4287,7 +4287,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                 padding: EdgeInsets.only(
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.04),
-                child: const textLabel(
+                child:  textLabel(
                     name:
                         'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida:'),
               ),
@@ -4298,7 +4298,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
               SizedBox(height: sizeScreen.height * 0.02,),              Row(
                 children: [
                  
-                  const textLabel(name: 'Outros'),
+                   textLabel(name: 'Outros'),
                   SizedBox(
                     width: sizeScreen.width * 0.1,
                   ),
@@ -4320,7 +4320,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                 height: sizeScreen.height * 0.05,
               ),
               Container(
-                color: const Color.fromARGB(255, 55, 111, 60),
+                color:  Color.fromARGB(255, 55, 111, 60),
                 height: sizeScreen.height * 0.06,
                 width: sizeScreen.width,
                 padding: EdgeInsets.only(
@@ -4345,7 +4345,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
               ),
 
               Container(
-                color: const Color.fromARGB(255, 55, 111, 60),
+                color:  Color.fromARGB(255, 55, 111, 60),
                 height: sizeScreen.height * 0.06,
                 width: sizeScreen.width,
                 padding: EdgeInsets.only(
@@ -4369,7 +4369,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                 height: sizeScreen.height * 0.05,
               ),
               Container(
-                color: const Color.fromARGB(255, 55, 111, 60),
+                color:  Color.fromARGB(255, 55, 111, 60),
                 height: sizeScreen.height * 0.06,
                 width: sizeScreen.width,
                 padding: EdgeInsets.only(
@@ -4384,7 +4384,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-              const textLabel(
+               textLabel(
                   name: 'Responsável pelo atendimento (Pesquisador)'),
               CustomTextField(
                   validat: (value) {
@@ -4394,7 +4394,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     return null;
                   },
                   name: '', getValue: (newValue) {valoresjson['Pesquisador'] = newValue;  },),
-              const textLabel(name: 'Telefone'),
+               textLabel(name: 'Telefone'),
               CustomTextField(
                   validat: (value) {
                     if (value == null || value.isEmpty) {
@@ -4403,7 +4403,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     return null;
                   },
                   name: '', getValue: (newValue) {valoresjson['TelefonePesquisador'] = newValue;  },),
-              const textLabel(name: 'E-mail'),
+               textLabel(name: 'E-mail'),
               CustomTextField(
                   validat: (value) {
                     if (value == null || value.isEmpty) {
@@ -4412,7 +4412,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     return null;
                   },
                   name: '', getValue: (newValue) {valoresjson['E-mail'];  },),
-              const textLabel(
+               textLabel(
                   name: 'Responsável pelo atendimento (Coordenador)'),
               CustomTextField(
                   validat: (value) {
@@ -4422,7 +4422,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     return null;
                   },
                   name: '', getValue: (newValue) {valoresjson['Coordenador'];  },),
-              const textLabel(name: 'Telefone'),
+               textLabel(name: 'Telefone'),
               CustomTextField(
                   validat: (value) {
                     if (value == null || value.isEmpty) {
@@ -4431,7 +4431,7 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
                     return null;
                   },
                   name: '', getValue: (newValue) {valoresjson['TelefoneCoordenador'] = newValue;  },),
-              const textLabel(name: 'E-mail'),
+               textLabel(name: 'E-mail'),
               CustomTextField(
                   validat: (value) {
                     if (value == null || value.isEmpty) {
@@ -4443,8 +4443,8 @@ class _ZonaCosteiraState extends State<ZonaCosteira> {
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-               const SendButton(),
-               const SizedBox(height: 15,)
+                SendButton(),
+                SizedBox(height: 15,)
               ],
             )),
           ),

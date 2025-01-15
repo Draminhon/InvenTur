@@ -86,6 +86,7 @@ class CheckC extends StatefulWidget {
 class CheckCState extends State<CheckC> {
   late List<bool> isChecked;
   late Queue<int> positions;
+
   int size = 0;
   @override
   void initState() {
@@ -117,7 +118,7 @@ class CheckCState extends State<CheckC> {
     return 
     SizedBox(
       width: sizeScreen.width,
-      height: sizeScreen.height * 0.3,
+      height: widget.nomes.length == 3 ? sizeScreen.height * 0.2 : sizeScreen.height * 0.28,
       child: RawScrollbar(
         thumbColor: const Color.fromARGB(255, 55, 111, 60),
         controller: firstController,

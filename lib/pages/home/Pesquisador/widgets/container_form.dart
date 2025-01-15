@@ -113,6 +113,8 @@ class _ExpansionTileA extends State<ExpansionTileA> {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(width: 0.5),
         color: const Color.fromARGB(255, 55, 111, 60),
+            gradient: LinearGradient(colors: [const Color.fromARGB(255, 55, 111, 60), const Color.fromARGB(255, 77, 156, 84)]),
+        
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
@@ -131,22 +133,22 @@ class _ExpansionTileA extends State<ExpansionTileA> {
             horizontal: 67.2.w, // Alinha título e ícone com os filhos
           ),
           child: ExpansionTile(
- 
+            
             minTileHeight:    200.52.h,
             dense: true,
             collapsedIconColor: Colors.white,
             iconColor: Colors.white,
-            title: Center(
-              child: Text(
+            title: Text(
                 titulo,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white, // Cor do texto para combinar com o botão
                   fontWeight: FontWeight.w900,
                   fontSize: 49.728.w,
                 ),
               ),
-            ),
-            tilePadding: EdgeInsets.only(right: 13.44.w),
+            
+            tilePadding: EdgeInsets.only(left: 130.44.w),
             collapsedBackgroundColor: Colors.transparent,
             backgroundColor: Colors.transparent,
             childrenPadding: EdgeInsets.zero, // Mantém alinhado com o título

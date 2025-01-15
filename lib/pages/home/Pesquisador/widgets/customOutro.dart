@@ -3,8 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class textLabel extends StatelessWidget {
   final String name;
-
-  const textLabel({super.key, required this.name});
+  final FontWeight? fontWeight;
+   textLabel({super.key, required this.name, this.fontWeight});
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
@@ -18,6 +18,7 @@ class textLabel extends StatelessWidget {
       name,
       style: TextStyle(
         fontSize:  59.w,
+        fontWeight: fontWeight ?? FontWeight.normal
         // fontWeight: FontWeight.w600
       ),
       textAlign: TextAlign.left,

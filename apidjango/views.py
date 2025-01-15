@@ -12,6 +12,13 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
+from django.contrib.auth import logout
+from rest_framework.views import APIView
+
+
+
+
+
 class UsuarioCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
@@ -40,8 +47,16 @@ class AlterPesquisaAPIView(generics.UpdateAPIView):
     serializer_class = PesquisaSerializer
 
     def partial_update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return self.update(request, *args, **kwargs)
+        try:
+            print("Dados recebidos no servidor:", request.data)
+            kwargs['partial'] = True
+            return self.update(request, *args, **kwargs)
+        except ValidationError as e:
+            print("Erro de validação:", e.detail)  # Exibe detalhes da validação
+            return Response({"error": e.detail}, status=400)
+        except Exception as e:
+            print("Erro inesperado:", str(e))
+            raise
 
 
 class PesquisaCreateView(generics.ListCreateAPIView):
@@ -68,7 +83,13 @@ class PesquisaUsuarioListView(generics.ListAPIView):
         return Pesquisa.objects.filter(usuario=user, is_active=True)
     
 
+class PesquisaPartialUpdateAPIView(generics.UpdateAPIView):
+    queryset = Pesquisa.objects.all()
+    serializer_class = PesquisaSerializer
 
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
 
 def get_admin_details(request, admin_id):
     admin = get_object_or_404(CustomUser, id = admin_id)
@@ -153,7 +174,17 @@ def UsuarioLoginView(request):
          
             print("Nao logado")
             return HttpResponse("Invalid credentials", status = 400)
-        
+
+class SistemaDeSegurancaListCreateAPIView(generics.ListCreateAPIView):
+    queryset = SistemaDeSeguranca.objects.all()
+    serializer_class = SistemaDeSegurancaSerializer
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return HttpResponse(serializer.data, status = status.HTTP_201_CREATED, headers=headers) 
+
 class RodoviaListCreateAPIView(generics.ListCreateAPIView):
     queryset = Rodovia.objects.all()
     serializer_class = RodoviaSerializer
@@ -211,6 +242,33 @@ class AlterPasswordView(generics.UpdateAPIView):
 
         return Response({"sucess": "Password changed sucessfully"})
 
+class EquipamentosListView(APIView):
+    def get(self, request, *args, **kwargs):
+        pesquisa_id = request.query_params.get('pesquisa_id')
+
+        if not pesquisa_id:
+            raise ValidationError({"detail": "O parâmetro 'pesquisa_id' é obrigatório."})
+
+        # Rodovias
+        rodovias = Rodovia.objects.filter(pesquisa__id=pesquisa_id)
+        rodovias_serialized = [
+            {"tipo": "Rodovia", "dados": RodoviaSerializer(rodovia).data}
+            for rodovia in rodovias
+        ]
+
+        # Sistemas de Segurança
+        sistemas = SistemaDeSeguranca.objects.filter(pesquisa__id=pesquisa_id)
+        sistemas_serialized = [
+            {"tipo": "SistemaDeSeguranca", "dados": SistemaDeSegurancaSerializer(sistema).data}
+            for sistema in sistemas
+        ]
+
+        # Combina os dados
+        equipamentos = rodovias_serialized + sistemas_serialized
+
+        return Response(equipamentos)
+
+
 class RodoviaListView(generics.ListAPIView):
     serializer_class = RodoviaSerializer
 
@@ -243,3 +301,16 @@ class StatusUpdateAPIView(generics.UpdateAPIView):
 # class DeleUserAPIView(generics.DestroyAPIView):
 #     queryset = CustomUser.objects.all()
 #     serializer_class = UserSerializer
+
+class LogoutAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        try:
+            refresh_token = request.data.get("refresh")
+            token = RefreshToken(refresh_token)
+
+            token.blacklist()
+            return Response({"detail": "Logout realizado com sucesso."}, status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

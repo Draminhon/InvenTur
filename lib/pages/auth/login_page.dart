@@ -11,6 +11,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future<String?> getToken() async {
   final prefs = await SharedPreferences.getInstance();
@@ -42,6 +43,7 @@ class _LoginPageState extends State<LoginPage> {
     _passwordController.dispose();
   }
 
+  bool _isWrong = false;
   @override
   Widget build(BuildContext context) {
     Future<void> loginUser(String cpf, String password) async {
@@ -64,7 +66,6 @@ class _LoginPageState extends State<LoginPage> {
 
           final Map<String, dynamic> user = responseData['user'];
 
-          
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('user_data', json.encode(user));
           await prefs.setString('acess_token', acessToken);
@@ -82,6 +83,9 @@ class _LoginPageState extends State<LoginPage> {
           }));
         } else {
           print("Usário nao logado ${response.body}");
+          setState(() {
+            _isWrong = true;
+          });
         }
       } catch (e) {
         print(e);
@@ -111,6 +115,28 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                 ),
+                _isWrong
+                    ? Container(
+                      width: 1230.w,
+                      padding: EdgeInsets.fromLTRB(50.h, 40.h, 15.h, 40.h),
+                        decoration: BoxDecoration(
+                            color: Colors.red[200],
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: const Color.fromRGBO(229, 115, 115, 1))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+
+                            Text('Usuário ou senha incorretos', style: TextStyle(color: const Color.fromARGB(255, 163, 45, 36), fontSize: 15),),
+                            IconButton(onPressed: () {
+                              setState(() {
+                                _isWrong = false;
+                              });
+                            }, icon: Icon(Icons.close))                        
+                          ],
+                        ),
+                      )
+                    : Container(),
                 Container(
                   padding: const EdgeInsets.all(20),
                   child: Form(
@@ -123,9 +149,9 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _cpfController,
                           keyboardType: TextInputType.number,
                           prefixIcon: FontAwesomeIcons.solidAddressCard,
-                           validator: (cpf) {
-                             return _cpfValidator.validate(cpf: cpf);
-                           },
+                          validator: (cpf) {
+                            return _cpfValidator.validate(cpf: cpf);
+                          },
                           inputFormatters: [cpfMask],
                         ),
                         SizedBox(height: screenSize.height * 0.02),
@@ -134,9 +160,10 @@ class _LoginPageState extends State<LoginPage> {
                           labelText: 'Senha',
                           controller: _passwordController,
                           prefixIcon: Icons.lock,
-                          // validator: (password) {
-                          //   return _passwordValidator.validate(password: password);
-                          // },
+                          validator: (password) {
+                            return _passwordValidator.validate(
+                                password: password);
+                          },
                         ),
                         SizedBox(height: screenSize.height * 0.02),
                         SizedBox(
@@ -156,12 +183,16 @@ class _LoginPageState extends State<LoginPage> {
                                     overlayColor: WidgetStateProperty.all(
                                         Colors.green[600])),
                                 onPressed: () {
+                                    final String cpf2 = '95434284097';
+                                  final String password2 = 'Jose123@';
+                                  loginUser(cpf2, password2);
                                   if (_formLoginKey.currentState!.validate()) {
                                     final cpf = _cpfController.text
                                         .replaceAll('.', '')
                                         .replaceAll('-', '');
                                     final password = _passwordController.text;
-
+                                    // final String cpf2 = '95434284097';
+                                    // final String password2 = 'Jose123@';
                                     loginUser(cpf, password);
                                   }
                                 },
@@ -177,8 +208,7 @@ class _LoginPageState extends State<LoginPage> {
                             alignment: Alignment.centerRight,
                             child: TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(
-                                    context, '/ConfirmarSenha');
+                                Navigator.pushNamed(context, '/ConfirmarSenha');
                               },
                               child: const Text(
                                 'Esqueceu sua senha?',

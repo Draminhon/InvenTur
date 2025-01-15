@@ -11,6 +11,8 @@ import 'package:inventur/utils/app_constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
 
@@ -37,18 +39,34 @@ class _AdminHomePageState extends State<AdminHomePage> {
 
   final UserController _userController = UserController();
   
-  
+    String userName = '';
+    String userEmail = '';
+    String userCPF = '';
 
   final Map<int, String> pageTitle = {
     0: 'Andamento das Pesquisas',
     1: 'Pesquisas Cadastradas',
     2: 'Gerenciar Usuários',
   };
+  Future<void> getUserInfo()async{
   
+    final prefs = await SharedPreferences.getInstance();
+    String? userDataString = prefs.getString('user_data');
+    if(userDataString != null){
+    Map<String, dynamic> userData = json.decode(userDataString);
+    setState(() {
+          userName = userData['name'];
+    userEmail = userData['email'];
+    userCPF = userData['CPF'];
+    });
+
+    }
+  }
   @override
-  void initState() {
+  void initState()  {
     super.initState();
     pageController = PageController(initialPage: currentPageIndex);
+    getUserInfo();
   }
 
   @override
@@ -65,7 +83,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 245, 245, 245),
         drawer: SafeArea(
-          child: OptionsDrawer(userController: _userController,)
+          child: OptionsDrawer(userController: _userController, userName: userName, userEmail: userEmail, cpf: userCPF,)
         ),
         appBar: AppBar(
           title: Text(pageTitle[currentPageIndex]!),

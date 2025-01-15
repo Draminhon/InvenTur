@@ -13,6 +13,7 @@ import 'package:inventur/utils/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RegisterPesquisa extends StatefulWidget {
   const RegisterPesquisa({super.key});
@@ -332,8 +333,10 @@ String? userDataString = prefs.getString('user_data');
                         },
                       ),
                       Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        
+                        margin: EdgeInsets.symmetric(vertical: 50.h),
                         decoration: const BoxDecoration(
+                          color: Colors.white,
                             border: Border.symmetric(
                                 horizontal: BorderSide(
                                     color: Color.fromARGB(255, 55, 111, 60)))),
@@ -423,16 +426,7 @@ String? userDataString = prefs.getString('user_data');
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8.0),
-                          child: Text(
-                            "Pesquisadores Selecionados",
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromARGB(255, 55, 111, 60),
-                            ),
-                          ),
-                        ),
+                          
                         selectedUsersSection(), // Aqui exibimos a lista dos usuários selecionados.
                       ],
                     ),
@@ -549,21 +543,29 @@ String? userDataString = prefs.getString('user_data');
     );
   }
 
-  Widget selectedUsersSection() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: selectedUsers.length,
-        itemBuilder: (context, index) {
-          final user = selectedUsers.elementAt(index);
-          return UserPesquisaCardList(
-            user: user,
-            pesquisaController: _pesquisaController,
-            xIsVisible: true,
-          );
-        },
-      ),
-    );
-  }
+Widget selectedUsersSection() {
+  return Expanded( // Certifique-se de usar Expanded aqui
+    child: selectedUsers.isNotEmpty
+        ? ListView.builder(
+            itemCount: selectedUsers.length,
+            itemBuilder: (context, index) {
+              final user = selectedUsers.elementAt(index);
+              return UserPesquisaCardList(
+                user: user,
+                pesquisaController: _pesquisaController,
+                xIsVisible: true,
+              );
+            },
+          )
+        : const Center(
+            child: Text(
+              "Nenhum pesquisador selecionado",
+              style: TextStyle(color: Colors.grey),
+            ),
+          ),
+  );
+}
+
 
   Widget showUsers(List<User> posts) {
     return SizedBox(

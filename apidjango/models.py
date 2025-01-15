@@ -88,10 +88,7 @@ class Base(models.Model):
     municipio = models.CharField(max_length=255)
 
     tipo = models.CharField(max_length=255)
-    subtipos = models.CharField(max_length=255)
-
-    nome_oficial = models.CharField(max_length=255)
-    nome_popular = models.CharField(max_length=255)
+  
 
     observacoes = models.TextField()
     referencias = models.TextField()
@@ -113,7 +110,20 @@ class Inventariacao(models.Model):
     criacao = models.DateField(auto_now_add=True)
     atualizacao = models.DateTimeField(auto_now = True)
 
+
+class SistemaDeSeguranca(Base):
+   nome = models.CharField(max_length=255,default='01' )
+   endereco = models.CharField(max_length=255, default='01')
+   whatsapp = models.CharField(max_length=50, default='01')
+   email = models.CharField(max_length=100, default='01')
+
 class Rodovia(Base):
+
+    subtipos = models.CharField(max_length=255)
+
+    nome_oficial = models.CharField(max_length=255)
+    nome_popular = models.CharField(max_length=255)
+
     jurisdicao = models.CharField(max_length=50)
     natureza = models.CharField(max_length=50)
     

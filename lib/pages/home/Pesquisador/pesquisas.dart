@@ -99,30 +99,29 @@ class Pesquisas extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-  Future<List<RodoviaModel>> getRodovias() async {
+  Future<List<Map<String, dynamic>>> getRodovias() async {
             final arguments = ModalRoute.of(context)?.settings.arguments as Map;
         final pesquisaId = arguments['pesquisa_id'];
-    var url = Uri.parse(AppConstants.BASE_URI + '/api/v1/rodovia/get/?pesquisa_id=$pesquisaId');
+    var url = Uri.parse(AppConstants.BASE_URI + '/api/v1/equipamentos/?pesquisa_id=$pesquisaId');
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(utf8.decode(response.bodyBytes));
-    return body.map((e) => RodoviaModel.fromJson(e)).toList();
+    return body.map((e) => Map<String, dynamic>.from(e)).toList();
   }
 
-  Future<List<RodoviaModel>> rodoviasFuture = getRodovias();
-
-    final sizeScreen = MediaQuery.sizeOf(context);
+  Future<List<Map<String, dynamic>>> rodoviasFuture = getRodovias();
 
     return Scaffold(
+      
       appBar: AppBar(
         actions: [
           Container(
             padding: EdgeInsets.only(right: 228.48.w),
           )
         ],
-        backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+        backgroundColor: Colors.white,
       ),
-      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+      backgroundColor:  Colors.white,
       body: Column(
           children: [
             Padding(
@@ -144,23 +143,26 @@ class Pesquisas extends StatelessWidget {
                   ],
                 )),
             Center(
-                child: FutureBuilder<List<RodoviaModel>>(
-              future: rodoviasFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                } else if (snapshot.hasData) {
-                
-                  final rodovias = snapshot.data!;
-                  if (rodovias.isEmpty) {
-                    return const Text("Não há equipamentos inventariados");
+                child: SizedBox(
+                  height: 1800.h,
+                  child: FutureBuilder<List<Map<String, dynamic>>>(
+                                future: rodoviasFuture,
+                                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator();
+                  } else if (snapshot.hasData) {
+                  
+                    final rodovias = snapshot.data!;
+                    if (rodovias.isEmpty) {
+                      return const Text("Não há equipamentos inventariados", style: TextStyle(fontWeight: FontWeight.bold),);
+                    }
+                    return showRodovias(rodovias);
+                  } else {
+                    return const Text("Não há equipamentos inventariados", style: TextStyle(fontWeight: FontWeight.bold));
                   }
-                  return showRodovias(rodovias);
-                } else {
-                  return const Text("Não há equipamentos inventariados");
-                }
-              },
-            )),
+                                },
+                              ),
+                )),
             Divider(
               color: const Color.fromARGB(255, 55, 111, 60),
               indent: 134.4.w,
@@ -170,7 +172,7 @@ class Pesquisas extends StatelessWidget {
         ),
     
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(top: 10, bottom: 150.52.h, left: 15, right: 15),
+        padding: EdgeInsets.only( bottom: 150.52.h, left: 15, right: 15),
         child: Container(
             margin: EdgeInsets.symmetric(horizontal: 80.52.w),
             height: 219.52.h,
@@ -193,25 +195,29 @@ class Pesquisas extends StatelessWidget {
   }
 }
 
-Widget showRodovias(List<RodoviaModel> posts) {
-  // ListView Builder to show data in a list
+Widget showRodovias(List<Map<String, dynamic>> posts) {
   return SizedBox(
     height: 1500.h,
     child: ListView.builder(
       itemCount: posts.length,
       itemBuilder: (context, index) {
-        final post = posts[index];
+        final equipamento = posts[index];
+        final tipo = equipamento['tipo'];
+        final dados = equipamento['dados'];
         return GestureDetector(
           onTap: () {
-            debugPrint(jsonEncode(post));
-            Navigator.pushReplacement(context,
-             MaterialPageRoute(builder: 
-             (context)=> RodoviaEdit(rodoviaModel: post,)));
+           // debugPrint(jsonEncode(equipamento));
+            
+            if(equipamento['tipo'] == 'Rodovia'){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> RodoviaEdit(rodoviaModel: RodoviaModel.fromJson(equipamento['dados']),)));
+            }
           },
           child: Container(
+            
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
               color: Colors.grey.shade300,
+
             ),
             margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
             padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 15.w),
@@ -220,7 +226,7 @@ Widget showRodovias(List<RodoviaModel> posts) {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${post.nomeOficial!} - ${post.tipoFormulario}',
+                  '${dados['nome_oficial'] ?? ''} - ${tipo}',
                   style: TextStyle(fontSize: 60.w),
                 ),
               ],

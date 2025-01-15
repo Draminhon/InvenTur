@@ -5,11 +5,12 @@ class AutocompleteTextField extends StatelessWidget {
   final Function(String option) onSelected;
   final AutocompleteOptionsBuilder<String> optionsBuilder;
   final Function(String value)? onChanged;
-   final TextEditingController? controllerAuto;
+  final TextEditingController? controllerAuto;
+
   const AutocompleteTextField({
     super.key,
     this.onChanged,
-    required this.label, 
+    required this.label,
     required this.onSelected,
     required this.optionsBuilder,
     this.controllerAuto,
@@ -17,18 +18,23 @@ class AutocompleteTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return LayoutBuilder(
       builder: (context, constraints) => Autocomplete<String>(
         optionsBuilder: (textEditingValue) => optionsBuilder(textEditingValue),
-        onSelected: onSelected,
+        onSelected: (String option) {
+          // Ao selecionar uma opção, passamos o valor completo para o controlador
+          if (controllerAuto != null) {
+            controllerAuto!.text = option; // Armazena o nome completo selecionado
+          }
+          onSelected(option); // Chama a função onSelected passada pelo pai
+        },
         optionsViewBuilder: (context, onSelected, options) => Align(
           alignment: Alignment.topLeft,
           child: Material(
             elevation: 4,
             color: Colors.white,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10)
+              borderRadius: BorderRadius.circular(10),
             ),
             child: Container(
               constraints: const BoxConstraints(maxHeight: 200),
@@ -47,18 +53,18 @@ class AutocompleteTextField extends StatelessWidget {
                   final String option = options.elementAt(index);
                   return InkWell(
                     borderRadius: options.length == 1
-                    ? const BorderRadius.all(Radius.circular(10))
-                    : index == 0
-                      ? const BorderRadius.only(
-                        topLeft: Radius.circular(10),
-                        topRight: Radius.circular(10),
-                      )
-                      : index == options.length - 1
-                        ? const BorderRadius.only(
-                          bottomLeft: Radius.circular(10),
-                          bottomRight: Radius.circular(10),
-                        )
-                        : null,
+                        ? const BorderRadius.all(Radius.circular(10))
+                        : index == 0
+                            ? const BorderRadius.only(
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                              )
+                            : index == options.length - 1
+                                ? const BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    bottomRight: Radius.circular(10),
+                                  )
+                                : null,
                     onTap: () => onSelected(option),
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -77,14 +83,12 @@ class AutocompleteTextField extends StatelessWidget {
           ),
         ),
         fieldViewBuilder: (context, textEditingController, focusNode, onFieldSubmitted) {
-          //extEditingController.text = controllerAuto!.text;
-          if(controllerAuto!=null && textEditingController.text.isEmpty){
-          textEditingController.text = controllerAuto!.text;
-
+          // Inicializa o textEditingController com o valor do controllerAuto, se não estiver vazio
+          if (controllerAuto != null && textEditingController.text.isEmpty) {
+            textEditingController.text = controllerAuto!.text;
           }
-            //final controller = controllerAuto?.text.isNotEmpty == true ? textEditingController : controllerAuto;
+
           return TextField(
-            
             focusNode: focusNode,
             textAlign: TextAlign.end,
             controller: textEditingController,
@@ -95,22 +99,23 @@ class AutocompleteTextField extends StatelessWidget {
               contentPadding: const EdgeInsets.all(10),
               labelText: label,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10)
+                borderRadius: BorderRadius.circular(10),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
+                borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60)),
               ),
             ),
-            onChanged: (value){
-              if (controllerAuto != null && controllerAuto!.text != value){
+            onChanged: (value) {
+              // Atualiza o valor digitado no controlador original (controllerAuto)
+              if (controllerAuto != null && controllerAuto!.text != value) {
                 controllerAuto!.text = value;
               }
 
-              if(onChanged!= null){
+              if (onChanged != null) {
                 onChanged!(value);
               }
-            }
+            },
           );
         },
       ),

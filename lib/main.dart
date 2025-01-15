@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/pages/auth/login_page.dart';
+import 'package:inventur/pages/auth/register_confirmation.dart';
 import 'package:inventur/pages/auth/register_page.dart';
 import 'package:inventur/pages/controllers/rodovia_controller.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
@@ -31,7 +32,7 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas
 import 'pages/home/Pesquisador/forms/formsC/zonaCosteira.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/helper/dependencies.dart' as dep;
-import 'package:inventur/pages/home/Pesquisador/forms/UpdatedForm';
+import 'package:inventur/pages/home/Pesquisador/forms/UpdatedForm.dart';
 class MyHttpOverrides extends HttpOverrides{
   @override
   HttpClient createHttpClient(SecurityContext? context){
@@ -47,11 +48,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   // await dep.init();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+   MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -69,45 +70,45 @@ class MyApp extends StatelessWidget {
           fontFamily: 'AbeeZee',
         ),
         routes: {
-          '/Login': (_) => const LoginPage(),
+          '/Login': (_) =>  LoginPage(),
           '/Register': (_) => RegisterPage(),
-          '/AdminHome': (_) => const AdminHomePage(),
-          '/RegisterPesquisa': (_) => const RegisterPesquisa(),
-          '/EditPesquisa': (_) => const EditPesquisa(),
+          '/RegisterConfirmation': (_) => RegisterConfimation(),
+          '/AdminHome': (_) =>  AdminHomePage(),
+          '/RegisterPesquisa': (_) =>  RegisterPesquisa(),
+          '/EditPesquisa': (_) =>  EditPesquisa(),
           '/PassWordRecover': (_) => RecuperarSenha(),
           '/ConfirmarCodigo': (_) => ConfirmarCodigo(),
           '/MudarSenha': (_) => MudarSenha(),
-          '/NewPassword': (_) => const ConfirmacaoNovaSenha(),
+          '/NewPassword': (_) =>  ConfirmacaoNovaSenha(),
           '/ConfirmarSenha':(_) =>  ConfirmarCodigo(),
-          '/PesquisadorHome': (_) => const PesquisadorHome(),
+          '/PesquisadorHome': (_) =>  PesquisadorHome(),
           '/Pesquisas': (_) =>    Pesquisas(),
-          '/FormA': (_) => const FormularioA(),
-          '/FormB': (_) => const FormularioB(),
-          '/FormC': (_) => const FormularioC(),
-          '/A': (_) => const A(),
-          '/PerfilPesquisador': (_) => const ContaPesquisador(),
-          '/AlterarDados': (_) => const AlterarCadastro(),
-          '/MeiosDeHospedagem': (_) => const MeiosDeHospedagem(),
-          '/Placeholder': (_) => const PlaceHolder(),
-          '/AlimentosEbebidas': (_) => const AlimentoseBebidas(),
-          '/Rodovia': (_) => const Rodovia(),
-          '/SistemaDeSeguranca': (_) => const SistemaDeSeguranca(),
-          '/ZonaCosteira': (_) => const ZonaCosteira(),
-          '/Hidrografia': (_) => const Hidrografia(),
-          '/SendedForm': (_) => const SendedFormPage(),
-          '/UpdatedForm': (_) => const UpdatedForm(),
+          '/FormA': (_) =>  FormularioA(),
+          '/FormB': (_) =>  FormularioB(),
+          '/FormC': (_) =>  FormularioC(),
+          '/A': (_) =>  A(),
+          '/AlterarDados': (_) =>  AlterarCadastro(),
+          '/MeiosDeHospedagem': (_) =>  MeiosDeHospedagem(),
+          '/Placeholder': (_) =>  PlaceHolder(),
+          '/AlimentosEbebidas': (_) =>  AlimentoseBebidas(),
+          '/Rodovia': (_) =>  Rodovia(),
+          '/SistemaDeSeguranca': (_) =>  SistemaDeSeguranca(),
+          '/ZonaCosteira': (_) =>  ZonaCosteira(),
+          '/Hidrografia': (_) =>  Hidrografia(),
+          '/SendedForm': (_) =>  SendedFormPage(),
+          '/UpdatedForm': (_) =>  UpdatedForm(),
         },
-        localizationsDelegates: const [
+        localizationsDelegates:  [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate
         ],
-        supportedLocales: const [
+        supportedLocales:  [
           Locale('pt')
         ],   
-        home: const LoginPage(),
+        home:  LoginPage(),
       ),
-      designSize: const Size(1344, 2992),
+      designSize:  Size(1344, 2992),
     );
   }
 }

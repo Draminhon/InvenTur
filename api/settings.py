@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apidjango',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+     'rest_framework_simplejwt.token_blacklist',
 ]
  
 AUTH_USER_MODEL =  'apidjango.CustomUser'
@@ -55,7 +56,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,

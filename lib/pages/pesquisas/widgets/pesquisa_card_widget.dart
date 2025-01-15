@@ -53,7 +53,8 @@ class _PesquisaCardState extends State<PesquisaCard> {
                         'codigoIBGE': _pesquisa.codigoIBGE,
                         'municipio': _pesquisa.municipio,
                         'estado': _pesquisa.estado,
-                        'pesquisadores': _pesquisa.userId
+                        'pesquisadores': _pesquisa.userId,
+                        'admin_id': _pesquisa.adminId
 
                       });
                       print(_pesquisa.municipio);

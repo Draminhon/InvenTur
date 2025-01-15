@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class AppConstants {
   static const String APP_NAME = "InvenTur";
   static int APP_VERSION = 1;
@@ -11,4 +13,6 @@ class AppConstants {
   static const String RODOVIA_GET = "/api/v1/rodovia/get";
   static const String SET_PESQUISA_STATUS = "/api/v1/pesquisa/status/update/<int:pk>/";
   static const String TOKEN = "DBtoken";
+
+  static const Color MAIN_GREEN = Color.fromARGB(255, 55, 111, 60);
 }

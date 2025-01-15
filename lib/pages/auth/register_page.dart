@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:inventur/pages/auth/register_confirmation.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/validators/cpf_validator.dart';
@@ -9,6 +10,7 @@ import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 
@@ -66,6 +68,9 @@ class _RegisterPageState extends State<RegisterPage> {
     
     if(response.statusCode == 201){
       print('Usuario registrado com sucesso');
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
+        return RegisterConfimation();
+      }));
     }else{
       print('Erro ao registrar o usuário: ${response.body}');    }
 
@@ -86,39 +91,42 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Form(
         key: _formKey3,
         child: SafeArea(
+
           child: SingleChildScrollView(
+            padding: EdgeInsets.only(top: 150.h),
             reverse: true,
             child: SizedBox(
               width: screenSize.width,
-              height: screenSize.height - MediaQuery.paddingOf(context).top,
               child: Stack(
                 children: [
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(top: screenSize.height * .07),
-                          child: Center(
-                            child: Image.asset(
-                              'assets/images/logo.png',
-                              height: screenSize.height * 0.35,
-                            ),
-                          ),
-                        ),
-                      ),
+                      
+                      Text('Cadastro', style: TextStyle(color: const Color.fromARGB(255, 55, 111, 60), fontSize: 90.h),),
+                      const Text('Preencha os campos com suas informações.'),
+                              SizedBox(height: paddingBottomTextField),
+                    
+                      const Divider(color:const Color.fromARGB(255, 55, 111, 60),thickness: 1.5, endIndent: 30,indent: 30,),
+                              SizedBox(height: paddingBottomTextField),
+                     
                       Container(
                         padding: const EdgeInsets.only(
                           left: 20,
                           right: 20,
                           bottom: 20,
                         ),
+                        
                         child: Form(
                           key: _formKey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
+                              const Text('Nome',style: TextStyle(fontWeight: FontWeight.bold)),
+                              SizedBox(height: paddingBottomTextField),
+                              
                               CustomTextField(
-                                labelText: 'Nome Completo',
+                                labelText: 'Insira seu nome completo',
                                 controller: _nameController,
                                 prefixIcon: Icons.person,
                                  validator: (name) {
@@ -126,8 +134,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                  },
                               ),
                               SizedBox(height: paddingBottomTextField),
+                              const Text('CPF',style: TextStyle(fontWeight: FontWeight.bold)),
+                              SizedBox(height: paddingBottomTextField),
+
                               CustomTextField(
-                                labelText: 'CPF',
+                                labelText: 'Insira seu CPF',
                                 controller: _cpfController,
                                 keyboardType: TextInputType.number,
                                 prefixIcon: FontAwesomeIcons.solidAddressCard,
@@ -137,8 +148,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                 inputFormatters: [cpfMask],
                               ),
                               SizedBox(height: paddingBottomTextField),
+                              const Text('Email',style: TextStyle(fontWeight: FontWeight.bold)),
+                              SizedBox(height: paddingBottomTextField),
+
                               CustomTextField(
-                                labelText: 'E-mail',
+                                labelText: 'Insira seu email',
                                 controller: _emailController,
                                 prefixIcon: FontAwesomeIcons.solidEnvelope,
                                 keyboardType: TextInputType.emailAddress,
@@ -147,8 +161,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                  },
                               ),
                               SizedBox(height: paddingBottomTextField),
+                              const Text('Senha', style: TextStyle(fontWeight: FontWeight.bold)),
+                              SizedBox(height: paddingBottomTextField),
+
                               CustomTextField(
-                                labelText: 'Senha',
+                                labelText: 'Insira sua senha',
                                 prefixIcon: Icons.lock, 
                                 controller: _passwordController, 
                                 isSecret: true,
@@ -157,8 +174,11 @@ class _RegisterPageState extends State<RegisterPage> {
                                  }, 
                               ),
                               SizedBox(height: paddingBottomTextField),
+                              const Text('Confirmar Senha', style: TextStyle(fontWeight: FontWeight.bold),),
+                              SizedBox(height: paddingBottomTextField),
+
                                 CustomTextField(
-                                labelText: 'Confirmar Senha',
+                                labelText: 'Confirme sua senha',
                                 prefixIcon: Icons.lock, 
                                 controller: _passwordController2, 
                                 isSecret: true,
@@ -171,7 +191,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   return null;
                                  }, 
                               ),
-                              SizedBox(height: paddingBottomTextField),
+                              SizedBox(height: 160.h),
 
                               SizedBox(
                                 height: screenSize.height * .07,
@@ -194,6 +214,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       Colors.green[600]
                                     )
                                   ),
+                                  
                                   onPressed: () async {
 
                                     if(_formKey.currentState!.validate()){
@@ -206,7 +227,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                                       final result = await registerUser(username, cpf, email, password);
                                       await Future.delayed(const Duration(milliseconds: 500));
-                                       Navigator.pop(context);
 
                                     }
 
@@ -228,7 +248,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                   Positioned(
-                    top: 50,
+                    top: 20,
                     left: 8,
                     child: SafeArea(
                       child: IconButton(

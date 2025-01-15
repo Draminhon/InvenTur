@@ -2,21 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/home/Administrador/account_page.dart';
 import 'package:inventur/pages/controllers/user_controller.dart';
-
+import 'package:inventur/pages/home/Pesquisador/perfil_pesquisador.dart';
+import 'package:inventur/utils/app_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 class OptionsDrawer extends StatelessWidget {
   final UserController userController;
+  final String userName;
+  final String userEmail;
+  final String cpf;
+  const OptionsDrawer({super.key, required this.userController, required this.userName, required this.userEmail, required this.cpf});
 
-  const OptionsDrawer({super.key, required this.userController});
+
+Future<void> logout(BuildContext context) async {
+  final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('acess_token');
+
+  final response = await http.post(
+    Uri.parse('${AppConstants.BASE_URI}/api/v1/logout/'),
+    headers: {'Authorization': 'Bearer $token'},
+  );
+
+  if(response.statusCode == 205){
+    await prefs.clear();
+    Navigator.pushReplacementNamed(context, '/Login');
+  }else{
+    print('Erro ao fazer logout: ${response.body}');
+  }
+}
+  
 
   @override
   Widget build(BuildContext context) {
+    print(userName);
     return Drawer(
       backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       child: Column(
         children: [
-          const UserAccountsDrawerHeader(
-            accountName: Text('accountName'), 
-            accountEmail: Text('accountEmail'),
+           UserAccountsDrawerHeader(
+            accountName: Text(userName), 
+            accountEmail: Text(userEmail),
             currentAccountPicture: CircleAvatar(
               child: Icon(
                 Icons.admin_panel_settings,
@@ -35,9 +61,7 @@ class OptionsDrawer extends StatelessWidget {
             ),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => AccountPage(
-                  userControllerNotifier: userController,
-                ),
+                builder: (context) => ContaPesquisador(userName: userName, userEmail: userEmail, userCPF: cpf,)
               ),
             ),
             child: const Row(
@@ -78,7 +102,9 @@ class OptionsDrawer extends StatelessWidget {
               foregroundColor: const WidgetStatePropertyAll(Colors.red),
               overlayColor: WidgetStatePropertyAll(Colors.red[100])
             ),
-            onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
+            onPressed: () async {
+              logout(context);
+            },
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

@@ -47,7 +47,7 @@ admin.site.register(Rodovia, RodoviaAdmin)
 class PesquisasAdmin(admin.ModelAdmin):
     ordering = ['id']
 
-    list_display = ['id', 'admin', 'codigoIBGE', 'estado', 'municipio', 'display_usuario']
+    list_display = ['id', 'dataInicio', 'dataTermino', 'admin', 'codigoIBGE', 'estado', 'municipio', 'display_usuario']
 
     def display_usuario(self, obj):
         return ", ".join(str(user) for user in obj.usuario.all())

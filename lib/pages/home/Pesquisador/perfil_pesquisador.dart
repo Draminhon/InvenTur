@@ -2,7 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ContaPesquisador extends StatelessWidget {
-  const ContaPesquisador({super.key});
+  final String userName;
+  final String userEmail;
+  final String userCPF;
+  const ContaPesquisador({super.key, required this.userName, required this.userEmail, required this.userCPF});
+
+  String formatCPF(String cpf){
+    if(cpf.length != 11){
+      return cpf;
+    }
+    return '${cpf.substring(0,3)}.${cpf.substring(3,6)}.${cpf.substring(6, 9)}-${cpf.substring(9, 11)}';
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +33,8 @@ class ContaPesquisador extends StatelessWidget {
             
             padding: EdgeInsets.only(top: screenSize.height * 0.03),
             child:  Column(mainAxisAlignment: MainAxisAlignment.end,children: [
-              const Text(
-                'Fulano da Silva',
+               Text(
+                userName,
                 style: TextStyle(
                   fontSize: 20,
                 ),
@@ -43,7 +54,7 @@ class ContaPesquisador extends StatelessWidget {
                Row(mainAxisAlignment: MainAxisAlignment.start,children:[
               const Icon(FontAwesomeIcons.solidEnvelope, color: Color.fromARGB(255, 55, 111, 60),),
               Padding(padding: EdgeInsets.only(left: screenSize.width * 0.02), child: 
-              const Text('fulanodasilva@gmail.com', style: TextStyle(fontSize: 18),)
+               Text(userEmail, style: TextStyle(fontSize: 18),)
               )
              ],),
 
@@ -51,7 +62,7 @@ class ContaPesquisador extends StatelessWidget {
               Row(mainAxisAlignment: MainAxisAlignment.start,children: [
               const Icon(FontAwesomeIcons.solidAddressCard, color: Color.fromARGB(255, 55, 111, 60),),
               Padding(padding: EdgeInsets.only(left: screenSize.width * 0.02)),
-              const Text('123.456.789-10',  style: TextStyle(fontSize: 18),)
+               Text(formatCPF(userCPF),  style: TextStyle(fontSize: 18),)
             
              ],)
              ]),
