@@ -12,6 +12,30 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranc
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia_edit.dart';
 
+
+Future updateQtdeLocais(int pesquisa, int quantidade) async{
+
+  var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/update/${pesquisa}');
+
+  try{
+    var response = await http.patch(url, headers: {
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode({
+      'quantidadeLocais': quantidade
+    })
+    );
+
+      if (response.statusCode == 200) {
+      print('Quantidade de locais atualizada com sucesso: ${response.body}');
+    } else {
+      print('Erro ao atualizar: ${response.statusCode} - ${response.body}');
+    }
+  } catch (e) {
+    print('Erro na requisição: $e');
+  }
+  }
+
 class A extends StatefulWidget {
   const A({super.key});
 
@@ -30,6 +54,7 @@ class _A extends State<A> {
     super.initState();
     pc = PageController(initialPage: paginaAtual);
   }
+
 
   setPaginaAtual(pagina) {
     setState(() {
@@ -207,11 +232,13 @@ Widget showRodovias(List<Map<String, dynamic>> posts) {
       
         final tipo = equipamento['tipo'];
         final dados = equipamento['dados'];
+            print(posts.length);
+           print(dados['pesquisa']);
         
         return GestureDetector(
           onTap: () {
-           // debugPrint(jsonEncode(equipamento));
-            
+          updateQtdeLocais(dados['pesquisa'], posts.length);
+
             if(equipamento['tipo'] == 'Rodovia'){
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> RodoviaEdit(rodoviaModel: RodoviaModel.fromJson(equipamento['dados']),)));
             }else if(equipamento['tipo'] == 'SistemaDeSeguranca'){

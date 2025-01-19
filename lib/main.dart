@@ -10,8 +10,10 @@ import 'package:inventur/pages/controllers/rodovia_controller.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%C3%A7a.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsC/hidrografia.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/updatedForm.dart';
 import 'package:inventur/pages/pesquisas/edit_pesquisa.dart';
 import 'package:inventur/pages/pesquisas/register_pesquisa_page.dart';
 import 'package:inventur/pages/recover/changepasswordsucess_page.dart';
@@ -25,14 +27,12 @@ import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
 import 'package:inventur/pages/home/Pesquisador/perfil_pesquisador.dart';
 import 'package:inventur/pages/home/Pesquisador/alterarDados-pesquisador.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosDeHospedagem.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/placeholder.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas.dart';
  import 'dart:io';
 import 'pages/home/Pesquisador/forms/formsC/zonaCosteira.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/helper/dependencies.dart' as dep;
-import 'package:inventur/pages/home/Pesquisador/forms/UpdatedForm.dart';
 class MyHttpOverrides extends HttpOverrides{
   @override
   HttpClient createHttpClient(SecurityContext? context){

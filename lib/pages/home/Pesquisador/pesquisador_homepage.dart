@@ -43,6 +43,11 @@ class PesquisadorHome extends StatefulWidget {
 }
 
 class _PesquisadorHomeState extends State<PesquisadorHome> {
+
+
+
+
+
   static Future<List<Pesquisa>> getPesquisas() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -242,6 +247,7 @@ Widget showPesquisas(List<Pesquisa> posts) {
         final post = filteredPosts[index];
         return GestureDetector(
           onTap: () {
+
             savePesquisaId(post.id);
 
             Navigator.pushNamed(context, '/Pesquisas',
