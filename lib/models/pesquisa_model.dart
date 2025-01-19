@@ -35,7 +35,7 @@ class Pesquisa {
         municipio = json['municipio'],
         dataInicio = json['dataInicio'],
         dataTermino = json['dataTermino'],
-        quantidadeLocais = json['quantidadeLocais' ?? 0],
+        quantidadeLocais = json['quantidadeLocais'],
         quantidadePesquisadores = json['quantidadePesquisadores'],
         status = json['status'];
 

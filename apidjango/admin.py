@@ -12,6 +12,44 @@ class CustomUserAdmin(admin.ModelAdmin):
     display_pesquisas.short_description = "Pesquisas"
 admin.site.register(CustomUser, CustomUserAdmin)
 
+class ContatoInfoAdmin(admin.ModelAdmin):
+    ordering = ['id']
+    list_display = ['id', 'nome', 'endereco', 'whatsapp', 'email']
+    search_fields = ['nome', 'email', 'whatsapp']
+    list_filter = ['endereco']
+
+class ServicoEspecializadoInfoAdmin(admin.ModelAdmin):
+    ordering = ['id']
+    list_display = ['id', 'email', 'servicos_especializados', 'outras_informacoes']
+    search_fields = ['email', 'servicos_especializados']
+    list_filter = ['email']
+
+class SistemaDeSegurancaAdmin(admin.ModelAdmin):
+    ordering = ['id']
+    list_display = [
+        'id', 'display_pesquisas', 'get_contatos_ids', 'get_servicos_ids',
+        'tipo_formulario', 'uf', 'regiao_turistica', 'municipio',
+        'tipo', 'observacoes', 'referencias',
+        'nome_pesquisador', 'telefone_pesquisador', 'email_pesquisador',
+        'nome_coordenador', 'telefone_coordenador', 'email_coordenador'
+    ]
+    def display_pesquisas(self, obj):
+        # Exibe as pesquisas associadas ao usuário como uma string
+        return str(obj.pesquisa.id) if obj.pesquisa else "Nenhuma pesquisa associada"
+    display_pesquisas.short_description = "Pesquisa"    
+
+    @admin.display(description='Contatos (IDs)')
+    def get_contatos_ids(self, obj):
+        return ", ".join(str(c.id) for c in obj.contatos.all())
+
+    @admin.display(description='Serviços Especializados (IDs)')
+    def get_servicos_ids(self, obj):
+        return ", ".join(str(s.id) for s in obj.servicos_especializados.all())
+
+# Registering models
+admin.site.register(SistemaDeSeguranca, SistemaDeSegurancaAdmin)
+admin.site.register(ContatoInfo, ContatoInfoAdmin)
+admin.site.register(ServicoEspecializadoInfo, ServicoEspecializadoInfoAdmin)
 
 class RodoviaAdmin(admin.ModelAdmin):
     ordering = ['id']

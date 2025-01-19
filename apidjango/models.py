@@ -67,7 +67,7 @@ class Pesquisa(models.Model):
 
     status = models.CharField(max_length=50, default='Não Iniciado')
     
-    quantidadeLocais = models.IntegerField(default=10)
+    quantidadeLocais = models.IntegerField(default=0)
 
     is_active = models.BooleanField(default=True)
 
@@ -112,10 +112,31 @@ class Inventariacao(models.Model):
 
 
 class SistemaDeSeguranca(Base):
-   nome = models.CharField(max_length=255,default='01' )
-   endereco = models.CharField(max_length=255, default='01')
-   whatsapp = models.CharField(max_length=50, default='01')
-   email = models.CharField(max_length=100, default='01')
+    contatos = models.ManyToManyField("ContatoInfo", related_name="sistemas_de_seguranca")
+    servicos_especializados = models.ManyToManyField("ServicoEspecializadoInfo", related_name="sistemas_de_servicos_especializados")
+
+class ContatoInfo(models.Model):
+
+    sistema_de_seguranca = models.ManyToManyField("SistemaDeSeguranca", related_name="contatos_info")
+
+
+    nome = models.CharField(max_length=255)
+    endereco = models.CharField(max_length=255)
+    whatsapp = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+
+class ServicoEspecializadoInfo(models.Model):
+    
+    sistema_de_seguranca = models.ManyToManyField("SistemaDeSeguranca", related_name="servicos_info")
+
+
+    email = models.CharField(max_length=255)
+    servicos_especializados = models.TextField()
+    outras_informacoes = models.TextField()
+
+
+    
+    
 
 class Rodovia(Base):
 

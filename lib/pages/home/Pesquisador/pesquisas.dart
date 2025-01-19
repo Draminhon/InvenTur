@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:inventur/models/rodovia_model.dart';
+import 'package:inventur/models/sistema_de_seguranca_model.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranca_edit.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia_edit.dart';
 
@@ -202,14 +204,19 @@ Widget showRodovias(List<Map<String, dynamic>> posts) {
       itemCount: posts.length,
       itemBuilder: (context, index) {
         final equipamento = posts[index];
+      
         final tipo = equipamento['tipo'];
         final dados = equipamento['dados'];
+        
         return GestureDetector(
           onTap: () {
            // debugPrint(jsonEncode(equipamento));
             
             if(equipamento['tipo'] == 'Rodovia'){
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> RodoviaEdit(rodoviaModel: RodoviaModel.fromJson(equipamento['dados']),)));
+            }else if(equipamento['tipo'] == 'SistemaDeSeguranca'){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> SistemaDeSegurancaEdit(sistemaModel: SistemaDeSegurancaModel.fromJson(equipamento['dados']),)));
+
             }
           },
           child: Container(
@@ -220,14 +227,17 @@ Widget showRodovias(List<Map<String, dynamic>> posts) {
 
             ),
             margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
-            padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 15.w),
+            padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 50.w),
             height: 250.h,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  '${dados['nome_oficial'] ?? ''} - ${tipo}',
-                  style: TextStyle(fontSize: 60.w),
+                Flexible(
+                  child: Text(
+                    '${dados['municipio'] ?? ''} - ${dados['tipo_formulario']}',
+                    style: TextStyle(fontSize: 60.w),
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),

@@ -39,11 +39,13 @@ class _RadioState extends State<RadioB> {
 }
 
 class RadioC extends StatefulWidget {
+  final String? indexModel;
+
   const RadioC(
       {super.key,
       required this.number,
       required this.options,
-      required this.getValue});
+      required this.getValue, this.indexModel});
   final List<String> options;
   final int number;
   final Function(String) getValue;
@@ -52,6 +54,23 @@ class RadioC extends StatefulWidget {
 }
 
 class _RadioStateC extends State<RadioC> {
+  int? _value;
+  @override
+  void initState() {
+  print(widget.indexModel);
+
+    super.initState();
+        if(widget.indexModel != null){
+    _value = widget.options.indexOf(widget.indexModel!);
+    widget.getValue(widget.indexModel!);
+     // widget.getValue(widget.options[i]);
+        if(_value == -1){
+          _value = null;
+        }
+
+    }
+  }
+
   int? _groupValue;
   bool _isExpanded = false;
   @override
@@ -75,13 +94,13 @@ class _RadioStateC extends State<RadioC> {
                         overflow: TextOverflow.ellipsis))),
             leading: Radio<int>(
               value: i,
-              groupValue: _groupValue,
+              groupValue: _value,
               onChanged: i == widget.number
                   ? null
                   : (value) {
                       setState(() {
                         if (value != null) {
-                          _groupValue = value;
+                          _value = value;
                         }
                         widget.getValue(widget.options[i]);
                       });
@@ -101,13 +120,13 @@ class _RadioStateC extends State<RadioC> {
                         overflow: TextOverflow.ellipsis))),
             leading: Radio<int>(
               value: i,
-              groupValue: _groupValue,
+              groupValue: _value,
               onChanged: i == widget.number
                   ? null
                   : (value) {
                       setState(() {
                         if (value != null) {
-                          _groupValue = value;
+                          _value = value;
                         }
                         widget.getValue(widget.options[i]);
                       });

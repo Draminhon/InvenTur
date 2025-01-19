@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:inventur/models/sistema_de_seguranca_model.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
@@ -12,37 +14,45 @@ import '../formsB/widgets/sendButton.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class SistemaDeSeguranca extends StatefulWidget {
-  SistemaDeSeguranca({super.key});
+class SistemaDeSegurancaEdit extends StatefulWidget {
+  
+  final SistemaDeSegurancaModel? sistemaModel;
+  SistemaDeSegurancaEdit({super.key, this.sistemaModel});
 
   @override
-  State<SistemaDeSeguranca> createState() => _SistemaDeSegurancaState();
+  State<SistemaDeSegurancaEdit> createState() => _SistemaDeSegurancaEditState();
 }
+final GlobalKey<CheckCState> checkCKey = GlobalKey<CheckCState>();
 
-Future<void> sendForm(Map<String, dynamic> valoresjson) async {
-  final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('acess_token');
-  final url = Uri.parse(AppConstants.BASE_URI + '/api/v1/sistemaseguranca/create/');
-  int? pesquisa_id = await getPesquisaId();
+    Future<void> updateSistemaDeSeguranca(int sistemaId, Map<String, dynamic> data) async{
 
-  try {
-    valoresjson['pesquisa'] = pesquisa_id;
-    final response = await http.post(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
+      final prefs =  await SharedPreferences.getInstance();
+      String? token = prefs.getString('acess_token');
+
+      final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/sistemadeseguranca/update/$sistemaId');
+
+  print('OSIADOAOSD ${token}');
+
+      try{
+      final response = await http.patch(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
         },
-        body: json.encode(valoresjson));
-    if (response.statusCode == 201) {
-      debugPrint("Formulário enviado com sucesso!");
-    } else {
-      debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
-    }
-  } catch (e) {
-    print('Erro: $e');
-  }
-}
+        body: json.encode(data),
+      );
+      if(response.statusCode == 200){
+        print("Atualização bem-sucedida");
+      }else{
+        print("Erro na atualização: ${response.statusCode}");
+      }
+      }catch(e){
+        print('Erro: $e');
+      }
 
-class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
+    }
+
+class _SistemaDeSegurancaEditState extends State<SistemaDeSegurancaEdit> {
   TextEditingController email_coordenador = TextEditingController();
   TextEditingController email_pesquisador = TextEditingController();
   TextEditingController municipio = TextEditingController();
@@ -72,22 +82,128 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
     'telefone_coordenador': '4444',
     'email_coordenador': 'ogaio@gmail.com',
   };
+  int qtdeInfo = 0;
+  int qtdeServicosEspecializados = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    autoFillForm();
+   if (widget.sistemaModel!.contatos != null) {
+    qtdeInfo = widget.sistemaModel!.contatos!.length;
+    qtdeServicosEspecializados = widget.sistemaModel!.contatos!.length;
+
+   }
+
+   if(qtdeInfo>=0){
+      for(int i = 1; i<qtdeInfo;i++){
+
+           sections.add(Tables());
+
+      }
+      for(int i = 0; i<qtdeInfo; i++){
+             if(i < widget.sistemaModel!.contatos!.length){
+        var contato = widget.sistemaModel!.contatos![i];
+        sections[i].fillForm(contato.nome!, contato.endereco!, contato.whatsapp!, contato.email!);
+      }
+       
+      }
+ 
+   }
+
+   if(qtdeServicosEspecializados>=0){
+    for(int i =1; i<qtdeServicosEspecializados;i++){
+      sections2.add(Tables2());
+    }
+
+          for(int i = 0; i<qtdeServicosEspecializados; i++){
+             if(i < widget.sistemaModel!.servicosEspecializados!.length){
+        var servicos = widget.sistemaModel!.servicosEspecializados![i];
+        sections2[i].fillForm(servicos.email!, servicos.servicosEspecializados!, servicos.outrasInformacoes!);
+      }
+       
+      }
+   }
+  }
+
 
   final _formKey = GlobalKey<FormState>();
 
   void autoFillForm() {
-    uf.text = 'CE';
-    regiao_turistica.text = 'Flores e Mel';
-    municipio.text = 'Viçosa do Ceará';
-    tipo.text = 'Rodovia';
-    observacoes.text = 'ABCDEFGHIJKLMNOPQRSTUVWXZ';
-    referencias.text = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    nome_pesquisador.text = 'Murilo';
-    telefone_pesquisador.text = '40028922';
-    email_pesquisador.text = 'murilo@gmail.com';
-    nome_coordenador.text = 'Raquel';
-    telefone_coordenador.text = '202115599';
-    email_coordenador.text = 'raquelsilveira@gmail.com';
+    if(widget.sistemaModel!.uf != null){
+    uf.text = widget.sistemaModel!.uf!;
+    }else{
+      uf.text = '';
+    }
+
+    if(widget.sistemaModel!.regiaoTuristica !=null){
+      regiao_turistica.text = widget.sistemaModel!.regiaoTuristica!;
+    }else{
+      regiao_turistica.text = '';
+    }
+
+    if(widget.sistemaModel!.municipio !=null){
+      municipio.text = widget.sistemaModel!.municipio!;
+    }else{
+      municipio.text = '';
+    }
+
+    if(widget.sistemaModel!.tipo !=null){
+      tipo.text = widget.sistemaModel!.tipo!;
+    }else{
+      tipo.text = '';
+    }
+
+    if(widget.sistemaModel!.observacoes !=null){
+      observacoes.text = widget.sistemaModel!.observacoes!;
+    }else{
+      observacoes.text = '';
+    }
+
+    if(widget.sistemaModel!.referencias !=null){
+      referencias.text = widget.sistemaModel!.referencias!;
+    }else{
+      referencias.text = '';
+    }
+    
+    
+if (widget.sistemaModel!.nomePesquisador != null) {
+  nome_pesquisador.text = widget.sistemaModel!.nomePesquisador!;
+} else {
+  nome_pesquisador.text = '';
+}
+
+if (widget.sistemaModel!.telefonePesquisador != null) {
+  telefone_pesquisador.text = widget.sistemaModel!.telefonePesquisador!;
+} else {
+  telefone_pesquisador.text = '';
+}
+
+if (widget.sistemaModel!.emailPesquisador != null) {
+  email_pesquisador.text = widget.sistemaModel!.emailPesquisador!;
+} else {
+  email_pesquisador.text = '';
+}
+
+if (widget.sistemaModel!.nomeCoordenador != null) {
+  nome_coordenador.text = widget.sistemaModel!.nomeCoordenador!;
+} else {
+  nome_coordenador.text = '';
+}
+
+if (widget.sistemaModel!.telefoneCoordenador != null) {
+  telefone_coordenador.text = widget.sistemaModel!.telefoneCoordenador!;
+} else {
+  telefone_coordenador.text = '';
+}
+
+if (widget.sistemaModel!.emailCoordenador != null) {
+  email_coordenador.text = widget.sistemaModel!.emailCoordenador!;
+} else {
+  email_coordenador.text = '';
+}
+
+
   }
 
   void dispose() {
@@ -110,9 +226,13 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
+
+
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+
           iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Color.fromARGB(255, 55, 111, 60),
           title: Text(
@@ -204,6 +324,8 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                       getValue: (newValue) {
                         valoresjson['tipo'] = newValue;
                       },
+                    indexModel: widget.sistemaModel!.tipo,
+
                       number: 10,
                     ),
                     SizedBox(
@@ -445,17 +567,17 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                       child: ElevatedButton(
                         
                         onPressed: () {
+
                           valoresjson['contatos'] = sections.map((element) => element.getData()).toList();
                           valoresjson['servicos_especializados'] = sections2.map((element) => element.getData()).toList();
-                           autoFillForm();
                          if (_formKey.currentState!.validate()) {
                         //  ScaffoldMessenger.of(context).showSnackBar(
                         //      SnackBar(content: Text('processing data')));
                         
                         _formKey.currentState!.save();
-                         debugPrint(valoresjson.toString(), wrapWidth: 1024);
-                        sendForm(valoresjson);
-                        sections2.forEach((element) => print(element.getData()));
+                        updateSistemaDeSeguranca(widget.sistemaModel!.id!, valoresjson);
+                   Navigator.pushReplacementNamed(context, '/UpdatedForm');
+
                       
                      }
 

@@ -178,12 +178,9 @@ def UsuarioLoginView(request):
 class SistemaDeSegurancaListCreateAPIView(generics.ListCreateAPIView):
     queryset = SistemaDeSeguranca.objects.all()
     serializer_class = SistemaDeSegurancaSerializer
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return HttpResponse(serializer.data, status = status.HTTP_201_CREATED, headers=headers) 
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 class RodoviaListCreateAPIView(generics.ListCreateAPIView):
     queryset = Rodovia.objects.all()
@@ -290,6 +287,14 @@ class RodoviaUpdateAPIView(generics.UpdateAPIView):
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
     
+class SistemaDeSegurancaUpdateAPIView(generics.UpdateAPIView):
+    queryset = SistemaDeSeguranca.objects.all()
+    serializer_class = SistemaDeSegurancaSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+
 class StatusUpdateAPIView(generics.UpdateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer

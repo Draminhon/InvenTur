@@ -104,6 +104,7 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
 
   @override
   Widget build(BuildContext context) {
+
     final sizeScreen = MediaQuery.sizeOf(context);
     DateTime now = DateTime.now();
     var inputFormat = DateFormat('dd/MM/yyyy');
@@ -184,6 +185,7 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
                     }
                     return showPesquisas(pesquisa);
                   } else {
+                    
                       return Container(
                     margin: EdgeInsets.only(top: 1000.h),
                     padding: EdgeInsets.only(left: 50.w),
