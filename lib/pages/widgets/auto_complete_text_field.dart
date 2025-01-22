@@ -6,14 +6,14 @@ class AutocompleteTextField extends StatelessWidget {
   final AutocompleteOptionsBuilder<String> optionsBuilder;
   final Function(String value)? onChanged;
   final TextEditingController? controllerAuto;
-
+  final TextAlign? textAlign;
   const AutocompleteTextField({
     super.key,
     this.onChanged,
     required this.label,
     required this.onSelected,
     required this.optionsBuilder,
-    this.controllerAuto,
+    this.controllerAuto, this.textAlign,
   });
 
   @override
@@ -90,7 +90,7 @@ class AutocompleteTextField extends StatelessWidget {
 
           return TextField(
             focusNode: focusNode,
-            textAlign: TextAlign.end,
+            textAlign: textAlign ?? TextAlign.end,
             controller: textEditingController,
             decoration: InputDecoration(
               filled: true,

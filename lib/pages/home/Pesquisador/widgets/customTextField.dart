@@ -21,7 +21,7 @@ class CustomTextField extends StatelessWidget {
     return Padding(
         padding: EdgeInsets.only(
           left: sizeScreen.width * 0.02,
-          right: sizeScreen.width * 0.02,
+          right: sizeScreen.width * 0.025,
           top: sizeScreen.height * 0.023,
         ),
 

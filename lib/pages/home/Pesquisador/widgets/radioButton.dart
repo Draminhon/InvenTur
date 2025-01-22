@@ -227,7 +227,6 @@ class _RadioStateD extends State<RadioD> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ExpansionTile(
-          shape: Border(),
           trailing: Icon(_isExpanded ? Icons.expand_less : Icons.expand_circle_down, color: Color.fromARGB(255, 55, 111, 60),),
           collapsedIconColor: Color.fromARGB(255, 55, 111, 60),
           onExpansionChanged: (bool expanded){
@@ -235,7 +234,9 @@ class _RadioStateD extends State<RadioD> {
               _isExpanded = expanded;
             });
           },
+
           collapsedBackgroundColor: Colors.grey[200],
+          shape: Border(),
             title: const Text(
               'OPÇÕES',
               style: TextStyle(color: Color.fromARGB(255, 55, 111, 60), fontWeight: FontWeight.bold),
@@ -243,7 +244,6 @@ class _RadioStateD extends State<RadioD> {
             tilePadding: EdgeInsets.only(
                 left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
             children: [
-              Divider(color: Colors.grey),
               for (int i = 0; i < widget.options.length; i++)
               
                 Padding(
@@ -272,7 +272,6 @@ class _RadioStateD extends State<RadioD> {
                         toggleable: true,
                       )),
                 ),
-                Divider(color: Colors.grey)
             ]),
            
         _value == widget.options.indexOf('outro')

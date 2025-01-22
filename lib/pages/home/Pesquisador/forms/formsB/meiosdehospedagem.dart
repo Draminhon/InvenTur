@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inventur/models/estado_model.dart';
+import 'package:inventur/models/pais_model.dart';
+import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/apis/estados.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.dart';
@@ -8,6 +12,8 @@ import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/expandedTileYoN.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/apis/paises.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
+import 'package:inventur/pages/widgets/auto_complete_text_field.dart';
 
 class MeiosDeHospedagem extends StatefulWidget {
    MeiosDeHospedagem({super.key});
@@ -16,13 +22,30 @@ class MeiosDeHospedagem extends StatefulWidget {
   State<MeiosDeHospedagem> createState() => _MeiosDeHospedagemState();
 }
 
+
+
 class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
   final _formKey = GlobalKey<FormState>();
+  late Estado? _estadoSelecionado = Estado(id: -1, sigla: '', nome: '');
+  late Pais? _paisSelecionado = Pais( nome: '');
+  final PesquisaController _pesquisaController = PesquisaController();
+  final TextEditingController _estadoController = TextEditingController();
+  final TextEditingController _paisController = TextEditingController();
+
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _pesquisaController.setEstados();
+    _pesquisaController.setPaises();
+
+  }
 
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
+      backgroundColor: Colors.white,
         appBar: AppBar(
           backgroundColor:  Color.fromARGB(255, 55, 111, 60),
           title:  Text(
@@ -86,12 +109,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     },
                     decoration:  InputDecoration(hintText: 'Município'),
                   )),
-             textLabel(name: 'Tipo:'),
+             textLabel(name: 'Tipo:', fontWeight: FontWeight.bold,),
               Padding(
                 padding: EdgeInsets.only(left: sizeScreen.width * 0.12),
                 child:  RadioB(name: 'Hotelaria e apoio', getValue: (newValue ) {  },),
               ),
-               textLabel(name: 'Subtipos:'),
+               textLabel(name: 'Subtipos:', fontWeight: FontWeight.bold),
 
               RadioC(number: 18, options:  [
                 'Hotel',
@@ -203,7 +226,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
             
            
-                textLabel(name: 'Natureza:'),
+                textLabel(name: 'Natureza:', fontWeight: FontWeight.bold),
           
                Column(
                 children: [
@@ -214,7 +237,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
 
                textLabel(
-                name: 'Tipo de organização/instituição:',
+                name: 'Tipo de organização/instituição:', fontWeight: FontWeight.bold
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -232,7 +255,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               Row(
                 children: [
           
-                   textLabel(name: 'Início da atividade:'),
+                   textLabel(name: 'Início da atividade:', fontWeight: FontWeight.bold),
                   SizedBox(
                     width: sizeScreen.width * 0.1,
                   ),
@@ -245,7 +268,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.03,
               ),
-               textLabel(name: 'Quantidade de Funcionários:'),
+               textLabel(name: 'Quantidade de Funcionários:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
@@ -254,7 +277,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   Row(
                     children: [
                    
-                       textLabel(name: 'Permanentes'),
+                       textLabel(name: 'Permanentes', fontWeight: FontWeight.bold),
                       SizedBox(
                         width: sizeScreen.width * 0.026,
                       ),
@@ -278,7 +301,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   Row(
                     children: [
                      
-                       textLabel(name: 'Temporários'),
+                       textLabel(name: 'Temporários', fontWeight: FontWeight.bold),
                       SizedBox(
                         width: sizeScreen.width * 0.038,
                       ),
@@ -300,7 +323,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   Row(
                     children: [
                   
-                       textLabel(name: 'Pessoas com\ndefiicência (%)'),
+                       textLabel(name: 'Pessoas com\ndefiicência (%)', fontWeight: FontWeight.bold),
                       SizedBox(
                           width: sizeScreen.width * 0.6,
                           //height: sizeScreen.height * 0.07,
@@ -320,12 +343,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   )
                 ],
               ),
-               textLabel(name: 'Localização:'),
+               textLabel(name: 'Localização:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
               RadioD(options:  ['urbana', 'rural'], getValue: (String ) {  },),
-               textLabel(name: 'Coordenadas Geográficas:'),
+               textLabel(name: 'Coordenadas Geográficas:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
@@ -333,7 +356,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 Row(
                   children: [
                    
-                     textLabel(name: 'Latitude'),
+                     textLabel(name: 'Latitude', fontWeight: FontWeight.bold),
                     SizedBox(
                       width: sizeScreen.width * 0.032,
                     ),
@@ -357,7 +380,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 Row(
                   children: [
                    
-                     textLabel(name: 'Longitude'),
+                     textLabel(name: 'Longitude', fontWeight: FontWeight.bold),
                     SizedBox(
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
@@ -376,7 +399,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   height: sizeScreen.height * 0.02,
                 ),
               ]),
-               textLabel(name: 'Endereço:'),
+               textLabel(name: 'Endereço:', fontWeight: FontWeight.bold),
 
               CustomTextField(
                 validat: (value) {
@@ -422,7 +445,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   children: [
                    
                   
-                     textLabel(name: 'Whatsapp'),
+                     textLabel(name: 'Whatsapp', fontWeight: FontWeight.bold),
                     SizedBox(
                       width: sizeScreen.width * 0.03,
                     ),
@@ -444,7 +467,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   children: [
                    
                   
-                     textLabel(name: 'Instagram'),
+                     textLabel(name: 'Instagram', fontWeight: FontWeight.bold),
                     SizedBox(
                       width: sizeScreen.width * 0.03,
                     ),
@@ -468,7 +491,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 Row(
                   children: [
               
-                     textLabel(name: 'E-mail'),
+                     textLabel(name: 'E-mail', fontWeight: FontWeight.bold),
                       SizedBox(width: sizeScreen.width * 0.03,),
                     SizedBox(
                         width: sizeScreen.width * 0.5,
@@ -491,7 +514,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   children: [
                    
                      textLabel(
-                        name: 'Site'),
+                        name: 'Site', fontWeight: FontWeight.bold),
                           SizedBox(width: sizeScreen.width * 0.05,),
                     SizedBox(
                       width: sizeScreen.width * 0.045,
@@ -514,13 +537,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.06,
               ),
-               textLabel(name: 'Sinalização:'),
+               textLabel(name: 'Sinalização:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
               Row(children: [
                 
-                 textLabel(name: 'de acessso -'),
+                 textLabel(name: 'de acessso -', fontWeight: FontWeight.bold),
                 SizedBox(
                   width: sizeScreen.width * 0.09,
                 ),
@@ -534,7 +557,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               Row(children: [
              
-                 textLabel(name: 'turística -'),
+                 textLabel(name: 'turística -', fontWeight: FontWeight.bold),
                 SizedBox(
                   width: sizeScreen.width * 0.14,
                 ),
@@ -546,7 +569,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.06,
               ),
-               textLabel(name: 'Proximidades:'),
+               textLabel(name: 'Proximidades:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
@@ -560,7 +583,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Galeria/rua comercial',
                 'outro'
               ],),
-               textLabel(name: 'Pontos de referência:'),
+               textLabel(name: 'Pontos de referência:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
@@ -578,7 +601,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
               Container(
                 color:  Color.fromARGB(255, 55, 111, 60),
-                height: sizeScreen.height * 0.06,
+                height: sizeScreen.height * 0.1,
                 width: sizeScreen.width,
                 padding: EdgeInsets.only(
                     top: sizeScreen.height * 0.008,
@@ -593,61 +616,81 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.05,
               ),
 
-               TabelaT1(column01: [
-                Text('Entidade/guia turístico'),
-                Text(
-                  'Associações e sindicatos do setor de hospedagem',
-                ),
-                Text('Associações de turismos'),
-                Text('Associações comerciais'),
-                Text('Guias Turísticos'),
-                Text('Outros'),
-              ], column02: [
-                Text('Categoria/tipo/classificação/número'),
-                Text('CADASTUR outros'),
-                TextField(
-                  decoration: InputDecoration(border: InputBorder.none),
-                ),
-                TextField(
-                  decoration: InputDecoration(border: InputBorder.none),
-                ),
-                TextField(
-                  decoration: InputDecoration(border: InputBorder.none),
-                ),
-                TextField(
-                  decoration: InputDecoration(border: InputBorder.none),
-                ),
-                TextField(
-                  decoration: InputDecoration(border: InputBorder.none),
-                ),
-              ]),
+           textLabel(name: "Entidade/guia turístico", fontWeight: FontWeight.bold,),
+
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-              Padding(
-                  padding: EdgeInsets.only(left: sizeScreen.width * 0.04),
+              textLabel(name: "MTur", fontWeight: FontWeight.bold,),
+              CustomTextField(name: "CADASTUR", validat: (p0) {
+                
+              }, getValue: (p0) {
+                
+              },),
+              CustomTextField(name: "outros", validat: (p0) {
+                
+              }, getValue:(p0) {
+                
+              },),
+                 textLabel(name: "associações e sindicatos do setor de hospedagem", fontWeight: FontWeight.bold,),
+              CustomTextField(name: "categoria/tipo/classificação/número", validat: (p0) {
+                
+              }, getValue: (p0) {
+                
+              },),
+                textLabel(name: "associações de turismo", fontWeight: FontWeight.bold,),
+              CustomTextField(name: "categoria/tipo/classificação/número", validat: (p0) {
+                
+              }, getValue: (p0) {
+                
+              },),
+                textLabel(name: "associações comerciais", fontWeight: FontWeight.bold,),
+              CustomTextField(name: "categoria/tipo/classificação/número", validat: (p0) {
+                
+              }, getValue: (p0) {
+                
+              },),
+                textLabel(name: "guias turísticos", fontWeight: FontWeight.bold,),
+              CustomTextField(name: "categoria/tipo/classificação/número", validat: (p0) {
+                
+              }, getValue: (p0) {
+                
+              },),
+                textLabel(name: "outros", fontWeight: FontWeight.bold,),
+              CustomTextField(name: "categoria/tipo/classificação/número", validat: (p0) {
+                
+              }, getValue: (p0) {
+                
+              },),
+               SizedBox(
+                height: sizeScreen.height * 0.05,
+              ),
+             Center(
                   child:  textLabel(
                       name:
-                          '       Segmentos ou tipos de turismo\nem que é especializado (assinalar até 3):')),
+                          '       Segmentos ou tipos de turismo\nem que é especializado (assinalar até 3):', fontWeight: FontWeight.bold,),),
               SizedBox(
-                height: sizeScreen.height * 0.05,
+                height: sizeScreen.height * 0.02,
               ),
-               CheckB(
-                nomes: [
-                  'Aventura',
-                  'Ecoturismo',
-                  'Rural',
-                  'Estudos e intercâmbio',
-                  'Cultural\n(cívico, étnico,\nreligioso, místico e\nesotérico)',
-                  'náutico',
-                  'Saúde\n(Bem estar e médico)',
-                  'Pesca',
-                  'Sol e praia',
-                  'Negócios eeventos',
-                  'Esporte',
-                  'Não é\nespecializado em nenhum segmento'
-                ],
-              ),
+               SizedBox(
+                height: 300,
+                 child: CheckB(
+                  nomes: [
+                    'Aventura',
+                    'Ecoturismo',
+                    'Rural',
+                    'Estudos e intercâmbio',
+                    'Cultural\n(cívico, étnico,\nreligioso, místico e\nesotérico)',
+                    'náutico',
+                    'Saúde\n(Bem estar e médico)',
+                    'Pesca',
+                    'Sol e praia',
+                    'Negócios eeventos',
+                    'Esporte',
+                    'Não é\nespecializado em nenhum segmento'
+                  ],
+                               ),
+               ),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
@@ -667,11 +710,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               textLabel(name: 'Estrutura de funcionamento:'),
+               textLabel(name: 'Estrutura de funcionamento:', fontWeight: FontWeight.bold,),
               SizedBox(
                 height: sizeScreen.height * 0.03,
               ),
-               textLabel(name: 'Tipo de diária:'),
+               textLabel(name: 'Tipo de diária:', fontWeight: FontWeight.bold),
 
               SizedBox(
                 height: sizeScreen.height * 0.03,
@@ -686,7 +729,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               textLabel(name: 'Formas de Pagamento:'),
+               textLabel(name: 'Formas de Pagamento:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
@@ -702,7 +745,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               textLabel(name: 'Reservas:'),
+               textLabel(name: 'Reservas:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
@@ -720,17 +763,17 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               textLabel(name: 'Atendimento ao público:'),
+               textLabel(name: 'Atendimento ao público:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.04,
               ),
 
-               textLabel(name: 'Atendimento em língua estrangeira:'),
+               textLabel(name: 'Atendimento em língua estrangeira:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
                CheckC(nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
-               textLabel(name: 'Informativos impressos:'),
+               textLabel(name: 'Informativos impressos:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
@@ -754,7 +797,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               textLabel(name: 'Período:'),
+               textLabel(name: 'Período:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
@@ -773,13 +816,14 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Dezembro',
                 'Ano Inteiro'
               ], getValue: (String ) {  },),
-               textLabel(name: 'Horário:'),
+               textLabel(name: 'Horário:', fontWeight: FontWeight.bold),
                SizedBox(
                 height: sizeScreen.height * 0.01,
               ),
-              TabelaT2(getValues: (newValue){
-                
-              }),
+         
+              TabelaHorarios(),
+
+
               SizedBox(
                 height: sizeScreen.height * 0.01,
               ),
@@ -787,23 +831,23 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-               textLabel(name: 'Funcionamento 24 horas:'),
+               textLabel(name: 'Funcionamento 24 horas:', fontWeight: FontWeight.bold,),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
            ExpansionTileYoN(getValue: (String ) {  },),
-               textLabel(name: 'Funcionamento em feriados:'),
+               textLabel(name: 'Funcionamento em feriados:', fontWeight: FontWeight.bold,),
               SizedBox(
                 height: sizeScreen.height * 0.03,
               ),
                ExpansionTileYoN(getValue: (String ) {  },),
-               textLabel(name: 'Restrições:'),
+               textLabel(name: 'Restrições:', fontWeight: FontWeight.bold,),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
                CheckC(
                   nomes: ['Crianças', 'Fumantes', 'Animais', 'outro'],),
-               textLabel(name: 'Outras regras e informações:'),
+               textLabel(name: 'Outras regras e informações:', fontWeight: FontWeight.bold,),
 
               CustomTextField(
                   validat: (value) {
@@ -816,11 +860,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               textLabel(name: 'Dados da visitação:'),
+               textLabel(name: 'Dados da visitação:', fontWeight: FontWeight.bold,),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               textLabel(name: 'Ocupação ano nº:'),
+               textLabel(name: 'Ocupação ano nº:', fontWeight: FontWeight.bold,),
 
               CustomTextField(
                   validat: (value) {
@@ -833,7 +877,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               textLabel(name: 'Ocupação na alta temporada nº:'),
+               textLabel(name: 'Ocupação na alta temporada nº:', fontWeight: FontWeight.bold,),
 
               CustomTextField(
                   validat: (value) {
@@ -846,7 +890,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               textLabel(name: 'Meses de alta temporada:'),
+               textLabel(name: 'Meses de alta temporada:', fontWeight: FontWeight.bold,),
               SizedBox(
                 height: sizeScreen.height * 0.01,
               ),
@@ -866,7 +910,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Dezembro',
                 'Ano Inteiro'
               ], ),
-               textLabel(name: 'Origem dos visitantes/turistas:'),
+               textLabel(name: 'Origem dos visitantes/turistas:', fontWeight: FontWeight.bold,),
               CheckC(nomes: [
                 'Entorno municipal',
                 'Estadual',
@@ -874,28 +918,328 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 'Internacional'
               ],),
                textLabel(
-                  name: 'Origem dos turistas nacionais (Até 5 estados)'),
+                  name: 'Origem dos turistas nacionais\n(Até 5 estados)', fontWeight: FontWeight.bold,),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-            Estados(),
-                  Estados(),
-                    Estados(),
-                    Estados(),
-                          Estados(),
+                            SizedBox(
+                              width: 1250.w,
+                              child: AutocompleteTextField(
+                                textAlign: TextAlign.start,
+
+                                label: "Selecione um estado",
+                                onSelected: (option) {
+                                  _estadoSelecionado =
+                                      _pesquisaController.getEstadoByNome(option);
+                                  _pesquisaController
+                                      .setMunicipios(_estadoSelecionado!.id);
+                                },
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') {
+                                    return const Iterable.empty();
+                                  }
+                                  return _pesquisaController.estados
+                                      .map((e) => e.nome)
+                                      .where(
+                                        (word) => word.toLowerCase().contains(
+                                              textEditingValue.text.toLowerCase(),
+                                            ),
+                                      );
+                                },
+                                onChanged: (value) {
+                                
+                                  _estadoController.text = value;
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 40.h,),
+
+                  SizedBox(
+                              width: 1250.w,
+                              child: AutocompleteTextField(
+                                textAlign: TextAlign.start,
+                                label: "Selecione um estado",
+                                onSelected: (option) {
+                                  _estadoSelecionado =
+                                      _pesquisaController.getEstadoByNome(option);
+                                  _pesquisaController
+                                      .setMunicipios(_estadoSelecionado!.id);
+                                },
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') {
+                                    return const Iterable.empty();
+                                  }
+                                  return _pesquisaController.estados
+                                      .map((e) => e.nome)
+                                      .where(
+                                        (word) => word.toLowerCase().contains(
+                                              textEditingValue.text.toLowerCase(),
+                                            ),
+                                      );
+                                },
+                                onChanged: (value) {
+                                
+                                  _estadoController.text = value;
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 40.h,),
+
+                             SizedBox(
+                              width: 1250.w,
+                              child: AutocompleteTextField(
+                                textAlign: TextAlign.start,
+
+                                label: "Selecione um estado",
+                                onSelected: (option) {
+                                  _estadoSelecionado =
+                                      _pesquisaController.getEstadoByNome(option);
+                                  _pesquisaController
+                                      .setMunicipios(_estadoSelecionado!.id);
+                                },
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') {
+                                    return const Iterable.empty();
+                                  }
+                                  return _pesquisaController.estados
+                                      .map((e) => e.nome)
+                                      .where(
+                                        (word) => word.toLowerCase().contains(
+                                              textEditingValue.text.toLowerCase(),
+                                            ),
+                                      );
+                                },
+                                onChanged: (value) {
+                                
+                                  _estadoController.text = value;
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 40.h,),
+
+                             SizedBox(
+                              width: 1250.w,
+                              child: AutocompleteTextField(
+                                textAlign: TextAlign.start,
+
+                                label: "Selecione um estado",
+                                onSelected: (option) {
+                                  _estadoSelecionado =
+                                      _pesquisaController.getEstadoByNome(option);
+                                  _pesquisaController
+                                      .setMunicipios(_estadoSelecionado!.id);
+                                },
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') {
+                                    return const Iterable.empty();
+                                  }
+                                  return _pesquisaController.estados
+                                      .map((e) => e.nome)
+                                      .where(
+                                        (word) => word.toLowerCase().contains(
+                                              textEditingValue.text.toLowerCase(),
+                                            ),
+                                      );
+                                },
+                                onChanged: (value) {
+                                
+                                  _estadoController.text = value;
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 40.h,),
+                             SizedBox(
+                              width: 1250.w,
+                              child: AutocompleteTextField(
+                                textAlign: TextAlign.start,
+
+                                label: "Selecione um estado",
+                                onSelected: (option) {
+                                  _estadoSelecionado =
+                                      _pesquisaController.getEstadoByNome(option);
+                                  _pesquisaController
+                                      .setMunicipios(_estadoSelecionado!.id);
+                                },
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') {
+                                    return const Iterable.empty();
+                                  }
+                                  return _pesquisaController.estados
+                                      .map((e) => e.nome)
+                                      .where(
+                                        (word) => word.toLowerCase().contains(
+                                              textEditingValue.text.toLowerCase(),
+                                            ),
+                                      );
+                                },
+                                onChanged: (value) {
+                                
+                                  _estadoController.text = value;
+                                },
+                              ),
+                            ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
                textLabel(
-                  name: 'Origem dos turistas internacionais (Até 5 Países)'),
-              SizedBox(
-                height: sizeScreen.height * 0.02,
-              ),
-               Paises(),
-               Paises(),
-               Paises(),
-               Paises(),
-               Paises(),
+                  name: 'Origem dos turistas internacionais\n(Até 5 Países)', fontWeight: FontWeight.bold,),
+                            SizedBox(height: 40.h,),
+
+                             SizedBox(
+                              width: 1250.w,
+                              child: AutocompleteTextField(
+                                textAlign: TextAlign.start,
+
+                                label: "Selecione um país",
+                                onSelected: (option) {
+                                  _paisSelecionado =
+                                      _pesquisaController.getPaisesByNome(option);
+                                
+                                },
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') {
+                                    return const Iterable.empty();
+                                  }
+                                  return _pesquisaController.paises
+                                      .map((e) => e.nome)
+                                      .where(
+                                        (word) => word.toLowerCase().contains(
+                                              textEditingValue.text.toLowerCase(),
+                                            ),
+                                      );
+                                },
+                                onChanged: (value) {
+                                
+                                  _paisController.text = value;
+                                },
+                              ),
+                            ),
+
+                                                 SizedBox(height: 40.h,),
+
+
+                             SizedBox(
+                              width: 1250.w,
+                              child: AutocompleteTextField(
+                                textAlign: TextAlign.start,
+
+                                label: "Selecione um país",
+                                onSelected: (option) {
+                                  _paisSelecionado =
+                                      _pesquisaController.getPaisesByNome(option);
+                                
+                                },
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') {
+                                    return const Iterable.empty();
+                                  }
+                                  return _pesquisaController.paises
+                                      .map((e) => e.nome)
+                                      .where(
+                                        (word) => word.toLowerCase().contains(
+                                              textEditingValue.text.toLowerCase(),
+                                            ),
+                                      );
+                                },
+                                onChanged: (value) {
+                                
+                                  _paisController.text = value;
+                                },
+                              ),
+                            ),   
+                                                          SizedBox(height: 40.h,),
+
+                             SizedBox(
+                              width: 1250.w,
+                              child: AutocompleteTextField(
+                                textAlign: TextAlign.start,
+
+                                label: "Selecione um país",
+                                onSelected: (option) {
+                                  _paisSelecionado =
+                                      _pesquisaController.getPaisesByNome(option);
+                                
+                                },
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') {
+                                    return const Iterable.empty();
+                                  }
+                                  return _pesquisaController.paises
+                                      .map((e) => e.nome)
+                                      .where(
+                                        (word) => word.toLowerCase().contains(
+                                              textEditingValue.text.toLowerCase(),
+                                            ),
+                                      );
+                                },
+                                onChanged: (value) {
+                                
+                                  _paisController.text = value;
+                                },
+                              ),
+                            ),   
+                                                      SizedBox(height: 40.h,),
+
+                             SizedBox(
+                              width: 1250.w,
+                              child: AutocompleteTextField(
+                                textAlign: TextAlign.start,
+
+                                label: "Selecione um país",
+                                onSelected: (option) {
+                                  _paisSelecionado =
+                                      _pesquisaController.getPaisesByNome(option);
+                                
+                                },
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') {
+                                    return const Iterable.empty();
+                                  }
+                                  return _pesquisaController.paises
+                                      .map((e) => e.nome)
+                                      .where(
+                                        (word) => word.toLowerCase().contains(
+                                              textEditingValue.text.toLowerCase(),
+                                            ),
+                                      );
+                                },
+                                onChanged: (value) {
+                                
+                                  _paisController.text = value;
+                                },
+                              ),
+                            ),  
+                                                          SizedBox(height: 40.h,),
+
+                             SizedBox(
+                              width: 1250.w,
+                              child: AutocompleteTextField(
+                                textAlign: TextAlign.start,
+
+                                label: "Selecione um país",
+                                onSelected: (option) {
+                                  _paisSelecionado =
+                                      _pesquisaController.getPaisesByNome(option);
+                                
+                                },
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') {
+                                    return const Iterable.empty();
+                                  }
+                                  return _pesquisaController.paises
+                                      .map((e) => e.nome)
+                                      .where(
+                                        (word) => word.toLowerCase().contains(
+                                              textEditingValue.text.toLowerCase(),
+                                            ),
+                                      );
+                                },
+                                onChanged: (value) {
+                                
+                                  _paisController.text = value;
+                                },
+                              ),
+                            ),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
@@ -914,7 +1258,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
 SizedBox(height: sizeScreen.height * 0.02,),
       
-              textLabel(name: 'Unidades habitacionais (UH):'),
+              textLabel(name: 'Unidades habitacionais (UH):', fontWeight: FontWeight.bold,),
              SizedBox(height: sizeScreen.height * 0.02,),
 
               Column(children: [
@@ -991,7 +1335,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                     left: sizeScreen.width * 0.02,
                     top: sizeScreen.height * 0.03,
                     bottom: sizeScreen.height * 0.03),
-                child:  textLabel(name: 'Produtos de higiene pessoal:'),
+                child:  textLabel(name: 'Produtos de higiene pessoal:', fontWeight: FontWeight.bold,),
               ),
                CheckC(nomes: [
                 'Shampoo',
@@ -1010,7 +1354,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                     left: sizeScreen.width * 0.005,
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child:  textLabel(name: 'Equipamentos e Serviços:'),
+                child:  textLabel(name: 'Equipamentos e Serviços:', fontWeight: FontWeight.bold,),
               ),
              CheckC(nomes: [
                 'TV',
@@ -1036,14 +1380,14 @@ SizedBox(height: sizeScreen.height * 0.02,),
                     right: sizeScreen.width * 0.05,
                     top: sizeScreen.height * 0.02,
                     bottom: sizeScreen.height * 0.02),
-                child:  textLabel(name: 'Instalações:'),
+                child:  textLabel(name: 'Instalações:', fontWeight: FontWeight.bold,),
               ),
               Padding(
                 padding: EdgeInsets.only(
                    
                     top: sizeScreen.height * 0.03,
                     bottom: sizeScreen.height * 0.03),
-                child:  textLabel(name: 'Estacionamento:'),
+                child:  textLabel(name: 'Estacionamento:', fontWeight: FontWeight.bold,),
               ),
                CheckC(
              nomes: ['Pago', 'Gratuito', 'Coberto', 'Descoberto'], 
@@ -1053,7 +1397,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
                    
-                     textLabel(name: 'Capacidade de\nveículos nº'),
+                     textLabel(name: 'Capacidade de\nveículos nº', fontWeight: FontWeight.bold,),
                     SizedBox(
                       width: sizeScreen.width * 0.01,
                     ),
@@ -1075,7 +1419,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
                       
-                     textLabel(name: 'Automóveis nº'),
+                     textLabel(name: 'Automóveis nº', fontWeight: FontWeight.bold,),
                     SizedBox(
                       width: sizeScreen.width * 0.005,
                     ),
@@ -1097,7 +1441,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 Row(
                   children: [
                   
-                     textLabel(name: 'Ônibus nº'),
+                     textLabel(name: 'Ônibus nº', fontWeight: FontWeight.bold,),
                     SizedBox(
                       width: sizeScreen.width * 0.1,
                     ),
@@ -1117,9 +1461,9 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 ),
               ]),
               SizedBox(height: sizeScreen.height * 0.03,),
-               textLabel(name: 'Outras instalações e estruturas:'),
+               textLabel(name: 'Outras instalações e estruturas:', fontWeight: FontWeight.bold,),
              SizedBox(height: sizeScreen.height * 0.02,),
-                textLabel(name: 'Energia  elétrica:'),
+                textLabel(name: 'Energia  elétrica:', fontWeight: FontWeight.bold,),
                   SizedBox(height: sizeScreen.height * 0.02,),
               RadioD(
                   options:  ['110 volts', '220 volts', '110/220 volts'], getValue: (String ) {  },),
@@ -1127,7 +1471,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               Row(
                 children: [
                      
-                   textLabel(name: 'Capacidade\nem KVA'),
+                   textLabel(name: 'Capacidade\nem KVA', fontWeight: FontWeight.bold,),
                   SizedBox(
                     width: sizeScreen.width * 0.005,
                   ),
@@ -1146,14 +1490,14 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 ],
               ),
                   SizedBox(height: sizeScreen.height * 0.02,),
-               textLabel(name: 'Gerador de emergência:'),
+               textLabel(name: 'Gerador de emergência:', fontWeight: FontWeight.bold,),
          SizedBox(height: sizeScreen.height * 0.032,),
                ExpansionTileYoN(getValue: (String ) {  },),
                   SizedBox(height: sizeScreen.height * 0.02,),
               Row(
                 children: [
                      
-                   textLabel(name: 'Capacidade\nem KVA'),
+                   textLabel(name: 'Capacidade\nem KVA', fontWeight: FontWeight.bold,),
                   SizedBox(
                     width: sizeScreen.width * 0.005,
                   ),
@@ -1172,9 +1516,9 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 ],
               ),
               SizedBox(height: sizeScreen.height * 0.03,),
-             textLabel(name: 'Área de alimentação:'),
+             textLabel(name: 'Área de alimentação:', fontWeight: FontWeight.bold,),
 SizedBox(height: sizeScreen.height * 0.02,),
-                textLabel(name: 'Restaurante:'),
+                textLabel(name: 'Restaurante:', fontWeight: FontWeight.bold,),
               SizedBox(height: sizeScreen.height * 0.02,)
 ,               CheckC(nomes: [
                 'Não',
@@ -1182,7 +1526,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Aberto ao público',
                 'Adaptado para PCD'
               ], ),
-                textLabel(name: 'Capacidade de atendimento:'),
+                textLabel(name: 'Capacidade de atendimento:', fontWeight: FontWeight.bold,),
                 SizedBox(height: sizeScreen.height * 0.02,),
               Column(children: [
                 Row(
@@ -1266,7 +1610,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                   ],
                 ),
                 SizedBox(height: sizeScreen.height * 0.02,),
-            textLabel(name: 'Lanchonete:'),
+            textLabel(name: 'Lanchonete:', fontWeight: FontWeight.bold,),
                 SizedBox(height: sizeScreen.height * 0.02,),
               ]),
                CheckC(nomes: [
@@ -1363,9 +1707,9 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ]),
               textLabel(
                     name:
-                    'Área de recreação e lazer:'),
+                    'Área de recreação e lazer:', fontWeight: FontWeight.bold,),
                SizedBox(height: sizeScreen.height * 0.02,),
-                textLabel(name: 'Instalações e espaços:'),
+                textLabel(name: 'Instalações e espaços:', fontWeight: FontWeight.bold,),
                SizedBox(height: sizeScreen.height * 0.02,),
                CheckC(nomes: [
                 'Piscina',
@@ -1386,7 +1730,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
             
                textLabel(
-                    name: 'Outros espaços, equipamentos e atividades:'),
+                    name: 'Outros espaços, equipamentos e atividades:', fontWeight: FontWeight.bold,),
                SizedBox(height: sizeScreen.height * 0.02,),
                CheckC(nomes: [
                 'Observação da fauna',
@@ -1424,13 +1768,13 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
                SizedBox(height: sizeScreen.height * 0.02,),
              textLabel(
-                    name: 'Área para eventos:'),
+                    name: 'Área para eventos:', fontWeight: FontWeight.bold,),
                SizedBox(height: sizeScreen.height * 0.04,),
-                textLabel(name: 'Instalações:'),
+                textLabel(name: 'Instalações:', fontWeight: FontWeight.bold,),
                 SizedBox(height: sizeScreen.height * 0.04,),
-               TabelaT3(),
+               TablesInstalacoes(),
                SizedBox(height: sizeScreen.height * 0.02,),
-            textLabel(name: 'Serviços:'),
+            textLabel(name: 'Serviços:', fontWeight: FontWeight.bold,),
                SizedBox(height: sizeScreen.height * 0.02,),
                CheckC(nomes: [
                 'Realização de eventos próprios',
@@ -1441,7 +1785,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Serviços de som',
                 'outro',
               ], ),
-                textLabel(name: 'Equipamentos:'),
+                textLabel(name: 'Equipamentos:', fontWeight: FontWeight.bold,),
                SizedBox(height: sizeScreen.height * 0.02,),
                CheckC(nomes: [
                 'Internet',
@@ -1457,7 +1801,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'outro'
               ], ),
              
-               textLabel(name: 'Facilidades e serviços:'),
+               textLabel(name: 'Facilidades e serviços:', fontWeight: FontWeight.bold,),
                SizedBox(height: sizeScreen.height * 0.02,),
                CheckC(nomes: [
                 'Adaptador de voltagem',
@@ -1507,7 +1851,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Exposição de arte/artesanato',
                 'outro'
               ], ),
-             textLabel(name: 'Facilidades para executivos:'),
+             textLabel(name: 'Facilidades para executivos:', fontWeight: FontWeight.bold,),
                SizedBox(height: sizeScreen.height * 0.02,),
               CheckC(nomes: [
                 'Apartamentos em andares especiais',
@@ -1551,7 +1895,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ),
               Row(children: [
                  
-                 textLabel(name: 'Do equipamento/espaço:'),
+                 textLabel(name: 'Do equipamento/espaço:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   width: sizeScreen.width * 0.04,
                 ),
@@ -2295,78 +2639,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-              Container(
-                color:  Color.fromARGB(255, 55, 111, 60),
-                height: sizeScreen.height * 0.06,
-                width: sizeScreen.width,
-                padding: EdgeInsets.only(
-                    top: sizeScreen.height * 0.008,
-                    left: sizeScreen.width * 0.04),
-                child: Text(
-                  'Equipe Responsável',
-                  style: TextStyle(
-                      color: Colors.white, fontSize: sizeScreen.height * 0.03),
-                ),
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-               textLabel(
-                  name: 'Responsável pelo atendimento (Pesquisador)'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (String ) {  },),
-               textLabel(name: 'Telefone'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (String ) {  },),
-               textLabel(name: 'E-mail'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (String ) {  },),
-               textLabel(
-                  name: 'Responsável pelo atendimento (Coordenador)'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (String ) {  },),
-               textLabel(name: 'Telefone'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (String ) {  },),
-               textLabel(name: 'E-mail'),
-              CustomTextField(
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
-                  name: '', getValue: (String ) {  },),
+       
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),

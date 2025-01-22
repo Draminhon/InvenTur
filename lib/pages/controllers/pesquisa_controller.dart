@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/models/estado_model.dart';
 import 'package:inventur/models/municipio_model.dart';
+import 'package:inventur/models/pais_model.dart';
 import 'package:inventur/models/pesquisa_model.dart';
 import 'package:inventur/models/user_model.dart';
 import 'package:inventur/services/brasil_service.dart';
@@ -31,6 +32,7 @@ class PesquisaController extends ChangeNotifier {
   ];
 
   List<Estado> _estados = [];
+  List<Pais> _paises=[];
   List<Pesquisa> _pesquisas = [];
   List<User> _usersPesquisas = [];
   List<Municipio> _municipios = [];
@@ -45,6 +47,7 @@ class PesquisaController extends ChangeNotifier {
   }
 
   List<Estado> get estados => _estados;
+  List<Pais> get paises => _paises;
   List<Pesquisa> get pesquisas => _pesquisas;
   List<Municipio> get municipios => _municipios;
   List<User> get userPesquisa => _usersPesquisas;
@@ -101,8 +104,23 @@ class PesquisaController extends ChangeNotifier {
     return municipio;
   }
 
+  Pais? getPaisesByNome(String nome){
+    late Pais? pais;
+
+    for(Pais paiss in _paises){
+      if(paiss.nome == nome) pais = paiss;
+    }
+    return pais;
+  }
+
   void setEstados() async {
     _estados = await _brasilService.fetchEstados();
+  }
+
+  void setPaises() async{
+    _paises = await _brasilService.fetchPaises();
+    print('oiee');
+    print(_paises);
   }
 
   void setMunicipios(int uf) async {
