@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 
 final GlobalKey<CheckCState> checkCKey = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> postoCombustivel = GlobalKey<CheckCState>();
-final GlobalKey<CheckCState>  outrosServicos = GlobalKey<CheckCState>();
+final GlobalKey<CheckCState> outrosServicos = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> estruturasAoLongoDaVia = GlobalKey<CheckCState>();
 
 class Rodovia extends StatefulWidget {
@@ -23,7 +23,6 @@ class Rodovia extends StatefulWidget {
   @override
   State<Rodovia> createState() => _RodoviaState();
 }
-
 
 class _RodoviaState extends State<Rodovia> {
   final _formKey = GlobalKey<FormState>();
@@ -81,56 +80,59 @@ class _RodoviaState extends State<Rodovia> {
     'email_coordenador': null,
   };
 
-    final TextEditingController uf = TextEditingController();
-      TextEditingController regiao_turistica = TextEditingController();
-    TextEditingController municipio = TextEditingController();
-    TextEditingController tipo = TextEditingController();
-    TextEditingController subtipos = TextEditingController();
-    TextEditingController nome_oficial = TextEditingController();
-    TextEditingController nome_popular = TextEditingController();
-    TextEditingController jurisdicao = TextEditingController();
-    TextEditingController natureza = TextEditingController();
-    TextEditingController tipo_de_organizacao_instituicao = TextEditingController();
-    TextEditingController extensao_rodovia_municipio = TextEditingController();
-    TextEditingController faixas_de_rolamento = TextEditingController();
-    TextEditingController pavimentacao = TextEditingController();
-    TextEditingController pedagio = TextEditingController();
-    TextEditingController municipios_vizinhos_interligados_rodovia = TextEditingController();
-    TextEditingController inicio_atividade = TextEditingController();
-    TextEditingController whatsapp = TextEditingController();
-    TextEditingController instagram = TextEditingController();
-    TextEditingController sinalizacao_de_acesso = TextEditingController();
-    TextEditingController sinalizacao_turistica = TextEditingController();
-    TextEditingController posto_de_combustivel = TextEditingController();
-    TextEditingController outros_servicos = TextEditingController();
-    TextEditingController estruturas_ao_longo_da_via = TextEditingController();
-    TextEditingController poluicao = TextEditingController();
-    TextEditingController poluicao_especificacao = TextEditingController();
-    TextEditingController lixo = TextEditingController();
-    TextEditingController lixo_especificacao = TextEditingController();
-    TextEditingController desmatamento = TextEditingController();
-    TextEditingController desmatamento_especificacao = TextEditingController();
-    TextEditingController queimadas = TextEditingController();
-    TextEditingController queimadas_especificacao = TextEditingController();
-    TextEditingController inseguranca = TextEditingController();
-    TextEditingController inseguranca_especificacao = TextEditingController();
-    TextEditingController extrativismo = TextEditingController();
-    TextEditingController extrativismo_especificacao = TextEditingController();
-    TextEditingController prostituicao = TextEditingController();
-    TextEditingController prostituicao_especificacao = TextEditingController();
-    TextEditingController ocupacao_irregular_invasao = TextEditingController();
-    TextEditingController ocupacao_irregular_invasao_especificacao = TextEditingController();
-    TextEditingController outras = TextEditingController();
-    TextEditingController outras_especificacao = TextEditingController();
-    TextEditingController estado_geral_de_conservacao = TextEditingController();
-    TextEditingController observacoes = TextEditingController();
-    TextEditingController referencias = TextEditingController();
-    TextEditingController nome_pesquisador = TextEditingController();
-    TextEditingController telefone_pesquisador = TextEditingController();
-    TextEditingController email_pesquisador = TextEditingController();
-    TextEditingController nome_coordenador = TextEditingController();
-    TextEditingController telefone_coordenador = TextEditingController();
-    TextEditingController email_coordenador = TextEditingController();
+  final TextEditingController uf = TextEditingController();
+  TextEditingController regiao_turistica = TextEditingController();
+  TextEditingController municipio = TextEditingController();
+  TextEditingController tipo = TextEditingController();
+  TextEditingController subtipos = TextEditingController();
+  TextEditingController nome_oficial = TextEditingController();
+  TextEditingController nome_popular = TextEditingController();
+  TextEditingController jurisdicao = TextEditingController();
+  TextEditingController natureza = TextEditingController();
+  TextEditingController tipo_de_organizacao_instituicao =
+      TextEditingController();
+  TextEditingController extensao_rodovia_municipio = TextEditingController();
+  TextEditingController faixas_de_rolamento = TextEditingController();
+  TextEditingController pavimentacao = TextEditingController();
+  TextEditingController pedagio = TextEditingController();
+  TextEditingController municipios_vizinhos_interligados_rodovia =
+      TextEditingController();
+  TextEditingController inicio_atividade = TextEditingController();
+  TextEditingController whatsapp = TextEditingController();
+  TextEditingController instagram = TextEditingController();
+  TextEditingController sinalizacao_de_acesso = TextEditingController();
+  TextEditingController sinalizacao_turistica = TextEditingController();
+  TextEditingController posto_de_combustivel = TextEditingController();
+  TextEditingController outros_servicos = TextEditingController();
+  TextEditingController estruturas_ao_longo_da_via = TextEditingController();
+  TextEditingController poluicao = TextEditingController();
+  TextEditingController poluicao_especificacao = TextEditingController();
+  TextEditingController lixo = TextEditingController();
+  TextEditingController lixo_especificacao = TextEditingController();
+  TextEditingController desmatamento = TextEditingController();
+  TextEditingController desmatamento_especificacao = TextEditingController();
+  TextEditingController queimadas = TextEditingController();
+  TextEditingController queimadas_especificacao = TextEditingController();
+  TextEditingController inseguranca = TextEditingController();
+  TextEditingController inseguranca_especificacao = TextEditingController();
+  TextEditingController extrativismo = TextEditingController();
+  TextEditingController extrativismo_especificacao = TextEditingController();
+  TextEditingController prostituicao = TextEditingController();
+  TextEditingController prostituicao_especificacao = TextEditingController();
+  TextEditingController ocupacao_irregular_invasao = TextEditingController();
+  TextEditingController ocupacao_irregular_invasao_especificacao =
+      TextEditingController();
+  TextEditingController outras = TextEditingController();
+  TextEditingController outras_especificacao = TextEditingController();
+  TextEditingController estado_geral_de_conservacao = TextEditingController();
+  TextEditingController observacoes = TextEditingController();
+  TextEditingController referencias = TextEditingController();
+  TextEditingController nome_pesquisador = TextEditingController();
+  TextEditingController telefone_pesquisador = TextEditingController();
+  TextEditingController email_pesquisador = TextEditingController();
+  TextEditingController nome_coordenador = TextEditingController();
+  TextEditingController telefone_coordenador = TextEditingController();
+  TextEditingController email_coordenador = TextEditingController();
 
   void autoFillForm() {
     uf.text = 'CE';
@@ -183,10 +185,10 @@ class _RodoviaState extends State<Rodovia> {
     nome_coordenador.text = 'Raquel';
     telefone_coordenador.text = '202115599';
     email_coordenador.text = 'raquelsilveira@gmail.com';
-}
+  }
 
-@override
-void dispose() {
+  @override
+  void dispose() {
     uf.dispose();
     regiao_turistica.dispose();
     municipio.dispose();
@@ -239,50 +241,40 @@ void dispose() {
     email_coordenador.dispose();
 
     super.dispose();
-}
+  }
 
   @override
   Widget build(BuildContext context) {
-
-
-
-    Future<void> sendForm(Map<String, dynamic> valoresjson) async{
-
+    Future<void> sendForm(Map<String, dynamic> valoresjson) async {
       final prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('acess_token');
-      final url = Uri.parse(AppConstants.BASE_URI + AppConstants.RODOVIA_CREATE);
-    int? pesquisa_id = await getPesquisaId();
+      final url =
+          Uri.parse(AppConstants.BASE_URI + AppConstants.RODOVIA_CREATE);
+      int? pesquisa_id = await getPesquisaId();
 
-
-
-      try{
+      try {
         valoresjson['pesquisa'] = pesquisa_id;
-        final response = await http.post(
-          url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: json.encode(valoresjson)
-        );
-        if(response.statusCode == 201){
+        final response = await http.post(url,
+            headers: <String, String>{
+              'Content-Type': 'application/json; charset=UTF-8',
+            },
+            body: json.encode(valoresjson));
+        if (response.statusCode == 201) {
           debugPrint("Formulário enviado com sucesso!");
-                  }else{
-                    debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
-                  }
-      }catch(e){
+        } else {
+          debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
+        }
+      } catch (e) {
         print('Erro: $e');
       }
-
     }
-
-
 
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor:  Color.fromARGB(255, 55, 111, 60),
-        title:  Text(
+        backgroundColor: const Color.fromARGB(255, 55, 111, 60),
+        title: const Text(
           'Identificação',
           style: TextStyle(color: Colors.white),
         ),
@@ -307,9 +299,9 @@ void dispose() {
                                 return null;
                               },
                               onSaved: (newValue) {
-                                 valoresjson['uf'] = newValue;
+                                valoresjson['uf'] = newValue;
                               },
-                              decoration:  InputDecoration(
+                              decoration: const InputDecoration(
                                 hintText: 'UF',
                               ),
                             )),
@@ -327,8 +319,8 @@ void dispose() {
                               onSaved: (newValue) {
                                 valoresjson['regiao_turistica'] = newValue;
                               },
-                              decoration:  InputDecoration(
-                                  hintText: 'Região Turística'),
+                              decoration:
+                                  const InputDecoration(hintText: 'Região Turística'),
                             ))
                       ],
                     )),
@@ -339,7 +331,7 @@ void dispose() {
                       top: sizeScreen.height * 0.01),
                   child: TextFormField(
                     controller: municipio,
-                    decoration:  InputDecoration(
+                    decoration: const InputDecoration(
                       isDense: true,
                       hintText: 'Municipio',
                     ),
@@ -351,16 +343,16 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                 textLabel(name: 'Tipo:'),
+                textLabel(name: 'Tipo:'),
                 RadioD(
-                  options:  ['Rodoviário'],
+                  options: ['Rodoviário'],
                   getValue: (newValue) {
                     valoresjson['tipo'] = newValue;
                   },
                 ),
-                 textLabel(name: 'Subtipos:'),
+                textLabel(name: 'Subtipos:'),
                 RadioD(
-                    options:  ['Estação rodoviária'],
+                    options: ['Estação rodoviária'],
                     getValue: (newValue) {
                       valoresjson['subtipos'] = newValue;
                     }),
@@ -368,7 +360,7 @@ void dispose() {
                   height: sizeScreen.height * 0.05,
                 ),
                 Container(
-                  color:  Color.fromARGB(255, 55, 111, 60),
+                  color: const Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -394,7 +386,7 @@ void dispose() {
                       valoresjson['nome_oficial'] = newValue;
                     }),
                 CustomTextField(
-                  controller: nome_popular,
+                    controller: nome_popular,
                     name: 'Nome Popular',
                     validat: (value) {
                       return null;
@@ -405,25 +397,25 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                 textLabel(name: 'Jurisdição:'),
+                textLabel(name: 'Jurisdição:'),
                 RadioD(
-                    options:  ['Federal', 'Estadual', 'Municipal'],
+                    options: ['Federal', 'Estadual', 'Municipal'],
                     getValue: (newValue) {
                       valoresjson['jurisdicao'] = newValue;
                     }),
-                 textLabel(name: 'Natureza:'),
+                textLabel(name: 'Natureza:'),
                 RadioD(
-                    options:  ['Pública', 'Privada', 'outro'],
+                    options: ['Pública', 'Privada', 'outro'],
                     getValue: (newValue) {
                       valoresjson['natureza'] = newValue;
                     }),
-                 textLabel(name: 'Tipo de organização/Instituição:'),
+                textLabel(name: 'Tipo de organização/Instituição:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                 CheckC(
+                CheckC(
                   key: checkCKey,
-                  nomes:  [
+                  nomes: [
                     'Associação',
                     'Sindicato',
                     'Cooperativa',
@@ -435,10 +427,9 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                 textLabel(
-                    name: 'Extensão da rodovia no âmbito do município:'),
+                textLabel(name: 'Extensão da rodovia no âmbito do município:'),
                 CustomTextField(
-                  controller:  extensao_rodovia_municipio,
+                    controller: extensao_rodovia_municipio,
                     name: 'Extensão',
                     validat: (value) {
                       return null;
@@ -449,9 +440,9 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                 textLabel(name: 'Faixas de rolamento:'),
+                textLabel(name: 'Faixas de rolamento:'),
                 RadioD(
-                    options:  [
+                    options: [
                       'Duas',
                       'Três',
                       'Quatro',
@@ -465,9 +456,9 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                 textLabel(name: 'Pavimentação:'),
+                textLabel(name: 'Pavimentação:'),
                 RadioD(
-                    options:  [
+                    options: [
                       'Asfalto',
                       'Concreto',
                       'Paralelepipedo',
@@ -483,7 +474,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                   textLabel(name: 'Pedágio:'),
+                  textLabel(name: 'Pedágio:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -499,23 +490,24 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                 textLabel(
+                textLabel(
                     name: 'Municípios vizinhos interligados por rodovia:'),
                 CustomTextField(
-                  controller: municipios_vizinhos_interligados_rodovia,
+                    controller: municipios_vizinhos_interligados_rodovia,
                     name: 'Municípios vizinhos',
                     validat: (value) {
                       return null;
                     },
                     getValue: (newValue) {
-                      valoresjson['municipios_vizinhos_interligados_rodovia'] = newValue;
+                      valoresjson['municipios_vizinhos_interligados_rodovia'] =
+                          newValue;
                     }),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(
                   children: [
-                     textLabel(name: 'Início da atividade:'),
+                    textLabel(name: 'Início da atividade:'),
                     SizedBox(
                       width: sizeScreen.width * 0.1,
                     ),
@@ -536,13 +528,13 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                 textLabel(name: 'Entidade mantedora:'),
+                textLabel(name: 'Entidade mantedora:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 Row(
                   children: [
-                     textLabel(name: 'Whatsapp'),
+                    textLabel(name: 'Whatsapp'),
                     SizedBox(
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
@@ -563,7 +555,7 @@ void dispose() {
                 ),
                 Row(
                   children: [
-                     textLabel(name: 'Instagram'),
+                    textLabel(name: 'Instagram'),
                     SizedBox(
                       width: sizeScreen.width * 0.045,
                     ),
@@ -585,12 +577,12 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                 textLabel(name: 'Sinalização:'),
+                textLabel(name: 'Sinalização:'),
                 SizedBox(
                   height: sizeScreen.height * 0.04,
                 ),
                 Row(children: [
-                   textLabel(name: 'de acessso -'),
+                  textLabel(name: 'de acessso -'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -607,7 +599,7 @@ void dispose() {
                   height: sizeScreen.height * 0.02,
                 ),
                 Row(children: [
-                   textLabel(name: 'turística -'),
+                  textLabel(name: 'turística -'),
                   SizedBox(
                     width: sizeScreen.width * 0.14,
                   ),
@@ -624,7 +616,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Container(
-                  color:  Color.fromARGB(255, 55, 111, 60),
+                  color: const Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -640,29 +632,28 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                 textLabel(
-                    name: 'Equipamentos e serviçõs ao longo da rodovia:'),
+                textLabel(name: 'Equipamentos e serviçõs ao longo da rodovia:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                 textLabel(name: 'Posto de combustível:'),
+                textLabel(name: 'Posto de combustível:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
                   key: postoCombustivel,
-                  nomes:  ['Álcool', 'Gasolina', 'Diesel'],
+                  nomes: ['Álcool', 'Gasolina', 'Diesel'],
                 ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                 textLabel(name: 'Outros serviços:'),
+                textLabel(name: 'Outros serviços:'),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
                   key: outrosServicos,
-                  nomes:  [
+                  nomes: [
                     'Alimentação',
                     'Hospedagem',
                     'Polícia rodoviária',
@@ -680,13 +671,13 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                 textLabel(name: 'Estruturas ao longo da via:'),
+                textLabel(name: 'Estruturas ao longo da via:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
                 CheckC(
                   key: estruturasAoLongoDaVia,
-                  nomes:  [
+                  nomes: [
                     'Ponte',
                     'Passarela',
                     'Viaduto',
@@ -698,12 +689,12 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                 textLabel(name: 'Questões ambientais/sociais:'),
+                textLabel(name: 'Questões ambientais/sociais:'),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                   textLabel(name: 'Poluição:'),
+                  textLabel(name: 'Poluição:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -720,7 +711,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 CustomTextField(
-                  controller: poluicao_especificacao,
+                    controller: poluicao_especificacao,
                     name: 'Especificação',
                     validat: (value) {
                       return null;
@@ -735,7 +726,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                   textLabel(name: 'Lixo:'),
+                  textLabel(name: 'Lixo:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -749,7 +740,7 @@ void dispose() {
                   ))
                 ]),
                 CustomTextField(
-                  controller: lixo_especificacao,
+                    controller: lixo_especificacao,
                     name: 'Especificação',
                     validat: (value) {
                       return null;
@@ -764,7 +755,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                   textLabel(name: 'Desmatamento:'),
+                  textLabel(name: 'Desmatamento:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -778,7 +769,7 @@ void dispose() {
                   ))
                 ]),
                 CustomTextField(
-                  controller: desmatamento_especificacao,
+                    controller: desmatamento_especificacao,
                     name: 'Especificação',
                     validat: (value) {
                       return null;
@@ -793,7 +784,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                   textLabel(name: 'Queimadas:'),
+                  textLabel(name: 'Queimadas:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -807,7 +798,7 @@ void dispose() {
                   ))
                 ]),
                 CustomTextField(
-                  controller: queimadas_especificacao,
+                    controller: queimadas_especificacao,
                     name: 'Especificação',
                     validat: (value) {
                       return null;
@@ -822,7 +813,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                   textLabel(name: 'Insegurança:'),
+                  textLabel(name: 'Insegurança:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -836,7 +827,7 @@ void dispose() {
                   ))
                 ]),
                 CustomTextField(
-                  controller: inseguranca_especificacao,
+                    controller: inseguranca_especificacao,
                     name: 'Especificação',
                     validat: (value) {
                       return null;
@@ -851,7 +842,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                   textLabel(name: 'Extrativismo:'),
+                  textLabel(name: 'Extrativismo:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -865,7 +856,7 @@ void dispose() {
                   ))
                 ]),
                 CustomTextField(
-                  controller: extrativismo_especificacao,
+                    controller: extrativismo_especificacao,
                     name: 'Especificação',
                     validat: (value) {
                       return null;
@@ -880,7 +871,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                   textLabel(name: 'Prostituição:'),
+                  textLabel(name: 'Prostituição:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -894,7 +885,7 @@ void dispose() {
                   ))
                 ]),
                 CustomTextField(
-                    controller:prostituicao_especificacao,
+                    controller: prostituicao_especificacao,
                     name: 'Especificação',
                     validat: (value) {
                       return null;
@@ -909,7 +900,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                   textLabel(name: 'Ocupações\nirregulares/invasão'),
+                  textLabel(name: 'Ocupações\nirregulares/invasão'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -923,7 +914,7 @@ void dispose() {
                   ))
                 ]),
                 CustomTextField(
-                  controller: ocupacao_irregular_invasao_especificacao,
+                    controller: ocupacao_irregular_invasao_especificacao,
                     name: 'Especificação',
                     validat: (value) {
                       return null;
@@ -936,7 +927,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                   textLabel(name: 'Outras:'),
+                  textLabel(name: 'Outras:'),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -950,7 +941,7 @@ void dispose() {
                   ))
                 ]),
                 CustomTextField(
-                  controller: outras_especificacao,
+                    controller: outras_especificacao,
                     name: 'Especificação',
                     validat: (value) {
                       return null;
@@ -962,7 +953,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Container(
-                  color:  Color.fromARGB(255, 55, 111, 60),
+                  color: const Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -987,7 +978,7 @@ void dispose() {
                   height: sizeScreen.height * 0.03,
                 ),
                 Container(
-                  color: Color.fromARGB(255, 55, 111, 60),
+                  color: const Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -1017,7 +1008,7 @@ void dispose() {
                   height: sizeScreen.height * 0.05,
                 ),
                 Container(
-                  color: Color.fromARGB(255, 55, 111, 60),
+                  color: const Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -1047,7 +1038,7 @@ void dispose() {
                   height: sizeScreen.height * 0.05,
                 ),
                 Container(
-                  color: Color.fromARGB(255, 55, 111, 60),
+                  color: const Color.fromARGB(255, 55, 111, 60),
                   height: sizeScreen.height * 0.06,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
@@ -1063,8 +1054,7 @@ void dispose() {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                textLabel(
-                    name: 'Responsável pelo atendimento (Pesquisador)'),
+                textLabel(name: 'Responsável pelo atendimento (Pesquisador)'),
                 CustomTextField(
                   controller: nome_pesquisador,
                   validat: (value) {
@@ -1106,8 +1096,7 @@ void dispose() {
                     valoresjson['email_pesquisador'] = newValue;
                   },
                 ),
-                textLabel(
-                    name: 'Responsável pelo atendimento (Coordenador)'),
+                textLabel(name: 'Responsável pelo atendimento (Coordenador)'),
                 CustomTextField(
                   controller: nome_coordenador,
                   validat: (value) {
@@ -1157,17 +1146,23 @@ void dispose() {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () {
-                      List<String> selectedValues = checkCKey.currentState!.getSelectedValues();
-                      List<String> posto = postoCombustivel.currentState!.getSelectedValues();
-                      List<String> outrosServicoss = outrosServicos.currentState!.getSelectedValues();
-                      List<String> estruturas = estruturasAoLongoDaVia.currentState!.getSelectedValues();
+                      List<String> selectedValues =
+                          checkCKey.currentState!.getSelectedValues();
+                      List<String> posto =
+                          postoCombustivel.currentState!.getSelectedValues();
+                      List<String> outrosServicoss =
+                          outrosServicos.currentState!.getSelectedValues();
+                      List<String> estruturas = estruturasAoLongoDaVia
+                          .currentState!
+                          .getSelectedValues();
 
                       // String selectedValuesStr = selectedValues.join(', ');
                       // String postoStr = posto.join(', ');
                       // String outrosServicosStr = outrosServicoss.join(', ');
                       // String estruturasStr = estruturas.join(', ');
-                      
-                      valoresjson['tipo_de_organizacao_instituicao'] = selectedValues;
+
+                      valoresjson['tipo_de_organizacao_instituicao'] =
+                          selectedValues;
                       valoresjson['posto_de_combustivel'] = posto;
                       valoresjson['outros_servicos'] = outrosServicoss;
                       valoresjson['estruturas_ao_longo_da_via'] = estruturas;
@@ -1175,14 +1170,13 @@ void dispose() {
                       if (_formKey.currentState!.validate()) {
                         //  ScaffoldMessenger.of(context).showSnackBar(
                         //      SnackBar(content: Text('processing data')));
-                        
+
                         _formKey.currentState!.save();
                         debugPrint(valoresjson.toString(), wrapWidth: 1024);
                         sendForm(valoresjson);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                                content: Text('preencha os dados!')));
+                            const SnackBar(content: Text('preencha os dados!')));
                       }
                       Navigator.pushReplacementNamed(context, '/SendedForm');
                     },
@@ -1191,16 +1185,15 @@ void dispose() {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10)),
                     ),
-                    child: Text(
+                    child: const Text(
                       'Enviar',
                       style: TextStyle(
                           color: Colors.white,
                           fontSize: 25), // Use um fontSize fixo
                     ),
-                    
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 15,
                 )
               ],
