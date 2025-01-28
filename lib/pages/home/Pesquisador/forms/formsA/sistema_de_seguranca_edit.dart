@@ -15,42 +15,42 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class SistemaDeSegurancaEdit extends StatefulWidget {
-  
   final SistemaDeSegurancaModel? sistemaModel;
   SistemaDeSegurancaEdit({super.key, this.sistemaModel});
 
   @override
   State<SistemaDeSegurancaEdit> createState() => _SistemaDeSegurancaEditState();
 }
+
 final GlobalKey<CheckCState> checkCKey = GlobalKey<CheckCState>();
 
-    Future<void> updateSistemaDeSeguranca(int sistemaId, Map<String, dynamic> data) async{
+Future<void> updateSistemaDeSeguranca(
+    int sistemaId, Map<String, dynamic> data) async {
+  final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('acess_token');
 
-      final prefs =  await SharedPreferences.getInstance();
-      String? token = prefs.getString('acess_token');
-
-      final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/sistemadeseguranca/update/$sistemaId');
+  final url = Uri.parse(
+      '${AppConstants.BASE_URI}/api/v1/sistemadeseguranca/update/$sistemaId');
 
   print('OSIADOAOSD ${token}');
 
-      try{
-      final response = await http.patch(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode(data),
-      );
-      if(response.statusCode == 200){
-        print("Atualização bem-sucedida");
-      }else{
-        print("Erro na atualização: ${response.statusCode}");
-      }
-      }catch(e){
-        print('Erro: $e');
-      }
-
+  try {
+    final response = await http.patch(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode(data),
+    );
+    if (response.statusCode == 200) {
+      print("Atualização bem-sucedida");
+    } else {
+      print("Erro na atualização: ${response.statusCode}");
     }
+  } catch (e) {
+    print('Erro: $e');
+  }
+}
 
 class _SistemaDeSegurancaEditState extends State<SistemaDeSegurancaEdit> {
   TextEditingController email_coordenador = TextEditingController();
@@ -89,121 +89,113 @@ class _SistemaDeSegurancaEditState extends State<SistemaDeSegurancaEdit> {
     // TODO: implement initState
     super.initState();
     autoFillForm();
-   if (widget.sistemaModel!.contatos != null) {
-    qtdeInfo = widget.sistemaModel!.contatos!.length;
-    qtdeServicosEspecializados = widget.sistemaModel!.contatos!.length;
-
-   }
-
-   if(qtdeInfo>=0){
-      for(int i = 1; i<qtdeInfo;i++){
-
-           sections.add(Tables());
-
-      }
-      for(int i = 0; i<qtdeInfo; i++){
-             if(i < widget.sistemaModel!.contatos!.length){
-        var contato = widget.sistemaModel!.contatos![i];
-        sections[i].fillForm(contato.nome!, contato.endereco!, contato.whatsapp!, contato.email!);
-      }
-       
-      }
- 
-   }
-
-   if(qtdeServicosEspecializados>=0){
-    for(int i =1; i<qtdeServicosEspecializados;i++){
-      sections2.add(Tables2());
+    if (widget.sistemaModel!.contatos != null) {
+      qtdeInfo = widget.sistemaModel!.contatos!.length;
+      qtdeServicosEspecializados = widget.sistemaModel!.contatos!.length;
     }
 
-          for(int i = 0; i<qtdeServicosEspecializados; i++){
-             if(i < widget.sistemaModel!.servicosEspecializados!.length){
-        var servicos = widget.sistemaModel!.servicosEspecializados![i];
-        sections2[i].fillForm(servicos.email!, servicos.servicosEspecializados!, servicos.outrasInformacoes!);
+    if (qtdeInfo >= 0) {
+      for (int i = 1; i < qtdeInfo; i++) {
+        sections.add(Tables());
       }
-       
+      for (int i = 0; i < qtdeInfo; i++) {
+        if (i < widget.sistemaModel!.contatos!.length) {
+          var contato = widget.sistemaModel!.contatos![i];
+          sections[i].fillForm(contato.nome!, contato.endereco!,
+              contato.whatsapp!, contato.email!);
+        }
       }
-   }
-  }
+    }
 
+    if (qtdeServicosEspecializados >= 0) {
+      for (int i = 1; i < qtdeServicosEspecializados; i++) {
+        sections2.add(Tables2());
+      }
+
+      for (int i = 0; i < qtdeServicosEspecializados; i++) {
+        if (i < widget.sistemaModel!.servicosEspecializados!.length) {
+          var servicos = widget.sistemaModel!.servicosEspecializados![i];
+          sections2[i].fillForm(servicos.email!,
+              servicos.servicosEspecializados!, servicos.outrasInformacoes!);
+        }
+      }
+    }
+  }
 
   final _formKey = GlobalKey<FormState>();
 
   void autoFillForm() {
-    if(widget.sistemaModel!.uf != null){
-    uf.text = widget.sistemaModel!.uf!;
-    }else{
+    if (widget.sistemaModel!.uf != null) {
+      uf.text = widget.sistemaModel!.uf!;
+    } else {
       uf.text = '';
     }
 
-    if(widget.sistemaModel!.regiaoTuristica !=null){
+    if (widget.sistemaModel!.regiaoTuristica != null) {
       regiao_turistica.text = widget.sistemaModel!.regiaoTuristica!;
-    }else{
+    } else {
       regiao_turistica.text = '';
     }
 
-    if(widget.sistemaModel!.municipio !=null){
+    if (widget.sistemaModel!.municipio != null) {
       municipio.text = widget.sistemaModel!.municipio!;
-    }else{
+    } else {
       municipio.text = '';
     }
 
-    if(widget.sistemaModel!.tipo !=null){
+    if (widget.sistemaModel!.tipo != null) {
       tipo.text = widget.sistemaModel!.tipo!;
-    }else{
+    } else {
       tipo.text = '';
     }
 
-    if(widget.sistemaModel!.observacoes !=null){
+    if (widget.sistemaModel!.observacoes != null) {
       observacoes.text = widget.sistemaModel!.observacoes!;
-    }else{
+    } else {
       observacoes.text = '';
     }
 
-    if(widget.sistemaModel!.referencias !=null){
+    if (widget.sistemaModel!.referencias != null) {
       referencias.text = widget.sistemaModel!.referencias!;
-    }else{
+    } else {
       referencias.text = '';
     }
-    
-    
-if (widget.sistemaModel!.nomePesquisador != null) {
-  nome_pesquisador.text = widget.sistemaModel!.nomePesquisador!;
-} else {
-  nome_pesquisador.text = '';
-}
 
-if (widget.sistemaModel!.telefonePesquisador != null) {
-  telefone_pesquisador.text = widget.sistemaModel!.telefonePesquisador!;
-} else {
-  telefone_pesquisador.text = '';
-}
+    if (widget.sistemaModel!.nomePesquisador != null) {
+      nome_pesquisador.text = widget.sistemaModel!.nomePesquisador!;
+    } else {
+      nome_pesquisador.text = '';
+    }
 
-if (widget.sistemaModel!.emailPesquisador != null) {
-  email_pesquisador.text = widget.sistemaModel!.emailPesquisador!;
-} else {
-  email_pesquisador.text = '';
-}
+    if (widget.sistemaModel!.telefonePesquisador != null) {
+      telefone_pesquisador.text = widget.sistemaModel!.telefonePesquisador!;
+    } else {
+      telefone_pesquisador.text = '';
+    }
 
-if (widget.sistemaModel!.nomeCoordenador != null) {
-  nome_coordenador.text = widget.sistemaModel!.nomeCoordenador!;
-} else {
-  nome_coordenador.text = '';
-}
+    if (widget.sistemaModel!.emailPesquisador != null) {
+      email_pesquisador.text = widget.sistemaModel!.emailPesquisador!;
+    } else {
+      email_pesquisador.text = '';
+    }
 
-if (widget.sistemaModel!.telefoneCoordenador != null) {
-  telefone_coordenador.text = widget.sistemaModel!.telefoneCoordenador!;
-} else {
-  telefone_coordenador.text = '';
-}
+    if (widget.sistemaModel!.nomeCoordenador != null) {
+      nome_coordenador.text = widget.sistemaModel!.nomeCoordenador!;
+    } else {
+      nome_coordenador.text = '';
+    }
 
-if (widget.sistemaModel!.emailCoordenador != null) {
-  email_coordenador.text = widget.sistemaModel!.emailCoordenador!;
-} else {
-  email_coordenador.text = '';
-}
+    if (widget.sistemaModel!.telefoneCoordenador != null) {
+      telefone_coordenador.text = widget.sistemaModel!.telefoneCoordenador!;
+    } else {
+      telefone_coordenador.text = '';
+    }
 
-
+    if (widget.sistemaModel!.emailCoordenador != null) {
+      email_coordenador.text = widget.sistemaModel!.emailCoordenador!;
+    } else {
+      email_coordenador.text = '';
+    }
   }
 
   void dispose() {
@@ -227,12 +219,9 @@ if (widget.sistemaModel!.emailCoordenador != null) {
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
 
-
-
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-
           iconTheme: IconThemeData(color: Colors.white),
           backgroundColor: Color.fromARGB(255, 55, 111, 60),
           title: Text(
@@ -308,7 +297,7 @@ if (widget.sistemaModel!.emailCoordenador != null) {
                       name: 'Tipo:',
                       fontWeight: FontWeight.bold,
                     ),
-                    RadioC(
+                    RadioD(
                       options: [
                         'Polícia Civil',
                         'Polícia Militar',
@@ -324,9 +313,7 @@ if (widget.sistemaModel!.emailCoordenador != null) {
                       getValue: (newValue) {
                         valoresjson['tipo'] = newValue;
                       },
-                    indexModel: widget.sistemaModel!.tipo,
-
-                      number: 10,
+                      indexModel: widget.sistemaModel!.tipo,
                     ),
                     SizedBox(
                       height: sizeScreen.height * 0.03,
@@ -565,21 +552,23 @@ if (widget.sistemaModel!.emailCoordenador != null) {
                       height: 50,
                       width: 300,
                       child: ElevatedButton(
-                        
                         onPressed: () {
+                          valoresjson['contatos'] = sections
+                              .map((element) => element.getData())
+                              .toList();
+                          valoresjson['servicos_especializados'] = sections2
+                              .map((element) => element.getData())
+                              .toList();
+                          if (_formKey.currentState!.validate()) {
+                            //  ScaffoldMessenger.of(context).showSnackBar(
+                            //      SnackBar(content: Text('processing data')));
 
-                          valoresjson['contatos'] = sections.map((element) => element.getData()).toList();
-                          valoresjson['servicos_especializados'] = sections2.map((element) => element.getData()).toList();
-                         if (_formKey.currentState!.validate()) {
-                        //  ScaffoldMessenger.of(context).showSnackBar(
-                        //      SnackBar(content: Text('processing data')));
-                        
-                        _formKey.currentState!.save();
-                        updateSistemaDeSeguranca(widget.sistemaModel!.id!, valoresjson);
-                   Navigator.pushReplacementNamed(context, '/UpdatedForm');
-
-                      
-                     }
+                            _formKey.currentState!.save();
+                            updateSistemaDeSeguranca(
+                                widget.sistemaModel!.id!, valoresjson);
+                            Navigator.pushReplacementNamed(
+                                context, '/UpdatedForm');
+                          }
 
                           // Navigator.pushReplacementNamed(context, '/SendedForm');
                         },

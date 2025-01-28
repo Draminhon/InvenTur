@@ -31,6 +31,63 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
   final PesquisaController _pesquisaController = PesquisaController();
   final TextEditingController _estadoController = TextEditingController();
   final TextEditingController _paisController = TextEditingController();
+  final Map<String, dynamic> valoresjson = {
+    'tipo_formulario': 'Meios de Hospedagem',
+    'uf': null,
+    'regiao_turistica': null,
+    'municipio': null,
+    'tipo': null,
+    'subtipo': null,
+    'razao_social': null,
+    'nome_fantasia': null,
+    'codigo_CNAE': null,
+    'atividade_economica': null,
+    'inscricao_municipal': null,
+    'nome_da_rede_holding': null,
+    'CNPJ': null,
+    'natureza': null,
+    'tipo_de_organizacao_instituicao': null,
+    'inicio_atividade': null,
+    'quantidade_funcionarios_permanentes': null,
+    'quantidade_funcionarios_temporarios': null,
+    'quantidade_funcionarios_com_deficiencia': null,
+    'localizacao': null,
+    'coordenadas_geograficas_latitude': null,
+    'coordenadas_geograficas_longitude': null,
+    'endereco_rua_avenida_travessia_caminho_outro': null,
+    'endereco_bairro_localidade': null,
+    'endereco_distrito': null,
+    'endereco_CEP': null,
+    'whatsapp': null,
+    'instagram': null,
+    'email': null,
+    'site': null,
+    'sinalizacao_de_acesso': null,
+    'sinalizacao_turistica': null,
+    'proximidades': null,
+    'pontos_de_referencia': null,
+    'MTur_CADASTUR': null,
+    'MTur_outros': null,
+    'associacoes_e_sindicatos_do_setor_de_hospedagem': null,
+    'associcoes_de_turismo': null,
+    'associacoes_comerciais': null,
+    'guias_turisticos':null,
+    'outros_entidade_guia_turistico': null,
+    'segmentos_ou_tipos_de_turismo_em_que_é_especializado': null,
+    'tipo_de_diária': null,
+    'formas_de_pagamento': null,
+    'reservas': null,
+    'atendimento_em_lingua_estrangeira': null,
+    'informativo impressos': null,
+    'observacoes': null,
+    'referencias': null,
+    'nome_pesquisador': 'jose',
+    'telefone_pesquisador': '12453',
+    'email_pesquisador': 'jose@gmail.com',
+    'nome_coordenador': 'oihaioo',
+    'telefone_coordenador': '4444',
+    'email_coordenador': 'ogaio@gmail.com',
+  };
 
 @override
   void initState() {
@@ -116,7 +173,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
                textLabel(name: 'Subtipos:', fontWeight: FontWeight.bold),
 
-              RadioC(number: 18, options:  [
+              RadioD( options:  [
                 'Hotel',
                 'Hotel histórico',
                 'Pousada',
@@ -1905,218 +1962,13 @@ SizedBox(height: sizeScreen.height * 0.02,),
                     child: ExpansionTileYoN(getValue: (String ) {  },))
               ]),
                SizedBox(height: sizeScreen.height * 0.02,),
-               TabelaT4(
-                column01: [
-                  Text('Categoria'),
-                  Text('Municipal'),
-                  Text('Municipal'),
-                  Text('Municipal'),
-                  Text('Municipal'),
-                ],
-                column02: [
-                  Text('instrumento (nª)'),
-                  Text('Lei/decreto'),
-                  Text('Portaria/instrução/deliberação'),
-                  Text('Norma/ato'),
-                  Text('Outros'),
-                ],
-                column03: [
-                  Text('Nome/titulo/certificação/licenciamento/outro'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-                column04: [
-                  Text('Entidade declaratória/tipo de declaração'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-               TabelaT4(
-                column01: [
-                  Text('Estadual/Distrital'),
-                  Text('Estadual/Distrital'),
-                  Text('Estadual/Distrital'),
-                  Text('Estadual/Distrital'),
-                  Text('Estadual/Distrital'),
-                ],
-                column02: [
-                  Text('instrumento (nª)'),
-                  Text('Lei/decreto'),
-                  Text('Portaria/instrução/deliberação'),
-                  Text('Norma/ato'),
-                  Text('Outros'),
-                ],
-                column03: [
-                  Text('Nome/titulo/certificação/licenciamento/outro'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-                column04: [
-                  Text('Entidade declaratória/tipo de declaração'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-               TabelaT4(
-                column01: [
-                  Text('Categoria'),
-                  Text('Federal'),
-                  Text('Federal'),
-                  Text('Federal'),
-                  Text('Federal'),
-                ],
-                column02: [
-                  Text('instrumento (nª)'),
-                  Text('Lei/decreto'),
-                  Text('Portaria/instrução/deliberação'),
-                  Text('Norma/ato'),
-                  Text('Outros'),
-                ],
-                column03: [
-                  Text('Nome/titulo/certificação/licenciamento/outro'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-                column04: [
-                  Text('Entidade declaratória/tipo de declaração'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-               TabelaT4(
-                column01: [
-                  Text('Estadual/Distrital'),
-                  Text('Internacional'),
-                  Text('Internacional'),
-                  Text('Internacional'),
-                  Text('Internacional'),
-                  Text('Outras'),
-                ],
-                column02: [
-                  Text('instrumento (nª)'),
-                  Text('Lei/decreto'),
-                  Text('Portaria/instrução/deliberação'),
-                  Text('Norma/ato'),
-                  Text('Outros'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-                column03: [
-                  Text('Nome/titulo/certificação/licenciamento/outro'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-                column04: [
-                  Text('Entidade declaratória/tipo de declaração'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
+                TabelsEquipamentoEEspaco(),
               Row(children: [
                  
                  textLabel(
                   
                     name:
-                        'Da área ou edificação \nem que está\nlocalizado / Instalado'),
+                        'Da área ou edificação \nem que está\nlocalizado / Instalado', fontWeight: FontWeight.bold,),
                 SizedBox(
                   width: sizeScreen.width * 0.04,
                 ),
@@ -2125,212 +1977,12 @@ SizedBox(height: sizeScreen.height * 0.02,),
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN(getValue: (String ) {  },))
               ]),
+                TabelsEquipamentoEEspaco(),        
+
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-               TabelaT4(
-                column01: [
-                  Text('Categoria'),
-                  Text('Municipal'),
-                  Text('Municipal'),
-                  Text('Municipal'),
-                  Text('Municipal'),
-                ],
-                column02: [
-                  Text('instrumento (nª)'),
-                  Text('Lei/decreto'),
-                  Text('Portaria/instrução/deliberação'),
-                  Text('Norma/ato'),
-                  Text('Outros'),
-                ],
-                column03: [
-                  Text('Nome/titulo/certificação/licenciamento/outro'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-                column04: [
-                  Text('Entidade declaratória/tipo de declaração'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-               TabelaT4(
-                column01: [
-                  Text('Estadual/Distrital'),
-                  Text('Estadual/Distrital'),
-                  Text('Estadual/Distrital'),
-                  Text('Estadual/Distrital'),
-                  Text('Estadual/Distrital'),
-                ],
-                column02: [
-                  Text('instrumento (nª)'),
-                  Text('Lei/decreto'),
-                  Text('Portaria/instrução/deliberação'),
-                  Text('Norma/ato'),
-                  Text('Outros'),
-                ],
-                column03: [
-                  Text('Nome/titulo/certificação/licenciamento/outro'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-                column04: [
-                  Text('Entidade declaratória/tipo de declaração'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-               TabelaT4(
-                column01: [
-                  Text('Categoria'),
-                  Text('Federal'),
-                  Text('Federal'),
-                  Text('Federal'),
-                  Text('Federal'),
-                ],
-                column02: [
-                  Text('instrumento (nª)'),
-                  Text('Lei/decreto'),
-                  Text('Portaria/instrução/deliberação'),
-                  Text('Norma/ato'),
-                  Text('Outros'),
-                ],
-                column03: [
-                  Text('Nome/titulo/certificação/licenciamento/outro'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-                column04: [
-                  Text('Entidade declaratória/tipo de declaração'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-               TabelaT4(
-                column01: [
-                  Text('Estadual/Distrital'),
-                  Text('Internacional'),
-                  Text('Internacional'),
-                  Text('Internacional'),
-                  Text('Internacional'),
-                  Text('Outras'),
-                ],
-                column02: [
-                  Text('instrumento (nª)'),
-                  Text('Lei/decreto'),
-                  Text('Portaria/instrução/deliberação'),
-                  Text('Norma/ato'),
-                  Text('Outros'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-                column03: [
-                  Text('Nome/titulo/certificação/licenciamento/outro'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-                column04: [
-                  Text('Entidade declaratória/tipo de declaração'),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                  TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ],
-              ),
+       
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
@@ -2370,15 +2022,15 @@ SizedBox(height: sizeScreen.height * 0.02,),
                SizedBox(height: sizeScreen.height * 0.02,),
                textLabel(
                     name:
-                        'Possui alguma facilidade para pessoas com deficiência ou mobilidade reduzida?'),
+                        'Possui alguma facilidade para pessoas com deficiência ou mobilidade reduzida?', fontWeight: FontWeight.bold,),
                SizedBox(height: sizeScreen.height * 0.04,),
                ExpansionTileYoN(getValue: (String ) {  },),
  SizedBox(height: sizeScreen.height * 0.02,),
                textLabel(
-                    name: 'obs: responder às questões seguintes'),
+                    name: 'obs: responder às questões seguintes', fontWeight: FontWeight.bold,),
           SizedBox(height: sizeScreen.height * 0.02,),
   textLabel(
-                    name: 'Pessoal capacitado para receber PCD:'),
+                    name: 'Pessoal capacitado para receber PCD:', fontWeight: FontWeight.bold,),
                 SizedBox(height: sizeScreen.height * 0.02,),
                CheckC(nomes: [
                 'Não',
@@ -2388,7 +2040,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Mental',
                 'Múltipla'
               ], ),
-              textLabel(name: 'Rota externa acessível:'),
+              textLabel(name: 'Rota externa acessível:', fontWeight: FontWeight.bold,),
                 SizedBox(height: sizeScreen.height * 0.02,),
                CheckC(nomes: [
                 'Não',
@@ -2402,7 +2054,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Livre de obstáculos',
                 'outro'
               ],),
-             textLabel(name: 'Símbolo internacional de acesso:'),
+             textLabel(name: 'Símbolo internacional de acesso:', fontWeight: FontWeight.bold,),
               
                CheckC(nomes: [
                 'Não',
@@ -2413,11 +2065,11 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Sanitário',
                 'Saída de emergência',
               ], ),
-               textLabel(name: 'Local de embarque e desembarque'),
+               textLabel(name: 'Local de embarque e desembarque', fontWeight: FontWeight.bold,),
               
                CheckC(
                  nomes: ['Não', 'Sinalizado', 'Com acesso em nível'],),
-               textLabel(name: 'Vaga em estacionamento:'),
+               textLabel(name: 'Vaga em estacionamento:', fontWeight: FontWeight.bold,),
               
                CheckC(nomes: [
                 'Não',
@@ -2428,7 +2080,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
                textLabel(
                     name:
-                        'Área de circulação / acesso interno\npara cadeira de rodas:'),
+                        'Área de circulação / acesso interno\npara cadeira de rodas:', fontWeight: FontWeight.bold,),
               
                CheckC(nomes: [
                 'Não',
@@ -2438,7 +2090,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Porta larga',
                 'Piso regular / antiderrapante'
               ], ),
-               textLabel(name: 'Escada:'),
+               textLabel(name: 'Escada:', fontWeight: FontWeight.bold,),
               
                CheckC(nomes: [
                 'Não',
@@ -2448,7 +2100,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Piso antiderrapante',
               ], ),
 
-          textLabel(name: 'Rampa:'),
+          textLabel(name: 'Rampa:', fontWeight: FontWeight.bold,),
               
                CheckC(nomes: [
                 'Não',
@@ -2458,7 +2110,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Piso antiderrapante',
                 'Inclinação adequada',
               ],),
-                textLabel(name: 'Piso:'),
+                textLabel(name: 'Piso:', fontWeight: FontWeight.bold,),
               
                   CheckC(nomes: [
                 'Não',
@@ -2466,7 +2118,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Sem obstáculos',
                 'Antiderrapante/deslizante',
               ],),
-                textLabel(name: 'Elevador:'),
+                textLabel(name: 'Elevador:', fontWeight: FontWeight.bold,),
               
                 CheckC(nomes: [
                 'Não',
@@ -2477,14 +2129,14 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
              textLabel(
                     name:
-                        'Equipamento motorizado para deslocamento interno:'),
+                        'Equipamento motorizado para deslocamento interno:', fontWeight: FontWeight.bold,),
            
                   CheckC(nomes: [
                 'Não',
                 'Cadeira',
                 'Carrinho',
               ], ),
-              textLabel(name: 'Sinalização visual:'),
+              textLabel(name: 'Sinalização visual:', fontWeight: FontWeight.bold,),
               
                     CheckC(nomes: [
                 'Não',
@@ -2497,7 +2149,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Área de lazer',
                 'Área de resgate',
               ],),
-              textLabel(name: 'Sinalização tátil:'),
+              textLabel(name: 'Sinalização tátil:', fontWeight: FontWeight.bold,),
               
                     CheckC(nomes: [
                 'Não',
@@ -2510,7 +2162,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Área de lazer',
                 'Área de resgate',
               ], ),
-              textLabel(name: 'Alarme de emergência:'),
+              textLabel(name: 'Alarme de emergência:', fontWeight: FontWeight.bold,),
               
                   CheckC(nomes: [
                 'Não',
@@ -2518,7 +2170,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Visual',
                 'Vibratório',
               ], ),
-             textLabel(name: 'Comunicação:'),
+             textLabel(name: 'Comunicação:', fontWeight: FontWeight.bold,),
               
                      CheckC(nomes: [
                 'Não',
@@ -2526,21 +2178,21 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Texto informativo em fonte ampliada',
                 'Intérprete em libras',
               ], ),
-              textLabel(name: 'Balcão de atendimento:'),
+              textLabel(name: 'Balcão de atendimento:', fontWeight: FontWeight.bold,),
               
                 CheckC(nomes: [
                 'Não',
                 'Rebaixado',
                 'Preferencial para PCD ou com deficiência ou mobilidade reduzida',
               ], ),
-              textLabel(name: 'Mobiliário:'),
+              textLabel(name: 'Mobiliário:', fontWeight: FontWeight.bold,),
               
                   CheckC(nomes: [
                 'Não',
                 'Altura adequada',
                 'Recuo adequado',
               ], ),
-                textLabel(name: 'Sanitário:'),
+                textLabel(name: 'Sanitário:', fontWeight: FontWeight.bold,),
               
                     CheckC(nomes: [
                 'Não',
@@ -2553,7 +2205,7 @@ SizedBox(height: sizeScreen.height * 0.02,),
                 'Pia rebaixada',
                 'Boxe ou banheira daptada',
               ], ),
-               textLabel(name: 'Telefone:'),
+               textLabel(name: 'Telefone:', fontWeight: FontWeight.bold,),
               
                    CheckC(nomes: [
                 'Não',
@@ -2562,14 +2214,14 @@ SizedBox(height: sizeScreen.height * 0.02,),
               ], ),
                 textLabel(
                     name:
-                        'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida:'),
+                        'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida:', fontWeight: FontWeight.bold,),
                SizedBox(height: 50,),
 
                ExpansionTileYoN(getValue: (String ) {  },),
               SizedBox(height: sizeScreen.height * 0.02,),              Row(
                 children: [
                 
-                   textLabel(name: 'Outros'),
+                   textLabel(name: 'Outros', fontWeight: FontWeight.bold,),
                   SizedBox(
                     width: sizeScreen.width * 0.1,
                   ),

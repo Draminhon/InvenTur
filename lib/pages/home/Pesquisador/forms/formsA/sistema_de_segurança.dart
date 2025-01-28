@@ -22,7 +22,8 @@ class SistemaDeSeguranca extends StatefulWidget {
 Future<void> sendForm(Map<String, dynamic> valoresjson) async {
   final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('acess_token');
-  final url = Uri.parse(AppConstants.BASE_URI + '/api/v1/sistemaseguranca/create/');
+  final url =
+      Uri.parse(AppConstants.BASE_URI + '/api/v1/sistemaseguranca/create/');
   int? pesquisa_id = await getPesquisaId();
 
   try {
@@ -188,7 +189,7 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                       name: 'Tipo:',
                       fontWeight: FontWeight.bold,
                     ),
-                    RadioC(
+                    RadioD(
                       options: [
                         'Polícia Civil',
                         'Polícia Militar',
@@ -204,7 +205,6 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                       getValue: (newValue) {
                         valoresjson['tipo'] = newValue;
                       },
-                      number: 10,
                     ),
                     SizedBox(
                       height: sizeScreen.height * 0.03,
@@ -443,23 +443,27 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                       height: 50,
                       width: 300,
                       child: ElevatedButton(
-                        
                         onPressed: () {
-                          valoresjson['contatos'] = sections.map((element) => element.getData()).toList();
-                          valoresjson['servicos_especializados'] = sections2.map((element) => element.getData()).toList();
-                           autoFillForm();
-                         if (_formKey.currentState!.validate()) {
-                        //  ScaffoldMessenger.of(context).showSnackBar(
-                        //      SnackBar(content: Text('processing data')));
-                        
-                        _formKey.currentState!.save();
-                         debugPrint(valoresjson.toString(), wrapWidth: 1024);
-                        sendForm(valoresjson);
-                        sections2.forEach((element) => print(element.getData()));
-                      
-                     }
+                          valoresjson['contatos'] = sections
+                              .map((element) => element.getData())
+                              .toList();
+                          valoresjson['servicos_especializados'] = sections2
+                              .map((element) => element.getData())
+                              .toList();
+                          autoFillForm();
+                          if (_formKey.currentState!.validate()) {
+                            //  ScaffoldMessenger.of(context).showSnackBar(
+                            //      SnackBar(content: Text('processing data')));
 
-                          // Navigator.pushReplacementNamed(context, '/SendedForm');
+                            _formKey.currentState!.save();
+                            debugPrint(valoresjson.toString(), wrapWidth: 1024);
+                            sendForm(valoresjson);
+                            sections2
+                                .forEach((element) => print(element.getData()));
+                          }
+
+                          Navigator.pushReplacementNamed(
+                              context, '/SendedForm');
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.green[800],

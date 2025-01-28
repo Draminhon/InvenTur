@@ -118,7 +118,7 @@ class CheckCState extends State<CheckC> {
     return 
     SizedBox(
       width: sizeScreen.width,
-      height: widget.nomes.length == 3 ? sizeScreen.height * 0.2 : sizeScreen.height * 0.28,
+      height: widget.nomes.length == 3 ? 500.w : 750.w,
       child: RawScrollbar(
         thumbColor: const Color.fromARGB(255, 55, 111, 60),
         controller: firstController,

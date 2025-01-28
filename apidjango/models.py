@@ -40,7 +40,7 @@ class CustomUser(AbstractUser):
         ],
     )
     acessLevel = models.CharField(max_length=22, default='Pesquisador');
-    status = models.CharField(max_length=50, default='Aguardando Aprovação')
+    status = models.CharField(max_length=50, default='Ativo')
     
     def clean(self):
         super().clean()

@@ -449,139 +449,396 @@ class TabelaHorarios extends StatelessWidget {
 }
 
 class TablesInstalacoes extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    
-    return Column(
-      children: [
-      textLabel(name: 'Auditório', fontWeight: FontWeight.bold, ),
-
-        Row(children: [
-          Expanded(
-            child: CustomTextField(name: 'quantidade', validat: (p0) {
-              
-            }, getValue: (p0) {
-              
-            },),
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          textLabel(
+            name: 'Auditório',
+            fontWeight: FontWeight.bold,
           ),
-           Expanded(
-             child: CustomTextField(name: 'área total(m²)', validat: (p0) {
-              
-                   }, getValue: (p0) {
-              
-                   },),
-           ),
-           Expanded(
-             child: CustomTextField(name: 'capacidade nºpessoas', validat: (p0) {
-              
-                   }, getValue: (p0) {
-              
-                   },),
-           )
-        ],),
-         textLabel(name: 'Salas modulares', fontWeight: FontWeight.bold, ),
-
-        Row(children: [
-          Expanded(
-            child: CustomTextField(name: 'quantidade', validat: (p0) {
-              
-            }, getValue: (p0) {
-              
-            },),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  name: 'quantidade',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  name: 'área total(m²)',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  name: 'capacidade nºpessoas',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              )
+            ],
           ),
-           Expanded(
-             child: CustomTextField(name: 'área total(m²)', validat: (p0) {
-              
-                   }, getValue: (p0) {
-              
-                   },),
-           ),
-           Expanded(
-             child: CustomTextField(name: 'capacidade nºpessoas', validat: (p0) {
-              
-                   }, getValue: (p0) {
-              
-                   },),
-           )
-        ],),
-         textLabel(name: 'Pavilhão de Feiras', fontWeight: FontWeight.bold, ),
-
-        Row(children: [
-          Expanded(
-            child: CustomTextField(name: 'quantidade', validat: (p0) {
-              
-            }, getValue: (p0) {
-              
-            },),
+          textLabel(
+            name: 'Salas modulares',
+            fontWeight: FontWeight.bold,
           ),
-           Expanded(
-             child: CustomTextField(name: 'área total(m²)', validat: (p0) {
-              
-                   }, getValue: (p0) {
-              
-                   },),
-           ),
-           Expanded(
-             child: CustomTextField(name: 'capacidade nºpessoas', validat: (p0) {
-              
-                   }, getValue: (p0) {
-              
-                   },),
-           )
-        ],),
-         textLabel(name: 'Área de exposição coberta', fontWeight: FontWeight.bold, ),
-
-        Row(children: [
-          Expanded(
-            child: CustomTextField(name: 'quantidade', validat: (p0) {
-              
-            }, getValue: (p0) {
-              
-            },),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  name: 'quantidade',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  name: 'área total(m²)',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  name: 'capacidade nºpessoas',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              )
+            ],
           ),
-           Expanded(
-             child: CustomTextField(name: 'área total(m²)', validat: (p0) {
-              
-                   }, getValue: (p0) {
-              
-                   },),
-           ),
-           Expanded(
-             child: CustomTextField(name: 'capacidade nºpessoas', validat: (p0) {
-              
-                   }, getValue: (p0) {
-              
-                   },),
-           )
-        ],),
-         textLabel(name: 'Área de exposição não coberta', fontWeight: FontWeight.bold, ),
-
-        Row(children: [
-          Expanded(
-            child: CustomTextField(name: 'quantidade', validat: (p0) {
-              
-            }, getValue: (p0) {
-              
-            },),
+          textLabel(
+            name: 'Pavilhão de Feiras',
+            fontWeight: FontWeight.bold,
           ),
-           Expanded(
-             child: CustomTextField(name: 'área total(m²)', validat: (p0) {
-              
-                   }, getValue: (p0) {
-              
-                   },),
-           ),
-           Expanded(
-             child: CustomTextField(name: 'capacidade nºpessoas', validat: (p0) {
-              
-                   }, getValue: (p0) {
-              
-                   },),
-           )
-        ],),
-      ],
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  name: 'quantidade',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  name: 'área total(m²)',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  name: 'capacidade nºpessoas',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              )
+            ],
+          ),
+          textLabel(
+            name: 'Área de exposição coberta',
+            fontWeight: FontWeight.bold,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  name: 'quantidade',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  name: 'área total(m²)',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  name: 'capacidade nºpessoas',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              )
+            ],
+          ),
+          textLabel(
+            name: 'Área de exposição não coberta',
+            fontWeight: FontWeight.bold,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: CustomTextField(
+                  name: 'quantidade',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  name: 'área total(m²)',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              ),
+              Expanded(
+                child: CustomTextField(
+                  name: 'capacidade nºpessoas',
+                  validat: (p0) {},
+                  getValue: (p0) {},
+                ),
+              )
+            ],
+          ),
+        ],
+      ),
     );
-    
   }
+}
 
+class TabelsEquipamentoEEspaco extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+
+    //Municipal
+
+          textLabel(
+            name: 'Municipal',
+            fontWeight: FontWeight.bold,
+          ),
+          textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(
+              name: 'portaria/instrução/deliberação',
+              fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(name: 'outros', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+
+    //Estadual/Distrital
+
+
+          textLabel(
+            name: 'Estadual/Distrital',
+            fontWeight: FontWeight.bold,
+          ),
+          textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(
+              name: 'portaria/instrução/deliberação',
+              fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(name: 'outros', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+
+        //Federal
+
+          textLabel(
+            name: 'Federal',
+            fontWeight: FontWeight.bold,
+          ),
+          textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(
+              name: 'portaria/instrução/deliberação',
+              fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(name: 'outros', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+
+          //Estadual/Distrital - Internacional
+
+
+          textLabel(
+            name: 'Estadual/Distrital - Internacional',
+            fontWeight: FontWeight.bold,
+          ),
+          textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(
+              name: 'portaria/instrução/deliberação',
+              fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          textLabel(name: 'outros', fontWeight: FontWeight.bold),
+          CustomTextField(
+            name: 'instrumento (n.º)',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'nome/titulo/certificação/licenciamento/outro',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+          CustomTextField(
+            name: 'entidade declaratória/tipo de declaração',
+            validat: (p0) {},
+            getValue: (p0) {},
+          ),
+        ],
+      ),
+    );
+  }
 }
