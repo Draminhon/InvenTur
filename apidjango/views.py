@@ -75,7 +75,7 @@ class PesquisaCreateView(generics.ListCreateAPIView):
 class PesquisaUsuarioListView(generics.ListAPIView):
 
     serializer_class = PesquisaSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    
 
     def get_queryset(self):
         user = self.request.user
