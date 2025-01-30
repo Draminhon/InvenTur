@@ -6,7 +6,6 @@ class ContainerA extends StatelessWidget {
   const ContainerA({super.key, required this.form, required this.routeName});
   @override
   Widget build(BuildContext context) {
-    final sizeScreen = MediaQuery.sizeOf(context);
 
     return GestureDetector(
       onTap: () {
@@ -32,7 +31,7 @@ class ContainerA extends StatelessWidget {
                   form,
                   textAlign: TextAlign.center,
                   style:  TextStyle(
-                fontSize: sizeScreen.width * 0.037,
+                fontSize: 55.w,
                       
                       color: Colors.white,
                       fontWeight: FontWeight.w900),
@@ -50,13 +49,13 @@ class Tilee extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final sizeScreen = MediaQuery.sizeOf(context);
     return GestureDetector(
       onTap: () {
         Navigator.pushReplacementNamed(context, routeName);
       },
       child: Container(
             margin: EdgeInsets.only(bottom: 29.92.h),
+            padding: EdgeInsets.symmetric(horizontal: 30.w),
             height: 179.52.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -75,7 +74,7 @@ class Tilee extends StatelessWidget {
                     style:  TextStyle(
                   fontSize: 49.72.w,
                        
-                        color: const Color.fromARGB(255, 55, 111, 60),
+                        color: Colors.black,
                         fontWeight: FontWeight.w900),
                   ))),
     );
@@ -96,7 +95,6 @@ class ExpansionTileA extends StatefulWidget {
 class _ExpansionTileA extends State<ExpansionTileA> {
   @override
   Widget build(BuildContext context) {
-    Size sizeScreen = MediaQuery.sizeOf(context);
     final String titulo = widget.titulo;
     List minhaLista = widget.minhaLista;
 
@@ -144,7 +142,7 @@ class _ExpansionTileA extends State<ExpansionTileA> {
                 style: TextStyle(
                   color: Colors.white, // Cor do texto para combinar com o botão
                   fontWeight: FontWeight.w900,
-                  fontSize: 49.728.w,
+                  fontSize: 55.w
                 ),
               ),
             

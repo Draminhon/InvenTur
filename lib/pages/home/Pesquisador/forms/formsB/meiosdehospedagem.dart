@@ -817,71 +817,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 fontWeight: FontWeight.bold,
               ),
 
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-              textLabel(
-                name: "MTur",
-                fontWeight: FontWeight.bold,
-              ),
-              CustomTextField(
-                name: "CADASTUR",
-                validat: (p0) {},
-                getValue: (p0) {},
-              ),
-              CustomTextField(
-                name: "outros",
-                validat: (p0) {},
-                getValue: (p0) {},
-              ),
-              textLabel(
-                name: "associações e sindicatos do setor de hospedagem",
-                fontWeight: FontWeight.bold,
-              ),
-              CustomTextField(
-                name: "categoria/tipo/classificação/número",
-                validat: (p0) {},
-                getValue: (p0) {},
-              ),
-              textLabel(
-                name: "associações de turismo",
-                fontWeight: FontWeight.bold,
-              ),
-              CustomTextField(
-                name: "categoria/tipo/classificação/número",
-                validat: (p0) {},
-                getValue: (p0) {},
-              ),
-              textLabel(
-                name: "associações comerciais",
-                fontWeight: FontWeight.bold,
-              ),
-              CustomTextField(
-                name: "categoria/tipo/classificação/número",
-                validat: (p0) {},
-                getValue: (p0) {},
-              ),
-              textLabel(
-                name: "guias turísticos",
-                fontWeight: FontWeight.bold,
-              ),
-              CustomTextField(
-                name: "categoria/tipo/classificação/número",
-                validat: (p0) {},
-                getValue: (p0) {},
-              ),
-              textLabel(
-                name: "outros",
-                fontWeight: FontWeight.bold,
-              ),
-              CustomTextField(
-                name: "categoria/tipo/classificação/número",
-                validat: (p0) {},
-                getValue: (p0) {},
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
+           TableMtur(),
               Center(
                 child: textLabel(
                   name:

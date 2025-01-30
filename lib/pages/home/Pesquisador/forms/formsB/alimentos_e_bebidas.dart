@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
 
 import '../../widgets/expandedTileYoN.dart';
 import 'widgets/checkBox.dart';
@@ -17,193 +19,7 @@ class AlimentoseBebidas extends StatefulWidget {
 
 class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
   final Map<String, dynamic> valoresjson = {
-    'uf': null,
-    'RG': null,
-    'Municipio': null,
-    'tipo': null,
-    'razãoSocial': null,
-    'nomeFantasia': null,
-    'CNPJ': null,
-    'CódigoCNAE': null,
-    'NomeDaRede': null,
-    'natureza': null,
-    'tipoDeOrganizacao': null,
-    'inicioDaAtividade': null,
-    'qtdeFuncionariosPermanentes': null,
-    'qtdeFuncionariosTemporarios': null,
-    'qtdeFuncionariosComDeficiencia': null,
-    'localização': null,
-    'latitude': null,
-    'longitude': null,
-    'avenida/rua/etc': null,
-    'bairro/localidade': null,
-    'distrito': null,
-    'CEP': null,
-    'TelefonePrincipal': null,
-    'TelefoneSecundario': null,
-    'Email': null,
-    'Site': null,
-    'SinalizaçãoDeAcesso': null,
-    'SinalizaçãoTurística': null,
-    'Proximidades': null,
-    'PontosDeReferência': null,
-    'AssociaçõesDeTurismos': null,
-    'AssociaçõesComerciais': null,
-    'GuiasTurísticos': null,
-    'Outros': null,
-    'FormaPagamento': null,
-    'VendaseReservas': null,
-    'LinguaEstrangeira': null,
-    'InformativosImpressos': null,
-    'PeriodoFuncionamento': null,
-    'Segunda-Feira_abertura': null,
-    'Terça-Feira_abertura': null,
-    'Quarta-Feira_abertura': null,
-    'Quinta-Feira_abertura': null,
-    'Sexta-Feira_abertura': null,
-    'Sabado_abertura': null,
-    'Domingo_abertura': null,
-    'Segunda-Feira_encerramento': null,
-    'Terça-Feira_encerramento': null,
-    'Quarta-Feira_encerramento': null,
-    'Quinta-Feira_encerramento': null,
-    'Sexta-Feira_encerramento': null,
-    'Sabado_encerramento': null,
-    'Domingo_encerramento': null,
-    'Funcionamento24h': null,
-    'FuncionamentoEmFeriados': null,
-    'Restrições': null,
-    'OutrasRegraseInformações': null,
-    'CapInstaladaPdia': null,
-    'CapSentadas': null,
-    'CapSimultanea': null,
-    'Estacionamento': null,
-    'CapacidadeVeículos': null,
-    'Automóveisnº': null,
-    'Ônibus': null,
-    'ServiçoseEquipamentos': null,
-    'EspecificaçãoDaGastronomia': null,
-    'SeForBrasileira': null,
-    'PorEspecialização': null,
-    'DoEquipamento': null,
-    'TabelaCategMunicipal': <String, dynamic>{
-      'Municipal->Lei/decreto': null,
-      'Municipal->Portaria/instrução': null,
-      'Municipal->Norma/ato': null,
-      'Municipal->outros': null,
-      'Municipal->Lei/decreto2coluna': null,
-      'Municipal->Portaria/instrução2coluna': null,
-      'Municipal->Norma/ato2coluna': null,
-      'Municipal->outros2coluna': null,
-    },
-    'TabelaCategEstadual': <String, dynamic>{
-      'Estadual->Lei/decreto': null,
-      'Estadual->Portaria/instrução': null,
-      'Estadual->Norma/ato': null,
-      'Estadual->outros': null,
-      'Estadual->Lei/decreto2coluna': null,
-      'Estadual->Portaria/instrução2coluna': null,
-      'Estadual->Norma/ato2coluna': null,
-      'Estadual->outros2coluna': null,
-    },
-    'TabelaCategFederal': <String, dynamic>{
-      'Federal->Lei/decreto': null,
-      'Federal->Portaria/instrução': null,
-      'Federal->Norma/ato': null,
-      'Federal->outros': null,
-      'Federal->Lei/decreto2coluna': null,
-      'Federal->Portaria/instrução2coluna': null,
-      'Federal->Norma/ato2coluna': null,
-      'Federal->outros2coluna': null,
-    },
-    'TabelaCategInternacional': <String, dynamic>{
-      'Internacional->Lei/decreto': null,
-      'Internacional->Portaria/instrução': null,
-      'Internacional->Norma/ato': null,
-      'Internacional->outros': null,
-      'Internacional->Lei/decreto2coluna': null,
-      'Internacional->Portaria/instrução2coluna': null,
-      'Internacional->Norma/ato2coluna': null,
-      'Internacional->outros2coluna': null,
-      'Outras': null,
-      'Outras2': null,
-    },
-    'DaÁreaOuEdificação': null,
-     'TabelaCategMunicipal2': <String, dynamic>{
-      'Municipal->Lei/decreto': null,
-      'Municipal->Portaria/instrução': null,
-      'Municipal->Norma/ato': null,
-      'Municipal->outros': null,
-      'Municipal->Lei/decreto2coluna': null,
-      'Municipal->Portaria/instrução2coluna': null,
-      'Municipal->Norma/ato2coluna': null,
-      'Municipal->outros2coluna': null,
-    },
-    'TabelaCategEstadual2': <String, dynamic>{
-      'Estadual->Lei/decreto': null,
-      'Estadual->Portaria/instrução': null,
-      'Estadual->Norma/ato': null,
-      'Estadual->outros': null,
-      'Estadual->Lei/decreto2coluna': null,
-      'Estadual->Portaria/instrução2coluna': null,
-      'Estadual->Norma/ato2coluna': null,
-      'Estadual->outros2coluna': null,
-    },
-    'TabelaCategFederal2': <String, dynamic>{
-      'Federal->Lei/decreto': null,
-      'Federal->Portaria/instrução': null,
-      'Federal->Norma/ato': null,
-      'Federal->outros': null,
-      'Federal->Lei/decreto2coluna': null,
-      'Federal->Portaria/instrução2coluna': null,
-      'Federal->Norma/ato2coluna': null,
-      'Federal->outros2coluna': null,
-    },
-    'TabelaCategInternacional2': <String, dynamic>{
-      'Internacional->Lei/decreto': null,
-      'Internacional->Portaria/instrução': null,
-      'Internacional->Norma/ato': null,
-      'Internacional->outros': null,
-      'Internacional->Lei/decreto2coluna': null,
-      'Internacional->Portaria/instrução2coluna': null,
-      'Internacional->Norma/ato2coluna': null,
-      'Internacional->outros2coluna': null,
-      'Outras': null,
-      'Outras2': null,
-    },
-    'EstadoGeralDeConservação': null,
-    'PossuiFacilidade': null,
-    'PessoalCapacitadoParaReceberPCD': null,
-    'RotaExternaAcessível': null,
-    'SimboloInternacionalDeAcesso': null,
-    'LocalDeEmbarqueEDesembarque': null,
-    'VagaEmEstacionamento': null,
-    'ÁreaDeCirculação': null,
-    'Escada': null,
-    'Rampa': null,
-    'Piso': null,
-    'Elevador': null,
-    'EquipamentoMotorizado': null,
-    'SinalizaçãoVisual': null,
-    'SinalizaçãoTátil': null,
-    'AlarmeDeEmemergência': null,
-    'Comunicação': null,
-    'BalcãoDeAtendimento': null,
-    'Mobiliário': null,
-    'Sanitário': null,
-    'Telefone': null,
-    'SinalizaçãoIndicativa': null,
-    'OutrosAcessibilidade': null,
-    'Observações': null,
-    'Referências': null,
-    'Pesquisador': null,
-    'TelefonePesquisador': null,
-    'E-mail': null,
-    'Coordenador': null,
-    'TelefoneCoordenador': null,
-    'E-mailCoordenador': null,
-
-
+   
   };
 
   final _formKey = GlobalKey<FormState>();
@@ -214,6 +30,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
     return Scaffold(
       backgroundColor: Colors.white,
         appBar: AppBar(
+          foregroundColor: Colors.white,
           backgroundColor:  Color.fromARGB(255, 55, 111, 60),
           title:  Text(
             'Identificação',
@@ -244,6 +61,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                               },
                               decoration:  InputDecoration(
                                 hintText: 'UF',
+                                hintStyle: TextStyle(fontSize: 50.w)
                               ),
                             )),
                         SizedBox(
@@ -260,7 +78,10 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                                 valoresjson['RG'] = newValue;
                               },
                               decoration:  InputDecoration(
-                                  hintText: 'Região Turística'),
+                                  hintText: 'Região Turística',
+                                hintStyle: TextStyle(fontSize: 50.w)
+                                  ),
+                                  
                             ))
                       ],
                     )),
@@ -273,15 +94,19 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     decoration:  InputDecoration(
                       isDense: true,
                       hintText: 'Municipio',
+                                hintStyle: TextStyle(fontSize: 50.w)
+
                     ),
                     onSaved: (newValue) {
                       valoresjson['Municipio'] = newValue;
                     },
                   ),
+                ), SizedBox(
+                  height: 20.w,
                 ),
                  textLabel(name: 'Tipo:', fontWeight: FontWeight.bold,),
                 SizedBox(
-                  height: sizeScreen.height * 0.05,
+                  height: 50.w,
                 ),
                 RadioD(
                   options:  [
@@ -317,7 +142,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   ),
                 ),
                 SizedBox(
-                  height: sizeScreen.height * 0.03,
+                  height: 30.w,
                 ),
                 CustomTextField(
                     name: 'Razão Social',
@@ -343,22 +168,49 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     getValue: (newValue) {
                       valoresjson['CNPJ'] = newValue;
                     }),
-                CustomTextField(
-                    name: 'Código CNAE',
-                    validat: (value) {
-                      return null;
-                    },
-                    getValue: (newValue) {
-                      valoresjson['CódigoCNAE'] = newValue;
-                    }),
-                CustomTextField(
-                    name: 'Nome da rede/holding',
-                    validat: (value) {
-                      return null;
-                    },
-                    getValue: (newValue) {
-                      valoresjson['NomeDaRede'] = newValue;
-                    }),
+
+                    Row(children: [ SizedBox(
+                      width: 600.w,
+                      child: CustomTextField(
+                      name: 'Código CNAE',
+                      validat: (value) {
+                        return null;
+                      },
+                      getValue: (newValue) {
+                        valoresjson['CódigoCNAE'] = newValue;
+                      }),
+                    ),
+                     Expanded(
+                       child: CustomTextField(name: 'Atividade Econômica', validat: (p0) {
+                        
+                                           }, getValue: (p0) {
+                        
+                                           },
+                                         ),
+                     ),],),
+               Row(
+                  children: [
+                    SizedBox(
+                      width: 600.w,
+                      child: CustomTextField(
+                          name: 'Inscrição Municipal',
+                          validat: (value) {
+                            return null;
+                          },
+                          getValue: (newValue) {
+                            valoresjson['NomeDaRede'] = newValue;
+                          }),
+                    ),
+                    Expanded(
+                      child: CustomTextField(
+                        name: 'Nome da rede/holding',
+                        validat: (p0) {},
+                        getValue: (p0) {},
+                      ),
+                    )
+                  ],
+                ),
+             
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
@@ -755,7 +607,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
 
                 Container(
                   color:  Color.fromARGB(255, 55, 111, 60),
-                  height: sizeScreen.height * 0.06,
+                  height: 300.h,
                   width: sizeScreen.width,
                   padding: EdgeInsets.only(
                       top: sizeScreen.height * 0.008,
@@ -770,50 +622,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                TabelaT1(column01:  [
-                  Text('Entidade/guia turístico'),
-                  Text(
-                    'Associações e sindicatos do setor de hospedagem',
-                  ),
-                  Text('Associações de turismos'),
-                  Text('Associações comerciais'),
-                  Text('Guias Turísticos'),
-                  Text('Outros'),
-                ], column02: [
-                   Text('Categoria/tipo/classificação/número'),
-                   Text('CADASTUR outros'),
-                  TextFormField(
-                    decoration:  InputDecoration(
-                        labelText: '', border: InputBorder.none),
-                    onSaved: (newValue) {
-                      valoresjson['AssociaçõesDeTurismos'] = newValue;
-                    },
-                  ),
-                  TextFormField(
-                    decoration:  InputDecoration(
-                        labelText: '', border: InputBorder.none),
-                    onSaved: (newValue) {
-                      valoresjson['AssociaçõesComerciais'] = newValue;
-                    },
-                  ),
-                  TextFormField(
-                    decoration:  InputDecoration(
-                        labelText: '', border: InputBorder.none),
-                    onSaved: (newValue) {
-                      valoresjson['GuiasTurísticos'] = newValue;
-                    },
-                  ),
-                  TextFormField(
-                    decoration:  InputDecoration(
-                        labelText: '', border: InputBorder.none),
-                    onSaved: (newValue) {
-                      valoresjson['Outros'] = newValue;
-                    },
-                  ),
-                   TextField(
-                    decoration: InputDecoration(border: InputBorder.none),
-                  ),
-                ]),
+                TableMtur(),
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
@@ -953,8 +762,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   height: sizeScreen.height * 0.01,
                 ),
 
-               TabelaT2(getValues: (value){},),
-
+TabelaHorarios(),
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),

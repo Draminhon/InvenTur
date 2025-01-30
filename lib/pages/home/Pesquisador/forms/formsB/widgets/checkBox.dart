@@ -118,7 +118,7 @@ class CheckCState extends State<CheckC> {
     return 
     SizedBox(
       width: sizeScreen.width,
-      height: widget.nomes.length == 3 ? 500.w : 750.w,
+      height: widget.nomes.length == 3 ? 500.w : 700.h,
       child: RawScrollbar(
         thumbColor: const Color.fromARGB(255, 55, 111, 60),
         controller: firstController,
@@ -135,6 +135,7 @@ class CheckCState extends State<CheckC> {
                       child: Text(
                         widget.nomes[index],
                         overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontSize: 60.w),
                       )),
                   leading: Checkbox(
                       

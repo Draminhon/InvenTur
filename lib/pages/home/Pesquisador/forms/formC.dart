@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/container_form.dart';
 
 class FormularioC extends StatelessWidget {
@@ -12,33 +13,34 @@ class FormularioC extends StatelessWidget {
         body: Column(children: [
           Padding(
               padding: EdgeInsets.only(
-                  right: sizeScreen.width * 0.85,
-                  top: sizeScreen.height * 0.05),
+                  right: 1142.5.w,
+                  top: 149.6.h),
               child: SizedBox(
-                height: sizeScreen.height * 0.03,
+                height: 89.76.h,
                 child: IconButton(
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.arrow_back),
-                  padding: EdgeInsets.only(bottom: sizeScreen.height * 0.005),
+                  icon:  Icon(Icons.arrow_back, size: 96.h,),
+                  padding: EdgeInsets.only(bottom: 14.96.h),
                 ),
               )),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: sizeScreen.height * 0.01),
+           Padding(
+            padding: EdgeInsets.symmetric(vertical: 29.92.h),
             child: Column(
               children: [
                 Text(
                   'CATEGORIA C',
                   style: TextStyle(
                       color: const Color.fromARGB(255, 55, 111, 60),
-                      fontSize: sizeScreen.width * 0.06),
+                      fontSize: 80.64.w,
+                      fontWeight: FontWeight.bold),
                 ),
                 Divider(
                   color: const Color.fromARGB(255, 55, 111, 60),
-                  indent: sizeScreen.width * 0.1,
-                  endIndent: sizeScreen.width * 0.1,
+                  indent: 134.4.w,
+                  endIndent: 134.4.w,
                 ),
                 SizedBox(
-                  height: sizeScreen.height * 0.002,
+                  height: 5.984.h,
                 ),
               ],
             ),

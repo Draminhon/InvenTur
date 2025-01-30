@@ -842,3 +842,74 @@ class TabelsEquipamentoEEspaco extends StatelessWidget {
     );
   }
 }
+
+class TableMtur extends StatelessWidget{
+  @override
+  Widget build(Object context) {
+    // TODO: implement build
+    return Column(children: [ 
+
+             
+              textLabel(
+                name: "MTur",
+                fontWeight: FontWeight.bold,
+              ),
+              CustomTextField(
+                name: "CADASTUR",
+                validat: (p0) {},
+                getValue: (p0) {},
+              ),
+              CustomTextField(
+                name: "outros",
+                validat: (p0) {},
+                getValue: (p0) {},
+              ),
+              textLabel(
+                name: "associações e sindicatos do setor de hospedagem",
+                fontWeight: FontWeight.bold,
+              ),
+              CustomTextField(
+                name: "categoria/tipo/classificação/número",
+                validat: (p0) {},
+                getValue: (p0) {},
+              ),
+              textLabel(
+                name: "associações de turismo",
+                fontWeight: FontWeight.bold,
+              ),
+              CustomTextField(
+                name: "categoria/tipo/classificação/número",
+                validat: (p0) {},
+                getValue: (p0) {},
+              ),
+              textLabel(
+                name: "associações comerciais",
+                fontWeight: FontWeight.bold,
+              ),
+              CustomTextField(
+                name: "categoria/tipo/classificação/número",
+                validat: (p0) {},
+                getValue: (p0) {},
+              ),
+              textLabel(
+                name: "guias turísticos",
+                fontWeight: FontWeight.bold,
+              ),
+              CustomTextField(
+                name: "categoria/tipo/classificação/número",
+                validat: (p0) {},
+                getValue: (p0) {},
+              ),
+              textLabel(
+                name: "outros",
+                fontWeight: FontWeight.bold,
+              ),
+              CustomTextField(
+                name: "categoria/tipo/classificação/número",
+                validat: (p0) {},
+                getValue: (p0) {},
+              ),
+            ],);
+  }
+
+}

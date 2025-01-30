@@ -252,7 +252,7 @@ class _RadioStateD extends State<RadioD> {
                       dense: true,
                       title: Text(
                         widget.options[i],
-                        style: TextStyle(fontSize: sizeScreen.height * 0.02,   fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: sizeScreen.height * 0.02,   ),
                       ),
                       leading: Radio<int>(
                         value: i,
