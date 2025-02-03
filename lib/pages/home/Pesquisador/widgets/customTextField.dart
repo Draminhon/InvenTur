@@ -1,7 +1,124 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+
+class CustomTimeField extends StatefulWidget {
+  final String label;
+  final String? hint;
+  final String? initialTime;
+  final bool required;
+  final ValueChanged<String>? onChanged;
+
+  const CustomTimeField({
+    super.key,
+    required this.label,
+    this.hint,
+    this.initialTime,
+    this.required = false,
+    this.onChanged, required this.getValue,
+  });
+  final Function(String) getValue;
+
+  @override
+  State<CustomTimeField> createState() => _CustomTimeFieldState();
+}
+
+class _CustomTimeFieldState extends State<CustomTimeField> {
+  late TextEditingController _controller;
+  final _timeRegex = RegExp(r'^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$');
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController(text: widget.initialTime);
+  }
+
+  Future<void> _selectTime() async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (context, child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      },
+    );
+
+    if (picked != null) {
+      final formattedTime =
+          '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
+      _controller.text = formattedTime;
+      widget.onChanged?.call(formattedTime);
+      widget.getValue(formattedTime);
+    }
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+              padding: EdgeInsets.only(
+          left: 25.w,
+          right: 25.w,
+          top: 25.w,
+        ),
+
+      child: TextFormField(
+        
+        controller: _controller,
+        decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              isDense: true,
+              hintStyle: const TextStyle(color: Colors.grey),
+              //errorBorder: UnderlineInputBorder()
+              fillColor: Colors.white,
+              filled: true,
+          labelText: widget.label,
+          hintText: widget.hint ?? 'HH:mm',
+        ),
+        keyboardType: TextInputType.datetime,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(5),
+          FilteringTextInputFormatter.allow(RegExp(r'[0-9:]')),
+          _TimeInputFormatter(),
+        ],
+        onChanged: (newValue){
+          setState(() {
+                      widget.getValue(newValue);
+
+          });
+        },
+        onTap: _selectTime,
+      ),
+    );
+  }
+}
+
+class _TimeInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    final text = newValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    final buffer = StringBuffer();
+
+    for (int i = 0; i < text.length; i++) {
+      if (i == 2) buffer.write(':');
+      if (i >= 4) break;
+      buffer.write(text[i]);
+    }
+
+    return TextEditingValue(
+      text: buffer.toString(),
+      selection: TextSelection.collapsed(offset: buffer.length),
+    );
+  }
+}
 
 class CustomTextField extends StatelessWidget {
   final String name;
@@ -12,16 +129,18 @@ class CustomTextField extends StatelessWidget {
       required this.name,
       required this.validat,
       required this.getValue,
-      this.controller
-      });
+      this.getChanged,
+      this.controller});
   final Function(String) getValue;
+  
+  final Function(String)? getChanged;
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
     return Padding(
         padding: EdgeInsets.only(
-          left: sizeScreen.width * 0.02,
-          right: sizeScreen.width * 0.025,
+          left: 25.w,
+          right: 25.w,
           top: sizeScreen.height * 0.023,
         ),
 
@@ -36,6 +155,9 @@ class CustomTextField extends StatelessWidget {
           onSaved: (newValue) {
             getValue(newValue!);
           },
+          // onChanged: (newValue){
+          //   getChanged!(newValue);
+          // },
           validator: validat,
           decoration: InputDecoration(
             border: OutlineInputBorder(
@@ -44,8 +166,6 @@ class CustomTextField extends StatelessWidget {
             isDense: true,
             hintText: name,
             hintStyle: const TextStyle(color: Colors.grey),
-            contentPadding: EdgeInsets.only(
-                top: sizeScreen.height * 0.03, left: sizeScreen.width * 0.05),
             //errorBorder: UnderlineInputBorder()
             fillColor: Colors.white,
             filled: true,
@@ -113,7 +233,7 @@ class CustomTextDate extends StatelessWidget {
   CustomTextDate({super.key, required this.getValue, this.dateController});
 
   final Function(String) getValue;
-  final dateFormat = DateFormat('yyyy-MM-dd');  // formato para enviar ao backend
+  final dateFormat = DateFormat('yyyy-MM-dd'); // formato para enviar ao backend
   final inputFormat = DateFormat('dd/MM/yyyy'); // formato de entrada do usuário
 
   @override
@@ -137,7 +257,8 @@ class CustomTextDate extends StatelessWidget {
             return 'Por favor, insira uma data';
           }
           try {
-            inputFormat.parseStrict(value); // verificar se o formato está correto
+            inputFormat
+                .parseStrict(value); // verificar se o formato está correto
           } catch (e) {
             return 'Insira uma data válida no formato DD/MM/AAAA';
           }

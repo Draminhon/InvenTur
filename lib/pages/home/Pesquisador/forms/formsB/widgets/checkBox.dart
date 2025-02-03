@@ -76,14 +76,19 @@ thumbColor: const Color.fromARGB(255, 55, 111, 60),
 }
 
 class CheckC extends StatefulWidget {
-  const CheckC({super.key, required this.nomes, this.nomesModel });
+  const CheckC({super.key, required this.nomes, this.nomesModel, this.nome, this.onChanged });
   final List<String> nomes;
   final List<String>? nomesModel;
+    final Function(List<String>)? onChanged;
+
+  final String? nome;
   @override
   State<CheckC> createState() => CheckCState();
 }
 
 class CheckCState extends State<CheckC> {
+    Map<String, dynamic>? valoresjson = {};
+
   late List<bool> isChecked;
   late Queue<int> positions;
 
@@ -99,6 +104,10 @@ class CheckCState extends State<CheckC> {
           isChecked[i] = true;
       }
     }}
+WidgetsBinding.instance.addPostFrameCallback((_){
+    _updateSelectedValues();
+
+});
   }
 
   List<String> getSelectedValues(){
@@ -109,6 +118,16 @@ class CheckCState extends State<CheckC> {
       }
     }
     return selectedValues;
+  }
+
+  void _updateSelectedValues(){
+    if(widget.onChanged != null){
+      widget.onChanged!(getSelectedValues());
+    }
+  }
+
+    void _onCheckboxChanged(int index, bool? value) {
+ 
   }
 
   @override
@@ -141,11 +160,13 @@ class CheckCState extends State<CheckC> {
                       
                       value: isChecked[index],
                       onChanged: (bool? value) {
-                        setState(() {
-                          if (value != null) {
-                            isChecked[index] = value;
-                          }
-                        });
+                             setState(() {
+      isChecked[index] = value ?? false;
+          _updateSelectedValues();
+
+    });
+
+    // Atualiza o callback com os novos valores selecionados
                       })),
                       
               widget.nomes[index] == 'outro' && isChecked[index] == true

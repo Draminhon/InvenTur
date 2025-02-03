@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SendButton extends StatelessWidget {
-  const SendButton({super.key});
+  final VoidCallback onPressed;
+  const SendButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -9,16 +10,7 @@ class SendButton extends StatelessWidget {
       height: 50,
       width: 300,
       child: ElevatedButton(
-        onPressed: () {
-          // if (_formKey.currentState!.validate()) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //       const SnackBar(content: Text('processing data')));
-          // } else {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //       const SnackBar(content: Text('preencha os dados!')));
-          // }
-          Navigator.pushReplacementNamed(context, '/SendedForm');
-        },
+        onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.green[800],
           shape:

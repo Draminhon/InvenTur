@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ExpansionTileYoN extends StatefulWidget {
   const ExpansionTileYoN({super.key, required this.getValue, this.optionModel});
@@ -27,11 +28,14 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
       children: [
         SizedBox(
          //   margin: EdgeInsets.only(bottom: sizeScreen.height * 0.01),
-            width: sizeScreen.width * 0.29,
+            width: 400.w,
             child: ExpansionTile(
-              
+              iconColor: Colors.white,
+              collapsedIconColor: Colors.white,
               collapsedShape: ContinuousRectangleBorder(
+                  
                   borderRadius: BorderRadius.circular(25), 
+                  
                   side: const BorderSide(color: Color.fromARGB(255, 55, 111, 69),width: 1.5)),
 
                shape: ContinuousRectangleBorder(
@@ -41,13 +45,13 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                 _option,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: const Color.fromARGB(255, 55, 111, 60),
+                  color: Colors.white,
                   fontWeight: FontWeight.w800,
-                  fontSize: sizeScreen.width * 0.03,
+                  fontSize: 50.w,
                 ),
               ),
-              collapsedBackgroundColor: Colors.white,
-              backgroundColor: Colors.white,
+              collapsedBackgroundColor: Color.fromARGB(255, 55, 111, 69),
+              backgroundColor: Color.fromARGB(255, 55, 111, 69),
               childrenPadding:
                   EdgeInsets.symmetric(horizontal: sizeScreen.width * 0.0),
               dense: true,
@@ -55,18 +59,19 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                 Container(
                     decoration: const BoxDecoration(
                       //border: Border.all(width: 0.4),
-                      color: Colors.white,
+                      color: Color.fromARGB(255, 55, 111, 69),
                     ),
                     child: ListTile(
                       
                       shape: ContinuousRectangleBorder(
                           borderRadius: BorderRadius.circular(25),),
-                      title: (const Text(
+                      title: ( Text(
                         'sim',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Color.fromARGB(255, 55, 111, 69),
-                            fontWeight: FontWeight.bold),
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 50.w),
                       )),
                       onTap: () => setState(() {
                         _option = 'sim';
@@ -77,7 +82,7 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                 Container(
                     decoration: BoxDecoration(
                       // border: Border.all(width: 0.4),
-                      color:Colors.white,
+                      color:Color.fromARGB(255, 55, 111, 69),
                         borderRadius: BorderRadius.circular(10)
                     ),
 
@@ -88,9 +93,9 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                         'não',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: const Color.fromARGB(255, 55, 111, 69),
+                            color: Colors.white,
                             fontWeight: FontWeight.bold,
-                            fontSize: sizeScreen.width * 0.033),
+                            fontSize:50.w),
                       )),
                       onTap: () {
                         setState(() {

@@ -2720,7 +2720,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-              const SendButton(),
+               SendButton(onPressed: () {  },),
 
               SizedBox(
                 height: sizeScreen.height * 0.05,

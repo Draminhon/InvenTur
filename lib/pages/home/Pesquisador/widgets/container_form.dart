@@ -72,7 +72,7 @@ class Tilee extends StatelessWidget {
                     texto,
                     textAlign: TextAlign.center,
                     style:  TextStyle(
-                  fontSize: 49.72.w,
+                  fontSize: 50.w,
                        
                         color: Colors.black,
                         fontWeight: FontWeight.w900),

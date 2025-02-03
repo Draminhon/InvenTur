@@ -14,7 +14,7 @@ class textLabel extends StatelessWidget {
       
   alignment: Alignment.centerLeft,
   child: Padding(
-    padding: EdgeInsets.only(top:  30.h, left: 80.w),
+    padding: EdgeInsets.only(top:  30.h, left: 80.w,),
     child: Text(
       
       name,
