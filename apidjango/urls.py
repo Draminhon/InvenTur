@@ -10,6 +10,8 @@ urlpatterns = [
     path('login/', UsuarioLoginView, name = 'usuario-login'),
     path('pesquisas/usuario/', PesquisaUsuarioListView.as_view(), name='pesquisa-usuario-list'),
 
+    path('alimentosEBebidas/create/', AlimentosEBebidasListCreateView.as_view(), name = 'createAlimentos'),
+
     path('rodovia/create/', RodoviaListCreateAPIView.as_view(), name = 'rodovia-see' ),
     path('rodovia/get/', RodoviaListView.as_view(), name = 'rodovia-se' ),
     path('rodovia/update/<int:pk>', RodoviaUpdateAPIView.as_view(), name='rodovia-update'),

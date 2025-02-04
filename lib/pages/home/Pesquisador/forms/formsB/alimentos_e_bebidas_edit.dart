@@ -24,14 +24,14 @@ final GlobalKey<CheckCState> atendimento_em_lingua_estrangeira_key =
 final GlobalKey<CheckCState> informativos_impressos_key =
     GlobalKey<CheckCState>();
 
-class AlimentoseBebidas extends StatefulWidget {
-  AlimentoseBebidas({super.key});
+class AlimentoseBebidasEdit extends StatefulWidget {
+  AlimentoseBebidasEdit({super.key});
 
   @override
-  State<AlimentoseBebidas> createState() => _AlimentoseBebidasState();
+  State<AlimentoseBebidasEdit> createState() => _AlimentoseBebidasEditState();
 }
 
-class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
+class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
   Future<void> sendForm(Map<String, dynamic> valoresjson) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('acess_token');

@@ -9,6 +9,7 @@ import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranca_edit.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas_edit.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia_edit.dart';
 
@@ -129,7 +130,7 @@ class Pesquisas extends StatelessWidget {
   Future<List<Map<String, dynamic>>> getRodovias() async {
             final arguments = ModalRoute.of(context)?.settings.arguments as Map;
         final pesquisaId = arguments['pesquisa_id'];
-    var url = Uri.parse(AppConstants.BASE_URI + '/api/v1/equipamentos/?pesquisa_id=$pesquisaId');
+    var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/equipamentos/?pesquisa_id=$pesquisaId');
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
     final List body = json.decode(utf8.decode(response.bodyBytes));
@@ -233,7 +234,7 @@ Widget showRodovias(List<Map<String, dynamic>> posts) {
         final tipo = equipamento['tipo'];
         final dados = equipamento['dados'];
             print(posts.length);
-           print(dados['pesquisa']);
+           print(equipamento);
         
         return GestureDetector(
           onTap: () {
@@ -244,6 +245,8 @@ Widget showRodovias(List<Map<String, dynamic>> posts) {
             }else if(equipamento['tipo'] == 'SistemaDeSeguranca'){
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> SistemaDeSegurancaEdit(sistemaModel: SistemaDeSegurancaModel.fromJson(equipamento['dados']),)));
 
+            }else if(equipamento['tipo'] == 'AlimentosEBebidas'){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AlimentoseBebidasEdit()));
             }
           },
           child: Container(

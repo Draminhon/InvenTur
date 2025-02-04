@@ -55,9 +55,10 @@ class Tilee extends StatelessWidget {
       },
       child: Container(
             margin: EdgeInsets.only(bottom: 29.92.h),
-            padding: EdgeInsets.symmetric(horizontal: 30.w),
-            height: 179.52.h,
+            padding: EdgeInsets.symmetric(horizontal: 30.w, ),
+            height: 209.52.h,
             decoration: BoxDecoration(
+              
               borderRadius: BorderRadius.circular(10),
                 color: Colors.white,
                 boxShadow: [

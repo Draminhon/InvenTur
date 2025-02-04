@@ -153,7 +153,7 @@ WidgetsBinding.instance.addPostFrameCallback((_){
                       message: widget.nomes[index],
                       child: Text(
                         widget.nomes[index],
-                        overflow: TextOverflow.ellipsis,
+                        overflow: TextOverflow.clip,
                         style: TextStyle(fontSize: 60.w),
                       )),
                   leading: Checkbox(

@@ -217,6 +217,12 @@ def verificar_email(request):
 
     return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
 
+class AlimentosEBebidasListCreateView(generics.ListCreateAPIView):
+    queryset = AlimentosEBebidas.objects.all()
+    serializer_class = AlimentosEBebidasSerializer
+
+
+
 class AlterPasswordView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
     queryset = CustomUser.objects.all()
@@ -259,8 +265,14 @@ class EquipamentosListView(APIView):
             for sistema in sistemas
         ]
 
+        alimentos = AlimentosEBebidas.objects.filter(pesquisa__id=pesquisa_id)
+        alimentos_serialized = [
+            {"tipo": "AlimentosEBebidas", "dados": AlimentosEBebidasSerializer(alimento).data}
+            for alimento in alimentos
+        ]        
+
         # Combina os dados
-        equipamentos = rodovias_serialized + sistemas_serialized
+        equipamentos = rodovias_serialized + sistemas_serialized + alimentos_serialized
 
         return Response(equipamentos)
 

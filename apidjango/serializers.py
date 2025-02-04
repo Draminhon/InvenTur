@@ -129,6 +129,11 @@ class RodoviaSerializer(serializers.ModelSerializer):
         model = Rodovia
         fields = '__all__'  # ou especifique os campos que você deseja incluir
 
+class AlimentosEBebidasSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AlimentosEBebidas
+        fields = '__all__'
 
 class EquipamentoSerializer(serializers.Serializer):
     tipo = serializers.CharField()
