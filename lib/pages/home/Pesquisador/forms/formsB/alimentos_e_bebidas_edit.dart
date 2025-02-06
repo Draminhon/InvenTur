@@ -14,7 +14,6 @@ import 'package:http/http.dart' as http;
 import '../../widgets/expandedTileYoN.dart';
 import 'widgets/checkBox.dart';
 import 'widgets/sendButton.dart';
-import 'widgets/tabela.dart';
 
 final GlobalKey<CheckCState> tipo_de_organizacao_key = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> proximidades_key = GlobalKey<CheckCState>();
@@ -129,7 +128,15 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
       fillIfExists('outras distancias', widget.alimentosModel!.distanciaOutras!);
       fillIfExists('ponto de referencia', widget.alimentosModel!.pontosDeReferencia!);
       fillIfExists('estadoGeralDeConservacao', widget.alimentosModel!.estadoGeralDeConservacao!);
-      fillIfExists('outrosAcessibilidade', widget.alimentosModel!.outrosAcessibilidade!);
+      fillIfExists('outrosSinalizacao', widget.alimentosModel!.outrosAcessibilidade!);
+      fillIfExists('outras regras e informações', widget.alimentosModel!.outrasRegraseInformacoes!);
+      fillIfExists('capacidade instalada por dia', widget.alimentosModel!.capInstaladaPdia!);
+      fillIfExists('instaladas pessoas atendidas sentadas', widget.alimentosModel!.capInstaladasSentadas!);
+      fillIfExists('capacidade simultanea', widget.alimentosModel!.capSimultanea!);
+      fillIfExists('simultanea pessoas atendidas sentadas', widget.alimentosModel!.capSimultaneaSentadas!);
+      fillIfExists('capacidade de veículos', widget.alimentosModel!.capacidadeVeiculos!);
+      fillIfExists('numero automoveis', widget.alimentosModel!.numeroAutomoveis!);
+      fillIfExists('numero onibus', widget.alimentosModel!.numeroOnibus!);
     }
   }
 
@@ -1209,11 +1216,13 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.02,
                 ),
                 ExpansionTileYoN(
+                  optionModel: widget.alimentosModel!.funcionamento24h,
                   getValue: (newValue) {
                     valoresjson['funcionamento24h'] = newValue;
                   },
                 ),
                 textLabel(
+                
                   name: 'Funcionamento em feriados:',
                   fontWeight: FontWeight.bold,
                 ),
@@ -1221,6 +1230,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.03,
                 ),
                 ExpansionTileYoN(
+                  optionModel: widget.alimentosModel!.funcionamentoEmFeriados,
                   getValue: (newValue) {
                     valoresjson['funcionamentoEmFeriados'] = newValue;
                   },
@@ -1233,6 +1243,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.restricoes,
                   onChanged: (p0) {
                     valoresjson['restricoes'] = p0;
                   },
@@ -1248,6 +1259,7 @@ controller: getController('whatsapp'),
                 ),
 
                 CustomTextField(
+
                   controller: getController('outras regras e informações'),
                   validat: (value) {
                     if (value == null || value.isEmpty) {
@@ -1402,6 +1414,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.03,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.estacionamento,
                   onChanged: (p0) {
                     valoresjson['estacionamento'] = p0;
                   },
@@ -1499,6 +1512,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.03,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.servicosEEquipamentos,
                   onChanged: (p0) => valoresjson['servicosEEquipamentos'] = p0,
                   nomes: [
                     'Música ao vivo',
@@ -1532,6 +1546,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.03,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.especificacaoDaGastronomiaPorPais,
                   onChanged: (p0) =>
                       valoresjson['especificacaoDaGastronomiaPorPais'] = p0,
                   nomes: [
@@ -1576,6 +1591,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.03,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.seForBrasileiraPorRegiao,
                   onChanged: (p0) =>
                       valoresjson['seForBrasileiraPorRegiao'] = p0,
                   nomes: [
@@ -1603,6 +1619,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.03,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.porEspecializacao,
                   onChanged: (p0) => valoresjson['porEspecializacao'] = p0,
                   nomes: [
                     'Não',
@@ -1641,6 +1658,7 @@ controller: getController('whatsapp'),
                   height: 55.w,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.porTipoDeDieta,
                     onChanged: (p0) => valoresjson['porTipoDeDieta'] = p0,
                     nomes: [
                       'não',
@@ -1660,6 +1678,7 @@ controller: getController('whatsapp'),
                 ),
 
                 CheckC(
+                  nomesModel: widget.alimentosModel!.porTipoDeServico,
                     onChanged: (p0) => valoresjson['porTipoDeServico'] = p0,
                     nomes: [
                       'a la carte',
@@ -1708,6 +1727,7 @@ controller: getController('whatsapp'),
                       child: Padding(
                     padding: EdgeInsets.only(top: sizeScreen.height * 0.04),
                     child: ExpansionTileYoN(
+                      optionModel: widget.alimentosModel!.doEquipamento,
                       getValue: (newValue) {
                         valoresjson['doEquipamento'] = newValue;
                       },
@@ -1719,6 +1739,7 @@ controller: getController('whatsapp'),
                 ),
 
                 TabelsEquipamentoEEspaco(
+                  getValue: widget.alimentosModel!.tabelaEquipamentoEEspaco,
                   onChanged: (p0) {
                     setState(() {
                       valoresjson['tabelaEquipamentoEEspaco'] = p0;
@@ -1751,6 +1772,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.05,
                 ),
                 RadioD(
+                  indexModel: widget.alimentosModel!.estadoGeralDeConservacao,
                   options: const ['Muito bom', 'Bom', 'Ruim'],
                   getValue: (newValue) {
                     valoresjson['estadoGeralDeConservacao'] = newValue;
@@ -1789,6 +1811,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.04,
                 ),
                 ExpansionTileYoN(
+                  optionModel: widget.alimentosModel!.possuiFacilidade,
                   getValue: (newValue) {
                     valoresjson['possuiFacilidade'] = newValue;
                   },
@@ -1811,6 +1834,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.pessoalCapacitadoParaReceberPCD,
                   onChanged: (p0) {
                     valoresjson['pessoalCapacitadoParaReceberPCD'] = p0;
                   },
@@ -1827,6 +1851,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.02,
                 ),
                 textLabel(
+                
                   name: 'Rota externa acessível:',
                   fontWeight: FontWeight.bold,
                 ),
@@ -1834,6 +1859,7 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.rotaExternaAcessivel,
                   onChanged: (p0) {
                     valoresjson['rotaExternaAcessível'] = p0;
                   },
@@ -1860,6 +1886,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.simboloInternacionalDeAcesso,
                   onChanged: (p0) {
                     valoresjson['simboloInternacionalDeAcesso'] = p0;
                   },
@@ -1883,6 +1910,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.localDeEmbarqueEDesembarque,
                   onChanged: (p0) {
                     valoresjson['localDeEmbarqueEDesembarque'] = p0;
                   },
@@ -1900,6 +1928,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.vagaEmEstacionamento,
                   onChanged: (p0) {
                     valoresjson['vagaEmEstacionamento'] = p0;
                   },
@@ -1922,6 +1951,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.areaDeCirculacaoAcessoInternoParaCadeiraDeRodas,
                   onChanged: (p0) {
                     valoresjson[
                         'areaDeCirculacaoAcessoInternoParaCadeiraDeRodas'] = p0;
@@ -1945,6 +1975,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.escada,
                   onChanged: (p0) {
                     valoresjson['escada'] = p0;
                   },
@@ -1967,6 +1998,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.rampa,
                   onChanged: (p0) {
                     valoresjson['rampa'] = p0;
                   },
@@ -1989,6 +2021,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.piso,
                   onChanged: (p0) {
                     valoresjson['piso'] = p0;
                   },
@@ -2009,6 +2042,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.elevador,
                   onChanged: (p0) {
                     valoresjson['elevador'] = p0;
                   },
@@ -2030,6 +2064,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.equipamentoMotorizadoParaDeslocamentoInterno,
                   onChanged: (p0) {
                     valoresjson[
                         'equipamentoMotorizadoParaDeslocamentoInterno'] = p0;
@@ -2050,6 +2085,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                   nomesModel: widget.alimentosModel!.sinalizacaoVisual,
                   onChanged: (p0) {
                     valoresjson['sinalizacaoVisual'] = p0;
                   },
@@ -2075,6 +2111,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.sinalizacaoTatil,
                   onChanged: (p0) {
                     valoresjson['sinalizacaoTatil'] = p0;
                   },
@@ -2100,6 +2137,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.alarmeDeEmergencia,
                   onChanged: (p0) {
                     valoresjson['alarmeDeEmergencia'] = p0;
                   },
@@ -2120,6 +2158,8 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.comunicacao,
+
                   onChanged: (p0) {
                     valoresjson['comunicacao'] = p0;
                   },
@@ -2140,6 +2180,8 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.balcaoDeAtendimento,
+
                   onChanged: (p0) {
                     valoresjson['balcaoDeAtendimento'] = p0;
                   },
@@ -2159,6 +2201,8 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.mobiliario,
+
                   onChanged: (p0) {
                     valoresjson['mobiliario'] = p0;
                   },
@@ -2178,6 +2222,8 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.sanitario,
+
                   onChanged: (p0) {
                     valoresjson['sanitario'] = p0;
                   },
@@ -2203,6 +2249,8 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
+                                    nomesModel: widget.alimentosModel!.telefone,
+
                   onChanged: (p0) {
                     valoresjson['telefone'] = p0;
                   },
@@ -2224,6 +2272,7 @@ controller: getController('whatsapp'),
                 ),
 
                 ExpansionTileYoN(
+                  optionModel: widget.alimentosModel!.sinalizacaoIndicativa,
                   getValue: (newValue) {
                     valoresjson['sinalizacaoIndicativa'] = newValue;
                   },

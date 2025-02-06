@@ -284,7 +284,30 @@ class DiasRow extends StatefulWidget {
 
 class _DiasRowState extends State<DiasRow> {
   Map<String, dynamic> _valoresJson = {};
+  late TextEditingController _aberturaController;
+  late TextEditingController _encerramentoController;
 
+
+  @override
+  void initState(){
+    super.initState();
+    _aberturaController = TextEditingController();
+    _encerramentoController = TextEditingController();
+
+    if(widget.getValue != null){
+      _aberturaController.text = widget.getValue!['${widget.nome} abertura'] ?? '';
+      _encerramentoController.text = widget.getValue!['${widget.nome} encerramento'] ?? '';
+    }
+  }
+
+  @override
+  void dispose(){
+    _aberturaController.dispose();
+    _encerramentoController.dispose();
+    super.dispose();
+      }
+
+  @override
   Widget build(BuildContext context) {
     return Row(
       children: [
@@ -295,7 +318,7 @@ class _DiasRowState extends State<DiasRow> {
         SizedBox(width: widget.spacing),
         Expanded(
             child: CustomTimeField(
-              controller2: widget.getValue!['segunda\nfeira: abertura'],
+              controller2: _aberturaController,
           label: 'abertura',
           getValue: (p0) {
             setState(() {
@@ -306,6 +329,7 @@ class _DiasRowState extends State<DiasRow> {
         )),
         Expanded(
           child: CustomTimeField(
+            controller2: _encerramentoController,
             label: 'encerramento',
             getValue: (p0) {
               setState(() {
@@ -545,6 +569,7 @@ class TablesInstalacoes extends StatelessWidget {
 }
 
 class TabelsEquipamentoEEspaco extends StatelessWidget {
+  Map<String, dynamic>? getValue;
   final _formKey = GlobalKey<FormState>();
     final Function(Map<String, dynamic>)? onChanged;
   
@@ -552,7 +577,7 @@ class TabelsEquipamentoEEspaco extends StatelessWidget {
   Map<String, dynamic> _valoresJson = {};
   Map<String, dynamic> get valoresJson => _valoresJson;
   Map<String, TextEditingController> controllers = {};
-  TabelsEquipamentoEEspaco({super.key, this.onChanged}){
+  TabelsEquipamentoEEspaco({super.key, this.onChanged, this.getValue}){
 
       controllers.forEach((key, value) {
         print(key);
@@ -564,51 +589,52 @@ class TabelsEquipamentoEEspaco extends StatelessWidget {
 
 
   void autoFillForm() {
+    print(getValue);
     // Verifica se o controlador existe no Map antes de preencher
     void fillIfExists(String key, String value) {
 
       getController(key).text = value;
 
     }
-fillIfExists('Municipal lei decreto nome', 'Lei Municipal Exemplo');
-  fillIfExists('entidade lei decreto municipal', 'Prefeitura Municipal');
-  fillIfExists('nome portaria', 'Portaria Municipal Exemplo');
-  fillIfExists('entidade portaria', 'Secretaria Municipal');
-  fillIfExists('nome norma ato', 'Norma Municipal Exemplo');
-  fillIfExists('entidade norma ato', 'Câmara Municipal');
-  fillIfExists('nomeOutrosMunicipal', 'Outros Exemplo Municipal');
-  fillIfExists('entidade outros', 'Entidade Municipal');
+fillIfExists('Municipal lei decreto nome', getValue!['nomeLeiDecretoMunicipal']);
+  fillIfExists('entidade lei decreto municipal', getValue!['entidadeLeiDecretoMunicipal']);
+  fillIfExists('nome portaria', getValue!['entidadePortariaInstrucaoMunicipal']);
+  fillIfExists('entidade portaria', getValue!['entidadePortariaMunicipal']);
+  fillIfExists('nome norma ato', getValue!['nomeNormaAtoMunicipal']);
+  fillIfExists('entidade norma ato',getValue!['entidadeNormaAtoMunicipal']);
+  fillIfExists('nomeOutrosMunicipal', getValue!['nomeOutrosMunicipal']);
+  fillIfExists('entidade outros', getValue!['entidadeOutrosMunicipal']);
 
-  fillIfExists('EstadualDistrital lei decreto nome', 'Lei Estadual/Distrital Exemplo');
-  fillIfExists('entidade lei decreto EstadualDistrital', 'Governo Estadual');
-  fillIfExists('entidadePortariaInstrucaoEstadualDistrital', 'Portaria Estadual Exemplo');
-  fillIfExists('entidadePortariaEstadualDistrital', 'Secretaria Estadual');
-  fillIfExists('nomeNormaAtoEstadualDistrital', 'Norma Estadual Exemplo');
-  fillIfExists('entidadeNormaAtoEstadualDistrital', 'Assembleia Legislativa');
-  fillIfExists('nomeOutrosEstadualDistrital', 'Outros Exemplo Estadual');
-  fillIfExists('entidadeOutrosEstadualDistrital', 'Entidade Estadual');
+  fillIfExists('EstadualDistrital lei decreto nome', getValue!['nomeLeiDecretoEstadualDistrital']);
+  fillIfExists('entidade lei decreto EstadualDistrital', getValue!['entidadeLeiDecretoEstadualDistrital']);
+  fillIfExists('entidadePortariaInstrucaoEstadualDistrital', getValue!['entidadePortariaInstrucaoEstadualDistrital']);
+  fillIfExists('entidadePortariaEstadualDistrital', getValue!['entidadePortariaEstadualDistrital']);
+  fillIfExists('nomeNormaAtoEstadualDistrital', getValue!['nomeNormaAtoEstadualDistrital']);
+  fillIfExists('entidadeNormaAtoEstadualDistrital',getValue!['entidadeNormaAtoEstadualDistrital']);
+  fillIfExists('nomeOutrosEstadualDistrital', getValue!['nomeOutrosEstadualDistrital']);
+  fillIfExists('entidadeOutrosEstadualDistrital', getValue!['entidadeOutrosEstadualDistrital']);
 
-  fillIfExists('Federal lei decreto nome', 'Lei Federal Exemplo');
-  fillIfExists('entidade lei decreto Federal', 'Governo Federal');
-  fillIfExists('entidadePortariaInstrucaoFederal', 'Portaria Federal Exemplo');
-  fillIfExists('entidadePortariaFederal', 'Ministério Federal');
-  fillIfExists('nomeNormaAtoFederal', 'Norma Federal Exemplo');
-  fillIfExists('entidadeNormaAtoFederal', 'Congresso Nacional');
-  fillIfExists('nomeOutrosFederal', 'Outros Exemplo Federal');
-  fillIfExists('entidadeOutrosFederal', 'Entidade Federal');
+  fillIfExists('Federal lei decreto nome',getValue!['nomeLeiDecretoFederal']);
+  fillIfExists('entidade lei decreto Federal', getValue!['entidadeLeiDecretoFederal']);
+  fillIfExists('entidadePortariaInstrucaoFederal', getValue!['entidadePortariaInstrucaoFederal']);
+  fillIfExists('entidadePortariaFederal', getValue!['entidadePortariaFederal']);
+  fillIfExists('nomeNormaAtoFederal', getValue!['nomeNormaAtoFederal']);
+  fillIfExists('entidadeNormaAtoFederal', getValue!['entidadeNormaAtoFederal']);
+  fillIfExists('nomeOutrosFederal', getValue!['nomeOutrosFederal']);
+  fillIfExists('entidadeOutrosFederal',getValue!['entidadeOutrosFederal']);
 
-  fillIfExists('Internacional lei decreto nome', 'Lei Internacional Exemplo');
-  fillIfExists('entidade lei decreto Internacional', 'Organização Internacional');
-  fillIfExists('entidadePortariaInstrucaoInternacional', 'Portaria Internacional Exemplo');
-  fillIfExists('entidadePortariaInternacional', 'Entidade Internacional');
-  fillIfExists('nomeNormaAtoInternacional', 'Norma Internacional Exemplo');
-  fillIfExists('entidadeNormaAtoInternacional', 'Organização Internacional');
-  fillIfExists('nomeOutrosInternacional', 'Outros Exemplo Internacional');
-  fillIfExists('entidadeOutrosInternacional', 'Entidade Internacional');
+  fillIfExists('Internacional lei decreto nome', getValue!['nomeLeiDecretoInternacional']);
+  fillIfExists('entidade lei decreto Internacional', getValue!['entidadeLeiDecretoInternacional']);
+  fillIfExists('entidadePortariaInstrucaoInternacional', getValue!['entidadePortariaInstrucaoInternacional']);
+  fillIfExists('entidadePortariaInternacional', getValue!['entidadePortariaInternacional']);
+  fillIfExists('nomeNormaAtoInternacional', getValue!['nomeNormaAtoInternacional']);
+  fillIfExists('entidadeNormaAtoInternacional', getValue!['entidadeNormaAtoInternacional']);
+  fillIfExists('nomeOutrosInternacional', getValue!['nomeOutrosInternacional']);
+  fillIfExists('entidadeOutrosInternacional', getValue!['entidadeOutrosInternacional']);
 
-  fillIfExists('outras nome', 'Outras Exemplo');
-  fillIfExists('outras lei decreto nome', 'Lei/Decreto Outras Exemplo');
-  fillIfExists('entidade lei decreto Outras', 'Entidade Outras');
+  fillIfExists('outras nome', getValue!['outras nome']);
+  fillIfExists('outras lei decreto nome',  getValue!['nomeLeiDecretoOutras']);
+  fillIfExists('entidade lei decreto Outras',  getValue!['entidadeLeiDecretoOutras']);
   }
 
   TextEditingController getController(String key) {
@@ -618,7 +644,10 @@ fillIfExists('Municipal lei decreto nome', 'Lei Municipal Exemplo');
 
   @override
   Widget build(BuildContext context) {
+    if (getValue != null){
     autoFillForm();
+
+    }
     // TODO: implement build
     return  Column(
         children: [
@@ -1056,7 +1085,10 @@ class TableMtur extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if(getValues != null){
     autoFillForm();
+
+    }
     return Column(
       children: [
         textLabel(

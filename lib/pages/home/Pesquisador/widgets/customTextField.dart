@@ -34,7 +34,7 @@ class _CustomTimeFieldState extends State<CustomTimeField> {
   @override
   void initState() {
     super.initState();
-    _controller = TextEditingController(text: widget.initialTime);
+   _controller = widget.controller2 ?? TextEditingController(text: widget.initialTime);
   }
 
   Future<void> _selectTime() async {
@@ -71,7 +71,7 @@ class _CustomTimeFieldState extends State<CustomTimeField> {
 
       child: TextFormField(
         
-        controller: widget.controller2 ?? _controller,
+        controller: _controller,
         decoration: InputDecoration(
                       border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
