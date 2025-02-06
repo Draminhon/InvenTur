@@ -1102,7 +1102,7 @@ class TableMtur extends StatelessWidget {
           getValue: (p0) {
             _valoresJson['CADASTUR'] = p0;
             onChanged?.call(_valoresJson);
-          },
+    },
         ),
         CustomTextField(
           controller: getController('MTUR Outros'),

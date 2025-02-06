@@ -24,6 +24,7 @@ Future<void> logout(BuildContext context) async {
     headers: {'Authorization': 'Bearer $token'},
   );
 
+  print(response.statusCode);
   if(response.statusCode == 205){
     await prefs.clear();
     Navigator.pushReplacementNamed(context, '/Login');
