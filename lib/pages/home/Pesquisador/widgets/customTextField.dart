@@ -10,10 +10,12 @@ class CustomTimeField extends StatefulWidget {
   final String? initialTime;
   final bool required;
   final ValueChanged<String>? onChanged;
+  TextEditingController? controller2;
 
-  const CustomTimeField({
+  CustomTimeField({
     super.key,
     required this.label,
+    this.controller2,
     this.hint,
     this.initialTime,
     this.required = false,
@@ -69,7 +71,7 @@ class _CustomTimeFieldState extends State<CustomTimeField> {
 
       child: TextFormField(
         
-        controller: _controller,
+        controller: widget.controller2 ?? _controller,
         decoration: InputDecoration(
                       border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
@@ -175,8 +177,10 @@ class CustomTextField extends StatelessWidget {
 }
 
 class CustomTextNumber extends StatelessWidget {
+    final TextEditingController? controller;
+
   const CustomTextNumber(
-      {super.key, required this.getValue, required this.labelText});
+      {super.key, required this.getValue, required this.labelText, this.controller});
   final Function(String) getValue;
   final String labelText;
   @override
@@ -194,6 +198,7 @@ class CustomTextNumber extends StatelessWidget {
         //   padding: EdgeInsets.only(
         //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
         child: TextFormField(
+          controller: controller,
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]')),
             MaskTextInputFormatter(mask: '(##) # ####-####')

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inventur/models/alimentos_bebidas_model.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
@@ -25,7 +26,8 @@ final GlobalKey<CheckCState> informativos_impressos_key =
     GlobalKey<CheckCState>();
 
 class AlimentoseBebidasEdit extends StatefulWidget {
-  AlimentoseBebidasEdit({super.key});
+  final AlimentosEBebidas? alimentosModel;
+  AlimentoseBebidasEdit({super.key, this.alimentosModel});
 
   @override
   State<AlimentoseBebidasEdit> createState() => _AlimentoseBebidasEditState();
@@ -65,68 +67,79 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
     'telefone_coordenador': '4444',
     'email_coordenador': 'ogaio@gmail.com',
   };
-
   final Map<String, TextEditingController> controllers = {};
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   void autoFillForm() {
     // Verifica se o controlador existe no Map antes de preencher
     void fillIfExists(String key, String value) {
-      if (controllers.containsKey(key)) {
-        controllers[key]!.text = value;
-      }
+         getController(key).text = value;
     }
 
     // Preenche os valores dos controladores
-    fillIfExists('uf', 'CE');
-    fillIfExists('rg', '1234567');
-    fillIfExists('municipio', 'Viçosa do Ceará');
-    fillIfExists('razão social', 'Razão Social Exemplo');
-    fillIfExists('nome fantasia', 'Nome Fantasia Exemplo');
-    fillIfExists('CNPJ', '00.000.000/0000-00');
-    fillIfExists('Código CNAE', '12345');
-    fillIfExists('Atividade Economica', 'Atividade Econômica Exemplo');
-    fillIfExists('Inscrição Municipal', '123456');
-    fillIfExists('Nome da rede', 'Nome da Rede Exemplo');
-    fillIfExists('inicio da atividade', '01/01/2023');
-    fillIfExists('quantidade funcionarios permanentes', '10');
-    fillIfExists('Quantidade de funcionarios temporarios', '5');
-    fillIfExists('quantidade funcionarios com definicencia', '2');
-    fillIfExists('latitude', '-3.7319');
-    fillIfExists('longitude', '-38.5267');
-    fillIfExists('avenida rua', 'Rua Exemplo');
-    fillIfExists('bairro localidade', 'Bairro Exemplo');
-    fillIfExists('distrito', 'Distrito Exemplo');
-    fillIfExists('CEP', '60000-000');
-    fillIfExists('Instagram', '@exemplo');
-    fillIfExists('email', 'exemplo@email.com');
-    fillIfExists('ponto de referencia', 'Ponto de Referência Exemplo');
-    fillIfExists('distancia aeroporto', '10 km');
-    fillIfExists('estação rodoviária', 'Estação Rodoviária Exemplo');
-    fillIfExists('estação ferroviária', 'Estação Ferroviária Exemplo');
-    fillIfExists('Estacao maritima', 'Estação Marítima Exemplo');
-    fillIfExists('estacao metroviaria', 'Estação Metroviária Exemplo');
-    fillIfExists('ponto de onibus', 'Ponto de Ônibus Exemplo');
-    fillIfExists('ponto de taxi', 'Ponto de Táxi Exemplo');
-    fillIfExists('outras distancias', 'Outras Distâncias Exemplo');
-    fillIfExists(
-        'outras distancias nome', 'Nome das Outras Distâncias Exemplo');
-    fillIfExists(
-        'outras regras e informações', 'Informações adicionais e regras');
-    fillIfExists('capacidade instalada por dia', '100');
-    fillIfExists('instaladas pessoas atendidas sentadas', '50');
-    fillIfExists('capacidade simultanea', '75');
-    fillIfExists('simultanea pessoas atendidas sentadas', '40');
-    fillIfExists('capacidade de veículos', '200');
-    fillIfExists('numero automoveis', '30');
-    fillIfExists('numero onibus', '5');
-    fillIfExists('outrosSinalizacao', 'Outras sinalizações');
-    fillIfExists('observacoes', 'Observações importantes');
-    fillIfExists('referencias', 'Referências ou links');
+     if (widget.alimentosModel != null) {
+      fillIfExists('uf', widget.alimentosModel!.uf!);
+      fillIfExists('rg', widget.alimentosModel!.regiaoTuristica!);
+      fillIfExists('municipio', widget.alimentosModel!.municipio!);
+      fillIfExists('observacoes', widget.alimentosModel!.observacoes!);
+      fillIfExists('referencias', widget.alimentosModel!.referencias!);
+      fillIfExists('nome_pesquisador', widget.alimentosModel!.nomePesquisador!);
+      fillIfExists('telefone_pesquisador', widget.alimentosModel!.telefonePesquisador!);
+      fillIfExists('email_pesquisador', widget.alimentosModel!.emailPesquisador!);
+      fillIfExists('nome_coordenador', widget.alimentosModel!.nomeCoordenador!);
+      fillIfExists('telefone_coordenador', widget.alimentosModel!.telefoneCoordenador!);
+      fillIfExists('email_coordenador', widget.alimentosModel!.emailCoordenador!);
+
+      // Campos específicos de AlimentosEBebidas
+      fillIfExists('razão social', widget.alimentosModel!.razaoSocial!);
+      fillIfExists('nome fantasia', widget.alimentosModel!.nomeFantasia!);
+      fillIfExists('CNPJ', widget.alimentosModel!.CNPJ!);
+      fillIfExists('Código CNAE', widget.alimentosModel!.codigoCNAE!);
+      fillIfExists('Atividade Economica', widget.alimentosModel!.atividadeEconomica!);
+      fillIfExists('Inscrição Municipal', widget.alimentosModel!.inscricaoMunicipal!);
+      fillIfExists('Nome da rede', widget.alimentosModel!.nomeDaRede!);
+      fillIfExists('inicio da atividade', widget.alimentosModel!.inicioDaAtividade!);
+      fillIfExists('quantidade funcionarios permanentes', widget.alimentosModel!.qtdeFuncionariosPermanentes!);
+      fillIfExists('Quantidade de funcionarios temporarios', widget.alimentosModel!.qtdeFuncionariosTemporarios!);
+      fillIfExists('quantidade funcionarios com definicencia', widget.alimentosModel!.qtdeFuncionariosComDeficiencia!);
+      fillIfExists('latitude', widget.alimentosModel!.latitude!);
+      fillIfExists('longitude', widget.alimentosModel!.longitude!);
+      fillIfExists('avenida rua', widget.alimentosModel!.avenidaRuaEtc!);
+      fillIfExists('bairro localidade', widget.alimentosModel!.bairroLocalidade!);
+      fillIfExists('distrito', widget.alimentosModel!.distrito!);
+      fillIfExists('CEP', widget.alimentosModel!.CEP!);
+      fillIfExists('whatsapp', widget.alimentosModel!.whatsapp!);
+      fillIfExists('Instagram', widget.alimentosModel!.instagram!);
+      fillIfExists('email', widget.alimentosModel!.email!);
+      fillIfExists('sinalizacaoDeAcesso', widget.alimentosModel!.sinalizacaoDeAcesso!);
+      fillIfExists('sinalizacaoTuristica', widget.alimentosModel!.sinalizacaoTuristica!);
+      fillIfExists('distancia aeroporto', widget.alimentosModel!.distanciasAeroporto!);
+      fillIfExists('estação rodoviária', widget.alimentosModel!.distanciasRodoviaria!);
+      fillIfExists('estação ferroviária', widget.alimentosModel!.distanciaEstacaoFerroviaria!);
+      fillIfExists('Estacao maritima', widget.alimentosModel!.distanciaEstacaoMaritima!);
+      fillIfExists('estacao metroviaria', widget.alimentosModel!.distanciaEstacaoMetroviaria!);
+      fillIfExists('ponto de onibus', widget.alimentosModel!.distanciaPontoDeOnibus!);
+      fillIfExists('ponto de taxi', widget.alimentosModel!.distanciaPontoDeTaxi!);
+      fillIfExists('outras distancias nome', widget.alimentosModel!.distanciasOutraNome!);
+      fillIfExists('outras distancias', widget.alimentosModel!.distanciaOutras!);
+      fillIfExists('ponto de referencia', widget.alimentosModel!.pontosDeReferencia!);
+      fillIfExists('estadoGeralDeConservacao', widget.alimentosModel!.estadoGeralDeConservacao!);
+      fillIfExists('outrosAcessibilidade', widget.alimentosModel!.outrosAcessibilidade!);
+    }
   }
 
   TextEditingController getController(String key) {
     controllers[key] ??= TextEditingController();
     return controllers[key]!;
   }
+
+
+
 
   @override
   void dispose() {
@@ -138,6 +151,8 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
   final _formKey = GlobalKey<FormState>();
 
   Widget build(BuildContext context) {
+        autoFillForm();
+
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
         backgroundColor: Colors.white,
@@ -223,6 +238,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                   height: 50.w,
                 ),
                 RadioD(
+                  indexModel: widget.alimentosModel!.tipo,
                   options: const [
                     'Restaurante',
                     'Bar',
@@ -352,6 +368,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                       height: sizeScreen.height * 0.03,
                     ),
                     RadioD(
+                      indexModel: widget.alimentosModel!.natureza,
                         options: const ['pública', 'privada', 'outro'],
                         getValue: (newValue) {
                           valoresjson['natureza'] = newValue;
@@ -371,6 +388,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                       height: sizeScreen.height * 0.03,
                     ),
                     CheckC(
+                      nomesModel: widget.alimentosModel!.tipoDeOrganizacaoInstituicao,
                       key: tipo_de_organizacao_key,
                       nomes: [
                         'associação',
@@ -495,6 +513,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                   height: sizeScreen.height * 0.02,
                 ),
                 RadioD(
+                  indexModel: widget.alimentosModel!.localizacao,
                   options: const ['urbana', 'rural'],
                   getValue: (newValue) {
                     valoresjson['localizacao'] = newValue;
@@ -618,6 +637,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                           width: sizeScreen.width * 0.6,
                           //height: sizeScreen.height * 0.07,
                           child: CustomTextNumber(
+controller: getController('whatsapp'),
                             labelText: '(DD) n°',
                             getValue: (newValue) {
                               valoresjson['whatsapp'] = newValue;
@@ -699,6 +719,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.alimentosModel!.sinalizacaoDeAcesso,
                     getValue: (newValue) {
                       valoresjson['sinalizacaoDeAcesso'] = newValue;
                     },
@@ -716,6 +737,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                       //width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
+                        optionModel: widget.alimentosModel!.sinalizacaoTuristica,
                     getValue: (newValue) {
                       valoresjson['sinalizacaoTuristica'] = newValue;
                     },
@@ -737,6 +759,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                 ),
                 //  RadioD(number: 6, options: options)
                 CheckC(
+                  nomesModel: widget.alimentosModel!.proximidades,
                   key: proximidades_key,
                   nomes: [
                     'Meio de hospedagem',
@@ -990,6 +1013,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                   height: sizeScreen.height * 0.05,
                 ),
                 TableMtur(
+                  getValues: widget.alimentosModel!.tabelaMTUR,
                   onChanged: (p0) {
                     setState(() {
                       valoresjson['tabelaMTUR'] = p0;
@@ -1035,6 +1059,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                   height: sizeScreen.height * 0.03,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.formasDePagamento,
                   key: formas_de_pagamento_key,
                   nomes: [
                     'Dinheiro',
@@ -1057,6 +1082,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.vendasEReservas,
                   key: vendas_e_reservas_key,
                   nomes: ['Balcão', 'Whatsapp', 'Site', 'Instagram', 'outro'],
                 ),
@@ -1079,6 +1105,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.atendimentoEmLinguasEstrangeiras,
                   key: atendimento_em_lingua_estrangeira_key,
                   nomes: ['Não', 'Inglês', 'Espanhol', 'outro'],
                   // getValue: (newValue) {
@@ -1096,6 +1123,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.informativosImpressos,
                   key: informativos_impressos_key,
                   nomes: ['Não', 'Inglês', 'Espanhol', 'Português', 'outro'],
                   // getValue: (newValue) {
@@ -1131,6 +1159,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
+                  nomesModel: widget.alimentosModel!.periodo,
                   onChanged: (p0) {
                     valoresjson['periodo'] = p0;
                   },
@@ -1162,6 +1191,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                 ),
 
                 TabelaHorarios(
+                  getValue: widget.alimentosModel!.tabelasHorario,
                   onChanged: (p0) {
                     setState(() {
                       valoresjson['tabelasHorario'] = p0;
@@ -2321,10 +2351,8 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                         informativos_impressos_key.currentState!
                             .getSelectedValues()
                             .toList();
-                    autoFillForm();
 
                     _formKey.currentState!.save();
-                    sendForm(valoresjson);
                     valoresjson.forEach(
                       (key, value) {
                         debugPrint('$key ');

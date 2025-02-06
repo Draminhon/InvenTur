@@ -269,11 +269,13 @@ class DiasRow extends StatefulWidget {
 
   final Function(Map<String, dynamic>)? onChanged;
   final String? nome;
+  Map<String, dynamic>? getValue;
   DiasRow(
       {super.key,
       required this.dayLabel,
       required this.spacing,
       this.onChanged,
+      this.getValue,
       this.nome});
 
   @override
@@ -293,6 +295,7 @@ class _DiasRowState extends State<DiasRow> {
         SizedBox(width: widget.spacing),
         Expanded(
             child: CustomTimeField(
+              controller2: widget.getValue!['segunda\nfeira: abertura'],
           label: 'abertura',
           getValue: (p0) {
             setState(() {
@@ -319,7 +322,8 @@ class _DiasRowState extends State<DiasRow> {
 
 class TabelaHorarios extends StatefulWidget {
   final Function(Map<String, dynamic>)? onChanged;
-  TabelaHorarios({Key? key, this.onChanged}) : super(key: key);
+  Map<String, dynamic>? getValue;
+  TabelaHorarios({Key? key, this.onChanged, this.getValue}) : super(key: key);
 
   @override
   State<TabelaHorarios> createState() => _TabelaHorariosState();
@@ -356,6 +360,7 @@ class _TabelaHorariosState extends State<TabelaHorarios> {
           children: [
             for (final day in days)
               DiasRow(
+                getValue: widget.getValue,
                 dayLabel: day.label,
                 spacing: day.spacing,
                 nome: day.label,
@@ -1004,12 +1009,13 @@ SizedBox(height: 50.h,),
 
 class TableMtur extends StatelessWidget {
   String? associacao_e_sindicato;
+  Map<String, dynamic>? getValues;
   Map<String, dynamic> _valoresJson = {};
   final Function(Map<String, dynamic>)? onChanged;
   Map<String, dynamic> get valoresJson => _valoresJson;
   Map<String, TextEditingController> controllers = {};
 
-  TableMtur({super.key, this.associacao_e_sindicato, this.onChanged}) {
+  TableMtur({super.key, this.associacao_e_sindicato, this.onChanged, this.getValues}) {
     // Inicialize todos os controladores aqui
     controllers['CADASTUR'] = TextEditingController();
     controllers['MTUR Outros'] = TextEditingController();
@@ -1022,6 +1028,9 @@ class TableMtur extends StatelessWidget {
   }
 
   void autoFillForm() {
+    if(getValues != null){
+      print(getValues!['CADASTUR']);
+    }
     // Verifica se o controlador existe no Map antes de preencher
     void fillIfExists(String key, String value) {
       if (controllers.containsKey(key)) {
@@ -1030,14 +1039,14 @@ class TableMtur extends StatelessWidget {
     }
 
     // Preenche os valores dos controladores
-    fillIfExists('CADASTUR', 'CADASTUR exemplo');
-    fillIfExists('MTUR Outros', 'mtur EXEMPLO');
+    fillIfExists('CADASTUR', getValues!['CADASTUR']);
+    fillIfExists('MTUR Outros', getValues!['MturOutros']);
     fillIfExists('associação e sindicatos do setor de alimentação',
-        'associações exemplo');
-    fillIfExists('associações de turismo', 'associações de turismo exemplo');
-    fillIfExists('associações comerciais', 'associaçoes comerciais exemplo');
-    fillIfExists('guias turisticos', 'guias turisticos exemplo');
-    fillIfExists('outros', 'outros exemplo');
+        getValues!['categoriaAssociacoesESindicatosDoSetorDeAlimentacao']);
+    fillIfExists('associações de turismo', getValues!['categoriaAssociacoesDeTurismo']);
+    fillIfExists('associações comerciais', getValues!['categoriaAssociacoesComerciais']);
+    fillIfExists('guias turisticos', getValues!['categoriaGuiasTuristicos']);
+    fillIfExists('outros', getValues!['categoriaOutros']);
   }
 
   TextEditingController getController(String key) {

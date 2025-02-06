@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:inventur/models/alimentos_bebidas_model.dart';
 import 'package:inventur/models/rodovia_model.dart';
 import 'package:inventur/models/sistema_de_seguranca_model.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
@@ -246,7 +247,7 @@ Widget showRodovias(List<Map<String, dynamic>> posts) {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> SistemaDeSegurancaEdit(sistemaModel: SistemaDeSegurancaModel.fromJson(equipamento['dados']),)));
 
             }else if(equipamento['tipo'] == 'AlimentosEBebidas'){
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AlimentoseBebidasEdit()));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AlimentoseBebidasEdit(alimentosModel: AlimentosEBebidas.fromJson(equipamento['dados']),)));
             }
           },
           child: Container(
