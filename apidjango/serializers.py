@@ -133,3 +133,21 @@ class RodoviaSerializer(serializers.ModelSerializer):
 class EquipamentoSerializer(serializers.Serializer):
     tipo = serializers.CharField()
     dados = serializers.JSONField()
+
+class LogoutSerializer(serializers.Serializer):
+    refresh = serializers.CharField()
+
+    def validate_refresh(self, value):
+        """
+        Aqui você pode adicionar validações adicionais ao token, se necessário.
+        Por padrão, se o campo estiver preenchido, seguimos adiante.
+        """
+        return value
+
+    def save(self, **kwargs):
+        refresh_token = self.validated_data.get("refresh")
+        try:
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+        except TokenError:
+            raise serializers.ValidationError("Token inválido ou expirado")

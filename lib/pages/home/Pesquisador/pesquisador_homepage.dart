@@ -248,7 +248,7 @@ Widget showPesquisas(List<Pesquisa> posts) {
         return GestureDetector(
           onTap: () {
 
-            savePesquisaId(post.id);
+            savePesquisaId(post.id!);
 
             Navigator.pushNamed(context, '/Pesquisas',
                 arguments: {'pesquisa_id': post.id});
