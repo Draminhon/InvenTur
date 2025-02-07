@@ -74,12 +74,12 @@ class PesquisaCreateView(generics.ListCreateAPIView):
 
 class PesquisaUsuarioListView(generics.ListAPIView):
     serializer_class = PesquisaSerializer
-    permission_classes = [permissions.AllowAny] 
+    permission_classes = [permissions.IsAuthenticated] 
 
     def get_queryset(self):
         user = self.request.user
 
-        return Pesquisa.objects.filter(usuario=user, is_active=True)
+        return Pesquisa.objects.filter(usuario__in=[user], is_active=True)
     
 
 class PesquisaPartialUpdateAPIView(generics.UpdateAPIView):
@@ -158,7 +158,7 @@ def UsuarioLoginView(request):
 
             return JsonResponse({
                 'refresh': str(refresh),
-                'acess': str(refresh.access_token),
+                'access': str(refresh.access_token),
                 'user':{
                     'id': user.id,
                     'CPF': user.CPF,
