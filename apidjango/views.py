@@ -74,7 +74,7 @@ class PesquisaCreateView(generics.ListCreateAPIView):
 
 class PesquisaUsuarioListView(generics.ListAPIView):
     serializer_class = PesquisaSerializer
-    permission_classes = (AllowAny,) 
+    permission_classes = [AllowAny,]
 
 
     def get_queryset(self):
