@@ -135,7 +135,139 @@ class ServicoEspecializadoInfo(models.Model):
     outras_informacoes = models.TextField()
 
 
+class AlimentosEBebidas(Base):
+
+    razaoSocial = models.CharField(max_length=255)
+    nomeFantasia = models.CharField(max_length=255)
+    CNPJ = models.CharField(max_length=255)
+    codigoCNAE = models.CharField(max_length=255)
+    atividadeEconomica =models.CharField(max_length=255)
+    inscricaoMunicipal = models.CharField(max_length=255)
+    nomeDaRede =models.CharField(max_length=255)
+
+    natureza = models.CharField(max_length=255)
+    tipoDeOrganizacaoInstituicao = models.JSONField()
+    inicioDaAtividade = models.DateField()
+    qtdeFuncionariosPermanentes = models.CharField(max_length=255)
+    qtdeFuncionariosTemporarios = models.CharField(max_length=255)
+    qtdeFuncionariosComDeficiencia = models.CharField(max_length=255)
+    localizacao = models.CharField(max_length=255)
+    latitude = models.CharField(max_length=255)
+    longitude =models.CharField(max_length=255)
+    avenidaRuaEtc = models.CharField(max_length=255)
+    bairroLocalidade = models.CharField(max_length=255)
+    distrito = models.CharField(max_length=255)
+    CEP = models.CharField(max_length=255)
+
     
+    whatsapp = models.CharField(max_length=50)
+    instagram = models.CharField(max_length=50)
+    email = models.CharField(max_length=50)
+    sinalizacaoDeAcesso = models.CharField(max_length=50)
+    sinalizacaoTuristica = models.CharField(max_length=50)
+
+    proximidades = models.JSONField()
+
+    distanciasAeroporto = models.CharField(max_length=255)
+    distanciasRodoviaria  = models.CharField(max_length=255)
+    distanciaEstacaoFerroviaria  = models.CharField(max_length=255)
+    distanciaEstacaoMaritima  = models.CharField(max_length=255)
+    distanciaEstacaoMetroviaria  = models.CharField(max_length=255)
+    distanciaPontoDeOnibus  = models.CharField(max_length=255)
+    distanciaPontoDeTaxi  = models.CharField(max_length=255)
+    distanciasOutraNome  = models.CharField(max_length=255)
+    distanciaOutras  = models.CharField(max_length=255)
+
+    pontosDeReferencia  = models.CharField(max_length=255)
+
+    tabelaMTUR = models.JSONField()
+
+    formasDePagamento = models.JSONField()
+    vendasEReservas = models.JSONField()
+    atendimentoEmLinguasEstrangeiras = models.JSONField()
+    informativosImpressos = models.JSONField()
+
+    periodo = models.JSONField()
+    tabelasHorario = models.JSONField()
+
+    funcionamento24h = models.CharField(max_length=255)
+    funcionamentoEmFeriados = models.CharField(max_length=255)
+
+    restricoes = models.JSONField()
+
+    outrasRegraseInformacoes  = models.CharField(max_length=255)
+
+    capInstaladaPdia  = models.CharField(max_length=255)
+    capInstaladasSentadas  = models.CharField(max_length=255)
+    capSimultanea  = models.CharField(max_length=255)
+    capSimultaneaSentadas  = models.CharField(max_length=255)
+
+    estacionamento = models.JSONField()
+
+    capacidadeVeiculos  = models.CharField(max_length=255)
+
+    numeroAutomoveis  = models.CharField(max_length=255)
+
+    numeroOnibus  = models.CharField(max_length=255)
+
+    servicosEEquipamentos = models.JSONField()
+
+    especificacaoDaGastronomiaPorPais = models.JSONField()
+
+    seForBrasileiraPorRegiao = models.JSONField()
+    porEspecializacao = models.JSONField()
+    porTipoDeDieta = models.JSONField()
+    porTipoDeServico = models.JSONField()
+
+    doEquipamento = models.CharField(max_length=255)
+
+    tabelaEquipamentoEEspaco = models.JSONField()
+
+    estadoGeralDeConservacao = models.CharField(max_length=255)
+
+    possuiFacilidade = models.CharField(max_length=255)
+
+    pessoalCapacitadoParaReceberPCD = models.JSONField()
+
+    rotaExternaAcessível  = models.JSONField()
+
+    simboloInternacionalDeAcesso  = models.JSONField()
+
+    localDeEmbarqueEDesembarque  = models.JSONField()
+
+    vagaEmEstacionamento  = models.JSONField()
+
+    areaDeCirculacaoAcessoInternoParaCadeiraDeRodas  = models.JSONField()
+
+    escada  = models.JSONField()
+
+    rampa  = models.JSONField()
+
+    piso  = models.JSONField()
+
+    elevador =  models.JSONField()
+
+    equipamentoMotorizadoParaDeslocamentoInterno = models.JSONField()
+
+    sinalizacaoVisual = models.JSONField()
+
+    sinalizacaoTatil = models.JSONField()
+
+    alarmeDeEmergencia = models.JSONField()
+
+    comunicacao = models.JSONField()
+
+    balcaoDeAtendimento = models.JSONField()
+
+    mobiliario = models.JSONField()
+
+    sanitario = models.JSONField()
+
+    telefone = models.JSONField()
+
+    sinalizacaoIndicativa = models.CharField(max_length=255)
+
+    outrosAcessibilidade = models.CharField(max_length=255)
     
 
 class Rodovia(Base):

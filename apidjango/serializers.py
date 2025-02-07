@@ -138,18 +138,3 @@ class AlimentosEBebidasSerializer(serializers.ModelSerializer):
 class EquipamentoSerializer(serializers.Serializer):
     tipo = serializers.CharField()
     dados = serializers.JSONField()
-
-# class LogoutSerializer(serializers.Serializer):
-#     refresh = serializers.CharField()
-
-#     def validate_refresh(self, value):
-
-#         return value
-
-#     def save(self, **kwargs):
-#         refresh_token = self.validated_data.get("refresh")
-#         try:
-#             token = RefreshToken(refresh_token)
-#             token.blacklist()
-#         except TokenError:
-#             raise serializers.ValidationError("Token inválido ou expirado")
