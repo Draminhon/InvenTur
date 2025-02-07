@@ -1,7 +1,6 @@
 from rest_framework import serializers
 from .models import *
 from apidjango.models import validate_cpf
-from rest_framework_simplejwt.exceptions import TokenError
 
 class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(write_only=True, required=True)
@@ -130,6 +129,11 @@ class RodoviaSerializer(serializers.ModelSerializer):
         model = Rodovia
         fields = '__all__'  # ou especifique os campos que você deseja incluir
 
+class AlimentosEBebidasSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = AlimentosEBebidas
+        fields = '__all__'
 
 class EquipamentoSerializer(serializers.Serializer):
     tipo = serializers.CharField()
@@ -139,10 +143,7 @@ class EquipamentoSerializer(serializers.Serializer):
 #     refresh = serializers.CharField()
 
 #     def validate_refresh(self, value):
-#         """
-#         Aqui você pode adicionar validações adicionais ao token, se necessário.
-#         Por padrão, se o campo estiver preenchido, seguimos adiante.
-#         """
+
 #         return value
 
 #     def save(self, **kwargs):
