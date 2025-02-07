@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from apidjango.models import validate_cpf
+from rest_framework_simplejwt.exceptions import TokenError
 
 class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(write_only=True, required=True)
