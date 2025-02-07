@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 import json
 from django.http import HttpResponse, JsonResponse
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
