@@ -74,8 +74,7 @@ class PesquisaCreateView(generics.ListCreateAPIView):
 
 class PesquisaUsuarioListView(generics.ListAPIView):
     serializer_class = PesquisaSerializer
-    permission_classes = [AllowAny,]
-
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
@@ -218,6 +217,12 @@ def verificar_email(request):
 
     return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
 
+class AlimentosEBebidasListCreateView(generics.ListCreateAPIView):
+    queryset = AlimentosEBebidas.objects.all()
+    serializer_class = AlimentosEBebidasSerializer
+
+
+
 class AlterPasswordView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer
     queryset = CustomUser.objects.all()
@@ -260,8 +265,14 @@ class EquipamentosListView(APIView):
             for sistema in sistemas
         ]
 
+        alimentos = AlimentosEBebidas.objects.filter(pesquisa__id=pesquisa_id)
+        alimentos_serialized = [
+            {"tipo": "AlimentosEBebidas", "dados": AlimentosEBebidasSerializer(alimento).data}
+            for alimento in alimentos
+        ]        
+
         # Combina os dados
-        equipamentos = rodovias_serialized + sistemas_serialized
+        equipamentos = rodovias_serialized + sistemas_serialized + alimentos_serialized
 
         return Response(equipamentos)
 
@@ -308,13 +319,14 @@ class StatusUpdateAPIView(generics.UpdateAPIView):
 #     serializer_class = UserSerializer
 
 class LogoutAPIView(APIView):
-    permission_classes = (AllowAny,) 
+    permission_classes = [permissions.AllowAny] 
 
     def post(self, request):
-        serializer = LogoutSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(
-            {"detail": "Logout realizado com sucesso."}, 
-            status=status.HTTP_205_RESET_CONTENT
-        )
+        try:
+            refresh_token = request.data.get("refresh")
+            token = RefreshToken(refresh_token)
+
+            token.blacklist()
+            return Response({"detail": "Logout realizado com sucesso."}, status=status.HTTP_205_RESET_CONTENT)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
