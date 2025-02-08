@@ -27,7 +27,7 @@ Future<void> refreshToken() async {
 
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
-      prefs.setString('acess_token', body['access']);
+      prefs.setString('access_token', body['access']);
       print('Token atualizado com sucesso.');
     } else {
       print('Erro ao atualizar token: ${response.body}');
@@ -51,7 +51,7 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
   static Future<List<Pesquisa>> getPesquisas() async {
     final prefs = await SharedPreferences.getInstance();
 
-    String? token = await prefs.getString('acess_token');
+    String? token = await prefs.getString('access_token');
     var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisas/usuario/');
     var response = await http.get(url, headers: {
       "Authorization": "Bearer $token",
@@ -61,10 +61,10 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
     if (response.statusCode == 401) {
       await refreshToken();
 
-      token = prefs.getString('acess_token');
+      token = prefs.getString('access_token');
 
       response = await http.get(url, headers: {
-        "Authorization": "Bearer $token",
+        //"Authorization": "Bearer $token",
         "Content-Type": "application/json"
       });
     }
@@ -168,6 +168,7 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
                     return const CircularProgressIndicator();
                   } else if (snapshot.hasData) {
                     final pesquisa = snapshot.data!;
+                    print(pesquisa);
                     if (pesquisa.isEmpty) {
                      return Container(
                     margin: EdgeInsets.only(top: 1000.h),
