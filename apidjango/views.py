@@ -6,7 +6,7 @@ from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 import json
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseNotAllowed
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
@@ -192,6 +192,8 @@ def UsuarioLoginView(request):
          
             print("Nao logado")
             return HttpResponse("Invalid credentials", status = 400)
+    else:
+        return HttpResponseNotAllowed(['POST'])
 
 class SistemaDeSegurancaListCreateAPIView(generics.ListCreateAPIView):
     queryset = SistemaDeSeguranca.objects.all()
