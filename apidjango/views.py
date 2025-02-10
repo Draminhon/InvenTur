@@ -6,7 +6,7 @@ from rest_framework import status
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 import json
-from django.http import HttpResponse, JsonResponse, HttpResponseNotAllowed
+from django.http import HttpResponse, JsonResponse
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
@@ -14,12 +14,6 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth import logout
 from rest_framework.views import APIView
-from rest_framework_simplejwt.authentication import JWTAuthentication
-from rest_framework.exceptions import AuthenticationFailed
-import logging
-
-logging.basicConfig(level=logging.DEBUG)
-logger = logging.getLogger(__name__)
 
 
 
@@ -80,24 +74,11 @@ class PesquisaCreateView(generics.ListCreateAPIView):
 
 class PesquisaUsuarioListView(generics.ListAPIView):
     serializer_class = PesquisaSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [permissions.IsAuthenticated] 
 
     def get_queryset(self):
-        # Verifica o token e o usuário autenticado
-        try:
-            # Autentica o usuário usando o token JWT
-            jwt_authentication = JWTAuthentication()
-            user, _ = jwt_authentication.authenticate(self.request)
-            if user:
-                logger.debug(f'Usuário autenticado: {user.username}')
-                logger.debug(f'Token recebido: {self.request.headers.get("Authorization")}')
-            else:
-                logger.debug('Nenhum usuário autenticado encontrado.')
-        except AuthenticationFailed as e:
-            logger.error(f'Erro de autenticação: {e}')
-
-        # Retorna as pesquisas do usuário
         user = self.request.user
+
         return Pesquisa.objects.filter(usuario__in=[user], is_active=True)
     
 
@@ -192,8 +173,6 @@ def UsuarioLoginView(request):
          
             print("Nao logado")
             return HttpResponse("Invalid credentials", status = 400)
-    else:
-        return HttpResponseNotAllowed(['POST'])
 
 class SistemaDeSegurancaListCreateAPIView(generics.ListCreateAPIView):
     queryset = SistemaDeSeguranca.objects.all()
