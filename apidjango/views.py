@@ -132,47 +132,69 @@ class AdminUserCreateView(generics.ListCreateAPIView):
             headers = self.get_success_headers(serializer.data)
             return HttpResponse(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-@csrf_exempt # Apenas para testes locais. Em produção, use o CSRF adequadamente
+@csrf_exempt
 def UsuarioLoginView(request):
-    if request.method == "POST":
-        if request.content_type == "application/json":
-            try:
-                data = json.loads(request.body)
-                CPF = data.get("CPF")
-                password = data.get("password")
+    # Responde a métodos não-POST com erro 405
+    if request.method != "POST":
+        return JsonResponse(
+            {"error": "Método não permitido"}, 
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
-            except json.JSONDecodeError:
-                return HttpResponse("Invalid JSON", status = status.HTTP_400_BAD_REQUEST)
-        else:
-            CPF = request.POST.get("CPF")
-            password = request.POST.get("password")
+    CPF = None
+    password = None
 
-   
+    # Tratamento para JSON
+    if request.content_type == "application/json":
+        try:
+            data = json.loads(request.body)
+            CPF = data.get("CPF")
+            password = data.get("password")
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"error": "JSON inválido"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    # Tratamento para form-data/x-www-form-urlencoded
+    else:
+        CPF = request.POST.get("CPF")
+        password = request.POST.get("password")
 
-        user = authenticate(request, CPF = CPF, password = password)
-        if user is not None:
-         
-            refresh = RefreshToken.for_user(user)
-            print("Logado com sucesso")
-            print(str(refresh.access_token))
+    # Validação dos campos
+    if not CPF or not password:
+        return JsonResponse(
+            {"error": "CPF e senha são obrigatórios"}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-            return JsonResponse({
-                'refresh': str(refresh),
-                'access': str(refresh.access_token),
-                'user':{
-                    'id': user.id,
-                    'CPF': user.CPF,
-                    'name': user.username,
-                    'email': user.email,
-                    'acess_level': user.acessLevel,
-                    'status': user.status
-                }
-            }, status = 200)
-    
-        else:
-         
-            print("Nao logado")
-            return HttpResponse("Invalid credentials", status = 400)
+    # Autenticação
+    user = authenticate(request, CPF=CPF, password=password)
+    if user is None:
+        return JsonResponse(
+            {"error": "Credenciais inválidas"}, 
+            status=status.HTTP_401_UNAUTHORIZED
+        )
+
+    # Geração do token JWT
+    try:
+        refresh = RefreshToken.for_user(user)
+        return JsonResponse({
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+            "user": {
+                "id": user.id,
+                "CPF": user.CPF,
+                "name": user.username,
+                "email": user.email,
+                "access_level": user.acessLevel,
+                "status": user.status
+            }
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        return JsonResponse(
+            {"error": "Erro ao gerar token"}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 class SistemaDeSegurancaListCreateAPIView(generics.ListCreateAPIView):
     queryset = SistemaDeSeguranca.objects.all()
