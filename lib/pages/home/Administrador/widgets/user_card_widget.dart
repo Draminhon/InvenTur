@@ -49,9 +49,28 @@ class UserCard extends StatelessWidget {
                     : const Padding(padding: EdgeInsets.only(left: 10)),
                 IconButton(
                   onPressed: ()async {
+                     
+                     showDialog(context: context,
+                      builder: (BuildContext context){
+                    return   AlertDialog(
+                          title: const Text("Tem certeza?"),
+                          content: const Text('Você deseja excluir esse pesquisador?'),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          actions: [
+                            TextButton(onPressed: () {
+                              Navigator.pop(context);
+                            }, child: Text("Cancelar")),
 
-                         userControllerNotifier.removeUser(false, user);
-                          userControllerNotifier.populateFilteredUsers();
+                            TextButton(onPressed: () {
+                                         userControllerNotifier.removeUser(false, user);
+                           userControllerNotifier.populateFilteredUsers();
+                              Navigator.pop(context);
+
+                            }, child: Text("Excluir", style: TextStyle(color: Colors.red),))
+                          ],
+                        );
+                      });
+              
 
 
                   }, 

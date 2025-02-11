@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:inventur/main.dart';
 import 'package:inventur/models/pesquisa_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/pesquisas/register_pesquisa_page.dart';
+import 'package:inventur/utils/app_constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PesquisaCard extends StatefulWidget {
   final Pesquisa pesquisa;
@@ -42,8 +45,12 @@ class _PesquisaCardState extends State<PesquisaCard> {
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                IconButton(onPressed: () {
+                  Navigator.pushNamed(context, '/Pesquisas',arguments: {'pesquisa_id': _pesquisa.id, 'is_admin': true});
+                }, icon: Icon(Icons.remove_red_eye, color: AppConstants.MAIN_GREEN,)),
+               // SizedBox(width: 700.w,),
                 IconButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/EditPesquisa', arguments: {

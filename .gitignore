@@ -41,3 +41,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+/home/user01/InvenTur/api/settings.py
+/home/user01/InvenTur/api/wsgi.py

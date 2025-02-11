@@ -138,3 +138,8 @@ class AlimentosEBebidasSerializer(serializers.ModelSerializer):
 class EquipamentoSerializer(serializers.Serializer):
     tipo = serializers.CharField()
     dados = serializers.JSONField()
+
+class DynamicBaseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Base
+        fields = '__all__'

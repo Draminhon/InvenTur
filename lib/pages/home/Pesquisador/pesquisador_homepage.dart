@@ -27,7 +27,7 @@ Future<void> refreshToken() async {
 
     if (response.statusCode == 200) {
       var body = json.decode(response.body);
-      prefs.setString('acess_token', body['access']);
+      prefs.setString('access_token', body['access']);
       print('Token atualizado com sucesso.');
     } else {
       print('Erro ao atualizar token: ${response.body}');
@@ -48,35 +48,58 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
 
 
 
-  static Future<List<Pesquisa>> getPesquisas() async {
+static Future<List<Pesquisa>> getPesquisas() async {
+  try {
+    // Obtém a instância das preferências e o token de acesso
     final prefs = await SharedPreferences.getInstance();
-
-    String? token = await prefs.getString('acess_token');
-    var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisas/usuario/');
-    var response = await http.get(url, headers: {
-      "Authorization": "Bearer $token",
-      "Content-Type": "application/json"
-    });
-
-    if (response.statusCode == 401) {
-      await refreshToken();
-
-      token = prefs.getString('acess_token');
-
-      response = await http.get(url, headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json"
-      });
-    }
-
-    if (response.statusCode == 200) {
-      final List body = json.decode(utf8.decode(response.bodyBytes));
-
-      return body.map((e) => Pesquisa.fromJson(e)).toList();
-    } else {
+    String? token = prefs.getString('access_token');
+    if (token == null) {
+      print("Token de acesso não encontrado.");
       return [];
     }
+
+    // Define a URL da API
+    final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisas/usuario/');
+
+    // Realiza a requisição GET com o token atual
+    http.Response response = await _getWithToken(url, token);
+
+    // Se o token expirou, tenta atualizar e refazer a requisição
+    if (response.statusCode == 401) {
+      await refreshToken();
+      token = prefs.getString('access_token');
+      if (token == null) {
+        print("Falha ao atualizar o token de acesso.");
+        return [];
+      }
+      print('Novo token fornecido: $token');
+      response = await _getWithToken(url, token);
+    }
+
+    // Se a resposta for bem-sucedida, decodifica o JSON e retorna a lista de pesquisas
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
+      return data.map((item) => Pesquisa.fromJson(item)).toList();
+    } else {
+      // Em caso de erro, loga os detalhes e retorna lista vazia
+      print("Falha ao carregar pesquisas. Status: ${response.statusCode}");
+      print("Resposta: ${response.body}");
+      return [];
+    }
+  } catch (e) {
+    print("Ocorreu um erro ao buscar as pesquisas: $e");
+    return [];
   }
+}
+
+/// Realiza uma requisição GET com o token de autorização informado.
+static Future<http.Response> _getWithToken(Uri url, String token) async {
+  return await http.get(url, headers: {
+    "Authorization": "Bearer $token",
+    "Content-Type": "application/json",
+  });
+}
+
 
   Future<List<Pesquisa>> pesquisasFuture = getPesquisas();
   final UserController _userController = UserController();
@@ -168,6 +191,7 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
                     return const CircularProgressIndicator();
                   } else if (snapshot.hasData) {
                     final pesquisa = snapshot.data!;
+                    print(pesquisa);
                     if (pesquisa.isEmpty) {
                      return Container(
                     margin: EdgeInsets.only(top: 1000.h),

@@ -39,7 +39,9 @@ static Future<List<Pesquisa>> getPesquisas() async{
 
     final List body = json.decode(utf8.decode(response.bodyBytes));
    final List<Pesquisa> todasAsPesquisas = body.map((e) => Pesquisa.fromJson(e)).toList();
-    final List<Pesquisa> pesquisasFiltradas = todasAsPesquisas.where((pesquisa) => pesquisa.adminId == adminId).toList();
+    final List<Pesquisa> pesquisasFiltradas = todasAsPesquisas
+    .where((pesquisa) => pesquisa.adminId != null && pesquisa.adminId == adminId)
+    .toList();
     return pesquisasFiltradas;
     
   }catch(e){

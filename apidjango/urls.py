@@ -18,7 +18,7 @@ urlpatterns = [
     path('equipamentos/',  EquipamentosListView.as_view(), name='equipamento'),
     path('sistemaseguranca/create/', SistemaDeSegurancaListCreateAPIView.as_view(), name = 'sistemaDeSeguranca-create'),
     path('sistemadeseguranca/update/<int:pk>', SistemaDeSegurancaUpdateAPIView.as_view(), name ='sistemaDeSeguranca-update'),
-
+    path('base/<int:pk>/', BaseViewSet.as_view({'patch': 'update'})),
 
     path('usuarios/status/update/<int:pk>/', StatusUpdateAPIView.as_view(), name='status-update'),
     path('usuarios/update/<int:pk>', AlterUserAPIView.as_view(), name = 'delete-user'),

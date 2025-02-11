@@ -15,7 +15,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 Future<String?> getToken() async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('acess_token');
+  return prefs.getString('access_token');
 }
 
 class LoginPage extends StatefulWidget {
@@ -61,23 +61,23 @@ class _LoginPageState extends State<LoginPage> {
         if (response.statusCode == 200) {
           final Map<String, dynamic> responseData = json.decode(response.body);
 
-          String acessToken = responseData['acess'];
+          String accessToken = responseData['access'];
           String refreshToken = responseData['refresh'];
 
           final Map<String, dynamic> user = responseData['user'];
 
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('user_data', json.encode(user));
-          await prefs.setString('acess_token', acessToken);
+          await prefs.setString('access_token', accessToken);
           await prefs.setString('refresh_token', refreshToken);
 
-          print("token armazenado: $acessToken");
+          print("token armazenado: $accessToken");
           print("refresh token armazenado: $refreshToken");
           print("Usuario logado com sucesso: ${json.encode(user)}");
 
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-            return user['acess_level'] == 'Pesquisador'
+            return user['access_level'] == 'Pesquisador'
                 ? const PesquisadorHome()
                 : const AdminHomePage();
           }));
@@ -183,8 +183,8 @@ class _LoginPageState extends State<LoginPage> {
                                     overlayColor: WidgetStateProperty.all(
                                         Colors.green[600])),
                                 onPressed: () {
-                                  //   final String cpf2 = '95434284097';
-                                  // final String password2 = 'Jose123@';
+                                  //   final String cpf2 = '43443785042';
+                                  // final String password2 = 'Murilo159753@';
                                   // loginUser(cpf2, password2);
                                   if (_formLoginKey.currentState!.validate()) {
                                     final cpf = _cpfController.text

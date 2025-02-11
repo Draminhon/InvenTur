@@ -81,6 +81,7 @@ class Base(models.Model):
     
     pesquisa = models.ForeignKey(Pesquisa, on_delete=models.CASCADE)
     
+    is_active = models.BooleanField(default=True)
    
     tipo_formulario = models.CharField(max_length=100)
     uf = models.CharField(max_length=255)
@@ -133,8 +134,6 @@ class ServicoEspecializadoInfo(models.Model):
     email = models.CharField(max_length=255)
     servicos_especializados = models.TextField()
     outras_informacoes = models.TextField()
-    
-
     
 
 class AlimentosEBebidas(Base):
@@ -270,7 +269,7 @@ class AlimentosEBebidas(Base):
     sinalizacaoIndicativa = models.CharField(max_length=255)
 
     outrosAcessibilidade = models.CharField(max_length=255)
-
+    
 
 class Rodovia(Base):
 

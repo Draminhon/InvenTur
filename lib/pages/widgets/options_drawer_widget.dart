@@ -17,11 +17,17 @@ class OptionsDrawer extends StatelessWidget {
 
 Future<void> logout(BuildContext context) async {
   final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('acess_token');
-
+  String? token = prefs.getString('access_token');
+String? refreshToken = prefs.getString('refresh_token');
   final response = await http.post(
     Uri.parse('${AppConstants.BASE_URI}/api/v1/logout/'),
-    headers: {'Authorization': 'Bearer $token'},
+    headers: {
+      'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+
+      },
+      
+     body: jsonEncode({'refresh': refreshToken}),
   );
 
   print(response.statusCode);

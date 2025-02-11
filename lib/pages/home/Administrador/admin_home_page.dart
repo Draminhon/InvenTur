@@ -44,9 +44,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
     String userCPF = '';
 
   final Map<int, String> pageTitle = {
-    0: 'Andamento das Pesquisas',
-    1: 'Pesquisas Cadastradas',
-    2: 'Gerenciar Usuários',
+   // 0: 'Andamento das Pesquisas',
+    0: 'Pesquisas Cadastradas',
+    1: 'Gerenciar Usuários',
   };
   Future<void> getUserInfo()async{
   
@@ -116,10 +116,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           },
           selectedItemColor: const Color.fromARGB(255, 55, 111, 60),
           items: const <BottomNavigationBarItem> [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.insert_chart),
-              label: 'Andamento'
-            ),
+  
             BottomNavigationBarItem(
               icon: Icon(Icons.manage_search),
               label: 'Pesquisas'
@@ -138,11 +135,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
             });
           },
           children: [
-            Container(
-              width: 200,
-              height: 200,
-              color: Colors.green,
-            ),
+            // Container(
+            //   width: 200,
+            //   height: 200,
+            //   color: Colors.green,
+            // ),
             const PesquisasPage(),
             UserManagementPage(userControllerNotifier: _userController),
           ],

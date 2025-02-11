@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, viewsets
 from .serializers import UserSerializer
 from .models import *
 from .serializers import *
@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, login
 import json
 from django.http import HttpResponse, JsonResponse
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
@@ -74,12 +74,14 @@ class PesquisaCreateView(generics.ListCreateAPIView):
 
 class PesquisaUsuarioListView(generics.ListAPIView):
     serializer_class = PesquisaSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated] 
 
-    def get_queryset(self):
-        user = self.request.user
+def get_queryset(self):
+    print(self.request.headers)
+    user = self.request.user
+    print(f"Usuário autenticado: {user} - {user.is_authenticated}")  # Log no servidor
 
-        return Pesquisa.objects.filter(usuario=user, is_active=True)
+    return Pesquisa.objects.filter(usuario=user, is_active=True)
     
 
 class PesquisaPartialUpdateAPIView(generics.UpdateAPIView):
@@ -132,47 +134,69 @@ class AdminUserCreateView(generics.ListCreateAPIView):
             headers = self.get_success_headers(serializer.data)
             return HttpResponse(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-@csrf_exempt # Apenas para testes locais. Em produção, use o CSRF adequadamente
+@csrf_exempt
 def UsuarioLoginView(request):
-    if request.method == "POST":
-        if request.content_type == "application/json":
-            try:
-                data = json.loads(request.body)
-                CPF = data.get("CPF")
-                password = data.get("password")
+    # Responde a métodos não-POST com erro 405
+    if request.method != "POST":
+        return JsonResponse(
+            {"error": "Método não permitido"}, 
+            status=status.HTTP_405_METHOD_NOT_ALLOWED
+        )
 
-            except json.JSONDecodeError:
-                return HttpResponse("Invalid JSON", status = status.HTTP_400_BAD_REQUEST)
-        else:
-            CPF = request.POST.get("CPF")
-            password = request.POST.get("password")
+    CPF = None
+    password = None
 
-   
+    # Tratamento para JSON
+    if request.content_type == "application/json":
+        try:
+            data = json.loads(request.body)
+            CPF = data.get("CPF")
+            password = data.get("password")
+        except json.JSONDecodeError:
+            return JsonResponse(
+                {"error": "JSON inválido"}, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
+    # Tratamento para form-data/x-www-form-urlencoded
+    else:
+        CPF = request.POST.get("CPF")
+        password = request.POST.get("password")
 
-        user = authenticate(request, CPF = CPF, password = password)
-        if user is not None:
-         
-            refresh = RefreshToken.for_user(user)
-            print("Logado com sucesso")
-            print(str(refresh.access_token))
+    # Validação dos campos
+    if not CPF or not password:
+        return JsonResponse(
+            {"error": "CPF e senha são obrigatórios"}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-            return JsonResponse({
-                'refresh': str(refresh),
-                'acess': str(refresh.access_token),
-                'user':{
-                    'id': user.id,
-                    'CPF': user.CPF,
-                    'name': user.username,
-                    'email': user.email,
-                    'acess_level': user.acessLevel,
-                    'status': user.status
-                }
-            }, status = 200)
-    
-        else:
-         
-            print("Nao logado")
-            return HttpResponse("Invalid credentials", status = 400)
+    # Autenticação
+    user = authenticate(request, CPF=CPF, password=password)
+    if user is None:
+        return JsonResponse(
+            {"error": "Credenciais inválidas"}, 
+            status=status.HTTP_401_UNAUTHORIZED
+        )
+
+    # Geração do token JWT
+    try:
+        refresh = RefreshToken.for_user(user)
+        return JsonResponse({
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+            "user": {
+                "id": user.id,
+                "CPF": user.CPF,
+                "name": user.username,
+                "email": user.email,
+                "access_level": user.acessLevel,
+                "status": user.status
+            }
+        }, status=status.HTTP_200_OK)
+    except Exception as e:
+        return JsonResponse(
+            {"error": "Erro ao gerar token"}, 
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
 class SistemaDeSegurancaListCreateAPIView(generics.ListCreateAPIView):
     queryset = SistemaDeSeguranca.objects.all()
@@ -252,20 +276,20 @@ class EquipamentosListView(APIView):
             raise ValidationError({"detail": "O parâmetro 'pesquisa_id' é obrigatório."})
 
         # Rodovias
-        rodovias = Rodovia.objects.filter(pesquisa__id=pesquisa_id)
+        rodovias = Rodovia.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
         rodovias_serialized = [
             {"tipo": "Rodovia", "dados": RodoviaSerializer(rodovia).data}
             for rodovia in rodovias
         ]
 
         # Sistemas de Segurança
-        sistemas = SistemaDeSeguranca.objects.filter(pesquisa__id=pesquisa_id)
+        sistemas = SistemaDeSeguranca.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
         sistemas_serialized = [
             {"tipo": "SistemaDeSeguranca", "dados": SistemaDeSegurancaSerializer(sistema).data}
             for sistema in sistemas
         ]
 
-        alimentos = AlimentosEBebidas.objects.filter(pesquisa__id=pesquisa_id)
+        alimentos = AlimentosEBebidas.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
         alimentos_serialized = [
             {"tipo": "AlimentosEBebidas", "dados": AlimentosEBebidasSerializer(alimento).data}
             for alimento in alimentos
@@ -318,8 +342,24 @@ class StatusUpdateAPIView(generics.UpdateAPIView):
 #     queryset = CustomUser.objects.all()
 #     serializer_class = UserSerializer
 
+
+class BaseViewSet(viewsets.ModelViewSet):
+    queryset = Base.objects.all()
+    serializer_class = DynamicBaseSerializer
+    
+
+    def update(self, request, *args, **kwargs):
+        instance = get_object_or_404(Base, id=kwargs.get('pk'))  # Obtém o objeto apenas pelo ID
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class LogoutAPIView(APIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.AllowAny] 
 
     def post(self, request):
         try:

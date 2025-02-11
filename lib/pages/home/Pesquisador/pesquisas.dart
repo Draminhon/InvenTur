@@ -185,7 +185,7 @@ class Pesquisas extends StatelessWidget {
                     if (rodovias.isEmpty) {
                       return const Text("Não há equipamentos inventariados", style: TextStyle(fontWeight: FontWeight.bold),);
                     }
-                    return showRodovias(rodovias);
+                    return ShowRodoviaAux(posts: rodovias);
                   } else {
                     return const Text("Não há equipamentos inventariados", style: TextStyle(fontWeight: FontWeight.bold));
                   }
@@ -224,14 +224,38 @@ class Pesquisas extends StatelessWidget {
   }
 }
 
-Widget showRodovias(List<Map<String, dynamic>> posts) {
+class ShowRodoviaAux extends StatefulWidget{
+  final List<Map<String, dynamic>> posts;
+
+  const ShowRodoviaAux({super.key, required this.posts});
+  @override
+  State<ShowRodoviaAux> createState() => _ShowRodoviaAuxState();
+}
+
+class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
+  List<Map<String, dynamic>> posts = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    posts = List.from(widget.posts);
+  }
+
+  void removePost(int index){
+    setState(() {
+      posts.removeAt(index);
+    });
+  }
+Widget build(BuildContext context){
+  
   return SizedBox(
     height: 1500.h,
     child: ListView.builder(
       itemCount: posts.length,
       itemBuilder: (context, index) {
+         final arguments = ModalRoute.of(context)?.settings.arguments as Map;
         final equipamento = posts[index];
-      
+        final isadmin = arguments['is_admin'];
         final tipo = equipamento['tipo'];
         final dados = equipamento['dados'];
             print(posts.length);
@@ -250,7 +274,62 @@ Widget showRodovias(List<Map<String, dynamic>> posts) {
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AlimentoseBebidasEdit(alimentosModel: AlimentosEBebidas.fromJson(equipamento['dados']),)));
             }
           },
-          child: Container(
+          child:  isadmin == true ? Container(
+            
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: Colors.grey.shade300,
+
+            ),
+            margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
+            padding: EdgeInsets.symmetric(vertical: 15.h, horizontal: 50.w),
+            height: 250.h,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Text(
+                    '${dados['municipio'] ?? ''} - ${dados['tipo_formulario']}',
+                    style: TextStyle(fontSize: 60.w),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                SizedBox(width: 15.w,),
+                IconButton(onPressed: () async{
+                        final int id = dados['id'];
+                        final String nome = dados['tipo_formulario'];
+                        print('excluindo: $nome (ID: $id)');
+                        var url =
+        Uri.parse('${AppConstants.BASE_URI}/api/v1/base/$id/');
+
+    try {
+      final response =  await http.patch(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'is_active': false
+        }),
+      );
+
+      if (response.statusCode == 204) {
+        print('Usuario deletado com sucesso');
+      } else {
+        print('Falha ao deletar: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Erro $e');
+    }
+
+
+
+                  removePost(index);
+                }, icon: Icon(Icons.close, color: Colors.red,))
+              ],
+            ),
+          ):
+          Container(
             
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
@@ -278,3 +357,7 @@ Widget showRodovias(List<Map<String, dynamic>> posts) {
     ),
   );
 }
+
+}
+
+
