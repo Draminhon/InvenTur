@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth import logout
 from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 
 
@@ -75,7 +76,7 @@ class PesquisaCreateView(generics.ListCreateAPIView):
 class PesquisaUsuarioListView(generics.ListAPIView):
     serializer_class = PesquisaSerializer
     permission_classes = [permissions.IsAuthenticated] 
-
+    authentication_classes = [JWTAuthentication]
 def get_queryset(self):
     print(self.request.headers)
     user = self.request.user
@@ -355,7 +356,7 @@ class BaseViewSet(viewsets.ModelViewSet):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        
+         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LogoutAPIView(APIView):
