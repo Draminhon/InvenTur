@@ -23,9 +23,12 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
 
   static Future<List<User>> getUsers() async {
+      final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
     try{
     var url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_USERS);
-    final response = await http.get(url, headers: {"Content-Type": "application/json"});
+    final response = await http.get(url, headers: {"Content-Type": "application/json",  
+                                                   "Authorization": "Bearer $token",});
     final List body = json.decode(utf8.decode(response.bodyBytes));
     return body.map((e) => User.fromJson(e)).toList();
     }catch(e){

@@ -51,9 +51,11 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
   final TextEditingController _cpfPesquisador = TextEditingController();
 
   static Future<List<User>> getUsers() async {
+    final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
     var url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_USERS);
     final response =
-        await http.get(url, headers: {"Content-Type": "application/json"});
+        await http.get(url, headers: {"Content-Type": "application/json","Authorization": "Bearer $token"});
     final List body = json.decode(utf8.decode(response.bodyBytes));
     return body.map((e) => User.fromJson(e)).toList();
   }
@@ -125,6 +127,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
 
     final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/create');
 final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
 String? userDataString = prefs.getString('user_data');
   Map<String, dynamic> userData = json.decode(userDataString!);
   print("Nome do usuário: ${userData['id']}");
@@ -137,6 +140,7 @@ String? userDataString = prefs.getString('user_data');
       final response = await http.post(url,
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
+            "Authorization": "Bearer $token"
           },
           body: json.encode(<String, dynamic>{
  

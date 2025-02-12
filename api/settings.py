@@ -29,6 +29,19 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
+#CORS_ALLOW_ALL_ORIGINS = True
+# Application definition
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://nupreds.ifce.edu.br",
+]
+
+CORS_ALLOW_HEADERS = [
+    "authorization",
+    "content-type",
+]
+
+
 CORS_ALLOW_ALL_ORIGINS = True
 # Application definition
 
@@ -41,15 +54,19 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'apidjango',
     'rest_framework',
+    'rest_framework_simplejwt',
     'corsheaders',
      'rest_framework_simplejwt.token_blacklist',
 ]
  
-AUTH_USER_MODEL =  'apidjango.CustomUser'
+AUTH_USER_MODEL =  'apidjan.CustomUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
     ),
     'DATE_FORMAT': '%d/%m/%Y',
     'DATETIME_FORMAT': '%d/%m/%Y %H:%M:%S',

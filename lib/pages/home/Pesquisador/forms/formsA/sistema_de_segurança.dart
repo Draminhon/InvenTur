@@ -21,7 +21,8 @@ class SistemaDeSeguranca extends StatefulWidget {
 
 Future<void> sendForm(Map<String, dynamic> valoresjson) async {
   final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('acess_token');
+  String? token = prefs.getString('access_token');
+  print('token sendo fornecido no equipamento: $token');
   final url =
       Uri.parse(AppConstants.BASE_URI + '/api/v1/sistemaseguranca/create/');
   int? pesquisa_id = await getPesquisaId();
@@ -31,6 +32,8 @@ Future<void> sendForm(Map<String, dynamic> valoresjson) async {
     final response = await http.post(url,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          "Authorization": "Bearer $token",
+
         },
         body: json.encode(valoresjson));
     if (response.statusCode == 201) {

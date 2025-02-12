@@ -119,7 +119,7 @@ class AdminUserCreateView(generics.ListCreateAPIView):
         user = CustomUser.objects.filter(CPF=cpf).first()
 
         if user:
-           user.acessLevel = 'Administrador'
+           user.accessLevel = 'Administrador'
            user.save()
 
            return HttpResponse(
@@ -127,7 +127,7 @@ class AdminUserCreateView(generics.ListCreateAPIView):
                 status=status.HTTP_200_OK
             )
         else:
-            data['acessLevel'] = 'Administrador'
+            data['accessLevel'] = 'Administrador'
 
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)

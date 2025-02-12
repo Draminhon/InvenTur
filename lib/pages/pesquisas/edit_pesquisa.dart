@@ -52,8 +52,10 @@ late int adminId;
  late int pesquisaId;
   static Future<List<User>> getUsers() async {
     var url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_USERS);
+     final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
     final response =
-        await http.get(url, headers: {"Content-Type": "application/json"});
+        await http.get(url, headers: {"Content-Type": "application/json","Authorization": "Bearer $token",});
     final List body = json.decode(utf8.decode(response.bodyBytes));
     return body.map((e) => User.fromJson(e)).toList();
   }
@@ -144,24 +146,50 @@ void didChangeDependencies() {
     }
     return '';
   }
+DateTime parseDate(String dateStr) {
+  // Remove o sufixo "at ..." se existir
+  String cleaned = dateStr.split('at').first.trim();
 
+  // Se a string contém traços, assume o padrão "yyyy-MM-dd"
+  if (cleaned.contains('-')) {
+    return DateFormat('yyyy-MM-dd').parse(cleaned);
+  }
+  // Se a string contém barras, assume o padrão "dd/MM/yyyy"
+  else if (cleaned.contains('/')) {
+    return DateFormat('dd/MM/yyyy').parse(cleaned);
+  }
+  else {
+    throw FormatException('Formato desconhecido para data: $dateStr');
+  }
+}
 
 Future<void> atualizarPesquisa() async {
   var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/${pesquisaId}/atualizar/');
-  
+  String rawDataInicio = _inicioController.text;
+  String rawDataTermino = _terminoController.text;
+  if(rawDataInicio.contains('at')){
+    rawDataInicio = rawDataInicio.split('at').first.trim();
+    rawDataTermino = rawDataTermino.split('at').first.trim();
+  }
   try {
+    final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
+
+  DateTime dtInicio = parseDate(rawDataInicio);
+  DateTime dtTermino = parseDate(rawDataTermino);
+
     // Formatar a data usando DateFormat para garantir que ela tenha o formato correto
-    DateFormat inputFormat = DateFormat('yyyy-MM-dd'); // Ajuste aqui
     DateFormat outputFormat = DateFormat('yyyy-MM-dd'); // Para manter o mesmo formato
     
     // Converte a data do formato yyyy-MM-dd para yyyy-MM-dd (caso seja necessário)
-    String dataInicioFormatada = outputFormat.format(inputFormat.parse(_inicioController.text));
-    String dataTerminoFormatada = outputFormat.format(inputFormat.parse(_terminoController.text));
+    String dataInicioFormatada = outputFormat.format(dtInicio);
+    String dataTerminoFormatada = outputFormat.format(dtTermino);
     
     var response = await http.patch(
       url,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
       },
       body: json.encode({
         'admin': adminId,

@@ -10,6 +10,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:inventur/utils/app_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class ResgistrationForm extends StatelessWidget {
@@ -38,13 +39,16 @@ class ResgistrationForm extends StatelessWidget {
 
   Future<void> registerUser(String username, String CPF, String email, String password) async{
 
-    final url = Uri.parse(AppConstants.BASE_URI + '/api/v1/usuarios/register/admin');
+    final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/usuarios/register/admin');
 
   try{
+          final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
       final response = await http.post(
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "Authorization": "Bearer $token",
       },
       body: json.encode(<String, String>{
         'username': username,

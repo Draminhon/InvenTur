@@ -72,7 +72,30 @@ class _PesquisaCardState extends State<PesquisaCard> {
                     )),
                 IconButton(
                     onPressed: () async {
+                      showDialog(context: context, builder: (BuildContext context){
+
+                        return AlertDialog(
+
+                          title: const Text("Tem certeza?"),
+                          content: const Text('Você deseja excluir essa pesquisa?'),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          actions: [
+                            TextButton(onPressed: (){
+                              Navigator.pop(context);
+                            }, child: Text('Cancelar')
+                            
+                            )
+                            ,
+                            TextButton(onPressed: (){
                       _pesquisaController.removePesquisa(false, _pesquisa);
+                      Navigator.pop(context);
+                              
+                            }, child: Text('Excluir', style: TextStyle(color: Colors.red),))
+                          ],
+
+                        );
+
+                      });
                     },
                     icon: Icon(
                       Icons.delete_rounded,

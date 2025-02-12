@@ -55,6 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        
       },
       body: json.encode(<String, String>{
         'username': username,

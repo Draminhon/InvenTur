@@ -8,6 +8,7 @@ import 'package:inventur/services/brasil_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PesquisaController extends ChangeNotifier {
   static const String _finished = "Concluído";
@@ -68,10 +69,14 @@ class PesquisaController extends ChangeNotifier {
         Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/update/${pesquisa.id}');
 
     try {
+final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
+
       final response =  await http.patch(
         url,
         headers: {
           'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
         },
         body: json.encode({
           'is_active': active
@@ -153,7 +158,8 @@ class PesquisaController extends ChangeNotifier {
   void setPesquisaStatus(String status, Pesquisa pesquisa)async{
     pesquisa.status = status;
     notifyListeners();
-
+    final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
     var url = Uri.parse(
       '${AppConstants.BASE_URI}/api/v1/pesquisa/status/update/${pesquisa.id}/');
 
@@ -162,6 +168,7 @@ class PesquisaController extends ChangeNotifier {
           url,
           headers: {
             'Content-Type': 'application/json',
+            "Authorization": "Bearer $token"
           },
           body: json.encode({
             'status': status

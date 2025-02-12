@@ -6,6 +6,8 @@ import 'package:inventur/utils/app_constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class UserController extends ChangeNotifier {
   static const String _allStatus = 'Todos';
   static const String _onStatus = 'Ativo';
@@ -54,18 +56,20 @@ class UserController extends ChangeNotifier {
     var url =
         Uri.parse('${AppConstants.BASE_URI}/api/v1/usuarios/update/${user.id}');
 
-    try {
+    try {     final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
       final response =  await http.patch(
         url,
         headers: {
           'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
         },
         body: json.encode({
           'is_active': active
         }),
       );
 
-      if (response.statusCode == 204) {
+      if (response.statusCode == 200) {
         print('Usuario deletado com sucesso');
       } else {
         print('Falha ao deletar: ${response.statusCode}');
@@ -157,10 +161,15 @@ class UserController extends ChangeNotifier {
         '${AppConstants.BASE_URI}/api/v1/usuarios/status/update/${user.id}/');
 
     try {
+
+      final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
       await http.patch(
         url,
         headers: {
           'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+
         },
         body: json.encode({
           'id': user.id,
