@@ -59,7 +59,7 @@ INSTALLED_APPS = [
      'rest_framework_simplejwt.token_blacklist',
 ]
  
-AUTH_USER_MODEL =  'apidjan.CustomUser'
+AUTH_USER_MODEL =  'apidjango.CustomUser'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (

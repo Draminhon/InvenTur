@@ -765,7 +765,7 @@ SizedBox(height: 50.h,),
               name: 'portaria/instrução/deliberação',
               fontWeight: FontWeight.bold),
           CustomTextField(
-            controller: getController('nome portaria'),
+            controller: getController('entidadePortariaInstrucaoEstadualDistrital'),
             name: 'nome/titulo/certificação/licenciamento/outro',
             validat: (p0) {},
             getValue: (p0) {
@@ -774,7 +774,7 @@ SizedBox(height: 50.h,),
             },
           ),
           CustomTextField(
-            controller: getController('entidade portaria'),
+            controller: getController('entidadePortariaEstadualDistrital'),
             name: 'entidade declaratória/tipo de declaração',
             validat: (p0) {},
             getValue: (p0) {
@@ -784,7 +784,7 @@ SizedBox(height: 50.h,),
           ),
           textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
           CustomTextField(
-            controller: getController('nome norma ato'),
+            controller: getController('nomeNormaAtoEstadualDistrital'),
             name: 'nome/titulo/certificação/licenciamento/outro',
             validat: (p0) {},
             getValue: (p0) {
@@ -793,7 +793,7 @@ SizedBox(height: 50.h,),
             },
           ),
           CustomTextField(
-            controller: getController('entidade norma ato'),
+            controller: getController('entidadeNormaAtoEstadualDistrital'),
             name: 'entidade declaratória/tipo de declaração',
             validat: (p0) {},
             getValue: (p0) {
@@ -812,7 +812,7 @@ SizedBox(height: 50.h,),
             },
           ),
           CustomTextField(
-            controller: getController('entidade outros'),
+            controller: getController('entidadeOutrosEstadualDistrital'),
             name: 'entidade declaratória/tipo de declaração',
             validat: (p0) {},
             getValue: (p0) {
@@ -850,7 +850,7 @@ SizedBox(height: 50.h,),
               name: 'portaria/instrução/deliberação',
               fontWeight: FontWeight.bold),
           CustomTextField(
-            controller: getController('nome portaria'),
+            controller: getController('entidadePortariaInstrucaoFederal'),
             name: 'nome/titulo/certificação/licenciamento/outro',
             validat: (p0) {},
             getValue: (p0) {
@@ -859,7 +859,7 @@ SizedBox(height: 50.h,),
             },
           ),
           CustomTextField(
-            controller: getController('entidade portaria'),
+            controller: getController('entidadePortariaFederal'),
             name: 'entidade declaratória/tipo de declaração',
             validat: (p0) {},
             getValue: (p0) {
@@ -869,7 +869,7 @@ SizedBox(height: 50.h,),
           ),
           textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
           CustomTextField(
-            controller: getController('nome norma ato'),
+            controller: getController('nomeNormaAtoFederal'),
             name: 'nome/titulo/certificação/licenciamento/outro',
             validat: (p0) {},
             getValue: (p0) {
@@ -878,7 +878,7 @@ SizedBox(height: 50.h,),
             },
           ),
           CustomTextField(
-            controller: getController('entidade norma ato'),
+            controller: getController('entidadeNormaAtoFederal'),
             name: 'entidade declaratória/tipo de declaração',
             validat: (p0) {},
             getValue: (p0) {
@@ -897,7 +897,7 @@ SizedBox(height: 50.h,),
             },
           ),
           CustomTextField(
-            controller: getController('entidade outros'),
+            controller: getController('entidadeOutrosFederal'),
             name: 'entidade declaratória/tipo de declaração',
             validat: (p0) {},
             getValue: (p0) {
@@ -936,7 +936,7 @@ SizedBox(height: 50.h,),
               name: 'portaria/instrução/deliberação',
               fontWeight: FontWeight.bold),
           CustomTextField(
-            controller: getController('nome portaria'),
+            controller: getController('entidadePortariaInstrucaoInternacional'),
             name: 'nome/titulo/certificação/licenciamento/outro',
             validat: (p0) {},
             getValue: (p0) {
@@ -945,7 +945,7 @@ SizedBox(height: 50.h,),
             },
           ),
           CustomTextField(
-            controller: getController('entidade portaria'),
+            controller: getController('entidadePortariaInternacional'),
             name: 'entidade declaratória/tipo de declaração',
             validat: (p0) {},
             getValue: (p0) {
@@ -955,7 +955,7 @@ SizedBox(height: 50.h,),
           ),
           textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
           CustomTextField(
-            controller: getController('nome norma ato'),
+            controller: getController('nomeNormaAtoInternacional'),
             name: 'nome/titulo/certificação/licenciamento/outro',
             validat: (p0) {},
             getValue: (p0) {
@@ -964,7 +964,7 @@ SizedBox(height: 50.h,),
             },
           ),
           CustomTextField(
-            controller: getController('entidade norma ato'),
+            controller: getController('entidadeNormaAtoInternacional'),
             name: 'entidade declaratória/tipo de declaração',
             validat: (p0) {},
             getValue: (p0) {
@@ -983,7 +983,7 @@ SizedBox(height: 50.h,),
             },
           ),
           CustomTextField(
-            controller: getController('entidade outros'),
+            controller: getController('entidadeOutrosInternacional'),
             name: 'entidade declaratória/tipo de declaração',
             validat: (p0) {},
             getValue: (p0) {

@@ -159,7 +159,7 @@ class Pesquisas extends StatelessWidget {
               child: Column(
                 children: [
                   Text(
-                    'LOCAIS CADASTRADOS',
+                    'EQUIPAMENTOS',
                     style: TextStyle(
                         color: const Color.fromARGB(255, 55, 111, 60),
                         fontSize: 80.67.w,
@@ -179,7 +179,10 @@ class Pesquisas extends StatelessWidget {
               future: rodoviasFuture,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
+                  return const SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: Center(child: CircularProgressIndicator()));
                 } else if (snapshot.hasData) {
                   final rodovias = snapshot.data!;
                   if (rodovias.isEmpty) {
@@ -338,7 +341,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                                             onPressed: () {
                                               Navigator.pop(context);
                                             },
-                                            child: Text("Cancelar")),
+                                            child: const Text("Cancelar")),
                                         TextButton(
                                             onPressed: () async {
                                               final int id = dados['id'];
@@ -382,7 +385,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                                               removePost(index);
                                               Navigator.pop(context);
                                             },
-                                            child: Text(
+                                            child: const Text(
                                               "Excluir",
                                               style:
                                                   TextStyle(color: Colors.red),
@@ -391,7 +394,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                                     );
                                   });
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.close,
                               color: Colors.red,
                             ))
@@ -413,7 +416,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                       children: [
                         Flexible(
                           child: Text(
-                            '${dados['municipio'] ?? ''} - ${dados['tipo_formulario']}',
+                            '${dados['tipo_formulario']}',
                             style: TextStyle(fontSize: 60.w),
                             overflow: TextOverflow.ellipsis,
                           ),

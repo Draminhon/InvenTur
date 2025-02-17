@@ -503,17 +503,18 @@ void dispose() {
     Future<void> updateRodovia(int rodoviaId, Map<String, dynamic> data) async{
 
       final prefs =  await SharedPreferences.getInstance();
-      String? token = prefs.getString('acess_token');
+      String? token = prefs.getString('access_token');
 
       final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/rodovia/update/$rodoviaId');
 
-  print('OSIADOAOSD ${token}');
+
 
       try{
       final response = await http.patch(
         url,
         headers: {
           'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
         },
         body: json.encode(data),
       );
