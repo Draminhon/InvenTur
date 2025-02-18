@@ -33,30 +33,33 @@ class AlimentoseBebidasEdit extends StatefulWidget {
 }
 
 class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
-  Future<void> sendForm(Map<String, dynamic> valoresjson) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-    final url =
-        Uri.parse(AppConstants.BASE_URI + '/api/v1/alimentosEBebidas/create/');
-    int? pesquisa_id = await getPesquisaId();
+Future<void> updateAlimentosEBebidas(
+    int sistemaId, Map<String, dynamic> data) async {
+  final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
 
-    try {
-      valoresjson['pesquisa'] = pesquisa_id;
-      final response = await http.post(url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer $token'
-          },
-          body: json.encode(valoresjson));
-      if (response.statusCode == 201) {
-        debugPrint("Formulário enviado com sucesso!");
-      } else {
-        debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
-      }
-    } catch (e) {
-      print('Erro: $e');
+  final url = Uri.parse(
+      '${AppConstants.BASE_URI}/api/v1/alimentosEBebidas/update/$sistemaId');
+
+
+  try {
+    final response = await http.patch(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        "Authorization": "Bearer $token",
+      },
+      body: json.encode(data),
+    );
+    if (response.statusCode == 200) {
+      print("Atualização bem-sucedida");
+    } else {
+      print("Erro na atualização: ${response.statusCode}");
     }
+  } catch (e) {
+    print('Erro: $e');
   }
+}
 
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Alimentos e bebidas',
@@ -2403,11 +2406,8 @@ controller: getController('whatsapp'),
                             .toList();
 
                     _formKey.currentState!.save();
-                    valoresjson.forEach(
-                      (key, value) {
-                        debugPrint('$key ');
-                      },
-                    );
+                       updateAlimentosEBebidas(
+                                widget.alimentosModel!.id!, valoresjson);
 
                     // if (_formKey.currentState!.validate()) {
                     //   ScaffoldMessenger.of(context).showSnackBar(

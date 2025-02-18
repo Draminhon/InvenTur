@@ -15,8 +15,37 @@ from rest_framework.exceptions import ValidationError
 from django.contrib.auth import logout
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
+import openpyxl
+from django.shortcuts import get_object_or_404
 
 
+
+def export_pesquisa_to_excel(request, pesquisa_id):
+    try:
+        pesquisa = Pesquisa.objects.get(id=pesquisa_id)
+        equipamentos = AlimentosEBebidas.objects.filter(pesquisa=pesquisa)  # Ajuste o relacionamento
+
+        # Criando um arquivo Excel
+        wb = openpyxl.Workbook()
+        ws = wb.active
+        ws.title = f"Pesquisa {pesquisa.id}"
+
+        # Criar cabeçalhos da planilha
+        ws.append(["ID", "uf", "regiao_turistica", "municipio"])  # Ajuste conforme os campos do modelo
+
+        # Adicionar os equipamentos da pesquisa
+        for equipamento in equipamentos:
+            ws.append([equipamento.id, equipamento.uf, equipamento.regiao_turistica, equipamento.municipio])
+
+        # Criar a resposta HTTP com o arquivo Excel
+        response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        response["Content-Disposition"] = f'attachment; filename="pesquisa_{pesquisa.id}.xlsx"'
+        wb.save(response)
+
+        return response
+
+    except Pesquisa.DoesNotExist:
+        return HttpResponse("Pesquisa não encontrada", status=404)
 
 
 
@@ -247,6 +276,13 @@ class AlimentosEBebidasListCreateView(generics.ListCreateAPIView):
     serializer_class = AlimentosEBebidasSerializer
 
 
+class AlimentosEBebidasUpdateAPIView(generics.UpdateAPIView):
+    queryset = AlimentosEBebidas.objects.all()
+    serializer_class = AlimentosEBebidasSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
 
 class AlterPasswordView(generics.UpdateAPIView):
     serializer_class = ChangePasswordSerializer

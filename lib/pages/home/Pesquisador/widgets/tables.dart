@@ -568,73 +568,137 @@ class TablesInstalacoes extends StatelessWidget {
   }
 }
 
-class TabelsEquipamentoEEspaco extends StatelessWidget {
-  Map<String, dynamic>? getValue;
+class TabelsEquipamentoEEspaco extends StatefulWidget {
+  final Map<String, dynamic>? getValue;
+  final Function(Map<String, dynamic>)? onChanged;
+
+  const TabelsEquipamentoEEspaco({
+    Key? key,
+    this.onChanged,
+    this.getValue,
+  }) : super(key: key);
+
+  @override
+  _TabelsEquipamentoEEspacoState createState() =>
+      _TabelsEquipamentoEEspacoState();
+}
+
+class _TabelsEquipamentoEEspacoState extends State<TabelsEquipamentoEEspaco> {
   final _formKey = GlobalKey<FormState>();
-    final Function(Map<String, dynamic>)? onChanged;
-  
-
   Map<String, dynamic> _valoresJson = {};
-  Map<String, dynamic> get valoresJson => _valoresJson;
   Map<String, TextEditingController> controllers = {};
-  TabelsEquipamentoEEspaco({super.key, this.onChanged, this.getValue}){
 
-      controllers.forEach((key, value) {
-        print(key);
-        controllers[key] = TextEditingController();
-      });
+  @override
+  void initState() {
+    super.initState();
+
+    // Lista de chaves para os controladores
+    List<String> keys = [
+      'Municipal lei decreto nome',
+      'entidade lei decreto municipal',
+      'nome portaria',
+      'entidade portaria',
+      'nome norma ato',
+      'entidade norma ato',
+      'nomeOutrosMunicipal',
+      'entidade outros',
+      'EstadualDistrital lei decreto nome',
+      'entidade lei decreto EstadualDistrital',
+      'entidadePortariaInstrucaoEstadualDistrital',
+      'entidadePortariaEstadualDistrital',
+      'nomeNormaAtoEstadualDistrital',
+      'entidadeNormaAtoEstadualDistrital',
+      'nomeOutrosEstadualDistrital',
+      'entidadeOutrosEstadualDistrital',
+      'Federal lei decreto nome',
+      'entidade lei decreto Federal',
+      'entidadePortariaInstrucaoFederal',
+      'entidadePortariaFederal',
+      'nomeNormaAtoFederal',
+      'entidadeNormaAtoFederal',
+      'nomeOutrosFederal',
+      'entidadeOutrosFederal',
+      'Internacional lei decreto nome',
+      'entidade lei decreto Internacional',
+      'entidadePortariaInstrucaoInternacional',
+      'entidadePortariaInternacional',
+      'nomeNormaAtoInternacional',
+      'entidadeNormaAtoInternacional',
+      'nomeOutrosInternacional',
+      'entidadeOutrosInternacional',
+      'outras nome',
+      'outras lei decreto nome',
+      'entidade lei decreto Outras',
+    ];
+
+    // Inicializa os controladores para cada chave
+    for (var key in keys) {
+      controllers[key] = TextEditingController();
     }
 
+    // Se houver valores para preencher, chama o autoFill
+    if (widget.getValue != null) {
+      autoFillForm();
+    }
+  }
 
-
+  @override
+  void dispose() {
+    // Desfaz o dispose de cada controlador para evitar vazamentos de memória
+    for (var controller in controllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
 
   void autoFillForm() {
-    print(getValue);
-    // Verifica se o controlador existe no Map antes de preencher
-    void fillIfExists(String key, String value) {
-
-      getController(key).text = value;
-
+    // Função auxiliar para preencher os controladores com os valores do JSON
+    void fillIfExists(String key, dynamic value) {
+      if (value != null) {
+        controllers[key]?.text = value.toString();
+      }
     }
-fillIfExists('Municipal lei decreto nome', getValue!['nomeLeiDecretoMunicipal']);
-  fillIfExists('entidade lei decreto municipal', getValue!['entidadeLeiDecretoMunicipal']);
-  fillIfExists('nome portaria', getValue!['entidadePortariaInstrucaoMunicipal']);
-  fillIfExists('entidade portaria', getValue!['entidadePortariaMunicipal']);
-  fillIfExists('nome norma ato', getValue!['nomeNormaAtoMunicipal']);
-  fillIfExists('entidade norma ato',getValue!['entidadeNormaAtoMunicipal']);
-  fillIfExists('nomeOutrosMunicipal', getValue!['nomeOutrosMunicipal']);
-  fillIfExists('entidade outros', getValue!['entidadeOutrosMunicipal']);
 
-  fillIfExists('EstadualDistrital lei decreto nome', getValue!['nomeLeiDecretoEstadualDistrital']);
-  fillIfExists('entidade lei decreto EstadualDistrital', getValue!['entidadeLeiDecretoEstadualDistrital']);
-  fillIfExists('entidadePortariaInstrucaoEstadualDistrital', getValue!['entidadePortariaInstrucaoEstadualDistrital']);
-  fillIfExists('entidadePortariaEstadualDistrital', getValue!['entidadePortariaEstadualDistrital']);
-  fillIfExists('nomeNormaAtoEstadualDistrital', getValue!['nomeNormaAtoEstadualDistrital']);
-  fillIfExists('entidadeNormaAtoEstadualDistrital',getValue!['entidadeNormaAtoEstadualDistrital']);
-  fillIfExists('nomeOutrosEstadualDistrital', getValue!['nomeOutrosEstadualDistrital']);
-  fillIfExists('entidadeOutrosEstadualDistrital', getValue!['entidadeOutrosEstadualDistrital']);
+    final values = widget.getValue!;
+    fillIfExists('Municipal lei decreto nome', values['nomeLeiDecretoMunicipal']);
+    fillIfExists('entidade lei decreto municipal', values['entidadeLeiDecretoMunicipal']);
+    fillIfExists('nome portaria', values['entidadePortariaInstrucaoMunicipal']);
+    fillIfExists('entidade portaria', values['entidadePortariaMunicipal']);
+    fillIfExists('nome norma ato', values['nomeNormaAtoMunicipal']);
+    fillIfExists('entidade norma ato', values['entidadeNormaAtoMunicipal']);
+    fillIfExists('nomeOutrosMunicipal', values['nomeOutrosMunicipal']);
+    fillIfExists('entidade outros', values['entidadeOutrosMunicipal']);
 
-  fillIfExists('Federal lei decreto nome',getValue!['nomeLeiDecretoFederal']);
-  fillIfExists('entidade lei decreto Federal', getValue!['entidadeLeiDecretoFederal']);
-  fillIfExists('entidadePortariaInstrucaoFederal', getValue!['entidadePortariaInstrucaoFederal']);
-  fillIfExists('entidadePortariaFederal', getValue!['entidadePortariaFederal']);
-  fillIfExists('nomeNormaAtoFederal', getValue!['nomeNormaAtoFederal']);
-  fillIfExists('entidadeNormaAtoFederal', getValue!['entidadeNormaAtoFederal']);
-  fillIfExists('nomeOutrosFederal', getValue!['nomeOutrosFederal']);
-  fillIfExists('entidadeOutrosFederal',getValue!['entidadeOutrosFederal']);
+    fillIfExists('EstadualDistrital lei decreto nome', values['nomeLeiDecretoEstadualDistrital']);
+    fillIfExists('entidade lei decreto EstadualDistrital', values['entidadeLeiDecretoEstadualDistrital']);
+    fillIfExists('entidadePortariaInstrucaoEstadualDistrital', values['entidadePortariaInstrucaoEstadualDistrital']);
+    fillIfExists('entidadePortariaEstadualDistrital', values['entidadePortariaEstadualDistrital']);
+    fillIfExists('nomeNormaAtoEstadualDistrital', values['nomeNormaAtoEstadualDistrital']);
+    fillIfExists('entidadeNormaAtoEstadualDistrital', values['entidadeNormaAtoEstadualDistrital']);
+    fillIfExists('nomeOutrosEstadualDistrital', values['nomeOutrosEstadualDistrital']);
+    fillIfExists('entidadeOutrosEstadualDistrital', values['entidadeOutrosEstadualDistrital']);
 
-  fillIfExists('Internacional lei decreto nome', getValue!['nomeLeiDecretoInternacional']);
-  fillIfExists('entidade lei decreto Internacional', getValue!['entidadeLeiDecretoInternacional']);
-  fillIfExists('entidadePortariaInstrucaoInternacional', getValue!['entidadePortariaInstrucaoInternacional']);
-  fillIfExists('entidadePortariaInternacional', getValue!['entidadePortariaInternacional']);
-  fillIfExists('nomeNormaAtoInternacional', getValue!['nomeNormaAtoInternacional']);
-  fillIfExists('entidadeNormaAtoInternacional', getValue!['entidadeNormaAtoInternacional']);
-  fillIfExists('nomeOutrosInternacional', getValue!['nomeOutrosInternacional']);
-  fillIfExists('entidadeOutrosInternacional', getValue!['entidadeOutrosInternacional']);
+    fillIfExists('Federal lei decreto nome', values['nomeLeiDecretoFederal']);
+    fillIfExists('entidade lei decreto Federal', values['entidadeLeiDecretoFederal']);
+    fillIfExists('entidadePortariaInstrucaoFederal', values['entidadePortariaInstrucaoFederal']);
+    fillIfExists('entidadePortariaFederal', values['entidadePortariaFederal']);
+    fillIfExists('nomeNormaAtoFederal', values['nomeNormaAtoFederal']);
+    fillIfExists('entidadeNormaAtoFederal', values['entidadeNormaAtoFederal']);
+    fillIfExists('nomeOutrosFederal', values['nomeOutrosFederal']);
+    fillIfExists('entidadeOutrosFederal', values['entidadeOutrosFederal']);
 
-  fillIfExists('outras nome', getValue!['outras nome']);
-  fillIfExists('outras lei decreto nome',  getValue!['nomeLeiDecretoOutras']);
-  fillIfExists('entidade lei decreto Outras',  getValue!['entidadeLeiDecretoOutras']);
+    fillIfExists('Internacional lei decreto nome', values['nomeLeiDecretoInternacional']);
+    fillIfExists('entidade lei decreto Internacional', values['entidadeLeiDecretoInternacional']);
+    fillIfExists('entidadePortariaInstrucaoInternacional', values['entidadePortariaInstrucaoInternacional']);
+    fillIfExists('entidadePortariaInternacional', values['entidadePortariaInternacional']);
+    fillIfExists('nomeNormaAtoInternacional', values['nomeNormaAtoInternacional']);
+    fillIfExists('entidadeNormaAtoInternacional', values['entidadeNormaAtoInternacional']);
+    fillIfExists('nomeOutrosInternacional', values['nomeOutrosInternacional']);
+    fillIfExists('entidadeOutrosInternacional', values['entidadeOutrosInternacional']);
+
+    fillIfExists('outras nome', values['outras nome']);
+    fillIfExists('outras lei decreto nome', values['nomeLeiDecretoOutras']);
+    fillIfExists('entidade lei decreto Outras', values['entidadeLeiDecretoOutras']);
   }
 
   TextEditingController getController(String key) {
@@ -644,408 +708,414 @@ fillIfExists('Municipal lei decreto nome', getValue!['nomeLeiDecretoMunicipal'])
 
   @override
   Widget build(BuildContext context) {
-    if (getValue != null){
-    autoFillForm();
+    return Column(
+      children: [
+        // Municipal
+        textLabel(
+          name: 'Municipal',
+          fontWeight: FontWeight.bold,
+        ),
+        textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('Municipal lei decreto nome'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeLeiDecretoMunicipal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidade lei decreto municipal'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeLeiDecretoMunicipal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(
+          name: 'portaria/instrução/deliberação',
+          fontWeight: FontWeight.bold,
+        ),
+        CustomTextField(
+          controller: getController('nome portaria'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadePortariaInstrucaoMunicipal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidade portaria'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadePortariaMunicipal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('nome norma ato'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeNormaAtoMunicipal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidade norma ato'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeNormaAtoMunicipal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(name: 'outros', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('nomeOutrosMunicipal'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeOutrosMunicipal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidade outros'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeOutrosMunicipal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
 
-    }
-    // TODO: implement build
-    return  Column(
-        children: [
-          //Municipal
+        // Estadual/Distrital
+        SizedBox(height: 50),
+        textLabel(
+          name: 'Estadual/Distrital',
+          fontWeight: FontWeight.bold,
+        ),
+        textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('EstadualDistrital lei decreto nome'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeLeiDecretoEstadualDistrital'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidade lei decreto EstadualDistrital'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeLeiDecretoEstadualDistrital'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(
+          name: 'portaria/instrução/deliberação',
+          fontWeight: FontWeight.bold,
+        ),
+        CustomTextField(
+          controller: getController('entidadePortariaInstrucaoEstadualDistrital'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadePortariaInstrucaoEstadualDistrital'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidadePortariaEstadualDistrital'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadePortariaEstadualDistrital'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('nomeNormaAtoEstadualDistrital'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeNormaAtoEstadualDistrital'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidadeNormaAtoEstadualDistrital'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeNormaAtoEstadualDistrital'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(name: 'outros', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('nomeOutrosEstadualDistrital'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeOutrosEstadualDistrital'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidadeOutrosEstadualDistrital'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeOutrosEstadualDistrital'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
 
-          textLabel(
-            name: 'Municipal',
-            fontWeight: FontWeight.bold,
-          ),
-          textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('Municipal lei decreto nome'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeLeiDecretoMunicipal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidade lei decreto municipal'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeLeiDecretoMunicipal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(
-              name: 'portaria/instrução/deliberação',
-              fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('nome portaria'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadePortariaInstrucaoMunicipal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidade portaria'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadePortariaMunicipal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('nome norma ato'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeNormaAtoMunicipal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidade norma ato'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeNormaAtoMunicipal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(name: 'outros', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('nomeOutrosMunicipal'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeOutrosMunicipal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidade outros'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeOutrosMunicipal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
+        // Federal
+        SizedBox(height: 50),
+        textLabel(
+          name: 'Federal',
+          fontWeight: FontWeight.bold,
+        ),
+        textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('Federal lei decreto nome'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeLeiDecretoFederal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidade lei decreto Federal'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeLeiDecretoFederal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(
+          name: 'portaria/instrução/deliberação',
+          fontWeight: FontWeight.bold,
+        ),
+        CustomTextField(
+          controller: getController('entidadePortariaInstrucaoFederal'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadePortariaInstrucaoFederal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidadePortariaFederal'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadePortariaFederal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('nomeNormaAtoFederal'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeNormaAtoFederal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidadeNormaAtoFederal'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeNormaAtoFederal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(name: 'outros', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('nomeOutrosFederal'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeOutrosFederal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidadeOutrosFederal'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeOutrosFederal'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
 
-          //Estadual/Distrital
-SizedBox(height: 50.h,),
-          textLabel(
-            name: 'Estadual/Distrital',
-            fontWeight: FontWeight.bold,
-          ),
-          textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('EstadualDistrital lei decreto nome'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeLeiDecretoEstadualDistrital'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidade lei decreto EstadualDistrital'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeLeiDecretoEstadualDistrital'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(
-              name: 'portaria/instrução/deliberação',
-              fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('entidadePortariaInstrucaoEstadualDistrital'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadePortariaInstrucaoEstadualDistrital'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidadePortariaEstadualDistrital'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadePortariaEstadualDistrital'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('nomeNormaAtoEstadualDistrital'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeNormaAtoEstadualDistrital'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidadeNormaAtoEstadualDistrital'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeNormaAtoEstadualDistrital'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(name: 'outros', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('nomeOutrosEstadualDistrital'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeOutrosEstadualDistrital'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidadeOutrosEstadualDistrital'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeOutrosEstadualDistrital'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
+        // Internacional
+        SizedBox(height: 50),
+        textLabel(
+          name: 'Internacional',
+          fontWeight: FontWeight.bold,
+        ),
+        textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('Internacional lei decreto nome'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeLeiDecretoInternacional'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidade lei decreto Internacional'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeLeiDecretoInternacional'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(
+          name: 'portaria/instrução/deliberação',
+          fontWeight: FontWeight.bold,
+        ),
+        CustomTextField(
+          controller: getController('entidadePortariaInstrucaoInternacional'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadePortariaInstrucaoInternacional'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidadePortariaInternacional'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadePortariaInternacional'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('nomeNormaAtoInternacional'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeNormaAtoInternacional'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidadeNormaAtoInternacional'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeNormaAtoInternacional'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        textLabel(name: 'outros', fontWeight: FontWeight.bold),
+        CustomTextField(
+          controller: getController('nomeOutrosInternacional'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeOutrosInternacional'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidadeOutrosInternacional'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeOutrosInternacional'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
 
-          //Federal
-           SizedBox(height: 50.h),
-          textLabel(
-            name: 'Federal',
-            fontWeight: FontWeight.bold,
-          ),
-          textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('Federal lei decreto nome'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeLeiDecretoFederal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidade lei decreto Federal'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeLeiDecretoFederal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(
-              name: 'portaria/instrução/deliberação',
-              fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('entidadePortariaInstrucaoFederal'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadePortariaInstrucaoFederal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidadePortariaFederal'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadePortariaFederal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('nomeNormaAtoFederal'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeNormaAtoFederal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidadeNormaAtoFederal'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeNormaAtoFederal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(name: 'outros', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('nomeOutrosFederal'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeOutrosFederal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidadeOutrosFederal'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeOutrosFederal'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          //Estadual/Distrital - Internacional
-
-
-  SizedBox(height: 50.h,),
-          textLabel(
-            name: 'Internacional',
-            fontWeight: FontWeight.bold,
-          ),
-          textLabel(name: 'lei/decreto', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('Internacional lei decreto nome'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeLeiDecretoInternacional'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidade lei decreto Internacional'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeLeiDecretoInternacional'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(
-              name: 'portaria/instrução/deliberação',
-              fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('entidadePortariaInstrucaoInternacional'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadePortariaInstrucaoInternacional'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidadePortariaInternacional'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadePortariaInternacional'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(name: 'norma/ato', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('nomeNormaAtoInternacional'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeNormaAtoInternacional'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidadeNormaAtoInternacional'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeNormaAtoInternacional'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          textLabel(name: 'outros', fontWeight: FontWeight.bold),
-          CustomTextField(
-            controller: getController('nomeOutrosInternacional'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeOutrosInternacional'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidadeOutrosInternacional'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeOutrosInternacional'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-
-
-
-      //Outras
-
-
-      SizedBox(height: 50.h,),
-          textLabel(
-            name: 'Outras',
-            fontWeight: FontWeight.bold,
-          ),
-
-          CustomTextField(
-            controller: getController('outras nome'),
-            name: 'insira o nome',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['outras nome'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('outras lei decreto nome'),
-            name: 'nome/titulo/certificação/licenciamento/outro',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['nomeLeiDecretoOutras'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-          CustomTextField(
-            controller: getController('entidade lei decreto Outras'),
-            name: 'entidade declaratória/tipo de declaração',
-            validat: (p0) {},
-            getValue: (p0) {
-              _valoresJson['entidadeLeiDecretoOutras'] = p0;
-              onChanged?.call(_valoresJson);
-            },
-          ),
-
-        ],
-      );
+        // Outras
+        SizedBox(height: 50),
+        textLabel(
+          name: 'Outras',
+          fontWeight: FontWeight.bold,
+        ),
+        CustomTextField(
+          controller: getController('outras nome'),
+          name: 'insira o nome',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['outras nome'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('outras lei decreto nome'),
+          name: 'nome/titulo/certificação/licenciamento/outro',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['nomeLeiDecretoOutras'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+        CustomTextField(
+          controller: getController('entidade lei decreto Outras'),
+          name: 'entidade declaratória/tipo de declaração',
+          validat: (p0) {},
+          getValue: (p0) {
+            _valoresJson['entidadeLeiDecretoOutras'] = p0;
+            widget.onChanged?.call(_valoresJson);
+          },
+        ),
+      ],
+    );
   }
 }
 
-class TableMtur extends StatelessWidget {
-  String? associacao_e_sindicato;
-  Map<String, dynamic>? getValues;
-  Map<String, dynamic> _valoresJson = {};
+
+class TableMtur extends StatefulWidget {
+  final String? associacao_e_sindicato;
+  final Map<String, dynamic>? getValues;
   final Function(Map<String, dynamic>)? onChanged;
-  Map<String, dynamic> get valoresJson => _valoresJson;
+
+  const TableMtur({
+    Key? key,
+    this.associacao_e_sindicato,
+    this.onChanged,
+    this.getValues,
+  }) : super(key: key);
+
+  @override
+  _TableMturState createState() => _TableMturState();
+}
+
+class _TableMturState extends State<TableMtur> {
+  Map<String, dynamic> _valoresJson = {};
   Map<String, TextEditingController> controllers = {};
 
-  TableMtur({super.key, this.associacao_e_sindicato, this.onChanged, this.getValues}) {
-    // Inicialize todos os controladores aqui
+  @override
+  void initState() {
+    super.initState();
+    // Inicializa os controladores
     controllers['CADASTUR'] = TextEditingController();
     controllers['MTUR Outros'] = TextEditingController();
     controllers['associação e sindicatos do setor de alimentação'] =
@@ -1054,28 +1124,56 @@ class TableMtur extends StatelessWidget {
     controllers['associações comerciais'] = TextEditingController();
     controllers['guias turisticos'] = TextEditingController();
     controllers['outros'] = TextEditingController();
+
+    // Se houver valores iniciais, preenche os campos
+    if (widget.getValues != null) {
+      autoFillForm();
+    }
+  }
+
+  @override
+  void dispose() {
+    // Dispose dos controladores para evitar vazamentos de memória
+    for (var controller in controllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   void autoFillForm() {
-    if(getValues != null){
-      print(getValues!['CADASTUR']);
-    }
-    // Verifica se o controlador existe no Map antes de preencher
+    // Exemplo de debug
+    print(widget.getValues!['CADASTUR']);
+
+    // Função auxiliar para preencher os controladores se a chave existir
     void fillIfExists(String key, String value) {
       if (controllers.containsKey(key)) {
         controllers[key]!.text = value;
       }
     }
 
-    // Preenche os valores dos controladores
-    fillIfExists('CADASTUR', getValues!['CADASTUR']);
-    fillIfExists('MTUR Outros', getValues!['MturOutros']);
-    fillIfExists('associação e sindicatos do setor de alimentação',
-        getValues!['categoriaAssociacoesESindicatosDoSetorDeAlimentacao']);
-    fillIfExists('associações de turismo', getValues!['categoriaAssociacoesDeTurismo']);
-    fillIfExists('associações comerciais', getValues!['categoriaAssociacoesComerciais']);
-    fillIfExists('guias turisticos', getValues!['categoriaGuiasTuristicos']);
-    fillIfExists('outros', getValues!['categoriaOutros']);
+    // Preenche os controladores com os valores recebidos
+    fillIfExists('CADASTUR', widget.getValues!['CADASTUR'] ?? '');
+    fillIfExists('MTUR Outros', widget.getValues!['MturOutros'] ?? '');
+    fillIfExists(
+      'associação e sindicatos do setor de alimentação',
+      widget.getValues!['categoriaAssociacoesESindicatosDoSetorDeAlimentacao'] ?? '',
+    );
+    fillIfExists(
+      'associações de turismo',
+      widget.getValues!['categoriaAssociacoesDeTurismo'] ?? '',
+    );
+    fillIfExists(
+      'associações comerciais',
+      widget.getValues!['categoriaAssociacoesComerciais'] ?? '',
+    );
+    fillIfExists(
+      'guias turisticos',
+      widget.getValues!['categoriaGuiasTuristicos'] ?? '',
+    );
+    fillIfExists(
+      'outros',
+      widget.getValues!['categoriaOutros'] ?? '',
+    );
   }
 
   TextEditingController getController(String key) {
@@ -1085,10 +1183,6 @@ class TableMtur extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(getValues != null){
-    autoFillForm();
-
-    }
     return Column(
       children: [
         textLabel(
@@ -1101,8 +1195,8 @@ class TableMtur extends StatelessWidget {
           validat: (p0) {},
           getValue: (p0) {
             _valoresJson['CADASTUR'] = p0;
-            onChanged?.call(_valoresJson);
-    },
+            widget.onChanged?.call(_valoresJson);
+          },
         ),
         CustomTextField(
           controller: getController('MTUR Outros'),
@@ -1110,24 +1204,22 @@ class TableMtur extends StatelessWidget {
           validat: (p0) {},
           getValue: (p0) {
             _valoresJson['MturOutros'] = p0;
-            onChanged?.call(_valoresJson);
+            widget.onChanged?.call(_valoresJson);
           },
         ),
         textLabel(
-          name: associacao_e_sindicato?.isEmpty ?? true
+          name: (widget.associacao_e_sindicato?.isEmpty ?? true)
               ? 'associações e sindicatos do setor de hospedagem'
-              : associacao_e_sindicato!,
+              : widget.associacao_e_sindicato!,
           fontWeight: FontWeight.bold,
         ),
         CustomTextField(
-          controller:
-              getController('associação e sindicatos do setor de alimentação'),
+          controller: getController('associação e sindicatos do setor de alimentação'),
           name: "categoria/tipo/classificação/número",
           validat: (p0) {},
           getValue: (p0) {
-            _valoresJson[
-                'categoriaAssociacoesESindicatosDoSetorDeAlimentacao'] = p0;
-            onChanged?.call(_valoresJson);
+            _valoresJson['categoriaAssociacoesESindicatosDoSetorDeAlimentacao'] = p0;
+            widget.onChanged?.call(_valoresJson);
           },
         ),
         textLabel(
@@ -1140,7 +1232,7 @@ class TableMtur extends StatelessWidget {
           validat: (p0) {},
           getValue: (p0) {
             _valoresJson['categoriaAssociacoesDeTurismo'] = p0;
-            onChanged?.call(_valoresJson);
+            widget.onChanged?.call(_valoresJson);
           },
         ),
         textLabel(
@@ -1153,7 +1245,7 @@ class TableMtur extends StatelessWidget {
           validat: (p0) {},
           getValue: (p0) {
             _valoresJson['categoriaAssociacoesComerciais'] = p0;
-            onChanged?.call(_valoresJson);
+            widget.onChanged?.call(_valoresJson);
           },
         ),
         textLabel(
@@ -1166,7 +1258,7 @@ class TableMtur extends StatelessWidget {
           validat: (p0) {},
           getValue: (p0) {
             _valoresJson['categoriaGuiasTuristicos'] = p0;
-            onChanged?.call(_valoresJson);
+            widget.onChanged?.call(_valoresJson);
           },
         ),
         textLabel(
@@ -1179,10 +1271,11 @@ class TableMtur extends StatelessWidget {
           validat: (p0) {},
           getValue: (p0) {
             _valoresJson['categoriaOutros'] = p0;
-            onChanged?.call(_valoresJson);
+            widget.onChanged?.call(_valoresJson);
           },
         ),
       ],
     );
   }
 }
+

@@ -10,7 +10,10 @@ urlpatterns = [
     path('login/', UsuarioLoginView, name = 'usuario-login'),
     path('pesquisas/usuario/', PesquisaUsuarioListView.as_view(), name='pesquisa-usuario-list'),
 
+    path('export/pesquisa/<int:pesquisa_id>/', export_pesquisa_to_excel, name = 'export_pesquisa'),
+
     path('alimentosEBebidas/create/', AlimentosEBebidasListCreateView.as_view(), name = 'createAlimentos'),
+    path('alimentosEBebidas/update/<int:pk>', AlimentosEBebidasUpdateAPIView.as_view(), name = 'updateAlimentos'),
 
     path('rodovia/create/', RodoviaListCreateAPIView.as_view(), name = 'rodovia-see' ),
     path('rodovia/get/', RodoviaListView.as_view(), name = 'rodovia-se' ),

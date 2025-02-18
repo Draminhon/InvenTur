@@ -82,6 +82,183 @@ class RodoviaAdmin(admin.ModelAdmin):
 admin.site.register(Rodovia, RodoviaAdmin)
 
 
+
+
+@admin.register(AlimentosEBebidas)
+class AlimentosEBebidasAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in AlimentosEBebidas._meta.fields]
+    
+    fieldsets = (
+        ("Dados Gerais", {
+            "fields": (
+                "pesquisa",
+                "is_active",
+                "tipo_formulario",
+                "uf",
+                "regiao_turistica",
+                "municipio",
+                "tipo",
+                "observacoes",
+                "referencias",
+            )
+        }),
+        ("Responsáveis", {
+            "classes": ("collapse",),
+            "fields": (
+                "nome_pesquisador",
+                "telefone_pesquisador",
+                "email_pesquisador",
+                "nome_coordenador",
+                "telefone_coordenador",
+                "email_coordenador",
+            )
+        }),
+        ("Dados da Empresa", {
+            "fields": (
+                "razaoSocial",
+                "nomeFantasia",
+                "CNPJ",
+                "codigoCNAE",
+                "atividadeEconomica",
+                "inscricaoMunicipal",
+                "nomeDaRede",
+                "natureza",
+                "tipoDeOrganizacaoInstituicao",
+                "inicioDaAtividade",
+            )
+        }),
+        ("Funcionários", {
+            "classes": ("collapse",),
+            "fields": (
+                "qtdeFuncionariosPermanentes",
+                "qtdeFuncionariosTemporarios",
+                "qtdeFuncionariosComDeficiencia",
+            )
+        }),
+        ("Localização", {
+            "fields": (
+                "localizacao",
+                "latitude",
+                "longitude",
+                "avenidaRuaEtc",
+                "bairroLocalidade",
+                "distrito",
+                "CEP",
+            )
+        }),
+        ("Contatos", {
+            "fields": (
+                "whatsapp",
+                "instagram",
+                "email",
+                "sinalizacaoDeAcesso",
+                "sinalizacaoTuristica",
+            )
+        }),
+        ("Proximidades e Distâncias", {
+            "classes": ("collapse",),
+            "fields": (
+                "proximidades",
+                "distanciasAeroporto",
+                "distanciasRodoviaria",
+                "distanciaEstacaoFerroviaria",
+                "distanciaEstacaoMaritima",
+                "distanciaEstacaoMetroviaria",
+                "distanciaPontoDeOnibus",
+                "distanciaPontoDeTaxi",
+                "distanciasOutraNome",
+                "distanciaOutras",
+                "pontosDeReferencia",
+            )
+        }),
+        ("Pagamentos e Horários", {
+            "classes": ("collapse",),
+            "fields": (
+                "tabelaMTUR",
+                "formasDePagamento",
+                "vendasEReservas",
+                "atendimentoEmLinguasEstrangeiras",
+                "informativosImpressos",
+                "periodo",
+                "tabelasHorario",
+                "funcionamento24h",
+                "funcionamentoEmFeriados",
+            )
+        }),
+        ("Restrições e Informações Adicionais", {
+            "classes": ("collapse",),
+            "fields": (
+                "restricoes",
+                "outrasRegraseInformacoes",
+            )
+        }),
+        ("Capacidades", {
+            "classes": ("collapse",),
+            "fields": (
+                "capInstaladaPdia",
+                "capInstaladasSentadas",
+                "capSimultanea",
+                "capSimultaneaSentadas",
+            )
+        }),
+        ("Estacionamento e Veículos", {
+            "classes": ("collapse",),
+            "fields": (
+                "estacionamento",
+                "capacidadeVeiculos",
+                "numeroAutomoveis",
+                "numeroOnibus",
+            )
+        }),
+        ("Serviços e Equipamentos", {
+            "classes": ("collapse",),
+            "fields": (
+                "servicosEEquipamentos",
+                "especificacaoDaGastronomiaPorPais",
+                "seForBrasileiraPorRegiao",
+                "porEspecializacao",
+                "porTipoDeDieta",
+                "porTipoDeServico",
+            )
+        }),
+        ("Equipamento", {
+            "classes": ("collapse",),
+            "fields": (
+                "doEquipamento",
+                "tabelaEquipamentoEEspaco",
+                "estadoGeralDeConservacao",
+                "possuiFacilidade",
+            )
+        }),
+        ("Acessibilidade", {
+            "classes": ("collapse",),
+            "fields": (
+                "pessoalCapacitadoParaReceberPCD",
+                "rotaExternaAcessível",
+                "simboloInternacionalDeAcesso",
+                "localDeEmbarqueEDesembarque",
+                "vagaEmEstacionamento",
+                "areaDeCirculacaoAcessoInternoParaCadeiraDeRodas",
+                "escada",
+                "rampa",
+                "piso",
+                "elevador",
+                "equipamentoMotorizadoParaDeslocamentoInterno",
+                "sinalizacaoVisual",
+                "sinalizacaoTatil",
+                "alarmeDeEmergencia",
+                "comunicacao",
+                "balcaoDeAtendimento",
+                "mobiliario",
+                "sanitario",
+                "telefone",
+                "sinalizacaoIndicativa",
+                "outrosAcessibilidade",
+            )
+        }),
+    )
+
+
 class PesquisasAdmin(admin.ModelAdmin):
     ordering = ['id']
 

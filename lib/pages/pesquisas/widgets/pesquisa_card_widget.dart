@@ -5,6 +5,10 @@ import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/pesquisas/register_pesquisa_page.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
+import 'package:open_file/open_file.dart';
 
 class PesquisaCard extends StatefulWidget {
   final Pesquisa pesquisa;
@@ -18,6 +22,32 @@ class PesquisaCard extends StatefulWidget {
 
   @override
   State<PesquisaCard> createState() => _PesquisaCardState();
+}
+
+Future<File?> downloadExcel(int pesquisaId) async {
+  final url =
+      Uri.parse(AppConstants.BASE_URI + '/api/v1/export/pesquisa/$pesquisaId');
+
+  final response = await http.get(url);
+  if (response.statusCode == 200) {
+    try {
+      final directory = await getTemporaryDirectory();
+      final filePath = '${directory.path}/pesquisa_$pesquisaId.xlsx';
+
+      final file = File(filePath);
+      await file.writeAsBytes(response.bodyBytes);
+
+      final result = await OpenFile.open(file.path);
+      print('Open result: ${result.message}');
+      return file;
+    } catch (e) {
+      print('Error acessing temporary directory: $e');
+      return null;
+    }
+  } else {
+    print('Erro ao baixar o Excel: ${response.statusCode}');
+    return null;
+  }
 }
 
 class _PesquisaCardState extends State<PesquisaCard> {
@@ -47,10 +77,26 @@ class _PesquisaCardState extends State<PesquisaCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                IconButton(onPressed: () {
-                  Navigator.pushNamed(context, '/Pesquisas',arguments: {'pesquisa_id': _pesquisa.id, 'is_admin': true});
-                }, icon: Icon(Icons.remove_red_eye, color: AppConstants.MAIN_GREEN,)),
-               // SizedBox(width: 700.w,),
+                IconButton(
+                    onPressed: () {
+                      downloadExcel(29);
+                    },
+                    icon: Icon(
+                      Icons.print_rounded,
+                      color: AppConstants.MAIN_GREEN,
+                    )),
+                IconButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/Pesquisas', arguments: {
+                        'pesquisa_id': _pesquisa.id,
+                        'is_admin': true
+                      });
+                    },
+                    icon: Icon(
+                      Icons.remove_red_eye,
+                      color: AppConstants.MAIN_GREEN,
+                    )),
+                // SizedBox(width: 700.w,),
                 IconButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/EditPesquisa', arguments: {
@@ -62,7 +108,6 @@ class _PesquisaCardState extends State<PesquisaCard> {
                         'estado': _pesquisa.estado,
                         'pesquisadores': _pesquisa.userId,
                         'admin_id': _pesquisa.adminId
-
                       });
                       print(_pesquisa.municipio);
                     },
@@ -72,30 +117,34 @@ class _PesquisaCardState extends State<PesquisaCard> {
                     )),
                 IconButton(
                     onPressed: () async {
-                      showDialog(context: context, builder: (BuildContext context){
-
-                        return AlertDialog(
-
-                          title: const Text("Tem certeza?"),
-                          content: const Text('Você deseja excluir essa pesquisa?'),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                          actions: [
-                            TextButton(onPressed: (){
-                              Navigator.pop(context);
-                            }, child: Text('Cancelar')
-                            
-                            )
-                            ,
-                            TextButton(onPressed: (){
-                      _pesquisaController.removePesquisa(false, _pesquisa);
-                      Navigator.pop(context);
-                              
-                            }, child: Text('Excluir', style: TextStyle(color: Colors.red),))
-                          ],
-
-                        );
-
-                      });
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text("Tem certeza?"),
+                              content: const Text(
+                                  'Você deseja excluir essa pesquisa?'),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20)),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text('Cancelar')),
+                                TextButton(
+                                    onPressed: () {
+                                      _pesquisaController.removePesquisa(
+                                          false, _pesquisa);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'Excluir',
+                                      style: TextStyle(color: Colors.red),
+                                    ))
+                              ],
+                            );
+                          });
                     },
                     icon: Icon(
                       Icons.delete_rounded,

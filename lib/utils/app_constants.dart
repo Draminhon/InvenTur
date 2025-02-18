@@ -4,8 +4,8 @@ class AppConstants {
   static const String APP_NAME = "InvenTur";
   static int APP_VERSION = 1;
 
-// static const String BASE_URI = "http://10.0.2.2:8000";
-    static const String BASE_URI = "https://nupreds.ifce.edu.br/inventur";
+ static const String BASE_URI = "http://10.0.2.2:8000";
+    //static const String BASE_URI = "https://nupreds.ifce.edu.br/inventur";
 //    static const String BASE_URI = "http://localhost";
   static const String LOGIN_URI = "/api/v1/login/";
   static const String REGISTER_URI = "/api/v1/register/";
