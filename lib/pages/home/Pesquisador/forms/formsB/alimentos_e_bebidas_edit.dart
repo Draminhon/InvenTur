@@ -2408,6 +2408,8 @@ controller: getController('whatsapp'),
                     _formKey.currentState!.save();
                        updateAlimentosEBebidas(
                                 widget.alimentosModel!.id!, valoresjson);
+                                  Navigator.pushReplacementNamed(
+                                context, '/UpdatedForm');
 
                     // if (_formKey.currentState!.validate()) {
                     //   ScaffoldMessenger.of(context).showSnackBar(

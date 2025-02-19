@@ -2339,7 +2339,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     //   ScaffoldMessenger.of(context).showSnackBar(
                     //       const SnackBar(content: Text('preencha os dados!')));
                     // }
-                    // Navigator.pushReplacementNamed(context, '/SendedForm');
+                    Navigator.pushReplacementNamed(context, '/SendedForm');
                   },
                 ),
                 const SizedBox(

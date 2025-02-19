@@ -9,6 +9,8 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:open_file/open_file.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PesquisaCard extends StatefulWidget {
   final Pesquisa pesquisa;
@@ -25,10 +27,15 @@ class PesquisaCard extends StatefulWidget {
 }
 
 Future<File?> downloadExcel(int pesquisaId) async {
+      final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
   final url =
       Uri.parse(AppConstants.BASE_URI + '/api/v1/export/pesquisa/$pesquisaId');
 
-  final response = await http.get(url);
+  final response = await http.get(url,        headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token'
+          },);
   if (response.statusCode == 200) {
     try {
       final directory = await getTemporaryDirectory();
@@ -79,7 +86,7 @@ class _PesquisaCardState extends State<PesquisaCard> {
               children: [
                 IconButton(
                     onPressed: () {
-                      downloadExcel(29);
+                      downloadExcel(widget.pesquisa.id!);
                     },
                     icon: Icon(
                       Icons.print_rounded,

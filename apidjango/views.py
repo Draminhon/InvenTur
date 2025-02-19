@@ -17,7 +17,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import openpyxl
 from django.shortcuts import get_object_or_404
-
+from django.db.models import Model
 
 
 def export_pesquisa_to_excel(request, pesquisa_id):
@@ -30,12 +30,23 @@ def export_pesquisa_to_excel(request, pesquisa_id):
         ws = wb.active
         ws.title = f"Pesquisa {pesquisa.id}"
 
+        field_names = [field.name for field in equipamentos.model._meta.fields]
         # Criar cabeçalhos da planilha
-        ws.append(["ID", "uf", "regiao_turistica", "municipio"])  # Ajuste conforme os campos do modelo
+        ws.append(field_names)  # Ajuste conforme os campos do modelo
 
         # Adicionar os equipamentos da pesquisa
         for equipamento in equipamentos:
-            ws.append([equipamento.id, equipamento.uf, equipamento.regiao_turistica, equipamento.municipio])
+            row = []
+            for field in field_names:
+                value = getattr(equipamento, field)
+
+                if isinstance(value, Model):
+                    value = str(value)
+                elif isinstance(value, (list, dict)):
+                    value = json.dumps(value, ensure_ascii=False)
+                row.append(value)
+            ws.append(row)
+
 
         # Criar a resposta HTTP com o arquivo Excel
         response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
@@ -52,6 +63,9 @@ def export_pesquisa_to_excel(request, pesquisa_id):
 class UsuarioCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer
+    
+    permission_classes = [permissions.AllowAny] 
+
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -148,21 +162,21 @@ class AdminUserCreateView(generics.ListCreateAPIView):
         user = CustomUser.objects.filter(CPF=cpf).first()
 
         if user:
-           user.accessLevel = 'Administrador'
+           user.acessLevel = 'Administrador'
            user.save()
 
-           return HttpResponse(
+           return Response(
                {"message": "Usuário atualizado com sucesso!", "id": user.id},
                 status=status.HTTP_200_OK
             )
         else:
-            data['accessLevel'] = 'Administrador'
+            data['access_level'] = 'Administrador'
 
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
-            return HttpResponse(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 @csrf_exempt
 def UsuarioLoginView(request):
