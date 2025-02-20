@@ -7,7 +7,7 @@ class Pesquisa {
   String municipio;
   String dataInicio;
   String dataTermino;
-  int quantidadeLocais;
+  int? quantidadeLocais;
   int quantidadePesquisadores;
   String status;
 
@@ -35,7 +35,7 @@ class Pesquisa {
         municipio = json['municipio'],
         dataInicio = json['dataInicio'],
         dataTermino = json['dataTermino'],
-        quantidadeLocais = json['quantidadeLocais'],
+        quantidadeLocais = json['quantidadeLocais'] as int?,
         quantidadePesquisadores = json['quantidadePesquisadores'],
         status = json['status'];
 

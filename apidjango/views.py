@@ -18,46 +18,115 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 import openpyxl
 from django.shortcuts import get_object_or_404
 from django.db.models import Model
+from datetime import date, datetime
 
+
+def process_value(value):
+    # Se for callable, chama a função
+    if callable(value):
+        value = value()
+    # Se for datetime com tzinfo, remove o tzinfo
+    if isinstance(value, datetime):
+        if value.tzinfo is not None:
+            value = value.replace(tzinfo=None)
+    # Se for uma instância de Model, converte para string
+    if isinstance(value, Model):
+        value = str(value)
+    # Se for lista ou dict, converte para JSON
+    elif isinstance(value, (list, dict)):
+        value = json.dumps(value, ensure_ascii=False)
+    return value
 
 def export_pesquisa_to_excel(request, pesquisa_id):
     try:
         pesquisa = Pesquisa.objects.get(id=pesquisa_id)
-        equipamentos = AlimentosEBebidas.objects.filter(pesquisa=pesquisa)  # Ajuste o relacionamento
-
-        # Criando um arquivo Excel
-        wb = openpyxl.Workbook()
-        ws = wb.active
-        ws.title = f"Pesquisa {pesquisa.id}"
-
-        field_names = [field.name for field in equipamentos.model._meta.fields]
-        # Criar cabeçalhos da planilha
-        ws.append(field_names)  # Ajuste conforme os campos do modelo
-
-        # Adicionar os equipamentos da pesquisa
-        for equipamento in equipamentos:
-            row = []
-            for field in field_names:
-                value = getattr(equipamento, field)
-
-                if isinstance(value, Model):
-                    value = str(value)
-                elif isinstance(value, (list, dict)):
-                    value = json.dumps(value, ensure_ascii=False)
-                row.append(value)
-            ws.append(row)
-
-
-        # Criar a resposta HTTP com o arquivo Excel
-        response = HttpResponse(content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-        response["Content-Disposition"] = f'attachment; filename="pesquisa_{pesquisa.id}.xlsx"'
-        wb.save(response)
-
-        return response
-
     except Pesquisa.DoesNotExist:
         return HttpResponse("Pesquisa não encontrada", status=404)
+    
+    wb = openpyxl.Workbook()
+    
+    # ==============================
+    # Aba para os dados da Pesquisa
+    # ==============================
+    # Título curto para não ultrapassar 31 caracteres
+    dados_sheet_title = f"Dados {date.today().strftime('%d-%m-%Y')}"
+    ws_pesquisa = wb.active
+    ws_pesquisa.title = dados_sheet_title
+    
+    # Cria a lista de campos: campos normais, many-to-many e o campo computado
+    pesquisa_field_names = [field.name for field in pesquisa._meta.fields]
+    m2m_field_names = [field.name for field in pesquisa._meta.many_to_many]
+    pesquisa_field_names.extend(m2m_field_names)
+    pesquisa_field_names.append("quantidadePesquisadores")
+    
+    # Cabeçalho
+    ws_pesquisa.append(pesquisa_field_names)
+    ss_queryset = SistemaDeSeguranca.objects.filter(base_ptr__pesquisa=pesquisa)
+    print(ss_queryset.exists())  # Deve retornar True se houver dados
+    print(ss_queryset)  # Veja os objetos retornados
+    data_row = []
+    # Processa os campos "normais"
+    for field in pesquisa._meta.fields:
+        value = getattr(pesquisa, field.name)
+        data_row.append(process_value(value))
+    
+    # Processa os campos ManyToMany
+    for field_name in m2m_field_names:
+        manager = getattr(pesquisa, field_name)
+        value = ", ".join(str(obj) for obj in manager.all())
+        data_row.append(value)
+    
+    # Campo computado: quantidadePesquisadores
+    computed_value = getattr(pesquisa, "quantidadePesquisadores")
+    data_row.append(process_value(computed_value))
+    
+    ws_pesquisa.append(data_row)
+    
+    # ======================================
+    # Abas para os formulários/equipamentos
+    # ======================================
+    sheets = []
+    ab_queryset = AlimentosEBebidas.objects.filter(pesquisa=pesquisa)
+    ss_queryset = SistemaDeSeguranca.objects.filter(pesquisa=pesquisa)
+    rodovia_queryset = Rodovia.objects.filter(pesquisa=pesquisa)
+    
+    if ab_queryset.exists():
+        sheets.append(("Alimentos e Bebidas", ab_queryset))
+    if ss_queryset.exists():
+        sheets.append(("Sistemas de Segurança", ss_queryset))
+    if rodovia_queryset.exists():
+        sheets.append(("Rodovia", rodovia_queryset))
+    
+    for sheet_title, queryset in sheets:
+        ws = wb.create_sheet(title=sheet_title)
+        model = queryset.model
+        field_names = [field.name for field in model._meta.fields]
 
+        m2m_field_names = [field.name for field in model._meta.many_to_many]
+        field_names.extend(m2m_field_names)
+
+        ws.append(field_names)
+        for obj in queryset:
+            row = []
+            for field in model._meta.fields:
+                value = getattr(obj, field.name)
+                row.append(process_value(value))
+
+            for field_name in m2m_field_names:
+                manager = getattr(obj, field_name)
+                value = ", ".join(str(related_obj) for related_obj in manager.all())
+                row.append(value)
+            ws.append(row)
+    
+    # Cria a resposta HTTP com o arquivo Excel
+    response = HttpResponse(
+        content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+    response["Content-Disposition"] = f'attachment; filename="pesquisa_{pesquisa.id}.xlsx"'
+    wb.save(response)
+    return response
+
+     
 
 
 class UsuarioCreateView(generics.ListCreateAPIView):

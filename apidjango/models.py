@@ -67,19 +67,22 @@ class Pesquisa(models.Model):
 
     status = models.CharField(max_length=50, default='Não Iniciado')
     
-    quantidadeLocais = models.IntegerField(default=0)
 
     is_active = models.BooleanField(default=True)
 
 
     @property
     def quantidadePesquisadores(self):
-        return self.usuario.count
+        return self.usuario.count()
+
+    @property
+    def quantidadeLocais(self):
+        return self.bases.filter(is_active=True).count()
 
 
 class Base(models.Model):
     
-    pesquisa = models.ForeignKey(Pesquisa, on_delete=models.CASCADE)
+    pesquisa = models.ForeignKey(Pesquisa, on_delete=models.CASCADE, related_name="bases")
     
     is_active = models.BooleanField(default=True)
    

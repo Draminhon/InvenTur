@@ -35,10 +35,13 @@ class PesquisaSerializer(serializers.ModelSerializer):
 
     quantidadePesquisadores = serializers.IntegerField(source='usuario.count', read_only = True)
     usuario = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), many=True)
-
+    quantidadeLocais = serializers.SerializerMethodField()
     class Meta:
         model = Pesquisa
         fields = '__all__'
+    
+    def get_quantidadeLocais(self, obj):
+        return obj.bases.filter(is_active=True).count()
 
 class ContatoInfoSerializer(serializers.ModelSerializer):
     class Meta:
