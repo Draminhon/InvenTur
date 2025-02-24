@@ -11,8 +11,7 @@ import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({super.key});
@@ -22,9 +21,8 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-    final _formKey = GlobalKey<FormState>();
-    final _formKey3 = GlobalKey<FormState>();
-
+  final _formKey = GlobalKey<FormState>();
+  final _formKey3 = GlobalKey<FormState>();
 
   final CPFValidator _cpfValidator = CPFValidator();
 
@@ -46,53 +44,89 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
 
-  Future<void> registerUser(String username, String CPF, String email, String password) async{
-
+  Future<void> registerUser(
+      String username, String CPF, String email, String password) async {
     final url = Uri.parse(AppConstants.BASE_URI + AppConstants.REGISTER_URI);
 
-  try{
-      final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        
-      },
-      body: json.encode(<String, String>{
-        'username': username,
-        'CPF': CPF,
-        'email': email,
-        'password': password,
-      })
-    ); 
+    try {
+      final response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: json.encode(<String, String>{
+            'username': username,
+            'CPF': CPF,
+            'email': email,
+            'password': password,
+          }));
 
-     
-    
-    if(response.statusCode == 201){
-      print('Usuario registrado com sucesso');
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-        return RegisterConfimation();
-      }));
-    }else{
-      print('Erro ao registrar o usuário: ${response.body}');    }
-
-     }catch(e){
+      if (response.statusCode == 201) {
+        print('Usuario registrado com sucesso');
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) {
+          return RegisterConfimation();
+        }));
+      } else {
+        print('Erro ao registrar o usuário: ${response.body}');
+      }
+    } catch (e) {
       print('Erro: $e');
-     }
+    }
+  }
 
+  Future updateUsers(int user, String username, String CPF, String email,
+      String password) async {
+    var url =
+        Uri.parse('${AppConstants.BASE_URI}/api/v1/usuarios/update/$user');
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
+    try {
+      var response = await http.patch(url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token'
+          },
+          body: json.encode(<String, String>{
+            'username': username,
+            'CPF': CPF,
+            'email': email,
+            'password': password,
+          }));
+
+      if (response.statusCode == 200) {
+        print('Usuario atualizado com sucesso: ${response.body}');
+      } else {
+        print(
+            'Erro ao atualizar usuario: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      print('Erro na requisição: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
-    
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    final isChange = arguments['is_change'];
+    final username = arguments['username'];
+    final cpf = arguments['user_cpf'];
+    final email = arguments['user_email'];
+    print(isChange);
     double paddingBottomTextField = screenSize.height * .015;
+
+    if (isChange == true) {
+      _nameController.text = username;
+      _cpfController.text = cpf;
+      _emailController.text = email;
+    }
 
     return Scaffold(
       backgroundColor: Colors.white,
       body: Form(
         key: _formKey3,
         child: SafeArea(
-
           child: SingleChildScrollView(
             padding: EdgeInsets.only(top: 150.h),
             reverse: true,
@@ -103,145 +137,210 @@ class _RegisterPageState extends State<RegisterPage> {
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      
-                      Text('Cadastro', style: TextStyle(color: const Color.fromARGB(255, 55, 111, 60), fontSize: 90.h),),
+                      Text(
+                        isChange == true ? 'Alterar Dados' : 'Cadastro',
+                        style: TextStyle(
+                            color: const Color.fromARGB(255, 55, 111, 60),
+                            fontSize: 90.h),
+                      ),
                       const Text('Preencha os campos com suas informações.'),
-                              SizedBox(height: paddingBottomTextField),
-                    
-                      const Divider(color:const Color.fromARGB(255, 55, 111, 60),thickness: 1.5, endIndent: 30,indent: 30,),
-                              SizedBox(height: paddingBottomTextField),
-                     
+                      SizedBox(height: paddingBottomTextField),
+                      const Divider(
+                        color: const Color.fromARGB(255, 55, 111, 60),
+                        thickness: 1.5,
+                        endIndent: 30,
+                        indent: 30,
+                      ),
+                      SizedBox(height: paddingBottomTextField),
                       Container(
                         padding: const EdgeInsets.only(
                           left: 20,
                           right: 20,
                           bottom: 20,
                         ),
-                        
                         child: Form(
                           key: _formKey,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              const Text('Nome',style: TextStyle(fontWeight: FontWeight.bold)),
+                              const Text('Nome',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               SizedBox(height: paddingBottomTextField),
-                              
                               CustomTextField(
                                 labelText: 'Insira seu nome completo',
                                 controller: _nameController,
                                 prefixIcon: Icons.person,
-                                 validator: (name) {
-                                   return _nameValidator.validate(name: name);
-                                 },
+                                validator: (name) {
+                                  return _nameValidator.validate(name: name);
+                                },
                               ),
                               SizedBox(height: paddingBottomTextField),
-                              const Text('CPF',style: TextStyle(fontWeight: FontWeight.bold)),
+                              const Text('CPF',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               SizedBox(height: paddingBottomTextField),
-
                               CustomTextField(
                                 labelText: 'Insira seu CPF',
                                 controller: _cpfController,
                                 keyboardType: TextInputType.number,
                                 prefixIcon: FontAwesomeIcons.solidAddressCard,
-                                 validator: (cpf) {
-                                   return _cpfValidator.validate(cpf: cpf);
-                                 },
+                                validator: (cpf) {
+                                  return _cpfValidator.validate(cpf: cpf);
+                                },
                                 inputFormatters: [cpfMask],
                               ),
                               SizedBox(height: paddingBottomTextField),
-                              const Text('Email',style: TextStyle(fontWeight: FontWeight.bold)),
+                              const Text('Email',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               SizedBox(height: paddingBottomTextField),
-
                               CustomTextField(
                                 labelText: 'Insira seu email',
                                 controller: _emailController,
                                 prefixIcon: FontAwesomeIcons.solidEnvelope,
                                 keyboardType: TextInputType.emailAddress,
-                                 validator: (email) {
-                                   return _emailValidator.validate(email: email);
-                                 },
+                                validator: (email) {
+                                  return _emailValidator.validate(email: email);
+                                },
                               ),
                               SizedBox(height: paddingBottomTextField),
-                              const Text('Senha', style: TextStyle(fontWeight: FontWeight.bold)),
+                              const Text('Senha',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold)),
                               SizedBox(height: paddingBottomTextField),
-
                               CustomTextField(
-                                labelText: 'Insira sua senha',
-                                prefixIcon: Icons.lock, 
-                                controller: _passwordController, 
+                                labelText: isChange == true
+                                    ? 'Insira sua nova senha'
+                                    : 'Insira sua senha',
+                                prefixIcon: Icons.lock,
+                                controller: _passwordController,
                                 isSecret: true,
-                                 validator: (password) {
-                                   return _passwordValidator.validate(password: password);
-                                 }, 
+                                validator: (password) {
+                                  return _passwordValidator.validate(
+                                      password: password);
+                                },
                               ),
                               SizedBox(height: paddingBottomTextField),
-                              const Text('Confirmar Senha', style: TextStyle(fontWeight: FontWeight.bold),),
+                              const Text(
+                                'Confirmar Senha',
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
                               SizedBox(height: paddingBottomTextField),
-
-                                CustomTextField(
+                              CustomTextField(
                                 labelText: 'Confirme sua senha',
-                                prefixIcon: Icons.lock, 
-                                controller: _passwordController2, 
+                                prefixIcon: Icons.lock,
+                                controller: _passwordController2,
                                 isSecret: true,
-                                 validator: (value) {
-                                                    if (value == null || value.isEmpty) {
-                    return 'Insira uma senha válida';
-                  }else if(_passwordController.text != _passwordController2.text){
-                    return 'As senhas precisam ser iguais!';
-                  }
-                  return null;
-                                 }, 
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Insira uma senha válida';
+                                  } else if (_passwordController.text !=
+                                      _passwordController2.text) {
+                                    return 'As senhas precisam ser iguais!';
+                                  }
+                                  return null;
+                                },
                               ),
-                              SizedBox(height: 160.h),
-
+                              SizedBox(height: isChange == true ? 50.w : 160.h),
                               SizedBox(
                                 height: screenSize.height * .07,
                                 child: ElevatedButton(
-                                  style: ButtonStyle(
-                                    shape: WidgetStateProperty.all(
-                                      RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10)
-                                      )
-                                    ),
-                                    padding: WidgetStateProperty.all(
-                                      EdgeInsets.symmetric(
-                                        vertical: screenSize.height * 0.012
-                                      )
-                                    ),
-                                    backgroundColor: WidgetStateProperty.all(
-                                      const Color.fromARGB(255, 55, 111, 60)
-                                    ),
-                                    overlayColor: WidgetStateProperty.all(
-                                      Colors.green[600]
-                                    )
-                                  ),
-                                  
-                                  onPressed: () async {
+                                    style: ButtonStyle(
+                                        shape: WidgetStateProperty.all(
+                                            RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        padding: WidgetStateProperty.all(
+                                            EdgeInsets.symmetric(
+                                                vertical:
+                                                    screenSize.height * 0.012)),
+                                        backgroundColor:
+                                            WidgetStateProperty.all(
+                                                const Color.fromARGB(
+                                                    255, 55, 111, 60)),
+                                        overlayColor: WidgetStateProperty.all(
+                                           Colors.green[600])),
+                                    onPressed: () async {
+                                      if (isChange == true) {
+                                        if (_formKey.currentState!.validate()) {
+                                                                                    final cpf = _cpfController.text
+                                              .replaceAll('.', '')
+                                              .replaceAll('-', '');
+                                          _formKey.currentState!.save();
+                                          updateUsers(
+                                              58,
+                                              _nameController.text,
+                                              cpf,
+                                              _emailController.text,
+                                              _passwordController.text);
+                                        }
+                                      } else {
+                                        if (_formKey.currentState!.validate()) {
+                                          _formKey.currentState!.save();
 
-                                    if(_formKey.currentState!.validate()){
-                                      _formKey.currentState!.save();
+                                          final username = _nameController.text;
+                                          final cpf = _cpfController.text
+                                              .replaceAll('.', '')
+                                              .replaceAll('-', '');
+                                          final email = _emailController.text;
+                                          final password =
+                                              _passwordController.text;
 
-                                      final username = _nameController.text;
-                                      final cpf = _cpfController.text.replaceAll('.','').replaceAll('-', '');
-                                      final email = _emailController.text;
-                                      final password = _passwordController.text;
-
-                                      final result = await registerUser(username, cpf, email, password);
-                                      await Future.delayed(const Duration(milliseconds: 500));
-
-                                    }
-
-
-                                  }, 
-                                  child: Text(
-                                    'Solicitar Cadastro',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: screenSize.height * .03
-                                    ),
-                                  )
-                                ),
+                                          final result = await registerUser(
+                                              username, cpf, email, password);
+                                          await Future.delayed(const Duration(
+                                              milliseconds: 500));
+                                        }
+                                      }
+                                    },
+                                    child: Text(
+                                      isChange == true
+                                          ? 'Confirmar Alterações'
+                                          : 'Solicitar Cadastro',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: screenSize.height * .03),
+                                    )),
                               ),
+                              isChange == true
+                                  ? SizedBox(
+                                      height: 50.w,
+                                    )
+                                  : SizedBox(),
+                              isChange == true
+                                  ? SizedBox(
+                                      height: screenSize.height * .07,
+                                      child: ElevatedButton(
+                                          style: ButtonStyle(
+                                              shape: WidgetStateProperty.all(
+                                                  RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10))),
+                                              padding: WidgetStateProperty.all(
+                                                  EdgeInsets.symmetric(
+                                                      vertical:
+                                                          screenSize.height *
+                                                              0.012)),
+                                              backgroundColor:
+                                                  WidgetStateProperty.all(
+                                                      Colors.red),
+                                              overlayColor:
+                                                  WidgetStateProperty.all(
+                                                      Colors.green[600])),
+                                          onPressed: () async {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text(
+                                            'Cancelar',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize:
+                                                    screenSize.height * .03),
+                                          )),
+                                    )
+                                  : SizedBox(),
                             ],
                           ),
                         ),
@@ -255,10 +354,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       child: IconButton(
                         tooltip: 'Voltar',
                         style: ButtonStyle(
-                          overlayColor: WidgetStatePropertyAll(
-                            Colors.green[100]
-                          )
-                        ),
+                            overlayColor:
+                                WidgetStatePropertyAll(Colors.green[100])),
                         onPressed: () => Navigator.pop(context),
                         icon: const Icon(
                           Icons.arrow_back_ios,

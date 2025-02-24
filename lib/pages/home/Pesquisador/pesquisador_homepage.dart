@@ -191,7 +191,6 @@ static Future<http.Response> _getWithToken(Uri url, String token) async {
                     return const CircularProgressIndicator();
                   } else if (snapshot.hasData) {
                     final pesquisa = snapshot.data!;
-                    print(pesquisa);
                     if (pesquisa.isEmpty) {
                      return Container(
                     margin: EdgeInsets.only(top: 1000.h),

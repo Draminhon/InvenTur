@@ -109,7 +109,11 @@ class _PesquisasPageState extends State<PesquisasPage> {
                         overlayColor:
                             WidgetStateProperty.all(Colors.green[600])),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/RegisterPesquisa');
+                      Navigator.pushNamed(context, '/RegisterPesquisa').then((result){
+                        if(result == true){
+                          loadPesquisas();
+                        }
+                      });
                     },
                     child: Text(
                       'Cadastrar Nova Pesquisa',

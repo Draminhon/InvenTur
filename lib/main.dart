@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
           '/FormB': (_) =>  FormularioB(),
           '/FormC': (_) =>  FormularioC(),
           '/A': (_) =>  A(),
-          '/AlterarDados': (_) =>  AlterarCadastro(),
+          '/AlterarDados': (_) =>  RegisterPage(),
           '/MeiosDeHospedagem': (_) =>  MeiosDeHospedagem(),
           '/Placeholder': (_) =>  PlaceHolder(),
           '/AlimentosEbebidas': (_) =>  AlimentoseBebidas(),

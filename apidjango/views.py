@@ -331,6 +331,8 @@ class RodoviaListCreateAPIView(generics.ListCreateAPIView):
     serializer_class = RodoviaSerializer
 @csrf_exempt
 def verificar_email(request):
+    permission_classes = [permissions.AllowAny] 
+
     if request.method == 'POST':
         try:
             data = json.loads(request.body)

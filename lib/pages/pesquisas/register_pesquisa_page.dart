@@ -156,7 +156,7 @@ String? userDataString = prefs.getString('user_data');
       if (response.statusCode == 201) {
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Pesquisa criada com sucesso!"),));
-        Navigator.pop(context);
+        Navigator.pop(context, true);
       } else {
         print('Erro ao criar pesquisa: ${response.body}');
       }
@@ -479,6 +479,7 @@ String? userDataString = prefs.getString('user_data');
                                     estado,
                                     municipio,
                                     selectedUsers);
+
                               },
                               child: Text(
                                 "Confirmar",
@@ -506,7 +507,9 @@ String? userDataString = prefs.getString('user_data');
                                       const Color.fromARGB(255, 232, 0, 0)),
                                   overlayColor:
                                       WidgetStateProperty.all(Colors.red[500])),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
                               child: Text(
                                 "Cancelar",
                                 style: TextStyle(
