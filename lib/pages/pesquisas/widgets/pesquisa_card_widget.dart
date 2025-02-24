@@ -38,8 +38,17 @@ Future<File?> downloadExcel(int pesquisaId) async {
           },);
   if (response.statusCode == 200) {
     try {
-      final directory = await getTemporaryDirectory();
-      final filePath = '${directory.path}/pesquisa_$pesquisaId.xlsx';
+
+      final selectedDirectory = await FilePicker.platform.getDirectoryPath(
+                dialogTitle: 'Selecione o local para salvar o arquivo',
+      );
+
+      if(selectedDirectory == null){
+        print("Nenhum diretório foi selecionado");
+        return null;
+      }
+
+      final filePath = '$selectedDirectory/pesquisa_$pesquisaId.xlsx';
 
       final file = File(filePath);
       await file.writeAsBytes(response.bodyBytes);
@@ -224,7 +233,7 @@ class _PesquisaCardState extends State<PesquisaCard> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        'Quantidade de Locais Cadastrados:',
+                        'Quantidade de Equipamentos:',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       Text(widget.pesquisa.quantidadeLocais.toString())

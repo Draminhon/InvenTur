@@ -134,7 +134,7 @@ class _PesquisaPesquisadorCardWidgetState extends State<PesquisaPesquisadorCardW
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                        Text(
-                        'Quantidade de Locais Cadastrados:',
+                        'Quantidade de Equipamentos:',
                         style: TextStyle(fontWeight: FontWeight.bold,fontSize: 50.w),
                       ),
                       Text(widget.pesquisa.quantidadeLocais.toString(),style: TextStyle(fontSize: 50.w),)

@@ -69,7 +69,6 @@ class _A extends State<A> {
 
   @override
   Widget build(BuildContext context) {
-           
     return Scaffold(
         backgroundColor: Colors.white,
         body: PageView(
@@ -123,8 +122,8 @@ class Pesquisas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      final arguments = ModalRoute.of(context)?.settings.arguments as Map;
-          final isadmin = arguments['is_admin'];
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    final isadmin = arguments['is_admin'];
     Future<List<Map<String, dynamic>>> getRodovias() async {
       final prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('access_token');
@@ -143,90 +142,93 @@ class Pesquisas extends StatelessWidget {
     Future<List<Map<String, dynamic>>> rodoviasFuture = getRodovias();
 
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          Container(
-            padding: EdgeInsets.only(right: 228.48.w),
-          )
-        ],
+        appBar: AppBar(
+          actions: [
+            Container(
+              padding: EdgeInsets.only(right: 228.48.w),
+            )
+          ],
+          backgroundColor: Colors.white,
+        ),
         backgroundColor: Colors.white,
-      ),
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          Padding(
-              padding: EdgeInsets.symmetric(vertical: 29.92.h),
-              child: Column(
-                children: [
-                  Text(
-                    'EQUIPAMENTOS',
-                    style: TextStyle(
-                        color: const Color.fromARGB(255, 55, 111, 60),
-                        fontSize: 80.67.w,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  Divider(
-                    color: const Color.fromARGB(255, 55, 111, 60),
-                    indent: 134.4.w,
-                    endIndent: 134.4.w,
-                  )
-                ],
-              )),
-          Center(
-              child: SizedBox(
-            height: 1800.h,
-            child: FutureBuilder<List<Map<String, dynamic>>>(
-              future: rodoviasFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const SizedBox(
-                    width: 50,
-                    height: 50,
-                    child: Center(child: CircularProgressIndicator()));
-                } else if (snapshot.hasData) {
-                  final rodovias = snapshot.data!;
-                  if (rodovias.isEmpty) {
-                    return const Text(
-                      "Não há equipamentos inventariados",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    );
-                  }
-                  return ShowRodoviaAux(posts: rodovias);
-                } else {
-                  return const Text("Não há equipamentos inventariados",
-                      style: TextStyle(fontWeight: FontWeight.bold));
-                }
-              },
-            ),
-          )),
-          Divider(
-            color: const Color.fromARGB(255, 55, 111, 60),
-            indent: 134.4.w,
-            endIndent: 134.4.w,
-          ),
-        ],
-      ),
-      bottomNavigationBar:  Padding(
-        padding: EdgeInsets.only(bottom: 150.52.h, left: 15, right: 15),
-        child: Container(
-            margin: EdgeInsets.symmetric(horizontal: 80.52.w),
-            height: 219.52.h,
-            child: isadmin==true ? Container():ElevatedButton(
-                style: ButtonStyle(
-                    shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                    padding: WidgetStateProperty.all(
-                        EdgeInsets.symmetric(vertical: 35.904.h)),
-                    backgroundColor: WidgetStateProperty.all(
-                        const Color.fromARGB(255, 55, 111, 60)),
-                    overlayColor: WidgetStateProperty.all(Colors.green[600])),
-                onPressed: () => Navigator.pushNamed(context, '/A'),
-                child: Text(
-                  'inventariar novo equipamento',
-                  style: TextStyle(color: Colors.white, fontSize: 65.76.w),
+        body: Column(
+          children: [
+            Padding(
+                padding: EdgeInsets.symmetric(vertical: 29.92.h),
+                child: Column(
+                  children: [
+                    Text(
+                      'EQUIPAMENTOS',
+                      style: TextStyle(
+                          color: const Color.fromARGB(255, 55, 111, 60),
+                          fontSize: 80.67.w,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    Divider(
+                      color: const Color.fromARGB(255, 55, 111, 60),
+                      indent: 134.4.w,
+                      endIndent: 134.4.w,
+                    )
+                  ],
                 )),
-      )
-    ));
+            Center(
+                child: SizedBox(
+              height: 1800.h,
+              child: FutureBuilder<List<Map<String, dynamic>>>(
+                future: rodoviasFuture,
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const SizedBox(
+                        width: 50,
+                        height: 50,
+                        child: Center(child: CircularProgressIndicator()));
+                  } else if (snapshot.hasData) {
+                    final rodovias = snapshot.data!;
+                    if (rodovias.isEmpty) {
+                      return const Text(
+                        "Não há equipamentos inventariados",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      );
+                    }
+                    return ShowRodoviaAux(posts: rodovias);
+                  } else {
+                    return const Text("Não há equipamentos inventariados",
+                        style: TextStyle(fontWeight: FontWeight.bold));
+                  }
+                },
+              ),
+            )),
+            Divider(
+              color: const Color.fromARGB(255, 55, 111, 60),
+              indent: 134.4.w,
+              endIndent: 134.4.w,
+            ),
+          ],
+        ),
+        bottomNavigationBar: Padding(
+            padding: EdgeInsets.only(bottom: 150.52.h, left: 15, right: 15),
+            child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 80.52.w),
+              height: 219.52.h,
+              child: isadmin == true
+                  ? Container()
+                  : ElevatedButton(
+                      style: ButtonStyle(
+                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                          padding: WidgetStateProperty.all(
+                              EdgeInsets.symmetric(vertical: 35.904.h)),
+                          backgroundColor: WidgetStateProperty.all(
+                              const Color.fromARGB(255, 55, 111, 60)),
+                          overlayColor:
+                              WidgetStateProperty.all(Colors.green[600])),
+                      onPressed: () => Navigator.pushNamed(context, '/A'),
+                      child: Text(
+                        'inventariar novo equipamento',
+                        style:
+                            TextStyle(color: Colors.white, fontSize: 65.76.w),
+                      )),
+            )));
   }
 }
 
@@ -264,11 +266,10 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
           final arguments = ModalRoute.of(context)?.settings.arguments as Map;
           final isadmin = arguments['is_admin'];
           final equipamento = posts[index];
-          
+
           final tipo = equipamento['tipo'];
           final dados = equipamento['dados'];
-          
-
+        print(dados);
           return GestureDetector(
             onTap: () {
               updateQtdeLocais(dados['pesquisa'], posts.length);
@@ -282,7 +283,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                                   RodoviaModel.fromJson(equipamento['dados']),
                             )));
               } else if (equipamento['tipo'] == 'SistemaDeSeguranca') {
-                                print(equipamento['dados']);
+                print(equipamento['dados']);
 
                 Navigator.pushReplacement(
                     context,
@@ -305,25 +306,27 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                 ? Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey.shade300,
+                      
+                      color: AppConstants.MAIN_GREEN,
                     ),
                     margin:
                         EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.h, horizontal: 50.w),
+                   
                     height: 250.h,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        SizedBox(width: 140.w,),
                         Flexible(
-                          child: Text(
-                            '${dados['municipio'] ?? ''} - ${dados['tipo_formulario']}',
-                            style: TextStyle(fontSize: 60.w),
-                            overflow: TextOverflow.ellipsis,
+                          child: Center(
+                            child: Text(
+                              getDisplay(dados),
+                              style: TextStyle(fontSize: 55.w, color: Colors.white,),
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                          width: 15.w,
                         ),
                         IconButton(
                             onPressed: () async {
@@ -396,8 +399,10 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                                   });
                             },
                             icon: const Icon(
+
                               Icons.close,
                               color: Colors.red,
+                              
                             ))
                       ],
                     ),
@@ -409,17 +414,17 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                     ),
                     margin:
                         EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 15.h, horizontal: 50.w),
+                   
                     height: 250.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Flexible(
                           child: Text(
-                            '${dados['tipo_formulario']}',
-                            style: TextStyle(fontSize: 60.w),
-                            overflow: TextOverflow.ellipsis,
+                            getDisplay(dados),
+                                 style: TextStyle(fontSize: 55.w, ),
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
                           ),
                         ),
                       ],
@@ -429,5 +434,21 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
         },
       ),
     );
+  }
+}
+
+
+String getDisplay(Map<String, dynamic> dados){
+  final tipoFormulario = dados['tipo_formulario'] ?? '';
+
+  switch(tipoFormulario){
+    case 'Rodovia':
+      return '$tipoFormulario\n${dados['nome_oficial']}';
+    case 'Sistema de Segurança':
+      return '$tipoFormulario\n${dados['tipo']}';
+    case 'Alimentos e bebidas':
+      return '$tipoFormulario\n${dados['nomeFantasia']}';
+    default:
+      return '$tipoFormulario\n${dados['tipo'] ?? ''}';
   }
 }

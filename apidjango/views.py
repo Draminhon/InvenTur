@@ -48,35 +48,32 @@ def export_pesquisa_to_excel(request, pesquisa_id):
     # ==============================
     # Aba para os dados da Pesquisa
     # ==============================
-    # Título curto para não ultrapassar 31 caracteres
     dados_sheet_title = f"Dados {date.today().strftime('%d-%m-%Y')}"
     ws_pesquisa = wb.active
     ws_pesquisa.title = dados_sheet_title
+
+    EXCLUDE_FIELDS = ['id', 'is_active', 'base_ptr', 'pesquisa']
     
-    # Cria a lista de campos: campos normais, many-to-many e o campo computado
-    pesquisa_field_names = [field.name for field in pesquisa._meta.fields]
-    m2m_field_names = [field.name for field in pesquisa._meta.many_to_many]
+    # Campos normais e ManyToMany para Pesquisa (exceto os indesejados)
+    pesquisa_field_names = [field.name for field in pesquisa._meta.fields if field.name not in EXCLUDE_FIELDS]
+    m2m_field_names = [field.name for field in pesquisa._meta.many_to_many if field.name not in EXCLUDE_FIELDS]
     pesquisa_field_names.extend(m2m_field_names)
     pesquisa_field_names.append("quantidadePesquisadores")
     
-    # Cabeçalho
     ws_pesquisa.append(pesquisa_field_names)
-    ss_queryset = SistemaDeSeguranca.objects.filter(base_ptr__pesquisa=pesquisa)
-    print(ss_queryset.exists())  # Deve retornar True se houver dados
-    print(ss_queryset)  # Veja os objetos retornados
+    
     data_row = []
-    # Processa os campos "normais"
     for field in pesquisa._meta.fields:
+        if field.name in EXCLUDE_FIELDS:
+            continue
         value = getattr(pesquisa, field.name)
         data_row.append(process_value(value))
     
-    # Processa os campos ManyToMany
     for field_name in m2m_field_names:
         manager = getattr(pesquisa, field_name)
         value = ", ".join(str(obj) for obj in manager.all())
         data_row.append(value)
     
-    # Campo computado: quantidadePesquisadores
     computed_value = getattr(pesquisa, "quantidadePesquisadores")
     data_row.append(process_value(computed_value))
     
@@ -100,25 +97,36 @@ def export_pesquisa_to_excel(request, pesquisa_id):
     for sheet_title, queryset in sheets:
         ws = wb.create_sheet(title=sheet_title)
         model = queryset.model
-        field_names = [field.name for field in model._meta.fields]
-
-        m2m_field_names = [field.name for field in model._meta.many_to_many]
-        field_names.extend(m2m_field_names)
-
-        ws.append(field_names)
+        model_field_names = [field.name for field in model._meta.fields if field.name not in EXCLUDE_FIELDS]
+        m2m_field_names = [field.name for field in model._meta.many_to_many if field.name not in EXCLUDE_FIELDS]
+        all_field_names = model_field_names + m2m_field_names
+        ws.append(all_field_names)
+        
         for obj in queryset:
             row = []
+            # Processa os campos normais
             for field in model._meta.fields:
+                if field.name in EXCLUDE_FIELDS:
+                    continue
                 value = getattr(obj, field.name)
                 row.append(process_value(value))
-
+            # Processa os campos ManyToMany
             for field_name in m2m_field_names:
                 manager = getattr(obj, field_name)
-                value = ", ".join(str(related_obj) for related_obj in manager.all())
+                if field_name in ["contatos", "servicos_especializados"]:
+                    related_values = []
+                    for related_obj in manager.all():
+                        fields_dict = {
+                            f.name: process_value(getattr(related_obj, f.name))
+                            for f in related_obj._meta.fields if f.name not in EXCLUDE_FIELDS
+                        }
+                        related_values.append(fields_dict)
+                    value = json.dumps(related_values, ensure_ascii=False)
+                else:
+                    value = ", ".join(str(related_obj) for related_obj in manager.all())
                 row.append(value)
             ws.append(row)
     
-    # Cria a resposta HTTP com o arquivo Excel
     response = HttpResponse(
         content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     )
@@ -126,7 +134,7 @@ def export_pesquisa_to_excel(request, pesquisa_id):
     wb.save(response)
     return response
 
-     
+
 
 
 class UsuarioCreateView(generics.ListCreateAPIView):
