@@ -9,10 +9,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 class OptionsDrawer extends StatelessWidget {
   final UserController userController;
+  final int  userId;
   final String userName;
   final String userEmail;
   final String cpf;
-  const OptionsDrawer({super.key, required this.userController, required this.userName, required this.userEmail, required this.cpf});
+  const OptionsDrawer({super.key, required this.userController, required this.userName, required this.userEmail, required this.cpf, required this.userId});
 
 
 Future<void> logout(BuildContext context) async {
@@ -68,7 +69,7 @@ String? refreshToken = prefs.getString('refresh_token');
             ),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => ContaPesquisador(userName: userName, userEmail: userEmail, userCPF: cpf,)
+                builder: (context) => ContaPesquisador(userName: userName, userEmail: userEmail, userCPF: cpf, userId: userId,)
               ),
             ),
             child: const Row(

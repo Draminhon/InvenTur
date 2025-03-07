@@ -41,7 +41,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
   late PageController pageController;
 
   final UserController _userController = UserController();
-  
+    int userId = 0;
     String userName = '';
     String userEmail = '';
     String userCPF = '';
@@ -58,9 +58,11 @@ class _AdminHomePageState extends State<AdminHomePage> {
     if(userDataString != null){
     Map<String, dynamic> userData = json.decode(userDataString);
     setState(() {
+      userId = userData['id'];
           userName = userData['name'];
     userEmail = userData['email'];
     userCPF = userData['CPF'];
+    print(userDataString);
     });
 
     }
@@ -86,7 +88,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 245, 245, 245),
         drawer: SafeArea(
-          child: OptionsDrawer(userController: _userController, userName: userName, userEmail: userEmail, cpf: userCPF,)
+          child: OptionsDrawer(userController: _userController, userName: userName, userEmail: userEmail, cpf: userCPF, userId: userId,)
         ),
         appBar: AppBar(
           title: Text(pageTitle[currentPageIndex]!),

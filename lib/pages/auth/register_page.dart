@@ -95,6 +95,19 @@ class _RegisterPageState extends State<RegisterPage> {
 
       if (response.statusCode == 200) {
         print('Usuario atualizado com sucesso: ${response.body}');
+
+        Map<String, dynamic> userData = {
+          'id': user,
+          'name': username,
+          'email': email,
+          'cpf': CPF
+        };
+        prefs.setString('user_data', jsonEncode(userData));
+
+        Navigator.pop(context);
+const snackBar = SnackBar(content: Text("Atualização realizada com sucesso!"));
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+
       } else {
         print(
             'Erro ao atualizar usuario: ${response.statusCode} - ${response.body}');
@@ -113,6 +126,7 @@ class _RegisterPageState extends State<RegisterPage> {
     final username = arguments['username'];
     final cpf = arguments['user_cpf'];
     final email = arguments['user_email'];
+    final id = arguments['user_id'];
     print(isChange);
     double paddingBottomTextField = screenSize.height * .015;
 
@@ -263,18 +277,17 @@ class _RegisterPageState extends State<RegisterPage> {
                                            Colors.green[600])),
                                     onPressed: () async {
                                       if (isChange == true) {
-                                        if (_formKey.currentState!.validate()) {
+                                                                                  _formKey.currentState!.save();
+
                                                                                     final cpf = _cpfController.text
                                               .replaceAll('.', '')
                                               .replaceAll('-', '');
-                                          _formKey.currentState!.save();
                                           updateUsers(
-                                              58,
+                                              id,
                                               _nameController.text,
                                               cpf,
                                               _emailController.text,
                                               _passwordController.text);
-                                        }
                                       } else {
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();

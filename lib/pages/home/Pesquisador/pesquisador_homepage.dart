@@ -104,6 +104,7 @@ static Future<http.Response> _getWithToken(Uri url, String token) async {
   Future<List<Pesquisa>> pesquisasFuture = getPesquisas();
   final UserController _userController = UserController();
 
+  int userId = 0;
   String userName = '';
   String userEmail = '';
   String userCPF = '';
@@ -118,7 +119,7 @@ static Future<http.Response> _getWithToken(Uri url, String token) async {
         userEmail = userData['email'];
         userCPF = userData['CPF'];
         userStatus = userData['status'];
-        print(userStatus);
+        userId = userData['id'];
       });
     }
   }
@@ -129,6 +130,14 @@ static Future<http.Response> _getWithToken(Uri url, String token) async {
     super.initState();
     getUserInfo();
   }
+
+@override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    getUserInfo();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -154,6 +163,7 @@ static Future<http.Response> _getWithToken(Uri url, String token) async {
         ),
         drawer: SafeArea(
             child: OptionsDrawer(
+              userId: userId,
           userController: _userController,
           userName: userName,
           userEmail: userEmail,

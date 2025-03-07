@@ -6,11 +6,12 @@ class ContaPesquisador extends StatelessWidget {
   final String userName;
   final String userEmail;
   final String userCPF;
+  final int userId;
   const ContaPesquisador(
       {super.key,
       required this.userName,
       required this.userEmail,
-      required this.userCPF});
+      required this.userCPF, required this.userId});
 
   String formatCPF(String cpf) {
     if (cpf.length != 11) {
@@ -105,7 +106,8 @@ class ContaPesquisador extends StatelessWidget {
                     'is_change': true,
                     'username': userName,
                     'user_cpf': userCPF,
-                    'user_email': userEmail
+                    'user_email': userEmail,
+                    'user_id': userId
                   }),
                   style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(
