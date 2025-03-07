@@ -27,44 +27,57 @@ class PesquisaCard extends StatefulWidget {
 }
 
 Future<File?> downloadExcel(int pesquisaId) async {
-      final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-  final url =
-      Uri.parse(AppConstants.BASE_URI + '/api/v1/export/pesquisa/$pesquisaId');
+  final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
+  final url = Uri.parse(AppConstants.BASE_URI + '/api/v1/export/pesquisa/$pesquisaId');
 
-  final response = await http.get(url,        headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer $token'
-          },);
+  final response = await http.get(
+    url,
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token'
+    },
+  );
+
   if (response.statusCode == 200) {
-    try {
+    // Seleciona o diretório
+    final selectedDirectory = await FilePicker.platform.getDirectoryPath(
+      dialogTitle: 'Selecione o local para salvar o arquivo',
+    );
 
-      final selectedDirectory = await FilePicker.platform.getDirectoryPath(
-                dialogTitle: 'Selecione o local para salvar o arquivo',
-      );
-
-      if(selectedDirectory == null){
-        print("Nenhum diretório foi selecionado");
-        return null;
-      }
-
-      final filePath = '$selectedDirectory/pesquisa_$pesquisaId.xlsx';
-
-      final file = File(filePath);
-      await file.writeAsBytes(response.bodyBytes);
-
-      final result = await OpenFile.open(file.path);
-      print('Open result: ${result.message}');
-      return file;
-    } catch (e) {
-      print('Error acessing temporary directory: $e');
+    if (selectedDirectory == null) {
+      print("Nenhum diretório foi selecionado");
       return null;
     }
+
+    final filePath = '$selectedDirectory/pesquisa_$pesquisaId.xlsx';
+    final file = File(filePath);
+
+    // Primeiro, tenta salvar o arquivo
+    try {
+      await file.writeAsBytes(response.bodyBytes);
+      print('Arquivo salvo com sucesso em: $filePath');
+    } catch (e) {
+      print('Erro ao salvar o arquivo: $e');
+      return null;
+    }
+
+    // Em seguida, tenta abrir o arquivo sem interferir no retorno
+    try {
+      final result = await OpenFile.open(file.path);
+      print('Resultado ao abrir o arquivo: ${result.message}');
+    } catch (e) {
+      print('Erro ao tentar abrir o arquivo: $e');
+      // Aqui você pode apenas registrar o erro e continuar, já que o arquivo foi salvo
+    }
+
+    return file;
   } else {
     print('Erro ao baixar o Excel: ${response.statusCode}');
     return null;
   }
 }
+
 
 class _PesquisaCardState extends State<PesquisaCard> {
   late Pesquisa _pesquisa;

@@ -104,7 +104,7 @@ class _RegisterPageState extends State<RegisterPage> {
         };
         prefs.setString('user_data', jsonEncode(userData));
 
-        Navigator.pop(context);
+        Navigator.pop(context, userData);
 const snackBar = SnackBar(content: Text("Atualização realizada com sucesso!"));
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
+import 'package:inventur/helper/providers.dart';
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/pages/auth/login_page.dart';
 import 'package:inventur/pages/auth/register_confirmation.dart';
@@ -29,37 +30,39 @@ import 'package:inventur/pages/home/Pesquisador/perfil_pesquisador.dart';
 import 'package:inventur/pages/home/Pesquisador/alterarDados-pesquisador.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/placeholder.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas.dart';
- import 'dart:io';
+import 'package:provider/provider.dart';
+import 'dart:io';
 import 'pages/home/Pesquisador/forms/formsC/zonaCosteira.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/helper/dependencies.dart' as dep;
-class MyHttpOverrides extends HttpOverrides{
+
+class MyHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }
 
-
 void main() async {
-  
- HttpOverrides.global = MyHttpOverrides();
+  HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   // await dep.init();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp( MyApp());
+  runApp(ChangeNotifierProvider(
+      create: (context) => UserProvider(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
-   MyApp({super.key});
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     // Get.find<RodoviaController>().getRodoviaList();
-  
+
     return ScreenUtilInit(
-      builder: (_ , child) => MaterialApp(
+      builder: (_, child) => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'InvenTur',
         theme: ThemeData(
@@ -70,45 +73,43 @@ class MyApp extends StatelessWidget {
           fontFamily: 'AbeeZee',
         ),
         routes: {
-          '/Login': (_) =>  LoginPage(),
+          '/Login': (_) => LoginPage(),
           '/Register': (_) => RegisterPage(),
           '/RegisterConfirmation': (_) => RegisterConfimation(),
-          '/AdminHome': (_) =>  AdminHomePage(),
-          '/RegisterPesquisa': (_) =>  RegisterPesquisa(),
-          '/EditPesquisa': (_) =>  EditPesquisa(),
+          '/AdminHome': (_) => AdminHomePage(),
+          '/RegisterPesquisa': (_) => RegisterPesquisa(),
+          '/EditPesquisa': (_) => EditPesquisa(),
           '/PassWordRecover': (_) => RecuperarSenha(),
           '/ConfirmarCodigo': (_) => ConfirmarCodigo(),
           '/MudarSenha': (_) => MudarSenha(),
-          '/NewPassword': (_) =>  ConfirmacaoNovaSenha(),
-          '/ConfirmarSenha':(_) =>  ConfirmarCodigo(),
-          '/PesquisadorHome': (_) =>  PesquisadorHome(),
-          '/Pesquisas': (_) =>    Pesquisas(),
-          '/FormA': (_) =>  FormularioA(),
-          '/FormB': (_) =>  FormularioB(),
-          '/FormC': (_) =>  FormularioC(),
-          '/A': (_) =>  A(),
-          '/AlterarDados': (_) =>  RegisterPage(),
-          '/MeiosDeHospedagem': (_) =>  MeiosDeHospedagem(),
-          '/Placeholder': (_) =>  PlaceHolder(),
-          '/AlimentosEbebidas': (_) =>  AlimentoseBebidas(),
-          '/Rodovia': (_) =>  Rodovia(),
-          '/SistemaDeSeguranca': (_) =>  SistemaDeSeguranca(),
-          '/ZonaCosteira': (_) =>  ZonaCosteira(),
-          '/Hidrografia': (_) =>  Hidrografia(),
-          '/SendedForm': (_) =>  SendedFormPage(),
-          '/UpdatedForm': (_) =>  UpdatedForm(),
+          '/NewPassword': (_) => ConfirmacaoNovaSenha(),
+          '/ConfirmarSenha': (_) => ConfirmarCodigo(),
+          '/PesquisadorHome': (_) => PesquisadorHome(),
+          '/Pesquisas': (_) => Pesquisas(),
+          '/FormA': (_) => FormularioA(),
+          '/FormB': (_) => FormularioB(),
+          '/FormC': (_) => FormularioC(),
+          '/A': (_) => A(),
+          '/AlterarDados': (_) => RegisterPage(),
+          '/MeiosDeHospedagem': (_) => MeiosDeHospedagem(),
+          '/Placeholder': (_) => PlaceHolder(),
+          '/AlimentosEbebidas': (_) => AlimentoseBebidas(),
+          '/Rodovia': (_) => Rodovia(),
+          '/SistemaDeSeguranca': (_) => SistemaDeSeguranca(),
+          '/ZonaCosteira': (_) => ZonaCosteira(),
+          '/Hidrografia': (_) => Hidrografia(),
+          '/SendedForm': (_) => SendedFormPage(),
+          '/UpdatedForm': (_) => UpdatedForm(),
         },
-        localizationsDelegates:  [
+        localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate
         ],
-        supportedLocales:  [
-          Locale('pt')
-        ],   
-        home:  LoginPage(),
+        supportedLocales: [Locale('pt')],
+        home: LoginPage(),
       ),
-      designSize:  Size(1344, 2992),
+      designSize: Size(1344, 2992),
     );
   }
 }
