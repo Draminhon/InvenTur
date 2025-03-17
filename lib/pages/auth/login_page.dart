@@ -44,9 +44,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool _isWrong = false;
+  bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
     Future<void> loginUser(String cpf, String password) async {
+
+setState(() {
+  _isLoading = true;
+});
+
       final url = Uri.parse(AppConstants.BASE_URI + AppConstants.LOGIN_URI);
       try {
         final response = await http.post(url,
@@ -89,6 +95,11 @@ class _LoginPageState extends State<LoginPage> {
         }
       } catch (e) {
         print(e);
+      } finally{
+        setState(() {
+                    _isLoading = false;
+
+        });
       }
     }
 
@@ -196,11 +207,18 @@ class _LoginPageState extends State<LoginPage> {
                                     loginUser(cpf, password);
                                   }
                                 },
-                                child: const Text(
+                                child: _isLoading == false ? const Text(
                                   'Entrar',
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 22),
-                                ))),
+                                ):  
+              Container(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                ),
+              )),),
                         Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: screenSize.height * .015),
@@ -251,11 +269,13 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                )
+                ),
+                
               ],
             ),
           ),
         ),
+
       ),
     );
   }
