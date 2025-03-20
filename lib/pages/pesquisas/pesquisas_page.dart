@@ -18,9 +18,14 @@ class PesquisasPage extends StatefulWidget {
 }
 
 class _PesquisasPageState extends State<PesquisasPage> {
+  bool _isLoading = false;
+
   final PesquisaController _pesquisaController = PesquisaController();
 
   static Future<List<Pesquisa>> getPesquisas() async {
+
+    
+
     final prefs = await SharedPreferences.getInstance();
     String? userDataString = prefs.getString('user_data');
     if (userDataString == null) {
@@ -31,6 +36,8 @@ class _PesquisasPageState extends State<PesquisasPage> {
     Map<String, dynamic> userData = json.decode(userDataString);
     final url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_PESQUISAS);
     int adminId = userData['id'];
+
+
 
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -62,6 +69,7 @@ class _PesquisasPageState extends State<PesquisasPage> {
   @override
   void initState() {
     super.initState();
+    
   }
 
   @override
@@ -74,52 +82,68 @@ class _PesquisasPageState extends State<PesquisasPage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Expanded(
-            child: ListenableBuilder(
-              listenable: _pesquisaController,
-              builder: (context, child) {
-                return _pesquisaController.pesquisas.isNotEmpty
-                    ? ListView.builder(
-                        itemCount: _pesquisaController.pesquisas.length,
-                        itemBuilder: (context, index) {
-                          return PesquisaCard(
-                            pesquisa: _pesquisaController.pesquisas[index],
-                            pesquisaController: _pesquisaController,
-                          );
-                        },
-                      )
-                    : const Center(
-                        child: Text("Nenhuma Pesquisa Cadastrada"),
-                      );
+                    Expanded(
+            child: FutureBuilder<List<Pesquisa>>(
+              future: getPesquisas(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text("Erro: ${snapshot.error}"),
+                  );
+                } else if (snapshot.hasData) {
+                  final pesquisas = snapshot.data!;
+                  // Atualiza o controller com as pesquisas recebidas
+                  _pesquisaController.addPesquisa(pesquisas);
+                  return pesquisas.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: pesquisas.length,
+                          itemBuilder: (context, index) {
+                            return PesquisaCard(
+                              pesquisa: pesquisas[index],
+                              pesquisaController: _pesquisaController,
+                            );
+                          },
+                        )
+                      : const Center(
+                          child: Text("Nenhuma Pesquisa Encontrada"),
+                        );
+                } else {
+                  return const Center(
+                    child: Text("Nenhuma Pesquisa Cadastrada."),
+                  );
+                }
               },
             ),
           ),
           Padding(
-            padding:  EdgeInsets.only(top: 5.w),
+            padding: EdgeInsets.only(top: 5.w),
             child: SizedBox(
                 height: 150.w,
                 child: ElevatedButton(
                     style: ButtonStyle(
                         shape: WidgetStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10))),
-                        padding: WidgetStateProperty.all(EdgeInsets.symmetric(
-                            vertical: 10.w)),
+                        padding: WidgetStateProperty.all(
+                            EdgeInsets.symmetric(vertical: 10.w)),
                         backgroundColor: WidgetStateProperty.all(
                             const Color.fromARGB(255, 55, 111, 60)),
                         overlayColor:
                             WidgetStateProperty.all(Colors.green[600])),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/RegisterPesquisa').then((result){
-                        if(result == true){
+                      Navigator.pushNamed(context, '/RegisterPesquisa')
+                          .then((result) {
+                        if (result == true) {
                           loadPesquisas();
                         }
                       });
                     },
                     child: Text(
                       'Cadastrar Nova Pesquisa',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 80.w),
+                      style: TextStyle(color: Colors.white, fontSize: 80.w),
                     ))),
           ),
         ],

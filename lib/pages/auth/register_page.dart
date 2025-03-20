@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/auth/register_confirmation.dart';
@@ -24,6 +26,8 @@ class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
   final _formKey3 = GlobalKey<FormState>();
 
+  bool _isLoading = false;
+
   final CPFValidator _cpfValidator = CPFValidator();
 
   final NameValidator _nameValidator = NameValidator();
@@ -48,6 +52,12 @@ class _RegisterPageState extends State<RegisterPage> {
       String username, String CPF, String email, String password) async {
     final url = Uri.parse(AppConstants.BASE_URI + AppConstants.REGISTER_URI);
 
+    setState(() {
+      _isLoading = true;
+    });
+
+    FocusScope.of(context).unfocus();
+
     try {
       final response = await http.post(url,
           headers: <String, String>{
@@ -64,13 +74,17 @@ class _RegisterPageState extends State<RegisterPage> {
         print('Usuario registrado com sucesso');
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) {
-          return RegisterConfimation();
+          return const RegisterConfimation();
         }));
       } else {
         print('Erro ao registrar o usuário: ${response.body}');
       }
     } catch (e) {
       print('Erro: $e');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -105,9 +119,9 @@ class _RegisterPageState extends State<RegisterPage> {
         prefs.setString('user_data', jsonEncode(userData));
 
         Navigator.pop(context);
-const snackBar = SnackBar(content: Text("Atualização realizada com sucesso!"));
-  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
+        const snackBar =
+            SnackBar(content: Text("Atualização realizada com sucesso!"));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
         print(
             'Erro ao atualizar usuario: ${response.statusCode} - ${response.body}');
@@ -274,20 +288,20 @@ const snackBar = SnackBar(content: Text("Atualização realizada com sucesso!"))
                                                 const Color.fromARGB(
                                                     255, 55, 111, 60)),
                                         overlayColor: WidgetStateProperty.all(
-                                           Colors.green[600])),
+                                            Colors.green[600])),
                                     onPressed: () async {
                                       if (isChange == true) {
-                                                                                  _formKey.currentState!.save();
+                                        _formKey.currentState!.save();
 
-                                                                                    final cpf = _cpfController.text
-                                              .replaceAll('.', '')
-                                              .replaceAll('-', '');
-                                          updateUsers(
-                                              id,
-                                              _nameController.text,
-                                              cpf,
-                                              _emailController.text,
-                                              _passwordController.text);
+                                        final cpf = _cpfController.text
+                                            .replaceAll('.', '')
+                                            .replaceAll('-', '');
+                                        updateUsers(
+                                            id,
+                                            _nameController.text,
+                                            cpf,
+                                            _emailController.text,
+                                            _passwordController.text);
                                       } else {
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
@@ -353,7 +367,7 @@ const snackBar = SnackBar(content: Text("Atualização realizada com sucesso!"))
                                                     screenSize.height * .03),
                                           )),
                                     )
-                                  : SizedBox(),
+                                  : const SizedBox(),
                             ],
                           ),
                         ),
@@ -377,6 +391,33 @@ const snackBar = SnackBar(content: Text("Atualização realizada com sucesso!"))
                       ),
                     ),
                   ),
+                  if (_isLoading)
+                    Positioned(
+                      top: 1000.w,
+                      left: 600.w,
+                      child: AbsorbPointer(
+                        absorbing: true,
+                        child: Stack(
+                          children: [
+                            BackdropFilter(
+                              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                              child: Container(
+                                color: Colors.black.withValues(alpha: 0.5),
+                              ),
+                            ),
+                               Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      color:
+                                          Colors.black.withValues(alpha: 0.5)),
+                                
+                                 ),
+                                 
+                             SizedBox(height: 150.w,width: 150.w, child: CircularProgressIndicator())
+                          ],
+                        ),
+                      ),
+                    )
                 ],
               ),
             ),
