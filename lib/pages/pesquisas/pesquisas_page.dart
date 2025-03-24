@@ -115,7 +115,7 @@ class _PesquisasPageState extends State<PesquisasPage> {
                   return const Center(
                     child: Text("Nenhuma Pesquisa Cadastrada."),
                   );
-                }
+                } 
               },
             ),
           ),
