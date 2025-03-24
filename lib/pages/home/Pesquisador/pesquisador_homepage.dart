@@ -204,7 +204,7 @@ static Future<http.Response> _getWithToken(Uri url, String token) async {
                     if (pesquisa.isEmpty) {
                      return Container(
                     margin: EdgeInsets.only(top: 1000.h),
-                    padding: EdgeInsets.only(left: 50.w,),
+                    padding: EdgeInsets.only(left: 30.w,),
                     height: 450.h,
                       decoration: BoxDecoration(
                           color: Colors.white,

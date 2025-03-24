@@ -453,7 +453,6 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                           valoresjson['servicos_especializados'] = sections2
                               .map((element) => element.getData())
                               .toList();
-                          autoFillForm();
                           if (_formKey.currentState!.validate()) {
                             //  ScaffoldMessenger.of(context).showSnackBar(
                             //      SnackBar(content: Text('processing data')));
@@ -463,10 +462,12 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                             sendForm(valoresjson);
                             sections2
                                 .forEach((element) => print(element.getData()));
-                          }
+
 
                           Navigator.pushReplacementNamed(
                               context, '/SendedForm');
+                          }
+
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.green[800],

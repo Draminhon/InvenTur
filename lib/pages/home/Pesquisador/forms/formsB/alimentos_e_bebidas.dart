@@ -2322,7 +2322,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                         informativos_impressos_key.currentState!
                             .getSelectedValues()
                             .toList();
-                    autoFillForm();
 
                     _formKey.currentState!.save();
                    sendForm(valoresjson);

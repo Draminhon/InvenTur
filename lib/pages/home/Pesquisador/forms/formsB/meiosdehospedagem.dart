@@ -201,6 +201,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          foregroundColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 55, 111, 60),
           title: const Text(
             'Identificação',
@@ -263,18 +264,18 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     },
                     decoration: const InputDecoration(hintText: 'Município'),
                   )),
+                  SizedBox(height: 50.w),
               textLabel(
                 name: 'Tipo:',
                 fontWeight: FontWeight.bold,
               ),
-              Padding(
-                padding: EdgeInsets.only(left: sizeScreen.width * 0.12),
-                child: RadioB(
-                  name: 'Hotelaria e apoio',
+              SizedBox(height: 25.w,),
+                RadioD(options: ['Hotelaria e apoio'],
                   getValue: (newValue) {},
-                ),
               ),
+              SizedBox(height: 25.w,),
               textLabel(name: 'Subtipos:', fontWeight: FontWeight.bold),
+                            SizedBox(height: 25.w,),
 
               RadioD(
                 options: [
@@ -301,7 +302,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
 
               SizedBox(
-                height: sizeScreen.height * 0.05,
+                height: 100.w
               ),
 
               Container(
@@ -396,7 +397,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
 
               textLabel(name: 'Natureza:', fontWeight: FontWeight.bold),
-
+              SizedBox(height: 50.w,),
               Column(
                 children: [
                   RadioD(
@@ -405,7 +406,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   ),
                 ],
               ),
-
+          SizedBox(height: 50.w,),
               textLabel(
                   name: 'Tipo de organização/instituição:',
                   fontWeight: FontWeight.bold),
@@ -422,6 +423,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'outro'
                 ],
               ),
+              SizedBox(height: 25.w,),
               Row(
                 children: [
                   textLabel(
@@ -452,7 +454,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   Row(
                     children: [
                       textLabel(
-                          name: 'Permanentes', fontWeight: FontWeight.bold),
+                          name: 'Permanentes', ),
                       SizedBox(
                         width: sizeScreen.width * 0.026,
                       ),
@@ -477,7 +479,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   Row(
                     children: [
                       textLabel(
-                          name: 'Temporários', fontWeight: FontWeight.bold),
+                          name: 'Temporários',),
                       SizedBox(
                         width: sizeScreen.width * 0.038,
                       ),
@@ -501,7 +503,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     children: [
                       textLabel(
                           name: 'Pessoas com\ndefiicência (%)',
-                          fontWeight: FontWeight.bold),
+                          ),
                       SizedBox(
                           width: sizeScreen.width * 0.6,
                           //height: sizeScreen.height * 0.07,
@@ -522,6 +524,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   )
                 ],
               ),
+              SizedBox(height: 25.w,),
               textLabel(name: 'Localização:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -530,6 +533,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 options: ['urbana', 'rural'],
                 getValue: (String) {},
               ),
+              SizedBox(height: 50.w,),
               textLabel(
                   name: 'Coordenadas Geográficas:',
                   fontWeight: FontWeight.bold),
@@ -539,7 +543,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               Column(children: [
                 Row(
                   children: [
-                    textLabel(name: 'Latitude', fontWeight: FontWeight.bold),
+                    textLabel(name: 'Latitude', ),
                     SizedBox(
                       width: sizeScreen.width * 0.032,
                     ),
@@ -563,7 +567,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 ),
                 Row(
                   children: [
-                    textLabel(name: 'Longitude', fontWeight: FontWeight.bold),
+                    textLabel(name: 'Longitude',),
                     SizedBox(
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
@@ -731,7 +735,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.02,
               ),
               Row(children: [
-                textLabel(name: 'de acessso -', fontWeight: FontWeight.bold),
+                textLabel(name: 'de acessso -',),
                 SizedBox(
                   width: sizeScreen.width * 0.09,
                 ),
@@ -746,7 +750,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.05,
               ),
               Row(children: [
-                textLabel(name: 'turística -', fontWeight: FontWeight.bold),
+                textLabel(name: 'turística -', ),
                 SizedBox(
                   width: sizeScreen.width * 0.14,
                 ),
@@ -758,7 +762,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 ))
               ]),
               SizedBox(
-                height: sizeScreen.height * 0.06,
+                height: 90.w,
               ),
               textLabel(name: 'Proximidades:', fontWeight: FontWeight.bold),
               SizedBox(
@@ -776,10 +780,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'outro'
                 ],
               ),
+
+              SizedBox(height: 50.w,),
               textLabel(
                   name: 'Pontos de referência:', fontWeight: FontWeight.bold),
               SizedBox(
-                height: sizeScreen.height * 0.02,
+                height: 20.w,
               ),
               CustomTextField(
                 validat: (value) {
@@ -792,7 +798,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 getValue: (String) {},
               ),
               SizedBox(
-                height: sizeScreen.height * 0.1,
+                height: 100.w,
               ),
 
               Container(
@@ -809,7 +815,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 ),
               ),
               SizedBox(
-                height: sizeScreen.height * 0.05,
+                height: 50.w,
               ),
 
               textLabel(
@@ -818,6 +824,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
 
            TableMtur(),
+           SizedBox(height: 50.w,),
               Center(
                 child: textLabel(
                   name:
@@ -937,6 +944,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.02,
               ),
               const CheckC(nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
+              SizedBox(height: sizeScreen.height * 0.02,),
               textLabel(
                   name: 'Informativos impressos:', fontWeight: FontWeight.bold),
               SizedBox(
@@ -985,6 +993,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 ],
                 getValue: (String) {},
               ),
+              SizedBox(height: 30.w,),
               textLabel(name: 'Horário:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.01,
@@ -997,7 +1006,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               //TabelaT2(),
               SizedBox(
-                height: sizeScreen.height * 0.05,
+                  height: 50.w,
               ),
               textLabel(
                 name: 'Funcionamento 24 horas:',
@@ -1009,16 +1018,18 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ExpansionTileYoN(
                 getValue: (String) {},
               ),
+              SizedBox(height: 50.w,),
               textLabel(
                 name: 'Funcionamento em feriados:',
                 fontWeight: FontWeight.bold,
               ),
               SizedBox(
-                height: sizeScreen.height * 0.03,
+                height: sizeScreen.height * 0.02,
               ),
               ExpansionTileYoN(
                 getValue: (String) {},
               ),
+              SizedBox(height: 25.w,),
               textLabel(
                 name: 'Restrições:',
                 fontWeight: FontWeight.bold,
@@ -1029,6 +1040,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               const CheckC(
                 nomes: ['Crianças', 'Fumantes', 'Animais', 'outro'],
               ),
+              SizedBox(height: 50.w,),
               textLabel(
                 name: 'Outras regras e informações:',
                 fontWeight: FontWeight.bold,
@@ -1115,10 +1127,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Ano Inteiro'
                 ],
               ),
+              SizedBox(height: 50.w,),
               textLabel(
                 name: 'Origem dos visitantes/turistas:',
                 fontWeight: FontWeight.bold,
               ),
+              SizedBox(height: 25.w,),
               const CheckC(
                 nomes: [
                   'Entorno municipal',
@@ -1127,6 +1141,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Internacional'
                 ],
               ),
+              SizedBox(height: 50.w,),
               textLabel(
                 name: 'Origem dos turistas nacionais\n(Até 5 estados)',
                 fontWeight: FontWeight.bold,
@@ -1523,9 +1538,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    left: sizeScreen.width * 0.02,
                     top: sizeScreen.height * 0.03,
-                    bottom: sizeScreen.height * 0.03),
+                    bottom: 20.w),
                 child: textLabel(
                   name: 'Produtos de higiene pessoal:',
                   fontWeight: FontWeight.bold,
@@ -1587,7 +1601,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               Padding(
                 padding: EdgeInsets.only(
                     top: sizeScreen.height * 0.03,
-                    bottom: sizeScreen.height * 0.03),
+                    bottom: 20.w),
                 child: textLabel(
                   name: 'Estacionamento:',
                   fontWeight: FontWeight.bold,
@@ -1596,7 +1610,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               const CheckC(
                 nomes: ['Pago', 'Gratuito', 'Coberto', 'Descoberto'],
               ),
-
+    SizedBox(height: 50.w,),
               Column(children: [
                 Row(
                   children: [
@@ -1790,6 +1804,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Adaptado para PCD'
                 ],
               ),
+              SizedBox(height: 50.w,),
               textLabel(
                 name: 'Capacidade de atendimento:',
                 fontWeight: FontWeight.bold,
@@ -1901,6 +1916,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Adaptado para PCD'
                 ],
               ),
+              SizedBox(height: 25.w,),
               Column(children: [
                 Row(
                   children: [
@@ -2026,7 +2042,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'outro'
                 ],
               ),
-
+SizedBox(height: 25.w,),
               textLabel(
                 name: 'Outros espaços, equipamentos e atividades:',
                 fontWeight: FontWeight.bold,
@@ -2109,6 +2125,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'outro',
                 ],
               ),
+              SizedBox(height: 30.w,),
               textLabel(
                 name: 'Equipamentos:',
                 fontWeight: FontWeight.bold,
@@ -2131,7 +2148,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'outro'
                 ],
               ),
-
+SizedBox(height: 30.w,),
               textLabel(
                 name: 'Facilidades e serviços:',
                 fontWeight: FontWeight.bold,
@@ -2189,6 +2206,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'outro'
                 ],
               ),
+              SizedBox(height: 30.w,),
               textLabel(
                 name: 'Facilidades para executivos:',
                 fontWeight: FontWeight.bold,
@@ -2259,6 +2277,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.02,
               ),
               TabelsEquipamentoEEspaco(),
+              SizedBox(height: 100.w,),
               Row(children: [
                 textLabel(
                   name:
@@ -2275,12 +2294,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   getValue: (String) {},
                 ))
               ]),
+              SizedBox(height: 100.w,),
               TabelsEquipamentoEEspaco(),
-
-              SizedBox(
-                height: sizeScreen.height * 0.05,
-              ),
-
+             
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
@@ -2324,8 +2340,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.02,
               ),
               textLabel(
-                name:
-                    'Possui alguma facilidade para pessoas com deficiência ou mobilidade reduzida?',
+                name: 'Possui alguma facilidade para pessoas  com deficiência ou mobilidade reduzida?',
                 fontWeight: FontWeight.bold,
               ),
               SizedBox(
