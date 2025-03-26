@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:http/http.dart';
 import 'package:inventur/models/estado_model.dart';
 import 'package:inventur/models/pais_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
@@ -24,6 +25,7 @@ class MeiosDeHospedagem extends StatefulWidget {
 
 class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
   final _formKey = GlobalKey<FormState>();
+
   late Estado? _estadoSelecionado = Estado(id: -1, sigla: '', nome: '');
   late Pais? _paisSelecionado = Pais(nome: '');
   final PesquisaController _pesquisaController = PesquisaController();
@@ -173,7 +175,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
         null,
     'acessibilidade_outros': null,
     'observacoes': null,
-    'referencias': null,  
+    'referencias': null,
     'nome_pesquisador': 'jose',
     'telefone_pesquisador': '12453',
     'email_pesquisador': 'jose@gmail.com',
@@ -184,8 +186,70 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
 //Implementar o Map para os controllers
 
+  final Map<String, TextEditingController> controllers = {};
 
+  TextEditingController getController(String key) {
+    controllers[key] ??= TextEditingController();
+    return controllers[key]!;
+  }
 
+  void autoFillForm() {
+    // Verifica se o controlador existe no Map antes de preencher
+    void fillIfExists(String key, String value) {
+      if (controllers.containsKey(key)) {
+        controllers[key]!.text = value;
+      }
+    }
+
+    // Preenche os valores dos controladores
+    fillIfExists('uf', 'CE');
+    fillIfExists('rg', '1234567');
+    fillIfExists('municipio', 'Viçosa do Ceará');
+    fillIfExists('razao social', 'Razão Social Exemplo');
+    fillIfExists('nome fantasia', 'Nome Fantasia Exemplo');
+    fillIfExists('CNPJ', '00.000.000/0000-00');
+    fillIfExists('codigo CNAE', '12345');
+    fillIfExists('atividade economica', 'Atividade Econômica Exemplo');
+    fillIfExists('inscricao municipal', '123456');
+    fillIfExists('nome da rede', 'Nome da Rede Exemplo');
+    fillIfExists('inicio da atividade', '01/01/2023');
+    fillIfExists('funcionarios permanentes', '10');
+    fillIfExists('funcionarios temporarios', '5');
+    fillIfExists('pessoas com deficiencia', '2');
+    fillIfExists('latitude', '-3.7319');
+    fillIfExists('longitute', '-38.5267');
+    fillIfExists('avenida rua', 'Rua Exemplo');
+    fillIfExists('bairro localidade', 'Bairro Exemplo');
+    fillIfExists('distrito', 'Distrito Exemplo');
+    fillIfExists('CEP', '60000-000');
+    fillIfExists('whatsapp', '(88) 99999-9999');
+    fillIfExists('instagram', '@exemplo');
+    fillIfExists('email', 'exemplo@email.com');
+    fillIfExists('site', 'www.exemplo.com');
+    fillIfExists('pontos de referencia', 'Ponto de Referência Exemplo');
+    fillIfExists('regras e informacoes', 'Informações adicionais e regras');
+    fillIfExists('ocupação ano n', '80%');
+    fillIfExists('ocupacao alta temporada n', '95%');
+    fillIfExists('total de UH', '50');
+    fillIfExists('total de leitos', '100');
+    fillIfExists('uh adaptados para pcd', '5');
+    fillIfExists('capacidade de veiculos', '200');
+    fillIfExists('capacidade automoveis', '30');
+    fillIfExists('onibus', '5');
+    fillIfExists('capacidade em KVA', '500');
+    fillIfExists('gerador capacidade em KVA', '300');
+    fillIfExists('capacidade instalada por dia', '100');
+    fillIfExists('pessoas atendidas sentadas', '50');
+    fillIfExists('capacidade simultanea', '75');
+    fillIfExists('capacidade simultanea pessoas atendidas sentadas', '40');
+    fillIfExists('lanchonete capacidade instalada por dia', '80');
+    fillIfExists('lanchonete capacidade pessoas atendidas sentadas', '40');
+    fillIfExists('lanchonete capacidade simultanea', '60');
+    fillIfExists('lanchonete pessoas atendidas sentadas simultanea', '30');
+    fillIfExists('outros', 'Outras informações relevantes');
+    fillIfExists('observacoes', 'Observações importantes');
+    fillIfExists('referencias', 'Referências ou links');
+  }
 
   @override
   void initState() {
@@ -193,6 +257,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     super.initState();
     _pesquisaController.setEstados();
     _pesquisaController.setPaises();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    controllers.forEach((key, controllers) => controllers.dispose());
   }
 
   @override
@@ -222,6 +293,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           width: sizeScreen.width * 0.3,
                           height: sizeScreen.height * 0.045,
                           child: TextFormField(
+                            controller: getController('uf'),
+                            onSaved: (newValue) => valoresjson['uf'] = newValue,
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Preencha o campo';
@@ -239,14 +312,17 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           width: sizeScreen.width * 0.5,
                           height: sizeScreen.height * 0.045,
                           child: TextFormField(
+                            onSaved: (newValue) =>
+                                valoresjson['regiao_turistica'] = newValue,
+                            controller: getController('rg'),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Preencha o campo';
                               }
                               return null;
                             },
-                            decoration:
-                                const InputDecoration(hintText: 'Região Turística'),
+                            decoration: const InputDecoration(
+                                hintText: 'Região Turística'),
                           ))
                     ],
                   )),
@@ -256,6 +332,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       right: sizeScreen.width * 0.1,
                       top: sizeScreen.height * 0.01),
                   child: TextFormField(
+                    controller: getController('municipio'),
+                    onSaved: (newValue) => valoresjson['municipio'] = newValue,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Preencha o campo';
@@ -264,18 +342,27 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     },
                     decoration: const InputDecoration(hintText: 'Município'),
                   )),
-                  SizedBox(height: 50.w),
+              SizedBox(height: 50.w),
               textLabel(
                 name: 'Tipo:',
                 fontWeight: FontWeight.bold,
               ),
-              SizedBox(height: 25.w,),
-                RadioD(options: ['Hotelaria e apoio'],
-                  getValue: (newValue) {},
+              SizedBox(
+                height: 25.w,
               ),
-              SizedBox(height: 25.w,),
+              RadioD(
+                options: ['Hotelaria e apoio'],
+                getValue: (newValue) {
+                  valoresjson['tipo'] = newValue;
+                },
+              ),
+              SizedBox(
+                height: 25.w,
+              ),
               textLabel(name: 'Subtipos:', fontWeight: FontWeight.bold),
-                            SizedBox(height: 25.w,),
+              SizedBox(
+                height: 25.w,
+              ),
 
               RadioD(
                 options: [
@@ -298,12 +385,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Hotel de trânsito',
                   'Spa'
                 ],
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['subtipo'] = newValue;
+                },
               ),
 
-              SizedBox(
-                height: 100.w
-              ),
+              SizedBox(height: 100.w),
 
               Container(
                 color: const Color.fromARGB(255, 55, 111, 60),
@@ -324,15 +411,19 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               CustomTextField(
                 name: 'Razão Social',
+                controller: getController('razao social'),
                 validat: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
                   }
                   return null;
                 },
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['razaoSocial'] = newValue;
+                },
               ),
               CustomTextField(
+                controller: getController('nome fantasia'),
                 name: 'Nome Fantasia',
                 validat: (value) {
                   if (value == null || value.isEmpty) {
@@ -340,9 +431,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   }
                   return null;
                 },
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['nomeFantasia'] = newValue;
+                },
               ),
               CustomTextField(
+                controller: getController('codigo CNAE'),
                 name: 'Código CNAE',
                 validat: (value) {
                   if (value == null || value.isEmpty) {
@@ -350,9 +444,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   }
                   return null;
                 },
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['codigoCNAE'] = newValue;
+                },
               ),
               CustomTextField(
+                controller: getController('atividade economica'),
                 name: 'Atividade econômica',
                 validat: (value) {
                   if (value == null || value.isEmpty) {
@@ -360,9 +457,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   }
                   return null;
                 },
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['atividadeEconomica'] = newValue;
+                },
               ),
               CustomTextField(
+                controller: getController('inscricao municipal'),
                 name: 'Inscrição Municipal',
                 validat: (value) {
                   if (value == null || value.isEmpty) {
@@ -370,9 +470,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   }
                   return null;
                 },
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['inscricaoMunicipal'] = newValue;
+                },
               ),
               CustomTextField(
+                controller: getController('nome da rede'),
                 name: 'Nome da rede/holding',
                 validat: (value) {
                   if (value == null || value.isEmpty) {
@@ -380,40 +483,52 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   }
                   return null;
                 },
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['nomeDaRede'] = newValue;
+                },
               ),
               CustomTextField(
                 name: 'CNPJ',
+                controller: getController('CNPJ'),
                 validat: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
                   }
                   return null;
                 },
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['CNPJ'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
 
               textLabel(name: 'Natureza:', fontWeight: FontWeight.bold),
-              SizedBox(height: 50.w,),
+              SizedBox(
+                height: 50.w,
+              ),
               Column(
                 children: [
                   RadioD(
                     options: ['pública', 'privada', 'outro'],
-                    getValue: (String) {},
+                    getValue: (newValue) {
+                      valoresjson['natureza'] = newValue;
+                    },
                   ),
                 ],
               ),
-          SizedBox(height: 50.w,),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                   name: 'Tipo de organização/instituição:',
                   fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+              CheckC(
+                onChanged: (p0) => valoresjson['tipoDeOrganizacao'] = p0,
                 nomes: [
                   'associação',
                   'sindicato',
@@ -423,7 +538,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'outro'
                 ],
               ),
-              SizedBox(height: 25.w,),
+              SizedBox(
+                height: 25.w,
+              ),
               Row(
                 children: [
                   textLabel(
@@ -436,7 +553,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       width: sizeScreen.width * 0.4,
                       //height: sizeScreen.height * 0.07,
                       child: CustomTextDate(
-                        getValue: (String) {},
+                        dateController: getController('inicio da atividade'),
+                        getValue: (newValue) {
+                          valoresjson['inicioDaAtividade'] = newValue;
+                        },
                       ))
                 ],
               ),
@@ -454,7 +574,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   Row(
                     children: [
                       textLabel(
-                          name: 'Permanentes', ),
+                        name: 'Permanentes',
+                      ),
                       SizedBox(
                         width: sizeScreen.width * 0.026,
                       ),
@@ -462,6 +583,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           width: sizeScreen.width * 0.6,
                           //height: sizeScreen.height * 0.07,
                           child: CustomTextField(
+                            controller:
+                                getController('funcionarios permanentes'),
                             name: 'n°',
                             validat: (value) {
                               if (value == null || value.isEmpty) {
@@ -469,7 +592,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                               }
                               return null;
                             },
-                            getValue: (String) {},
+                            getValue: (newValue) {
+                              valoresjson['qtdeFuncionariosPermanentes'] =
+                                  newValue;
+                            },
                           ))
                     ],
                   ),
@@ -479,7 +605,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   Row(
                     children: [
                       textLabel(
-                          name: 'Temporários',),
+                        name: 'Temporários',
+                      ),
                       SizedBox(
                         width: sizeScreen.width * 0.038,
                       ),
@@ -487,6 +614,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           width: sizeScreen.width * 0.6,
                           //height: sizeScreen.height * 0.07,
                           child: CustomTextField(
+                            controller:
+                                getController('funcionarios temporarios'),
                             name: 'n°',
                             validat: (value) {
                               if (value == null || value.isEmpty) {
@@ -494,7 +623,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                               }
                               return null;
                             },
-                            getValue: (String) {},
+                            getValue: (newValue) {
+                              valoresjson['qtdeFuncionariosTemporarios'] =
+                                  newValue;
+                            },
                           ))
                     ],
                   ),
@@ -502,12 +634,14 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   Row(
                     children: [
                       textLabel(
-                          name: 'Pessoas com\ndefiicência (%)',
-                          ),
+                        name: 'Pessoas com\ndefiicência (%)',
+                      ),
                       SizedBox(
                           width: sizeScreen.width * 0.6,
                           //height: sizeScreen.height * 0.07,
                           child: CustomTextField(
+                            controller:
+                                getController('pessoas com deficiencia'),
                             name: '%',
                             validat: (value) {
                               if (value == null || value.isEmpty) {
@@ -515,7 +649,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                               }
                               return null;
                             },
-                            getValue: (String) {},
+                            getValue: (newValue) {
+                              valoresjson['qtdeFuncionarisComDeficiencia'] =
+                                  newValue;
+                            },
                           ))
                     ],
                   ),
@@ -524,16 +661,22 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   )
                 ],
               ),
-              SizedBox(height: 25.w,),
+              SizedBox(
+                height: 25.w,
+              ),
               textLabel(name: 'Localização:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
               RadioD(
                 options: ['urbana', 'rural'],
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['localizacao'] = newValue;
+                },
               ),
-              SizedBox(height: 50.w,),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                   name: 'Coordenadas Geográficas:',
                   fontWeight: FontWeight.bold),
@@ -543,7 +686,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               Column(children: [
                 Row(
                   children: [
-                    textLabel(name: 'Latitude', ),
+                    textLabel(
+                      name: 'Latitude',
+                    ),
                     SizedBox(
                       width: sizeScreen.width * 0.032,
                     ),
@@ -551,6 +696,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('latitude'),
                           name: 'valor',
                           validat: (value) {
                             if (value == null || value.isEmpty) {
@@ -558,7 +704,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             }
                             return null;
                           },
-                          getValue: (String) {},
+                          getValue: (newValue) {
+                            valoresjson['latitude'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -567,11 +715,14 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 ),
                 Row(
                   children: [
-                    textLabel(name: 'Longitude',),
+                    textLabel(
+                      name: 'Longitude',
+                    ),
                     SizedBox(
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('longitute'),
                           name: 'valor',
                           validat: (value) {
                             if (value == null || value.isEmpty) {
@@ -579,7 +730,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             }
                             return null;
                           },
-                          getValue: (String) {},
+                          getValue: (newValue) {
+                            valoresjson['longitute'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -590,6 +743,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               textLabel(name: 'Endereço:', fontWeight: FontWeight.bold),
 
               CustomTextField(
+                controller: getController('avenida rua'),
                 validat: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
@@ -597,9 +751,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   return null;
                 },
                 name: 'avenida/rua/travessa/caminho/outro',
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['avenidaRuaEtc'] = newValue;
+                },
               ),
               CustomTextField(
+                controller: getController('bairro localidade'),
                 validat: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
@@ -607,9 +764,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   return null;
                 },
                 name: 'bairro/localidade',
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['bairroLocalidade'] = newValue;
+                },
               ),
               CustomTextField(
+                controller: getController('distrito'),
                 validat: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
@@ -617,9 +777,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   return null;
                 },
                 name: 'distrito',
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['distrito'] = newValue;
+                },
               ),
               CustomTextField(
+                controller: getController('CEP'),
                 validat: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
@@ -627,7 +790,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   return null;
                 },
                 name: 'CEP',
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['CEP'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.03,
@@ -643,6 +808,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('whatsapp'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -650,7 +816,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: '(DD) n°',
-                          getValue: (String) {},
+                          getValue: (newValue) {
+                            valoresjson['whatsapp'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -664,6 +832,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('instagram'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -671,7 +840,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: '@',
-                          getValue: (String) {},
+                          getValue: (newValue) {
+                            valoresjson['instagram'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -688,6 +859,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('email'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -695,7 +867,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'e-mail',
-                          getValue: (String) {},
+                          getValue: (newValue) {
+                            valoresjson['email'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -715,6 +889,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('site'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -722,7 +897,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'www.endereço.com',
-                          getValue: (String) {},
+                          getValue: (newValue) {
+                            valoresjson['site'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -735,7 +912,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.02,
               ),
               Row(children: [
-                textLabel(name: 'de acessso -',),
+                textLabel(
+                  name: 'de acessso -',
+                ),
                 SizedBox(
                   width: sizeScreen.width * 0.09,
                 ),
@@ -743,14 +922,18 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     // width: sizeScreen.width * 0.5,
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN(
-                  getValue: (String) {},
+                  getValue: (newValue) {
+                    valoresjson['sinalizacaoDeAcesso'] = newValue;
+                  },
                 ))
               ]),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
               Row(children: [
-                textLabel(name: 'turística -', ),
+                textLabel(
+                  name: 'turística -',
+                ),
                 SizedBox(
                   width: sizeScreen.width * 0.14,
                 ),
@@ -758,7 +941,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     //width: sizeScreen.width * 0.5,
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN(
-                  getValue: (String) {},
+                  getValue: (newValue) {
+                    valoresjson['sinalizacaoTuristica'] = newValue;
+                  },
                 ))
               ]),
               SizedBox(
@@ -769,7 +954,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.02,
               ),
               //  RadioD(number: 6, options: options)
-              const CheckC(
+              CheckC(
+                onChanged: (p0) => valoresjson['proximidades'] = p0,
                 nomes: [
                   'Restaurante',
                   'Centro de Convenções exposições',
@@ -781,13 +967,16 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 ],
               ),
 
-              SizedBox(height: 50.w,),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                   name: 'Pontos de referência:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: 20.w,
               ),
               CustomTextField(
+                controller: getController('pontos de referencia'),
                 validat: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
@@ -795,7 +984,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   return null;
                 },
                 name: 'ponto de referência',
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['pontosDeReferencia'] = newValue;
+                },
               ),
               SizedBox(
                 height: 100.w,
@@ -823,8 +1014,16 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 fontWeight: FontWeight.bold,
               ),
 
-           TableMtur(),
-           SizedBox(height: 50.w,),
+              TableMtur(
+                onChanged: (p0) {
+                  setState(() {
+                    valoresjson['tabelaMTUR'] = p0;
+                  });
+                },
+              ),
+              SizedBox(
+                height: 50.w,
+              ),
               Center(
                 child: textLabel(
                   name:
@@ -835,9 +1034,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const SizedBox(
+              SizedBox(
                 height: 300,
-                child: CheckB(
+                child: CheckC(
+                  onChanged: (p0) =>
+                      valoresjson['segmentosOuTurismoEspecializado'] = p0,
                   nomes: [
                     'Aventura',
                     'Ecoturismo',
@@ -893,7 +1094,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Pensão Completa',
                   'Tudo incluído'
                 ],
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['tipoDeDiaria'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -903,7 +1106,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+              CheckC(
+                onChanged: (p0) => valoresjson['formasDePagamento'] = p0,
                 nomes: [
                   'Dinheiro',
                   'Pix',
@@ -918,7 +1122,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+              CheckC(
+                onChanged: (p0) => valoresjson['reseras'] = p0,
                 nomes: [
                   'Balcão',
                   'Whatsapp',
@@ -943,14 +1148,21 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
-              SizedBox(height: sizeScreen.height * 0.02,),
+              CheckC(
+                  onChanged: (p0) =>
+                      valoresjson['atendimentoEmLinguaEstrangeira'] = p0,
+                  nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
               textLabel(
                   name: 'Informativos impressos:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
+              CheckC(
+                  onChanged: (p0) => valoresjson['informativosImpressos'] = p0,
+                  nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
@@ -991,22 +1203,32 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Dezembro',
                   'Ano Inteiro'
                 ],
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['perido'] = newValue;
+                },
               ),
-              SizedBox(height: 30.w,),
+              SizedBox(
+                height: 30.w,
+              ),
               textLabel(name: 'Horário:', fontWeight: FontWeight.bold),
               SizedBox(
                 height: sizeScreen.height * 0.01,
               ),
 
-              TabelaHorarios(),
+              TabelaHorarios(
+                onChanged: (p0) {
+                  setState(() {
+                    valoresjson['tabelasHorario'] = p0;
+                  });
+                },
+              ),
 
               SizedBox(
                 height: sizeScreen.height * 0.01,
               ),
               //TabelaT2(),
               SizedBox(
-                  height: 50.w,
+                height: 50.w,
               ),
               textLabel(
                 name: 'Funcionamento 24 horas:',
@@ -1016,9 +1238,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.02,
               ),
               ExpansionTileYoN(
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['funcionamento24h'] = newValue;
+                },
               ),
-              SizedBox(height: 50.w,),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Funcionamento em feriados:',
                 fontWeight: FontWeight.bold,
@@ -1027,9 +1253,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.02,
               ),
               ExpansionTileYoN(
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['funcionamentoEmFeriados'] = newValue;
+                },
               ),
-              SizedBox(height: 25.w,),
+              SizedBox(
+                height: 25.w,
+              ),
               textLabel(
                 name: 'Restrições:',
                 fontWeight: FontWeight.bold,
@@ -1037,16 +1267,20 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+              CheckC(
+                onChanged: (p0) => valoresjson['restricoes'] = p0,
                 nomes: ['Crianças', 'Fumantes', 'Animais', 'outro'],
               ),
-              SizedBox(height: 50.w,),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Outras regras e informações:',
                 fontWeight: FontWeight.bold,
               ),
 
               CustomTextField(
+                controller: getController('regras e informacoes'),
                 validat: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
@@ -1054,7 +1288,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   return null;
                 },
                 name: 'Regras e informações',
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['outrasRegrasEInformacoes'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -1072,6 +1308,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
 
               CustomTextField(
+                controller: getController('ocupação ano n'),
                 validat: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
@@ -1079,7 +1316,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   return null;
                 },
                 name: 'nº',
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['nAnoOcupacao'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -1090,6 +1329,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
 
               CustomTextField(
+                controller: getController('ocupacao alta temporada n'),
                 validat: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
@@ -1097,7 +1337,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   return null;
                 },
                 name: 'nº',
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['nOcupacaoAltaTemporada'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -1110,7 +1352,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.01,
               ),
 
-              const CheckC(
+              CheckC(
+                onChanged: (p0) => valoresjson['mesesAltaTemporada'] = p0,
                 nomes: [
                   'Janeiro',
                   'Fevereiro',
@@ -1127,13 +1370,18 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Ano Inteiro'
                 ],
               ),
-              SizedBox(height: 50.w,),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Origem dos visitantes/turistas:',
                 fontWeight: FontWeight.bold,
               ),
-              SizedBox(height: 25.w,),
-              const CheckC(
+              SizedBox(
+                height: 25.w,
+              ),
+              CheckC(
+                onChanged: (p0) => valoresjson['origemDosVisitantes'] = p0,
                 nomes: [
                   'Entorno municipal',
                   'Estadual',
@@ -1141,7 +1389,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Internacional'
                 ],
               ),
-              SizedBox(height: 50.w,),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Origem dos turistas nacionais\n(Até 5 estados)',
                 fontWeight: FontWeight.bold,
@@ -1476,6 +1726,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('total de UH'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1483,7 +1734,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {valoresjson['nTotalDeUH']=newValue;},
                         ))
                   ],
                 ),
@@ -1500,6 +1751,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('total de leitos'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1507,7 +1759,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {
+                            valoresjson['nTotalDeLeitos']=newValue;
+                          },
                         ))
                   ],
                 ),
@@ -1524,6 +1778,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('uh adaptados para pcd'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1531,21 +1786,24 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {
+                            valoresjson['nUhAdaptadasParaPCD'] = newValue;
+                          },
                         ))
                   ],
                 ),
               ]),
               Padding(
                 padding: EdgeInsets.only(
-                    top: sizeScreen.height * 0.03,
-                    bottom: 20.w),
+                    top: sizeScreen.height * 0.03, bottom: 20.w),
                 child: textLabel(
                   name: 'Produtos de higiene pessoal:',
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const CheckC(nomes: [
+               CheckC(
+                onChanged: (p0) => valoresjson['produtosHigienePessoal'] = p0,
+                nomes: [
                 'Shampoo',
                 'Toalha',
                 'Condicionador',
@@ -1567,7 +1825,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['equipamentosEServicos'] = p0,
                 nomes: [
                   'TV',
                   'Internet',
@@ -1592,7 +1851,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 padding: EdgeInsets.only(
                     right: sizeScreen.width * 0.05,
                     top: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.02),
+                    ),
                 child: textLabel(
                   name: 'Instalações:',
                   fontWeight: FontWeight.bold,
@@ -1600,17 +1859,19 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    top: sizeScreen.height * 0.03,
-                    bottom: 20.w),
+                    top: sizeScreen.height * 0.03, bottom: 20.w),
                 child: textLabel(
                   name: 'Estacionamento:',
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['estacionamento'] = p0,
                 nomes: ['Pago', 'Gratuito', 'Coberto', 'Descoberto'],
               ),
-    SizedBox(height: 50.w,),
+              SizedBox(
+                height: 50.w,
+              ),
               Column(children: [
                 Row(
                   children: [
@@ -1625,6 +1886,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('capacidade de veiculos'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1632,7 +1894,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {valoresjson['nCapacidadeDeVeiculos'] = newValue;},
                         ))
                   ],
                 ),
@@ -1652,6 +1914,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('capacidade automoveis'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1659,7 +1922,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {valoresjson['nAutomoveis'] = newValue;},
                         ))
                   ],
                 ),
@@ -1679,6 +1942,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('onibus'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1686,7 +1950,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {
+                            valoresjson['nOnibus'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -1710,7 +1976,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               RadioD(
                 options: ['110 volts', '220 volts', '110/220 volts'],
-                getValue: (String) {},
+                getValue: (newValue) {valoresjson['energiaEletrica'] = newValue;},
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -1728,6 +1994,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       width: sizeScreen.width * 0.6,
                       //height: sizeScreen.height * 0.07,
                       child: CustomTextField(
+                        controller: getController('capacidade em KVA'),
                         validat: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Preencha o campo';
@@ -1735,7 +2002,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           return null;
                         },
                         name: 'KVA',
-                        getValue: (String) {},
+                        getValue: (newValue) {valoresjson['capacidadeEmKVA'] = newValue;},
                       ))
                 ],
               ),
@@ -1750,7 +2017,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.032,
               ),
               ExpansionTileYoN(
-                getValue: (String) {},
+                getValue: (newValue) {valoresjson['geradorDeEmergencia'] = newValue;},
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -1768,6 +2035,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       width: sizeScreen.width * 0.6,
                       //height: sizeScreen.height * 0.07,
                       child: CustomTextField(
+                        controller: getController('gerador capacidade em KVA'),
                         validat: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Preencha o campo';
@@ -1775,7 +2043,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           return null;
                         },
                         name: 'KVA',
-                        getValue: (String) {},
+                        getValue: (newValue) {valoresjson['geradorCapacidadeEmKVA'] = newValue;},
                       ))
                 ],
               ),
@@ -1796,7 +2064,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['restaurante'] = p0,
                 nomes: [
                   'Não',
                   'Apenas para hóspedes',
@@ -1804,7 +2073,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Adaptado para PCD'
                 ],
               ),
-              SizedBox(height: 50.w,),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Capacidade de atendimento:',
                 fontWeight: FontWeight.bold,
@@ -1823,6 +2094,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('capacidade instalada por dia'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1830,7 +2102,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {valoresjson['nCapacidadeInstaladaPorDia'] = newValue;},
                         ))
                   ],
                 ),
@@ -1847,6 +2119,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('pessoas atendidas sentadas'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1854,7 +2127,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {valoresjson['nPessoasAtendidasSentadas'] = newValue;},
                         ))
                   ],
                 ),
@@ -1868,6 +2141,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('capacidade simultanea'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1875,7 +2149,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {valoresjson['nCapacidadeSimultanea'] = newValue;},
                         ))
                   ],
                 ),
@@ -1886,6 +2160,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('capacidade simultanea pessoas atendidas sentadas'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1893,7 +2168,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {valoresjson['nPessoasAtendidasSentadasSimultanea'] = newValue;},
                         ))
                   ],
                 ),
@@ -1908,7 +2183,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   height: sizeScreen.height * 0.02,
                 ),
               ]),
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['lanchonete'] = p0,
                 nomes: [
                   'Não',
                   'Apenas para hóspedes',
@@ -1916,7 +2192,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'Adaptado para PCD'
                 ],
               ),
-              SizedBox(height: 25.w,),
+              SizedBox(
+                height: 25.w,
+              ),
               Column(children: [
                 Row(
                   children: [
@@ -1928,6 +2206,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('lanchonete capacidade instalada por dia'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1935,7 +2214,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {
+                            valoresjson['lanchoneteCapacidadeInstaladaPorDia'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -1952,6 +2233,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('lanchonete capacidade pessoas atendidas sentadas'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1959,7 +2241,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {
+                            valoresjson['lanchoneteCapacidadePessoasAtendidasSentadas']=newValue;
+                          },
                         ))
                   ],
                 ),
@@ -1973,6 +2257,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('lanchonete capacidade simultanea'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -1980,7 +2265,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {valoresjson['lanchoneteCapacidadeSimultanea'] = newValue;},
                         ))
                   ],
                 ),
@@ -1994,6 +2279,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          controller: getController('lanchonete pessoas atendidas sentadas simultanea'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -2001,7 +2287,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (String) {},
+                          getValue: (newValue) {valoresjson['lanchoneteCapacidadeSentadasSimultanea']=newValue;},
                         ))
                   ],
                 ),
@@ -2023,7 +2309,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['instalacaoEEspacos'] = p0,
                 nomes: [
                   'Piscina',
                   'Toboágua',
@@ -2042,7 +2329,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   'outro'
                 ],
               ),
-SizedBox(height: 25.w,),
+              SizedBox(
+                height: 25.w,
+              ),
               textLabel(
                 name: 'Outros espaços, equipamentos e atividades:',
                 fontWeight: FontWeight.bold,
@@ -2050,7 +2339,8 @@ SizedBox(height: 25.w,),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['outrosEspacosEAtividades'] = p0,
                 nomes: [
                   'Observação da fauna',
                   'Visita a produção agrícola',
@@ -2114,7 +2404,8 @@ SizedBox(height: 25.w,),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['servicos']  = p0,
                 nomes: [
                   'Realização de eventos próprios',
                   'Aluguel de equipamentos',
@@ -2125,7 +2416,9 @@ SizedBox(height: 25.w,),
                   'outro',
                 ],
               ),
-              SizedBox(height: 30.w,),
+              SizedBox(
+                height: 30.w,
+              ),
               textLabel(
                 name: 'Equipamentos:',
                 fontWeight: FontWeight.bold,
@@ -2133,7 +2426,8 @@ SizedBox(height: 25.w,),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['equipamentos'] = p0,
                 nomes: [
                   'Internet',
                   'Elevador',
@@ -2148,7 +2442,9 @@ SizedBox(height: 25.w,),
                   'outro'
                 ],
               ),
-SizedBox(height: 30.w,),
+              SizedBox(
+                height: 30.w,
+              ),
               textLabel(
                 name: 'Facilidades e serviços:',
                 fontWeight: FontWeight.bold,
@@ -2156,7 +2452,8 @@ SizedBox(height: 30.w,),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['facilidadesEServicos'] = p0,
                 nomes: [
                   'Adaptador de voltagem',
                   'Impressora',
@@ -2206,7 +2503,9 @@ SizedBox(height: 30.w,),
                   'outro'
                 ],
               ),
-              SizedBox(height: 30.w,),
+              SizedBox(
+                height: 30.w,
+              ),
               textLabel(
                 name: 'Facilidades para executivos:',
                 fontWeight: FontWeight.bold,
@@ -2214,7 +2513,8 @@ SizedBox(height: 30.w,),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+               CheckC(
+              onChanged: (p0) => valoresjson['facilidadesParaExecutivos'] = p0,
                 nomes: [
                   'Apartamentos em andares especiais',
                   'Café da manhã em ambiente privativo',
@@ -2270,14 +2570,20 @@ SizedBox(height: 30.w,),
                     // width: sizeScreen.width * 0.5,
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN(
-                  getValue: (String) {},
+                  getValue: (newValue) {valoresjson['doEquipamentoEspaco'] = newValue;},
                 ))
               ]),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              TabelsEquipamentoEEspaco(),
-              SizedBox(height: 100.w,),
+              TabelsEquipamentoEEspaco(onChanged: (p0) {
+                setState(() {
+                  valoresjson['tabelaEquipamentoEEspaco'] = p0;
+                });
+              },),
+              SizedBox(
+                height: 100.w,
+              ),
               Row(children: [
                 textLabel(
                   name:
@@ -2291,12 +2597,20 @@ SizedBox(height: 30.w,),
                     // width: sizeScreen.width * 0.5,
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN(
-                  getValue: (String) {},
+                  getValue: (newValue) {
+                    valoresjson['daAreaOuEdificacaoEmQueEstaLocalizado'] = newValue;
+                  },
                 ))
               ]),
-              SizedBox(height: 100.w,),
-              TabelsEquipamentoEEspaco(),
-             
+              SizedBox(
+                height: 100.w,
+              ),
+              TabelsEquipamentoEEspaco(onChanged: (p0) {
+                setState(() {
+                  valoresjson['tabelaEquipamentoEEspaco2'] = p0;
+                });
+              },),
+
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
@@ -2318,7 +2632,9 @@ SizedBox(height: 30.w,),
               ),
               RadioD(
                 options: ['Muito bom', 'Bom', 'Ruim'],
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['estadoGeralDeConservacao'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.05,
@@ -2340,20 +2656,23 @@ SizedBox(height: 30.w,),
                 height: sizeScreen.height * 0.02,
               ),
               textLabel(
-                name: 'Possui alguma facilidade para pessoas  com deficiência ou mobilidade reduzida?',
+                name:
+                    'Possui alguma facilidade para pessoas  com deficiência ou mobilidade reduzida?',
                 fontWeight: FontWeight.bold,
               ),
               SizedBox(
                 height: sizeScreen.height * 0.04,
               ),
               ExpansionTileYoN(
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['possuiFacilidade'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
               textLabel(
-                name: 'obs: responder às questões seguintes',
+                name: 'obs: caso sim, responder às questões seguintes',
                 fontWeight: FontWeight.bold,
               ),
               SizedBox(
@@ -2366,7 +2685,8 @@ SizedBox(height: 30.w,),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['pessoalCapacitadoParaReceberPCD'] = p0,
                 nomes: [
                   'Não',
                   'Física',
@@ -2376,6 +2696,9 @@ SizedBox(height: 30.w,),
                   'Múltipla'
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Rota externa acessível:',
                 fontWeight: FontWeight.bold,
@@ -2383,7 +2706,8 @@ SizedBox(height: 30.w,),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['rotaExternaAcessivel'] = p0,
                 nomes: [
                   'Não',
                   'Estacionamento',
@@ -2397,12 +2721,19 @@ SizedBox(height: 30.w,),
                   'outro'
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Símbolo internacional de acesso:',
                 fontWeight: FontWeight.bold,
               ),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
 
-              const CheckC(
+               CheckC(
+                onChanged: (p0) => valoresjson['simboloInternacionalDeAcesso'] = p0,
                 nomes: [
                   'Não',
                   'Entrada',
@@ -2413,20 +2744,30 @@ SizedBox(height: 30.w,),
                   'Saída de emergência',
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Local de embarque e desembarque',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: sizeScreen.height * 0.02,
+              ),
+               CheckC(
+                onChanged: (p0) => valoresjson['localDeEmbarqueEDesembarque'] = p0,
                 nomes: ['Não', 'Sinalizado', 'Com acesso em nível'],
+              ),
+              SizedBox(
+                height: sizeScreen.height * 0.02,
               ),
               textLabel(
                 name: 'Vaga em estacionamento:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(height: 50.w),
+               CheckC(
+                onChanged: (p0) => valoresjson['vagaEmEstacionamento'] = p0,
                 nomes: [
                   'Não',
                   'Sinalizado',
@@ -2435,13 +2776,19 @@ SizedBox(height: 30.w,),
                   'Rampa de acesso á calçada'
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name:
                     'Área de circulação / acesso interno\npara cadeira de rodas:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+                onChanged:(p0) => valoresjson['areaDeCirculacaoAcessoInterno'] = p0,
                 nomes: [
                   'Não',
                   'Rampa',
@@ -2451,12 +2798,18 @@ SizedBox(height: 30.w,),
                   'Piso regular / antiderrapante'
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Escada:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['escada'] = p0,
                 nomes: [
                   'Não',
                   'Corrimão',
@@ -2465,13 +2818,18 @@ SizedBox(height: 30.w,),
                   'Piso antiderrapante',
                 ],
               ),
-
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Rampa:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['rampa']=p0,
                 nomes: [
                   'Não',
                   'Corrimão',
@@ -2481,12 +2839,18 @@ SizedBox(height: 30.w,),
                   'Inclinação adequada',
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Piso:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['piso']=p0,
                 nomes: [
                   'Não',
                   'Tátil',
@@ -2494,12 +2858,18 @@ SizedBox(height: 30.w,),
                   'Antiderrapante/deslizante',
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Elevador:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['elevador'] = p0,
                 nomes: [
                   'Não',
                   'Sinalizado em braile',
@@ -2508,24 +2878,36 @@ SizedBox(height: 30.w,),
                   'Sensor eletrônico (porta)'
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Equipamento motorizado para deslocamento interno:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+                onChanged: (p0) => valoresjson['equipamentoMotorizadoParaDeslocamentoInterno'] = p0,
                 nomes: [
                   'Não',
                   'Cadeira',
                   'Carrinho',
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Sinalização visual:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['sinalizacaoVisual'] = p0,
                 nomes: [
                   'Não',
                   'Entrada',
@@ -2537,13 +2919,19 @@ SizedBox(height: 30.w,),
                   'Área de lazer',
                   'Área de resgate',
                 ],
+              ),
+              SizedBox(
+                height: 50.w,
               ),
               textLabel(
                 name: 'Sinalização tátil:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['sinalizacaoTatil'] = p0,
                 nomes: [
                   'Não',
                   'Entrada',
@@ -2556,12 +2944,18 @@ SizedBox(height: 30.w,),
                   'Área de resgate',
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Alarme de emergência:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['alarmeDeEmergencia'] = p0,
                 nomes: [
                   'Não',
                   'Sonoro',
@@ -2569,12 +2963,18 @@ SizedBox(height: 30.w,),
                   'Vibratório',
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Comunicação:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['comunicacao'] = p0,
                 nomes: [
                   'Não',
                   'Texto informativo em braile',
@@ -2582,36 +2982,54 @@ SizedBox(height: 30.w,),
                   'Intérprete em libras',
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Balcão de atendimento:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['balcaoDeAtendimento'] = p0,
                 nomes: [
                   'Não',
                   'Rebaixado',
                   'Preferencial para PCD ou com deficiência ou mobilidade reduzida',
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Mobiliário:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['mobiliario'] = p0,
                 nomes: [
                   'Não',
                   'Altura adequada',
                   'Recuo adequado',
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Sanitário:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['sanitario'] = p0,
                 nomes: [
                   'Não',
                   'Porta larga suficiente para entrada de cadeira de rodas ',
@@ -2624,17 +3042,26 @@ SizedBox(height: 30.w,),
                   'Boxe ou banheira daptada',
                 ],
               ),
+              SizedBox(
+                height: 50.w,
+              ),
               textLabel(
                 name: 'Telefone:',
                 fontWeight: FontWeight.bold,
               ),
-
-              const CheckC(
+              SizedBox(
+                height: 50.w,
+              ),
+               CheckC(
+              onChanged: (p0) => valoresjson['telefone'] = p0,
                 nomes: [
                   'Não',
                   'Altura adequada',
                   'Para surdos (TPS ou TTS)',
                 ],
+              ),
+              SizedBox(
+                height: 50.w,
               ),
               textLabel(
                 name:
@@ -2646,7 +3073,9 @@ SizedBox(height: 30.w,),
               ),
 
               ExpansionTileYoN(
-                getValue: (String) {},
+                getValue: (newValue) {
+                  valoresjson['sinalizacaoIndicativa'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -2664,6 +3093,7 @@ SizedBox(height: 30.w,),
                       width: sizeScreen.width * 0.6,
                       //eight: sizeScreen.height * 0.07,
                       child: CustomTextField(
+                        controller: getController('outros'),
                         validat: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Preencha o campo';
@@ -2671,7 +3101,7 @@ SizedBox(height: 30.w,),
                           return null;
                         },
                         name: '',
-                        getValue: (String) {},
+                        getValue: (newValue) {valoresjson['outros'] = newValue;},
                       ))
                 ],
               ),
@@ -2692,6 +3122,7 @@ SizedBox(height: 30.w,),
                 ),
               ),
               CustomTextField(
+                controller: getController('observacoes'),
                 validat: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
@@ -2699,7 +3130,7 @@ SizedBox(height: 30.w,),
                   return null;
                 },
                 name: '',
-                getValue: (String) {},
+                getValue: (newValue) {valoresjson['observacoes']=newValue;},
               ),
               SizedBox(
                 height: sizeScreen.height * 0.05,
@@ -2719,23 +3150,31 @@ SizedBox(height: 30.w,),
                 ),
               ),
               CustomTextField(
+                controller: getController('referencias'),
                 validat: (value) {
+                  
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
                   }
                   return null;
                 },
                 name: '',
-                getValue: (String) {},
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.05,
+                getValue: (newValue) {
+                  valoresjson['referencias']=newValue;
+                },
               ),
 
               SizedBox(
                 height: sizeScreen.height * 0.05,
               ),
-               SendButton(onPressed: () {  },),
+              SendButton(
+                onPressed: () {
+                  autoFillForm();
+                  controllers.forEach((key, value){
+                      print(key);
+                  });
+                },
+              ),
 
               SizedBox(
                 height: sizeScreen.height * 0.05,
