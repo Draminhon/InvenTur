@@ -350,3 +350,152 @@ class Rodovia(Base):
 
     ##Observações
 
+class MeiosDeHospedagem(models.Model):
+   
+    # Dados do formulário e pesquisador
+    tipo_formulario = models.CharField("Tipo de Formulário", max_length=255)
+    nome_pesquisador = models.CharField("Nome do Pesquisador", max_length=255)
+    telefone_pesquisador = models.CharField("Telefone do Pesquisador", max_length=50)
+    email_pesquisador = models.EmailField("Email do Pesquisador", max_length=254)
+    
+    # Dados do coordenador
+    nome_coordenador = models.CharField("Nome do Coordenador", max_length=255)
+    telefone_coordenador = models.CharField("Telefone do Coordenador", max_length=50)
+    email_coordenador = models.EmailField("Email do Coordenador", max_length=254)
+    
+    # Sinalizações e funcionamento
+    sinalizacaoDeAcesso = models.BooleanField("Sinalização de Acesso", default=False)
+    sinalizacaoTuristica = models.BooleanField("Sinalização Turística", default=False)
+    funcionamento24h = models.BooleanField("Funcionamento 24h", default=False)
+    funcionamentoEmFeriados = models.BooleanField("Funcionamento em Feriados", default=False)
+    geradorDeEmergencia = models.BooleanField("Gerador de Emergência", default=False)
+    
+    # Infraestrutura e localização do equipamento/edificação
+    doEquipamentoEspaco = models.TextField("Do Equipamento/Espaço", blank=True, null=True)
+    daAreaOuEdificacaoEmQueEstaLocalizado = models.TextField("Da Área/Edificação em que Está Localizado", blank=True, null=True)
+    possuiFacilidade = models.BooleanField("Possui Facilidade", default=False)
+    sinalizacaoIndicativa = models.BooleanField("Sinalização Indicativa", default=False)
+    tipoDeOrganizacao = models.CharField("Tipo de Organização", max_length=255, blank=True, null=True)
+    proximidades = models.TextField("Proximidades", blank=True, null=True)
+    
+    # Dados relacionados ao turismo e pagamentos
+    segmentosOuTurismoEspecializado = models.TextField("Segmentos ou Turismo Especializado", blank=True, null=True)
+    formasDePagamento = models.TextField("Formas de Pagamento", blank=True, null=True)
+    reservas = models.BooleanField("Reservas", default=False)
+    atendimentoEmLinguaEstrangeira = models.BooleanField("Atendimento em Língua Estrangeira", default=False)
+    informativosImpressos = models.BooleanField("Informativos Impressos", default=False)
+    restricoes = models.TextField("Restrições", blank=True, null=True)
+    mesesAltaTemporada = models.TextField("Meses de Alta Temporada", blank=True, null=True)
+    origemDosVisitantes = models.TextField("Origem dos Visitantes", blank=True, null=True)
+    
+    # Produtos e serviços
+    produtosHigienePessoal = models.TextField("Produtos de Higiene Pessoal", blank=True, null=True)
+    equipamentosEServicos = models.TextField("Equipamentos e Serviços", blank=True, null=True)
+    estacionamento = models.BooleanField("Estacionamento", default=False)
+    restaurante = models.BooleanField("Restaurante", default=False)
+    lanchonete = models.BooleanField("Lanchonete", default=False)
+    instalacaoEEspacos = models.TextField("Instalação e Espaços", blank=True, null=True)
+    outrosEspacosEAtividades = models.TextField("Outros Espaços e Atividades", blank=True, null=True)
+    servicos = models.TextField("Serviços", blank=True, null=True)
+    equipamentos = models.TextField("Equipamentos", blank=True, null=True)
+    facilidadesEServicos = models.TextField("Facilidades e Serviços", blank=True, null=True)
+    facilidadesParaExecutivos = models.TextField("Facilidades para Executivos", blank=True, null=True)
+    pessoalCapacitadoParaReceberPCD = models.BooleanField("Pessoal Capacitado para Receber PCD", default=False)
+    
+    # Acessibilidade
+    rotaExternaAcessivel = models.BooleanField("Rota Externa Acessível", default=False)
+    simboloInternacionalDeAcesso = models.BooleanField("Símbolo Internacional de Acesso", default=False)
+    localDeEmbarqueEDesembarque = models.BooleanField("Local de Embarque e Desembarque", default=False)
+    vagaEmEstacionamento = models.BooleanField("Vaga em Estacionamento", default=False)
+    areaDeCirculacaoAcessoInterno = models.TextField("Área de Circulação/Acesso Interno", blank=True, null=True)
+    escada = models.BooleanField("Escada", default=False)
+    rampa = models.BooleanField("Rampa", default=False)
+    piso = models.BooleanField("Piso", default=False)
+    elevador = models.BooleanField("Elevador", default=False)
+    equipamentoMotorizadoParaDeslocamentoInterno = models.BooleanField("Equipamento Motorizado para Deslocamento Interno", default=False)
+    sinalizacaoVisual = models.BooleanField("Sinalização Visual", default=False)
+    sinalizacaoTatil = models.BooleanField("Sinalização Tátil", default=False)
+    alarmeDeEmergencia = models.BooleanField("Alarme de Emergência", default=False)
+    comunicacao = models.BooleanField("Comunicação", default=False)
+    balcaoDeAtendimento = models.BooleanField("Balcão de Atendimento", default=False)
+    mobiliario = models.TextField("Mobiliário", blank=True, null=True)
+    sanitario = models.TextField("Sanitário", blank=True, null=True)
+    telefone = models.CharField("Telefone", max_length=50, blank=True, null=True)
+    
+    # Classificação e localização do meio de hospedagem
+    tipo = models.CharField("Tipo", max_length=255, blank=True, null=True)
+    subtipo = models.CharField("Subtipo", max_length=255, blank=True, null=True)
+    natureza = models.CharField("Natureza", max_length=255, blank=True, null=True)
+    localizacao = models.TextField("Localização", blank=True, null=True)
+    tipoDeDiaria = models.CharField("Tipo de Diária", max_length=255, blank=True, null=True)
+    periodo = models.CharField("Período", max_length=255, blank=True, null=True)
+    tabelasHorario = models.TextField("Tabelas de Horário", blank=True, null=True)
+    energiaEletrica = models.TextField("Energia Elétrica", blank=True, null=True)
+    estadoGeralDeConservacao = models.CharField("Estado Geral de Conservação", max_length=255, blank=True, null=True)
+    
+    # Dados de turismo e localização geográfica
+    estadosTuristas = models.TextField("Estados Turistas", blank=True, null=True)
+    paisesTuristas = models.TextField("Países Turistas", blank=True, null=True)
+    uf = models.CharField("UF", max_length=2, blank=True, null=True)
+    regiao_turistica = models.CharField("Região Turística", max_length=255, blank=True, null=True)
+    municipio = models.CharField("Município", max_length=255, blank=True, null=True)
+    
+    # Dados empresariais
+    razaoSocial = models.CharField("Razão Social", max_length=255, blank=True, null=True)
+    nomeFantasia = models.CharField("Nome Fantasia", max_length=255, blank=True, null=True)
+    codigoCNAE = models.CharField("Código CNAE", max_length=50, blank=True, null=True)
+    atividadeEconomica = models.TextField("Atividade Econômica", blank=True, null=True)
+    inscricaoMunicipal = models.CharField("Inscrição Municipal", max_length=50, blank=True, null=True)
+    nomeDaRede = models.CharField("Nome da Rede", max_length=255, blank=True, null=True)
+    CNPJ = models.CharField("CNPJ", max_length=20, blank=True, null=True)
+    inicioDaAtividade = models.DateField("Início da Atividade", blank=True, null=True)
+    
+    # Dados de quantitativos e capacidade
+    qtdeFuncionariosPermanentes = models.IntegerField("Qtd. Funcionários Permanentes", default=0)
+    qtdeFuncionariosTemporarios = models.IntegerField("Qtd. Funcionários Temporários", default=0)
+    qtdeFuncionarisComDeficiencia = models.IntegerField("Qtd. Funcionários com Deficiência", default=0)
+    latitude = models.DecimalField("Latitude", max_digits=9, decimal_places=6, blank=True, null=True)
+    longitute = models.DecimalField("Longitude", max_digits=9, decimal_places=6, blank=True, null=True)
+    
+    # Endereço e contato
+    avenidaRuaEtc = models.CharField("Avenida/Rua/etc.", max_length=255, blank=True, null=True)
+    bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
+    distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
+    CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
+    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
+    email = models.EmailField("Email", max_length=254, blank=True, null=True)
+    site = models.URLField("Site", blank=True, null=True)
+    pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
+    
+    # Dados de tabelas e informações adicionais
+    tabelaMTUR = models.TextField("Tabela MTUR", blank=True, null=True)
+    outrasRegrasEInformacoes = models.TextField("Outras Regras e Informações", blank=True, null=True)
+    nAnoOcupacao = models.IntegerField("Ano de Ocupação", default=0)
+    nOcupacaoAltaTemporada = models.IntegerField("Ocupação em Alta Temporada", default=0)
+    nTotalDeUH = models.IntegerField("Total de UH", default=0)
+    nTotalDeLeitos = models.IntegerField("Total de Leitos", default=0)
+    nUhAdaptadasParaPCD = models.IntegerField("UH Adaptadas para PCD", default=0)
+    nCapacidadeDeVeiculos = models.IntegerField("Capacidade de Veículos", default=0)
+    nAutomoveis = models.IntegerField("Número de Automóveis", default=0)
+    nOnibus = models.IntegerField("Número de Ônibus", default=0)
+    capacidadeEmKVA = models.DecimalField("Capacidade (KVA)", max_digits=10, decimal_places=2, blank=True, null=True)
+    geradorCapacidadeEmKVA = models.DecimalField("Capacidade do Gerador (KVA)", max_digits=10, decimal_places=2, blank=True, null=True)
+    nCapacidadeInstaladaPorDia = models.IntegerField("Capacidade Instalada por Dia", default=0)
+    nPessoasAtendidasSentadas = models.IntegerField("Qtd. de Pessoas Atendidas Sentadas", default=0)
+    nCapacidadeSimultanea = models.IntegerField("Capacidade Simultânea", default=0)
+    nPessoasAtendidasSentadasSimultanea = models.IntegerField("Qtd. de Pessoas Atendidas Sentadas (Simultânea)", default=0)
+    lanchoneteCapacidadeInstaladaPorDia = models.IntegerField("Lanchonete - Capacidade Instalada por Dia", default=0)
+    lanchoneteCapacidadePessoasAtendidasSentadas = models.IntegerField("Lanchonete - Pessoas Atendidas Sentadas", default=0)
+    lanchoneteCapacidadeSimultanea = models.IntegerField("Lanchonete - Capacidade Simultânea", default=0)
+    lanchoneteCapacidadeSentadasSimultanea = models.IntegerField("Lanchonete - Pessoas Sentadas Simultânea", default=0)
+    
+    # Tabelas de instalações e equipamentos/espaços
+    tabelaInstalacoes = models.TextField("Tabela Instalações", blank=True, null=True)
+    tabelaEquipamentoEEspaco = models.TextField("Tabela Equipamento e Espaço", blank=True, null=True)
+    tabelaEquipamentoEEspaco2 = models.TextField("Tabela Equipamento e Espaço 2", blank=True, null=True)
+    
+    # Observações e referências
+    outros = models.TextField("Outros", blank=True, null=True)
+    observacoes = models.TextField("Observações", blank=True, null=True)
+    referencias = models.TextField("Referências", blank=True, null=True)

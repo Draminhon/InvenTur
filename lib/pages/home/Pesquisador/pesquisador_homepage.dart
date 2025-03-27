@@ -198,7 +198,7 @@ static Future<http.Response> _getWithToken(Uri url, String token) async {
                       ));
                 } else {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+                    return Center(child: const CircularProgressIndicator());
                   } else if (snapshot.hasData) {
                     final pesquisa = snapshot.data!;
                     if (pesquisa.isEmpty) {

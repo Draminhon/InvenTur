@@ -269,7 +269,6 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
 
           final tipo = equipamento['tipo'];
           final dados = equipamento['dados'];
-        print(dados);
           return GestureDetector(
             onTap: () {
               updateQtdeLocais(dados['pesquisa'], posts.length);
@@ -283,7 +282,6 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                                   RodoviaModel.fromJson(equipamento['dados']),
                             )));
               } else if (equipamento['tipo'] == 'SistemaDeSeguranca') {
-                print(equipamento['dados']);
 
                 Navigator.pushReplacement(
                     context,

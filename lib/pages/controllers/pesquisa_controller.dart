@@ -124,8 +124,7 @@ final prefs = await SharedPreferences.getInstance();
 
   void setPaises() async{
     _paises = await _brasilService.fetchPaises();
-    print('oiee');
-    print(_paises);
+
   }
 
   void setMunicipios(int uf) async {
@@ -134,7 +133,6 @@ final prefs = await SharedPreferences.getInstance();
 
   void addPesquisa(List<Pesquisa> pesquisas) {
     _pesquisas = pesquisas;
-    print(pesquisas);
     notifyListeners();
   }
 
@@ -151,7 +149,6 @@ final prefs = await SharedPreferences.getInstance();
 
   void removeUserPesquisa(User user) {
     _usersPesquisas.remove(user);
-    print(_usersPesquisas);
     notifyListeners();
   }
 

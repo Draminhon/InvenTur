@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/home/Administrador/account_page.dart';
 import 'package:inventur/pages/controllers/user_controller.dart';
@@ -7,7 +10,7 @@ import 'package:inventur/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-class OptionsDrawer extends StatelessWidget {
+class OptionsDrawer extends StatefulWidget {
   final UserController userController;
   final int  userId;
   final String userName;
@@ -15,12 +18,28 @@ class OptionsDrawer extends StatelessWidget {
   final String cpf;
   const OptionsDrawer({super.key, required this.userController, required this.userName, required this.userEmail, required this.cpf, required this.userId});
 
+  @override
+  State<OptionsDrawer> createState() => _OptionsDrawerState();
+}
+
+class _OptionsDrawerState extends State<OptionsDrawer> {
+
+
+  bool _isLoading = false;
+
 
 Future<void> logout(BuildContext context) async {
+
+
+  setState(() {
+    _isLoading = true;
+  });
+
+
   final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('access_token');
 String? refreshToken = prefs.getString('refresh_token');
-  final response = await http.post(
+try{final response = await http.post(
     Uri.parse('${AppConstants.BASE_URI}/api/v1/logout/'),
     headers: {
       'Authorization': 'Bearer $token',
@@ -37,20 +56,26 @@ String? refreshToken = prefs.getString('refresh_token');
     Navigator.pushReplacementNamed(context, '/Login');
   }else{
     print('Erro ao fazer logout: ${response.body}');
+  }}catch(e){
+    print("Erro $e");
+  }finally{
+    setState(() {
+      _isLoading = false;
+    });
   }
-}
   
+}
 
   @override
   Widget build(BuildContext context) {
-    print(userName);
+    print(widget.userName);
     return Drawer(
       backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       child: Column(
         children: [
            UserAccountsDrawerHeader(
-            accountName: Text(userName), 
-            accountEmail: Text(userEmail),
+            accountName: Text(widget.userName), 
+            accountEmail: Text(widget.userEmail),
             currentAccountPicture: CircleAvatar(
               child: Icon(
                 Icons.admin_panel_settings,
@@ -69,7 +94,7 @@ String? refreshToken = prefs.getString('refresh_token');
             ),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => ContaPesquisador(userName: userName, userEmail: userEmail, userCPF: cpf, userId: userId,)
+                builder: (context) => ContaPesquisador(userName: widget.userName, userEmail: widget.userEmail, userCPF: widget.cpf, userId: widget.userId,)
               ),
             ),
             child: const Row(
@@ -113,23 +138,24 @@ String? refreshToken = prefs.getString('refresh_token');
             onPressed: () async {
               logout(context);
             },
-            child: const Row(
+            child:  Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.logout_rounded),
+              _isLoading?SizedBox():  Icon(Icons.logout_rounded),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  child: Text(
+                  child: _isLoading == false? Text(
                     "Sair",
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold
                     ),
-                  ),
+                  ) : CircularProgressIndicator(),
                 ),
               ],
             ),
           ),
+
         ],
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
@@ -406,16 +408,36 @@ class DayConfig {
   });
 }
 
-class TablesInstalacoes extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
+class TablesInstalacoes extends StatefulWidget {
 
-  TablesInstalacoes({super.key});
+  final Function(Map<String, dynamic>)? onChanged;
+  TablesInstalacoes({super.key, this.onChanged});
+
+  @override
+  State<TablesInstalacoes> createState() => _TablesInstalacoesState();
+}
+
+class _TablesInstalacoesState extends State<TablesInstalacoes> {
+  final _formKey = GlobalKey<FormState>();
+  Map<String, dynamic> _valoresJson={};
+  Map<String, TextEditingController> controllers = {};
+
+  @override
+  void initState(){
+    super.initState();
+
+  }
+
+ TextEditingController getController(String key) {
+    controllers[key] ??= TextEditingController();
+    return controllers[key]!;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
+
+    return 
+       Column(
         children: [
           textLabel(
             name: 'Auditório',
@@ -426,22 +448,34 @@ class TablesInstalacoes extends StatelessWidget {
               Expanded(
                 child: CustomTextField(
                   name: 'quantidade',
+                  controller: getController('auditorio quantidade'),
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  getValue: (p0) {
+                    _valoresJson['auditorioQUantidade'] = p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               ),
               Expanded(
                 child: CustomTextField(
                   name: 'área total(m²)',
+                  controller: getController('auditorio area total'),
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  getValue: (p0) {
+                    _valoresJson['auditorioAreaTotal'] = p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               ),
               Expanded(
                 child: CustomTextField(
                   name: 'capacidade nºpessoas',
+                  controller: getController('auditorio capacidade n de pessoas'),
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  getValue: (p0) {
+                    _valoresJson['auditorioCapacidadeDePessoas'] = p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               )
             ],
@@ -455,22 +489,35 @@ class TablesInstalacoes extends StatelessWidget {
               Expanded(
                 child: CustomTextField(
                   name: 'quantidade',
+                  controller: getController('salas modulares quantidade'),
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  getValue: (p0) {
+                    _valoresJson['salasModularesQuantidade'] = p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               ),
               Expanded(
                 child: CustomTextField(
                   name: 'área total(m²)',
+                  controller: getController('salas modulares area total'),
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  getValue: (p0) {
+                    _valoresJson['salasModularesAreaTotal'] = p0;
+                    widget.onChanged?.call(_valoresJson);
+
+                  },
                 ),
               ),
               Expanded(
                 child: CustomTextField(
                   name: 'capacidade nºpessoas',
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  controller: getController('capacidade de pessoas'),
+                  getValue: (p0) {
+                    _valoresJson['salasModularesCapacidadeDePessoas'] = p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               )
             ],
@@ -485,21 +532,33 @@ class TablesInstalacoes extends StatelessWidget {
                 child: CustomTextField(
                   name: 'quantidade',
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  controller: getController('pavilhao de feiras quantidade'),
+                  getValue: (p0) {
+                    _valoresJson['pavilhaoDeFeirasQuantidade']=p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               ),
               Expanded(
                 child: CustomTextField(
                   name: 'área total(m²)',
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  controller: getController('pavilhao de feiras area total'),
+                  getValue: (p0) {
+                    _valoresJson['pavilhaoDeFeirasAreaTotal'] = p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               ),
               Expanded(
                 child: CustomTextField(
                   name: 'capacidade nºpessoas',
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  controller: getController('pavilhao de feiras n de pessoas'),
+                  getValue: (p0) {
+                    _valoresJson['pavilhaoDeFeirasCapacidadeDePessoas'] = p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               )
             ],
@@ -514,21 +573,33 @@ class TablesInstalacoes extends StatelessWidget {
                 child: CustomTextField(
                   name: 'quantidade',
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  controller: getController('area de exposicao coberta quantidade'),
+                  getValue: (p0) {
+                    _valoresJson['areaDeExposicaoCobertaQuantidade'] = p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               ),
               Expanded(
                 child: CustomTextField(
                   name: 'área total(m²)',
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  controller: getController('area de exposicao coberta area total'),
+                  getValue: (p0) {
+                    _valoresJson['areaDeExposicaoCobertaAreaTotal']=p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               ),
               Expanded(
                 child: CustomTextField(
                   name: 'capacidade nºpessoas',
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  controller: getController('area de exposicao coberta capacidade'),
+                  getValue: (p0) {
+                    _valoresJson['areaDeExposicaoCobertaCapacidadeDePessoas'] = p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               )
             ],
@@ -543,28 +614,38 @@ class TablesInstalacoes extends StatelessWidget {
                 child: CustomTextField(
                   name: 'quantidade',
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  controller: getController('area de exposicao nao coberta quantidade'),
+                  getValue: (p0) {
+                    _valoresJson['areaDeExposicaoNaoCobertaQuantidade'] = p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               ),
               Expanded(
                 child: CustomTextField(
                   name: 'área total(m²)',
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  controller: getController('area de exposicao nao coberta area total'),
+                  getValue: (p0) {
+                    _valoresJson['areaDeExposicaoNaoCobertaAreaTotal']=p0;
+                    widget.onChanged?.call(_valoresJson);
+                  },
                 ),
               ),
               Expanded(
                 child: CustomTextField(
                   name: 'capacidade nºpessoas',
                   validat: (p0) {},
-                  getValue: (p0) {},
+                  controller: getController('area de exposicao nao coberta capacidade'),
+                  getValue: (p0) {
+                    _valoresJson['areaDeExposicaoNaoCobertaCapacidadeDePessoas'] = p0;
+                  },
                 ),
               )
             ],
           ),
         ],
-      ),
-    );
+      );
   }
 }
 
