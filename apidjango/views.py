@@ -368,6 +368,9 @@ class AlimentosEBebidasListCreateView(generics.ListCreateAPIView):
     queryset = AlimentosEBebidas.objects.all()
     serializer_class = AlimentosEBebidasSerializer
 
+class MeiosDeHospedagemListCreateView(generics.ListCreateAPIView):
+    queryset = MeioDeHospedagem.objects.all()
+    serializer_class = MeioDeHospedagemSerializer
 
 class AlimentosEBebidasUpdateAPIView(generics.UpdateAPIView):
     queryset = AlimentosEBebidas.objects.all()

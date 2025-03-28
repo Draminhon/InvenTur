@@ -93,7 +93,7 @@ class Base(models.Model):
 
     tipo = models.CharField(max_length=255)
   
-
+ 
     observacoes = models.TextField()
     referencias = models.TextField()
 
@@ -350,95 +350,84 @@ class Rodovia(Base):
 
     ##Observações
 
-class MeiosDeHospedagem(models.Model):
+class MeioDeHospedagem(Base):
    
     # Dados do formulário e pesquisador
-    tipo_formulario = models.CharField("Tipo de Formulário", max_length=255)
-    nome_pesquisador = models.CharField("Nome do Pesquisador", max_length=255)
-    telefone_pesquisador = models.CharField("Telefone do Pesquisador", max_length=50)
-    email_pesquisador = models.EmailField("Email do Pesquisador", max_length=254)
     
     # Dados do coordenador
-    nome_coordenador = models.CharField("Nome do Coordenador", max_length=255)
-    telefone_coordenador = models.CharField("Telefone do Coordenador", max_length=50)
-    email_coordenador = models.EmailField("Email do Coordenador", max_length=254)
     
     # Sinalizações e funcionamento
-    sinalizacaoDeAcesso = models.BooleanField("Sinalização de Acesso", default=False)
-    sinalizacaoTuristica = models.BooleanField("Sinalização Turística", default=False)
-    funcionamento24h = models.BooleanField("Funcionamento 24h", default=False)
-    funcionamentoEmFeriados = models.BooleanField("Funcionamento em Feriados", default=False)
-    geradorDeEmergencia = models.BooleanField("Gerador de Emergência", default=False)
+    sinalizacaoDeAcesso = models.CharField("Sinalização de Acesso",max_length=255)
+    sinalizacaoTuristica = models.CharField("Sinalização Turística",max_length=255)
+    funcionamento24h = models.CharField("Funcionamento 24h",max_length=255)
+    funcionamentoEmFeriados = models.CharField("Funcionamento em Feriados",max_length=255)
+    geradorDeEmergencia = models.CharField("Gerador de Emergência",max_length=255)
     
     # Infraestrutura e localização do equipamento/edificação
     doEquipamentoEspaco = models.TextField("Do Equipamento/Espaço", blank=True, null=True)
     daAreaOuEdificacaoEmQueEstaLocalizado = models.TextField("Da Área/Edificação em que Está Localizado", blank=True, null=True)
-    possuiFacilidade = models.BooleanField("Possui Facilidade", default=False)
-    sinalizacaoIndicativa = models.BooleanField("Sinalização Indicativa", default=False)
-    tipoDeOrganizacao = models.CharField("Tipo de Organização", max_length=255, blank=True, null=True)
-    proximidades = models.TextField("Proximidades", blank=True, null=True)
+    possuiFacilidade = models.CharField("Possui Facilidade",max_length=255,)
+    sinalizacaoIndicativa = models.CharField("Sinalização Indicativa", max_length=255)
+    tipoDeOrganizacao = models.JSONField("Tipo de Organização")
+    proximidades = models.JSONField("Proximidades")
     
     # Dados relacionados ao turismo e pagamentos
-    segmentosOuTurismoEspecializado = models.TextField("Segmentos ou Turismo Especializado", blank=True, null=True)
-    formasDePagamento = models.TextField("Formas de Pagamento", blank=True, null=True)
-    reservas = models.BooleanField("Reservas", default=False)
-    atendimentoEmLinguaEstrangeira = models.BooleanField("Atendimento em Língua Estrangeira", default=False)
-    informativosImpressos = models.BooleanField("Informativos Impressos", default=False)
-    restricoes = models.TextField("Restrições", blank=True, null=True)
-    mesesAltaTemporada = models.TextField("Meses de Alta Temporada", blank=True, null=True)
-    origemDosVisitantes = models.TextField("Origem dos Visitantes", blank=True, null=True)
+    segmentosOuTurismoEspecializado = models.JSONField("Segmentos ou Turismo Especializado")
+    formasDePagamento = models.JSONField("Formas de Pagamento")
+    reservas = models.JSONField("Reservas")
+    atendimentoEmLinguaEstrangeira = models.JSONField("Atendimento em Língua Estrangeira")
+    informativosImpressos = models.JSONField("Informativos Impressos",)
+    restricoes = models.JSONField("Restrições")
+    mesesAltaTemporada = models.JSONField("Meses de Alta Temporada")
+    origemDosVisitantes = models.JSONField("Origem dos Visitantes",)
     
     # Produtos e serviços
-    produtosHigienePessoal = models.TextField("Produtos de Higiene Pessoal", blank=True, null=True)
-    equipamentosEServicos = models.TextField("Equipamentos e Serviços", blank=True, null=True)
-    estacionamento = models.BooleanField("Estacionamento", default=False)
-    restaurante = models.BooleanField("Restaurante", default=False)
-    lanchonete = models.BooleanField("Lanchonete", default=False)
-    instalacaoEEspacos = models.TextField("Instalação e Espaços", blank=True, null=True)
-    outrosEspacosEAtividades = models.TextField("Outros Espaços e Atividades", blank=True, null=True)
-    servicos = models.TextField("Serviços", blank=True, null=True)
-    equipamentos = models.TextField("Equipamentos", blank=True, null=True)
-    facilidadesEServicos = models.TextField("Facilidades e Serviços", blank=True, null=True)
-    facilidadesParaExecutivos = models.TextField("Facilidades para Executivos", blank=True, null=True)
-    pessoalCapacitadoParaReceberPCD = models.BooleanField("Pessoal Capacitado para Receber PCD", default=False)
+    produtosHigienePessoal = models.JSONField("Produtos de Higiene Pessoal")
+    equipamentosEServicos = models.JSONField("Equipamentos e Serviços")
+    estacionamento = models.JSONField("Estacionamento")
+    restaurante = models.JSONField("Restaurante",)
+    lanchonete = models.JSONField("Lanchonete",)
+    instalacaoEEspacos = models.JSONField("Instalação e Espaços")
+    outrosEspacosEAtividades = models.JSONField("Outros Espaços e Atividades")
+    servicos = models.JSONField("Serviços")
+    equipamentos = models.JSONField("Equipamentos")
+    facilidadesEServicos = models.JSONField("Facilidades e Serviços")
+    facilidadesParaExecutivos = models.JSONField("Facilidades para Executivos")
+    pessoalCapacitadoParaReceberPCD = models.JSONField("Pessoal Capacitado para Receber PCD")
     
     # Acessibilidade
-    rotaExternaAcessivel = models.BooleanField("Rota Externa Acessível", default=False)
-    simboloInternacionalDeAcesso = models.BooleanField("Símbolo Internacional de Acesso", default=False)
-    localDeEmbarqueEDesembarque = models.BooleanField("Local de Embarque e Desembarque", default=False)
-    vagaEmEstacionamento = models.BooleanField("Vaga em Estacionamento", default=False)
-    areaDeCirculacaoAcessoInterno = models.TextField("Área de Circulação/Acesso Interno", blank=True, null=True)
-    escada = models.BooleanField("Escada", default=False)
-    rampa = models.BooleanField("Rampa", default=False)
-    piso = models.BooleanField("Piso", default=False)
-    elevador = models.BooleanField("Elevador", default=False)
-    equipamentoMotorizadoParaDeslocamentoInterno = models.BooleanField("Equipamento Motorizado para Deslocamento Interno", default=False)
-    sinalizacaoVisual = models.BooleanField("Sinalização Visual", default=False)
-    sinalizacaoTatil = models.BooleanField("Sinalização Tátil", default=False)
-    alarmeDeEmergencia = models.BooleanField("Alarme de Emergência", default=False)
-    comunicacao = models.BooleanField("Comunicação", default=False)
-    balcaoDeAtendimento = models.BooleanField("Balcão de Atendimento", default=False)
-    mobiliario = models.TextField("Mobiliário", blank=True, null=True)
-    sanitario = models.TextField("Sanitário", blank=True, null=True)
-    telefone = models.CharField("Telefone", max_length=50, blank=True, null=True)
+    rotaExternaAcessivel = models.JSONField("Rota Externa Acessível")
+    simboloInternacionalDeAcesso = models.JSONField("Símbolo Internacional de Acesso")
+    localDeEmbarqueEDesembarque = models.JSONField("Local de Embarque e Desembarque")
+    vagaEmEstacionamento = models.JSONField("Vaga em Estacionamento")
+    areaDeCirculacaoAcessoInterno = models.JSONField("Área de Circulação/Acesso Interno")
+    escada = models.JSONField("Escada")
+    rampa = models.JSONField("Rampa",)
+    piso = models.JSONField("Piso")
+    elevador = models.JSONField("Elevador",)
+    equipamentoMotorizadoParaDeslocamentoInterno = models.JSONField("Equipamento Motorizado para Deslocamento Interno")
+    sinalizacaoVisual = models.JSONField("Sinalização Visual")
+    sinalizacaoTatil = models.JSONField("Sinalização Tátil")
+    alarmeDeEmergencia = models.JSONField("Alarme de Emergência")
+    comunicacao = models.JSONField("Comunicação")
+    balcaoDeAtendimento = models.JSONField("Balcão de Atendimento")
+    mobiliario = models.JSONField("Mobiliário",)
+    sanitario = models.JSONField("Sanitário")
+    telefone = models.JSONField("Telefone")
     
     # Classificação e localização do meio de hospedagem
-    tipo = models.CharField("Tipo", max_length=255, blank=True, null=True)
     subtipo = models.CharField("Subtipo", max_length=255, blank=True, null=True)
     natureza = models.CharField("Natureza", max_length=255, blank=True, null=True)
     localizacao = models.TextField("Localização", blank=True, null=True)
     tipoDeDiaria = models.CharField("Tipo de Diária", max_length=255, blank=True, null=True)
     periodo = models.CharField("Período", max_length=255, blank=True, null=True)
-    tabelasHorario = models.TextField("Tabelas de Horário", blank=True, null=True)
+    tabelasHorario = models.JSONField("Tabelas de Horário")
     energiaEletrica = models.TextField("Energia Elétrica", blank=True, null=True)
     estadoGeralDeConservacao = models.CharField("Estado Geral de Conservação", max_length=255, blank=True, null=True)
     
     # Dados de turismo e localização geográfica
-    estadosTuristas = models.TextField("Estados Turistas", blank=True, null=True)
-    paisesTuristas = models.TextField("Países Turistas", blank=True, null=True)
-    uf = models.CharField("UF", max_length=2, blank=True, null=True)
-    regiao_turistica = models.CharField("Região Turística", max_length=255, blank=True, null=True)
-    municipio = models.CharField("Município", max_length=255, blank=True, null=True)
+    estadosTuristas = models.JSONField("Estados Turistas")
+    paisesTuristas = models.JSONField("Países Turistas")
     
     # Dados empresariais
     razaoSocial = models.CharField("Razão Social", max_length=255, blank=True, null=True)
@@ -465,14 +454,14 @@ class MeiosDeHospedagem(models.Model):
     whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
     instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
     email = models.EmailField("Email", max_length=254, blank=True, null=True)
-    site = models.URLField("Site", blank=True, null=True)
+    site = models.CharField("Site", max_length=255)
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
     # Dados de tabelas e informações adicionais
-    tabelaMTUR = models.TextField("Tabela MTUR", blank=True, null=True)
+    tabelaMTUR = models.JSONField("Tabela MTUR")
     outrasRegrasEInformacoes = models.TextField("Outras Regras e Informações", blank=True, null=True)
-    nAnoOcupacao = models.IntegerField("Ano de Ocupação", default=0)
-    nOcupacaoAltaTemporada = models.IntegerField("Ocupação em Alta Temporada", default=0)
+    nAnoOcupacao = models.CharField("Ano de Ocupação", max_length=255)
+    nOcupacaoAltaTemporada = models.CharField("Ocupação em Alta Temporada", max_length=255)
     nTotalDeUH = models.IntegerField("Total de UH", default=0)
     nTotalDeLeitos = models.IntegerField("Total de Leitos", default=0)
     nUhAdaptadasParaPCD = models.IntegerField("UH Adaptadas para PCD", default=0)
@@ -491,11 +480,11 @@ class MeiosDeHospedagem(models.Model):
     lanchoneteCapacidadeSentadasSimultanea = models.IntegerField("Lanchonete - Pessoas Sentadas Simultânea", default=0)
     
     # Tabelas de instalações e equipamentos/espaços
-    tabelaInstalacoes = models.TextField("Tabela Instalações", blank=True, null=True)
-    tabelaEquipamentoEEspaco = models.TextField("Tabela Equipamento e Espaço", blank=True, null=True)
-    tabelaEquipamentoEEspaco2 = models.TextField("Tabela Equipamento e Espaço 2", blank=True, null=True)
+    tabelaInstalacoes = models.JSONField("Tabela Instalações")
+    tabelaEquipamentoEEspaco = models.JSONField("Tabela Equipamento e Espaço", )
+    tabelaEquipamentoEEspaco2 = models.JSONField("Tabela Equipamento e Espaço 2", )
     
     # Observações e referências
     outros = models.TextField("Outros", blank=True, null=True)
-    observacoes = models.TextField("Observações", blank=True, null=True)
-    referencias = models.TextField("Referências", blank=True, null=True)
+
+

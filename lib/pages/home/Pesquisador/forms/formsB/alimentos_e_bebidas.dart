@@ -2323,7 +2323,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                             .getSelectedValues()
                             .toList();
 
+                  
                     _formKey.currentState!.save();
+
                    sendForm(valoresjson);
                     valoresjson.forEach(
                       (key, value) {

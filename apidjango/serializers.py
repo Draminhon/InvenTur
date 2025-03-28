@@ -147,6 +147,13 @@ class AlimentosEBebidasSerializer(serializers.ModelSerializer):
         model = AlimentosEBebidas
         fields = '__all__'
 
+
+
+class MeioDeHospedagemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MeioDeHospedagem
+        fields = '__all__'
+
 class EquipamentoSerializer(serializers.Serializer):
     tipo = serializers.CharField()
     dados = serializers.JSONField()

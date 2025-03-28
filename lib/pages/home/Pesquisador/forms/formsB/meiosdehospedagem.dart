@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
@@ -17,7 +18,10 @@ import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/apis/paises.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
 import 'package:inventur/pages/widgets/auto_complete_text_field.dart';
-
+import 'package:inventur/services/admin_service.dart';
+import 'package:inventur/utils/app_constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 class MeiosDeHospedagem extends StatefulWidget {
   MeiosDeHospedagem({super.key});
 
@@ -26,6 +30,37 @@ class MeiosDeHospedagem extends StatefulWidget {
 }
 
 class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
+
+
+
+    Future<void> sendForm(Map<String, dynamic> valoresjson) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
+    final url =
+        Uri.parse(AppConstants.BASE_URI + '/api/v1/meiosdehospedagem/create/');
+    int? pesquisa_id = await getPesquisaId();
+
+    try {
+      valoresjson['pesquisa'] = pesquisa_id;
+      final response = await http.post(url,
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token'
+          },
+          body: json.encode(valoresjson));
+      if (response.statusCode == 201) {
+        debugPrint("Formulário enviado com sucesso!");
+      } else {
+        debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
+      }
+    } catch (e) {
+      print('Erro: $e');
+    }
+  }
+
+
+
+
   final _formKey = GlobalKey<FormState>();
 
   late Estado? _estadoSelecionado = Estado(id: -1, sigla: '', nome: '');
@@ -3250,7 +3285,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   autoFillForm();
                                       _formKey.currentState!.save();
 
-              
+                  sendForm(valoresjson);
                   valoresjson.forEach((key, value){
                      print('$key');
 
