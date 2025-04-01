@@ -264,138 +264,166 @@ class MeiosDeHospedagemModel{
   });
 
   MeiosDeHospedagemModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    tipoFormulario = json['tipo_formulario'];
-    uf = json['uf'];
-    regiaoTuristica = json['regiao_turistica'];
-    municipio = json['municipio'];
-    tipo = json['tipo'];
-    observacoes = json['observacoes'];
-    referencias = json['referencias'];
-    nomePesquisador = json['nome_pesquisador'];
-    telefonePesquisador = json['telefone_pesquisador'];
-    emailPesquisador = json['email_pesquisador'];
-    nomeCoordenador = json['nome_coordenador'];
-    telefoneCoordenador = json['telefone_coordenador'];
-    emailCoordenador = json['email_coordenador'];
-    sinalizacaoDeAcesso = json['sinalizacao_de_acesso'];
-    sinalizacaoTuristica = json['sinalizacao_turistica'];
-    funcionamento24h = json['funcionamento_24h'];
-    funcionamentoEmFeriados = json['funcionamento_em_feriados'];
-    geradorDeEmergencia = json['gerador_de_emergencia'];
-    doEquipamentoEspaco = json['do_equipamento_espaco'];
-    daAreaOuEdificacaoEmQueEstaLocalizado = json['da_area_ou_edificacao_em_que_esta_localizado'];
-    possuiFacilidade = json['possui_facilidade'];
-    sinalizacaoIndicativa = json['sinalizacao_indicativa'];
-    tipoDeOrganizacao = json['tipo_de_organizacao'] != null
-        ? List<String>.from(json['tipo_de_organizacao']): null;
-    proximidades = json['proximidades'] != null
-        ? List<String>.from(json['proximidades'])
-        : null;
-    segmentosOuTurismoEspecializado =
-        List<String>.from(json['segmentosOuTurismoEspecializado']);
-    formasDePagamento = List<String>.from(json['formas_de_pagamento']);
-    reservas = List<String>.from(json['reservas']);
-    atendimentoEmLinguaEstrangeira =
-        List<String>.from(json['atendimento_em_lingua_estrangeira']);
-    informativosImpressos = List<String>.from(json['informativos_impressos']);
-    restricoes = List<String>.from(json['restricoes']);
-    mesesAltaTemporada = List<String>.from(json['meses_alta_temporada']);
-    origemDosVisitantes = List<String>.from(json['origem_dos_visitantes']);
-    produtosHigienePessoal = List<String>.from(json['produtos_higiene_pessoal']);
-    equipamentosEServicos = List<String>.from(json['equipamentos_e_servicos']);
-    estacionamento = List<String>.from(json['estacionamento']);
-    restaurante = List<String>.from(json['restaurante']);
-    lanchonete = List<String>.from(json['lanchonete']);
-    instalacaoEEspacos = List<String>.from(json['instalacao_e_espacos']);
-    outrosEspacosEAtividades = List<String>.from(json['outros_espacos_e_atividades']);
-    servicos = List<String>.from(json['servicos']);
-    equipamentos = List<String>.from(json['equipamentos']);
-    facilidadesEServicos = List<String>.from(json['facilidades_e_servicos']);
-    facilidadesParaExecutivos = List<String>.from(json['facilidades_para_executivos']);
-    pessoalCapacitadoParaReceberPCD =
-        List<String>.from(json['pessoal_capacitado_para_receber_pcd']);
-    rotaExternaAcessivel =List<String>.from(json['rota_externa_acessivel']);
-    simboloInternacionalDeAcesso = List<String>.from(json['simbolo_internacional_de_acesso']);
-    localDeEmbarqueEDesembarque = List<String>.from(json['local_de_embarque_e_desembarque']);
-    vagaEmEstacionamento = List<String>.from(json['vaga_em_estacionamento']);
-    areaDeCirculacaoAcessoInterno = List<String>.from(json['area_de_circulacao_acesso_interno']);
-    escada = List<String>.from(json['escada']);
-    rampa = List<String>.from(json['rampa']);
-    piso = List<String>.from(json['piso']);
-    elevador = List<String>.from(json['elevador']);
-    equipamentoMotorizadoParaDeslocamentoInterno =
-        List<String>.from(json['equipamento_motorizado_para_deslocamento_interno']);
-    sinalizacaoVisual = List<String>.from(json['sinalizacao_visual']);
-    sinalizacaoTatil = List<String>.from(json['sinalizacao_tatil']);
-    alarmeDeEmergencia = List<String>.from(json['alarme_de_emergencia']);
-    comunicacao = List<String>.from(json['comunicacao']);
-    balcaoDeAtendimento = List<String>.from(json['balcao_de_atendimento']);
-    mobiliario = List<String>.from(json['mobiliario']);
-    sanitario = List<String>.from(json['sanitario']);
-    telefone = List<String>.from(json['telefone']);
-    subtipo = json['subtipo'];
-    natureza = json['natureza'];
-    localizacao = json['localizacao'];
-    tipoDeDiaria = json['tipo_de_diaria'];
-    periodo = json['periodo'];
-    tabelasHorario = Map<String, dynamic>.from(json['tabelas_horario']);
-    energiaEletrica = json['energia_eletrica'];
-    estadoGeralDeConservacao = json['estado_geral_de_conservacao'];
-    estadosTuristas = List<String>.from(json['estados_turistas']);
-    paisesTuristas = List<String>.from(json['paises_turistas']);
-    razaoSocial = json['razao_social'];
-    nomeFantasia = json['nome_fantasia'];
-    codigoCNAE = json['codigo_cnae'];
-    atividadeEconomica = json['atividade_economica'];
-    inscricaoMunicipal = json['inscricao_municipal'];
-    nomeDaRede = json['nome_da_rede'];
-    CNPJ = json['cnpj'];
-    inicioDaAtividade = json['inicio_da_atividade'];
-    qtdeFuncionariosPermanentes = json['qtde_funcionarios_permanentes'];
-    qtdeFuncionariosTemporarios = json['qtde_funcionarios_temporarios'];
-    qtdeFuncionarisComDeficiencia = json['qtde_funcionarios_com_deficiencia'];
-    latitude = json['latitude'];
-    longitute = json['longitute'];
-    avenidaRuaEtc = json['avenida_rua_etc'];
-    bairroLocalidade = json['bairro_localidade'];
-    distrito = json['distrito'];
-    CEP = json['cep'];
-    whatsapp = json['whatsapp'];
-    instagram = json['instagram'];
-    email = json['email'];
-    site = json['site'];
-    pontosDeReferencia = json['pontos_de_referencia'];
-    tabelaMTUR = Map<String, dynamic>.from(json['tabela_mtur']);
-    outrasRegrasEInformacoes = json['outras_regras_e_informacoes'];
-    nAnoOcupacao = json['n_ano_ocupacao'];
-    nOcupacaoAltaTemporada = json['n_ocupacao_alta_temporada'];
-    nTotalDeUH = json['n_total_de_uh'];
-    nTotalDeLeitos = json['n_total_de_leitos'];
-    nUhAdaptadasParaPCD = json['n_uh_adaptadas_para_pcd'];
-    nCapacidadeDeVeiculos = json['n_capacidade_de_veiculos'];
-    nAutomoveis = json['n_automoveis'];
-    nOnibus = json['n_onibus'];
-    capacidadeEmKVA = json['capacidade_em_kva'];
-    geradorCapacidadeEmKVA = json['gerador_capacidade_em_kva'];
-    nCapacidadeInstaladaPorDia = json['n_capacidade_instalada_por_dia'];
-    nPessoasAtendidasSentadas = json['n_pessoas_atendidas_sentadas'];
-    nCapacidadeSimultanea = json['n_capacidade_simultanea'];
-    nPessoasAtendidasSentadasSimultanea =
-        json['n_pessoas_atendidas_sentadas_simultanea'];
-    lanchoneteCapacidadeInstaladaPorDia =
-        json['lanchonete_capacidade_instalada_por_dia'];
-    lanchoneteCapacidadePessoasAtendidasSentadas =
-        json['lanchonete_capacidade_pessoas_atendidas_sentadas'];
-    lanchoneteCapacidadeSimultanea =
-        json['lanchonete_capacidade_simultanea'];
-    lanchoneteCapacidadeSentadasSimultanea =
-        json['lanchonete_capacidade_sentadas_simultanea'];
-    tabelaInstalacoes = Map<String, dynamic>.from(json['tabela_instalacoes']);
-    tabelaEquipamentoEEspaco = Map<String, dynamic>.from(json['tabela_equipamento_e_espaco']);
-    tabelaEquipamentoEEspaco2 = Map<String, dynamic>.from(json['tabela_equipamento_e_espaco_2']);
-    outros = json['outros'];
-  }
+  id = json['id'];
+  tipoFormulario = json['tipoFormulario'];
+  uf = json['uf'];
+  regiaoTuristica = json['regiaoTuristica'];
+  municipio = json['municipio'];
+  tipo = json['tipo'];
+  observacoes = json['observacoes'];
+  referencias = json['referencias'];
+  nomePesquisador = json['nomePesquisador'];
+  telefonePesquisador = json['telefonePesquisador'];
+  emailPesquisador = json['emailPesquisador'];
+  nomeCoordenador = json['nomeCoordenador'];
+  telefoneCoordenador = json['telefoneCoordenador'];
+  emailCoordenador = json['emailCoordenador'];
+  sinalizacaoDeAcesso = json['sinalizacaoDeAcesso'];
+  sinalizacaoTuristica = json['sinalizacaoTuristica'];
+  funcionamento24h = json['funcionamento24h'];
+  funcionamentoEmFeriados = json['funcionamentoEmFeriados'];
+  geradorDeEmergencia = json['geradorDeEmergencia'];
+  doEquipamentoEspaco = json['doEquipamentoEspaco'];
+  daAreaOuEdificacaoEmQueEstaLocalizado =
+      json['daAreaOuEdificacaoEmQueEstaLocalizado'];
+  possuiFacilidade = json['possuiFacilidade'];
+  sinalizacaoIndicativa = json['sinalizacaoIndicativa'];
+  tipoDeOrganizacao = json['tipoDeOrganizacao'] != null
+      ? List<String>.from(json['tipoDeOrganizacao'])
+      : null;
+  proximidades = json['proximidades'] != null
+      ? List<String>.from(json['proximidades'])
+      : null;
+  segmentosOuTurismoEspecializado =
+      List<String>.from(json['segmentosOuTurismoEspecializado']);
+  formasDePagamento =
+      List<String>.from(json['formasDePagamento']);
+  reservas = List<String>.from(json['reservas']);
+  atendimentoEmLinguaEstrangeira =
+      List<String>.from(json['atendimentoEmLinguaEstrangeira']);
+  informativosImpressos =
+      List<String>.from(json['informativosImpressos']);
+  restricoes = List<String>.from(json['restricoes']);
+  mesesAltaTemporada =
+      List<String>.from(json['mesesAltaTemporada']);
+  origemDosVisitantes =
+      List<String>.from(json['origemDosVisitantes']);
+  produtosHigienePessoal =
+      List<String>.from(json['produtosHigienePessoal']);
+  equipamentosEServicos =
+      List<String>.from(json['equipamentosEServicos']);
+  estacionamento = List<String>.from(json['estacionamento']);
+  restaurante = List<String>.from(json['restaurante']);
+  lanchonete = List<String>.from(json['lanchonete']);
+  instalacaoEEspacos =
+      List<String>.from(json['instalacaoEEspacos']);
+  outrosEspacosEAtividades =
+      List<String>.from(json['outrosEspacosEAtividades']);
+  servicos = List<String>.from(json['servicos']);
+  equipamentos = List<String>.from(json['equipamentos']);
+  facilidadesEServicos =
+      List<String>.from(json['facilidadesEServicos']);
+  facilidadesParaExecutivos =
+      List<String>.from(json['facilidadesParaExecutivos']);
+  pessoalCapacitadoParaReceberPCD =
+      List<String>.from(json['pessoalCapacitadoParaReceberPCD']);
+  rotaExternaAcessivel =
+      List<String>.from(json['rotaExternaAcessivel']);
+  simboloInternacionalDeAcesso =
+      List<String>.from(json['simboloInternacionalDeAcesso']);
+  localDeEmbarqueEDesembarque =
+      List<String>.from(json['localDeEmbarqueEDesembarque']);
+  vagaEmEstacionamento =
+      List<String>.from(json['vagaEmEstacionamento']);
+  areaDeCirculacaoAcessoInterno =
+      List<String>.from(json['areaDeCirculacaoAcessoInterno']);
+  escada = List<String>.from(json['escada']);
+  rampa = List<String>.from(json['rampa']);
+  piso = List<String>.from(json['piso']);
+  elevador = List<String>.from(json['elevador']);
+  equipamentoMotorizadoParaDeslocamentoInterno =
+      List<String>.from(json['equipamentoMotorizadoParaDeslocamentoInterno']);
+  sinalizacaoVisual =
+      List<String>.from(json['sinalizacaoVisual']);
+  sinalizacaoTatil =
+      List<String>.from(json['sinalizacaoTatil']);
+  alarmeDeEmergencia =
+      List<String>.from(json['alarmeDeEmergencia']);
+  comunicacao = List<String>.from(json['comunicacao']);
+  balcaoDeAtendimento =
+      List<String>.from(json['balcaoDeAtendimento']);
+  mobiliario = List<String>.from(json['mobiliario']);
+  sanitario = List<String>.from(json['sanitario']);
+  telefone = List<String>.from(json['telefone']);
+  subtipo = json['subtipo'];
+  natureza = json['natureza'];
+  localizacao = json['localizacao'];
+  tipoDeDiaria = json['tipoDeDiaria'];
+  periodo = json['periodo'];
+  tabelasHorario = Map<String, dynamic>.from(json['tabelasHorario']);
+  energiaEletrica = json['energiaEletrica'];
+  estadoGeralDeConservacao = json['estadoGeralDeConservacao'];
+  estadosTuristas = List<String>.from(json['estadosTuristas']);
+  paisesTuristas = List<String>.from(json['paisesTuristas']);
+  razaoSocial = json['razaoSocial'];
+  nomeFantasia = json['nomeFantasia'];
+  codigoCNAE = json['codigoCNAE'];
+  atividadeEconomica = json['atividadeEconomica'];
+  inscricaoMunicipal = json['inscricaoMunicipal'];
+  nomeDaRede = json['nomeDaRede'];
+  CNPJ = json['CNPJ'];
+  inicioDaAtividade = json['inicioDaAtividade'];
+  qtdeFuncionariosPermanentes =
+      json['qtdeFuncionariosPermanentes'];
+  qtdeFuncionariosTemporarios =
+      json['qtdeFuncionariosTemporarios'];
+  qtdeFuncionarisComDeficiencia =
+      json['qtdeFuncionarisComDeficiencia'];
+  latitude = json['latitude'];
+  longitute = json['longitute'];
+  avenidaRuaEtc = json['avenidaRuaEtc'];
+  bairroLocalidade = json['bairroLocalidade'];
+  distrito = json['distrito'];
+  CEP = json['CEP'];
+  whatsapp = json['whatsapp'];
+  instagram = json['instagram'];
+  email = json['email'];
+  site = json['site'];
+  pontosDeReferencia = json['pontosDeReferencia'];
+  tabelaMTUR = Map<String, dynamic>.from(json['tabelaMTUR']);
+  outrasRegrasEInformacoes = json['outrasRegrasEInformacoes'];
+  nAnoOcupacao = json['nAnoOcupacao'];
+  nOcupacaoAltaTemporada = json['nOcupacaoAltaTemporada'];
+  nTotalDeUH = json['nTotalDeUH'];
+  nTotalDeLeitos = json['nTotalDeLeitos'];
+  nUhAdaptadasParaPCD = json['nUhAdaptadasParaPCD'];
+  nCapacidadeDeVeiculos = json['nCapacidadeDeVeiculos'];
+  nAutomoveis = json['nAutomoveis'];
+  nOnibus = json['nOnibus'];
+  capacidadeEmKVA = json['capacidadeEmKVA'];
+  geradorCapacidadeEmKVA = json['geradorCapacidadeEmKVA'];
+  nCapacidadeInstaladaPorDia = json['nCapacidadeInstaladaPorDia'];
+  nPessoasAtendidasSentadas = json['nPessoasAtendidasSentadas'];
+  nCapacidadeSimultanea = json['nCapacidadeSimultanea'];
+  nPessoasAtendidasSentadasSimultanea =
+      json['nPessoasAtendidasSentadasSimultanea'];
+  lanchoneteCapacidadeInstaladaPorDia =
+      json['lanchoneteCapacidadeInstaladaPorDia'];
+  lanchoneteCapacidadePessoasAtendidasSentadas =
+      json['lanchoneteCapacidadePessoasAtendidasSentadas'];
+  lanchoneteCapacidadeSimultanea =
+      json['lanchoneteCapacidadeSimultanea'];
+  lanchoneteCapacidadeSentadasSimultanea =
+      json['lanchoneteCapacidadeSentadasSimultanea'];
+  tabelaInstalacoes =
+      Map<String, dynamic>.from(json['tabelaInstalacoes']);
+  tabelaEquipamentoEEspaco =
+      Map<String, dynamic>.from(json['tabelaEquipamentoEEspaco']);
+  tabelaEquipamentoEEspaco2 =
+      Map<String, dynamic>.from(json['tabelaEquipamentoEEspaco2']);
+  outros = json['outros'];
+}
+  
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};

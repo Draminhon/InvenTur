@@ -402,14 +402,14 @@ class _RegisterPageState extends State<RegisterPage> {
                             BackdropFilter(
                               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
                               child: Container(
-                                color: Colors.black.withValues(alpha: 0.5),
+                                color: Colors.black.withAlpha(5),
                               ),
                             ),
                                Container(
                                   decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(10),
                                       color:
-                                          Colors.black.withValues(alpha: 0.5)),
+                                          Colors.black.withAlpha(5)),
                                 
                                  ),
                                  

@@ -303,7 +303,8 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                   hospedagemModel: MeiosDeHospedagemModel.fromJson(
                     equipamento['dados']
                   ),
-                )));
+
+                ), settings: RouteSettings(arguments: {'isUpdate': true})), );
               }
             },
             child: isadmin == true

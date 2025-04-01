@@ -62,7 +62,15 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
   final TextEditingController _paisController = TextEditingController();
 
   bool isUpdate = false;
+  @override
+void didChangeDependencies(){
+    super.didChangeDependencies();
+     final argument = ModalRoute.of(context)!.settings.arguments as Map;
+     if(argument.containsKey('isUpdate')){
+     isUpdate = argument['isUpdate'];
 
+     }
+  }
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Meios de Hospedagem',
     // 'uf': null,
@@ -228,9 +236,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
   void autoFillForm() {
     // Verifica se o controlador existe no Map antes de preencher
     void fillIfExists(String key, String value) {
-      if (controllers.containsKey(key)) {
-        controllers[key]!.text = value;
-      }
+     getController(key).text = value;
     }
 
     // Preenche os valores dos controladores
@@ -292,6 +298,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     super.initState();
     _pesquisaController.setEstados();
     _pesquisaController.setPaises();
+
   }
 
   @override
@@ -303,7 +310,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
   @override
   Widget build(BuildContext context) {
-        autoFillForm();
+        autoFillForm(); 
 
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(

@@ -32,33 +32,32 @@ class AlimentoseBebidasEdit extends StatefulWidget {
 }
 
 class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
-Future<void> updateAlimentosEBebidas(
-    int sistemaId, Map<String, dynamic> data) async {
-  final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
+  Future<void> updateAlimentosEBebidas(
+      int sistemaId, Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
 
-  final url = Uri.parse(
-      '${AppConstants.BASE_URI}/api/v1/alimentosEBebidas/update/$sistemaId');
+    final url = Uri.parse(
+        '${AppConstants.BASE_URI}/api/v1/alimentosEBebidas/update/$sistemaId');
 
-
-  try {
-    final response = await http.patch(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-      body: json.encode(data),
-    );
-    if (response.statusCode == 200) {
-      print("Atualização bem-sucedida");
-    } else {
-      print("Erro na atualização: ${response.statusCode}");
+    try {
+      final response = await http.patch(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+        body: json.encode(data),
+      );
+      if (response.statusCode == 200) {
+        print("Atualização bem-sucedida");
+      } else {
+        print("Erro na atualização: ${response.statusCode}");
+      }
+    } catch (e) {
+      print('Erro: $e');
     }
-  } catch (e) {
-    print('Erro: $e');
   }
-}
 
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Alimentos e bebidas',
@@ -80,65 +79,97 @@ Future<void> updateAlimentosEBebidas(
   void autoFillForm() {
     // Verifica se o controlador existe no Map antes de preencher
     void fillIfExists(String key, String value) {
-         getController(key).text = value;
+      getController(key).text = value;
     }
 
     // Preenche os valores dos controladores
-     if (widget.alimentosModel != null) {
+    if (widget.alimentosModel != null) {
       fillIfExists('uf', widget.alimentosModel!.uf!);
       fillIfExists('rg', widget.alimentosModel!.regiaoTuristica!);
       fillIfExists('municipio', widget.alimentosModel!.municipio!);
       fillIfExists('observacoes', widget.alimentosModel!.observacoes!);
       fillIfExists('referencias', widget.alimentosModel!.referencias!);
       fillIfExists('nome_pesquisador', widget.alimentosModel!.nomePesquisador!);
-      fillIfExists('telefone_pesquisador', widget.alimentosModel!.telefonePesquisador!);
-      fillIfExists('email_pesquisador', widget.alimentosModel!.emailPesquisador!);
+      fillIfExists(
+          'telefone_pesquisador', widget.alimentosModel!.telefonePesquisador!);
+      fillIfExists(
+          'email_pesquisador', widget.alimentosModel!.emailPesquisador!);
       fillIfExists('nome_coordenador', widget.alimentosModel!.nomeCoordenador!);
-      fillIfExists('telefone_coordenador', widget.alimentosModel!.telefoneCoordenador!);
-      fillIfExists('email_coordenador', widget.alimentosModel!.emailCoordenador!);
+      fillIfExists(
+          'telefone_coordenador', widget.alimentosModel!.telefoneCoordenador!);
+      fillIfExists(
+          'email_coordenador', widget.alimentosModel!.emailCoordenador!);
 
       // Campos específicos de AlimentosEBebidas
       fillIfExists('razão social', widget.alimentosModel!.razaoSocial!);
       fillIfExists('nome fantasia', widget.alimentosModel!.nomeFantasia!);
       fillIfExists('CNPJ', widget.alimentosModel!.CNPJ!);
       fillIfExists('Código CNAE', widget.alimentosModel!.codigoCNAE!);
-      fillIfExists('Atividade Economica', widget.alimentosModel!.atividadeEconomica!);
-      fillIfExists('Inscrição Municipal', widget.alimentosModel!.inscricaoMunicipal!);
+      fillIfExists(
+          'Atividade Economica', widget.alimentosModel!.atividadeEconomica!);
+      fillIfExists(
+          'Inscrição Municipal', widget.alimentosModel!.inscricaoMunicipal!);
       fillIfExists('Nome da rede', widget.alimentosModel!.nomeDaRede!);
-      fillIfExists('inicio da atividade', widget.alimentosModel!.inicioDaAtividade!);
-      fillIfExists('quantidade funcionarios permanentes', widget.alimentosModel!.qtdeFuncionariosPermanentes!);
-      fillIfExists('Quantidade de funcionarios temporarios', widget.alimentosModel!.qtdeFuncionariosTemporarios!);
-      fillIfExists('quantidade funcionarios com definicencia', widget.alimentosModel!.qtdeFuncionariosComDeficiencia!);
+      fillIfExists(
+          'inicio da atividade', widget.alimentosModel!.inicioDaAtividade!);
+      fillIfExists('quantidade funcionarios permanentes',
+          widget.alimentosModel!.qtdeFuncionariosPermanentes!);
+      fillIfExists('Quantidade de funcionarios temporarios',
+          widget.alimentosModel!.qtdeFuncionariosTemporarios!);
+      fillIfExists('quantidade funcionarios com definicencia',
+          widget.alimentosModel!.qtdeFuncionariosComDeficiencia!);
       fillIfExists('latitude', widget.alimentosModel!.latitude!);
       fillIfExists('longitude', widget.alimentosModel!.longitude!);
       fillIfExists('avenida rua', widget.alimentosModel!.avenidaRuaEtc!);
-      fillIfExists('bairro localidade', widget.alimentosModel!.bairroLocalidade!);
+      fillIfExists(
+          'bairro localidade', widget.alimentosModel!.bairroLocalidade!);
       fillIfExists('distrito', widget.alimentosModel!.distrito!);
       fillIfExists('CEP', widget.alimentosModel!.CEP!);
       fillIfExists('whatsapp', widget.alimentosModel!.whatsapp!);
       fillIfExists('Instagram', widget.alimentosModel!.instagram!);
       fillIfExists('email', widget.alimentosModel!.email!);
-      fillIfExists('sinalizacaoDeAcesso', widget.alimentosModel!.sinalizacaoDeAcesso!);
-      fillIfExists('sinalizacaoTuristica', widget.alimentosModel!.sinalizacaoTuristica!);
-      fillIfExists('distancia aeroporto', widget.alimentosModel!.distanciasAeroporto!);
-      fillIfExists('estação rodoviária', widget.alimentosModel!.distanciasRodoviaria!);
-      fillIfExists('estação ferroviária', widget.alimentosModel!.distanciaEstacaoFerroviaria!);
-      fillIfExists('Estacao maritima', widget.alimentosModel!.distanciaEstacaoMaritima!);
-      fillIfExists('estacao metroviaria', widget.alimentosModel!.distanciaEstacaoMetroviaria!);
-      fillIfExists('ponto de onibus', widget.alimentosModel!.distanciaPontoDeOnibus!);
-      fillIfExists('ponto de taxi', widget.alimentosModel!.distanciaPontoDeTaxi!);
-      fillIfExists('outras distancias nome', widget.alimentosModel!.distanciasOutraNome!);
-      fillIfExists('outras distancias', widget.alimentosModel!.distanciaOutras!);
-      fillIfExists('ponto de referencia', widget.alimentosModel!.pontosDeReferencia!);
-      fillIfExists('estadoGeralDeConservacao', widget.alimentosModel!.estadoGeralDeConservacao!);
-      fillIfExists('outrosSinalizacao', widget.alimentosModel!.outrosAcessibilidade!);
-      fillIfExists('outras regras e informações', widget.alimentosModel!.outrasRegraseInformacoes!);
-      fillIfExists('capacidade instalada por dia', widget.alimentosModel!.capInstaladaPdia!);
-      fillIfExists('instaladas pessoas atendidas sentadas', widget.alimentosModel!.capInstaladasSentadas!);
-      fillIfExists('capacidade simultanea', widget.alimentosModel!.capSimultanea!);
-      fillIfExists('simultanea pessoas atendidas sentadas', widget.alimentosModel!.capSimultaneaSentadas!);
-      fillIfExists('capacidade de veículos', widget.alimentosModel!.capacidadeVeiculos!);
-      fillIfExists('numero automoveis', widget.alimentosModel!.numeroAutomoveis!);
+      fillIfExists(
+          'sinalizacaoDeAcesso', widget.alimentosModel!.sinalizacaoDeAcesso!);
+      fillIfExists(
+          'sinalizacaoTuristica', widget.alimentosModel!.sinalizacaoTuristica!);
+      fillIfExists(
+          'distancia aeroporto', widget.alimentosModel!.distanciasAeroporto!);
+      fillIfExists(
+          'estação rodoviária', widget.alimentosModel!.distanciasRodoviaria!);
+      fillIfExists('estação ferroviária',
+          widget.alimentosModel!.distanciaEstacaoFerroviaria!);
+      fillIfExists(
+          'Estacao maritima', widget.alimentosModel!.distanciaEstacaoMaritima!);
+      fillIfExists('estacao metroviaria',
+          widget.alimentosModel!.distanciaEstacaoMetroviaria!);
+      fillIfExists(
+          'ponto de onibus', widget.alimentosModel!.distanciaPontoDeOnibus!);
+      fillIfExists(
+          'ponto de taxi', widget.alimentosModel!.distanciaPontoDeTaxi!);
+      fillIfExists('outras distancias nome',
+          widget.alimentosModel!.distanciasOutraNome!);
+      fillIfExists(
+          'outras distancias', widget.alimentosModel!.distanciaOutras!);
+      fillIfExists(
+          'ponto de referencia', widget.alimentosModel!.pontosDeReferencia!);
+      fillIfExists('estadoGeralDeConservacao',
+          widget.alimentosModel!.estadoGeralDeConservacao!);
+      fillIfExists(
+          'outrosSinalizacao', widget.alimentosModel!.outrosAcessibilidade!);
+      fillIfExists('outras regras e informações',
+          widget.alimentosModel!.outrasRegraseInformacoes!);
+      fillIfExists('capacidade instalada por dia',
+          widget.alimentosModel!.capInstaladaPdia!);
+      fillIfExists('instaladas pessoas atendidas sentadas',
+          widget.alimentosModel!.capInstaladasSentadas!);
+      fillIfExists(
+          'capacidade simultanea', widget.alimentosModel!.capSimultanea!);
+      fillIfExists('simultanea pessoas atendidas sentadas',
+          widget.alimentosModel!.capSimultaneaSentadas!);
+      fillIfExists(
+          'capacidade de veículos', widget.alimentosModel!.capacidadeVeiculos!);
+      fillIfExists(
+          'numero automoveis', widget.alimentosModel!.numeroAutomoveis!);
       fillIfExists('numero onibus', widget.alimentosModel!.numeroOnibus!);
     }
   }
@@ -147,9 +178,6 @@ Future<void> updateAlimentosEBebidas(
     controllers[key] ??= TextEditingController();
     return controllers[key]!;
   }
-
-
-
 
   @override
   void dispose() {
@@ -161,7 +189,7 @@ Future<void> updateAlimentosEBebidas(
   final _formKey = GlobalKey<FormState>();
 
   Widget build(BuildContext context) {
-        autoFillForm();
+    autoFillForm();
 
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
@@ -378,7 +406,7 @@ Future<void> updateAlimentosEBebidas(
                       height: sizeScreen.height * 0.03,
                     ),
                     RadioD(
-                      indexModel: widget.alimentosModel!.natureza,
+                        indexModel: widget.alimentosModel!.natureza,
                         options: const ['pública', 'privada', 'outro'],
                         getValue: (newValue) {
                           valoresjson['natureza'] = newValue;
@@ -398,7 +426,8 @@ Future<void> updateAlimentosEBebidas(
                       height: sizeScreen.height * 0.03,
                     ),
                     CheckC(
-                      nomesModel: widget.alimentosModel!.tipoDeOrganizacaoInstituicao,
+                      nomesModel:
+                          widget.alimentosModel!.tipoDeOrganizacaoInstituicao,
                       key: tipo_de_organizacao_key,
                       nomes: [
                         'associação',
@@ -647,7 +676,7 @@ Future<void> updateAlimentosEBebidas(
                           width: sizeScreen.width * 0.6,
                           //height: sizeScreen.height * 0.07,
                           child: CustomTextNumber(
-controller: getController('whatsapp'),
+                            controller: getController('whatsapp'),
                             labelText: '(DD) n°',
                             getValue: (newValue) {
                               valoresjson['whatsapp'] = newValue;
@@ -729,7 +758,7 @@ controller: getController('whatsapp'),
                       // width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
-                        optionModel: widget.alimentosModel!.sinalizacaoDeAcesso,
+                    optionModel: widget.alimentosModel!.sinalizacaoDeAcesso,
                     getValue: (newValue) {
                       valoresjson['sinalizacaoDeAcesso'] = newValue;
                     },
@@ -747,7 +776,7 @@ controller: getController('whatsapp'),
                       //width: sizeScreen.width * 0.5,
                       //  //height: sizeScreen.height * 0.07,
                       child: ExpansionTileYoN(
-                        optionModel: widget.alimentosModel!.sinalizacaoTuristica,
+                    optionModel: widget.alimentosModel!.sinalizacaoTuristica,
                     getValue: (newValue) {
                       valoresjson['sinalizacaoTuristica'] = newValue;
                     },
@@ -1115,7 +1144,8 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
-                  nomesModel: widget.alimentosModel!.atendimentoEmLinguasEstrangeiras,
+                  nomesModel:
+                      widget.alimentosModel!.atendimentoEmLinguasEstrangeiras,
                   key: atendimento_em_lingua_estrangeira_key,
                   nomes: ['Não', 'Inglês', 'Espanhol', 'outro'],
                   // getValue: (newValue) {
@@ -1225,7 +1255,6 @@ controller: getController('whatsapp'),
                   },
                 ),
                 textLabel(
-                
                   name: 'Funcionamento em feriados:',
                   fontWeight: FontWeight.bold,
                 ),
@@ -1262,7 +1291,6 @@ controller: getController('whatsapp'),
                 ),
 
                 CustomTextField(
-
                   controller: getController('outras regras e informações'),
                   validat: (value) {
                     if (value == null || value.isEmpty) {
@@ -1549,7 +1577,8 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.03,
                 ),
                 CheckC(
-                  nomesModel: widget.alimentosModel!.especificacaoDaGastronomiaPorPais,
+                  nomesModel:
+                      widget.alimentosModel!.especificacaoDaGastronomiaPorPais,
                   onChanged: (p0) =>
                       valoresjson['especificacaoDaGastronomiaPorPais'] = p0,
                   nomes: [
@@ -1661,7 +1690,7 @@ controller: getController('whatsapp'),
                   height: 55.w,
                 ),
                 CheckC(
-                  nomesModel: widget.alimentosModel!.porTipoDeDieta,
+                    nomesModel: widget.alimentosModel!.porTipoDeDieta,
                     onChanged: (p0) => valoresjson['porTipoDeDieta'] = p0,
                     nomes: [
                       'não',
@@ -1681,7 +1710,7 @@ controller: getController('whatsapp'),
                 ),
 
                 CheckC(
-                  nomesModel: widget.alimentosModel!.porTipoDeServico,
+                    nomesModel: widget.alimentosModel!.porTipoDeServico,
                     onChanged: (p0) => valoresjson['porTipoDeServico'] = p0,
                     nomes: [
                       'a la carte',
@@ -1837,7 +1866,8 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.02,
                 ),
                 CheckC(
-                  nomesModel: widget.alimentosModel!.pessoalCapacitadoParaReceberPCD,
+                  nomesModel:
+                      widget.alimentosModel!.pessoalCapacitadoParaReceberPCD,
                   onChanged: (p0) {
                     valoresjson['pessoalCapacitadoParaReceberPCD'] = p0;
                   },
@@ -1854,7 +1884,6 @@ controller: getController('whatsapp'),
                   height: sizeScreen.height * 0.02,
                 ),
                 textLabel(
-                
                   name: 'Rota externa acessível:',
                   fontWeight: FontWeight.bold,
                 ),
@@ -1889,7 +1918,8 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
-                  nomesModel: widget.alimentosModel!.simboloInternacionalDeAcesso,
+                  nomesModel:
+                      widget.alimentosModel!.simboloInternacionalDeAcesso,
                   onChanged: (p0) {
                     valoresjson['simboloInternacionalDeAcesso'] = p0;
                   },
@@ -1913,7 +1943,8 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
-                  nomesModel: widget.alimentosModel!.localDeEmbarqueEDesembarque,
+                  nomesModel:
+                      widget.alimentosModel!.localDeEmbarqueEDesembarque,
                   onChanged: (p0) {
                     valoresjson['localDeEmbarqueEDesembarque'] = p0;
                   },
@@ -1954,7 +1985,8 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
-                  nomesModel: widget.alimentosModel!.areaDeCirculacaoAcessoInternoParaCadeiraDeRodas,
+                  nomesModel: widget.alimentosModel!
+                      .areaDeCirculacaoAcessoInternoParaCadeiraDeRodas,
                   onChanged: (p0) {
                     valoresjson[
                         'areaDeCirculacaoAcessoInternoParaCadeiraDeRodas'] = p0;
@@ -2067,7 +2099,8 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
-                  nomesModel: widget.alimentosModel!.equipamentoMotorizadoParaDeslocamentoInterno,
+                  nomesModel: widget.alimentosModel!
+                      .equipamentoMotorizadoParaDeslocamentoInterno,
                   onChanged: (p0) {
                     valoresjson[
                         'equipamentoMotorizadoParaDeslocamentoInterno'] = p0;
@@ -2088,7 +2121,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
-                   nomesModel: widget.alimentosModel!.sinalizacaoVisual,
+                  nomesModel: widget.alimentosModel!.sinalizacaoVisual,
                   onChanged: (p0) {
                     valoresjson['sinalizacaoVisual'] = p0;
                   },
@@ -2162,7 +2195,6 @@ controller: getController('whatsapp'),
                 ),
                 CheckC(
                   nomesModel: widget.alimentosModel!.comunicacao,
-
                   onChanged: (p0) {
                     valoresjson['comunicacao'] = p0;
                   },
@@ -2184,7 +2216,6 @@ controller: getController('whatsapp'),
                 ),
                 CheckC(
                   nomesModel: widget.alimentosModel!.balcaoDeAtendimento,
-
                   onChanged: (p0) {
                     valoresjson['balcaoDeAtendimento'] = p0;
                   },
@@ -2205,7 +2236,6 @@ controller: getController('whatsapp'),
                 ),
                 CheckC(
                   nomesModel: widget.alimentosModel!.mobiliario,
-
                   onChanged: (p0) {
                     valoresjson['mobiliario'] = p0;
                   },
@@ -2226,7 +2256,6 @@ controller: getController('whatsapp'),
                 ),
                 CheckC(
                   nomesModel: widget.alimentosModel!.sanitario,
-
                   onChanged: (p0) {
                     valoresjson['sanitario'] = p0;
                   },
@@ -2252,8 +2281,7 @@ controller: getController('whatsapp'),
                   ),
                 ),
                 CheckC(
-                                    nomesModel: widget.alimentosModel!.telefone,
-
+                  nomesModel: widget.alimentosModel!.telefone,
                   onChanged: (p0) {
                     valoresjson['telefone'] = p0;
                   },
@@ -2405,10 +2433,9 @@ controller: getController('whatsapp'),
                             .toList();
 
                     _formKey.currentState!.save();
-                       updateAlimentosEBebidas(
-                                widget.alimentosModel!.id!, valoresjson);
-                                  Navigator.pushReplacementNamed(
-                                context, '/UpdatedForm');
+                    updateAlimentosEBebidas(
+                        widget.alimentosModel!.id!, valoresjson);
+                    Navigator.pushReplacementNamed(context, '/UpdatedForm');
 
                     // if (_formKey.currentState!.validate()) {
                     //   ScaffoldMessenger.of(context).showSnackBar(
