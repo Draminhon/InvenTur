@@ -426,10 +426,16 @@ class EquipamentosListView(APIView):
         alimentos_serialized = [
             {"tipo": "AlimentosEBebidas", "dados": AlimentosEBebidasSerializer(alimento).data}
             for alimento in alimentos
+        ]
+
+        hospedagens =  MeioDeHospedagem.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        hospedagens_serialized = [
+            {"tipo": "Meios de Hospedagem", "dados": MeioDeHospedagemSerializer(hospedagem).data}
+            for hospedagem in hospedagens
         ]        
 
         # Combina os dados
-        equipamentos = rodovias_serialized + sistemas_serialized + alimentos_serialized
+        equipamentos = rodovias_serialized + sistemas_serialized + alimentos_serialized + hospedagens_serialized
 
         return Response(equipamentos)
 

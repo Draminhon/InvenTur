@@ -274,6 +274,7 @@ admin.site.register(Pesquisa, PesquisasAdmin)
 @admin.register(MeioDeHospedagem)
 class MeiosDeHospedagemAdmin(admin.ModelAdmin):
     list_display = (
+        "pesquisa",
         "tipo_formulario",
         "nome_pesquisador",
         "telefone_pesquisador",

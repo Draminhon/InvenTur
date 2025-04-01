@@ -1,39 +1,34 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart';
 import 'package:inventur/models/estado_model.dart';
+import 'package:inventur/models/meios_hospedagem_model.dart';
 import 'package:inventur/models/pais_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/apis/estados.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/tabela.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/expandedTileYoN.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/apis/paises.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
 import 'package:inventur/pages/widgets/auto_complete_text_field.dart';
 import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+
 class MeiosDeHospedagem extends StatefulWidget {
-  MeiosDeHospedagem({super.key});
+  final MeiosDeHospedagemModel? hospedagemModel;
+  MeiosDeHospedagem({super.key, this.hospedagemModel});
 
   @override
   State<MeiosDeHospedagem> createState() => _MeiosDeHospedagemState();
 }
 
 class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
-
-
-
-    Future<void> sendForm(Map<String, dynamic> valoresjson) async {
+  Future<void> sendForm(Map<String, dynamic> valoresjson) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
     final url =
@@ -58,9 +53,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     }
   }
 
-
-
-
   final _formKey = GlobalKey<FormState>();
 
   late Estado? _estadoSelecionado = Estado(id: -1, sigla: '', nome: '');
@@ -68,6 +60,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
   final PesquisaController _pesquisaController = PesquisaController();
   final TextEditingController _estadoController = TextEditingController();
   final TextEditingController _paisController = TextEditingController();
+
+  bool isUpdate = false;
 
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Meios de Hospedagem',
@@ -240,7 +234,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     }
 
     // Preenche os valores dos controladores
-    fillIfExists('uf', 'CE');
+    fillIfExists('uf', 'widget.hospedagemModel!.uf!');
     fillIfExists('rg', '1234567');
     fillIfExists('municipio', 'Viçosa do Ceará');
     fillIfExists('razao social', 'Razão Social Exemplo');
@@ -289,8 +283,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     fillIfExists('referencias', 'Referências ou links');
   }
 
-  List<String> _estadosSelecionados =[];
-  List<String> _paisesSelecionados = []; 
+  List<String> _estadosSelecionados = [];
+  List<String> _paisesSelecionados = [];
 
   @override
   void initState() {
@@ -309,11 +303,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
   @override
   Widget build(BuildContext context) {
+        autoFillForm();
+
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
-
           foregroundColor: Colors.white,
           backgroundColor: const Color.fromARGB(255, 55, 111, 60),
           title: const Text(
@@ -1450,12 +1445,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     _estadoSelecionado =
                         _pesquisaController.getEstadoByNome(option);
                     _pesquisaController.setMunicipios(_estadoSelecionado!.id);
-                  if( _estadosSelecionados.length < 5 ){
-                  _estadosSelecionados.add(_estadoSelecionado!.nome); 
-                  }else{
-                    _estadosSelecionados.removeAt(0); 
-                    _estadosSelecionados.insert(0, _estadoSelecionado!.nome);
-                  }
+                    if (_estadosSelecionados.length < 5) {
+                      _estadosSelecionados.add(_estadoSelecionado!.nome);
+                    } else {
+                      _estadosSelecionados.removeAt(0);
+                      _estadosSelecionados.insert(0, _estadoSelecionado!.nome);
+                    }
                   },
                   optionsBuilder: (textEditingValue) {
                     if (textEditingValue.text == '') {
@@ -1485,13 +1480,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     _estadoSelecionado =
                         _pesquisaController.getEstadoByNome(option);
                     _pesquisaController.setMunicipios(_estadoSelecionado!.id);
-                                        if( _estadosSelecionados.length < 5 ){
-                  _estadosSelecionados.add(_estadoSelecionado!.nome); 
-                  }else{
-                    _estadosSelecionados.removeAt(1); 
-                    _estadosSelecionados.insert(1, _estadoSelecionado!.nome);
-                  }
-
+                    if (_estadosSelecionados.length < 5) {
+                      _estadosSelecionados.add(_estadoSelecionado!.nome);
+                    } else {
+                      _estadosSelecionados.removeAt(1);
+                      _estadosSelecionados.insert(1, _estadoSelecionado!.nome);
+                    }
                   },
                   optionsBuilder: (textEditingValue) {
                     if (textEditingValue.text == '') {
@@ -1521,13 +1515,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     _estadoSelecionado =
                         _pesquisaController.getEstadoByNome(option);
                     _pesquisaController.setMunicipios(_estadoSelecionado!.id);
-                                          if( _estadosSelecionados.length < 5 ){
-                  _estadosSelecionados.add(_estadoSelecionado!.nome); 
-                  }else{
-                    _estadosSelecionados.removeAt(2); 
-                    _estadosSelecionados.insert(2, _estadoSelecionado!.nome);
-                  }
-
+                    if (_estadosSelecionados.length < 5) {
+                      _estadosSelecionados.add(_estadoSelecionado!.nome);
+                    } else {
+                      _estadosSelecionados.removeAt(2);
+                      _estadosSelecionados.insert(2, _estadoSelecionado!.nome);
+                    }
                   },
                   optionsBuilder: (textEditingValue) {
                     if (textEditingValue.text == '') {
@@ -1557,12 +1550,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     _estadoSelecionado =
                         _pesquisaController.getEstadoByNome(option);
                     _pesquisaController.setMunicipios(_estadoSelecionado!.id);
-                                         if( _estadosSelecionados.length < 5 ){
-                  _estadosSelecionados.add(_estadoSelecionado!.nome); 
-                  }else{
-                    _estadosSelecionados.removeAt(3); 
-                    _estadosSelecionados.insert(3, _estadoSelecionado!.nome);
-                  }
+                    if (_estadosSelecionados.length < 5) {
+                      _estadosSelecionados.add(_estadoSelecionado!.nome);
+                    } else {
+                      _estadosSelecionados.removeAt(3);
+                      _estadosSelecionados.insert(3, _estadoSelecionado!.nome);
+                    }
                   },
                   optionsBuilder: (textEditingValue) {
                     if (textEditingValue.text == '') {
@@ -1591,13 +1584,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     _estadoSelecionado =
                         _pesquisaController.getEstadoByNome(option);
                     _pesquisaController.setMunicipios(_estadoSelecionado!.id);
-                                          if( _estadosSelecionados.length < 5 ){
-                  _estadosSelecionados.add(_estadoSelecionado!.nome); 
-                  }else{
-                    _estadosSelecionados.removeAt(4); 
-                    _estadosSelecionados.insert(4, _estadoSelecionado!.nome);
-                  }
-
+                    if (_estadosSelecionados.length < 5) {
+                      _estadosSelecionados.add(_estadoSelecionado!.nome);
+                    } else {
+                      _estadosSelecionados.removeAt(4);
+                      _estadosSelecionados.insert(4, _estadoSelecionado!.nome);
+                    }
                   },
                   optionsBuilder: (textEditingValue) {
                     if (textEditingValue.text == '') {
@@ -1633,12 +1625,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   onSelected: (option) {
                     _paisSelecionado =
                         _pesquisaController.getPaisesByNome(option);
-                          if( _paisesSelecionados.length < 5 ){
-                  _paisesSelecionados.add(_paisSelecionado!.nome); 
-                  }else{
-                    _paisesSelecionados.removeAt(0); 
-                    _paisesSelecionados.insert(0, _paisSelecionado!.nome);
-                  }
+                    if (_paisesSelecionados.length < 5) {
+                      _paisesSelecionados.add(_paisSelecionado!.nome);
+                    } else {
+                      _paisesSelecionados.removeAt(0);
+                      _paisesSelecionados.insert(0, _paisSelecionado!.nome);
+                    }
                   },
                   optionsBuilder: (textEditingValue) {
                     if (textEditingValue.text == '') {
@@ -1668,12 +1660,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   onSelected: (option) {
                     _paisSelecionado =
                         _pesquisaController.getPaisesByNome(option);
-                              if( _paisesSelecionados.length < 5 ){
-                  _paisesSelecionados.add(_paisSelecionado!.nome); 
-                  }else{
-                    _paisesSelecionados.removeAt(1); 
-                    _paisesSelecionados.insert(1, _paisSelecionado!.nome);
-                  }
+                    if (_paisesSelecionados.length < 5) {
+                      _paisesSelecionados.add(_paisSelecionado!.nome);
+                    } else {
+                      _paisesSelecionados.removeAt(1);
+                      _paisesSelecionados.insert(1, _paisSelecionado!.nome);
+                    }
                   },
                   optionsBuilder: (textEditingValue) {
                     if (textEditingValue.text == '') {
@@ -1702,12 +1694,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   onSelected: (option) {
                     _paisSelecionado =
                         _pesquisaController.getPaisesByNome(option);
-                              if( _paisesSelecionados.length < 5 ){
-                  _paisesSelecionados.add(_paisSelecionado!.nome); 
-                  }else{
-                    _paisesSelecionados.removeAt(2); 
-                    _paisesSelecionados.insert(2, _paisSelecionado!.nome);
-                  }
+                    if (_paisesSelecionados.length < 5) {
+                      _paisesSelecionados.add(_paisSelecionado!.nome);
+                    } else {
+                      _paisesSelecionados.removeAt(2);
+                      _paisesSelecionados.insert(2, _paisSelecionado!.nome);
+                    }
                   },
                   optionsBuilder: (textEditingValue) {
                     if (textEditingValue.text == '') {
@@ -1736,12 +1728,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   onSelected: (option) {
                     _paisSelecionado =
                         _pesquisaController.getPaisesByNome(option);
-                              if( _paisesSelecionados.length < 5 ){
-                  _paisesSelecionados.add(_paisSelecionado!.nome); 
-                  }else{
-                    _paisesSelecionados.removeAt(3); 
-                    _paisesSelecionados.insert(3, _paisSelecionado!.nome);
-                  }
+                    if (_paisesSelecionados.length < 5) {
+                      _paisesSelecionados.add(_paisSelecionado!.nome);
+                    } else {
+                      _paisesSelecionados.removeAt(3);
+                      _paisesSelecionados.insert(3, _paisSelecionado!.nome);
+                    }
                   },
                   optionsBuilder: (textEditingValue) {
                     if (textEditingValue.text == '') {
@@ -1770,12 +1762,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   onSelected: (option) {
                     _paisSelecionado =
                         _pesquisaController.getPaisesByNome(option);
-                              if( _paisesSelecionados.length < 5 ){
-                  _paisesSelecionados.add(_paisSelecionado!.nome); 
-                  }else{
-                    _paisesSelecionados.removeAt(4); 
-                    _paisesSelecionados.insert(4, _paisSelecionado!.nome);
-                  }
+                    if (_paisesSelecionados.length < 5) {
+                      _paisesSelecionados.add(_paisSelecionado!.nome);
+                    } else {
+                      _paisesSelecionados.removeAt(4);
+                      _paisesSelecionados.insert(4, _paisSelecionado!.nome);
+                    }
                   },
                   optionsBuilder: (textEditingValue) {
                     if (textEditingValue.text == '') {
@@ -1839,7 +1831,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (newValue) {valoresjson['nTotalDeUH']=newValue;},
+                          getValue: (newValue) {
+                            valoresjson['nTotalDeUH'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -1865,7 +1859,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           },
                           name: 'nº',
                           getValue: (newValue) {
-                            valoresjson['nTotalDeLeitos']=newValue;
+                            valoresjson['nTotalDeLeitos'] = newValue;
                           },
                         ))
                   ],
@@ -1906,20 +1900,20 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-               CheckC(
-                onChanged: (p0) => valoresjson['produtosHigienePessoal'] = p0,
-                nomes: [
-                'Shampoo',
-                'Toalha',
-                'Condicionador',
-                'Roupão de banho',
-                'Sabonete',
-                'Touca',
-                'Creme dental',
-                'Chinelo',
-                'Loção',
-                'outro'
-              ]),
+              CheckC(
+                  onChanged: (p0) => valoresjson['produtosHigienePessoal'] = p0,
+                  nomes: [
+                    'Shampoo',
+                    'Toalha',
+                    'Condicionador',
+                    'Roupão de banho',
+                    'Sabonete',
+                    'Touca',
+                    'Creme dental',
+                    'Chinelo',
+                    'Loção',
+                    'outro'
+                  ]),
               Padding(
                 padding: EdgeInsets.only(
                     left: sizeScreen.width * 0.005,
@@ -1930,7 +1924,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-               CheckC(
+              CheckC(
                 onChanged: (p0) => valoresjson['equipamentosEServicos'] = p0,
                 nomes: [
                   'TV',
@@ -1954,9 +1948,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               Padding(
                 padding: EdgeInsets.only(
-                    right: sizeScreen.width * 0.05,
-                    top: sizeScreen.height * 0.02,
-                    ),
+                  right: sizeScreen.width * 0.05,
+                  top: sizeScreen.height * 0.02,
+                ),
                 child: textLabel(
                   name: 'Instalações:',
                   fontWeight: FontWeight.bold,
@@ -1970,7 +1964,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-               CheckC(
+              CheckC(
                 onChanged: (p0) => valoresjson['estacionamento'] = p0,
                 nomes: ['Pago', 'Gratuito', 'Coberto', 'Descoberto'],
               ),
@@ -1999,7 +1993,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (newValue) {valoresjson['nCapacidadeDeVeiculos'] = newValue;},
+                          getValue: (newValue) {
+                            valoresjson['nCapacidadeDeVeiculos'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -2027,7 +2023,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (newValue) {valoresjson['nAutomoveis'] = newValue;},
+                          getValue: (newValue) {
+                            valoresjson['nAutomoveis'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -2081,7 +2079,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               RadioD(
                 options: ['110 volts', '220 volts', '110/220 volts'],
-                getValue: (newValue) {valoresjson['energiaEletrica'] = newValue;},
+                getValue: (newValue) {
+                  valoresjson['energiaEletrica'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -2107,7 +2107,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           return null;
                         },
                         name: 'KVA',
-                        getValue: (newValue) {valoresjson['capacidadeEmKVA'] = newValue;},
+                        getValue: (newValue) {
+                          valoresjson['capacidadeEmKVA'] = newValue;
+                        },
                       ))
                 ],
               ),
@@ -2122,7 +2124,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.032,
               ),
               ExpansionTileYoN(
-                getValue: (newValue) {valoresjson['geradorDeEmergencia'] = newValue;},
+                getValue: (newValue) {
+                  valoresjson['geradorDeEmergencia'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -2148,7 +2152,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           return null;
                         },
                         name: 'KVA',
-                        getValue: (newValue) {valoresjson['geradorCapacidadeEmKVA'] = newValue;},
+                        getValue: (newValue) {
+                          valoresjson['geradorCapacidadeEmKVA'] = newValue;
+                        },
                       ))
                 ],
               ),
@@ -2169,7 +2175,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               CheckC(
+              CheckC(
                 onChanged: (p0) => valoresjson['restaurante'] = p0,
                 nomes: [
                   'Não',
@@ -2199,7 +2205,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
-                          controller: getController('capacidade instalada por dia'),
+                          controller:
+                              getController('capacidade instalada por dia'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -2207,7 +2214,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (newValue) {valoresjson['nCapacidadeInstaladaPorDia'] = newValue;},
+                          getValue: (newValue) {
+                            valoresjson['nCapacidadeInstaladaPorDia'] =
+                                newValue;
+                          },
                         ))
                   ],
                 ),
@@ -2224,7 +2234,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
-                          controller: getController('pessoas atendidas sentadas'),
+                          controller:
+                              getController('pessoas atendidas sentadas'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -2232,7 +2243,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (newValue) {valoresjson['nPessoasAtendidasSentadas'] = newValue;},
+                          getValue: (newValue) {
+                            valoresjson['nPessoasAtendidasSentadas'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -2254,7 +2267,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (newValue) {valoresjson['nCapacidadeSimultanea'] = newValue;},
+                          getValue: (newValue) {
+                            valoresjson['nCapacidadeSimultanea'] = newValue;
+                          },
                         ))
                   ],
                 ),
@@ -2265,7 +2280,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
-                          controller: getController('capacidade simultanea pessoas atendidas sentadas'),
+                          controller: getController(
+                              'capacidade simultanea pessoas atendidas sentadas'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -2273,7 +2289,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (newValue) {valoresjson['nPessoasAtendidasSentadasSimultanea'] = newValue;},
+                          getValue: (newValue) {
+                            valoresjson['nPessoasAtendidasSentadasSimultanea'] =
+                                newValue;
+                          },
                         ))
                   ],
                 ),
@@ -2288,7 +2307,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   height: sizeScreen.height * 0.02,
                 ),
               ]),
-               CheckC(
+              CheckC(
                 onChanged: (p0) => valoresjson['lanchonete'] = p0,
                 nomes: [
                   'Não',
@@ -2311,7 +2330,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
-                          controller: getController('lanchonete capacidade instalada por dia'),
+                          controller: getController(
+                              'lanchonete capacidade instalada por dia'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -2320,7 +2340,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           },
                           name: 'nº',
                           getValue: (newValue) {
-                            valoresjson['lanchoneteCapacidadeInstaladaPorDia'] = newValue;
+                            valoresjson['lanchoneteCapacidadeInstaladaPorDia'] =
+                                newValue;
                           },
                         ))
                   ],
@@ -2338,7 +2359,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
-                          controller: getController('lanchonete capacidade pessoas atendidas sentadas'),
+                          controller: getController(
+                              'lanchonete capacidade pessoas atendidas sentadas'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -2347,7 +2369,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           },
                           name: 'nº',
                           getValue: (newValue) {
-                            valoresjson['lanchoneteCapacidadePessoasAtendidasSentadas']=newValue;
+                            valoresjson[
+                                    'lanchoneteCapacidadePessoasAtendidasSentadas'] =
+                                newValue;
                           },
                         ))
                   ],
@@ -2362,7 +2386,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
-                          controller: getController('lanchonete capacidade simultanea'),
+                          controller:
+                              getController('lanchonete capacidade simultanea'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -2370,7 +2395,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (newValue) {valoresjson['lanchoneteCapacidadeSimultanea'] = newValue;},
+                          getValue: (newValue) {
+                            valoresjson['lanchoneteCapacidadeSimultanea'] =
+                                newValue;
+                          },
                         ))
                   ],
                 ),
@@ -2384,7 +2412,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
-                          controller: getController('lanchonete pessoas atendidas sentadas simultanea'),
+                          controller: getController(
+                              'lanchonete pessoas atendidas sentadas simultanea'),
                           validat: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Preencha o campo';
@@ -2392,7 +2421,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             return null;
                           },
                           name: 'nº',
-                          getValue: (newValue) {valoresjson['lanchoneteCapacidadeSentadasSimultanea']=newValue;},
+                          getValue: (newValue) {
+                            valoresjson[
+                                    'lanchoneteCapacidadeSentadasSimultanea'] =
+                                newValue;
+                          },
                         ))
                   ],
                 ),
@@ -2414,7 +2447,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               CheckC(
+              CheckC(
                 onChanged: (p0) => valoresjson['instalacaoEEspacos'] = p0,
                 nomes: [
                   'Piscina',
@@ -2444,7 +2477,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               CheckC(
+              CheckC(
                 onChanged: (p0) => valoresjson['outrosEspacosEAtividades'] = p0,
                 nomes: [
                   'Observação da fauna',
@@ -2515,8 +2548,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               CheckC(
-                onChanged: (p0) => valoresjson['servicos']  = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['servicos'] = p0,
                 nomes: [
                   'Realização de eventos próprios',
                   'Aluguel de equipamentos',
@@ -2537,7 +2570,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               CheckC(
+              CheckC(
                 onChanged: (p0) => valoresjson['equipamentos'] = p0,
                 nomes: [
                   'Internet',
@@ -2563,7 +2596,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               CheckC(
+              CheckC(
                 onChanged: (p0) => valoresjson['facilidadesEServicos'] = p0,
                 nomes: [
                   'Adaptador de voltagem',
@@ -2624,8 +2657,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['facilidadesParaExecutivos'] = p0,
+              CheckC(
+                onChanged: (p0) =>
+                    valoresjson['facilidadesParaExecutivos'] = p0,
                 nomes: [
                   'Apartamentos em andares especiais',
                   'Café da manhã em ambiente privativo',
@@ -2681,17 +2715,21 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     // width: sizeScreen.width * 0.5,
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN(
-                  getValue: (newValue) {valoresjson['doEquipamentoEspaco'] = newValue;},
+                  getValue: (newValue) {
+                    valoresjson['doEquipamentoEspaco'] = newValue;
+                  },
                 ))
               ]),
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-              TabelsEquipamentoEEspaco(onChanged: (p0) {
-                setState(() {
-                  valoresjson['tabelaEquipamentoEEspaco'] = p0;
-                });
-              },),
+              TabelsEquipamentoEEspaco(
+                onChanged: (p0) {
+                  setState(() {
+                    valoresjson['tabelaEquipamentoEEspaco'] = p0;
+                  });
+                },
+              ),
               SizedBox(
                 height: 100.w,
               ),
@@ -2709,18 +2747,21 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN(
                   getValue: (newValue) {
-                    valoresjson['daAreaOuEdificacaoEmQueEstaLocalizado'] = newValue;
+                    valoresjson['daAreaOuEdificacaoEmQueEstaLocalizado'] =
+                        newValue;
                   },
                 ))
               ]),
               SizedBox(
                 height: 100.w,
               ),
-              TabelsEquipamentoEEspaco(onChanged: (p0) {
-                setState(() {
-                  valoresjson['tabelaEquipamentoEEspaco2'] = p0;
-                });
-              },),
+              TabelsEquipamentoEEspaco(
+                onChanged: (p0) {
+                  setState(() {
+                    valoresjson['tabelaEquipamentoEEspaco2'] = p0;
+                  });
+                },
+              ),
 
               SizedBox(
                 height: sizeScreen.height * 0.05,
@@ -2796,8 +2837,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               CheckC(
-                onChanged: (p0) => valoresjson['pessoalCapacitadoParaReceberPCD'] = p0,
+              CheckC(
+                onChanged: (p0) =>
+                    valoresjson['pessoalCapacitadoParaReceberPCD'] = p0,
                 nomes: [
                   'Não',
                   'Física',
@@ -2817,7 +2859,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               CheckC(
+              CheckC(
                 onChanged: (p0) => valoresjson['rotaExternaAcessivel'] = p0,
                 nomes: [
                   'Não',
@@ -2843,8 +2885,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 height: sizeScreen.height * 0.02,
               ),
 
-               CheckC(
-                onChanged: (p0) => valoresjson['simboloInternacionalDeAcesso'] = p0,
+              CheckC(
+                onChanged: (p0) =>
+                    valoresjson['simboloInternacionalDeAcesso'] = p0,
                 nomes: [
                   'Não',
                   'Entrada',
@@ -2865,8 +2908,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: sizeScreen.height * 0.02,
               ),
-               CheckC(
-                onChanged: (p0) => valoresjson['localDeEmbarqueEDesembarque'] = p0,
+              CheckC(
+                onChanged: (p0) =>
+                    valoresjson['localDeEmbarqueEDesembarque'] = p0,
                 nomes: ['Não', 'Sinalizado', 'Com acesso em nível'],
               ),
               SizedBox(
@@ -2877,7 +2921,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 fontWeight: FontWeight.bold,
               ),
               SizedBox(height: 50.w),
-               CheckC(
+              CheckC(
                 onChanged: (p0) => valoresjson['vagaEmEstacionamento'] = p0,
                 nomes: [
                   'Não',
@@ -2898,8 +2942,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-                onChanged:(p0) => valoresjson['areaDeCirculacaoAcessoInterno'] = p0,
+              CheckC(
+                onChanged: (p0) =>
+                    valoresjson['areaDeCirculacaoAcessoInterno'] = p0,
                 nomes: [
                   'Não',
                   'Rampa',
@@ -2919,8 +2964,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['escada'] = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['escada'] = p0,
                 nomes: [
                   'Não',
                   'Corrimão',
@@ -2939,8 +2984,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['rampa']=p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['rampa'] = p0,
                 nomes: [
                   'Não',
                   'Corrimão',
@@ -2960,8 +3005,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['piso']=p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['piso'] = p0,
                 nomes: [
                   'Não',
                   'Tátil',
@@ -2979,8 +3024,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['elevador'] = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['elevador'] = p0,
                 nomes: [
                   'Não',
                   'Sinalizado em braile',
@@ -2999,8 +3044,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-                onChanged: (p0) => valoresjson['equipamentoMotorizadoParaDeslocamentoInterno'] = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson[
+                    'equipamentoMotorizadoParaDeslocamentoInterno'] = p0,
                 nomes: [
                   'Não',
                   'Cadeira',
@@ -3017,8 +3063,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['sinalizacaoVisual'] = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['sinalizacaoVisual'] = p0,
                 nomes: [
                   'Não',
                   'Entrada',
@@ -3041,8 +3087,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['sinalizacaoTatil'] = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['sinalizacaoTatil'] = p0,
                 nomes: [
                   'Não',
                   'Entrada',
@@ -3065,8 +3111,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['alarmeDeEmergencia'] = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['alarmeDeEmergencia'] = p0,
                 nomes: [
                   'Não',
                   'Sonoro',
@@ -3084,8 +3130,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['comunicacao'] = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['comunicacao'] = p0,
                 nomes: [
                   'Não',
                   'Texto informativo em braile',
@@ -3103,8 +3149,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['balcaoDeAtendimento'] = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['balcaoDeAtendimento'] = p0,
                 nomes: [
                   'Não',
                   'Rebaixado',
@@ -3121,8 +3167,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['mobiliario'] = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['mobiliario'] = p0,
                 nomes: [
                   'Não',
                   'Altura adequada',
@@ -3139,8 +3185,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['sanitario'] = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['sanitario'] = p0,
                 nomes: [
                   'Não',
                   'Porta larga suficiente para entrada de cadeira de rodas ',
@@ -3163,8 +3209,8 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               SizedBox(
                 height: 50.w,
               ),
-               CheckC(
-              onChanged: (p0) => valoresjson['telefone'] = p0,
+              CheckC(
+                onChanged: (p0) => valoresjson['telefone'] = p0,
                 nomes: [
                   'Não',
                   'Altura adequada',
@@ -3212,7 +3258,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           return null;
                         },
                         name: '',
-                        getValue: (newValue) {valoresjson['outros'] = newValue;},
+                        getValue: (newValue) {
+                          valoresjson['outros'] = newValue;
+                        },
                       ))
                 ],
               ),
@@ -3241,7 +3289,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   return null;
                 },
                 name: '',
-                getValue: (newValue) {valoresjson['observacoes']=newValue;},
+                getValue: (newValue) {
+                  valoresjson['observacoes'] = newValue;
+                },
               ),
               SizedBox(
                 height: sizeScreen.height * 0.05,
@@ -3263,7 +3313,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               CustomTextField(
                 controller: getController('referencias'),
                 validat: (value) {
-                  
                   if (value == null || value.isEmpty) {
                     return 'Preencha o campo';
                   }
@@ -3271,7 +3320,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 },
                 name: '',
                 getValue: (newValue) {
-                  valoresjson['referencias']=newValue;
+                  valoresjson['referencias'] = newValue;
                 },
               ),
 
@@ -3283,12 +3332,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   valoresjson['estadosTuristas'] = _estadosSelecionados;
                   valoresjson['paisesTuristas'] = _paisesSelecionados;
                   autoFillForm();
-                                      _formKey.currentState!.save();
+                  _formKey.currentState!.save();
 
                   sendForm(valoresjson);
-                  valoresjson.forEach((key, value){
-                     print('$key');
-
+                  valoresjson.forEach((key, value) {
+                    print('$key');
                   });
                 },
               ),

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:inventur/models/alimentos_bebidas_model.dart';
+import 'package:inventur/models/meios_hospedagem_model.dart';
 import 'package:inventur/models/rodovia_model.dart';
 import 'package:inventur/models/sistema_de_seguranca_model.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
@@ -11,6 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranca_edit.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas_edit.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia_edit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -266,7 +268,6 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
           final arguments = ModalRoute.of(context)?.settings.arguments as Map;
           final isadmin = arguments['is_admin'];
           final equipamento = posts[index];
-
           final tipo = equipamento['tipo'];
           final dados = equipamento['dados'];
           return GestureDetector(
@@ -282,7 +283,6 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                                   RodoviaModel.fromJson(equipamento['dados']),
                             )));
               } else if (equipamento['tipo'] == 'SistemaDeSeguranca') {
-
                 Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
@@ -298,31 +298,39 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                               alimentosModel: AlimentosEBebidas.fromJson(
                                   equipamento['dados']),
                             )));
+              }else if(equipamento['tipo'] == 'Meios de Hospedagem'){
+                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MeiosDeHospedagem(
+                  hospedagemModel: MeiosDeHospedagemModel.fromJson(
+                    equipamento['dados']
+                  ),
+                )));
               }
             },
             child: isadmin == true
                 ? Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      
                       color: AppConstants.MAIN_GREEN,
                     ),
                     margin:
                         EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
-                   
                     height: 250.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(width: 140.w,),
+                        SizedBox(
+                          width: 140.w,
+                        ),
                         Flexible(
                           child: Center(
                             child: Text(
                               getDisplay(dados),
-                              style: TextStyle(fontSize: 55.w, color: Colors.white,),
+                              style: TextStyle(
+                                fontSize: 55.w,
+                                color: Colors.white,
+                              ),
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
-                              
                             ),
                           ),
                         ),
@@ -397,10 +405,8 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                                   });
                             },
                             icon: const Icon(
-
                               Icons.close,
                               color: Colors.red,
-                              
                             ))
                       ],
                     ),
@@ -412,7 +418,6 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                     ),
                     margin:
                         EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
-                   
                     height: 250.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -420,9 +425,11 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                         Flexible(
                           child: Text(
                             getDisplay(dados),
-                                 style: TextStyle(fontSize: 55.w, ),
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 55.w,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.center,
                           ),
                         ),
                       ],
@@ -435,16 +442,17 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
   }
 }
 
-
-String getDisplay(Map<String, dynamic> dados){
+String getDisplay(Map<String, dynamic> dados) {
   final tipoFormulario = dados['tipo_formulario'] ?? '';
 
-  switch(tipoFormulario){
+  switch (tipoFormulario) {
     case 'Rodovia':
       return '$tipoFormulario\n${dados['nome_oficial']}';
     case 'Sistema de Segurança':
       return '$tipoFormulario\n${dados['tipo']}';
     case 'Alimentos e bebidas':
+      return '$tipoFormulario\n${dados['nomeFantasia']}';
+    case 'Meios de Hospedagem':
       return '$tipoFormulario\n${dados['nomeFantasia']}';
     default:
       return '$tipoFormulario\n${dados['tipo'] ?? ''}';
