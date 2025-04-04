@@ -53,6 +53,33 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     }
   }
 
+  Future<void> update(
+      int sistemaId, Map<String, dynamic> data) async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
+
+    final url = Uri.parse(
+        '${AppConstants.BASE_URI}/api/v1/meiosdehospedagem/update/$sistemaId');
+
+    try {
+      final response = await http.patch(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          "Authorization": "Bearer $token",
+        },
+        body: json.encode(data),
+      );
+      if (response.statusCode == 200) {
+        print("Atualização bem-sucedida");
+      } else {
+        print("Erro na atualização: ${response.statusCode}");
+      }
+    } catch (e) {
+      print('Erro: $e');
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   late Estado? _estadoSelecionado = Estado(id: -1, sigla: '', nome: '');
@@ -63,14 +90,18 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
   bool isUpdate = false;
   @override
-void didChangeDependencies(){
+  void didChangeDependencies() {
     super.didChangeDependencies();
-     final argument = ModalRoute.of(context)!.settings.arguments as Map;
-     if(argument.containsKey('isUpdate')){
-     isUpdate = argument['isUpdate'];
-
-     }
+    try {
+      final argument = ModalRoute.of(context)!.settings.arguments as Map;
+      if (argument.containsKey('isUpdate')) {
+        isUpdate = argument['isUpdate'];
+      }
+    } catch (e) {
+      isUpdate = false;
+    }
   }
+
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Meios de Hospedagem',
     // 'uf': null,
@@ -236,68 +267,126 @@ void didChangeDependencies(){
   void autoFillForm() {
     // Verifica se o controlador existe no Map antes de preencher
     void fillIfExists(String key, String value) {
-     getController(key).text = value;
+      getController(key).text = value;
     }
 
-    // Preenche os valores dos controladores
-    fillIfExists('uf', 'widget.hospedagemModel!.uf!');
-    fillIfExists('rg', '1234567');
-    fillIfExists('municipio', 'Viçosa do Ceará');
-    fillIfExists('razao social', 'Razão Social Exemplo');
-    fillIfExists('nome fantasia', 'Nome Fantasia Exemplo');
-    fillIfExists('CNPJ', '00.000.000/0000-00');
-    fillIfExists('codigo CNAE', '12345');
-    fillIfExists('atividade economica', 'Atividade Econômica Exemplo');
-    fillIfExists('inscricao municipal', '123456');
-    fillIfExists('nome da rede', 'Nome da Rede Exemplo');
-    fillIfExists('inicio da atividade', '01/01/2023');
-    fillIfExists('funcionarios permanentes', '10');
-    fillIfExists('funcionarios temporarios', '5');
-    fillIfExists('pessoas com deficiencia', '2');
-    fillIfExists('latitude', '-3.7319');
-    fillIfExists('longitute', '-38.5267');
-    fillIfExists('avenida rua', 'Rua Exemplo');
-    fillIfExists('bairro localidade', 'Bairro Exemplo');
-    fillIfExists('distrito', 'Distrito Exemplo');
-    fillIfExists('CEP', '60000-000');
-    fillIfExists('whatsapp', '(88) 99999-9999');
-    fillIfExists('instagram', '@exemplo');
-    fillIfExists('email', 'exemplo@email.com');
-    fillIfExists('site', 'www.exemplo.com');
-    fillIfExists('pontos de referencia', 'Ponto de Referência Exemplo');
-    fillIfExists('regras e informacoes', 'Informações adicionais e regras');
-    fillIfExists('ocupação ano n', '80%');
-    fillIfExists('ocupacao alta temporada n', '95%');
-    fillIfExists('total de UH', '50');
-    fillIfExists('total de leitos', '100');
-    fillIfExists('uh adaptados para pcd', '5');
-    fillIfExists('capacidade de veiculos', '200');
-    fillIfExists('capacidade automoveis', '30');
-    fillIfExists('onibus', '5');
-    fillIfExists('capacidade em KVA', '500');
-    fillIfExists('gerador capacidade em KVA', '300');
-    fillIfExists('capacidade instalada por dia', '100');
-    fillIfExists('pessoas atendidas sentadas', '50');
-    fillIfExists('capacidade simultanea', '75');
-    fillIfExists('capacidade simultanea pessoas atendidas sentadas', '40');
-    fillIfExists('lanchonete capacidade instalada por dia', '80');
-    fillIfExists('lanchonete capacidade pessoas atendidas sentadas', '40');
-    fillIfExists('lanchonete capacidade simultanea', '60');
-    fillIfExists('lanchonete pessoas atendidas sentadas simultanea', '30');
-    fillIfExists('outros', 'Outras informações relevantes');
-    fillIfExists('observacoes', 'Observações importantes');
-    fillIfExists('referencias', 'Referências ou links');
+    if (widget.hospedagemModel != null) {
+      fillIfExists('uf', widget.hospedagemModel!.uf!);
+      fillIfExists('rg', widget.hospedagemModel!.regiaoTuristica!);
+      fillIfExists('municipio', widget.hospedagemModel!.municipio!);
+      fillIfExists('razao social', widget.hospedagemModel!.razaoSocial!);
+      fillIfExists('nome fantasia', widget.hospedagemModel!.nomeFantasia!);
+      fillIfExists('CNPJ', widget.hospedagemModel!.CNPJ!);
+      fillIfExists('codigo CNAE', widget.hospedagemModel!.codigoCNAE!);
+      
+      fillIfExists('estado01', widget.hospedagemModel!.estadosTuristas![0]);
+      fillIfExists('estado02', widget.hospedagemModel!.estadosTuristas![1]);
+      fillIfExists('estado03', widget.hospedagemModel!.estadosTuristas![2]);
+      fillIfExists('estado04', widget.hospedagemModel!.estadosTuristas![3]);
+      fillIfExists('estado05', widget.hospedagemModel!.estadosTuristas![4]);
+      fillIfExists('pais01', widget.hospedagemModel!.paisesTuristas![0]);
+      fillIfExists('pais02', widget.hospedagemModel!.paisesTuristas![1]);
+      fillIfExists('pais03', widget.hospedagemModel!.paisesTuristas![2]);
+      fillIfExists('pais04', widget.hospedagemModel!.paisesTuristas![3]);
+      fillIfExists('pais05', widget.hospedagemModel!.paisesTuristas![4]);
+
+      fillIfExists(
+          'atividade economica', widget.hospedagemModel!.atividadeEconomica!);
+      fillIfExists(
+          'inscricao municipal', widget.hospedagemModel!.inscricaoMunicipal!);
+      fillIfExists('nome da rede', widget.hospedagemModel!.nomeDaRede!);
+      fillIfExists(
+          'inicio da atividade', widget.hospedagemModel!.inicioDaAtividade!);
+      fillIfExists('funcionarios permanentes',
+          widget.hospedagemModel!.qtdeFuncionariosPermanentes!.toString());
+      fillIfExists('funcionarios temporarios',
+          widget.hospedagemModel!.qtdeFuncionariosTemporarios!.toString());
+      fillIfExists('pessoas com deficiencia',
+          widget.hospedagemModel!.qtdeFuncionarisComDeficiencia!.toString());
+      fillIfExists('latitude', widget.hospedagemModel!.latitude.toString());
+      fillIfExists('longitute', widget.hospedagemModel!.longitute.toString());
+      fillIfExists('avenida rua', widget.hospedagemModel!.avenidaRuaEtc!);
+      fillIfExists(
+          'bairro localidade', widget.hospedagemModel!.bairroLocalidade!);
+      fillIfExists('distrito', widget.hospedagemModel!.distrito!);
+      fillIfExists('CEP', widget.hospedagemModel!.CEP!);
+      fillIfExists('whatsapp', widget.hospedagemModel!.whatsapp!);
+      fillIfExists('instagram', widget.hospedagemModel!.instagram!);
+      fillIfExists('email', widget.hospedagemModel!.email!);
+      fillIfExists('site', widget.hospedagemModel!.site!);
+      fillIfExists(
+          'pontos de referencia', widget.hospedagemModel!.pontosDeReferencia!);
+      fillIfExists('regras e informacoes',
+          widget.hospedagemModel!.outrasRegrasEInformacoes!);
+      fillIfExists('ocupação ano n', widget.hospedagemModel!.nAnoOcupacao!);
+      fillIfExists('ocupacao alta temporada n',
+          widget.hospedagemModel!.nOcupacaoAltaTemporada!);
+      fillIfExists(
+          'total de UH', widget.hospedagemModel!.nTotalDeUH!.toString());
+      fillIfExists('total de leitos',
+          widget.hospedagemModel!.nTotalDeLeitos!.toString());
+      fillIfExists('uh adaptados para pcd',
+          widget.hospedagemModel!.nUhAdaptadasParaPCD!.toString());
+      fillIfExists('capacidade de veiculos',
+          widget.hospedagemModel!.nCapacidadeDeVeiculos!.toString());
+      fillIfExists('capacidade automoveis',
+          widget.hospedagemModel!.nAutomoveis!.toString());
+      fillIfExists('onibus', widget.hospedagemModel!.nOnibus!.toString());
+      fillIfExists('capacidade em KVA',
+          widget.hospedagemModel!.capacidadeEmKVA!.toString());
+      fillIfExists('gerador capacidade em KVA',
+          widget.hospedagemModel!.geradorCapacidadeEmKVA!);
+      fillIfExists('capacidade instalada por dia',
+          widget.hospedagemModel!.nCapacidadeInstaladaPorDia!.toString());
+      fillIfExists('pessoas atendidas sentadas',
+          widget.hospedagemModel!.nPessoasAtendidasSentadas!.toString());
+      fillIfExists('capacidade simultanea',
+          widget.hospedagemModel!.nCapacidadeSimultanea!.toString());
+      fillIfExists(
+          'capacidade simultanea pessoas atendidas sentadas',
+          widget.hospedagemModel!.nPessoasAtendidasSentadasSimultanea!
+              .toString());
+      fillIfExists(
+          'lanchonete capacidade instalada por dia',
+          widget.hospedagemModel!.lanchoneteCapacidadeInstaladaPorDia!
+              .toString());
+      fillIfExists(
+          'lanchonete capacidade pessoas atendidas sentadas',
+          widget.hospedagemModel!.lanchoneteCapacidadePessoasAtendidasSentadas!
+              .toString());
+      fillIfExists('lanchonete capacidade simultanea',
+          widget.hospedagemModel!.lanchoneteCapacidadeSimultanea!.toString());
+      fillIfExists(
+          'lanchonete pessoas atendidas sentadas simultanea',
+          widget.hospedagemModel!.lanchoneteCapacidadeSentadasSimultanea!
+              .toString());
+      fillIfExists('outros', widget.hospedagemModel!.outros!);
+      fillIfExists('observacoes', widget.hospedagemModel!.observacoes!);
+      fillIfExists('referencias', widget.hospedagemModel!.referencias!);
+    }
   }
 
-  List<String> _estadosSelecionados = [];
-  List<String> _paisesSelecionados = [];
 
+  
+  late List<String> _estadosSelecionados;
+  late List<String> _paisesSelecionados;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _pesquisaController.setEstados();
     _pesquisaController.setPaises();
+
+
+  try{
+   _estadosSelecionados = widget.hospedagemModel!.estadosTuristas!;
+   _paisesSelecionados = widget.hospedagemModel!.paisesTuristas!;
+  }catch(e){
+    _estadosSelecionados = [];
+    _paisesSelecionados = [];
+  }
+
+
 
   }
 
@@ -310,8 +399,8 @@ void didChangeDependencies(){
 
   @override
   Widget build(BuildContext context) {
-        autoFillForm(); 
-
+    if (isUpdate == true) autoFillForm();
+    
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
         backgroundColor: Colors.white,
@@ -399,6 +488,8 @@ void didChangeDependencies(){
                 getValue: (newValue) {
                   valoresjson['tipo'] = newValue;
                 },
+                indexModel:
+                    isUpdate == true ? widget.hospedagemModel!.tipo : "",
               ),
               SizedBox(
                 height: 25.w,
@@ -409,6 +500,8 @@ void didChangeDependencies(){
               ),
 
               RadioD(
+                indexModel:
+                    isUpdate == true ? widget.hospedagemModel!.subtipo : "",
                 options: [
                   'Hotel',
                   'Hotel histórico',
@@ -555,6 +648,9 @@ void didChangeDependencies(){
               Column(
                 children: [
                   RadioD(
+                    indexModel: isUpdate == true
+                        ? widget.hospedagemModel!.natureza
+                        : "",
                     options: ['pública', 'privada', 'outro'],
                     getValue: (newValue) {
                       valoresjson['natureza'] = newValue;
@@ -573,6 +669,9 @@ void didChangeDependencies(){
               ),
               CheckC(
                 onChanged: (p0) => valoresjson['tipoDeOrganizacao'] = p0,
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.tipoDeOrganizacao
+                    : [],
                 nomes: [
                   'associação',
                   'sindicato',
@@ -713,6 +812,8 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               RadioD(
+                indexModel:
+                    isUpdate == true ? widget.hospedagemModel!.localizacao : "",
                 options: ['urbana', 'rural'],
                 getValue: (newValue) {
                   valoresjson['localizacao'] = newValue;
@@ -966,6 +1067,9 @@ void didChangeDependencies(){
                     // width: sizeScreen.width * 0.5,
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN(
+                  optionModel: isUpdate == true
+                      ? widget.hospedagemModel!.sinalizacaoDeAcesso
+                      : "não",
                   getValue: (newValue) {
                     valoresjson['sinalizacaoDeAcesso'] = newValue;
                   },
@@ -985,6 +1089,9 @@ void didChangeDependencies(){
                     //width: sizeScreen.width * 0.5,
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN(
+                  optionModel: isUpdate == true
+                      ? widget.hospedagemModel!.sinalizacaoTuristica
+                      : "não",
                   getValue: (newValue) {
                     valoresjson['sinalizacaoTuristica'] = newValue;
                   },
@@ -1000,6 +1107,9 @@ void didChangeDependencies(){
               //  RadioD(number: 6, options: options)
               CheckC(
                 onChanged: (p0) => valoresjson['proximidades'] = p0,
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.proximidades
+                    : [],
                 nomes: [
                   'Restaurante',
                   'Centro de Convenções exposições',
@@ -1059,6 +1169,8 @@ void didChangeDependencies(){
               ),
 
               TableMtur(
+                getValues:
+                    isUpdate == true ? widget.hospedagemModel!.tabelaMTUR : {},
                 onChanged: (p0) {
                   setState(() {
                     valoresjson['tabelaMTUR'] = p0;
@@ -1081,6 +1193,9 @@ void didChangeDependencies(){
               SizedBox(
                 height: 300,
                 child: CheckC(
+                  nomesModel: isUpdate == true
+                      ? widget.hospedagemModel!.segmentosOuTurismoEspecializado
+                      : [],
                   onChanged: (p0) =>
                       valoresjson['segmentosOuTurismoEspecializado'] = p0,
                   nomes: [
@@ -1141,6 +1256,9 @@ void didChangeDependencies(){
                 getValue: (newValue) {
                   valoresjson['tipoDeDiaria'] = newValue;
                 },
+                indexModel: isUpdate == true
+                    ? widget.hospedagemModel!.tipoDeDiaria
+                    : "",
               ),
               SizedBox(
                 height: sizeScreen.height * 0.02,
@@ -1151,6 +1269,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.formasDePagamento
+                    : [],
                 onChanged: (p0) => valoresjson['formasDePagamento'] = p0,
                 nomes: [
                   'Dinheiro',
@@ -1167,6 +1288,8 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.reservas : [],
                 onChanged: (p0) => valoresjson['reservas'] = p0,
                 nomes: [
                   'Balcão',
@@ -1193,6 +1316,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                  nomesModel: isUpdate == true
+                      ? widget.hospedagemModel!.atendimentoEmLinguaEstrangeira
+                      : [],
                   onChanged: (p0) =>
                       valoresjson['atendimentoEmLinguaEstrangeira'] = p0,
                   nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
@@ -1205,6 +1331,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                  nomesModel: isUpdate == true
+                      ? widget.hospedagemModel!.informativosImpressos
+                      : [],
                   onChanged: (p0) => valoresjson['informativosImpressos'] = p0,
                   nomes: ['Não', 'Inglês', 'Espanhol', 'outro']),
               SizedBox(
@@ -1231,6 +1360,8 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               RadioC(
+                indexModel:
+                    isUpdate == true ? widget.hospedagemModel!.periodo : "",
                 number: 13,
                 options: [
                   'Janeiro',
@@ -1260,6 +1391,9 @@ void didChangeDependencies(){
               ),
 
               TabelaHorarios(
+                getValue: isUpdate == true
+                    ? widget.hospedagemModel!.tabelasHorario
+                    : {},
                 onChanged: (p0) {
                   setState(() {
                     valoresjson['tabelasHorario'] = p0;
@@ -1282,6 +1416,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               ExpansionTileYoN(
+                optionModel: isUpdate == true
+                    ? widget.hospedagemModel!.funcionamento24h
+                    : "não",
                 getValue: (newValue) {
                   valoresjson['funcionamento24h'] = newValue;
                 },
@@ -1297,6 +1434,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               ExpansionTileYoN(
+                optionModel: isUpdate == true
+                    ? widget.hospedagemModel!.funcionamentoEmFeriados
+                    : "não",
                 getValue: (newValue) {
                   valoresjson['funcionamentoEmFeriados'] = newValue;
                 },
@@ -1312,6 +1452,8 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.restricoes : [],
                 onChanged: (p0) => valoresjson['restricoes'] = p0,
                 nomes: ['Crianças', 'Fumantes', 'Animais', 'outro'],
               ),
@@ -1397,6 +1539,9 @@ void didChangeDependencies(){
               ),
 
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.mesesAltaTemporada
+                    : [],
                 onChanged: (p0) => valoresjson['mesesAltaTemporada'] = p0,
                 nomes: [
                   'Janeiro',
@@ -1426,6 +1571,9 @@ void didChangeDependencies(){
               ),
               CheckC(
                 onChanged: (p0) => valoresjson['origemDosVisitantes'] = p0,
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.origemDosVisitantes
+                    : [],
                 nomes: [
                   'Entorno municipal',
                   'Estadual',
@@ -1446,6 +1594,7 @@ void didChangeDependencies(){
               SizedBox(
                 width: 1250.w,
                 child: AutocompleteTextField(
+                  controllerAuto: getController('estado01'),
                   textAlign: TextAlign.start,
                   label: "Selecione um estado",
                   onSelected: (option) {
@@ -1481,6 +1630,7 @@ void didChangeDependencies(){
               SizedBox(
                 width: 1250.w,
                 child: AutocompleteTextField(
+                  controllerAuto: getController('estado02'),
                   textAlign: TextAlign.start,
                   label: "Selecione um estado",
                   onSelected: (option) {
@@ -1518,6 +1668,7 @@ void didChangeDependencies(){
                 child: AutocompleteTextField(
                   textAlign: TextAlign.start,
                   label: "Selecione um estado",
+                  controllerAuto: getController('estado03'),
                   onSelected: (option) {
                     _estadoSelecionado =
                         _pesquisaController.getEstadoByNome(option);
@@ -1551,6 +1702,7 @@ void didChangeDependencies(){
               SizedBox(
                 width: 1250.w,
                 child: AutocompleteTextField(
+                  controllerAuto: getController('estado04'),
                   textAlign: TextAlign.start,
                   label: "Selecione um estado",
                   onSelected: (option) {
@@ -1587,6 +1739,7 @@ void didChangeDependencies(){
                 child: AutocompleteTextField(
                   textAlign: TextAlign.start,
                   label: "Selecione um estado",
+                  controllerAuto: getController('estado05'),
                   onSelected: (option) {
                     _estadoSelecionado =
                         _pesquisaController.getEstadoByNome(option);
@@ -1629,6 +1782,7 @@ void didChangeDependencies(){
                 child: AutocompleteTextField(
                   textAlign: TextAlign.start,
                   label: "Selecione um país",
+                  controllerAuto: getController('pais01'),
                   onSelected: (option) {
                     _paisSelecionado =
                         _pesquisaController.getPaisesByNome(option);
@@ -1664,6 +1818,7 @@ void didChangeDependencies(){
                 child: AutocompleteTextField(
                   textAlign: TextAlign.start,
                   label: "Selecione um país",
+                  controllerAuto: getController('pais02'),
                   onSelected: (option) {
                     _paisSelecionado =
                         _pesquisaController.getPaisesByNome(option);
@@ -1696,6 +1851,7 @@ void didChangeDependencies(){
               SizedBox(
                 width: 1250.w,
                 child: AutocompleteTextField(
+                  controllerAuto: getController('pais03'),
                   textAlign: TextAlign.start,
                   label: "Selecione um país",
                   onSelected: (option) {
@@ -1730,6 +1886,7 @@ void didChangeDependencies(){
               SizedBox(
                 width: 1250.w,
                 child: AutocompleteTextField(
+                  controllerAuto: getController('pais04'),
                   textAlign: TextAlign.start,
                   label: "Selecione um país",
                   onSelected: (option) {
@@ -1766,6 +1923,7 @@ void didChangeDependencies(){
                 child: AutocompleteTextField(
                   textAlign: TextAlign.start,
                   label: "Selecione um país",
+                  controllerAuto: getController('pais05'),
                   onSelected: (option) {
                     _paisSelecionado =
                         _pesquisaController.getPaisesByNome(option);
@@ -1908,6 +2066,9 @@ void didChangeDependencies(){
                 ),
               ),
               CheckC(
+                  nomesModel: isUpdate == true
+                      ? widget.hospedagemModel!.produtosHigienePessoal
+                      : [],
                   onChanged: (p0) => valoresjson['produtosHigienePessoal'] = p0,
                   nomes: [
                     'Shampoo',
@@ -1932,6 +2093,9 @@ void didChangeDependencies(){
                 ),
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.equipamentosEServicos
+                    : [],
                 onChanged: (p0) => valoresjson['equipamentosEServicos'] = p0,
                 nomes: [
                   'TV',
@@ -1972,6 +2136,9 @@ void didChangeDependencies(){
                 ),
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.estacionamento
+                    : [],
                 onChanged: (p0) => valoresjson['estacionamento'] = p0,
                 nomes: ['Pago', 'Gratuito', 'Coberto', 'Descoberto'],
               ),
@@ -2086,6 +2253,9 @@ void didChangeDependencies(){
               ),
               RadioD(
                 options: ['110 volts', '220 volts', '110/220 volts'],
+                indexModel: isUpdate == true
+                    ? widget.hospedagemModel!.energiaEletrica
+                    : "",
                 getValue: (newValue) {
                   valoresjson['energiaEletrica'] = newValue;
                 },
@@ -2131,6 +2301,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.032,
               ),
               ExpansionTileYoN(
+                optionModel: isUpdate == true
+                    ? widget.hospedagemModel!.geradorDeEmergencia
+                    : "não",
                 getValue: (newValue) {
                   valoresjson['geradorDeEmergencia'] = newValue;
                 },
@@ -2183,6 +2356,8 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.restaurante : [],
                 onChanged: (p0) => valoresjson['restaurante'] = p0,
                 nomes: [
                   'Não',
@@ -2316,6 +2491,8 @@ void didChangeDependencies(){
               ]),
               CheckC(
                 onChanged: (p0) => valoresjson['lanchonete'] = p0,
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.lanchonete : [],
                 nomes: [
                   'Não',
                   'Apenas para hóspedes',
@@ -2455,6 +2632,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.instalacaoEEspacos
+                    : [],
                 onChanged: (p0) => valoresjson['instalacaoEEspacos'] = p0,
                 nomes: [
                   'Piscina',
@@ -2485,6 +2665,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.outrosEspacosEAtividades
+                    : [],
                 onChanged: (p0) => valoresjson['outrosEspacosEAtividades'] = p0,
                 nomes: [
                   'Observação da fauna',
@@ -2539,6 +2722,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.04,
               ),
               TablesInstalacoes(
+                getValue: isUpdate == true
+                    ? widget.hospedagemModel!.tabelaInstalacoes
+                    : {},
                 onChanged: (p0) {
                   setState(() {
                     valoresjson['tabelaInstalacoes'] = p0;
@@ -2556,6 +2742,8 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.servicos : [],
                 onChanged: (p0) => valoresjson['servicos'] = p0,
                 nomes: [
                   'Realização de eventos próprios',
@@ -2578,6 +2766,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.equipamentos
+                    : [],
                 onChanged: (p0) => valoresjson['equipamentos'] = p0,
                 nomes: [
                   'Internet',
@@ -2604,6 +2795,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.facilidadesEServicos
+                    : [],
                 onChanged: (p0) => valoresjson['facilidadesEServicos'] = p0,
                 nomes: [
                   'Adaptador de voltagem',
@@ -2665,6 +2859,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.facilidadesParaExecutivos
+                    : [],
                 onChanged: (p0) =>
                     valoresjson['facilidadesParaExecutivos'] = p0,
                 nomes: [
@@ -2722,6 +2919,9 @@ void didChangeDependencies(){
                     // width: sizeScreen.width * 0.5,
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN(
+                  optionModel: isUpdate == true
+                      ? widget.hospedagemModel!.doEquipamentoEspaco
+                      : "não",
                   getValue: (newValue) {
                     valoresjson['doEquipamentoEspaco'] = newValue;
                   },
@@ -2731,6 +2931,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               TabelsEquipamentoEEspaco(
+                getValue: isUpdate == true
+                    ? widget.hospedagemModel!.tabelaEquipamentoEEspaco
+                    : {},
                 onChanged: (p0) {
                   setState(() {
                     valoresjson['tabelaEquipamentoEEspaco'] = p0;
@@ -2753,6 +2956,10 @@ void didChangeDependencies(){
                     // width: sizeScreen.width * 0.5,
                     //  //height: sizeScreen.height * 0.07,
                     child: ExpansionTileYoN(
+                  optionModel: isUpdate == true
+                      ? widget.hospedagemModel!
+                          .daAreaOuEdificacaoEmQueEstaLocalizado
+                      : "não",
                   getValue: (newValue) {
                     valoresjson['daAreaOuEdificacaoEmQueEstaLocalizado'] =
                         newValue;
@@ -2763,6 +2970,9 @@ void didChangeDependencies(){
                 height: 100.w,
               ),
               TabelsEquipamentoEEspaco(
+                getValue: isUpdate == true
+                    ? widget.hospedagemModel!.tabelaEquipamentoEEspaco2
+                    : {},
                 onChanged: (p0) {
                   setState(() {
                     valoresjson['tabelaEquipamentoEEspaco2'] = p0;
@@ -2790,6 +3000,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.05,
               ),
               RadioD(
+                indexModel: isUpdate == true
+                    ? widget.hospedagemModel!.estadoGeralDeConservacao
+                    : "",
                 options: ['Muito bom', 'Bom', 'Ruim'],
                 getValue: (newValue) {
                   valoresjson['estadoGeralDeConservacao'] = newValue;
@@ -2823,6 +3036,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.04,
               ),
               ExpansionTileYoN(
+                optionModel: isUpdate == true
+                    ? widget.hospedagemModel!.possuiFacilidade
+                    : "não",
                 getValue: (newValue) {
                   valoresjson['possuiFacilidade'] = newValue;
                 },
@@ -2845,6 +3061,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.pessoalCapacitadoParaReceberPCD
+                    : [],
                 onChanged: (p0) =>
                     valoresjson['pessoalCapacitadoParaReceberPCD'] = p0,
                 nomes: [
@@ -2867,6 +3086,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.rotaExternaAcessivel
+                    : [],
                 onChanged: (p0) => valoresjson['rotaExternaAcessivel'] = p0,
                 nomes: [
                   'Não',
@@ -2893,6 +3115,9 @@ void didChangeDependencies(){
               ),
 
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.simboloInternacionalDeAcesso
+                    : [],
                 onChanged: (p0) =>
                     valoresjson['simboloInternacionalDeAcesso'] = p0,
                 nomes: [
@@ -2916,6 +3141,9 @@ void didChangeDependencies(){
                 height: sizeScreen.height * 0.02,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.localDeEmbarqueEDesembarque
+                    : [],
                 onChanged: (p0) =>
                     valoresjson['localDeEmbarqueEDesembarque'] = p0,
                 nomes: ['Não', 'Sinalizado', 'Com acesso em nível'],
@@ -2929,6 +3157,9 @@ void didChangeDependencies(){
               ),
               SizedBox(height: 50.w),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.vagaEmEstacionamento
+                    : [],
                 onChanged: (p0) => valoresjson['vagaEmEstacionamento'] = p0,
                 nomes: [
                   'Não',
@@ -2950,6 +3181,9 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.areaDeCirculacaoAcessoInterno
+                    : [],
                 onChanged: (p0) =>
                     valoresjson['areaDeCirculacaoAcessoInterno'] = p0,
                 nomes: [
@@ -2972,6 +3206,8 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.escada : [],
                 onChanged: (p0) => valoresjson['escada'] = p0,
                 nomes: [
                   'Não',
@@ -2992,6 +3228,8 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.rampa : [],
                 onChanged: (p0) => valoresjson['rampa'] = p0,
                 nomes: [
                   'Não',
@@ -3013,6 +3251,8 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.piso : [],
                 onChanged: (p0) => valoresjson['piso'] = p0,
                 nomes: [
                   'Não',
@@ -3032,6 +3272,8 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.elevador : [],
                 onChanged: (p0) => valoresjson['elevador'] = p0,
                 nomes: [
                   'Não',
@@ -3052,6 +3294,10 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!
+                        .equipamentoMotorizadoParaDeslocamentoInterno
+                    : [],
                 onChanged: (p0) => valoresjson[
                     'equipamentoMotorizadoParaDeslocamentoInterno'] = p0,
                 nomes: [
@@ -3071,6 +3317,9 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.sinalizacaoVisual
+                    : [],
                 onChanged: (p0) => valoresjson['sinalizacaoVisual'] = p0,
                 nomes: [
                   'Não',
@@ -3095,6 +3344,9 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.sinalizacaoTatil
+                    : [],
                 onChanged: (p0) => valoresjson['sinalizacaoTatil'] = p0,
                 nomes: [
                   'Não',
@@ -3119,6 +3371,9 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.alarmeDeEmergencia
+                    : [],
                 onChanged: (p0) => valoresjson['alarmeDeEmergencia'] = p0,
                 nomes: [
                   'Não',
@@ -3138,6 +3393,8 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.comunicacao : [],
                 onChanged: (p0) => valoresjson['comunicacao'] = p0,
                 nomes: [
                   'Não',
@@ -3157,6 +3414,9 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel: isUpdate == true
+                    ? widget.hospedagemModel!.balcaoDeAtendimento
+                    : [],
                 onChanged: (p0) => valoresjson['balcaoDeAtendimento'] = p0,
                 nomes: [
                   'Não',
@@ -3176,6 +3436,8 @@ void didChangeDependencies(){
               ),
               CheckC(
                 onChanged: (p0) => valoresjson['mobiliario'] = p0,
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.mobiliario : [],
                 nomes: [
                   'Não',
                   'Altura adequada',
@@ -3194,6 +3456,8 @@ void didChangeDependencies(){
               ),
               CheckC(
                 onChanged: (p0) => valoresjson['sanitario'] = p0,
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.sanitario : [],
                 nomes: [
                   'Não',
                   'Porta larga suficiente para entrada de cadeira de rodas ',
@@ -3217,6 +3481,8 @@ void didChangeDependencies(){
                 height: 50.w,
               ),
               CheckC(
+                nomesModel:
+                    isUpdate == true ? widget.hospedagemModel!.telefone : [],
                 onChanged: (p0) => valoresjson['telefone'] = p0,
                 nomes: [
                   'Não',
@@ -3237,6 +3503,9 @@ void didChangeDependencies(){
               ),
 
               ExpansionTileYoN(
+                optionModel: isUpdate == true
+                    ? widget.hospedagemModel!.sinalizacaoIndicativa
+                    : "não",
                 getValue: (newValue) {
                   valoresjson['sinalizacaoIndicativa'] = newValue;
                 },
@@ -3336,14 +3605,16 @@ void didChangeDependencies(){
               ),
               SendButton(
                 onPressed: () {
-                  valoresjson['estadosTuristas'] = _estadosSelecionados;
+                   valoresjson['estadosTuristas'] = _estadosSelecionados;
                   valoresjson['paisesTuristas'] = _paisesSelecionados;
-                  autoFillForm();
+            
                   _formKey.currentState!.save();
 
-                  sendForm(valoresjson);
+                  isUpdate == true? update(widget.hospedagemModel!.id!, valoresjson):sendForm(valoresjson);
                   valoresjson.forEach((key, value) {
-                    print('$key');
+                    
+                    print('$key $value');
+
                   });
                 },
               ),

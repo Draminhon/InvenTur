@@ -138,7 +138,6 @@ class _PesquisaCardState extends State<PesquisaCard> {
                         'pesquisadores': _pesquisa.userId,
                         'admin_id': _pesquisa.adminId
                       });
-                      print(_pesquisa.municipio);
                     },
                     icon: Icon(
                       Icons.edit_rounded,
@@ -163,8 +162,11 @@ class _PesquisaCardState extends State<PesquisaCard> {
                                     child: Text('Cancelar')),
                                 TextButton(
                                     onPressed: () {
-                                      _pesquisaController.removePesquisa(
+                                      setState(() {
+                                           _pesquisaController.removePesquisa(
                                           false, _pesquisa);
+                                      });
+                                   
                                       Navigator.pop(context);
                                     },
                                     child: Text(

@@ -16,6 +16,7 @@ urlpatterns = [
     path('alimentosEBebidas/update/<int:pk>', AlimentosEBebidasUpdateAPIView.as_view(), name = 'updateAlimentos'),
 
     path('meiosdehospedagem/create/', MeiosDeHospedagemListCreateView.as_view(), name = 'meiosDeHospdagem'),
+    path('meiosdehospedagem/update/<int:pk>', MeiosDeHospedagensUpdateAPIView.as_view(), name ='updateMeiosDeHospedagem'),
 
     path('rodovia/create/', RodoviaListCreateAPIView.as_view(), name = 'rodovia-see' ),
     path('rodovia/get/', RodoviaListView.as_view(), name = 'rodovia-se' ),

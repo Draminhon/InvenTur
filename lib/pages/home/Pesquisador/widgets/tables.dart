@@ -289,25 +289,26 @@ class _DiasRowState extends State<DiasRow> {
   late TextEditingController _aberturaController;
   late TextEditingController _encerramentoController;
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _aberturaController = TextEditingController();
     _encerramentoController = TextEditingController();
 
-    if(widget.getValue != null){
-      _aberturaController.text = widget.getValue!['${widget.nome} abertura'] ?? '';
-      _encerramentoController.text = widget.getValue!['${widget.nome} encerramento'] ?? '';
+    if (widget.getValue != null) {
+      _aberturaController.text =
+          widget.getValue!['${widget.nome} abertura'] ?? '';
+      _encerramentoController.text =
+          widget.getValue!['${widget.nome} encerramento'] ?? '';
     }
   }
 
   @override
-  void dispose(){
+  void dispose() {
     _aberturaController.dispose();
     _encerramentoController.dispose();
     super.dispose();
-      }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -320,7 +321,7 @@ class _DiasRowState extends State<DiasRow> {
         SizedBox(width: widget.spacing),
         Expanded(
             child: CustomTimeField(
-              controller2: _aberturaController,
+          controller2: _aberturaController,
           label: 'abertura',
           getValue: (p0) {
             setState(() {
@@ -409,9 +410,9 @@ class DayConfig {
 }
 
 class TablesInstalacoes extends StatefulWidget {
-
+  final Map<String, dynamic>? getValue;
   final Function(Map<String, dynamic>)? onChanged;
-  TablesInstalacoes({super.key, this.onChanged});
+  TablesInstalacoes({super.key, this.onChanged, this.getValue});
 
   @override
   State<TablesInstalacoes> createState() => _TablesInstalacoesState();
@@ -419,233 +420,305 @@ class TablesInstalacoes extends StatefulWidget {
 
 class _TablesInstalacoesState extends State<TablesInstalacoes> {
   final _formKey = GlobalKey<FormState>();
-  Map<String, dynamic> _valoresJson={};
+  Map<String, dynamic> _valoresJson = {};
   Map<String, TextEditingController> controllers = {};
 
-  @override
-  void initState(){
-    super.initState();
+  void autoFillForm() {
+    // Função auxiliar para preencher os controladores com os valores do JSON
+    void fillIfExists(String key, dynamic value) {
+      if (value != null) {
+        controllers[key]?.text = value.toString();
+      }
+    }
 
+    final values = widget.getValue!;
+    fillIfExists('auditorio quantidade', values['auditorioQUantidade']);
+    fillIfExists('auditorio area total', values['auditorioAreaTotal']);
+    fillIfExists('auditorio capacidade n de pessoas', values['auditorioCapacidadeDePessoas']);
+    
+    fillIfExists('salas modulares quantidade', values['salasModularesQuantidade']);
+    fillIfExists('salas modulares area total', values['salasModularesAreaTotal']);
+    fillIfExists('capacidade de pessoas', values['salasModularesCapacidadeDePessoas']);
+    
+    fillIfExists('pavilhao de feiras quantidade', values['pavilhaoDeFeirasQuantidade']);
+    fillIfExists('pavilhao de feiras area total', values['pavilhaoDeFeirasAreaTotal']);
+    fillIfExists('pavilhao de feiras n de pessoas', values['pavilhaoDeFeirasCapacidadeDePessoas']);
+
+    fillIfExists('area de exposicao coberta quantidade', values['areaDeExposicaoCobertaQuantidade']);
+    fillIfExists('area de exposicao coberta area total', values['areaDeExposicaoCobertaAreaTotal']);
+    fillIfExists('area de exposicao coberta capacidade', values['areaDeExposicaoCobertaCapacidadeDePessoas']);
+    
+    fillIfExists('area de exposicao nao coberta quantidade', values['areaDeExposicaoNaoCobertaQuantidade']);
+    fillIfExists('area de exposicao nao coberta area total', values['areaDeExposicaoNaoCobertaAreaTotal']);
+    fillIfExists('area de exposicao nao coberta capacidade', values['areaDeExposicaoNaoCobertaCapacidadeDePessoas']);
   }
 
- TextEditingController getController(String key) {
+  @override
+  void initState() {
+    super.initState();
+
+    List<String> keys = [
+      'auditorio quantidade',
+      'auditorio area total',
+      'auditorio capacidade n de pessoas',
+      'salas modulares quantidade',
+      'salas modulares area total',
+      'capacidade de pessoas',
+      'pavilhao de feiras quantidade',
+      'pavilhao de feiras area total',
+      'pavilhao de feiras n de pessoas',
+      'area de exposicao coberta quantidade',
+      'area de exposicao coberta area total',
+      'area de exposicao coberta capacidade',
+      'area de exposicao nao coberta quantidade',
+      'area de exposicao nao coberta area total',
+      'area de exposicao nao coberta capacidade'
+
+
+    ];
+
+    for (var key in keys){
+      controllers[key] = TextEditingController();
+    }
+
+
+    if (widget.getValue != null) {
+      autoFillForm();
+    }
+  }
+
+  @override
+  void dispose(){
+    super.dispose();
+    for (var controllers in controllers.values){
+      controllers.dispose();
+    }
+    
+  }
+
+  TextEditingController getController(String key) {
     controllers[key] ??= TextEditingController();
     return controllers[key]!;
   }
 
   @override
   Widget build(BuildContext context) {
-
-    return 
-       Column(
-        children: [
-          textLabel(
-            name: 'Auditório',
-            fontWeight: FontWeight.bold,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  name: 'quantidade',
-                  controller: getController('auditorio quantidade'),
-                  validat: (p0) {},
-                  getValue: (p0) {
-                    _valoresJson['auditorioQUantidade'] = p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
+    return Column(
+      children: [
+        textLabel(
+          name: 'Auditório',
+          fontWeight: FontWeight.bold,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextField(
+                name: 'quantidade',
+                controller: getController('auditorio quantidade'),
+                validat: (p0) {},
+                getValue: (p0) {
+                  _valoresJson['auditorioQUantidade'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
               ),
-              Expanded(
-                child: CustomTextField(
-                  name: 'área total(m²)',
-                  controller: getController('auditorio area total'),
-                  validat: (p0) {},
-                  getValue: (p0) {
-                    _valoresJson['auditorioAreaTotal'] = p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
+            ),
+            Expanded(
+              child: CustomTextField(
+                name: 'área total(m²)',
+                controller: getController('auditorio area total'),
+                validat: (p0) {},
+                getValue: (p0) {
+                  _valoresJson['auditorioAreaTotal'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
               ),
-              Expanded(
-                child: CustomTextField(
-                  name: 'capacidade nºpessoas',
-                  controller: getController('auditorio capacidade n de pessoas'),
-                  validat: (p0) {},
-                  getValue: (p0) {
-                    _valoresJson['auditorioCapacidadeDePessoas'] = p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
-              )
-            ],
-          ),
-          textLabel(
-            name: 'Salas modulares',
-            fontWeight: FontWeight.bold,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  name: 'quantidade',
-                  controller: getController('salas modulares quantidade'),
-                  validat: (p0) {},
-                  getValue: (p0) {
-                    _valoresJson['salasModularesQuantidade'] = p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
+            ),
+            Expanded(
+              child: CustomTextField(
+                name: 'capacidade nºpessoas',
+                controller: getController('auditorio capacidade n de pessoas'),
+                validat: (p0) {},
+                getValue: (p0) {
+                  _valoresJson['auditorioCapacidadeDePessoas'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
               ),
-              Expanded(
-                child: CustomTextField(
-                  name: 'área total(m²)',
-                  controller: getController('salas modulares area total'),
-                  validat: (p0) {},
-                  getValue: (p0) {
-                    _valoresJson['salasModularesAreaTotal'] = p0;
-                    widget.onChanged?.call(_valoresJson);
-
-                  },
-                ),
+            )
+          ],
+        ),
+        textLabel(
+          name: 'Salas modulares',
+          fontWeight: FontWeight.bold,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextField(
+                name: 'quantidade',
+                controller: getController('salas modulares quantidade'),
+                validat: (p0) {},
+                getValue: (p0) {
+                  _valoresJson['salasModularesQuantidade'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
               ),
-              Expanded(
-                child: CustomTextField(
-                  name: 'capacidade nºpessoas',
-                  validat: (p0) {},
-                  controller: getController('capacidade de pessoas'),
-                  getValue: (p0) {
-                    _valoresJson['salasModularesCapacidadeDePessoas'] = p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
-              )
-            ],
-          ),
-          textLabel(
-            name: 'Pavilhão de Feiras',
-            fontWeight: FontWeight.bold,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  name: 'quantidade',
-                  validat: (p0) {},
-                  controller: getController('pavilhao de feiras quantidade'),
-                  getValue: (p0) {
-                    _valoresJson['pavilhaoDeFeirasQuantidade']=p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
+            ),
+            Expanded(
+              child: CustomTextField(
+                name: 'área total(m²)',
+                controller: getController('salas modulares area total'),
+                validat: (p0) {},
+                getValue: (p0) {
+                  _valoresJson['salasModularesAreaTotal'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
               ),
-              Expanded(
-                child: CustomTextField(
-                  name: 'área total(m²)',
-                  validat: (p0) {},
-                  controller: getController('pavilhao de feiras area total'),
-                  getValue: (p0) {
-                    _valoresJson['pavilhaoDeFeirasAreaTotal'] = p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
+            ),
+            Expanded(
+              child: CustomTextField(
+                name: 'capacidade nºpessoas',
+                validat: (p0) {},
+                controller: getController('capacidade de pessoas'),
+                getValue: (p0) {
+                  _valoresJson['salasModularesCapacidadeDePessoas'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
               ),
-              Expanded(
-                child: CustomTextField(
-                  name: 'capacidade nºpessoas',
-                  validat: (p0) {},
-                  controller: getController('pavilhao de feiras n de pessoas'),
-                  getValue: (p0) {
-                    _valoresJson['pavilhaoDeFeirasCapacidadeDePessoas'] = p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
-              )
-            ],
-          ),
-          textLabel(
-            name: 'Área de exposição coberta',
-            fontWeight: FontWeight.bold,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  name: 'quantidade',
-                  validat: (p0) {},
-                  controller: getController('area de exposicao coberta quantidade'),
-                  getValue: (p0) {
-                    _valoresJson['areaDeExposicaoCobertaQuantidade'] = p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
+            )
+          ],
+        ),
+        textLabel(
+          name: 'Pavilhão de Feiras',
+          fontWeight: FontWeight.bold,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextField(
+                name: 'quantidade',
+                validat: (p0) {},
+                controller: getController('pavilhao de feiras quantidade'),
+                getValue: (p0) {
+                  _valoresJson['pavilhaoDeFeirasQuantidade'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
               ),
-              Expanded(
-                child: CustomTextField(
-                  name: 'área total(m²)',
-                  validat: (p0) {},
-                  controller: getController('area de exposicao coberta area total'),
-                  getValue: (p0) {
-                    _valoresJson['areaDeExposicaoCobertaAreaTotal']=p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
+            ),
+            Expanded(
+              child: CustomTextField(
+                name: 'área total(m²)',
+                validat: (p0) {},
+                controller: getController('pavilhao de feiras area total'),
+                getValue: (p0) {
+                  _valoresJson['pavilhaoDeFeirasAreaTotal'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
               ),
-              Expanded(
-                child: CustomTextField(
-                  name: 'capacidade nºpessoas',
-                  validat: (p0) {},
-                  controller: getController('area de exposicao coberta capacidade'),
-                  getValue: (p0) {
-                    _valoresJson['areaDeExposicaoCobertaCapacidadeDePessoas'] = p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
-              )
-            ],
-          ),
-          textLabel(
-            name: 'Área de exposição não coberta',
-            fontWeight: FontWeight.bold,
-          ),
-          Row(
-            children: [
-              Expanded(
-                child: CustomTextField(
-                  name: 'quantidade',
-                  validat: (p0) {},
-                  controller: getController('area de exposicao nao coberta quantidade'),
-                  getValue: (p0) {
-                    _valoresJson['areaDeExposicaoNaoCobertaQuantidade'] = p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
+            ),
+            Expanded(
+              child: CustomTextField(
+                name: 'capacidade nºpessoas',
+                validat: (p0) {},
+                controller: getController('pavilhao de feiras n de pessoas'),
+                getValue: (p0) {
+                  _valoresJson['pavilhaoDeFeirasCapacidadeDePessoas'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
               ),
-              Expanded(
-                child: CustomTextField(
-                  name: 'área total(m²)',
-                  validat: (p0) {},
-                  controller: getController('area de exposicao nao coberta area total'),
-                  getValue: (p0) {
-                    _valoresJson['areaDeExposicaoNaoCobertaAreaTotal']=p0;
-                    widget.onChanged?.call(_valoresJson);
-                  },
-                ),
+            )
+          ],
+        ),
+        textLabel(
+          name: 'Área de exposição coberta',
+          fontWeight: FontWeight.bold,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextField(
+                name: 'quantidade',
+                validat: (p0) {},
+                controller:
+                    getController('area de exposicao coberta quantidade'),
+                getValue: (p0) {
+                  _valoresJson['areaDeExposicaoCobertaQuantidade'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
               ),
-              Expanded(
-                child: CustomTextField(
-                  name: 'capacidade nºpessoas',
-                  validat: (p0) {},
-                  controller: getController('area de exposicao nao coberta capacidade'),
-                  getValue: (p0) {
-                    _valoresJson['areaDeExposicaoNaoCobertaCapacidadeDePessoas'] = p0;
-                  },
-                ),
-              )
-            ],
-          ),
-        ],
-      );
+            ),
+            Expanded(
+              child: CustomTextField(
+                name: 'área total(m²)',
+                validat: (p0) {},
+                controller:
+                    getController('area de exposicao coberta area total'),
+                getValue: (p0) {
+                  _valoresJson['areaDeExposicaoCobertaAreaTotal'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
+              ),
+            ),
+            Expanded(
+              child: CustomTextField(
+                name: 'capacidade nºpessoas',
+                validat: (p0) {},
+                controller:
+                    getController('area de exposicao coberta capacidade'),
+                getValue: (p0) {
+                  _valoresJson['areaDeExposicaoCobertaCapacidadeDePessoas'] =
+                      p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
+              ),
+            )
+          ],
+        ),
+        textLabel(
+          name: 'Área de exposição não coberta',
+          fontWeight: FontWeight.bold,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: CustomTextField(
+                name: 'quantidade',
+                validat: (p0) {},
+                controller:
+                    getController('area de exposicao nao coberta quantidade'),
+                getValue: (p0) {
+                  _valoresJson['areaDeExposicaoNaoCobertaQuantidade'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
+              ),
+            ),
+            Expanded(
+              child: CustomTextField(
+                name: 'área total(m²)',
+                validat: (p0) {},
+                controller:
+                    getController('area de exposicao nao coberta area total'),
+                getValue: (p0) {
+                  _valoresJson['areaDeExposicaoNaoCobertaAreaTotal'] = p0;
+                  widget.onChanged?.call(_valoresJson);
+                },
+              ),
+            ),
+            Expanded(
+              child: CustomTextField(
+                name: 'capacidade nºpessoas',
+                validat: (p0) {},
+                controller:
+                    getController('area de exposicao nao coberta capacidade'),
+                getValue: (p0) {
+                  _valoresJson['areaDeExposicaoNaoCobertaCapacidadeDePessoas'] =
+                      p0;
+                },
+              ),
+            )
+          ],
+        ),
+      ],
+    );
   }
 }
 
@@ -741,8 +814,10 @@ class _TabelsEquipamentoEEspacoState extends State<TabelsEquipamentoEEspaco> {
     }
 
     final values = widget.getValue!;
-    fillIfExists('Municipal lei decreto nome', values['nomeLeiDecretoMunicipal']);
-    fillIfExists('entidade lei decreto municipal', values['entidadeLeiDecretoMunicipal']);
+    fillIfExists(
+        'Municipal lei decreto nome', values['nomeLeiDecretoMunicipal']);
+    fillIfExists('entidade lei decreto municipal',
+        values['entidadeLeiDecretoMunicipal']);
     fillIfExists('nome portaria', values['entidadePortariaInstrucaoMunicipal']);
     fillIfExists('entidade portaria', values['entidadePortariaMunicipal']);
     fillIfExists('nome norma ato', values['nomeNormaAtoMunicipal']);
@@ -750,36 +825,54 @@ class _TabelsEquipamentoEEspacoState extends State<TabelsEquipamentoEEspaco> {
     fillIfExists('nomeOutrosMunicipal', values['nomeOutrosMunicipal']);
     fillIfExists('entidade outros', values['entidadeOutrosMunicipal']);
 
-    fillIfExists('EstadualDistrital lei decreto nome', values['nomeLeiDecretoEstadualDistrital']);
-    fillIfExists('entidade lei decreto EstadualDistrital', values['entidadeLeiDecretoEstadualDistrital']);
-    fillIfExists('entidadePortariaInstrucaoEstadualDistrital', values['entidadePortariaInstrucaoEstadualDistrital']);
-    fillIfExists('entidadePortariaEstadualDistrital', values['entidadePortariaEstadualDistrital']);
-    fillIfExists('nomeNormaAtoEstadualDistrital', values['nomeNormaAtoEstadualDistrital']);
-    fillIfExists('entidadeNormaAtoEstadualDistrital', values['entidadeNormaAtoEstadualDistrital']);
-    fillIfExists('nomeOutrosEstadualDistrital', values['nomeOutrosEstadualDistrital']);
-    fillIfExists('entidadeOutrosEstadualDistrital', values['entidadeOutrosEstadualDistrital']);
+    fillIfExists('EstadualDistrital lei decreto nome',
+        values['nomeLeiDecretoEstadualDistrital']);
+    fillIfExists('entidade lei decreto EstadualDistrital',
+        values['entidadeLeiDecretoEstadualDistrital']);
+    fillIfExists('entidadePortariaInstrucaoEstadualDistrital',
+        values['entidadePortariaInstrucaoEstadualDistrital']);
+    fillIfExists('entidadePortariaEstadualDistrital',
+        values['entidadePortariaEstadualDistrital']);
+    fillIfExists('nomeNormaAtoEstadualDistrital',
+        values['nomeNormaAtoEstadualDistrital']);
+    fillIfExists('entidadeNormaAtoEstadualDistrital',
+        values['entidadeNormaAtoEstadualDistrital']);
+    fillIfExists(
+        'nomeOutrosEstadualDistrital', values['nomeOutrosEstadualDistrital']);
+    fillIfExists('entidadeOutrosEstadualDistrital',
+        values['entidadeOutrosEstadualDistrital']);
 
     fillIfExists('Federal lei decreto nome', values['nomeLeiDecretoFederal']);
-    fillIfExists('entidade lei decreto Federal', values['entidadeLeiDecretoFederal']);
-    fillIfExists('entidadePortariaInstrucaoFederal', values['entidadePortariaInstrucaoFederal']);
+    fillIfExists(
+        'entidade lei decreto Federal', values['entidadeLeiDecretoFederal']);
+    fillIfExists('entidadePortariaInstrucaoFederal',
+        values['entidadePortariaInstrucaoFederal']);
     fillIfExists('entidadePortariaFederal', values['entidadePortariaFederal']);
     fillIfExists('nomeNormaAtoFederal', values['nomeNormaAtoFederal']);
     fillIfExists('entidadeNormaAtoFederal', values['entidadeNormaAtoFederal']);
     fillIfExists('nomeOutrosFederal', values['nomeOutrosFederal']);
     fillIfExists('entidadeOutrosFederal', values['entidadeOutrosFederal']);
 
-    fillIfExists('Internacional lei decreto nome', values['nomeLeiDecretoInternacional']);
-    fillIfExists('entidade lei decreto Internacional', values['entidadeLeiDecretoInternacional']);
-    fillIfExists('entidadePortariaInstrucaoInternacional', values['entidadePortariaInstrucaoInternacional']);
-    fillIfExists('entidadePortariaInternacional', values['entidadePortariaInternacional']);
-    fillIfExists('nomeNormaAtoInternacional', values['nomeNormaAtoInternacional']);
-    fillIfExists('entidadeNormaAtoInternacional', values['entidadeNormaAtoInternacional']);
+    fillIfExists('Internacional lei decreto nome',
+        values['nomeLeiDecretoInternacional']);
+    fillIfExists('entidade lei decreto Internacional',
+        values['entidadeLeiDecretoInternacional']);
+    fillIfExists('entidadePortariaInstrucaoInternacional',
+        values['entidadePortariaInstrucaoInternacional']);
+    fillIfExists('entidadePortariaInternacional',
+        values['entidadePortariaInternacional']);
+    fillIfExists(
+        'nomeNormaAtoInternacional', values['nomeNormaAtoInternacional']);
+    fillIfExists('entidadeNormaAtoInternacional',
+        values['entidadeNormaAtoInternacional']);
     fillIfExists('nomeOutrosInternacional', values['nomeOutrosInternacional']);
-    fillIfExists('entidadeOutrosInternacional', values['entidadeOutrosInternacional']);
+    fillIfExists(
+        'entidadeOutrosInternacional', values['entidadeOutrosInternacional']);
 
     fillIfExists('outras nome', values['outras nome']);
     fillIfExists('outras lei decreto nome', values['nomeLeiDecretoOutras']);
-    fillIfExists('entidade lei decreto Outras', values['entidadeLeiDecretoOutras']);
+    fillIfExists(
+        'entidade lei decreto Outras', values['entidadeLeiDecretoOutras']);
   }
 
   TextEditingController getController(String key) {
@@ -906,7 +999,8 @@ class _TabelsEquipamentoEEspacoState extends State<TabelsEquipamentoEEspaco> {
           fontWeight: FontWeight.bold,
         ),
         CustomTextField(
-          controller: getController('entidadePortariaInstrucaoEstadualDistrital'),
+          controller:
+              getController('entidadePortariaInstrucaoEstadualDistrital'),
           name: 'nome/titulo/certificação/licenciamento/outro',
           validat: (p0) {},
           getValue: (p0) {
@@ -1172,7 +1266,6 @@ class _TabelsEquipamentoEEspacoState extends State<TabelsEquipamentoEEspaco> {
   }
 }
 
-
 class TableMtur extends StatefulWidget {
   final String? associacao_e_sindicato;
   final Map<String, dynamic>? getValues;
@@ -1237,7 +1330,9 @@ class _TableMturState extends State<TableMtur> {
     fillIfExists('MTUR Outros', widget.getValues!['MturOutros'] ?? '');
     fillIfExists(
       'associação e sindicatos do setor de alimentação',
-      widget.getValues!['categoriaAssociacoesESindicatosDoSetorDeAlimentacao'] ?? '',
+      widget.getValues![
+              'categoriaAssociacoesESindicatosDoSetorDeAlimentacao'] ??
+          '',
     );
     fillIfExists(
       'associações de turismo',
@@ -1295,11 +1390,13 @@ class _TableMturState extends State<TableMtur> {
           fontWeight: FontWeight.bold,
         ),
         CustomTextField(
-          controller: getController('associação e sindicatos do setor de alimentação'),
+          controller:
+              getController('associação e sindicatos do setor de alimentação'),
           name: "categoria/tipo/classificação/número",
           validat: (p0) {},
           getValue: (p0) {
-            _valoresJson['categoriaAssociacoesESindicatosDoSetorDeAlimentacao'] = p0;
+            _valoresJson[
+                'categoriaAssociacoesESindicatosDoSetorDeAlimentacao'] = p0;
             widget.onChanged?.call(_valoresJson);
           },
         ),
@@ -1359,4 +1456,3 @@ class _TableMturState extends State<TableMtur> {
     );
   }
 }
-

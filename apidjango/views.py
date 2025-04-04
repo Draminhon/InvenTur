@@ -83,16 +83,20 @@ def export_pesquisa_to_excel(request, pesquisa_id):
     # Abas para os formulários/equipamentos
     # ======================================
     sheets = []
-    ab_queryset = AlimentosEBebidas.objects.filter(pesquisa=pesquisa)
-    ss_queryset = SistemaDeSeguranca.objects.filter(pesquisa=pesquisa)
-    rodovia_queryset = Rodovia.objects.filter(pesquisa=pesquisa)
-    
+    ab_queryset = AlimentosEBebidas.objects.filter(pesquisa=pesquisa,is_active=True)
+    ss_queryset = SistemaDeSeguranca.objects.filter(pesquisa=pesquisa,is_active=True)
+    rodovia_queryset = Rodovia.objects.filter(pesquisa=pesquisa,is_active=True)
+    meiosHospedagem_queryset = MeioDeHospedagem.objects.filter(pesquisa=pesquisa,is_active=True)
+
     if ab_queryset.exists():
         sheets.append(("Alimentos e Bebidas", ab_queryset))
     if ss_queryset.exists():
         sheets.append(("Sistemas de Segurança", ss_queryset))
     if rodovia_queryset.exists():
         sheets.append(("Rodovia", rodovia_queryset))
+    if meiosHospedagem_queryset.exists():
+        sheets.append(("Meios de Hospedagem", meiosHospedagem_queryset))
+
     
     for sheet_title, queryset in sheets:
         ws = wb.create_sheet(title=sheet_title)
@@ -375,6 +379,14 @@ class MeiosDeHospedagemListCreateView(generics.ListCreateAPIView):
 class AlimentosEBebidasUpdateAPIView(generics.UpdateAPIView):
     queryset = AlimentosEBebidas.objects.all()
     serializer_class = AlimentosEBebidasSerializer
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return self.update(request, *args, **kwargs)
+
+class MeiosDeHospedagensUpdateAPIView(generics.UpdateAPIView):
+    queryset = MeioDeHospedagem.objects.all()
+    serializer_class = MeioDeHospedagemSerializer
 
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True

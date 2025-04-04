@@ -265,19 +265,19 @@ class MeiosDeHospedagemModel{
 
   MeiosDeHospedagemModel.fromJson(Map<String, dynamic> json) {
   id = json['id'];
-  tipoFormulario = json['tipoFormulario'];
+  tipoFormulario = json['tipo_formulario'];
   uf = json['uf'];
-  regiaoTuristica = json['regiaoTuristica'];
+  regiaoTuristica = json['regiao_turistica'];
   municipio = json['municipio'];
   tipo = json['tipo'];
   observacoes = json['observacoes'];
   referencias = json['referencias'];
-  nomePesquisador = json['nomePesquisador'];
-  telefonePesquisador = json['telefonePesquisador'];
-  emailPesquisador = json['emailPesquisador'];
-  nomeCoordenador = json['nomeCoordenador'];
-  telefoneCoordenador = json['telefoneCoordenador'];
-  emailCoordenador = json['emailCoordenador'];
+  nomePesquisador = json['nome_pesquisador'];
+  telefonePesquisador = json['telefone_pesquisador'];
+  emailPesquisador = json['email_pesquisador'];
+  nomeCoordenador = json['nome_coordenador'];
+  telefoneCoordenador = json['telefone_coordenador'];
+  emailCoordenador = json['email_coordenador'];
   sinalizacaoDeAcesso = json['sinalizacaoDeAcesso'];
   sinalizacaoTuristica = json['sinalizacaoTuristica'];
   funcionamento24h = json['funcionamento24h'];
@@ -423,7 +423,6 @@ class MeiosDeHospedagemModel{
       Map<String, dynamic>.from(json['tabelaEquipamentoEEspaco2']);
   outros = json['outros'];
 }
-  
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
