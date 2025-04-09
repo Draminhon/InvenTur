@@ -6,6 +6,7 @@ class User {
   String status = '';
   String accessLevel = '';
    bool isSelected = false;
+  String telefone = '';
   
   User({
     this.id,
@@ -14,6 +15,7 @@ class User {
     this.username = '',
      this.email = '',
      this.accessLevel = '',
+    this.telefone = '',
   });
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -22,7 +24,7 @@ class User {
     email = json['email'];
     accessLevel = json['acessLevel'];
     status = json['status'];
-
+    telefone = json['telefone'];
   }
 
    Map<String, dynamic> toJson() {

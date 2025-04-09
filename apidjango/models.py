@@ -40,8 +40,8 @@ class CustomUser(AbstractUser):
         ],
     )
     acessLevel = models.CharField(max_length=22, default='Pesquisador');
-    status = models.CharField(max_length=50, default='Ativo')
-    
+    status = models.CharField(max_length=50, default='Ativo');
+    telefone = models.CharField(max_length=25);
     def clean(self):
         super().clean()
         validate_cpf(self.CPF)
@@ -70,6 +70,13 @@ class Pesquisa(models.Model):
 
     is_active = models.BooleanField(default=True)
 
+    @property
+    def admin_email(self):
+        return self.admin.email if self.admin else None
+    
+    @property
+    def admin_telefone(self):
+        return self.admin.telefone if self.admin else None
 
     @property
     def quantidadePesquisadores(self):

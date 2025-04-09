@@ -16,7 +16,8 @@ class OptionsDrawer extends StatefulWidget {
   final String userName;
   final String userEmail;
   final String cpf;
-  const OptionsDrawer({super.key, required this.userController, required this.userName, required this.userEmail, required this.cpf, required this.userId});
+  final String telefone;
+  const OptionsDrawer({super.key, required this.userController, required this.userName, required this.userEmail, required this.cpf, required this.userId, required this.telefone});
 
   @override
   State<OptionsDrawer> createState() => _OptionsDrawerState();
@@ -68,7 +69,6 @@ try{final response = await http.post(
 
   @override
   Widget build(BuildContext context) {
-    print(widget.userName);
     return Drawer(
       backgroundColor: const Color.fromARGB(255, 245, 245, 245),
       child: Column(
@@ -94,7 +94,7 @@ try{final response = await http.post(
             ),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (context) => ContaPesquisador(userName: widget.userName, userEmail: widget.userEmail, userCPF: widget.cpf, userId: widget.userId,)
+                builder: (context) => ContaPesquisador(userName: widget.userName, userEmail: widget.userEmail, userCPF: widget.cpf, userId: widget.userId, userTelefone: widget.telefone,)
               ),
             ),
             child: const Row(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/utils/app_constants.dart';
@@ -26,59 +27,50 @@ class Rodovia extends StatefulWidget {
 }
 
 class _RodoviaState extends State<Rodovia> {
+  String pesquisadorNome = '';
+  String pesquisadorTelefone = '';
+  String pesquisadorEmail = '';
+
+
+  String  coordenadorNome = '';
+  String  coordenadorTelefone= '';
+  String  coordenadorEmail= '';
+
+
+
+  Future<void> getAdminAndPesquisadorInfo() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? userDataString = prefs.getString('user_data');
+
+      if (userDataString != null) {
+        Map<String, dynamic> userData = json.decode(userDataString);
+
+        pesquisadorNome = userData['name'];
+        pesquisadorTelefone = userData['telefone'];
+        pesquisadorEmail = userData['email'];
+
+        print(prefs.getKeys()); 
+
+        coordenadorNome = prefs.getString('adminName')!;
+        coordenadorEmail = prefs.getString('adminEmail')!;
+        coordenadorTelefone = prefs.getString('adminTelefone')!;
+
+      }
+    } catch (e) {
+      pesquisadorNome = '';
+      pesquisadorTelefone = '';
+      pesquisadorEmail = '';
+
+        coordenadorNome = '';
+        coordenadorEmail = '';
+        coordenadorTelefone = '';
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Rodovia',
-    'uf': null,
-    'regiao_turistica': null,
-    'municipio': null,
-    'tipo': null,
-    'subtipos': null,
-    'nome_oficial': null,
-    'nome_popular': null,
-    'jurisdicao': null,
-    'natureza': null,
-    'tipo_de_organizacao_instituicao': null,
-    'extensao_rodovia_municipio': null,
-    'faixas_de_rolamento': null,
-    'pavimentacao': null,
-    'pedagio': null,
-    'municipios_vizinhos_interligados_rodovia': null,
-    'inicio_atividade': null,
-    'whatsapp': null,
-    'instagram': null,
-    'sinalizacao_de_acesso': null,
-    'sinalizacao_turistica': null,
-    'posto_de_combustivel': null,
-    'outros_servicos': null,
-    'estruturas_ao_longo_da_via': null,
-    'poluicao': null,
-    'poluicao_especificacao': null,
-    'lixo': null,
-    'lixo_especificacao': null,
-    'desmatamento': null,
-    'desmatamento_especificacao': null,
-    'queimadas': null,
-    'queimadas_especificacao': null,
-    'inseguranca': null,
-    'inseguranca_especificacao': null,
-    'extrativismo': null,
-    'extrativismo_especificacao': null,
-    'prostituicao': null,
-    'prostituicao_especificacao': null,
-    'ocupacao_irregular_invasao': null,
-    'ocupacao_irregular_invasao_especificacao': null,
-    'outras': null,
-    'outras_especificacao': null,
-    'estado_geral_de_conservacao': null,
-    'observacoes': null,
-    'referencias': null,
-    'nome_pesquisador': 'jose',
-    'telefone_pesquisador': '12453',
-    'email_pesquisador': 'jose@gmail.com',
-    'nome_coordenador': 'oihaioo',
-    'telefone_coordenador': '4444',
-    'email_coordenador': 'ogaio@gmail.com',
   };
 
   final TextEditingController uf = TextEditingController();
@@ -246,6 +238,8 @@ class _RodoviaState extends State<Rodovia> {
 
   @override
   Widget build(BuildContext context) {
+    getAdminAndPesquisadorInfo();
+
     Future<void> sendForm(Map<String, dynamic> valoresjson) async {
       final prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('access_token');
@@ -322,8 +316,8 @@ class _RodoviaState extends State<Rodovia> {
                               onSaved: (newValue) {
                                 valoresjson['regiao_turistica'] = newValue;
                               },
-                              decoration:
-                                  const InputDecoration(hintText: 'Região Turística'),
+                              decoration: const InputDecoration(
+                                  hintText: 'Região Turística'),
                             ))
                       ],
                     )),
@@ -346,7 +340,10 @@ class _RodoviaState extends State<Rodovia> {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                textLabel(name: 'Tipo:',fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Tipo:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: 50.w,
                 ),
@@ -356,8 +353,13 @@ class _RodoviaState extends State<Rodovia> {
                     valoresjson['tipo'] = newValue;
                   },
                 ),
-                textLabel(name: 'Subtipos:',fontWeight: FontWeight.bold,),
-                SizedBox(height: 50.w,),
+                textLabel(
+                  name: 'Subtipos:',
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 50.w,
+                ),
                 RadioD(
                     options: ['Estação rodoviária'],
                     getValue: (newValue) {
@@ -380,9 +382,7 @@ class _RodoviaState extends State<Rodovia> {
                         fontSize: sizeScreen.height * 0.03),
                   ),
                 ),
-                SizedBox(
-                  height: 10.w
-                ),
+                SizedBox(height: 10.w),
                 CustomTextField(
                     controller: nome_oficial,
                     name: 'Nome Oficial',
@@ -401,31 +401,43 @@ class _RodoviaState extends State<Rodovia> {
                     getValue: (newValue) {
                       valoresjson['nome_popular'] = newValue;
                     }),
-                SizedBox(
-                  height: 50.w
+                SizedBox(height: 50.w),
+                textLabel(
+                  name: 'Jurisdição:',
+                  fontWeight: FontWeight.bold,
                 ),
-                textLabel(name: 'Jurisdição:',fontWeight: FontWeight.bold,),
-                SizedBox(height: 25.w,),
+                SizedBox(
+                  height: 25.w,
+                ),
                 RadioD(
                     options: ['Federal', 'Estadual', 'Municipal'],
                     getValue: (newValue) {
                       valoresjson['jurisdicao'] = newValue;
                     }),
-                    SizedBox(height: 50.w,),
-                textLabel(name: 'Natureza:',fontWeight: FontWeight.bold,),
-                SizedBox(height: 25.w,),
+                SizedBox(
+                  height: 50.w,
+                ),
+                textLabel(
+                  name: 'Natureza:',
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 25.w,
+                ),
                 RadioD(
                     options: ['Pública', 'Privada', 'outro'],
                     getValue: (newValue) {
                       valoresjson['natureza'] = newValue;
                     }),
-                  SizedBox(height: 50.w,),
-                textLabel(name: 'Tipo de organização/Instituição:',fontWeight: FontWeight.bold,),
                 SizedBox(
-                  height: 25.w
+                  height: 50.w,
                 ),
+                textLabel(
+                  name: 'Tipo de organização/Instituição:',
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(height: 25.w),
                 CheckC(
-                  
                   key: checkCKey,
                   nomes: [
                     'Associação',
@@ -439,7 +451,10 @@ class _RodoviaState extends State<Rodovia> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Extensão da rodovia no âmbito do município:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Extensão da rodovia no âmbito do município:',
+                  fontWeight: FontWeight.bold,
+                ),
                 CustomTextField(
                     controller: extensao_rodovia_municipio,
                     name: 'Extensão',
@@ -452,8 +467,13 @@ class _RodoviaState extends State<Rodovia> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Faixas de rolamento:', fontWeight: FontWeight.bold,),
-                SizedBox(height: 25.w,),
+                textLabel(
+                  name: 'Faixas de rolamento:',
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 25.w,
+                ),
                 RadioD(
                     options: [
                       'Duas',
@@ -469,8 +489,13 @@ class _RodoviaState extends State<Rodovia> {
                 SizedBox(
                   height: 50.w,
                 ),
-                textLabel(name: 'Pavimentação:', fontWeight: FontWeight.bold,),
-                SizedBox(height: 25.w,),
+                textLabel(
+                  name: 'Pavimentação:',
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 25.w,
+                ),
                 RadioD(
                     options: [
                       'Asfalto',
@@ -488,7 +513,10 @@ class _RodoviaState extends State<Rodovia> {
                   height: 90.w,
                 ),
                 Row(children: [
-                  textLabel(name: 'Pedágio:', fontWeight: FontWeight.bold,),
+                  textLabel(
+                    name: 'Pedágio:',
+                    fontWeight: FontWeight.bold,
+                  ),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -505,7 +533,9 @@ class _RodoviaState extends State<Rodovia> {
                   height: sizeScreen.height * 0.05,
                 ),
                 textLabel(
-                    name: 'Municípios vizinhos interligados por rodovia:', fontWeight: FontWeight.bold,),
+                  name: 'Municípios vizinhos interligados por rodovia:',
+                  fontWeight: FontWeight.bold,
+                ),
                 CustomTextField(
                     controller: municipios_vizinhos_interligados_rodovia,
                     name: 'Municípios vizinhos',
@@ -521,7 +551,10 @@ class _RodoviaState extends State<Rodovia> {
                 ),
                 Row(
                   children: [
-                    textLabel(name: 'Início da atividade:', fontWeight: FontWeight.bold,),
+                    textLabel(
+                      name: 'Início da atividade:',
+                      fontWeight: FontWeight.bold,
+                    ),
                     SizedBox(
                       width: sizeScreen.width * 0.1,
                     ),
@@ -542,7 +575,10 @@ class _RodoviaState extends State<Rodovia> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                textLabel(name: 'Entidade mantedora:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Entidade mantedora:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -588,10 +624,11 @@ class _RodoviaState extends State<Rodovia> {
                         ))
                   ],
                 ),
-                SizedBox(
-                  height: 70.w
+                SizedBox(height: 70.w),
+                textLabel(
+                  name: 'Sinalização:',
+                  fontWeight: FontWeight.bold,
                 ),
-                textLabel(name: 'Sinalização:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: 25.w,
                 ),
@@ -646,11 +683,17 @@ class _RodoviaState extends State<Rodovia> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                textLabel(name: 'Equipamentos e serviços ao longo da rodovia:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Equipamentos e serviços ao longo da rodovia:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Posto de combustível:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Posto de combustível:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -661,7 +704,10 @@ class _RodoviaState extends State<Rodovia> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Outros serviços:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Outros serviços:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -685,7 +731,10 @@ class _RodoviaState extends State<Rodovia> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Estruturas ao longo da via:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Estruturas ao longo da via:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
@@ -703,7 +752,10 @@ class _RodoviaState extends State<Rodovia> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Questões ambientais/sociais:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Questões ambientais/sociais:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
@@ -1051,8 +1103,6 @@ class _RodoviaState extends State<Rodovia> {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-               
-               
                 SizedBox(
                   height: 50,
                   width: 300,
@@ -1078,6 +1128,16 @@ class _RodoviaState extends State<Rodovia> {
                       valoresjson['posto_de_combustivel'] = posto;
                       valoresjson['outros_servicos'] = outrosServicoss;
                       valoresjson['estruturas_ao_longo_da_via'] = estruturas;
+                      valoresjson['nome_pesquisador'] = pesquisadorNome;
+                      valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
+                      valoresjson['email_pesquisador'] = pesquisadorEmail;
+                      valoresjson['nome_coordenador'] = coordenadorNome;
+                      valoresjson['telefone_coordenador'] = coordenadorTelefone;
+                      valoresjson['email_coordenador'] = coordenadorEmail;
+
+    // 'nome_coordenador': 'oihaioo',
+    // 'telefone_coordenador': '4444',
+    // 'email_coordenador': 'ogaio@gmail.com',
                       if (_formKey.currentState!.validate()) {
                         //  ScaffoldMessenger.of(context).showSnackBar(
                         //      SnackBar(content: Text('processing data')));
@@ -1085,11 +1145,11 @@ class _RodoviaState extends State<Rodovia> {
                         _formKey.currentState!.save();
                         debugPrint(valoresjson.toString(), wrapWidth: 1024);
                         sendForm(valoresjson);
-                                             Navigator.pushReplacementNamed(context, '/SendedForm');
-
+                        //  Navigator.pushReplacementNamed(context, '/SendedForm');
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('preencha os dados!')));
+                            const SnackBar(
+                                content: Text('preencha os dados!')));
                       }
                     },
                     style: OutlinedButton.styleFrom(

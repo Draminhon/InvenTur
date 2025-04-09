@@ -4,7 +4,7 @@ from .models import *
 class CustomUserAdmin(admin.ModelAdmin):
     ordering = ['id']
 
-    list_display = ['id', 'username', 'CPF', 'acessLevel', 'status','email', 'display_pesquisas', 'is_active']
+    list_display = ['id', 'username', 'CPF','telefone', 'acessLevel', 'status','email', 'display_pesquisas', 'is_active']
 
     def display_pesquisas(self, obj):
         # Exibe as pesquisas associadas ao usuário como uma string
@@ -262,7 +262,7 @@ class AlimentosEBebidasAdmin(admin.ModelAdmin):
 class PesquisasAdmin(admin.ModelAdmin):
     ordering = ['id']
 
-    list_display = ['id', 'dataInicio', 'dataTermino', 'admin', 'codigoIBGE', 'estado', 'municipio', 'display_usuario']
+    list_display = ['id', 'dataInicio', 'dataTermino', 'admin', 'codigoIBGE', 'estado', 'municipio', 'display_usuario', 'admin_telefone', 'admin_email']
 
     def display_usuario(self, obj):
         return ", ".join(str(user) for user in obj.usuario.all())

@@ -46,10 +46,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
   final TextEditingController _passwordController2 = TextEditingController();
 
+  final TextEditingController _telefoneController = TextEditingController();
+
   final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
+  final phoneMask = MaskTextInputFormatter(mask: '(##) # ####-####');
 
   Future<void> registerUser(
-      String username, String CPF, String email, String password) async {
+      String username, String CPF, String email, String password, String telefone) async {
     final url = Uri.parse(AppConstants.BASE_URI + AppConstants.REGISTER_URI);
 
     setState(() {
@@ -68,6 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
             'CPF': CPF,
             'email': email,
             'password': password,
+            'telefone': telefone,
           }));
 
       if (response.statusCode == 201) {
@@ -89,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future updateUsers(int user, String username, String CPF, String email,
-      String password) async {
+      String password, String telefone) async {
     var url =
         Uri.parse('${AppConstants.BASE_URI}/api/v1/usuarios/update/$user');
     final prefs = await SharedPreferences.getInstance();
@@ -105,6 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
             'CPF': CPF,
             'email': email,
             'password': password,
+            'telefone': telefone
           }));
 
       if (response.statusCode == 200) {
@@ -141,13 +146,14 @@ class _RegisterPageState extends State<RegisterPage> {
     final cpf = arguments['user_cpf'];
     final email = arguments['user_email'];
     final id = arguments['user_id'];
-    print(isChange);
+    final telefone = arguments['user_telefone'];
     double paddingBottomTextField = screenSize.height * .015;
 
     if (isChange == true) {
       _nameController.text = username;
       _cpfController.text = cpf;
       _emailController.text = email;
+      _telefoneController.text = telefone;
     }
 
     return Scaffold(
@@ -233,6 +239,20 @@ class _RegisterPageState extends State<RegisterPage> {
                                 },
                               ),
                               SizedBox(height: paddingBottomTextField),
+                              const Text(
+                                "Telefone",
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(
+                                height: paddingBottomTextField,
+                              ),
+                              CustomTextField(
+                                  labelText: 'Insira seu telefone',
+                                  controller: _telefoneController,
+                                  inputFormatters: [phoneMask],
+                                  keyboardType: TextInputType.phone,
+                                  prefixIcon: FontAwesomeIcons.phone),
+                              SizedBox(height: paddingBottomTextField),
                               const Text('Senha',
                                   style:
                                       TextStyle(fontWeight: FontWeight.bold)),
@@ -301,7 +321,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                             _nameController.text,
                                             cpf,
                                             _emailController.text,
-                                            _passwordController.text);
+                                            _passwordController.text,
+                                            _telefoneController.text);
                                       } else {
                                         if (_formKey.currentState!.validate()) {
                                           _formKey.currentState!.save();
@@ -313,9 +334,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                           final email = _emailController.text;
                                           final password =
                                               _passwordController.text;
-
+                                          final telefone = _telefoneController.text;
                                           final result = await registerUser(
-                                              username, cpf, email, password);
+                                              username, cpf, email, password, telefone);
+                                          
+
+                                          print(telefone);
                                           await Future.delayed(const Duration(
                                               milliseconds: 500));
                                         }
@@ -405,15 +429,15 @@ class _RegisterPageState extends State<RegisterPage> {
                                 color: Colors.black.withAlpha(5),
                               ),
                             ),
-                               Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(10),
-                                      color:
-                                          Colors.black.withAlpha(5)),
-                                
-                                 ),
-                                 
-                             SizedBox(height: 150.w,width: 150.w, child: CircularProgressIndicator())
+                            Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.black.withAlpha(5)),
+                            ),
+                            SizedBox(
+                                height: 150.w,
+                                width: 150.w,
+                                child: CircularProgressIndicator())
                           ],
                         ),
                       ),

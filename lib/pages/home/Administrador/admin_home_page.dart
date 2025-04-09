@@ -45,6 +45,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     String userName = '';
     String userEmail = '';
     String userCPF = '';
+    String userTelefone = '';
 
   final Map<int, String> pageTitle = {
    // 0: 'Andamento das Pesquisas',
@@ -62,6 +63,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
           userName = userData['name'];
     userEmail = userData['email'];
     userCPF = userData['CPF'];
+    userTelefone = userData['telefone'];
     print(userDataString);
     });
 
@@ -88,7 +90,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 245, 245, 245),
         drawer: SafeArea(
-          child: OptionsDrawer(userController: _userController, userName: userName, userEmail: userEmail, cpf: userCPF, userId: userId,)
+          child: OptionsDrawer(userController: _userController, userName: userName, userEmail: userEmail, cpf: userCPF, userId: userId,telefone: userTelefone,)
         ),
         appBar: AppBar(
           title: Text(pageTitle[currentPageIndex]!),

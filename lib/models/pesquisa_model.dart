@@ -1,6 +1,8 @@
 class Pesquisa {
   int? id;
   int? adminId;
+  String? adminEmail;
+  String? adminTelefone;
   List<int> userId;
   String codigoIBGE;
   String estado;
@@ -23,12 +25,16 @@ class Pesquisa {
     required this.quantidadeLocais,
     required this.quantidadePesquisadores,
     required this.status,
+     this.adminEmail,
+     this.adminTelefone
   });
 
   // Método para criar uma instância de Pesquisa a partir de JSON
   Pesquisa.fromJson(Map<String, dynamic> json):
         id = json['id'] as int?,
         adminId = json['admin'] as int?,
+        adminEmail = json['admin_email'],       // Adicionado
+        adminTelefone = json['admin_telefone'],
         userId = List<int>.from(json['usuario'] ?? []),
         codigoIBGE = json['codigoIBGE'],
         estado = json['estado'],

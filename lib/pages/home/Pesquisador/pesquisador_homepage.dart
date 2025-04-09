@@ -109,6 +109,7 @@ static Future<http.Response> _getWithToken(Uri url, String token) async {
   String userEmail = '';
   String userCPF = '';
   String userStatus = '';
+  String userTelefone = '';
   Future<void> getUserInfo() async {
     final prefs = await SharedPreferences.getInstance();
     String? userDataString = prefs.getString('user_data');
@@ -120,6 +121,7 @@ static Future<http.Response> _getWithToken(Uri url, String token) async {
         userCPF = userData['CPF'];
         userStatus = userData['status'];
         userId = userData['id'];
+        userTelefone = userData['telefone'];
       });
     }
   }
@@ -168,6 +170,7 @@ static Future<http.Response> _getWithToken(Uri url, String token) async {
           userName: userName,
           userEmail: userEmail,
           cpf: userCPF,
+          telefone: userTelefone,
         )),
         body: Padding(
             padding: EdgeInsets.only(
@@ -278,9 +281,32 @@ Widget showPesquisas(List<Pesquisa> posts) {
       itemCount: filteredPosts.length,
       itemBuilder: (context, index) {
         final post = filteredPosts[index];
-        return GestureDetector(
-          onTap: () {
+        return GestureDetector( 
+          onTap: () async{
+            try{ 
+              
+                      final prefs = await SharedPreferences.getInstance();
 
+                      if(post.adminEmail != null && post.adminTelefone!= null){
+
+                        Future<void> obterNomeAdmin() async{
+                           final adminUsername = await AdminService.getAdminName(post.adminId!);
+                          prefs.setString('adminName', adminUsername.toString());
+
+                        }
+                         obterNomeAdmin();
+                         
+                        
+                          prefs.setString('adminEmail', post.adminEmail!);
+                       prefs.setString('adminTelefone', post.adminTelefone!);
+
+                      }
+                      
+                     
+            }catch(e){
+                print('Erro ao adicionar email ou telefone do administrador');
+            }
+                    
             savePesquisaId(post.id!);
 
             Navigator.pushNamed(context, '/Pesquisas',

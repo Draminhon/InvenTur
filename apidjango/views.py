@@ -314,7 +314,8 @@ def UsuarioLoginView(request):
                 "name": user.username,
                 "email": user.email,
                 "access_level": user.acessLevel,
-                "status": user.status
+                "status": user.status,
+                "telefone": user.telefone
             }
         }, status=status.HTTP_200_OK)
     except Exception as e:

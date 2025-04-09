@@ -16,7 +16,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id','username', 'CPF', 'email', 'password', 'is_active',  'acessLevel', 'status', 'password' ]
+        fields = ['id','username', 'CPF', 'email', 'password', 'is_active',  'acessLevel', 'status', 'password', 'telefone']
         extra_kwargs = {'password': {'write_only': True, 'required': False, 'allow_blank': True}}
 
     def create(self, validated_data):
@@ -42,9 +42,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 class PesquisaSerializer(serializers.ModelSerializer):
 
+
+
     quantidadePesquisadores = serializers.IntegerField(source='usuario.count', read_only = True)
     usuario = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), many=True)
+    admin_email = serializers.ReadOnlyField()
+    admin_telefone = serializers.ReadOnlyField()
     quantidadeLocais = serializers.SerializerMethodField()
+
     class Meta:
         model = Pesquisa
         fields = '__all__'

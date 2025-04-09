@@ -7,11 +7,12 @@ class ContaPesquisador extends StatelessWidget {
   final String userEmail;
   final String userCPF;
   final int userId;
+  final String userTelefone;
   const ContaPesquisador(
       {super.key,
       required this.userName,
       required this.userEmail,
-      required this.userCPF, required this.userId});
+      required this.userCPF, required this.userId, required this.userTelefone});
 
   String formatCPF(String cpf) {
     if (cpf.length != 11) {
@@ -22,6 +23,7 @@ class ContaPesquisador extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(userName);
     final screenSize = MediaQuery.sizeOf(context);
     return Scaffold(
         backgroundColor: Colors.white,
@@ -107,7 +109,8 @@ class ContaPesquisador extends StatelessWidget {
                     'username': userName,
                     'user_cpf': userCPF,
                     'user_email': userEmail,
-                    'user_id': userId
+                    'user_id': userId,
+                    'user_telefone': userTelefone
                   }),
                   style: OutlinedButton.styleFrom(
                       shape: RoundedRectangleBorder(
