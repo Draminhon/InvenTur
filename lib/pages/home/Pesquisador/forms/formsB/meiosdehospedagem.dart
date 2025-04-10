@@ -28,6 +28,34 @@ class MeiosDeHospedagem extends StatefulWidget {
 }
 
 class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
+
+
+
+  String pesquisadorNome = '';
+  String pesquisadorTelefone = '';
+  String pesquisadorEmail = '';
+
+
+  String  coordenadorNome = '';
+  String  coordenadorTelefone= '';
+  String  coordenadorEmail= '';
+
+  void getInfoUsersInPesquisa() async{
+    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
+
+     pesquisadorNome = info['pesquisador']['nome'];
+     pesquisadorTelefone = info['pesquisador']['telefone'];
+     pesquisadorEmail = info['pesquisador']['email'];
+
+     coordenadorNome = info['coordenador']['nome'];
+     coordenadorEmail = info['coordenador']['telefone'];
+     coordenadorTelefone = info['coordenador']['email'];     
+  }
+
+
+
+
+
   Future<void> sendForm(Map<String, dynamic> valoresjson) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
@@ -247,12 +275,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     // 'acessibilidade_outros': null,
     // 'observacoes': null,
     // 'referencias': null,
-    'nome_pesquisador': 'jose',
-    'telefone_pesquisador': '12453',
-    'email_pesquisador': 'jose@gmail.com',
-    'nome_coordenador': 'oihaioo',
-    'telefone_coordenador': '4444',
-    'email_coordenador': 'ogaio@gmail.com',
+
   };
 
 //Implementar o Map para os controllers
@@ -399,6 +422,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
   @override
   Widget build(BuildContext context) {
+    getInfoUsersInPesquisa();
     if (isUpdate == true) autoFillForm();
     
     final sizeScreen = MediaQuery.sizeOf(context);
@@ -3607,15 +3631,18 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                 onPressed: () {
                    valoresjson['estadosTuristas'] = _estadosSelecionados;
                   valoresjson['paisesTuristas'] = _paisesSelecionados;
-            
+
+                  valoresjson['nome_pesquisador'] = pesquisadorNome;
+                      valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
+                      valoresjson['email_pesquisador'] = pesquisadorEmail;
+                      valoresjson['nome_coordenador'] = coordenadorNome;
+                      valoresjson['telefone_coordenador'] = coordenadorTelefone;
+                      valoresjson['email_coordenador'] = coordenadorEmail;
                   _formKey.currentState!.save();
 
                   isUpdate == true? update(widget.hospedagemModel!.id!, valoresjson):sendForm(valoresjson);
-                  valoresjson.forEach((key, value) {
-                    
-                    print('$key $value');
-
-                  });
+              
+                  isUpdate == false? Navigator.pushReplacementNamed(context, '/SendedForm') : Navigator.pushReplacementNamed(context, '/UpdatedForm');
                 },
               ),
 

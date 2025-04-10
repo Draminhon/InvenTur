@@ -17,17 +17,17 @@ import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia_edit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Atualiza a quantidade de locais
 Future updateQtdeLocais(int pesquisa, int quantidade) async {
-  var url =
-      Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/update/${pesquisa}');
-
+  var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/update/${pesquisa}');
   try {
-    var response = await http.patch(url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({'quantidadeLocais': quantidade}));
-
+    var response = await http.patch(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'quantidadeLocais': quantidade}),
+    );
     if (response.statusCode == 200) {
       print('Quantidade de locais atualizada com sucesso: ${response.body}');
     } else {
@@ -38,9 +38,9 @@ Future updateQtdeLocais(int pesquisa, int quantidade) async {
   }
 }
 
+/// Página A com formulário
 class A extends StatefulWidget {
   const A({super.key});
-
   @override
   State<A> createState() => _A();
 }
@@ -52,7 +52,6 @@ class _A extends State<A> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     pc = PageController(initialPage: paginaAtual);
   }
@@ -72,181 +71,222 @@ class _A extends State<A> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: PageView(
-          controller: pc,
-          onPageChanged: setPaginaAtual,
-          children: const [FormularioA(), FormularioB(), FormularioC()],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: const Color.fromARGB(255, 55, 111, 60),
-          currentIndex: paginaAtual,
-
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
+      backgroundColor: Colors.white,
+      body: PageView(
+        controller: pc,
+        onPageChanged: setPaginaAtual,
+        children: const [FormularioA(), FormularioB(), FormularioC()],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: const Color.fromARGB(255, 55, 111, 60),
+        currentIndex: paginaAtual,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(
+              FontAwesomeIcons.a,
+              color: Colors.white,
+            ),
+            label: 'Categoria A',
+          ),
+          BottomNavigationBarItem(
               icon: Icon(
-                FontAwesomeIcons.a,
+                FontAwesomeIcons.b,
                 color: Colors.white,
               ),
-              label: 'Categoria A',
-            ),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  FontAwesomeIcons.b,
-                  color: Colors.white,
-                ),
-                label: 'Categoria B'),
-            BottomNavigationBarItem(
-                icon: Icon(
-                  FontAwesomeIcons.c,
-                  color: Colors.white,
-                ),
-                label: 'Categoria C')
-          ],
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white,
-          iconSize: 80.h, // Tamanho dos ícones
-          selectedLabelStyle:
-              TextStyle(fontSize: 60.h), // Tamanho do texto selecionado
-          unselectedLabelStyle: TextStyle(fontSize: 50.h), //
-
-          onTap: (pagina) {
-            pc.animateToPage(pagina,
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.ease);
-          },
-        ));
+              label: 'Categoria B'),
+          BottomNavigationBarItem(
+              icon: Icon(
+                FontAwesomeIcons.c,
+                color: Colors.white,
+              ),
+              label: 'Categoria C')
+        ],
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white,
+        iconSize: 80.h,
+        selectedLabelStyle: TextStyle(fontSize: 60.h),
+        unselectedLabelStyle: TextStyle(fontSize: 50.h),
+        onTap: (pagina) {
+          pc.animateToPage(pagina,
+              duration: const Duration(milliseconds: 400), curve: Curves.ease);
+        },
+      ),
+    );
   }
 }
 
-class Pesquisas extends StatelessWidget {
-  Pesquisas({super.key});
+/// Página de Equipamentos com barra de pesquisa
+class Pesquisas extends StatefulWidget {
+  const Pesquisas({super.key});
+  @override
+  _PesquisasState createState() => _PesquisasState();
+}
+
+class _PesquisasState extends State<Pesquisas> {
+  String _searchQuery = "";
+
+  Future<List<Map<String, dynamic>>> getRodovias() async {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    final pesquisaId = arguments['pesquisa_id'];
+    var url = Uri.parse(
+        '${AppConstants.BASE_URI}/api/v1/equipamentos/?pesquisa_id=$pesquisaId');
+    final response = await http.get(url, headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    });
+    final List body = json.decode(utf8.decode(response.bodyBytes));
+    return body.map((e) => Map<String, dynamic>.from(e)).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     final isadmin = arguments['is_admin'];
-    Future<List<Map<String, dynamic>>> getRodovias() async {
-      final prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('access_token');
-      final arguments = ModalRoute.of(context)?.settings.arguments as Map;
-      final pesquisaId = arguments['pesquisa_id'];
-      var url = Uri.parse(
-          '${AppConstants.BASE_URI}/api/v1/equipamentos/?pesquisa_id=$pesquisaId');
-      final response = await http.get(url, headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      });
-      final List body = json.decode(utf8.decode(response.bodyBytes));
-      return body.map((e) => Map<String, dynamic>.from(e)).toList();
-    }
-
     Future<List<Map<String, dynamic>>> rodoviasFuture = getRodovias();
 
     return Scaffold(
-        appBar: AppBar(
-          actions: [
-            Container(
-              padding: EdgeInsets.only(right: 228.48.w),
-            )
-          ],
-          backgroundColor: Colors.white,
-        ),
+      appBar: AppBar(
+        actions: [
+          Container(
+            padding: EdgeInsets.only(right: 228.48.w),
+          )
+        ],
         backgroundColor: Colors.white,
-        body: Column(
-          children: [
-            Padding(
-                padding: EdgeInsets.symmetric(vertical: 29.92.h),
-                child: Column(
-                  children: [
-                    Text(
-                      'EQUIPAMENTOS',
-                      style: TextStyle(
-                          color: const Color.fromARGB(255, 55, 111, 60),
-                          fontSize: 80.67.w,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Divider(
+      ),
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 29.92.h),
+            child: Column(
+              children: [
+                Text(
+                  'EQUIPAMENTOS',
+                  style: TextStyle(
                       color: const Color.fromARGB(255, 55, 111, 60),
-                      indent: 134.4.w,
-                      endIndent: 134.4.w,
-                    )
-                  ],
-                )),
-            Center(
-                child: SizedBox(
-              height: 1800.h,
-              child: FutureBuilder<List<Map<String, dynamic>>>(
-                future: rodoviasFuture,
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const SizedBox(
-                        width: 50,
-                        height: 50,
-                        child: Center(child: CircularProgressIndicator()));
-                  } else if (snapshot.hasData) {
-                    final rodovias = snapshot.data!;
-                    if (rodovias.isEmpty) {
-                      return const Text(
+                      fontSize: 80.67.w,
+                      fontWeight: FontWeight.w500),
+                ),
+                Divider(
+                  color: const Color.fromARGB(255, 55, 111, 60),
+                  indent: 134.4.w,
+                  endIndent: 134.4.w,
+                ),
+              ],
+            ),
+          ),
+          // Barra de pesquisa
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.h),
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: "Pesquisar equipamento...",
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+            ),
+          ),
+          // Lista de equipamentos filtrada
+          Expanded(
+            child: FutureBuilder<List<Map<String, dynamic>>>(
+              future: rodoviasFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                      child: SizedBox(
+                          width: 50,
+                          height: 50,
+                          child: CircularProgressIndicator()));
+                } else if (snapshot.hasData) {
+                  final rodovias = snapshot.data!;
+                  if (rodovias.isEmpty) {
+                    return const Center(
+                      child: Text(
                         "Não há equipamentos inventariados",
                         style: TextStyle(fontWeight: FontWeight.bold),
-                      );
-                    }
-                    return ShowRodoviaAux(posts: rodovias);
-                  } else {
-                    return const Text("Não há equipamentos inventariados",
-                        style: TextStyle(fontWeight: FontWeight.bold));
+                      ),
+                    );
                   }
-                },
-              ),
-            )),
-            Divider(
-              color: const Color.fromARGB(255, 55, 111, 60),
-              indent: 134.4.w,
-              endIndent: 134.4.w,
+                  return ShowRodoviaAux(
+                      posts: rodovias, searchQuery: _searchQuery);
+                } else {
+                  return const Center(
+                    child: Text(
+                      "Não há equipamentos inventariados",
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  );
+                }
+              },
             ),
-          ],
+          ),
+          Divider(
+            color: const Color.fromARGB(255, 55, 111, 60),
+            indent: 134.4.w,
+            endIndent: 134.4.w,
+          ),
+        ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: 150.52.h, left: 15, right: 15),
+        child: Container(
+          margin: EdgeInsets.symmetric(horizontal: 80.52.w),
+          height: 219.52.h,
+          child: isadmin == true
+              ? Container()
+              : ElevatedButton(
+                  style: ButtonStyle(
+                    shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10))),
+                    padding: WidgetStateProperty.all(
+                        EdgeInsets.symmetric(vertical: 35.904.h)),
+                    backgroundColor: WidgetStateProperty.all(
+                        const Color.fromARGB(255, 55, 111, 60)),
+                    overlayColor:
+                        WidgetStateProperty.all(Colors.green[600]),
+                  ),
+                  onPressed: () => Navigator.pushNamed(context, '/A'),
+                  child: Text(
+                    'inventariar novo equipamento',
+                    style: TextStyle(
+                        color: Colors.white, fontSize: 65.76.w),
+                  ),
+                ),
         ),
-        bottomNavigationBar: Padding(
-            padding: EdgeInsets.only(bottom: 150.52.h, left: 15, right: 15),
-            child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 80.52.w),
-              height: 219.52.h,
-              child: isadmin == true
-                  ? Container()
-                  : ElevatedButton(
-                      style: ButtonStyle(
-                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                          padding: WidgetStateProperty.all(
-                              EdgeInsets.symmetric(vertical: 35.904.h)),
-                          backgroundColor: WidgetStateProperty.all(
-                              const Color.fromARGB(255, 55, 111, 60)),
-                          overlayColor:
-                              WidgetStateProperty.all(Colors.green[600])),
-                      onPressed: () => Navigator.pushNamed(context, '/A'),
-                      child: Text(
-                        'inventariar novo equipamento',
-                        style:
-                            TextStyle(color: Colors.white, fontSize: 65.76.w),
-                      )),
-            )));
+      ),
+    );
   }
 }
 
+/// Widget para exibir e filtrar os equipamentos
 class ShowRodoviaAux extends StatefulWidget {
   final List<Map<String, dynamic>> posts;
+  final String searchQuery;
 
-  const ShowRodoviaAux({super.key, required this.posts});
+  const ShowRodoviaAux({
+    super.key,
+    required this.posts,
+    required this.searchQuery,
+  });
+
   @override
   State<ShowRodoviaAux> createState() => _ShowRodoviaAuxState();
 }
 
 class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
   List<Map<String, dynamic>> posts = [];
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     posts = List.from(widget.posts);
   }
@@ -259,52 +299,63 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
+    final filteredPosts = posts.where((post) {
+      final display = getDisplay(post['dados']).toLowerCase();
+      return display.contains(widget.searchQuery.toLowerCase());
+    }).toList();
+
     return SizedBox(
       height: 1500.h,
       child: ListView.builder(
-        itemCount: posts.length,
+        itemCount: filteredPosts.length,
         itemBuilder: (context, index) {
           final arguments = ModalRoute.of(context)?.settings.arguments as Map;
           final isadmin = arguments['is_admin'];
-          final equipamento = posts[index];
-          final tipo = equipamento['tipo'];
+          final equipamento = filteredPosts[index];
           final dados = equipamento['dados'];
+
           return GestureDetector(
             onTap: () {
               updateQtdeLocais(dados['pesquisa'], posts.length);
-
               if (equipamento['tipo'] == 'Rodovia') {
                 Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => RodoviaEdit(
-                              rodoviaModel:
-                                  RodoviaModel.fromJson(equipamento['dados']),
-                            )));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => RodoviaEdit(
+                      rodoviaModel: RodoviaModel.fromJson(equipamento['dados']),
+                    ),
+                  ),
+                );
               } else if (equipamento['tipo'] == 'SistemaDeSeguranca') {
                 Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SistemaDeSegurancaEdit(
-                              sistemaModel: SistemaDeSegurancaModel.fromJson(
-                                  equipamento['dados']),
-                            )));
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SistemaDeSegurancaEdit(
+                      sistemaModel: SistemaDeSegurancaModel.fromJson(equipamento['dados']),
+                    ),
+                  ),
+                );
               } else if (equipamento['tipo'] == 'AlimentosEBebidas') {
                 Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => AlimentoseBebidasEdit(
-                              alimentosModel: AlimentosEBebidas.fromJson(
-                                  equipamento['dados']),
-                            )));
-              }else if(equipamento['tipo'] == 'Meios de Hospedagem'){
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MeiosDeHospedagem(
-                  hospedagemModel: MeiosDeHospedagemModel.fromJson(
-                    equipamento['dados']
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AlimentoseBebidasEdit(
+                      alimentosModel: AlimentosEBebidas.fromJson(equipamento['dados']),
+                    ),
                   ),
-
-                ), settings: RouteSettings(arguments: {'isUpdate': true})), );
+                );
+              } else if (equipamento['tipo'] == 'Meios de Hospedagem') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MeiosDeHospedagem(
+                      hospedagemModel: MeiosDeHospedagemModel.fromJson(equipamento['dados']),
+                    ),
+                    settings: RouteSettings(arguments: {'isUpdate': true}),
+                  ),
+                );
               }
             },
             child: isadmin == true
@@ -313,15 +364,12 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                       borderRadius: BorderRadius.circular(20),
                       color: AppConstants.MAIN_GREEN,
                     ),
-                    margin:
-                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
+                    margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
                     height: 250.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          width: 140.w,
-                        ),
+                        SizedBox(width: 140.w),
                         Flexible(
                           child: Center(
                             child: Text(
@@ -336,79 +384,65 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                           ),
                         ),
                         IconButton(
-                            onPressed: () async {
-                              showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text("Tem certeza?"),
-                                      content: const Text(
-                                          "Você deseja excluir esse equipamento?"),
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
-                                      actions: [
-                                        TextButton(
-                                            onPressed: () {
-                                              Navigator.pop(context);
+                          onPressed: () async {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Tem certeza?"),
+                                  content: const Text("Você deseja excluir esse equipamento?"),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20)),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("Cancelar"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () async {
+                                        final int id = dados['id'];
+                                        final String nome = dados['tipo_formulario'];
+                                        print('excluindo: $nome (ID: $id)');
+                                        var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/base/$id/');
+                                        final prefs = await SharedPreferences.getInstance();
+                                        String? token = prefs.getString('access_token');
+                                        try {
+                                          final response = await http.patch(
+                                            url,
+                                            headers: {
+                                              'Content-Type': 'application/json',
+                                              "Authorization": "Bearer $token"
                                             },
-                                            child: const Text("Cancelar")),
-                                        TextButton(
-                                            onPressed: () async {
-                                              final int id = dados['id'];
-                                              final String nome =
-                                                  dados['tipo_formulario'];
-                                              print(
-                                                  'excluindo: $nome (ID: $id)');
-                                              var url = Uri.parse(
-                                                  '${AppConstants.BASE_URI}/api/v1/base/$id/');
-                                              final prefs =
-                                                  await SharedPreferences
-                                                      .getInstance();
-                                              String? token = prefs
-                                                  .getString('access_token');
-                                              try {
-                                                final response =
-                                                    await http.patch(
-                                                  url,
-                                                  headers: {
-                                                    'Content-Type':
-                                                        'application/json',
-                                                    "Authorization":
-                                                        "Bearer $token"
-                                                  },
-                                                  body: json.encode(
-                                                      {'is_active': false}),
-                                                );
-
-                                                if (response.statusCode ==
-                                                    204) {
-                                                  print(
-                                                      'Usuario deletado com sucesso');
-                                                } else {
-                                                  print(
-                                                      'Falha ao deletar: ${response.statusCode}');
-                                                }
-                                              } catch (e) {
-                                                print('Erro $e');
-                                              }
-
-                                              removePost(index);
-                                              Navigator.pop(context);
-                                            },
-                                            child: const Text(
-                                              "Excluir",
-                                              style:
-                                                  TextStyle(color: Colors.red),
-                                            ))
-                                      ],
-                                    );
-                                  });
-                            },
-                            icon: const Icon(
-                              Icons.close,
-                              color: Colors.red,
-                            ))
+                                            body: json.encode({'is_active': false}),
+                                          );
+                                          if (response.statusCode == 204) {
+                                            print('Usuário deletado com sucesso');
+                                          } else {
+                                            print('Falha ao deletar: ${response.statusCode}');
+                                          }
+                                        } catch (e) {
+                                          print('Erro $e');
+                                        }
+                                        removePost(index);
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text(
+                                        "Excluir",
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    )
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.red,
+                          ),
+                        ),
                       ],
                     ),
                   )
@@ -417,8 +451,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.grey.shade300,
                     ),
-                    margin:
-                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
+                    margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
                     height: 250.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -426,9 +459,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                         Flexible(
                           child: Text(
                             getDisplay(dados),
-                            style: TextStyle(
-                              fontSize: 55.w,
-                            ),
+                            style: TextStyle(fontSize: 55.w),
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
                           ),
@@ -443,9 +474,9 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
   }
 }
 
+/// Função auxiliar para montar o texto exibido para cada equipamento
 String getDisplay(Map<String, dynamic> dados) {
   final tipoFormulario = dados['tipo_formulario'] ?? '';
-
   switch (tipoFormulario) {
     case 'Rodovia':
       return '$tipoFormulario\n${dados['nome_oficial']}';

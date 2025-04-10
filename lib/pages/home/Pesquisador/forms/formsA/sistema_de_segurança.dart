@@ -47,6 +47,31 @@ Future<void> sendForm(Map<String, dynamic> valoresjson) async {
 }
 
 class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
+
+  String pesquisadorNome = '';
+  String pesquisadorTelefone = '';
+  String pesquisadorEmail = '';
+
+
+  String  coordenadorNome = '';
+  String  coordenadorTelefone= '';
+  String  coordenadorEmail= '';
+
+  void getInfoUsersInPesquisa() async{
+    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
+
+     pesquisadorNome = info['pesquisador']['nome'];
+     pesquisadorTelefone = info['pesquisador']['telefone'];
+     pesquisadorEmail = info['pesquisador']['email'];
+
+     coordenadorNome = info['coordenador']['nome'];
+     coordenadorEmail = info['coordenador']['telefone'];
+     coordenadorTelefone = info['coordenador']['email'];     
+  }
+
+
+
+
   TextEditingController email_coordenador = TextEditingController();
   TextEditingController email_pesquisador = TextEditingController();
   TextEditingController municipio = TextEditingController();
@@ -113,6 +138,7 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
 
   @override
   Widget build(BuildContext context) {
+    getInfoUsersInPesquisa();
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
         backgroundColor: Colors.white,
@@ -447,6 +473,13 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                       width: 300,
                       child: ElevatedButton(
                         onPressed: () {
+                                                valoresjson['nome_pesquisador'] = pesquisadorNome;
+                      valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
+                      valoresjson['email_pesquisador'] = pesquisadorEmail;
+                      valoresjson['nome_coordenador'] = coordenadorNome;
+                      valoresjson['telefone_coordenador'] = coordenadorTelefone;
+                      valoresjson['email_coordenador'] = coordenadorEmail;
+                      
                           valoresjson['contatos'] = sections
                               .map((element) => element.getData())
                               .toList();

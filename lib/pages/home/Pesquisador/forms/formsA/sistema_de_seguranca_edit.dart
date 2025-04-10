@@ -554,6 +554,16 @@ class _SistemaDeSegurancaEditState extends State<SistemaDeSegurancaEdit> {
                       width: 300,
                       child: ElevatedButton(
                         onPressed: () {
+
+                          
+   valoresjson['nome_pesquisador']= widget.sistemaModel!.nomePesquisador;
+   valoresjson['telefone_pesquisador']= widget.sistemaModel!.telefonePesquisador;
+   valoresjson['email_pesquisador']= widget.sistemaModel!.emailPesquisador;
+   valoresjson['nome_coordenador']= widget.sistemaModel!.nomeCoordenador;
+   valoresjson['telefone_coordenador']= widget.sistemaModel!.telefoneCoordenador;
+   valoresjson['email_coordenador']= widget.sistemaModel!.emailCoordenador;
+
+
                           valoresjson['contatos'] = sections
                               .map((element) => element.getData())
                               .toList();

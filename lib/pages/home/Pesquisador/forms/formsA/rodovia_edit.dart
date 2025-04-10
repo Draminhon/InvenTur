@@ -29,56 +29,7 @@ class _RodoviaState extends State<RodoviaEdit> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Rodovia',
-    'uf': null,
-    'regiao_turistica': null,
-    'municipio': null,
-    'tipo': null,
-    'subtipos': null,
-    'nome_oficial': null,
-    'nome_popular': null,
-    'jurisdicao': null,
-    'natureza': null,
-    'tipo_de_organizacao_instituicao': null,
-    'extensao_rodovia_municipio': null,
-    'faixas_de_rolamento': null,
-    'pavimentacao': null,
-    'pedagio': null,
-    'municipios_vizinhos_interligados_rodovia': null,
-    'inicio_atividade': null,
-    'whatsapp': null,
-    'instagram': null,
-    'sinalizacao_de_acesso': null,
-    'sinalizacao_turistica': null,
-    'posto_de_combustivel': null,
-    'outros_servicos': null,
-    'estruturas_ao_longo_da_via': null,
-    'poluicao': null,
-    'poluicao_especificacao': null,
-    'lixo': null,
-    'lixo_especificacao': null,
-    'desmatamento': null,
-    'desmatamento_especificacao': null,
-    'queimadas': null,
-    'queimadas_especificacao': null,
-    'inseguranca': null,
-    'inseguranca_especificacao': null,
-    'extrativismo': null,
-    'extrativismo_especificacao': null,
-    'prostituicao': null,
-    'prostituicao_especificacao': null,
-    'ocupacao_irregular_invasao': null,
-    'ocupacao_irregular_invasao_especificacao': null,
-    'outras': null,
-    'outras_especificacao': null,
-    'estado_geral_de_conservacao': null,
-    'observacoes': null,
-    'referencias': null,
-    'nome_pesquisador': 'jose',
-    'telefone_pesquisador': '12453',
-    'email_pesquisador': 'jose@gmail.com',
-    'nome_coordenador': 'oihaioo',
-    'telefone_coordenador': '4444',
-    'email_coordenador': 'ogaio@gmail.com',
+
   };
 
   @override
@@ -1373,13 +1324,21 @@ class _RodoviaState extends State<RodoviaEdit> {
                       valoresjson['posto_de_combustivel'] = posto;
                       valoresjson['outros_servicos'] = outrosServicoss;
                       valoresjson['estruturas_ao_longo_da_via'] = estruturas;
+
+   valoresjson['nome_pesquisador']= widget.rodoviaModel!.nomePesquisador;
+   valoresjson['telefone_pesquisador']= widget.rodoviaModel!.telefonePesquisador;
+   valoresjson['email_pesquisador']= widget.rodoviaModel!.emailPesquisador;
+   valoresjson['nome_coordenador']= widget.rodoviaModel!.nomeCoordenador;
+   valoresjson['telefone_coordenador']= widget.rodoviaModel!.telefoneCoordenador;
+   valoresjson['email_coordenador']= widget.rodoviaModel!.emailCoordenador;
+
+
                       if (_formKey.currentState!.validate()) {
                         //  ScaffoldMessenger.of(context).showSnackBar(
                         //       SnackBar(content: Text('processing data')));
 
                         _formKey.currentState!.save();
-                        updateRodovia(widget.rodoviaModel!.id!, valoresjson);
-                        Navigator.pushReplacementNamed(context, '/UpdatedForm');
+                        
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('preencha os dados!')));

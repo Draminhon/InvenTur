@@ -32,6 +32,31 @@ class AlimentoseBebidas extends StatefulWidget {
 }
 
 class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
+
+
+  String pesquisadorNome = '';
+  String pesquisadorTelefone = '';
+  String pesquisadorEmail = '';
+
+
+  String  coordenadorNome = '';
+  String  coordenadorTelefone= '';
+  String  coordenadorEmail= '';
+
+  void getInfoUsersInPesquisa() async{
+    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
+
+     pesquisadorNome = info['pesquisador']['nome'];
+     pesquisadorTelefone = info['pesquisador']['telefone'];
+     pesquisadorEmail = info['pesquisador']['email'];
+
+     coordenadorNome = info['coordenador']['nome'];
+     coordenadorEmail = info['coordenador']['telefone'];
+     coordenadorTelefone = info['coordenador']['email'];     
+  }
+
+
+
   Future<void> sendForm(Map<String, dynamic> valoresjson) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
@@ -59,12 +84,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
 
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Alimentos e bebidas',
-    'nome_pesquisador': 'jose',
-    'telefone_pesquisador': '12453',
-    'email_pesquisador': 'jose@gmail.com',
-    'nome_coordenador': 'oihaioo',
-    'telefone_coordenador': '4444',
-    'email_coordenador': 'ogaio@gmail.com',
+  
   };
 
   final Map<String, TextEditingController> controllers = {};
@@ -139,6 +159,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
   final _formKey = GlobalKey<FormState>();
 
   Widget build(BuildContext context) {
+    getInfoUsersInPesquisa();
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
         backgroundColor: Colors.white,
@@ -2299,6 +2320,12 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     // controllers.forEach((key, value) {
                     //   print(value.text);
                     // },);
+                    valoresjson['nome_pesquisador'] = pesquisadorNome;
+                      valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
+                      valoresjson['email_pesquisador'] = pesquisadorEmail;
+                      valoresjson['nome_coordenador'] = coordenadorNome;
+                      valoresjson['telefone_coordenador'] = coordenadorTelefone;
+                      valoresjson['email_coordenador'] = coordenadorEmail;
                     valoresjson['tipoDeOrganizacaoInstituicao'] =
                         tipo_de_organizacao_key.currentState!
                             .getSelectedValues()
@@ -2325,6 +2352,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
 
                   
                     _formKey.currentState!.save();
+
 
                    sendForm(valoresjson);
                     valoresjson.forEach(

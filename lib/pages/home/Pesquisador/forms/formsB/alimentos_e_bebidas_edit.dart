@@ -2432,6 +2432,12 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
                             .getSelectedValues()
                             .toList();
 
+   valoresjson['nome_pesquisador']= widget.alimentosModel!.nomePesquisador;
+   valoresjson['telefone_pesquisador']= widget.alimentosModel!.telefonePesquisador;
+   valoresjson['email_pesquisador']= widget.alimentosModel!.emailPesquisador;
+   valoresjson['nome_coordenador']= widget.alimentosModel!.nomeCoordenador;
+   valoresjson['telefone_coordenador']= widget.alimentosModel!.telefoneCoordenador;
+   valoresjson['email_coordenador']= widget.alimentosModel!.emailCoordenador;
                     _formKey.currentState!.save();
                     updateAlimentosEBebidas(
                         widget.alimentosModel!.id!, valoresjson);
