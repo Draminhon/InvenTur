@@ -69,13 +69,13 @@ class _PesquisasPageState extends State<PesquisasPage> {
   @override
   void initState() {
     super.initState();
+  loadPesquisas();
     
   }
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.sizeOf(context);
-    loadPesquisas();
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -83,39 +83,24 @@ class _PesquisasPageState extends State<PesquisasPage> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
                     Expanded(
-            child: FutureBuilder<List<Pesquisa>>(
-              future: getPesquisas(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text("Erro: ${snapshot.error}"),
-                  );
-                } else if (snapshot.hasData) {
-                  final pesquisas = snapshot.data!;
-                  // Atualiza o controller com as pesquisas recebidas
-                  _pesquisaController.addPesquisa(pesquisas);
-                  return pesquisas.isNotEmpty
-                      ? ListView.builder(
-                          itemCount: pesquisas.length,
-                          itemBuilder: (context, index) {
-                            return PesquisaCard(
-                              pesquisa: pesquisas[index],
-                              pesquisaController: _pesquisaController,
-                            );
-                          },
-                        )
-                      : const Center(
-                          child: Text("Nenhuma Pesquisa Encontrada"),
-                        );
-                } else {
-                  return const Center(
-                    child: Text("Nenhuma Pesquisa Cadastrada."),
-                  );
-                } 
+            child: ListenableBuilder(
+              listenable: _pesquisaController,
+              builder: (context, child) {
+             final pesquisas = _pesquisaController.pesquisas;
+             if(_isLoading){
+              return const Center(child: CircularProgressIndicator(),);
+             }else if (pesquisas.isEmpty){
+              return const Center(child: CircularProgressIndicator(),);
+             }
+                  return ListView.builder(
+                    itemCount: pesquisas.length,
+                    itemBuilder: (context, index) {
+                      return PesquisaCard(
+                        pesquisa: pesquisas[index],
+                        pesquisaController: _pesquisaController,
+                      );
+                    });
+                    
               },
             ),
           ),

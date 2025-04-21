@@ -8,6 +8,7 @@ class UserPesquisaCardList extends StatefulWidget{
   final PesquisaController pesquisaController;
   final bool xIsVisible;
 
+   
    UserPesquisaCardList({
     super.key,
     required this.user,

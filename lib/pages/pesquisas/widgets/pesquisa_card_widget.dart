@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:inventur/main.dart';
 import 'package:inventur/models/pesquisa_model.dart';
@@ -26,6 +28,45 @@ class PesquisaCard extends StatefulWidget {
   State<PesquisaCard> createState() => _PesquisaCardState();
 }
 
+
+ Future<List<Pesquisa>> getPesquisas() async {
+    
+    final prefs = await SharedPreferences.getInstance();
+    String? userDataString = prefs.getString('user_data');
+    if (userDataString == null) {
+      print("Nenhum dado do usuário encontrado no SharedPreferences.");
+      return [];
+    }
+
+    Map<String, dynamic> userData = json.decode(userDataString);
+    final url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_PESQUISAS);
+    int adminId = userData['id'];
+
+
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('access_token');
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
+
+      final List body = json.decode(utf8.decode(response.bodyBytes));
+      final List<Pesquisa> todasAsPesquisas =
+          body.map((e) => Pesquisa.fromJson(e)).toList();
+      final List<Pesquisa> pesquisasFiltradas = todasAsPesquisas
+          .where((pesquisa) =>
+              pesquisa.adminId != null && pesquisa.adminId == adminId)
+          .toList();
+      return pesquisasFiltradas;
+    } catch (e) {
+      print("Erro: $e");
+      return [];
+    }
+  }
+
+ 
 Future<File?> downloadExcel(int pesquisaId) async {
   final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('access_token');
@@ -80,8 +121,15 @@ Future<File?> downloadExcel(int pesquisaId) async {
 
 
 class _PesquisaCardState extends State<PesquisaCard> {
-  late Pesquisa _pesquisa;
+
   late PesquisaController _pesquisaController;
+
+   Future<void> loadPesquisas() async {
+    List<Pesquisa> pesquisas = await getPesquisas();
+    _pesquisaController.addPesquisa(pesquisas);
+  }
+  late Pesquisa _pesquisa;
+  
 
   bool _opened = false;
 
@@ -137,6 +185,10 @@ class _PesquisaCardState extends State<PesquisaCard> {
                         'estado': _pesquisa.estado,
                         'pesquisadores': _pesquisa.userId,
                         'admin_id': _pesquisa.adminId
+                      }).then((result) {
+                        if (result == true) {
+                            loadPesquisas();
+                        }
                       });
                     },
                     icon: Icon(

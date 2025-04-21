@@ -22,6 +22,10 @@ class EditPesquisa extends StatefulWidget {
 
 class _EditPesquisaState extends State<EditPesquisa>
     with SingleTickerProviderStateMixin {
+
+
+
+      
   bool _tileExpanded = false;
   final Set<User> selectedUsers = {};
   late Estado? _estadoSelecionado = Estado(id: -1, sigla: '', nome: '');
@@ -146,78 +150,7 @@ void didChangeDependencies() {
     }
     return '';
   }
-DateTime parseDate(String dateStr) {
-  // Remove o sufixo "at ..." se existir
-  String cleaned = dateStr.split('at').first.trim();
 
-  // Se a string contém traços, assume o padrão "yyyy-MM-dd"
-  if (cleaned.contains('-')) {
-    return DateFormat('yyyy-MM-dd').parse(cleaned);
-  }
-  // Se a string contém barras, assume o padrão "dd/MM/yyyy"
-  else if (cleaned.contains('/')) {
-    return DateFormat('dd/MM/yyyy').parse(cleaned);
-  }
-  else {
-    throw FormatException('Formato desconhecido para data: $dateStr');
-  }
-}
-
-Future<void> atualizarPesquisa() async {
-  var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/${pesquisaId}/atualizar/');
-  String rawDataInicio = _inicioController.text;
-  String rawDataTermino = _terminoController.text;
-  if(rawDataInicio.contains('at')){
-    rawDataInicio = rawDataInicio.split('at').first.trim();
-    rawDataTermino = rawDataTermino.split('at').first.trim();
-  }
-  try {
-    final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
-
-  DateTime dtInicio = parseDate(rawDataInicio);
-  DateTime dtTermino = parseDate(rawDataTermino);
-
-    // Formatar a data usando DateFormat para garantir que ela tenha o formato correto
-    DateFormat outputFormat = DateFormat('yyyy-MM-dd'); // Para manter o mesmo formato
-    
-    // Converte a data do formato yyyy-MM-dd para yyyy-MM-dd (caso seja necessário)
-    String dataInicioFormatada = outputFormat.format(dtInicio);
-    String dataTerminoFormatada = outputFormat.format(dtTermino);
-    
-    var response = await http.patch(
-      url,
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token"
-      },
-      body: json.encode({
-        'admin': adminId,
-        'dataInicio': dataInicioFormatada,
-        'dataTermino': dataTerminoFormatada,
-        'codigoIBGE': _codigIbgeController.text,
-        'estado': _estadoController.text,
-        'municipio': _municipioController.text,
-        'usuario': selectedUsers.map((user) => user.id).toList()
-      }),
-    );
-
-    // Verifique o código de status da resposta
-    if (response.statusCode == 200) {
-      // Requisição bem-sucedida
-      print("Pesquisa atualizada com sucesso!");
-      print("Resposta: ${response.body}");
-    } else {
-      // Se o status não for 200, printa o erro com detalhes
-      print("Erro ao atualizar pesquisa. Código de status: ${response.statusCode}");
-      print("Resposta do servidor: ${response.body}");
-    }
-
-  } catch (e) {
-    // Captura e imprime o erro
-    print("Erro ao fazer a requisição: $e");
-  }
-}
 
 
 
@@ -610,7 +543,24 @@ Future<void> atualizarPesquisa() async {
                                 //     estado,
                                 //     municipio,
                                 //     selectedUsers);
-                                atualizarPesquisa();
+                               final success = await _pesquisaController.atualizarPesquisa(
+                                  adminId: adminId,
+                                  pesquisaId: pesquisaId,
+                                  rawDataInicio: _inicioController.text,
+                                  rawDataTermino: _terminoController.text,
+                                  codigoIBGE: _codigIbgeController.text,
+                                  estado: _estadoController.text,
+                                  municipio: _municipioController.text,
+                                  selectedUsers: selectedUsers,);
+                                if(success){
+                                  Navigator.pop(context, true);
+                                }else{
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text("Erro ao atualizar pesquisa"),
+                                    ),
+                                  );
+                                }
                               },
                               child: Text(
                                 "Confirmar",
@@ -638,7 +588,10 @@ Future<void> atualizarPesquisa() async {
                                       const Color.fromARGB(255, 232, 0, 0)),
                                   overlayColor:
                                       WidgetStateProperty.all(Colors.red[500])),
-                              onPressed: () {},
+                              onPressed: () {
+                                  Navigator.pop(context);
+
+                              },
                               child: Text(
                                 "Cancelar",
                                 style: TextStyle(

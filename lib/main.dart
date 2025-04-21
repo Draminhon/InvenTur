@@ -51,13 +51,13 @@ void main() async {
   // await dep.init();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(ChangeNotifierProvider(
-      create: (context) => UserProvider(), child: MyApp()));
+      create: (context) => UserProvider(),  child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 
-  @override
+  @override 
   Widget build(BuildContext context) {
     // Get.find<RodoviaController>().getRodoviaList();
 

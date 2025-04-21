@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:inventur/models/estado_model.dart';
 import 'package:inventur/models/municipio_model.dart';
 import 'package:inventur/models/pais_model.dart';
@@ -9,6 +10,7 @@ import 'package:inventur/utils/app_constants.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:intl/intl.dart';
 
 class PesquisaController extends ChangeNotifier {
   static const String _finished = "Concluído";
@@ -96,7 +98,100 @@ final prefs = await SharedPreferences.getInstance();
     notifyListeners();
   }
 
+static DateTime parseDate(String dateStr) {
+  // Remove o sufixo "at ..." se existir
+  String cleaned = dateStr.split('at').first.trim();
 
+  // Se a string contém traços, assume o padrão "yyyy-MM-dd"
+  if (cleaned.contains('-')) {
+    return DateFormat('yyyy-MM-dd').parse(cleaned);
+  }
+  // Se a string contém barras, assume o padrão "dd/MM/yyyy"
+  else if (cleaned.contains('/')) {
+    return DateFormat('dd/MM/yyyy').parse(cleaned);
+  }
+  else {
+    throw FormatException('Formato desconhecido para data: $dateStr');
+  }
+}
+
+Future<bool> atualizarPesquisa({
+  required int pesquisaId,
+  required int adminId,
+  required String rawDataInicio,
+  required String rawDataTermino,
+  required String codigoIBGE,
+  required String estado,
+  required String municipio,
+  required Set<User> selectedUsers,
+}) async {
+  var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/$pesquisaId/atualizar/');
+  
+  // Ajustar as datas caso contenham o formato 'at'
+  if (rawDataInicio.contains('at')) {
+    rawDataInicio = rawDataInicio.split('at').first.trim();
+    rawDataTermino = rawDataTermino.split('at').first.trim();
+  }
+
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
+
+    // Converter as datas para o formato correto
+    DateTime dtInicio = parseDate(rawDataInicio);
+    DateTime dtTermino = parseDate(rawDataTermino);
+
+    DateFormat outputFormat = DateFormat('yyyy-MM-dd');
+    String dataInicioFormatada = outputFormat.format(dtInicio);
+    String dataTerminoFormatada = outputFormat.format(dtTermino);
+
+    // Fazer a requisição PATCH
+    var response = await http.patch(
+      url,
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token"
+      },
+      body: json.encode({
+        'admin': adminId,
+        'dataInicio': dataInicioFormatada,
+        'dataTermino': dataTerminoFormatada,
+        'codigoIBGE': codigoIBGE,
+        'estado': estado,
+        'municipio': municipio,
+        'usuario': selectedUsers.map((user) => user.id).toList(),
+      }),
+    );
+
+    // Verificar o código de status da resposta
+    if (response.statusCode == 200) {
+      print("Pesquisa atualizada com sucesso!");
+      print("Resposta: ${response.body}");
+      final idx = _pesquisas.indexWhere((p) => p.id == pesquisaId);
+      if(idx != -1){
+        _pesquisas[idx] = _pesquisas[idx].copyWith(
+          dataInicio: dataInicioFormatada,
+          dataTermino: dataTerminoFormatada,
+          codigoIBGE: codigoIBGE,
+          estado: estado,
+          municipio: municipio,
+          pesquisadores: selectedUsers.map((user) => user.id).toList(),
+        );
+      }
+      notifyListeners();
+    return true;
+      
+    } else {
+      print("Erro ao atualizar pesquisa. Código de status: ${response.statusCode}");
+      print("Resposta do servidor: ${response.body}");
+      return false;
+    }
+  } catch (e) {
+    print("Erro ao fazer a requisição: $e");
+    return false;
+  }
+  notifyListeners();
+}
 
 
   Municipio? getMunicipioByNome(String nome) {
