@@ -17,13 +17,13 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsC/hidrografia.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/updatedForm.dart';
 import 'package:inventur/pages/pesquisas/edit_pesquisa.dart';
 import 'package:inventur/pages/pesquisas/register_pesquisa_page.dart';
-import 'package:inventur/pages/recover/changepasswordsucess_page.dart';
+import 'package:inventur/pages/password_recover/changepasswordsucess_page.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisas.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
-import 'package:inventur/pages/recover/changepassword_page.dart';
-import 'package:inventur/pages/recover/passwordcod_page.dart';
-import 'package:inventur/pages/recover/passwordrecover_page.dart';
+import 'package:inventur/pages/password_recover/changepassword_page.dart';
+import 'package:inventur/pages/password_recover/changePassword_page.dart';
+import 'package:inventur/pages/password_recover/passwordrecover_page.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
 import 'package:inventur/pages/home/Pesquisador/perfil_pesquisador.dart';
@@ -79,11 +79,8 @@ class MyApp extends StatelessWidget {
           '/AdminHome': (_) => AdminHomePage(),
           '/RegisterPesquisa': (_) => RegisterPesquisa(),
           '/EditPesquisa': (_) => EditPesquisa(),
-          '/PassWordRecover': (_) => RecuperarSenha(),
-          '/ConfirmarCodigo': (_) => ConfirmarCodigo(),
-          '/MudarSenha': (_) => MudarSenha(),
+          '/PasswordRecover': (_) => RecuperarSenha(),
           '/NewPassword': (_) => ConfirmacaoNovaSenha(),
-          '/ConfirmarSenha': (_) => ConfirmarCodigo(),
           '/PesquisadorHome': (_) => PesquisadorHome(),
           '/Pesquisas': (_) => Pesquisas(),
           '/FormA': (_) => FormularioA(),

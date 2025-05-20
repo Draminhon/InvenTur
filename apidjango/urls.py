@@ -10,6 +10,10 @@ urlpatterns = [
     path('login/', UsuarioLoginView, name = 'usuario-login'),
     path('pesquisas/usuario/', PesquisaUsuarioListView.as_view(), name='pesquisa-usuario-list'),
 
+    path("password-reset/request/", PasswordResetRequestAPIView.as_view(), name="password-reset-request"),
+    path("password-reset/verify-otp/", OTPVerificationAPIView.as_view(), name="password-reset-verify-otp"),  # New API
+    path("password-reset/change-password/", PasswordResetAPIView.as_view(), name="password-reset-change"),
+
     path('export/pesquisa/<int:pesquisa_id>/', export_pesquisa_to_excel, name = 'export_pesquisa'),
 
     path('alimentosEBebidas/create/', AlimentosEBebidasListCreateView.as_view(), name = 'createAlimentos'),

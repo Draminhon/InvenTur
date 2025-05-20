@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
@@ -226,7 +226,7 @@ setState(() {
                             alignment: Alignment.centerRight,
                             child: TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/ConfirmarSenha');
+                                Navigator.pushNamed(context, '/PasswordRecover');
                               },
                               child: const Text(
                                 'Esqueceu sua senha?',

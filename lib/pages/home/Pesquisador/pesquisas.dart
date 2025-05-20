@@ -19,7 +19,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 /// Atualiza a quantidade de locais
 Future updateQtdeLocais(int pesquisa, int quantidade) async {
-  var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/update/${pesquisa}');
+  var url =
+      Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/update/${pesquisa}');
   try {
     var response = await http.patch(
       url,
@@ -178,6 +179,7 @@ class _PesquisasState extends State<Pesquisas> {
             ),
           ),
           // Barra de pesquisa
+
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.h),
             child: TextField(
@@ -196,6 +198,9 @@ class _PesquisasState extends State<Pesquisas> {
             ),
           ),
           // Lista de equipamentos filtrada
+          SizedBox(
+            height: 50.h,
+          ),
           Expanded(
             child: FutureBuilder<List<Map<String, dynamic>>>(
               future: rodoviasFuture,
@@ -251,14 +256,12 @@ class _PesquisasState extends State<Pesquisas> {
                         EdgeInsets.symmetric(vertical: 35.904.h)),
                     backgroundColor: WidgetStateProperty.all(
                         const Color.fromARGB(255, 55, 111, 60)),
-                    overlayColor:
-                        WidgetStateProperty.all(Colors.green[600]),
+                    overlayColor: WidgetStateProperty.all(Colors.green[600]),
                   ),
                   onPressed: () => Navigator.pushNamed(context, '/A'),
                   child: Text(
                     'inventariar novo equipamento',
-                    style: TextStyle(
-                        color: Colors.white, fontSize: 65.76.w),
+                    style: TextStyle(color: Colors.white, fontSize: 65.76.w),
                   ),
                 ),
         ),
@@ -333,7 +336,8 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => SistemaDeSegurancaEdit(
-                      sistemaModel: SistemaDeSegurancaModel.fromJson(equipamento['dados']),
+                      sistemaModel: SistemaDeSegurancaModel.fromJson(
+                          equipamento['dados']),
                     ),
                   ),
                 );
@@ -342,7 +346,8 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => AlimentoseBebidasEdit(
-                      alimentosModel: AlimentosEBebidas.fromJson(equipamento['dados']),
+                      alimentosModel:
+                          AlimentosEBebidas.fromJson(equipamento['dados']),
                     ),
                   ),
                 );
@@ -351,7 +356,8 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => MeiosDeHospedagem(
-                      hospedagemModel: MeiosDeHospedagemModel.fromJson(equipamento['dados']),
+                      hospedagemModel:
+                          MeiosDeHospedagemModel.fromJson(equipamento['dados']),
                     ),
                     settings: RouteSettings(arguments: {'isUpdate': true}),
                   ),
@@ -364,7 +370,8 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                       borderRadius: BorderRadius.circular(20),
                       color: AppConstants.MAIN_GREEN,
                     ),
-                    margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
+                    margin:
+                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
                     height: 250.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -390,7 +397,8 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: const Text("Tem certeza?"),
-                                  content: const Text("Você deseja excluir esse equipamento?"),
+                                  content: const Text(
+                                      "Você deseja excluir esse equipamento?"),
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(20)),
                                   actions: [
@@ -403,24 +411,32 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                                     TextButton(
                                       onPressed: () async {
                                         final int id = dados['id'];
-                                        final String nome = dados['tipo_formulario'];
+                                        final String nome =
+                                            dados['tipo_formulario'];
                                         print('excluindo: $nome (ID: $id)');
-                                        var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/base/$id/');
-                                        final prefs = await SharedPreferences.getInstance();
-                                        String? token = prefs.getString('access_token');
+                                        var url = Uri.parse(
+                                            '${AppConstants.BASE_URI}/api/v1/base/$id/');
+                                        final prefs = await SharedPreferences
+                                            .getInstance();
+                                        String? token =
+                                            prefs.getString('access_token');
                                         try {
                                           final response = await http.patch(
                                             url,
                                             headers: {
-                                              'Content-Type': 'application/json',
+                                              'Content-Type':
+                                                  'application/json',
                                               "Authorization": "Bearer $token"
                                             },
-                                            body: json.encode({'is_active': false}),
+                                            body: json
+                                                .encode({'is_active': false}),
                                           );
                                           if (response.statusCode == 204) {
-                                            print('Usuário deletado com sucesso');
+                                            print(
+                                                'Usuário deletado com sucesso');
                                           } else {
-                                            print('Falha ao deletar: ${response.statusCode}');
+                                            print(
+                                                'Falha ao deletar: ${response.statusCode}');
                                           }
                                         } catch (e) {
                                           print('Erro $e');
@@ -451,7 +467,8 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.grey.shade300,
                     ),
-                    margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
+                    margin:
+                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
                     height: 250.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

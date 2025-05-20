@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inventur/pages/password_recover/changepasswordsucess_page.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
@@ -6,8 +7,8 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 class MudarSenha extends StatefulWidget {
 
-  MudarSenha({super.key});
-
+  MudarSenha({super.key, required this.email});
+  final String email;
   @override
   State<MudarSenha> createState() => _MudarSenhaState();
 }
@@ -27,30 +28,50 @@ class _MudarSenhaState extends State<MudarSenha> {
   @override
   @override
   Widget build(BuildContext context) {
-            final arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    //         final arguments = ModalRoute.of(context)?.settings.arguments as Map;
 
-    final int userId = arguments['user_id'];
+    // final int userId = arguments['user_id'];
 
-    Future<void> alterPassword() async{
-      final response = await http.patch(
-      Uri.parse('${AppConstants.BASE_URI}/api/v1/user/$userId/change-password/'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({'new_password': _passwordController.text}),
-      );
+    // Future<void> alterPassword() async{
+    //   final response = await http.patch(
+    //   Uri.parse('${AppConstants.BASE_URI}/api/v1/user/$userId/change-password/'),
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: jsonEncode({'new_password': _passwordController.text}),
+    //   );
 
-      if(response.statusCode == 200){
-        print("Senha alterada cm sucesso!");
-                      Navigator.pushNamed(context, '/NewPassword');
+    //   if(response.statusCode == 200){
+    //     print("Senha alterada cm sucesso!");
+    //                   Navigator.pushNamed(context, '/NewPassword');
 
-      }else{
-        print(_passwordController.text);
-        print("Erro ao alterar a senha");
-      }
-    }
+    //   }else{
+    //     print(_passwordController.text);
+    //     print("Erro ao alterar a senha");
+    //   }
+    // }
        final screenSize = MediaQuery.sizeOf(context);
+   Future<void> requestOtp(String password) async {
+      String email = widget.email;
+      try {
+        final response = await http.post(
+          Uri.parse('${AppConstants.BASE_URI}/api/v1/password-reset/change-password/'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({'email': email, 'new_password': password}),
+        );
 
+        if (response.statusCode == 200) {
+              print(response.body);
+             Navigator.pushReplacement(context,
+              MaterialPageRoute(builder: (context) {
+            return ConfirmacaoNovaSenha();
+          }));
+
+        } else {
+          print(response.body);
+        }
+      } catch (e) {}
+    }
     return Scaffold(
       backgroundColor: Colors.white,
         body: SingleChildScrollView(
@@ -168,7 +189,7 @@ class _MudarSenhaState extends State<MudarSenha> {
           if (_formLoginKey.currentState?.validate() ?? false) {
 
                  if(_passwordController.text == _passwordController2.text ){
-                      alterPassword();
+                     requestOtp(_passwordController2.text);
                     }
                     
                     else{
@@ -190,7 +211,7 @@ class _MudarSenhaState extends State<MudarSenha> {
                 ),
               ),
               SizedBox(
-                height: screenSize.height * 0.04,
+                height: screenSize.height * 0.02,
               ),
               SizedBox(
                   height: 50,

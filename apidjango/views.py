@@ -2,7 +2,7 @@ from rest_framework import generics, permissions, viewsets
 from .serializers import UserSerializer
 from .models import *
 from .serializers import *
-from rest_framework import status
+from rest_framework import status, views
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login
 import json
@@ -19,7 +19,10 @@ import openpyxl
 from django.shortcuts import get_object_or_404
 from django.db.models import Model
 from datetime import date, datetime
+from django.core.mail import send_mail
+from django.utils import timezone
 
+import random
 
 def process_value(value):
     # Se for callable, chama a função
@@ -137,7 +140,6 @@ def export_pesquisa_to_excel(request, pesquisa_id):
     response["Content-Disposition"] = f'attachment; filename="pesquisa_{pesquisa.id}.xlsx"'
     wb.save(response)
     return response
-
 
 
 
@@ -522,3 +524,54 @@ class LogoutAPIView(APIView):
             return Response({"detail": "Logout realizado com sucesso."}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+class PasswordResetRequestAPIView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        serializer = PasswordResetRequestSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response(
+                {"success": True, "message": "OTP sent to email."}, 
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            {"success": False, "errors": serializer.errors}, 
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+
+class OTPVerificationAPIView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        serializer = OTPVerificationSerializer(data=request.data)
+        if serializer.is_valid():
+            return Response(
+                {"success": True, "message": "OTP verified successfully."},
+                status=status.HTTP_200_OK,
+            )
+        return Response(
+            {"success": False, "errors": serializer.errors},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
+
+
+
+
+class PasswordResetAPIView(APIView):
+    permission_classes = []
+
+    def post(self, request):
+        serializer = PasswordResetSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"success": True, "message": "Password reset successfully."},
+                status=status.HTTP_200_OK,
+            )
+        return Response(
+            {"success": False, "errors": serializer.errors},
+            status=status.HTTP_400_BAD_REQUEST,
+        )

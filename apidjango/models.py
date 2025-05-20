@@ -2,8 +2,16 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
+import uuid 
+from django.utils import timezone
+from datetime import timedelta 
+from django.core.mail import send_mail, EmailMessage
+import random
+from datetime import timedelta
+from django.utils import timezone
 
- 
+
+
 def validate_cpf(cpf):
     cpf = ''.join(filter(str.isdigit, cpf))
 
@@ -39,6 +47,17 @@ class CustomUser(AbstractUser):
             )
         ],
     )
+
+    otp = models.CharField(max_length=6, blank=True, null=True)
+    otp_exp = models.DateTimeField(blank=True, null=True)
+    otp_verified = models.BooleanField(default=False)
+
+    def generate_otp(self):
+        self.otp = str(random.randint(100000, 999999))
+        self.otp_exp = timezone.now() + timedelta(minutes=10)
+        self.otp_verified = False
+        self.save()
+
     acessLevel = models.CharField(max_length=22, default='Pesquisador');
     status = models.CharField(max_length=50, default='Ativo');
     telefone = models.CharField(max_length=25);
