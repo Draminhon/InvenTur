@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:inventur/models/estado_model.dart';
-import 'package:inventur/models/municipio_model.dart';
-import 'package:inventur/models/pais_model.dart';
+import 'package:inventur/models/endereco/estado_model.dart';
+import 'package:inventur/models/endereco/municipio_model.dart';
+import 'package:inventur/models/endereco/pais_model.dart';
 import 'package:inventur/models/pesquisa_model.dart';
 import 'package:inventur/models/user_model.dart';
 import 'package:inventur/services/brasil_service.dart';

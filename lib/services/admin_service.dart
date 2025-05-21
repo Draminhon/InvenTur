@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminService {
   static Future<String> getAdminName(int adminId) async {
-    var url = Uri.parse(AppConstants.BASE_URI + '/api/v1/admin/$adminId');
+    var url = Uri.parse(AppConstants.BASE_URI + 'admin/$adminId');
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
 

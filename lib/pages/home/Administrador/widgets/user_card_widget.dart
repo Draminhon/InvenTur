@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/user_controller.dart';
 import 'package:inventur/utils/app_constants.dart';
@@ -109,16 +110,7 @@ class UserCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'CPF:',
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(user.CPF),
-                    ],
-                  ),
+            SizedBox(height: 15.h,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

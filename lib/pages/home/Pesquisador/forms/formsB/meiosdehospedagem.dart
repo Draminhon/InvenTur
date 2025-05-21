@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/models/estado_model.dart';
-import 'package:inventur/models/meios_hospedagem_model.dart';
-import 'package:inventur/models/pais_model.dart';
+import 'package:inventur/models/endereco/estado_model.dart';
+import 'package:inventur/models/forms/meios_hospedagem_model.dart';
+import 'package:inventur/models/endereco/pais_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.dart';

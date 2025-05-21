@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%C3%A7a.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/services/admin_service.dart';
+import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,12 +33,9 @@ class _RodoviaState extends State<Rodovia> {
   String pesquisadorTelefone = '';
   String pesquisadorEmail = '';
 
-
-  String  coordenadorNome = '';
-  String  coordenadorTelefone= '';
-  String  coordenadorEmail= '';
-
-
+  String coordenadorNome = '';
+  String coordenadorTelefone = '';
+  String coordenadorEmail = '';
 
   Future<void> getAdminAndPesquisadorInfo() async {
     try {
@@ -50,21 +49,20 @@ class _RodoviaState extends State<Rodovia> {
         pesquisadorTelefone = userData['telefone'];
         pesquisadorEmail = userData['email'];
 
-        print(prefs.getKeys()); 
+        print(prefs.getKeys());
 
         coordenadorNome = prefs.getString('adminName')!;
         coordenadorEmail = prefs.getString('adminEmail')!;
         coordenadorTelefone = prefs.getString('adminTelefone')!;
-
       }
     } catch (e) {
       pesquisadorNome = '';
       pesquisadorTelefone = '';
       pesquisadorEmail = '';
 
-        coordenadorNome = '';
-        coordenadorEmail = '';
-        coordenadorTelefone = '';
+      coordenadorNome = '';
+      coordenadorEmail = '';
+      coordenadorTelefone = '';
     }
   }
 
@@ -236,34 +234,12 @@ class _RodoviaState extends State<Rodovia> {
     super.dispose();
   }
 
+  FormService formService = new FormService();
   @override
   Widget build(BuildContext context) {
     getAdminAndPesquisadorInfo();
 
-    Future<void> sendForm(Map<String, dynamic> valoresjson) async {
-      final prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('access_token');
-      final url =
-          Uri.parse(AppConstants.BASE_URI + AppConstants.RODOVIA_CREATE);
-      int? pesquisa_id = await getPesquisaId();
-
-      try {
-        valoresjson['pesquisa'] = pesquisa_id;
-        final response = await http.post(url,
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-              "Authorization": "Bearer $token",
-            },
-            body: json.encode(valoresjson));
-        if (response.statusCode == 201) {
-          debugPrint("Formulário enviado com sucesso!");
-        } else {
-          debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
-        }
-      } catch (e) {
-        print('Erro: $e');
-      }
-    }
+    formService.sendForm(valoresjson, AppConstants.RODOVIA_CREATE);
 
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
@@ -1135,9 +1111,9 @@ class _RodoviaState extends State<Rodovia> {
                       valoresjson['telefone_coordenador'] = coordenadorTelefone;
                       valoresjson['email_coordenador'] = coordenadorEmail;
 
-    // 'nome_coordenador': 'oihaioo',
-    // 'telefone_coordenador': '4444',
-    // 'email_coordenador': 'ogaio@gmail.com',
+                      // 'nome_coordenador': 'oihaioo',
+                      // 'telefone_coordenador': '4444',
+                      // 'email_coordenador': 'ogaio@gmail.com',
                       if (_formKey.currentState!.validate()) {
                         //  ScaffoldMessenger.of(context).showSnackBar(
                         //      SnackBar(content: Text('processing data')));
@@ -1145,7 +1121,7 @@ class _RodoviaState extends State<Rodovia> {
                         _formKey.currentState!.save();
                         debugPrint(valoresjson.toString(), wrapWidth: 1024);
                         sendForm(valoresjson);
-                       Navigator.pushReplacementNamed(context, '/SendedForm');
+                        Navigator.pushReplacementNamed(context, '/SendedForm');
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(

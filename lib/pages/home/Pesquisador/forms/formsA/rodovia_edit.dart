@@ -10,7 +10,7 @@ import '../../widgets/radioButton.dart';
 import '../formsB/widgets/checkBox.dart';
 import '../formsB/widgets/sendButton.dart';
 import 'dart:convert';
-import 'package:inventur/models/rodovia_model.dart';
+import 'package:inventur/models/forms/rodovia_model.dart';
 import 'package:http/http.dart' as http;
 
 final GlobalKey<CheckCState> checkCKey = GlobalKey<CheckCState>();

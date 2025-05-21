@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/models/alimentos_bebidas_model.dart';
+import 'package:inventur/models/forms/alimentos_bebidas_model.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';

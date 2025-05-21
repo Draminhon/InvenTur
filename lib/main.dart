@@ -7,7 +7,6 @@ import 'package:inventur/helper/providers.dart';
 import 'package:inventur/pages/auth/login_page.dart';
 import 'package:inventur/pages/auth/register_confirmation.dart';
 import 'package:inventur/pages/auth/register_page.dart';
-import 'package:inventur/pages/controllers/rodovia_controller.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%C3%A7a.dart';
@@ -34,7 +33,6 @@ import 'package:provider/provider.dart';
 import 'dart:io';
 import 'pages/home/Pesquisador/forms/formsC/zonaCosteira.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/helper/dependencies.dart' as dep;
 
 class MyHttpOverrides extends HttpOverrides {
   @override

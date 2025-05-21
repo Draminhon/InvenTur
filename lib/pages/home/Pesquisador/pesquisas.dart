@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:inventur/models/alimentos_bebidas_model.dart';
-import 'package:inventur/models/meios_hospedagem_model.dart';
-import 'package:inventur/models/rodovia_model.dart';
-import 'package:inventur/models/sistema_de_seguranca_model.dart';
+import 'package:inventur/models/forms/alimentos_bebidas_model.dart';
+import 'package:inventur/models/forms/meios_hospedagem_model.dart';
+import 'package:inventur/models/forms/rodovia_model.dart';
+import 'package:inventur/models/forms/sistema_de_seguranca_model.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';

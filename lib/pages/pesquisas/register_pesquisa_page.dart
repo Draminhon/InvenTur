@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:inventur/models/estado_model.dart';
-import 'package:inventur/models/municipio_model.dart';
+import 'package:inventur/models/endereco/estado_model.dart';
+import 'package:inventur/models/endereco/municipio_model.dart';
 import 'package:inventur/models/user_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/home/Administrador/widgets/user_card_widget.dart';

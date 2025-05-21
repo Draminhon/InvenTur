@@ -39,7 +39,7 @@ class CustomUser(AbstractUser):
     CPF = models.CharField(max_length=11, unique=True)
     username = models.CharField(
         max_length = 150,
-        unique=True,
+        unique=False,
          validators=[
             RegexValidator(
                 regex=r'^[\w\sáéíóúãõâêîôûçÁÉÍÓÚÃÕÂÊÎÔÛÇ]+$',

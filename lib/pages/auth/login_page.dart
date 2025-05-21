@@ -1,4 +1,4 @@
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
@@ -48,10 +48,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     Future<void> loginUser(String cpf, String password) async {
-
-setState(() {
-  _isLoading = true;
-});
+      setState(() {
+        _isLoading = true;
+      });
 
       final url = Uri.parse(AppConstants.BASE_URI + AppConstants.LOGIN_URI);
       try {
@@ -95,10 +94,9 @@ setState(() {
         }
       } catch (e) {
         print(e);
-      } finally{
+      } finally {
         setState(() {
-                    _isLoading = false;
-
+          _isLoading = false;
         });
       }
     }
@@ -128,22 +126,29 @@ setState(() {
                 ),
                 _isWrong
                     ? Container(
-                      width: 1230.w,
-                      padding: EdgeInsets.fromLTRB(50.h, 40.h, 15.h, 40.h),
+                        width: 1230.w,
+                        padding: EdgeInsets.fromLTRB(50.h, 40.h, 15.h, 40.h),
                         decoration: BoxDecoration(
                             color: Colors.red[200],
                             borderRadius: BorderRadius.circular(10),
-                            border: Border.all(color: const Color.fromRGBO(229, 115, 115, 1))),
+                            border: Border.all(
+                                color: const Color.fromRGBO(229, 115, 115, 1))),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-
-                            Text('Usuário ou senha incorretos', style: TextStyle(color: const Color.fromARGB(255, 163, 45, 36), fontSize: 15),),
-                            IconButton(onPressed: () {
-                              setState(() {
-                                _isWrong = false;
-                              });
-                            }, icon: Icon(Icons.close))                        
+                            Text(
+                              'Usuário ou senha incorretos',
+                              style: TextStyle(
+                                  color: const Color.fromARGB(255, 163, 45, 36),
+                                  fontSize: 15),
+                            ),
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _isWrong = false;
+                                  });
+                                },
+                                icon: Icon(Icons.close))
                           ],
                         ),
                       )
@@ -178,47 +183,50 @@ setState(() {
                         ),
                         SizedBox(height: screenSize.height * 0.02),
                         SizedBox(
-                            height: screenSize.height * .07,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                    shape: WidgetStateProperty.all(
-                                        RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(10))),
-                                    padding: WidgetStateProperty.all(
-                                        EdgeInsets.symmetric(
-                                            vertical:
-                                                screenSize.height * 0.012)),
-                                    backgroundColor: WidgetStateProperty.all(
-                                        const Color.fromARGB(255, 55, 111, 60)),
-                                    overlayColor: WidgetStateProperty.all(
-                                        Colors.green[600])),
-                                onPressed: () {
-                                  //   final String cpf2 = '43443785042';
-                                  // final String password2 = 'Murilo159753@';
-                                  // loginUser(cpf2, password2);
-                                  if (_formLoginKey.currentState!.validate()) {
-                                    final cpf = _cpfController.text
-                                        .replaceAll('.', '')
-                                        .replaceAll('-', '');
-                                    final password = _passwordController.text;
-                                    // final String cpf2 = '95434284097';
-                                    // final String password2 = 'Jose123@';
-                                    loginUser(cpf, password);
-                                  }
-                                },
-                                child: _isLoading == false ? const Text(
-                                  'Entrar',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 22),
-                                ):  
-              Container(
-                child: Center(
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                ),
-              )),),
+                          height: screenSize.height * .07,
+                          child: ElevatedButton(
+                              style: ButtonStyle(
+                                  shape: WidgetStateProperty.all(
+                                      RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10))),
+                                  padding: WidgetStateProperty.all(
+                                      EdgeInsets.symmetric(
+                                          vertical: screenSize.height * 0.012)),
+                                  backgroundColor: WidgetStateProperty.all(
+                                      const Color.fromARGB(255, 55, 111, 60)),
+                                  overlayColor: WidgetStateProperty.all(
+                                      Colors.green[600])),
+                              onPressed: () {
+                                //   final String cpf2 = '43443785042';
+                                // final String password2 = 'Murilo159753@';
+                                // loginUser(cpf2, password2);
+                                if (_formLoginKey.currentState!.validate()) {
+                                  final cpf = _cpfController.text
+                                      .replaceAll('.', '')
+                                      .replaceAll('-', '');
+                                  final password = _passwordController.text;
+                                  // final String cpf2 = '95434284097';
+                                  // final String password2 = 'Jose123@';
+                                  loginUser(cpf, password);
+                                }
+                              },
+                              child: _isLoading == false
+                                  ? const Text(
+                                      'Entrar',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 22),
+                                    )
+                                  : Container(
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                  Colors.white),
+                                        ),
+                                      ),
+                                    )),
+                        ),
                         Padding(
                           padding: EdgeInsets.symmetric(
                               vertical: screenSize.height * .015),
@@ -226,7 +234,8 @@ setState(() {
                             alignment: Alignment.centerRight,
                             child: TextButton(
                               onPressed: () {
-                                Navigator.pushNamed(context, '/PasswordRecover');
+                                Navigator.pushNamed(
+                                    context, '/PasswordRecover');
                               },
                               child: const Text(
                                 'Esqueceu sua senha?',
@@ -270,12 +279,10 @@ setState(() {
                     ),
                   ),
                 ),
-                
               ],
             ),
           ),
         ),
-
       ),
     );
   }

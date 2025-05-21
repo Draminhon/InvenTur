@@ -1,9 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:inventur/models/estado_model.dart';
-import 'package:inventur/models/municipio_model.dart';
-import 'package:inventur/models/pais_model.dart';
+import 'package:inventur/models/endereco/estado_model.dart';
+import 'package:inventur/models/endereco/municipio_model.dart';
+import 'package:inventur/models/endereco/pais_model.dart';
 
 class BrasilService {
   

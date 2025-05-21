@@ -16,7 +16,7 @@ Future<void> refreshToken() async {
   String? refresh = prefs.getString('refresh_token');
 
   if (refresh != null) {
-    var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/api/token/refresh/');
+    var url = Uri.parse('${AppConstants.BASE_URI}api/token/refresh/');
     var response = await http.post(
       url,
       headers: {
@@ -59,7 +59,7 @@ static Future<List<Pesquisa>> getPesquisas() async {
     }
 
     // Define a URL da API
-    final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisas/usuario/');
+    final url = Uri.parse('${AppConstants.BASE_URI}pesquisa');
 
     // Realiza a requisição GET com o token atual
     http.Response response = await _getWithToken(url, token);

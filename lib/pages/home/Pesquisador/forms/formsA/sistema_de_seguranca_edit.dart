@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/models/sistema_de_seguranca_model.dart';
+import 'package:inventur/models/forms/sistema_de_seguranca_model.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

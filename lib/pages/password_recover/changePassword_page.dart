@@ -111,7 +111,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                   labelText: 'Informe o código',
                   controller: _otpController,
                   prefixIcon: Icons.lock,
-
+                  
                 ),
               ),
             ),

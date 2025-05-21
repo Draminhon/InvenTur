@@ -41,7 +41,7 @@ Future<void> logout(BuildContext context) async {
   String? token = prefs.getString('access_token');
 String? refreshToken = prefs.getString('refresh_token');
 try{final response = await http.post(
-    Uri.parse('${AppConstants.BASE_URI}/api/v1/logout/'),
+    Uri.parse('${AppConstants.BASE_URI}logout/'),
     headers: {
       'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',

@@ -4,17 +4,16 @@ class AppConstants {
   static const String APP_NAME = "InvenTur";
   static int APP_VERSION = 1;
 
- static const String BASE_URI = "http://10.0.2.2:8000";
+ static const String BASE_URI = "http://10.0.2.2:8000/api/v1/";
     //static const String BASE_URI = "https://nupreds.ifce.edu.br/inventur";
 //    static const String BASE_URI = "http://localhost";
-  static const String LOGIN_URI = "/api/v1/login/";
-  static const String REGISTER_URI = "/api/v1/register/";
-  static const String GET_USERS = "/api/v1/usuarios/";
-  static const  String GET_PESQUISAS = "/api/v1/pesquisa/create";
-  static const String RODOVIA_CREATE = "/api/v1/rodovia/create/";
-  static const String RODOVIA_GET = "/api/v1/rodovia/get";
-  static const String SET_PESQUISA_STATUS = "/api/v1/pesquisa/status/update/<int:pk>/";
-  static const String TOKEN = "DBtoken";
+  static const String LOGIN_URI = "login/";
+  static const String REGISTER_URI = "user/";
+  static const String GET_USERS = "user/";
+  static const  String GET_PESQUISAS = "pesquisa/create";
+  static const String RODOVIA_CREATE = "rodovia/create/";
+  static const String RODOVIA_GET = "rodovia/get";
+  static const String SET_PESQUISA_STATUS = "pesquisa/status/update/<int:pk>/";
 
   static const Color MAIN_GREEN = Color.fromARGB(255, 55, 111, 60);
 }

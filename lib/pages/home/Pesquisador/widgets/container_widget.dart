@@ -27,6 +27,8 @@ class _PesquisaPesquisadorCardWidgetState extends State<PesquisaPesquisadorCardW
 
   @override
   Widget build(BuildContext context) {
+    print(widget.pesquisa.adminId);
+    print('aaaaa');
     return Card(
       elevation: 6,
       color: Colors.white,

@@ -10,6 +10,8 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.of(context).size;
     return Scaffold(
+        backgroundColor: Colors.white,
+        
         body: 
                 Column(children: [
       Padding(
@@ -20,7 +22,7 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
               height: sizeScreen.height * 0.23,
               width: sizeScreen.width * 0.7,
               decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: Color.fromARGB(255, 238, 238, 238),
                   borderRadius: BorderRadius.circular(15)),
               
                   child: Column(
@@ -38,14 +40,14 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
                       'Sua senha foi alterada com sucesso',
                       overflow: TextOverflow.visible,
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
                     ),
                   )
                 ],
               )))),
       SizedBox(
-          height: 50,
-          width: 300,
+          height: 55,
+          width: 350,
           child: OutlinedButton(
               style: OutlinedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 55, 111, 60),
@@ -57,7 +59,7 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 20,
-                    fontWeight: FontWeight.w300),
+                    fontWeight: FontWeight.bold),
               )))
     ]));
   }
