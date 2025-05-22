@@ -38,7 +38,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
     String? token = prefs.getString('access_token');
 
     final url = Uri.parse(
-        '${AppConstants.BASE_URI}/api/v1/alimentosEBebidas/update/$sistemaId');
+        '${AppConstants.BASE_URI}alimentosEBebidas/$sistemaId/');
 
     try {
       final response = await http.patch(

@@ -16,7 +16,7 @@ class RecuperarSenha extends StatelessWidget {
     Future<void> requestOtp(String email) async {
       try {
         final response = await http.post(
-          Uri.parse('${AppConstants.BASE_URI}/api/v1/password-reset/request/'),
+          Uri.parse('${AppConstants.BASE_URI}password-reset/request/'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': email}),
         );

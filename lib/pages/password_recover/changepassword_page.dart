@@ -55,7 +55,7 @@ class _MudarSenhaState extends State<MudarSenha> {
       String email = widget.email;
       try {
         final response = await http.post(
-          Uri.parse('${AppConstants.BASE_URI}/api/v1/password-reset/change-password/'),
+          Uri.parse('${AppConstants.BASE_URI}password-reset/change-password/'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': email, 'new_password': password}),
         );

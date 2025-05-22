@@ -20,7 +20,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Atualiza a quantidade de locais
 Future updateQtdeLocais(int pesquisa, int quantidade) async {
   var url =
-      Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/update/${pesquisa}');
+      Uri.parse('${AppConstants.BASE_URI}pesquisa/${pesquisa}/');
   try {
     var response = await http.patch(
       url,
@@ -132,7 +132,7 @@ class _PesquisasState extends State<Pesquisas> {
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     final pesquisaId = arguments['pesquisa_id'];
     var url = Uri.parse(
-        '${AppConstants.BASE_URI}/api/v1/equipamentos/?pesquisa_id=$pesquisaId');
+        '${AppConstants.BASE_URI}equipamentos/?pesquisa_id=$pesquisaId');
     final response = await http.get(url, headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer $token",
@@ -415,7 +415,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                                             dados['tipo_formulario'];
                                         print('excluindo: $nome (ID: $id)');
                                         var url = Uri.parse(
-                                            '${AppConstants.BASE_URI}/api/v1/base/$id/');
+                                            '${AppConstants.BASE_URI}base/$id/');
                                         final prefs = await SharedPreferences
                                             .getInstance();
                                         String? token =

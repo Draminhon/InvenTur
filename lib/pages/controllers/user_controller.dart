@@ -54,7 +54,7 @@ class UserController extends ChangeNotifier {
 
   void removeUser(bool active, User user) async {
     var url =
-        Uri.parse('${AppConstants.BASE_URI}/api/v1/usuarios/update/${user.id}');
+        Uri.parse('${AppConstants.BASE_URI}user/${user.id}/');
 
     try {     final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('access_token');
@@ -158,7 +158,7 @@ class UserController extends ChangeNotifier {
     notifyListeners();
 
     var url = Uri.parse(
-        '${AppConstants.BASE_URI}/api/v1/usuarios/status/update/${user.id}/');
+        '${AppConstants.BASE_URI}user/${user.id}/');
 
     try {
 

@@ -10,10 +10,10 @@ class AppConstants {
   static const String LOGIN_URI = "login/";
   static const String REGISTER_URI = "user/";
   static const String GET_USERS = "user/";
-  static const  String GET_PESQUISAS = "pesquisa/create";
-  static const String RODOVIA_CREATE = "rodovia/create/";
-  static const String RODOVIA_GET = "rodovia/get";
-  static const String SET_PESQUISA_STATUS = "pesquisa/status/update/<int:pk>/";
+  static const  String GET_PESQUISAS = "pesquisa";
+  static const String RODOVIA_CREATE = "rodovia";
+  static const String RODOVIA_GET = "rodovia";
+  static const String SET_PESQUISA_STATUS = "pesquisa/<int:pk>/";
 
   static const Color MAIN_GREEN = Color.fromARGB(255, 55, 111, 60);
 }

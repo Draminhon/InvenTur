@@ -30,7 +30,7 @@ Future<void> updateSistemaDeSeguranca(
   String? token = prefs.getString('access_token');
 
   final url = Uri.parse(
-      '${AppConstants.BASE_URI}/api/v1/sistemadeseguranca/update/$sistemaId');
+      '${AppConstants.BASE_URI}sistemadeseguranca/$sistemaId/');
 
   print('OSIADOAOSD ${token}');
 

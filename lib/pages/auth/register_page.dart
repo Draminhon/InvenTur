@@ -95,7 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Future updateUsers(int user, String username, String CPF, String email,
       String password, String telefone) async {
     var url =
-        Uri.parse('${AppConstants.BASE_URI}/api/v1/usuarios/update/$user');
+        Uri.parse('${AppConstants.BASE_URI}user/$user/');
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
     try {

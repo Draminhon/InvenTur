@@ -4,6 +4,8 @@ from rest_framework_simplejwt.authentication import JWTAuthentication
 from ..serializers import *
 from ..models import *
 from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404
+from rest_framework.response import Response
 
 class PesquisaViewSet(viewsets.ModelViewSet):
 

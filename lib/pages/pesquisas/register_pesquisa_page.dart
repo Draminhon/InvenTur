@@ -125,7 +125,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
       String municipio,
       Set<User> selectedUserss) async {
 
-    final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/create');
+    final url = Uri.parse('${AppConstants.BASE_URI}pesquisa/');
 final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('access_token');
 String? userDataString = prefs.getString('user_data');

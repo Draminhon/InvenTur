@@ -61,7 +61,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
     final url =
-        Uri.parse(AppConstants.BASE_URI + '/api/v1/alimentosEBebidas/create/');
+        Uri.parse(AppConstants.BASE_URI + 'alimentosEBebidas/');
     int? pesquisa_id = await getPesquisaId();
 
     try {

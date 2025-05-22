@@ -29,7 +29,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       String email = widget.email;
       try {
         final response = await http.post(
-          Uri.parse('${AppConstants.BASE_URI}/api/v1/password-reset/verify-otp/'),
+          Uri.parse('${AppConstants.BASE_URI}password-reset/verify-otp/'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({'email': email, 'otp': otp}),
         );

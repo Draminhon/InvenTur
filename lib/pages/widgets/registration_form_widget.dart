@@ -34,12 +34,15 @@ class ResgistrationForm extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _telefoneController = TextEditingController();
+
   final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
+  final phoneMask = MaskTextInputFormatter(mask: '(##) # ####-####');
 
 
-  Future<void> registerUser(String username, String CPF, String email, String password) async{
+  Future<void> registerUser(String username, String CPF, String email, String password, String telefone) async{
 
-    final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/usuarios/register/admin');
+    final url = Uri.parse('${AppConstants.BASE_URI}admin/register/');
 
   try{
           final prefs = await SharedPreferences.getInstance();
@@ -54,7 +57,8 @@ class ResgistrationForm extends StatelessWidget {
         'username': username,
         'CPF': CPF,
         'email': email,
-        'password': password
+        'password': password,
+        'telefone': telefone
       })
     ); 
 
@@ -104,6 +108,14 @@ class ResgistrationForm extends StatelessWidget {
             },
             inputFormatters: [cpfMask],
           ),
+          SizedBox(height: 
+          paddingBottomTextField),
+                CustomTextField(
+                                  labelText: 'Insira seu telefone',
+                                  controller: _telefoneController,
+                                  inputFormatters: [phoneMask],
+                                  keyboardType: TextInputType.phone,
+                                  prefixIcon: FontAwesomeIcons.phone),
           SizedBox(height: paddingBottomTextField),
           CustomTextField(
             labelText: 'E-mail',
@@ -125,6 +137,7 @@ class ResgistrationForm extends StatelessWidget {
             }, 
           ),
           SizedBox(height: paddingBottomTextField),
+    
           SizedBox(
             height: screenSize.height * .07,
             child: ElevatedButton(
@@ -153,8 +166,8 @@ class ResgistrationForm extends StatelessWidget {
                                       final cpf = _cpfController.text.replaceAll('.','').replaceAll('-', '');
                                       final email = _emailController.text;
                                       final password = _passwordController.text;
-
-                                      final result = await registerUser(username, cpf, email, password);
+                                      final telefone = _telefoneController.text;
+                                      final result = await registerUser(username, cpf, email, password, telefone);
                                       Navigator.pop(context);
                 }
               }, 

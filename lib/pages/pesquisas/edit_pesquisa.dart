@@ -175,7 +175,7 @@ void didChangeDependencies() {
       String estado,
       String municipio,
       Set<User> selectedUserss) async {
-    final url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/create');
+    final url = Uri.parse('${AppConstants.BASE_URI}pesquisa/');
     final prefs = await SharedPreferences.getInstance();
     String? userDataString = prefs.getString('user_data');
     Map<String, dynamic> userData = json.decode(userDataString!);

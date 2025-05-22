@@ -23,8 +23,8 @@ urlpatterns = [
     path('equipamentos/',  EquipamentosListView.as_view(), name='equipamento'),
     path('base/<int:pk>/', BaseViewSet.as_view({'patch': 'update'})),
     path('user/status/update/<int:pk>/', StatusUpdateAPIView.as_view(), name='status-update'),
-
-    path('user/register/admin', AdminUserCreateView.as_view(), name = 'create-admin'),
+    path('pesquisas/usuario/', PesquisaUsuarioAuth.as_view(), name='pesquisar usuario por token'),
+    path('admin/register/', AdminUserCreateView.as_view(), name = 'create-admin'),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name = 'token_refresh'),

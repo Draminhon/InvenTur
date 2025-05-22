@@ -24,7 +24,7 @@ Future<void> sendForm(Map<String, dynamic> valoresjson) async {
   String? token = prefs.getString('access_token');
   print('token sendo fornecido no equipamento: $token');
   final url =
-      Uri.parse(AppConstants.BASE_URI + '/api/v1/sistemaseguranca/create/');
+      Uri.parse(AppConstants.BASE_URI + 'sistemadeseguranca/');
   int? pesquisa_id = await getPesquisaId();
 
   try {

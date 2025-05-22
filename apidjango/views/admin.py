@@ -35,7 +35,7 @@ class AdminUserCreateView(generics.ListCreateAPIView):
                 status=status.HTTP_200_OK
             )
         else:
-            data['access_level'] = 'Administrador'
+            data['acessLevel'] = 'Administrador'
 
             serializer = self.get_serializer(data=data)
             serializer.is_valid(raise_exception=True)

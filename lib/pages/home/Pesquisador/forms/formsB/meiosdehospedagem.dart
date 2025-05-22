@@ -60,7 +60,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
     final url =
-        Uri.parse(AppConstants.BASE_URI + '/api/v1/meiosdehospedagem/create/');
+        Uri.parse(AppConstants.BASE_URI + 'meiosdehospedagem/');
     int? pesquisa_id = await getPesquisaId();
 
     try {
@@ -87,7 +87,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     String? token = prefs.getString('access_token');
 
     final url = Uri.parse(
-        '${AppConstants.BASE_URI}/api/v1/meiosdehospedagem/update/$sistemaId');
+        '${AppConstants.BASE_URI}meiosdehospedagem/$sistemaId/');
 
     try {
       final response = await http.patch(
@@ -311,7 +311,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
       fillIfExists('pais02', widget.hospedagemModel!.paisesTuristas![1]);
       fillIfExists('pais03', widget.hospedagemModel!.paisesTuristas![2]);
       fillIfExists('pais04', widget.hospedagemModel!.paisesTuristas![3]);
-      fillIfExists('pais05', widget.hospedagemModel!.paisesTuristas![4]);
+      fillIfExists('pais05', widget.hospedagemModel!.paisesTuristas![4] == null? "azerbaijão" : widget.hospedagemModel!.paisesTuristas![4]);
 
       fillIfExists(
           'atividade economica', widget.hospedagemModel!.atividadeEconomica!);
@@ -3629,6 +3629,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               SendButton(
                 onPressed: () {
+                            if (_formKey.currentState!.validate()) {
                    valoresjson['estadosTuristas'] = _estadosSelecionados;
                   valoresjson['paisesTuristas'] = _paisesSelecionados;
 
@@ -3643,7 +3644,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                   isUpdate == true? update(widget.hospedagemModel!.id!, valoresjson):sendForm(valoresjson);
               
                   isUpdate == false? Navigator.pushReplacementNamed(context, '/SendedForm') : Navigator.pushReplacementNamed(context, '/UpdatedForm');
-                },
+                 } },
               ),
 
               SizedBox(

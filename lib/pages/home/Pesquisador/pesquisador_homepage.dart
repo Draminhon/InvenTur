@@ -59,7 +59,7 @@ static Future<List<Pesquisa>> getPesquisas() async {
     }
 
     // Define a URL da API
-    final url = Uri.parse('${AppConstants.BASE_URI}pesquisa');
+    final url = Uri.parse('${AppConstants.BASE_URI}pesquisas/usuario/');
 
     // Realiza a requisição GET com o token atual
     http.Response response = await _getWithToken(url, token);

@@ -466,7 +466,7 @@ class _RodoviaState extends State<RodoviaEdit> {
       String? token = prefs.getString('access_token');
 
       final url = Uri.parse(
-          '${AppConstants.BASE_URI}/api/v1/rodovia/update/$rodoviaId');
+          '${AppConstants.BASE_URI}rodovia/$rodoviaId/');
 
       try {
         final response = await http.patch(

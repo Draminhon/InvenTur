@@ -68,7 +68,7 @@ class PesquisaController extends ChangeNotifier {
 
     void removePesquisa(bool active, Pesquisa pesquisa) async {
     var url =
-        Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/update/${pesquisa.id}');
+        Uri.parse('${AppConstants.BASE_URI}pesquisa/${pesquisa.id}/');
 
     try {
 final prefs = await SharedPreferences.getInstance();
@@ -125,7 +125,7 @@ Future<bool> atualizarPesquisa({
   required String municipio,
   required Set<User> selectedUsers,
 }) async {
-  var url = Uri.parse('${AppConstants.BASE_URI}/api/v1/pesquisa/$pesquisaId/atualizar/');
+  var url = Uri.parse('${AppConstants.BASE_URI}pesquisa/$pesquisaId/');
   
   // Ajustar as datas caso contenham o formato 'at'
   if (rawDataInicio.contains('at')) {
@@ -253,7 +253,7 @@ Future<bool> atualizarPesquisa({
     final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('access_token');
     var url = Uri.parse(
-      '${AppConstants.BASE_URI}/api/v1/pesquisa/status/update/${pesquisa.id}/');
+      '${AppConstants.BASE_URI}pesquisa/${pesquisa.id}/');
 
       try{
         await http.patch(

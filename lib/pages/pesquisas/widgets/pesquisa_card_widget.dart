@@ -70,7 +70,7 @@ class PesquisaCard extends StatefulWidget {
 Future<File?> downloadExcel(int pesquisaId) async {
   final prefs = await SharedPreferences.getInstance();
   String? token = prefs.getString('access_token');
-  final url = Uri.parse(AppConstants.BASE_URI + '/api/v1/export/pesquisa/$pesquisaId');
+  final url = Uri.parse(AppConstants.BASE_URI + 'export/pesquisa/$pesquisaId');
 
   final response = await http.get(
     url,

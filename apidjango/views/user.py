@@ -32,3 +32,15 @@ class StatusUpdateAPIView(generics.UpdateAPIView):
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return self.update(request, *args, **kwargs)
+
+
+class PesquisaUsuarioAuth(generics.ListAPIView):
+    serializer_class = PesquisaSerializer
+    permission_classes = [permissions.IsAuthenticated] 
+    authentication_classes = [JWTAuthentication]
+    def get_queryset(self):
+        print(self.request.headers)
+        user = self.request.user
+        print(f"Usuário autenticado: {user} - {user.is_authenticated}")  # Log no servidor
+
+        return Pesquisa.objects.filter(usuario=user, is_active=True)
