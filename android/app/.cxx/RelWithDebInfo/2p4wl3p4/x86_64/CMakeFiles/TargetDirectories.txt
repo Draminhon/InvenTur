@@ -1,0 +1,2 @@
+/home/murilo/InvenTur/android/app/.cxx/RelWithDebInfo/2p4wl3p4/x86_64/CMakeFiles/edit_cache.dir
+/home/murilo/InvenTur/android/app/.cxx/RelWithDebInfo/2p4wl3p4/x86_64/CMakeFiles/rebuild_cache.dir

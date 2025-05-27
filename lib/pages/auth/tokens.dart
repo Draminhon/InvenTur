@@ -14,7 +14,7 @@ Future<void> refreshAcessToken() async{
     return;
   }
 
-  final url = Uri.parse(AppConstants.BASE_URI + '/api/v1/api/token/refresh/');
+  final url = Uri.parse(AppConstants.BASE_URI + 'api/token/refresh/');
 
   try{
     final response = await http.post(
