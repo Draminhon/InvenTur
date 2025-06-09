@@ -42,7 +42,7 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
-
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,6 +61,7 @@ class MyApp extends StatelessWidget {
 
     return ScreenUtilInit(
       builder: (_, child) => MaterialApp(
+        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         title: 'InvenTur',
         theme: ThemeData(
@@ -90,7 +91,7 @@ class MyApp extends StatelessWidget {
           '/Placeholder': (_) => PlaceHolder(),
           '/AlimentosEbebidas': (_) => AlimentoseBebidas(),
           '/Rodovia': (_) => Rodovia(),
-          '/SistemaDeSeguranca': (_) => SistemaDeSeguranca(),
+         '/SistemaDeSeguranca': (_) => SistemaDeSeguranca(),
           '/ZonaCosteira': (_) => ZonaCosteira(),
           '/Hidrografia': (_) => Hidrografia(),
           '/SendedForm': (_) => SendedFormPage(),

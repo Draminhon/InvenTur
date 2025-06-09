@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
+import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/utils/app_constants.dart';
@@ -17,6 +18,7 @@ final GlobalKey<CheckCState> checkCKey = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> postoCombustivel = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> outrosServicos = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> estruturasAoLongoDaVia = GlobalKey<CheckCState>();
+final FormService _formService = FormService();
 
 class RodoviaEdit extends StatefulWidget {
   final RodoviaModel? rodoviaModel;
@@ -29,7 +31,6 @@ class _RodoviaState extends State<RodoviaEdit> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Rodovia',
-
   };
 
   @override
@@ -461,35 +462,8 @@ class _RodoviaState extends State<RodoviaEdit> {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> updateRodovia(int rodoviaId, Map<String, dynamic> data) async {
-      final prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('access_token');
-
-      final url = Uri.parse(
-          '${AppConstants.BASE_URI}rodovia/$rodoviaId/');
-
-      try {
-        final response = await http.patch(
-          url,
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": "Bearer $token",
-          },
-          body: json.encode(data),
-        );
-        if (response.statusCode == 200) {
-          print("Atualização bem-sucedida");
-        } else {
-          print("Erro na atualização: ${response.statusCode}");
-        }
-      } catch (e) {
-        print('Erro: $e');
-      }
-    }
-
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
-    
       backgroundColor: Colors.white,
       appBar: AppBar(
         foregroundColor: Colors.white,
@@ -563,8 +537,13 @@ class _RodoviaState extends State<RodoviaEdit> {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-                textLabel(name: 'Tipo:', fontWeight: FontWeight.bold,),
-                SizedBox(height: 50.w,),
+                textLabel(
+                  name: 'Tipo:',
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 50.w,
+                ),
                 RadioD(
                   options: ['Rodoviário'],
                   getValue: (newValue) {
@@ -572,8 +551,13 @@ class _RodoviaState extends State<RodoviaEdit> {
                   },
                   indexModel: widget.rodoviaModel!.tipo,
                 ),
-                textLabel(name: 'Subtipos:', fontWeight: FontWeight.bold,),
-                SizedBox(height: 50.w,),
+                textLabel(
+                  name: 'Subtipos:',
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 50.w,
+                ),
                 RadioD(
                   options: ['Estação rodoviária'],
                   getValue: (newValue) {
@@ -622,8 +606,13 @@ class _RodoviaState extends State<RodoviaEdit> {
                 SizedBox(
                   height: 50.w,
                 ),
-                textLabel(name: 'Jurisdição:', fontWeight: FontWeight.bold,),
-                SizedBox(height: 25.w,),
+                textLabel(
+                  name: 'Jurisdição:',
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 25.w,
+                ),
                 RadioD(
                   options: ['Federal', 'Estadual', 'Municipal'],
                   getValue: (newValue) {
@@ -631,9 +620,16 @@ class _RodoviaState extends State<RodoviaEdit> {
                   },
                   indexModel: widget.rodoviaModel!.jurisdicao,
                 ),
-                SizedBox(height: 50.w,),
-                textLabel(name: 'Natureza:', fontWeight: FontWeight.bold,),
-                SizedBox(height: 25.w,),
+                SizedBox(
+                  height: 50.w,
+                ),
+                textLabel(
+                  name: 'Natureza:',
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 25.w,
+                ),
                 RadioD(
                   options: ['Pública', 'Privada', 'outro'],
                   getValue: (newValue) {
@@ -641,8 +637,13 @@ class _RodoviaState extends State<RodoviaEdit> {
                   },
                   indexModel: widget.rodoviaModel!.natureza,
                 ),
-                SizedBox(height: 50.w,),
-                textLabel(name: 'Tipo de organização/Instituição:', fontWeight: FontWeight.bold,),
+                SizedBox(
+                  height: 50.w,
+                ),
+                textLabel(
+                  name: 'Tipo de organização/Instituição:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: 25.w,
                 ),
@@ -661,7 +662,10 @@ class _RodoviaState extends State<RodoviaEdit> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Extensão da rodovia no âmbito do município:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Extensão da rodovia no âmbito do município:',
+                  fontWeight: FontWeight.bold,
+                ),
                 CustomTextField(
                     controller: extensao_rodovia_municipio,
                     name: 'Extensão',
@@ -674,8 +678,13 @@ class _RodoviaState extends State<RodoviaEdit> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Faixas de rolamento:', fontWeight: FontWeight.bold,),
-                SizedBox(height: 25.w,),
+                textLabel(
+                  name: 'Faixas de rolamento:',
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 25.w,
+                ),
                 RadioD(
                   options: [
                     'Duas',
@@ -693,8 +702,13 @@ class _RodoviaState extends State<RodoviaEdit> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Pavimentação:', fontWeight: FontWeight.bold,),
-                SizedBox(height: 25.w,),
+                textLabel(
+                  name: 'Pavimentação:',
+                  fontWeight: FontWeight.bold,
+                ),
+                SizedBox(
+                  height: 25.w,
+                ),
                 RadioD(
                   options: [
                     'Asfalto',
@@ -714,7 +728,10 @@ class _RodoviaState extends State<RodoviaEdit> {
                   height: sizeScreen.height * 0.03,
                 ),
                 Row(children: [
-                  textLabel(name: 'Pedágio:', fontWeight: FontWeight.bold,),
+                  textLabel(
+                    name: 'Pedágio:',
+                    fontWeight: FontWeight.bold,
+                  ),
                   SizedBox(
                     width: sizeScreen.width * 0.09,
                   ),
@@ -732,7 +749,9 @@ class _RodoviaState extends State<RodoviaEdit> {
                   height: sizeScreen.height * 0.05,
                 ),
                 textLabel(
-                    name: 'Municípios vizinhos interligados por rodovia:', fontWeight: FontWeight.bold,),
+                  name: 'Municípios vizinhos interligados por rodovia:',
+                  fontWeight: FontWeight.bold,
+                ),
                 CustomTextField(
                     controller: municipios_vizinhos_interligados_rodovia,
                     name: 'Municípios vizinhos',
@@ -748,7 +767,10 @@ class _RodoviaState extends State<RodoviaEdit> {
                 ),
                 Row(
                   children: [
-                    textLabel(name: 'Início da atividade:', fontWeight: FontWeight.bold,),
+                    textLabel(
+                      name: 'Início da atividade:',
+                      fontWeight: FontWeight.bold,
+                    ),
                     SizedBox(
                       width: sizeScreen.width * 0.1,
                     ),
@@ -772,7 +794,10 @@ class _RodoviaState extends State<RodoviaEdit> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                textLabel(name: 'Entidade mantedora:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Entidade mantedora:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -821,7 +846,10 @@ class _RodoviaState extends State<RodoviaEdit> {
                 SizedBox(
                   height: 100.w,
                 ),
-                textLabel(name: 'Sinalização:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Sinalização:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: 25.w,
                 ),
@@ -878,11 +906,17 @@ class _RodoviaState extends State<RodoviaEdit> {
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
-                textLabel(name: 'Equipamentos e serviços ao longo da rodovia:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Equipamentos e serviços ao longo da rodovia:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Posto de combustível:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Posto de combustível:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -891,10 +925,11 @@ class _RodoviaState extends State<RodoviaEdit> {
                   key: postoCombustivel,
                   nomes: ['Álcool', 'Gasolina', 'Diesel'],
                 ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03
+                SizedBox(height: sizeScreen.height * 0.03),
+                textLabel(
+                  name: 'Outros serviços:',
+                  fontWeight: FontWeight.bold,
                 ),
-                textLabel(name: 'Outros serviços:', fontWeight: FontWeight.bold,),
                 SizedBox(
                   height: sizeScreen.height * 0.02,
                 ),
@@ -919,7 +954,10 @@ class _RodoviaState extends State<RodoviaEdit> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Estruturas ao longo da via:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Estruturas ao longo da via:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
@@ -938,7 +976,10 @@ class _RodoviaState extends State<RodoviaEdit> {
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
-                textLabel(name: 'Questões ambientais/sociais:', fontWeight: FontWeight.bold,),
+                textLabel(
+                  name: 'Questões ambientais/sociais:',
+                  fontWeight: FontWeight.bold,
+                ),
                 SizedBox(
                   height: sizeScreen.height * 0.03,
                 ),
@@ -1297,8 +1338,6 @@ class _RodoviaState extends State<RodoviaEdit> {
                 SizedBox(
                   height: sizeScreen.height * 0.05,
                 ),
-               
-                
                 SizedBox(
                   height: 50,
                   width: 300,
@@ -1325,20 +1364,27 @@ class _RodoviaState extends State<RodoviaEdit> {
                       valoresjson['outros_servicos'] = outrosServicoss;
                       valoresjson['estruturas_ao_longo_da_via'] = estruturas;
 
-   valoresjson['nome_pesquisador']= widget.rodoviaModel!.nomePesquisador;
-   valoresjson['telefone_pesquisador']= widget.rodoviaModel!.telefonePesquisador;
-   valoresjson['email_pesquisador']= widget.rodoviaModel!.emailPesquisador;
-   valoresjson['nome_coordenador']= widget.rodoviaModel!.nomeCoordenador;
-   valoresjson['telefone_coordenador']= widget.rodoviaModel!.telefoneCoordenador;
-   valoresjson['email_coordenador']= widget.rodoviaModel!.emailCoordenador;
-
+                      valoresjson['nome_pesquisador'] =
+                          widget.rodoviaModel!.nomePesquisador;
+                      valoresjson['telefone_pesquisador'] =
+                          widget.rodoviaModel!.telefonePesquisador;
+                      valoresjson['email_pesquisador'] =
+                          widget.rodoviaModel!.emailPesquisador;
+                      valoresjson['nome_coordenador'] =
+                          widget.rodoviaModel!.nomeCoordenador;
+                      valoresjson['telefone_coordenador'] =
+                          widget.rodoviaModel!.telefoneCoordenador;
+                      valoresjson['email_coordenador'] =
+                          widget.rodoviaModel!.emailCoordenador;
 
                       if (_formKey.currentState!.validate()) {
                         //  ScaffoldMessenger.of(context).showSnackBar(
                         //       SnackBar(content: Text('processing data')));
 
                         _formKey.currentState!.save();
-                        
+
+                        _formService.updateForm(
+                            widget.rodoviaModel!.id!, valoresjson, AppConstants.RODOVIA_CREATE);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text('preencha os dados!')));

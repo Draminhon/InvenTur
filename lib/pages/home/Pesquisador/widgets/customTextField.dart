@@ -19,7 +19,8 @@ class CustomTimeField extends StatefulWidget {
     this.hint,
     this.initialTime,
     this.required = false,
-    this.onChanged, required this.getValue,
+    this.onChanged,
+    required this.getValue,
   });
   final Function(String) getValue;
 
@@ -34,7 +35,8 @@ class _CustomTimeFieldState extends State<CustomTimeField> {
   @override
   void initState() {
     super.initState();
-   _controller = widget.controller2 ?? TextEditingController(text: widget.initialTime);
+    _controller =
+        widget.controller2 ?? TextEditingController(text: widget.initialTime);
   }
 
   Future<void> _selectTime() async {
@@ -58,29 +60,25 @@ class _CustomTimeFieldState extends State<CustomTimeField> {
     }
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-              padding: EdgeInsets.only(
-          left: 25.w,
-          right: 25.w,
-          top: 25.w,
-        ),
-
+      padding: EdgeInsets.only(
+        left: 25.w,
+        right: 25.w,
+        top: 25.w,
+      ),
       child: TextFormField(
-        
         controller: _controller,
         decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              isDense: true,
-              hintStyle: const TextStyle(color: Colors.grey),
-              //errorBorder: UnderlineInputBorder()
-              fillColor: Colors.white,
-              filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+          isDense: true,
+          hintStyle: const TextStyle(color: Colors.grey),
+          //errorBorder: UnderlineInputBorder()
+          fillColor: Colors.white,
+          filled: true,
           labelText: widget.label,
           hintText: widget.hint ?? 'HH:mm',
         ),
@@ -90,10 +88,9 @@ class _CustomTimeFieldState extends State<CustomTimeField> {
           FilteringTextInputFormatter.allow(RegExp(r'[0-9:]')),
           _TimeInputFormatter(),
         ],
-        onChanged: (newValue){
+        onChanged: (newValue) {
           setState(() {
-                      widget.getValue(newValue);
-
+            widget.getValue(newValue);
           });
         },
         onTap: _selectTime,
@@ -124,17 +121,20 @@ class _TimeInputFormatter extends TextInputFormatter {
 
 class CustomTextField extends StatelessWidget {
   final String name;
-  final String? Function(String?) validat;
+  final String? Function(String?)? validat;
   final TextEditingController? controller;
   const CustomTextField(
       {super.key,
       required this.name,
-      required this.validat,
+      this.validat,
       required this.getValue,
       this.getChanged,
+      this.keyboardType,
+      this.formatter = const [],
       this.controller});
   final Function(String) getValue;
-  
+  final List<TextInputFormatter> formatter;
+  final TextInputType? keyboardType;
   final Function(String)? getChanged;
   @override
   Widget build(BuildContext context) {
@@ -151,6 +151,8 @@ class CustomTextField extends StatelessWidget {
         //   padding: EdgeInsets.only(
         //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
         child: TextFormField(
+          keyboardType: keyboardType ?? (formatter.contains(FilteringTextInputFormatter.digitsOnly)?TextInputType.numberWithOptions():TextInputType.name),
+          inputFormatters: formatter,
           controller: controller,
           style:
               const TextStyle(color: Colors.black), //String? Function(String?)
@@ -160,7 +162,13 @@ class CustomTextField extends StatelessWidget {
           // onChanged: (newValue){
           //   getChanged!(newValue);
           // },
-          validator: validat,
+          validator: validat ??
+              (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Preencha o campo';
+                }
+                return null;
+              },
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
@@ -177,10 +185,13 @@ class CustomTextField extends StatelessWidget {
 }
 
 class CustomTextNumber extends StatelessWidget {
-    final TextEditingController? controller;
+  final TextEditingController? controller;
 
   const CustomTextNumber(
-      {super.key, required this.getValue, required this.labelText, this.controller});
+      {super.key,
+      required this.getValue,
+      required this.labelText,
+      this.controller});
   final Function(String) getValue;
   final String labelText;
   @override
@@ -198,6 +209,13 @@ class CustomTextNumber extends StatelessWidget {
         //   padding: EdgeInsets.only(
         //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
         child: TextFormField(
+          keyboardType: TextInputType.numberWithOptions(),
+          validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Preencha o campo';
+                  }
+                  return null;
+                },
           controller: controller,
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]')),
@@ -252,6 +270,7 @@ class CustomTextDate extends StatelessWidget {
         top: sizeScreen.height * 0.023,
       ),
       child: TextFormField(
+        keyboardType: TextInputType.numberWithOptions(),
         controller: dateController,
         inputFormatters: [
           FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]')),

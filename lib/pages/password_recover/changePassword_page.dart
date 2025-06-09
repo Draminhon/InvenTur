@@ -49,6 +49,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             duration: const Duration(seconds: 3),
           );
+            print(response.body);
+
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
       } catch (e) {}

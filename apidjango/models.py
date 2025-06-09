@@ -35,7 +35,7 @@ def validate_cpf(cpf):
 class CustomUser(AbstractUser):
 
     pesquisas = models.ManyToManyField("Pesquisa", related_name="pesquisas", blank=True)
-
+    email = models.EmailField(unique=True)
     CPF = models.CharField(max_length=11, unique=True)
     username = models.CharField(
         max_length = 150,
@@ -210,7 +210,7 @@ class AlimentosEBebidas(Base):
 
     pontosDeReferencia  = models.CharField(max_length=255)
 
-    tabelaMTUR = models.JSONField()
+    tabelaMTUR = models.JSONField(null=True, blank=True)
 
     formasDePagamento = models.JSONField()
     vendasEReservas = models.JSONField()
@@ -218,7 +218,7 @@ class AlimentosEBebidas(Base):
     informativosImpressos = models.JSONField()
 
     periodo = models.JSONField()
-    tabelasHorario = models.JSONField()
+    tabelasHorario = models.JSONField(null=True, blank=True)
 
     funcionamento24h = models.CharField(max_length=255)
     funcionamentoEmFeriados = models.CharField(max_length=255)
@@ -251,7 +251,7 @@ class AlimentosEBebidas(Base):
 
     doEquipamento = models.CharField(max_length=255)
 
-    tabelaEquipamentoEEspaco = models.JSONField()
+    tabelaEquipamentoEEspaco = models.JSONField(null=True, blank=True)
 
     estadoGeralDeConservacao = models.CharField(max_length=255)
 
@@ -447,13 +447,13 @@ class MeioDeHospedagem(Base):
     localizacao = models.TextField("Localização", blank=True, null=True)
     tipoDeDiaria = models.CharField("Tipo de Diária", max_length=255, blank=True, null=True)
     periodo = models.CharField("Período", max_length=255, blank=True, null=True)
-    tabelasHorario = models.JSONField("Tabelas de Horário")
+    tabelasHorario = models.JSONField("Tabelas de Horário",blank=True,null=True)
     energiaEletrica = models.TextField("Energia Elétrica", blank=True, null=True)
     estadoGeralDeConservacao = models.CharField("Estado Geral de Conservação", max_length=255, blank=True, null=True)
     
     # Dados de turismo e localização geográfica
-    estadosTuristas = models.JSONField("Estados Turistas")
-    paisesTuristas = models.JSONField("Países Turistas")
+    estadosTuristas = models.JSONField("Estados Turistas", blank=True)
+    paisesTuristas = models.JSONField("Países Turistas", blank=True)
     
     # Dados empresariais
     razaoSocial = models.CharField("Razão Social", max_length=255, blank=True, null=True)
@@ -469,8 +469,8 @@ class MeioDeHospedagem(Base):
     qtdeFuncionariosPermanentes = models.IntegerField("Qtd. Funcionários Permanentes", default=0)
     qtdeFuncionariosTemporarios = models.IntegerField("Qtd. Funcionários Temporários", default=0)
     qtdeFuncionarisComDeficiencia = models.IntegerField("Qtd. Funcionários com Deficiência", default=0)
-    latitude = models.DecimalField("Latitude", max_digits=9, decimal_places=6, blank=True, null=True)
-    longitute = models.DecimalField("Longitude", max_digits=9, decimal_places=6, blank=True, null=True)
+    latitude = models.CharField(max_length=255)
+    longitute = models.CharField(max_length=255)
     
     # Endereço e contato
     avenidaRuaEtc = models.CharField("Avenida/Rua/etc.", max_length=255, blank=True, null=True)
@@ -484,7 +484,7 @@ class MeioDeHospedagem(Base):
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
     # Dados de tabelas e informações adicionais
-    tabelaMTUR = models.JSONField("Tabela MTUR")
+    tabelaMTUR = models.JSONField("Tabela MTUR",blank=True,null=True)
     outrasRegrasEInformacoes = models.TextField("Outras Regras e Informações", blank=True, null=True)
     nAnoOcupacao = models.CharField("Ano de Ocupação", max_length=255)
     nOcupacaoAltaTemporada = models.CharField("Ocupação em Alta Temporada", max_length=255)
@@ -506,9 +506,9 @@ class MeioDeHospedagem(Base):
     lanchoneteCapacidadeSentadasSimultanea = models.IntegerField("Lanchonete - Pessoas Sentadas Simultânea", default=0)
     
     # Tabelas de instalações e equipamentos/espaços
-    tabelaInstalacoes = models.JSONField("Tabela Instalações")
-    tabelaEquipamentoEEspaco = models.JSONField("Tabela Equipamento e Espaço", )
-    tabelaEquipamentoEEspaco2 = models.JSONField("Tabela Equipamento e Espaço 2", )
+    tabelaInstalacoes = models.JSONField("Tabela Instalações",blank=True,null=True)
+    tabelaEquipamentoEEspaco = models.JSONField("Tabela Equipamento e Espaço",blank=True,null=True)
+    tabelaEquipamentoEEspaco2 = models.JSONField("Tabela Equipamento e Espaço 2",blank=True,null=True )
     
     # Observações e referências
     outros = models.TextField("Outros", blank=True, null=True)

@@ -1,19 +1,22 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
 import 'package:inventur/services/admin_service.dart';
+import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
+import 'package:inventur/utils/validators.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../widgets/expandedTileYoN.dart';
 import 'widgets/checkBox.dart';
 import 'widgets/sendButton.dart';
-import 'widgets/tabela.dart';
 
 final GlobalKey<CheckCState> tipo_de_organizacao_key = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> proximidades_key = GlobalKey<CheckCState>();
@@ -32,60 +35,41 @@ class AlimentoseBebidas extends StatefulWidget {
 }
 
 class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
-
-
   String pesquisadorNome = '';
   String pesquisadorTelefone = '';
   String pesquisadorEmail = '';
 
+  String coordenadorNome = '';
+  String coordenadorTelefone = '';
+  String coordenadorEmail = '';
 
-  String  coordenadorNome = '';
-  String  coordenadorTelefone= '';
-  String  coordenadorEmail= '';
-
-  void getInfoUsersInPesquisa() async{
+  void getInfoUsersInPesquisa() async {
     Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
 
-     pesquisadorNome = info['pesquisador']['nome'];
-     pesquisadorTelefone = info['pesquisador']['telefone'];
-     pesquisadorEmail = info['pesquisador']['email'];
+    pesquisadorNome = info['pesquisador']['nome'];
+    pesquisadorTelefone = info['pesquisador']['telefone'];
+    pesquisadorEmail = info['pesquisador']['email'];
 
-     coordenadorNome = info['coordenador']['nome'];
-     coordenadorEmail = info['coordenador']['telefone'];
-     coordenadorTelefone = info['coordenador']['email'];     
+    coordenadorNome = info['coordenador']['nome'];
+    coordenadorEmail = info['coordenador']['telefone'];
+    coordenadorTelefone = info['coordenador']['email'];
   }
 
-
-
-  Future<void> sendForm(Map<String, dynamic> valoresjson) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-    final url =
-        Uri.parse(AppConstants.BASE_URI + 'alimentosEBebidas/');
-    int? pesquisa_id = await getPesquisaId();
-
-    try {
-      valoresjson['pesquisa'] = pesquisa_id;
-      final response = await http.post(url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer $token'
-          },
-          body: json.encode(valoresjson));
-      if (response.statusCode == 201) {
-        debugPrint("Formulário enviado com sucesso!");
-      } else {
-        debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
-      }
-    } catch (e) {
-      print('Erro: $e');
-    }
-  }
+FormService _formService = FormService();
 
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Alimentos e bebidas',
-  
   };
+  final Validators _validators = Validators();
+  final cnpjFormatter = MaskTextInputFormatter(
+    mask: '##.###.###/####-##',
+    filter: {"#": RegExp(r'[0-9]')},
+  );
+
+  final somenteNumerosFormatter = MaskTextInputFormatter(
+    mask: '',
+    filter: {"#": RegExp(r'[0-9]')},
+  );
 
   final Map<String, TextEditingController> controllers = {};
   void autoFillForm() {
@@ -189,6 +173,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                             child: TextFormField(
                               controller: getController('uf'),
                               validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Preencha o campo';
+                                }
                                 return null;
                               },
                               onSaved: (newValue) {
@@ -207,6 +194,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                             child: TextFormField(
                               controller: getController('rg'),
                               validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Preencha o campo';
+                                }
                                 return null;
                               },
                               onSaved: (newValue) {
@@ -224,6 +214,12 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       right: sizeScreen.width * 0.1,
                       top: sizeScreen.height * 0.01),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Preencha o campo';
+                      }
+                      return null;
+                    },
                     controller: getController('municipio'),
                     decoration: InputDecoration(
                         isDense: true,
@@ -283,27 +279,20 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 CustomTextField(
                     controller: getController('razão social'),
                     name: 'Razão Social',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['razaoSocial'] = newValue;
                     }),
                 CustomTextField(
                     controller: getController('nome fantasia'),
                     name: 'Nome Fantasia',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['nomeFantasia'] = newValue;
                     }),
                 CustomTextField(
                     controller: getController('CNPJ'),
                     name: 'CNPJ',
-                    validat: (value) {
-                      return null;
-                    },
+                    validat: _validators.validarCNPJ,
+                    formatter: [cnpjFormatter],
                     getValue: (newValue) {
                       valoresjson['CNPJ'] = newValue;
                     }),
@@ -315,9 +304,8 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       child: CustomTextField(
                           controller: getController('Código CNAE'),
                           name: 'Código CNAE',
-                          validat: (value) {
-                            return null;
-                          },
+                          validat: _validators.validarNumero,
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           getValue: (newValue) {
                             valoresjson['codigoCNAE'] = newValue;
                           }),
@@ -326,7 +314,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       child: CustomTextField(
                         controller: getController('Atividade Economica'),
                         name: 'Atividade Econômica',
-                        validat: (value) {},
                         getValue: (value) {
                           valoresjson['atividadeEconomica'] = value;
                         },
@@ -341,9 +328,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       child: CustomTextField(
                           controller: getController('Inscrição Municipal'),
                           name: 'Inscrição Municipal',
-                          validat: (value) {
-                            return null;
-                          },
                           getValue: (newValue) {
                             valoresjson['inscricaoMunicipal'] = newValue;
                           }),
@@ -352,7 +336,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                       child: CustomTextField(
                         controller: getController('Nome da rede'),
                         name: 'Nome da rede/holding',
-                        validat: (p0) {},
                         getValue: (p0) {
                           valoresjson['nomeDaRede'] = p0;
                         },
@@ -451,9 +434,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                             controller: getController(
                                 'quantidade funcionarios permanentes'),
                             name: 'n°',
-                            validat: (value) {
-                              return null;
-                            },
+                            formatter: [FilteringTextInputFormatter.digitsOnly],
                             getValue: (newValue) {
                               valoresjson['qtdeFuncionariosPermanentes'] =
                                   newValue;
@@ -477,9 +458,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                             controller: getController(
                                 'Quantidade de funcionarios temporarios'),
                             name: 'n°',
-                            validat: (value) {
-                              return null;
-                            },
+                            formatter: [FilteringTextInputFormatter.digitsOnly],
                             getValue: (newValue) {
                               valoresjson['qtdeFuncionariosTemporarios'] =
                                   newValue;
@@ -498,9 +477,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                             controller: getController(
                                 'quantidade funcionarios com definicencia'),
                             name: '%',
-                            validat: (value) {
-                              return null;
-                            },
+                            formatter: [FilteringTextInputFormatter.digitsOnly],
                             getValue: (newValue) {
                               valoresjson['qtdeFuncionariosComDeficiencia'] =
                                   newValue;
@@ -544,9 +521,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           child: CustomTextField(
                             controller: getController('latitude'),
                             name: 'valor',
-                            validat: (value) {
-                              return null;
-                            },
+                            formatter: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
                             getValue: (newValue) {
                               valoresjson['latitude'] = newValue;
                             },
@@ -565,9 +542,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           child: CustomTextField(
                             controller: getController('longitude'),
                             name: 'valor',
-                            validat: (value) {
-                              return null;
-                            },
+                            formatter: [FilteringTextInputFormatter.digitsOnly],
                             getValue: (newValue) {
                               valoresjson['longitude'] = newValue;
                             },
@@ -584,9 +559,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 CustomTextField(
                   controller: getController('avenida rua'),
-                  validat: (value) {
-                    return null;
-                  },
                   name: 'avenida/rua/travessa/caminho/outro',
                   getValue: (newValue) {
                     valoresjson['avenidaRuaEtc'] = newValue;
@@ -594,9 +566,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 CustomTextField(
                   controller: getController('bairro localidade'),
-                  validat: (value) {
-                    return null;
-                  },
                   name: 'bairro/localidade',
                   getValue: (newValue) {
                     valoresjson['bairroLocalidade'] = newValue;
@@ -604,9 +573,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 CustomTextField(
                   controller: getController('distrito'),
-                  validat: (value) {
-                    return null;
-                  },
                   name: 'distrito',
                   getValue: (newValue) {
                     valoresjson['distrito'] = newValue;
@@ -614,9 +580,10 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 CustomTextField(
                   controller: getController('CEP'),
-                  validat: (value) {
-                    return null;
-                  },
+                  formatter: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    _validators.cepFormatter
+                  ],
                   name: 'CEP',
                   getValue: (newValue) {
                     valoresjson['CEP'] = newValue;
@@ -665,7 +632,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                               valoresjson['instagram'] = newValue;
                             },
                             name: '@',
-                            validat: (p0) {},
                           ))
                     ],
                   ),
@@ -688,9 +654,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('email'),
-                          validat: (value) {
-                            return null;
-                          },
                           name: 'e-mail',
                           getValue: (newValue) {
                             valoresjson['email'] = newValue;
@@ -790,13 +753,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           controller: getController('distancia aeroporto'),
                           name: '(km)',
                           getValue: (newValue) {
                             valoresjson['distanciasAeroporto'] = newValue;
-                          },
-                          validat: (value) {
-                            return null;
                           },
                         ))
                   ],
@@ -817,9 +778,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           getValue: (newValue) {
                             valoresjson['distanciasRodoviaria'] = newValue;
                           },
-                          validat: (value) {
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                         ))
                   ],
                 ),
@@ -840,9 +799,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                             valoresjson['distanciaEstacaoFerroviaria'] =
                                 newValue;
                           },
-                          validat: (value) {
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                         ))
                   ],
                 ),
@@ -862,9 +819,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           getValue: (newValue) {
                             valoresjson['distanciaEstacaoMaritima'] = newValue;
                           },
-                          validat: (value) {
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                         ))
                   ],
                 ),
@@ -883,9 +838,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                             valoresjson['distanciaEstacaoMetroviaria'] =
                                 newValue;
                           },
-                          validat: (value) {
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                         ))
                   ],
                 ),
@@ -905,9 +858,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           getValue: (newValue) {
                             valoresjson['distanciaPontoDeOnibus'] = newValue;
                           },
-                          validat: (value) {
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                         ))
                   ],
                 ),
@@ -927,9 +878,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           getValue: (newValue) {
                             valoresjson['distanciaPontoDeTaxi'] = newValue;
                           },
-                          validat: (value) {
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                         ))
                   ],
                 ),
@@ -947,9 +896,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           getValue: (newValue) {
                             valoresjson['distanciasOutraNome'] = newValue;
                           },
-                          validat: (value) {
-                            return null;
-                          },
                         )),
                     SizedBox(
                         width: sizeScreen.width * 0.2,
@@ -960,9 +906,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           getValue: (newValue) {
                             valoresjson['distanciaOutras'] = newValue;
                           },
-                          validat: (value) {
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                         ))
                   ],
                 ),
@@ -979,12 +923,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 CustomTextField(
                   controller: getController('ponto de referencia'),
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
                   name: 'ponto de referência',
                   getValue: (newValue) {
                     valoresjson['pontosDeReferencia'] = newValue;
@@ -1241,12 +1179,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
 
                 CustomTextField(
                   controller: getController('outras regras e informações'),
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
                   name: 'Outras regras e informações',
                   getValue: (newValue) {
                     valoresjson['outrasRegraseInformacoes'] = newValue;
@@ -1269,12 +1201,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
 
                 CustomTextField(
                   controller: getController('capacidade instalada por dia'),
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
                   name: 'nº',
                   getValue: (newValue) {
                     valoresjson['capInstaladaPdia'] = newValue;
@@ -1297,12 +1224,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   child: CustomTextField(
                     controller:
                         getController('instaladas pessoas atendidas sentadas'),
-                    validat: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Preencha o campo';
-                      }
-                      return null;
-                    },
+                    formatter: [FilteringTextInputFormatter.digitsOnly],
                     name: 'nº',
                     getValue: (newValue) {
                       valoresjson['capInstaladasSentadas'] = newValue;
@@ -1316,12 +1238,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
 
                 CustomTextField(
                   controller: getController('capacidade simultanea'),
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
                   name: 'nº',
                   getValue: (newValue) {
                     valoresjson['capSimultanea'] = newValue;
@@ -1345,12 +1262,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                   child: CustomTextField(
                     controller:
                         getController('simultanea pessoas atendidas sentadas'),
-                    validat: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Preencha o campo';
-                      }
-                      return null;
-                    },
+                    formatter: [FilteringTextInputFormatter.digitsOnly],
                     name: 'nº',
                     getValue: (newValue) {
                       valoresjson['capSimultaneaSentadas'] = newValue;
@@ -1415,12 +1327,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           child: CustomTextField(
                               controller:
                                   getController('capacidade de veículos'),
-                              validat: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Preencha o campo';
-                                }
-                                return null;
-                              },
+                              formatter: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                               name: '',
                               getValue: (newValue) {
                                 valoresjson['capacidadeVeiculos'] = newValue;
@@ -1441,12 +1350,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           //height: sizeScreen.height * 0.07,
                           child: CustomTextField(
                               controller: getController('numero automoveis'),
-                              validat: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Preencha o campo';
-                                }
-                                return null;
-                              },
+                              formatter: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                               name: '',
                               getValue: (newValue) {
                                 valoresjson['numeroAutomoveis'] = newValue;
@@ -1467,12 +1373,9 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           //height: sizeScreen.height * 0.07,
                           child: CustomTextField(
                               controller: getController('numero onibus'),
-                              validat: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Preencha o campo';
-                                }
-                                return null;
-                              },
+                              formatter: [
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                               name: '',
                               getValue: (newValue) {
                                 valoresjson['numeroOnibus'] = newValue;
@@ -2237,12 +2140,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                         //eight: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('outrosSinalizacao'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
                           name: '',
                           getValue: (newValue) {
                             valoresjson['outrosAcessibilidade'] = newValue;
@@ -2269,12 +2166,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 CustomTextField(
                   controller: getController('observacoes'),
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
                   name: '',
                   getValue: (newValue) {
                     valoresjson['observacoes'] = newValue;
@@ -2300,12 +2191,6 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                 ),
                 CustomTextField(
                   controller: getController('referencias'),
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
                   name: '',
                   getValue: (newValue) {
                     valoresjson['referencias'] = newValue;
@@ -2321,11 +2206,11 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     //   print(value.text);
                     // },);
                     valoresjson['nome_pesquisador'] = pesquisadorNome;
-                      valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
-                      valoresjson['email_pesquisador'] = pesquisadorEmail;
-                      valoresjson['nome_coordenador'] = coordenadorNome;
-                      valoresjson['telefone_coordenador'] = coordenadorTelefone;
-                      valoresjson['email_coordenador'] = coordenadorEmail;
+                    valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
+                    valoresjson['email_pesquisador'] = pesquisadorEmail;
+                    valoresjson['nome_coordenador'] = coordenadorNome;
+                    valoresjson['telefone_coordenador'] = coordenadorTelefone;
+                    valoresjson['email_coordenador'] = coordenadorEmail;
                     valoresjson['tipoDeOrganizacaoInstituicao'] =
                         tipo_de_organizacao_key.currentState!
                             .getSelectedValues()
@@ -2350,25 +2235,22 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                             .getSelectedValues()
                             .toList();
 
-                  
+
+                    //  sendForm(valoresjson);
+                    //   valoresjson.forEach(
+                    //     (key, value) {
+                    //       debugPrint('$key ');
+                    //     },
+                    //   );
+
+                    if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-
-                   sendForm(valoresjson);
-                    valoresjson.forEach(
-                      (key, value) {
-                        debugPrint('$key ');
-                      },
-                    );
-
-                    // if (_formKey.currentState!.validate()) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //       const SnackBar(content: Text('processing data')));
-                    // } else {
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //       const SnackBar(content: Text('preencha os dados!')));
-                    // }
-                  Navigator.pushReplacementNamed(context, '/SendedForm');
+                      _formService.sendForm(valoresjson, AppConstants.ALIMENTOS_E_BEBIDAS);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('preencha os dados!')));
+                    }
                   },
                 ),
                 const SizedBox(

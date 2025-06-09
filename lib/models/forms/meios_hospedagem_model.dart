@@ -360,7 +360,7 @@ class MeiosDeHospedagemModel{
   localizacao = json['localizacao'];
   tipoDeDiaria = json['tipoDeDiaria'];
   periodo = json['periodo'];
-  tabelasHorario = Map<String, dynamic>.from(json['tabelasHorario']);
+  tabelasHorario = Map<String, dynamic>.from(json['tabelasHorario'] ?? {});
   energiaEletrica = json['energiaEletrica'];
   estadoGeralDeConservacao = json['estadoGeralDeConservacao'];
   estadosTuristas = List<String>.from(json['estadosTuristas']);
@@ -390,7 +390,7 @@ class MeiosDeHospedagemModel{
   email = json['email'];
   site = json['site'];
   pontosDeReferencia = json['pontosDeReferencia'];
-  tabelaMTUR = Map<String, dynamic>.from(json['tabelaMTUR']);
+  tabelaMTUR = Map<String, dynamic>.from(json['tabelaMTUR'] ?? {});
   outrasRegrasEInformacoes = json['outrasRegrasEInformacoes'];
   nAnoOcupacao = json['nAnoOcupacao'];
   nOcupacaoAltaTemporada = json['nOcupacaoAltaTemporada'];
@@ -416,11 +416,11 @@ class MeiosDeHospedagemModel{
   lanchoneteCapacidadeSentadasSimultanea =
       json['lanchoneteCapacidadeSentadasSimultanea'];
   tabelaInstalacoes =
-      Map<String, dynamic>.from(json['tabelaInstalacoes']);
+      Map<String, dynamic>.from(json['tabelaInstalacoes'] ?? {});
   tabelaEquipamentoEEspaco =
-      Map<String, dynamic>.from(json['tabelaEquipamentoEEspaco']);
+      Map<String, dynamic>.from(json['tabelaEquipamentoEEspaco'] ?? {});
   tabelaEquipamentoEEspaco2 =
-      Map<String, dynamic>.from(json['tabelaEquipamentoEEspaco2']);
+      Map<String, dynamic>.from(json['tabelaEquipamentoEEspaco2']  ?? {});
   outros = json['outros'];
 }
 

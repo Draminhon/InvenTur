@@ -7,6 +7,7 @@ import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
+import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -32,32 +33,8 @@ class AlimentoseBebidasEdit extends StatefulWidget {
 }
 
 class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
-  Future<void> updateAlimentosEBebidas(
-      int sistemaId, Map<String, dynamic> data) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
 
-    final url = Uri.parse(
-        '${AppConstants.BASE_URI}alimentosEBebidas/$sistemaId/');
-
-    try {
-      final response = await http.patch(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer $token",
-        },
-        body: json.encode(data),
-      );
-      if (response.statusCode == 200) {
-        print("Atualização bem-sucedida");
-      } else {
-        print("Erro na atualização: ${response.statusCode}");
-      }
-    } catch (e) {
-      print('Erro: $e');
-    }
-  }
+  FormService _formService = FormService();
 
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Alimentos e bebidas',
@@ -2439,9 +2416,7 @@ class _AlimentoseBebidasEditState extends State<AlimentoseBebidasEdit> {
    valoresjson['telefone_coordenador']= widget.alimentosModel!.telefoneCoordenador;
    valoresjson['email_coordenador']= widget.alimentosModel!.emailCoordenador;
                     _formKey.currentState!.save();
-                    updateAlimentosEBebidas(
-                        widget.alimentosModel!.id!, valoresjson);
-                    Navigator.pushReplacementNamed(context, '/UpdatedForm');
+                    _formService.updateForm(widget.alimentosModel!.id!, valoresjson, AppConstants.ALIMENTOS_E_BEBIDAS);
 
                     // if (_formKey.currentState!.validate()) {
                     //   ScaffoldMessenger.of(context).showSnackBar(

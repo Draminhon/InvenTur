@@ -4,6 +4,7 @@ import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
 import 'package:inventur/services/admin_service.dart';
+import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/customOutro.dart';
@@ -19,58 +20,28 @@ class SistemaDeSeguranca extends StatefulWidget {
   State<SistemaDeSeguranca> createState() => _SistemaDeSegurancaState();
 }
 
-Future<void> sendForm(Map<String, dynamic> valoresjson) async {
-  final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
-  print('token sendo fornecido no equipamento: $token');
-  final url =
-      Uri.parse(AppConstants.BASE_URI + 'sistemadeseguranca/');
-  int? pesquisa_id = await getPesquisaId();
-
-  try {
-    valoresjson['pesquisa'] = pesquisa_id;
-    final response = await http.post(url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          "Authorization": "Bearer $token",
-
-        },
-        body: json.encode(valoresjson));
-    if (response.statusCode == 201) {
-      debugPrint("Formulário enviado com sucesso!");
-    } else {
-      debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
-    }
-  } catch (e) {
-    print('Erro: $e');
-  }
-}
+FormService _formService = FormService();
 
 class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
-
   String pesquisadorNome = '';
   String pesquisadorTelefone = '';
   String pesquisadorEmail = '';
 
+  String coordenadorNome = '';
+  String coordenadorTelefone = '';
+  String coordenadorEmail = '';
 
-  String  coordenadorNome = '';
-  String  coordenadorTelefone= '';
-  String  coordenadorEmail= '';
-
-  void getInfoUsersInPesquisa() async{
+  void getInfoUsersInPesquisa() async {
     Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
 
-     pesquisadorNome = info['pesquisador']['nome'];
-     pesquisadorTelefone = info['pesquisador']['telefone'];
-     pesquisadorEmail = info['pesquisador']['email'];
+    pesquisadorNome = info['pesquisador']['nome'];
+    pesquisadorTelefone = info['pesquisador']['telefone'];
+    pesquisadorEmail = info['pesquisador']['email'];
 
-     coordenadorNome = info['coordenador']['nome'];
-     coordenadorEmail = info['coordenador']['telefone'];
-     coordenadorTelefone = info['coordenador']['email'];     
+    coordenadorNome = info['coordenador']['nome'];
+    coordenadorEmail = info['coordenador']['telefone'];
+    coordenadorTelefone = info['coordenador']['email'];
   }
-
-
-
 
   TextEditingController email_coordenador = TextEditingController();
   TextEditingController email_pesquisador = TextEditingController();
@@ -167,6 +138,9 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                                 child: TextFormField(
                                   controller: uf,
                                   validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Preencha o campo';
+                                    }
                                     return null;
                                   },
                                   onSaved: (newValue) {
@@ -185,6 +159,9 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                                 child: TextFormField(
                                   controller: regiao_turistica,
                                   validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Preencha o campo';
+                                    }
                                     return null;
                                   },
                                   onSaved: (newValue) {
@@ -202,6 +179,12 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                           top: sizeScreen.height * 0.01),
                       child: TextFormField(
                         controller: municipio,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Preencha o campo';
+                          }
+                          return null;
+                        },
                         decoration: InputDecoration(
                           isDense: true,
                           hintText: 'Municipio',
@@ -424,12 +407,6 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                     ),
                     CustomTextField(
                       controller: observacoes,
-                      validat: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Preencha o campo';
-                        }
-                        return null;
-                      },
                       name: '',
                       getValue: (newValue) {
                         valoresjson['observacoes'] = newValue;
@@ -454,12 +431,6 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                     ),
                     CustomTextField(
                       controller: referencias,
-                      validat: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Preencha o campo';
-                        }
-                        return null;
-                      },
                       name: '',
                       getValue: (newValue) {
                         valoresjson['referencias'] = newValue;
@@ -473,13 +444,15 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                       width: 300,
                       child: ElevatedButton(
                         onPressed: () {
-                                                valoresjson['nome_pesquisador'] = pesquisadorNome;
-                      valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
-                      valoresjson['email_pesquisador'] = pesquisadorEmail;
-                      valoresjson['nome_coordenador'] = coordenadorNome;
-                      valoresjson['telefone_coordenador'] = coordenadorTelefone;
-                      valoresjson['email_coordenador'] = coordenadorEmail;
-                      
+                          valoresjson['nome_pesquisador'] = pesquisadorNome;
+                          valoresjson['telefone_pesquisador'] =
+                              pesquisadorTelefone;
+                          valoresjson['email_pesquisador'] = pesquisadorEmail;
+                          valoresjson['nome_coordenador'] = coordenadorNome;
+                          valoresjson['telefone_coordenador'] =
+                              coordenadorTelefone;
+                          valoresjson['email_coordenador'] = coordenadorEmail;
+
                           valoresjson['contatos'] = sections
                               .map((element) => element.getData())
                               .toList();
@@ -492,15 +465,13 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
 
                             _formKey.currentState!.save();
                             debugPrint(valoresjson.toString(), wrapWidth: 1024);
-                            sendForm(valoresjson);
+                            _formService.sendForm(valoresjson, AppConstants.SISTEMAS_DE_SEGURANCA);
                             sections2
                                 .forEach((element) => print(element.getData()));
 
-
-                          Navigator.pushReplacementNamed(
-                              context, '/SendedForm');
+                            Navigator.pushReplacementNamed(
+                                context, '/SendedForm');
                           }
-
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.green[800],

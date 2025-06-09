@@ -127,18 +127,32 @@ class _PesquisasState extends State<Pesquisas> {
   String _searchQuery = "";
 
   Future<List<Map<String, dynamic>>> getRodovias() async {
+
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     final pesquisaId = arguments['pesquisa_id'];
-    var url = Uri.parse(
+    try{
+          var url = Uri.parse(
         '${AppConstants.BASE_URI}equipamentos/?pesquisa_id=$pesquisaId');
     final response = await http.get(url, headers: {
       "Content-Type": "application/json",
       "Authorization": "Bearer $token",
     });
-    final List body = json.decode(utf8.decode(response.bodyBytes));
+    if(response.statusCode == 200){
+          final List body = json.decode(utf8.decode(response.bodyBytes));
+
     return body.map((e) => Map<String, dynamic>.from(e)).toList();
+    }else{
+      print("Erro" + response.body);
+      return [];
+    }
+
+    }catch(e){
+      return [];
+      print("ERRO!");
+    }
+
   }
 
   @override
@@ -242,10 +256,10 @@ class _PesquisasState extends State<Pesquisas> {
         ],
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 150.52.h, left: 15, right: 15),
+        padding: EdgeInsets.only(bottom: 150.52.w, ),
         child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 80.52.w),
-          height: 219.52.h,
+          margin: EdgeInsets.symmetric(horizontal: 80.w),
+          height: 219.52.w,
           child: isadmin == true
               ? Container()
               : ElevatedButton(
@@ -259,9 +273,11 @@ class _PesquisasState extends State<Pesquisas> {
                     overlayColor: WidgetStateProperty.all(Colors.green[600]),
                   ),
                   onPressed: () => Navigator.pushNamed(context, '/A'),
-                  child: Text(
-                    'inventariar novo equipamento',
-                    style: TextStyle(color: Colors.white, fontSize: 65.76.w),
+                  child: Center(
+                    child: Text(
+                      'inventariar novo equipamento',
+                      style: TextStyle(color: Colors.white, fontSize: 65.76.w),
+                    ),
                   ),
                 ),
         ),

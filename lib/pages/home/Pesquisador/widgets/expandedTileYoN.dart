@@ -28,7 +28,7 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
       children: [
         SizedBox(
          //   margin: EdgeInsets.only(bottom: sizeScreen.height * 0.01),
-            width: 400.w,
+            width: 410.w,
             child: ExpansionTile(
               iconColor: Colors.white,
               collapsedIconColor: Colors.white,

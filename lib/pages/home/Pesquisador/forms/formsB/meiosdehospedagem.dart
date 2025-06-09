@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/models/endereco/estado_model.dart';
 import 'package:inventur/models/forms/meios_hospedagem_model.dart';
@@ -15,7 +16,9 @@ import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
 import 'package:inventur/pages/widgets/auto_complete_text_field.dart';
 import 'package:inventur/services/admin_service.dart';
+import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
+import 'package:inventur/utils/validators.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -28,86 +31,30 @@ class MeiosDeHospedagem extends StatefulWidget {
 }
 
 class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
-
-
-
   String pesquisadorNome = '';
   String pesquisadorTelefone = '';
   String pesquisadorEmail = '';
+  final FormService _formService = FormService();
+  final Validators _validators = Validators();
 
+  String coordenadorNome = '';
+  String coordenadorTelefone = '';
+  String coordenadorEmail = '';
 
-  String  coordenadorNome = '';
-  String  coordenadorTelefone= '';
-  String  coordenadorEmail= '';
-
-  void getInfoUsersInPesquisa() async{
+  void getInfoUsersInPesquisa() async {
     Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
 
-     pesquisadorNome = info['pesquisador']['nome'];
-     pesquisadorTelefone = info['pesquisador']['telefone'];
-     pesquisadorEmail = info['pesquisador']['email'];
+    pesquisadorNome = info['pesquisador']['nome'];
+    pesquisadorTelefone = info['pesquisador']['telefone'];
+    pesquisadorEmail = info['pesquisador']['email'];
 
-     coordenadorNome = info['coordenador']['nome'];
-     coordenadorEmail = info['coordenador']['telefone'];
-     coordenadorTelefone = info['coordenador']['email'];     
+    coordenadorNome = info['coordenador']['nome'];
+    coordenadorEmail = info['coordenador']['telefone'];
+    coordenadorTelefone = info['coordenador']['email'];
   }
 
 
-
-
-
-  Future<void> sendForm(Map<String, dynamic> valoresjson) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-    final url =
-        Uri.parse(AppConstants.BASE_URI + 'meiosdehospedagem/');
-    int? pesquisa_id = await getPesquisaId();
-
-    try {
-      valoresjson['pesquisa'] = pesquisa_id;
-      final response = await http.post(url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'Authorization': 'Bearer $token'
-          },
-          body: json.encode(valoresjson));
-      if (response.statusCode == 201) {
-        debugPrint("Formulário enviado com sucesso!");
-      } else {
-        debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
-      }
-    } catch (e) {
-      print('Erro: $e');
-    }
-  }
-
-  Future<void> update(
-      int sistemaId, Map<String, dynamic> data) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-
-    final url = Uri.parse(
-        '${AppConstants.BASE_URI}meiosdehospedagem/$sistemaId/');
-
-    try {
-      final response = await http.patch(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer $token",
-        },
-        body: json.encode(data),
-      );
-      if (response.statusCode == 200) {
-        print("Atualização bem-sucedida");
-      } else {
-        print("Erro na atualização: ${response.statusCode}");
-      }
-    } catch (e) {
-      print('Erro: $e');
-    }
-  }
-
+  
   final _formKey = GlobalKey<FormState>();
 
   late Estado? _estadoSelecionado = Estado(id: -1, sigla: '', nome: '');
@@ -275,7 +222,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     // 'acessibilidade_outros': null,
     // 'observacoes': null,
     // 'referencias': null,
-
   };
 
 //Implementar o Map para os controllers
@@ -292,7 +238,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     void fillIfExists(String key, String value) {
       getController(key).text = value;
     }
-
+void safeFillIfExists(String key, List<String?>? list, int index) {
+  if (list != null && list.length > index && list[index] != null && list[index]!.isNotEmpty) {
+    fillIfExists(key, list[index]!);
+  }
+}
     if (widget.hospedagemModel != null) {
       fillIfExists('uf', widget.hospedagemModel!.uf!);
       fillIfExists('rg', widget.hospedagemModel!.regiaoTuristica!);
@@ -301,17 +251,20 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
       fillIfExists('nome fantasia', widget.hospedagemModel!.nomeFantasia!);
       fillIfExists('CNPJ', widget.hospedagemModel!.CNPJ!);
       fillIfExists('codigo CNAE', widget.hospedagemModel!.codigoCNAE!);
+
       
-      fillIfExists('estado01', widget.hospedagemModel!.estadosTuristas![0]);
-      fillIfExists('estado02', widget.hospedagemModel!.estadosTuristas![1]);
-      fillIfExists('estado03', widget.hospedagemModel!.estadosTuristas![2]);
-      fillIfExists('estado04', widget.hospedagemModel!.estadosTuristas![3]);
-      fillIfExists('estado05', widget.hospedagemModel!.estadosTuristas![4]);
-      fillIfExists('pais01', widget.hospedagemModel!.paisesTuristas![0]);
-      fillIfExists('pais02', widget.hospedagemModel!.paisesTuristas![1]);
-      fillIfExists('pais03', widget.hospedagemModel!.paisesTuristas![2]);
-      fillIfExists('pais04', widget.hospedagemModel!.paisesTuristas![3]);
-      fillIfExists('pais05', widget.hospedagemModel!.paisesTuristas![4] == null? "azerbaijão" : widget.hospedagemModel!.paisesTuristas![4]);
+      safeFillIfExists('estado01', widget.hospedagemModel!.estadosTuristas, 0);
+safeFillIfExists('estado02', widget.hospedagemModel!.estadosTuristas, 1);
+safeFillIfExists('estado03', widget.hospedagemModel!.estadosTuristas, 2);
+safeFillIfExists('estado04', widget.hospedagemModel!.estadosTuristas, 3);
+safeFillIfExists('estado05', widget.hospedagemModel!.estadosTuristas, 4);
+
+// Para países
+safeFillIfExists('pais01', widget.hospedagemModel!.paisesTuristas, 0);
+safeFillIfExists('pais02', widget.hospedagemModel!.paisesTuristas, 1);
+safeFillIfExists('pais03', widget.hospedagemModel!.paisesTuristas, 2);
+safeFillIfExists('pais04', widget.hospedagemModel!.paisesTuristas, 3);
+safeFillIfExists('pais05', widget.hospedagemModel!.paisesTuristas, 4);
 
       fillIfExists(
           'atividade economica', widget.hospedagemModel!.atividadeEconomica!);
@@ -389,8 +342,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     }
   }
 
-
-  
   late List<String> _estadosSelecionados;
   late List<String> _paisesSelecionados;
   @override
@@ -400,17 +351,13 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     _pesquisaController.setEstados();
     _pesquisaController.setPaises();
 
-
-  try{
-   _estadosSelecionados = widget.hospedagemModel!.estadosTuristas!;
-   _paisesSelecionados = widget.hospedagemModel!.paisesTuristas!;
-  }catch(e){
-    _estadosSelecionados = [];
-    _paisesSelecionados = [];
-  }
-
-
-
+    try {
+      _estadosSelecionados = widget.hospedagemModel!.estadosTuristas!;
+      _paisesSelecionados = widget.hospedagemModel!.paisesTuristas!;
+    } catch (e) {
+      _estadosSelecionados = [];
+      _paisesSelecionados = [];
+    }
   }
 
   @override
@@ -424,7 +371,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
   Widget build(BuildContext context) {
     getInfoUsersInPesquisa();
     if (isUpdate == true) autoFillForm();
-    
+
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
         backgroundColor: Colors.white,
@@ -573,12 +520,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               CustomTextField(
                 name: 'Razão Social',
                 controller: getController('razao social'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 getValue: (newValue) {
                   valoresjson['razaoSocial'] = newValue;
                 },
@@ -586,12 +527,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               CustomTextField(
                 controller: getController('nome fantasia'),
                 name: 'Nome Fantasia',
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 getValue: (newValue) {
                   valoresjson['nomeFantasia'] = newValue;
                 },
@@ -599,12 +534,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               CustomTextField(
                 controller: getController('codigo CNAE'),
                 name: 'Código CNAE',
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
+                formatter: [FilteringTextInputFormatter.digitsOnly],
                 getValue: (newValue) {
                   valoresjson['codigoCNAE'] = newValue;
                 },
@@ -612,12 +542,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               CustomTextField(
                 controller: getController('atividade economica'),
                 name: 'Atividade econômica',
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 getValue: (newValue) {
                   valoresjson['atividadeEconomica'] = newValue;
                 },
@@ -625,12 +549,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               CustomTextField(
                 controller: getController('inscricao municipal'),
                 name: 'Inscrição Municipal',
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 getValue: (newValue) {
                   valoresjson['inscricaoMunicipal'] = newValue;
                 },
@@ -638,12 +556,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               CustomTextField(
                 controller: getController('nome da rede'),
                 name: 'Nome da rede/holding',
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 getValue: (newValue) {
                   valoresjson['nomeDaRede'] = newValue;
                 },
@@ -651,12 +563,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               CustomTextField(
                 name: 'CNPJ',
                 controller: getController('CNPJ'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
+                validat: _validators.validarCNPJ,
+                formatter: [_validators.cnpjFormatter],
+                keyboardType: TextInputType.numberWithOptions(),
                 getValue: (newValue) {
                   valoresjson['CNPJ'] = newValue;
                 },
@@ -753,12 +662,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             controller:
                                 getController('funcionarios permanentes'),
                             name: 'n°',
-                            validat: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Preencha o campo';
-                              }
-                              return null;
-                            },
+                            formatter: [FilteringTextInputFormatter.digitsOnly],
                             getValue: (newValue) {
                               valoresjson['qtdeFuncionariosPermanentes'] =
                                   newValue;
@@ -784,12 +688,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             controller:
                                 getController('funcionarios temporarios'),
                             name: 'n°',
-                            validat: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Preencha o campo';
-                              }
-                              return null;
-                            },
+                            formatter: [FilteringTextInputFormatter.digitsOnly],
                             getValue: (newValue) {
                               valoresjson['qtdeFuncionariosTemporarios'] =
                                   newValue;
@@ -810,12 +709,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                             controller:
                                 getController('pessoas com deficiencia'),
                             name: '%',
-                            validat: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Preencha o campo';
-                              }
-                              return null;
-                            },
+                            formatter: [FilteringTextInputFormatter.digitsOnly],
                             getValue: (newValue) {
                               valoresjson['qtdeFuncionarisComDeficiencia'] =
                                   newValue;
@@ -867,12 +761,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         child: CustomTextField(
                           controller: getController('latitude'),
                           name: 'valor',
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          keyboardType: TextInputType.numberWithOptions(),
                           getValue: (newValue) {
                             valoresjson['latitude'] = newValue;
                           },
@@ -893,12 +782,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         child: CustomTextField(
                           controller: getController('longitute'),
                           name: 'valor',
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          keyboardType: TextInputType.numberWithOptions(),
                           getValue: (newValue) {
                             valoresjson['longitute'] = newValue;
                           },
@@ -913,12 +797,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
               CustomTextField(
                 controller: getController('avenida rua'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 name: 'avenida/rua/travessa/caminho/outro',
                 getValue: (newValue) {
                   valoresjson['avenidaRuaEtc'] = newValue;
@@ -926,12 +804,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               CustomTextField(
                 controller: getController('bairro localidade'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 name: 'bairro/localidade',
                 getValue: (newValue) {
                   valoresjson['bairroLocalidade'] = newValue;
@@ -939,12 +811,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               CustomTextField(
                 controller: getController('distrito'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 name: 'distrito',
                 getValue: (newValue) {
                   valoresjson['distrito'] = newValue;
@@ -952,12 +818,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               CustomTextField(
                 controller: getController('CEP'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
+                formatter: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  _validators.cepFormatter
+                ],
                 name: 'CEP',
                 getValue: (newValue) {
                   valoresjson['CEP'] = newValue;
@@ -976,15 +840,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                     SizedBox(
                         width: sizeScreen.width * 0.6,
                         //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
+                        child: CustomTextNumber(
                           controller: getController('whatsapp'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
-                          name: '(DD) n°',
+                          labelText: '(DD) n°',
                           getValue: (newValue) {
                             valoresjson['whatsapp'] = newValue;
                           },
@@ -1002,12 +860,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('instagram'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
                           name: '@',
                           getValue: (newValue) {
                             valoresjson['instagram'] = newValue;
@@ -1029,12 +881,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('email'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          keyboardType: TextInputType.emailAddress,
                           name: 'e-mail',
                           getValue: (newValue) {
                             valoresjson['email'] = newValue;
@@ -1059,12 +906,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('site'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          keyboardType: TextInputType.url,
                           name: 'www.endereço.com',
                           getValue: (newValue) {
                             valoresjson['site'] = newValue;
@@ -1155,12 +997,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               CustomTextField(
                 controller: getController('pontos de referencia'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 name: 'ponto de referência',
                 getValue: (newValue) {
                   valoresjson['pontosDeReferencia'] = newValue;
@@ -1491,12 +1327,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
               CustomTextField(
                 controller: getController('regras e informacoes'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 name: 'Regras e informações',
                 getValue: (newValue) {
                   valoresjson['outrasRegrasEInformacoes'] = newValue;
@@ -1519,12 +1349,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
               CustomTextField(
                 controller: getController('ocupação ano n'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
+                formatter: [FilteringTextInputFormatter.digitsOnly],
                 name: 'nº',
                 getValue: (newValue) {
                   valoresjson['nAnoOcupacao'] = newValue;
@@ -1540,12 +1365,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
               CustomTextField(
                 controller: getController('ocupacao alta temporada n'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
+                formatter: [FilteringTextInputFormatter.digitsOnly],
                 name: 'nº',
                 getValue: (newValue) {
                   valoresjson['nOcupacaoAltaTemporada'] = newValue;
@@ -2013,12 +1833,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('total de UH'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['nTotalDeUH'] = newValue;
@@ -2040,12 +1855,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('total de leitos'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['nTotalDeLeitos'] = newValue;
@@ -2067,12 +1877,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('uh adaptados para pcd'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['nUhAdaptadasParaPCD'] = newValue;
@@ -2184,12 +1989,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('capacidade de veiculos'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['nCapacidadeDeVeiculos'] = newValue;
@@ -2214,12 +2014,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('capacidade automoveis'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['nAutomoveis'] = newValue;
@@ -2244,12 +2039,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('onibus'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['nOnibus'] = newValue;
@@ -2301,12 +2091,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       //height: sizeScreen.height * 0.07,
                       child: CustomTextField(
                         controller: getController('capacidade em KVA'),
-                        validat: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Preencha o campo';
-                          }
-                          return null;
-                        },
+                        formatter: [FilteringTextInputFormatter.digitsOnly],
                         name: 'KVA',
                         getValue: (newValue) {
                           valoresjson['capacidadeEmKVA'] = newValue;
@@ -2349,12 +2134,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       //height: sizeScreen.height * 0.07,
                       child: CustomTextField(
                         controller: getController('gerador capacidade em KVA'),
-                        validat: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Preencha o campo';
-                          }
-                          return null;
-                        },
+                        formatter: [FilteringTextInputFormatter.digitsOnly],
                         name: 'KVA',
                         getValue: (newValue) {
                           valoresjson['geradorCapacidadeEmKVA'] = newValue;
@@ -2413,12 +2193,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         child: CustomTextField(
                           controller:
                               getController('capacidade instalada por dia'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['nCapacidadeInstaladaPorDia'] =
@@ -2442,12 +2217,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         child: CustomTextField(
                           controller:
                               getController('pessoas atendidas sentadas'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['nPessoasAtendidasSentadas'] = newValue;
@@ -2466,12 +2236,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: getController('capacidade simultanea'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['nCapacidadeSimultanea'] = newValue;
@@ -2488,12 +2253,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         child: CustomTextField(
                           controller: getController(
                               'capacidade simultanea pessoas atendidas sentadas'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['nPessoasAtendidasSentadasSimultanea'] =
@@ -2540,12 +2300,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         child: CustomTextField(
                           controller: getController(
                               'lanchonete capacidade instalada por dia'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['lanchoneteCapacidadeInstaladaPorDia'] =
@@ -2569,12 +2324,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         child: CustomTextField(
                           controller: getController(
                               'lanchonete capacidade pessoas atendidas sentadas'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson[
@@ -2596,12 +2346,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         child: CustomTextField(
                           controller:
                               getController('lanchonete capacidade simultanea'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson['lanchoneteCapacidadeSimultanea'] =
@@ -2622,12 +2367,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         child: CustomTextField(
                           controller: getController(
                               'lanchonete pessoas atendidas sentadas simultanea'),
-                          validat: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Preencha o campo';
-                            }
-                            return null;
-                          },
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           name: 'nº',
                           getValue: (newValue) {
                             valoresjson[
@@ -3551,12 +3291,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                       //eight: sizeScreen.height * 0.07,
                       child: CustomTextField(
                         controller: getController('outros'),
-                        validat: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Preencha o campo';
-                          }
-                          return null;
-                        },
                         name: '',
                         getValue: (newValue) {
                           valoresjson['outros'] = newValue;
@@ -3582,12 +3316,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               CustomTextField(
                 controller: getController('observacoes'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 name: '',
                 getValue: (newValue) {
                   valoresjson['observacoes'] = newValue;
@@ -3612,12 +3340,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               CustomTextField(
                 controller: getController('referencias'),
-                validat: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
                 name: '',
                 getValue: (newValue) {
                   valoresjson['referencias'] = newValue;
@@ -3629,22 +3351,29 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
               ),
               SendButton(
                 onPressed: () {
-                            if (_formKey.currentState!.validate()) {
-                   valoresjson['estadosTuristas'] = _estadosSelecionados;
-                  valoresjson['paisesTuristas'] = _paisesSelecionados;
+                    valoresjson['estadosTuristas'] = _estadosSelecionados;
+                    valoresjson['paisesTuristas'] = _paisesSelecionados;
 
-                  valoresjson['nome_pesquisador'] = pesquisadorNome;
-                      valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
-                      valoresjson['email_pesquisador'] = pesquisadorEmail;
-                      valoresjson['nome_coordenador'] = coordenadorNome;
-                      valoresjson['telefone_coordenador'] = coordenadorTelefone;
-                      valoresjson['email_coordenador'] = coordenadorEmail;
-                  _formKey.currentState!.save();
+                    valoresjson['nome_pesquisador'] = pesquisadorNome;
+                    valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
+                    valoresjson['email_pesquisador'] = pesquisadorEmail;
+                    valoresjson['nome_coordenador'] = coordenadorNome;
+                    valoresjson['telefone_coordenador'] = coordenadorTelefone;
+                    valoresjson['email_coordenador'] = coordenadorEmail;
+                  if (_formKey.currentState!.validate()) {
 
-                  isUpdate == true? update(widget.hospedagemModel!.id!, valoresjson):sendForm(valoresjson);
-              
-                  isUpdate == false? Navigator.pushReplacementNamed(context, '/SendedForm') : Navigator.pushReplacementNamed(context, '/UpdatedForm');
-                 } },
+                    _formKey.currentState!.save();
+
+                    isUpdate == false
+                        ? _formService.sendForm(valoresjson, AppConstants.MEIOS_DE_HOSPEDAGEM)
+                        : _formService.updateForm(widget.hospedagemModel!.id!, valoresjson, AppConstants.MEIOS_DE_HOSPEDAGEM);
+
+                    // isUpdate == false
+                    //     ? Navigator.pushReplacementNamed(context, '/SendedForm')
+                    //     : Navigator.pushReplacementNamed(
+                    //         context, '/UpdatedForm');
+                  }
+                },
               ),
 
               SizedBox(

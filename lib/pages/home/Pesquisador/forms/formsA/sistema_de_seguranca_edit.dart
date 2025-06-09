@@ -6,6 +6,7 @@ import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
 import 'package:inventur/services/admin_service.dart';
+import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/customOutro.dart';
@@ -24,34 +25,7 @@ class SistemaDeSegurancaEdit extends StatefulWidget {
 
 final GlobalKey<CheckCState> checkCKey = GlobalKey<CheckCState>();
 
-Future<void> updateSistemaDeSeguranca(
-    int sistemaId, Map<String, dynamic> data) async {
-  final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
-
-  final url = Uri.parse(
-      '${AppConstants.BASE_URI}sistemadeseguranca/$sistemaId/');
-
-  print('OSIADOAOSD ${token}');
-
-  try {
-    final response = await http.patch(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        "Authorization": "Bearer $token",
-      },
-      body: json.encode(data),
-    );
-    if (response.statusCode == 200) {
-      print("Atualização bem-sucedida");
-    } else {
-      print("Erro na atualização: ${response.statusCode}");
-    }
-  } catch (e) {
-    print('Erro: $e');
-  }
-}
+FormService _formService = FormService();
 
 class _SistemaDeSegurancaEditState extends State<SistemaDeSegurancaEdit> {
   TextEditingController email_coordenador = TextEditingController();
@@ -575,8 +549,7 @@ class _SistemaDeSegurancaEditState extends State<SistemaDeSegurancaEdit> {
                             //      SnackBar(content: Text('processing data')));
 
                             _formKey.currentState!.save();
-                            updateSistemaDeSeguranca(
-                                widget.sistemaModel!.id!, valoresjson);
+                            _formService.updateForm(widget.sistemaModel!.id!, valoresjson, AppConstants.SISTEMAS_DE_SEGURANCA);
                             Navigator.pushReplacementNamed(
                                 context, '/UpdatedForm');
                           }

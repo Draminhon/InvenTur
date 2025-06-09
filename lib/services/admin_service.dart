@@ -5,6 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AdminService {
   static Future<String> getAdminName(int adminId) async {
+    if(adminId < 0){
+      return "erro";
+    }else{
+
+    
     var url = Uri.parse(AppConstants.BASE_URI + 'admin/$adminId');
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
@@ -15,6 +20,7 @@ class AdminService {
     } else {
       return "administrador não encontrado";
     }
+  }
   }
 }
 

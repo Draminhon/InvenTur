@@ -61,7 +61,7 @@ class _PesquisaPesquisadorCardWidgetState extends State<PesquisaPesquisadorCardW
     ),
     Flexible(
       child: FutureBuilder<String>(
-        future: AdminService.getAdminName(widget.pesquisa.adminId!),
+        future: AdminService.getAdminName(widget.pesquisa.adminId==null? -1 : widget.pesquisa.adminId!),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return  Text('Carregando...');

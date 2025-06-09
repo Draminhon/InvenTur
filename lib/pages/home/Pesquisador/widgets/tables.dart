@@ -14,6 +14,9 @@ class Tables extends StatelessWidget {
   TextEditingController _whatsappController = new TextEditingController();
   TextEditingController _emailController = new TextEditingController();
 
+
+  
+
   Map<String, String> getData() {
     return {
       "nome": _nomeController.text,
@@ -39,6 +42,12 @@ class Tables extends StatelessWidget {
             height: 190.w,
             margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
             child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Preencha o campo';
+                }
+                return null;
+              },
               controller: _nomeController,
               style: const TextStyle(
                   color: Colors.black), //String? Function(String?)
@@ -71,6 +80,12 @@ class Tables extends StatelessWidget {
                     width: 1080.w,
                     margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
                       controller: _enderecoController,
                       style: const TextStyle(
                           color: Colors.black), //String? Function(String?)
@@ -94,6 +109,12 @@ class Tables extends StatelessWidget {
                     width: 1080.w,
                     margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
                       controller: _whatsappController,
                       style: const TextStyle(
                           color: Colors.black), //String? Function(String?)
@@ -117,6 +138,12 @@ class Tables extends StatelessWidget {
                     width: 1080.w,
                     margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
                     child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
                       controller: _emailController,
                       style: const TextStyle(
                           color: Colors.black), //String? Function(String?)
@@ -434,23 +461,36 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
     final values = widget.getValue!;
     fillIfExists('auditorio quantidade', values['auditorioQUantidade']);
     fillIfExists('auditorio area total', values['auditorioAreaTotal']);
-    fillIfExists('auditorio capacidade n de pessoas', values['auditorioCapacidadeDePessoas']);
-    
-    fillIfExists('salas modulares quantidade', values['salasModularesQuantidade']);
-    fillIfExists('salas modulares area total', values['salasModularesAreaTotal']);
-    fillIfExists('capacidade de pessoas', values['salasModularesCapacidadeDePessoas']);
-    
-    fillIfExists('pavilhao de feiras quantidade', values['pavilhaoDeFeirasQuantidade']);
-    fillIfExists('pavilhao de feiras area total', values['pavilhaoDeFeirasAreaTotal']);
-    fillIfExists('pavilhao de feiras n de pessoas', values['pavilhaoDeFeirasCapacidadeDePessoas']);
+    fillIfExists('auditorio capacidade n de pessoas',
+        values['auditorioCapacidadeDePessoas']);
 
-    fillIfExists('area de exposicao coberta quantidade', values['areaDeExposicaoCobertaQuantidade']);
-    fillIfExists('area de exposicao coberta area total', values['areaDeExposicaoCobertaAreaTotal']);
-    fillIfExists('area de exposicao coberta capacidade', values['areaDeExposicaoCobertaCapacidadeDePessoas']);
-    
-    fillIfExists('area de exposicao nao coberta quantidade', values['areaDeExposicaoNaoCobertaQuantidade']);
-    fillIfExists('area de exposicao nao coberta area total', values['areaDeExposicaoNaoCobertaAreaTotal']);
-    fillIfExists('area de exposicao nao coberta capacidade', values['areaDeExposicaoNaoCobertaCapacidadeDePessoas']);
+    fillIfExists(
+        'salas modulares quantidade', values['salasModularesQuantidade']);
+    fillIfExists(
+        'salas modulares area total', values['salasModularesAreaTotal']);
+    fillIfExists(
+        'capacidade de pessoas', values['salasModularesCapacidadeDePessoas']);
+
+    fillIfExists(
+        'pavilhao de feiras quantidade', values['pavilhaoDeFeirasQuantidade']);
+    fillIfExists(
+        'pavilhao de feiras area total', values['pavilhaoDeFeirasAreaTotal']);
+    fillIfExists('pavilhao de feiras n de pessoas',
+        values['pavilhaoDeFeirasCapacidadeDePessoas']);
+
+    fillIfExists('area de exposicao coberta quantidade',
+        values['areaDeExposicaoCobertaQuantidade']);
+    fillIfExists('area de exposicao coberta area total',
+        values['areaDeExposicaoCobertaAreaTotal']);
+    fillIfExists('area de exposicao coberta capacidade',
+        values['areaDeExposicaoCobertaCapacidadeDePessoas']);
+
+    fillIfExists('area de exposicao nao coberta quantidade',
+        values['areaDeExposicaoNaoCobertaQuantidade']);
+    fillIfExists('area de exposicao nao coberta area total',
+        values['areaDeExposicaoNaoCobertaAreaTotal']);
+    fillIfExists('area de exposicao nao coberta capacidade',
+        values['areaDeExposicaoNaoCobertaCapacidadeDePessoas']);
   }
 
   @override
@@ -473,14 +513,11 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
       'area de exposicao nao coberta quantidade',
       'area de exposicao nao coberta area total',
       'area de exposicao nao coberta capacidade'
-
-
     ];
 
-    for (var key in keys){
+    for (var key in keys) {
       controllers[key] = TextEditingController();
     }
-
 
     if (widget.getValue != null) {
       autoFillForm();
@@ -488,12 +525,11 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
   }
 
   @override
-  void dispose(){
+  void dispose() {
     super.dispose();
-    for (var controllers in controllers.values){
+    for (var controllers in controllers.values) {
       controllers.dispose();
     }
-    
   }
 
   TextEditingController getController(String key) {

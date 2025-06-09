@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%C3%A7a.dart';
-import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
-import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../widgets/customTextField.dart';
 import '../../widgets/expandedTileYoN.dart';
 import '../../widgets/radioButton.dart';
 import '../formsB/widgets/checkBox.dart';
-import '../formsB/widgets/sendButton.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 final GlobalKey<CheckCState> checkCKey = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> postoCombustivel = GlobalKey<CheckCState>();
@@ -29,6 +25,19 @@ class Rodovia extends StatefulWidget {
 }
 
 class _RodoviaState extends State<Rodovia> {
+  String? validarNumero(String? value) {
+  if (value == null || value.trim().isEmpty) {
+    return 'Este campo é obrigatório';
+  }
+
+  final numeroRegex = RegExp(r'^\d+$');
+
+  if (!numeroRegex.hasMatch(value)) {
+    return 'Insira apenas números';
+  }
+
+  return null; // válido
+}
   String pesquisadorNome = '';
   String pesquisadorTelefone = '';
   String pesquisadorEmail = '';
@@ -36,7 +45,8 @@ class _RodoviaState extends State<Rodovia> {
   String coordenadorNome = '';
   String coordenadorTelefone = '';
   String coordenadorEmail = '';
-
+  final whatsappFormatter = MaskTextInputFormatter(mask: '(##) # ####-####');
+  final instagramFormatter = MaskTextInputFormatter(mask: '@###############');
   Future<void> getAdminAndPesquisadorInfo() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -48,8 +58,6 @@ class _RodoviaState extends State<Rodovia> {
         pesquisadorNome = userData['name'];
         pesquisadorTelefone = userData['telefone'];
         pesquisadorEmail = userData['email'];
-
-        print(prefs.getKeys());
 
         coordenadorNome = prefs.getString('adminName')!;
         coordenadorEmail = prefs.getString('adminEmail')!;
@@ -70,6 +78,13 @@ class _RodoviaState extends State<Rodovia> {
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Rodovia',
   };
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getAdminAndPesquisadorInfo();
+  }
 
   final TextEditingController uf = TextEditingController();
   TextEditingController regiao_turistica = TextEditingController();
@@ -237,10 +252,6 @@ class _RodoviaState extends State<Rodovia> {
   FormService formService = new FormService();
   @override
   Widget build(BuildContext context) {
-    getAdminAndPesquisadorInfo();
-
-    formService.sendForm(valoresjson, AppConstants.RODOVIA_CREATE);
-
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -269,6 +280,9 @@ class _RodoviaState extends State<Rodovia> {
                             child: TextFormField(
                               controller: uf,
                               validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Preencha o campo';
+                                }
                                 return null;
                               },
                               onSaved: (newValue) {
@@ -287,6 +301,9 @@ class _RodoviaState extends State<Rodovia> {
                             child: TextFormField(
                               controller: regiao_turistica,
                               validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Preencha o campo';
+                                }
                                 return null;
                               },
                               onSaved: (newValue) {
@@ -303,6 +320,12 @@ class _RodoviaState extends State<Rodovia> {
                       right: sizeScreen.width * 0.1,
                       top: sizeScreen.height * 0.01),
                   child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Preencha o campo';
+                      }
+                      return null;
+                    },
                     controller: municipio,
                     decoration: const InputDecoration(
                       isDense: true,
@@ -362,18 +385,12 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: nome_oficial,
                     name: 'Nome Oficial',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['nome_oficial'] = newValue;
                     }),
                 CustomTextField(
                     controller: nome_popular,
                     name: 'Nome Popular',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['nome_popular'] = newValue;
                     }),
@@ -434,9 +451,7 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: extensao_rodovia_municipio,
                     name: 'Extensão',
-                    validat: (value) {
-                      return null;
-                    },
+                    validat: validarNumero,
                     getValue: (newValue) {
                       valoresjson['extensao_rodovia_municipio'] = newValue;
                     }),
@@ -515,9 +530,6 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: municipios_vizinhos_interligados_rodovia,
                     name: 'Municípios vizinhos',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['municipios_vizinhos_interligados_rodovia'] =
                           newValue;
@@ -565,10 +577,11 @@ class _RodoviaState extends State<Rodovia> {
                         width: sizeScreen.width * 0.5,
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
+                          formatter: [
+                            FilteringTextInputFormatter.digitsOnly,
+                            whatsappFormatter
+                          ],
                           controller: whatsapp,
-                          validat: (value) {
-                            return null;
-                          },
                           name: '(xx) x xxxx-xxxx',
                           getValue: (newValue) {
                             valoresjson['whatsapp'] = newValue;
@@ -590,9 +603,6 @@ class _RodoviaState extends State<Rodovia> {
                         //height: sizeScreen.height * 0.07,
                         child: CustomTextField(
                           controller: instagram,
-                          validat: (value) {
-                            return null;
-                          },
                           name: '@',
                           getValue: (newvalue) {
                             valoresjson['instagram'] = newvalue;
@@ -755,9 +765,6 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: poluicao_especificacao,
                     name: 'Especificação',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['poluicao_especificacao'] = newValue;
                     }),
@@ -784,9 +791,6 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: lixo_especificacao,
                     name: 'Especificação',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['lixo_especificacao'] = newValue;
                     }),
@@ -813,9 +817,6 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: desmatamento_especificacao,
                     name: 'Especificação',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['desmatamento_especificacao'] = newValue;
                     }),
@@ -842,9 +843,6 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: queimadas_especificacao,
                     name: 'Especificação',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['queimadas_especificacao'] = newValue;
                     }),
@@ -871,9 +869,6 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: inseguranca_especificacao,
                     name: 'Especificação',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['inseguranca_especificacao'] = newValue;
                     }),
@@ -900,9 +895,6 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: extrativismo_especificacao,
                     name: 'Especificação',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['extrativismo_especificacao'] = newValue;
                     }),
@@ -929,9 +921,6 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: prostituicao_especificacao,
                     name: 'Especificação',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['prostituicao_especificacao'] = newValue;
                     }),
@@ -958,9 +947,6 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: ocupacao_irregular_invasao_especificacao,
                     name: 'Especificação',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['ocupacao_irregular_invasao_especificacao'] =
                           newValue;
@@ -985,9 +971,6 @@ class _RodoviaState extends State<Rodovia> {
                 CustomTextField(
                     controller: outras_especificacao,
                     name: 'Especificação',
-                    validat: (value) {
-                      return null;
-                    },
                     getValue: (newValue) {
                       valoresjson['outras_especificacao'] = newValue;
                     }),
@@ -1035,12 +1018,6 @@ class _RodoviaState extends State<Rodovia> {
                 ),
                 CustomTextField(
                   controller: observacoes,
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
                   name: '',
                   getValue: (newValue) {
                     valoresjson['observacoes'] = newValue;
@@ -1065,12 +1042,6 @@ class _RodoviaState extends State<Rodovia> {
                 ),
                 CustomTextField(
                   controller: referencias,
-                  validat: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Preencha o campo';
-                    }
-                    return null;
-                  },
                   name: '',
                   getValue: (newValue) {
                     valoresjson['referencias'] = newValue;
@@ -1115,13 +1086,10 @@ class _RodoviaState extends State<Rodovia> {
                       // 'telefone_coordenador': '4444',
                       // 'email_coordenador': 'ogaio@gmail.com',
                       if (_formKey.currentState!.validate()) {
-                        //  ScaffoldMessenger.of(context).showSnackBar(
-                        //      SnackBar(content: Text('processing data')));
-
                         _formKey.currentState!.save();
-                        debugPrint(valoresjson.toString(), wrapWidth: 1024);
-                        sendForm(valoresjson);
-                        Navigator.pushReplacementNamed(context, '/SendedForm');
+                
+                        formService.sendForm(
+                            valoresjson, AppConstants.RODOVIA_CREATE);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
