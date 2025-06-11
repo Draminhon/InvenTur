@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/password_recover/changepasswordsucess_page.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/validators/password_validator.dart';
@@ -186,6 +187,17 @@ class _MudarSenhaState extends State<MudarSenha> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
                   onPressed: ()async {
+                     showDialog(context: context, builder: (context) {
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 1000.w, horizontal: 200.w),
+              child: AlertDialog(
+
+                content: Center(child: CircularProgressIndicator()),
+                shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20)),
+              ),
+            );
+          },);
           if (_formLoginKey.currentState?.validate() ?? false) {
 
                  if(_passwordController.text == _passwordController2.text ){

@@ -7,12 +7,15 @@ class UserPesquisaCardList extends StatefulWidget{
   bool isSelected;
   final PesquisaController pesquisaController;
   final bool xIsVisible;
-
+  final int pesquisaId;
+  final void Function(User)? onRemove;
    
    UserPesquisaCardList({
     super.key,
     required this.user,
+    required this.pesquisaId,
     required this.pesquisaController,
+    this.onRemove,
     this.isSelected = false,
     this.xIsVisible = false
   });
@@ -23,14 +26,28 @@ class UserPesquisaCardList extends StatefulWidget{
 class _UserPesquisaCardListState extends State<UserPesquisaCardList>{
 
   bool _isVisible = true;
-  void _removeUser() {
+void _removeUser() async {
+  // 1) Chamar o método que faz a requisição HTTP de remoção
+  final sucesso = await widget.pesquisaController.removerPesquisador(
+    pesquisaId: widget.pesquisaId,
+    userId: widget.user.id!,
+  );
+  if (sucesso) {
+    // 2) Atualiza lista local
     widget.pesquisaController.removeUserPesquisa(widget.user);
+    // 3) Atualiza a UI deste card
     setState(() {
-      _isVisible = false; 
-    widget.isSelected = widget.isSelected;
-      // Oculta o card após a remoção
+      _isVisible = false;
+      // Se quiser também atualizar widget.isSelected, você pode:
+      widget.isSelected = false;
+      widget.onRemove!(widget.user);
     });
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Erro ao remover pesquisador")),
+    );
   }
+}
 
 
 

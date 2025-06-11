@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/password_recover/changePassword_page.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/validators/email_validator.dart';
@@ -22,6 +23,7 @@ class RecuperarSenha extends StatelessWidget {
         );
 
         if (response.statusCode == 200) {
+
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
             return ChangePasswordPage(email: _emailController.text);
@@ -150,13 +152,26 @@ class RecuperarSenha extends StatelessWidget {
               ),
               SizedBox(
                 height: 55,
-                width: 350,
+                width: 1200.w,
                 child: OutlinedButton(
                   style: OutlinedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 55, 111, 60),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
                   onPressed: () async {
+          showDialog(context: context, builder: (context) {
+            return Container(
+              padding: EdgeInsets.symmetric(vertical: 1000.w, horizontal: 200.w),
+              child: AlertDialog(
+
+                content: Center(child: CircularProgressIndicator()),
+                shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20)),
+              ),
+            );
+          },);
+                    
+
                     _formKey.currentState!.save();
                     if (_formKey.currentState?.validate() ?? false) {
                       await requestOtp(_emailController.text);
@@ -176,7 +191,7 @@ class RecuperarSenha extends StatelessWidget {
               ),
               SizedBox(
                   height: 55,
-                  width: 350,
+                  width: 1200.w,
                   child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.red,

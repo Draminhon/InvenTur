@@ -56,9 +56,13 @@ class PesquisaSerializer(serializers.ModelSerializer):
     admin_telefone = serializers.ReadOnlyField()
     quantidadeLocais = serializers.SerializerMethodField()
 
+    
     class Meta:
         model = Pesquisa
         fields = '__all__'
+
+    def update(self, instance, validated_data):
+        return super().update(instance, validated_data)
     
     def get_quantidadeLocais(self, obj):
         return obj.bases.filter(is_active=True).count()

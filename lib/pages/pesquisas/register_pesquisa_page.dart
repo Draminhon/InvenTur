@@ -165,6 +165,8 @@ String? userDataString = prefs.getString('user_data');
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.sizeOf(context);
@@ -559,6 +561,7 @@ Widget selectedUsersSection() {
               final user = selectedUsers.elementAt(index);
               return UserPesquisaCardList(
                 user: user,
+                pesquisaId: 1,
                 pesquisaController: _pesquisaController,
                 xIsVisible: true,
               );
@@ -601,6 +604,7 @@ Widget selectedUsersSection() {
             },
             child: UserPesquisaCardList(
               user: post,
+              pesquisaId: 1,
               isSelected: isSelected,
               pesquisaController: _pesquisaController,
             ),

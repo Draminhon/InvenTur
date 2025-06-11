@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 
 
@@ -47,7 +48,7 @@ class ConfirmacaoNovaSenha extends StatelessWidget {
               )))),
       SizedBox(
           height: 55,
-          width: 350,
+          width: 1200.w,
           child: OutlinedButton(
               style: OutlinedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 55, 111, 60),

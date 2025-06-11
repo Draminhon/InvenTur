@@ -150,19 +150,19 @@ class ContatoInfo(models.Model):
     sistema_de_seguranca = models.ManyToManyField("SistemaDeSeguranca", related_name="contatos_info")
 
 
-    nome = models.CharField(max_length=255)
-    endereco = models.CharField(max_length=255)
-    whatsapp = models.CharField(max_length=255)
-    email = models.CharField(max_length=255)
+    nome = models.CharField(max_length=255,null=True, blank=True)
+    endereco = models.CharField(max_length=255,null=True, blank=True)
+    whatsapp = models.CharField(max_length=255,null=True, blank=True)
+    email = models.CharField(max_length=255,null=True, blank=True)
 
 class ServicoEspecializadoInfo(models.Model):
     
     sistema_de_seguranca = models.ManyToManyField("SistemaDeSeguranca", related_name="servicos_info")
 
 
-    email = models.CharField(max_length=255)
-    servicos_especializados = models.TextField()
-    outras_informacoes = models.TextField()
+    email = models.CharField(max_length=255,null=True, blank=True)
+    servicos_especializados = models.TextField(null=True, blank=True)
+    outras_informacoes = models.TextField(null=True, blank=True)
     
 
 class AlimentosEBebidas(Base):

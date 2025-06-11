@@ -176,10 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                           labelText: 'Senha',
                           controller: _passwordController,
                           prefixIcon: Icons.lock,
-                          validator: (password) {
-                            return _passwordValidator.validate(
-                                password: password);
-                          },
+
                         ),
                         SizedBox(height: screenSize.height * 0.02),
                         SizedBox(

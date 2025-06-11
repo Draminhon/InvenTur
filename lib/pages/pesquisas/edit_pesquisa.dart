@@ -10,7 +10,6 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class EditPesquisa extends StatefulWidget {
@@ -22,15 +21,11 @@ class EditPesquisa extends StatefulWidget {
 
 class _EditPesquisaState extends State<EditPesquisa>
     with SingleTickerProviderStateMixin {
-
-
-
-      
   bool _tileExpanded = false;
   final Set<User> selectedUsers = {};
   late Estado? _estadoSelecionado = Estado(id: -1, sigla: '', nome: '');
   late Municipio? _municipioSelecionado = Municipio(id: -1, nome: '');
-late int adminId;
+  late int adminId;
   List<User> users = [
     User(
         username: "Fulano Silva da Costa",
@@ -53,28 +48,25 @@ late int adminId;
   final TextEditingController _cpfPesquisador = TextEditingController();
 
   late List<int> _usersIds;
- late int pesquisaId;
+  late int pesquisaId;
   static Future<List<User>> getUsers() async {
     var url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_USERS);
-     final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
-    final response =
-        await http.get(url, headers: {"Content-Type": "application/json","Authorization": "Bearer $token",});
+    final prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('access_token');
+    final response = await http.get(url, headers: {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $token",
+    });
     final List body = json.decode(utf8.decode(response.bodyBytes));
     return body.map((e) => User.fromJson(e)).toList();
   }
 
-
   Future<List<User>> userFuture = getUsers();
-
-
-
- 
 
   @override
   void initState() {
     super.initState();
-      
+
     _inicioController = TextEditingController();
     _terminoController = TextEditingController();
     _codigIbgeController = TextEditingController();
@@ -93,38 +85,37 @@ late int adminId;
     _pesquisaController.setEstados();
   }
 
-@override
-void didChangeDependencies() {
-  super.didChangeDependencies();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-  final args = ModalRoute.of(context)?.settings.arguments as Map?;
-  if (args != null) {
-    // Atribui as datas apenas se o controlador estiver vazio
-    if (_inicioController.text.isEmpty && args.containsKey('data_inicio')) {
-      _inicioController.text = args['data_inicio'];
-    }
-    if (_terminoController.text.isEmpty && args.containsKey('data_termino')) {
-      _terminoController.text = args['data_termino'];
-    }
+    final args = ModalRoute.of(context)?.settings.arguments as Map?;
+    if (args != null) {
+      // Atribui as datas apenas se o controlador estiver vazio
+      if (_inicioController.text.isEmpty && args.containsKey('data_inicio')) {
+        _inicioController.text = args['data_inicio'];
+      }
+      if (_terminoController.text.isEmpty && args.containsKey('data_termino')) {
+        _terminoController.text = args['data_termino'];
+      }
 
-    // Atribui outros valores apenas se o controlador estiver vazio
-    if (_codigIbgeController.text.isEmpty && args.containsKey('codigoIBGE')) {
-      _codigIbgeController.text = args['codigoIBGE'];
-    }
-    if (_municipioController.text.isEmpty && args.containsKey('municipio')) {
-      _municipioController.text = args['municipio'];
-    }
-    if (_estadoController.text.isEmpty && args.containsKey('estado')) {
-      _estadoController.text = args['estado'];
-    }
+      // Atribui outros valores apenas se o controlador estiver vazio
+      if (_codigIbgeController.text.isEmpty && args.containsKey('codigoIBGE')) {
+        _codigIbgeController.text = args['codigoIBGE'];
+      }
+      if (_municipioController.text.isEmpty && args.containsKey('municipio')) {
+        _municipioController.text = args['municipio'];
+      }
+      if (_estadoController.text.isEmpty && args.containsKey('estado')) {
+        _estadoController.text = args['estado'];
+      }
 
-    _usersIds.addAll(args['pesquisadores']);
-    alreadySelectedUsersSection(userId: _usersIds);
+      _usersIds.addAll(args['pesquisadores']);
+      alreadySelectedUsersSection(userId: _usersIds);
+    }
   }
-}
 
-
-   Future<String> selectDate() async {
+  Future<String> selectDate() async {
     late DateTime? selectedDate;
     final DateTime dateNow = DateTime.now();
 
@@ -150,10 +141,6 @@ void didChangeDependencies() {
     }
     return '';
   }
-
-
-
-
 
   var appbar = AppBar(
     title: const Text('Editar pesquisa'),
@@ -215,9 +202,9 @@ void didChangeDependencies() {
 
   @override
   Widget build(BuildContext context) {
-        final args = ModalRoute.of(context)?.settings.arguments as Map?;
+    final args = ModalRoute.of(context)?.settings.arguments as Map?;
 
-     pesquisaId = args!['id'];
+    pesquisaId = args!['id'];
     adminId = args!['admin_id'];
     print(_inicioController.text);
     final Size screenSize = MediaQuery.sizeOf(context);
@@ -493,9 +480,7 @@ void didChangeDependencies() {
                             ),
                           ),
                         ),
-
-                        selectedUsersSection(
-                        ),
+                        selectedUsersSection(),
                       ],
                     ),
                   ),
@@ -543,7 +528,8 @@ void didChangeDependencies() {
                                 //     estado,
                                 //     municipio,
                                 //     selectedUsers);
-                               final success = await _pesquisaController.atualizarPesquisa(
+                                final success =
+                                    await _pesquisaController.atualizarPesquisa(
                                   adminId: adminId,
                                   pesquisaId: pesquisaId,
                                   rawDataInicio: _inicioController.text,
@@ -551,13 +537,15 @@ void didChangeDependencies() {
                                   codigoIBGE: _codigIbgeController.text,
                                   estado: _estadoController.text,
                                   municipio: _municipioController.text,
-                                  selectedUsers: selectedUsers,);
-                                if(success){
+                                  selectedUsers: selectedUsers,
+                                );
+                                if (success) {
                                   Navigator.pop(context, true);
-                                }else{
+                                } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
-                                      content: Text("Erro ao atualizar pesquisa"),
+                                      content:
+                                          Text("Erro ao atualizar pesquisa"),
                                     ),
                                   );
                                 }
@@ -589,8 +577,7 @@ void didChangeDependencies() {
                                   overlayColor:
                                       WidgetStateProperty.all(Colors.red[500])),
                               onPressed: () {
-                                  Navigator.pop(context);
-
+                                Navigator.pop(context);
                               },
                               child: Text(
                                 "Cancelar",
@@ -632,56 +619,51 @@ void didChangeDependencies() {
     );
   }
 
-
   Widget selectedUsersSection() {
-
-    
     return Expanded(
- 
-        
-          
-            child:  ListView.builder(
-          itemCount: selectedUsers.length,
-          itemBuilder: (context, index) {
-            final user = selectedUsers.elementAt(index);
-            return UserPesquisaCardList(
-              user: user,
-              pesquisaController: _pesquisaController,
-              xIsVisible: true,
-            );
+        child: ListView.builder(
+      itemCount: selectedUsers.length,
+      itemBuilder: (context, index) {
+        final user = selectedUsers.elementAt(index);
+        return UserPesquisaCardList(
+          user: user,
+          onRemove: (p0) {
+            setState(() {
+              selectedUsers.remove(p0);
+            });
           },
-        ));
-        }
-
+          pesquisaId: pesquisaId,
+          pesquisaController: _pesquisaController,
+          xIsVisible: true,
+        );
+      },
+    ));
+  }
 
 //Retirar esta parte, redundância.
-   Future<void> alreadySelectedUsersSection({List<int>? userId})async {
+  Future<void> alreadySelectedUsersSection({List<int>? userId}) async {
     userId ??= [];
 
     print(userId);
-   
 
-        List<User> users =await userFuture;
+    List<User> users = await userFuture;
 
-        // Filtrando os usuários com o mesmo ID do último `userId`
-        List<User> filteredUsers = userId!.isNotEmpty
-            ? users.where((element) => userId!.contains(element.id)).toList()
-            : [];
+    // Filtrando os usuários com o mesmo ID do último `userId`
+    List<User> filteredUsers = userId!.isNotEmpty
+        ? users.where((element) => userId!.contains(element.id)).toList()
+        : [];
 
-        filteredUsers.forEach((element) => print(element.id),);
-        // Verifica se existem usuários filtrados
-        if (filteredUsers.isNotEmpty) {
-          setState(() {
+    filteredUsers.forEach(
+      (element) => print(element.id),
+    );
+    // Verifica se existem usuários filtrados
+    if (filteredUsers.isNotEmpty) {
+      setState(() {
         selectedUsers.addAll(filteredUsers);
-
-          });
-          
-        }
-
-   
-      }
-      // Caso nenhum dado seja recebido
-
+      });
+    }
+  }
+  // Caso nenhum dado seja recebido
 
   Widget showUsers(List<User> posts) {
     return SizedBox(
@@ -711,6 +693,7 @@ void didChangeDependencies() {
             child: UserPesquisaCardList(
               user: post,
               isSelected: isSelected,
+              pesquisaId: pesquisaId,
               pesquisaController: _pesquisaController,
             ),
           );

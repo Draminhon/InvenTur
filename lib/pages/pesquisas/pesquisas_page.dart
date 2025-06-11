@@ -18,14 +18,11 @@ class PesquisasPage extends StatefulWidget {
 }
 
 class _PesquisasPageState extends State<PesquisasPage> {
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   final PesquisaController _pesquisaController = PesquisaController();
 
   static Future<List<Pesquisa>> getPesquisas() async {
-
-    
-
     final prefs = await SharedPreferences.getInstance();
     String? userDataString = prefs.getString('user_data');
     if (userDataString == null) {
@@ -36,8 +33,6 @@ class _PesquisasPageState extends State<PesquisasPage> {
     Map<String, dynamic> userData = json.decode(userDataString);
     final url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_PESQUISAS);
     int adminId = userData['id'];
-
-
 
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -69,30 +64,32 @@ class _PesquisasPageState extends State<PesquisasPage> {
   @override
   void initState() {
     super.initState();
-  loadPesquisas();
-    
+    loadPesquisas();
   }
 
   @override
   Widget build(BuildContext context) {
-    final Size screenSize = MediaQuery.sizeOf(context);
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-                    Expanded(
+          Expanded(
             child: ListenableBuilder(
               listenable: _pesquisaController,
               builder: (context, child) {
-             final pesquisas = _pesquisaController.pesquisas;
-             if(_isLoading){
-              return const Center(child: CircularProgressIndicator(),);
-             }else if (pesquisas.isEmpty){
-              return const Center(child: CircularProgressIndicator(),);
-             }
-                  return ListView.builder(
+                final pesquisas = _pesquisaController.pesquisas;
+                if (_isLoading) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (pesquisas.isEmpty) {
+                  return Center(
+                    child: Center(child: Text("Não há pesquisas cadastradas"))
+                  );
+                }
+                return ListView.builder(
                     itemCount: pesquisas.length,
                     itemBuilder: (context, index) {
                       return PesquisaCard(
@@ -100,14 +97,13 @@ class _PesquisasPageState extends State<PesquisasPage> {
                         pesquisaController: _pesquisaController,
                       );
                     });
-                    
               },
             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 5.w),
             child: SizedBox(
-                height: 150.w,
+                height: 180.w,
                 child: ElevatedButton(
                     style: ButtonStyle(
                         shape: WidgetStateProperty.all(RoundedRectangleBorder(
