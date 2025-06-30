@@ -42,7 +42,7 @@ class Pesquisa {
         dataInicio = json['dataInicio'],
         dataTermino = json['dataTermino'],
         quantidadeLocais = json['quantidadeLocais'] as int?,
-        quantidadePesquisadores = json['quantidadePesquisadores'],
+        quantidadePesquisadores = json['quantidadePesquisadores'] ?? 0,
         status = json['status'];
 
   // Método para converter uma instância de Pesquisa em JSON

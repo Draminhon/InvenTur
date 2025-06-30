@@ -55,7 +55,7 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
     coordenadorTelefone = info['coordenador']['email'];
   }
 
-FormService _formService = FormService();
+  FormService _formService = FormService();
 
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Alimentos e bebidas',
@@ -172,6 +172,8 @@ FormService _formService = FormService();
                             height: sizeScreen.height * 0.045,
                             child: TextFormField(
                               controller: getController('uf'),
+                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
+
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
                                   return 'Preencha o campo';
@@ -202,6 +204,8 @@ FormService _formService = FormService();
                               onSaved: (newValue) {
                                 valoresjson['regiao_turistica'] = newValue;
                               },
+                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
+
                               decoration: InputDecoration(
                                   hintText: 'Região Turística',
                                   hintStyle: TextStyle(fontSize: 50.w)),
@@ -220,7 +224,10 @@ FormService _formService = FormService();
                       }
                       return null;
                     },
+                    
                     controller: getController('municipio'),
+                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
+
                     decoration: InputDecoration(
                         isDense: true,
                         hintText: 'Municipio',
@@ -289,6 +296,7 @@ FormService _formService = FormService();
                       valoresjson['nomeFantasia'] = newValue;
                     }),
                 CustomTextField(
+                  keyboardType: TextInputType.numberWithOptions(),
                     controller: getController('CNPJ'),
                     name: 'CNPJ',
                     validat: _validators.validarCNPJ,
@@ -328,6 +336,8 @@ FormService _formService = FormService();
                       child: CustomTextField(
                           controller: getController('Inscrição Municipal'),
                           name: 'Inscrição Municipal',
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
+                          keyboardType: TextInputType.numberWithOptions(),
                           getValue: (newValue) {
                             valoresjson['inscricaoMunicipal'] = newValue;
                           }),
@@ -1330,7 +1340,7 @@ FormService _formService = FormService();
                               formatter: [
                                 FilteringTextInputFormatter.digitsOnly
                               ],
-                              name: '',
+                              name: 'nº',
                               getValue: (newValue) {
                                 valoresjson['capacidadeVeiculos'] = newValue;
                               }))
@@ -1353,7 +1363,7 @@ FormService _formService = FormService();
                               formatter: [
                                 FilteringTextInputFormatter.digitsOnly
                               ],
-                              name: '',
+                              name: 'nº',
                               getValue: (newValue) {
                                 valoresjson['numeroAutomoveis'] = newValue;
                               }))
@@ -1376,7 +1386,7 @@ FormService _formService = FormService();
                               formatter: [
                                 FilteringTextInputFormatter.digitsOnly
                               ],
-                              name: '',
+                              name: 'nº',
                               getValue: (newValue) {
                                 valoresjson['numeroOnibus'] = newValue;
                               }))
@@ -2235,7 +2245,6 @@ FormService _formService = FormService();
                             .getSelectedValues()
                             .toList();
 
-
                     //  sendForm(valoresjson);
                     //   valoresjson.forEach(
                     //     (key, value) {
@@ -2244,9 +2253,10 @@ FormService _formService = FormService();
                     //   );
 
                     if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
+                      _formKey.currentState!.save();
 
-                      _formService.sendForm(valoresjson, AppConstants.ALIMENTOS_E_BEBIDAS);
+                      _formService.sendForm(
+                          valoresjson, AppConstants.ALIMENTOS_E_BEBIDAS);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('preencha os dados!')));

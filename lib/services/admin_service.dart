@@ -7,9 +7,9 @@ class AdminService {
   static Future<String> getAdminName(int adminId) async {
     if(adminId < 0){
       return "erro";
-    }else{
+    }
 
-    
+    try{
     var url = Uri.parse(AppConstants.BASE_URI + 'admin/$adminId');
     final response =
         await http.get(url, headers: {"Content-Type": "application/json"});
@@ -20,9 +20,12 @@ class AdminService {
     } else {
       return "administrador não encontrado";
     }
+    }catch(e){
+      return "administrador não encontrado";
+    }
+
   }
   }
-}
 
 Future<void> savePesquisaId(int pesquisaId) async {
   final prefs = await SharedPreferences.getInstance();

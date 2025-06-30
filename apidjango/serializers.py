@@ -19,28 +19,38 @@ class ChangePasswordSerializer(serializers.Serializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-
+    pesquisas = serializers.PrimaryKeyRelatedField(
+        many = True,
+        queryset = Pesquisa.objects.all()
+        )
+        
     class Meta:
         model = CustomUser
-        fields = ['id','username', 'CPF', 'email', 'password', 'is_active',  'acessLevel', 'status', 'password', 'telefone']
+        fields = ['id','username', 'CPF', 'email', 'password', 'is_active',  'acessLevel', 'status', 'password', 'telefone', 'pesquisas']
         extra_kwargs = {'password': {'write_only': True, 'required': False, 'allow_blank': True}}
 
+
     def create(self, validated_data):
+        pesquisas_data = validated_data.pop('pesquisas', [])
         user = CustomUser(**validated_data)
         user.set_password(validated_data['password'])
         user.save()
+        if pesquisas_data:
+            user.pesquisas.set(pesquisas_data)
         return user
     
     def update(self, instance, validated_data):
+        pesquisas_data = validated_data.pop('pesquisas', None)
         password = validated_data.pop('password', None)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         if password and password.strip() != "":
             instance.set_password(password)
         instance.save()
+        
+        if pesquisas_data is not None:
+            instance.pesquisas.set(pesquisas_data)
         return instance
-    
-
     
     def validate_CPF(self, value):
         validate_cpf(value)
@@ -52,8 +62,8 @@ class PesquisaSerializer(serializers.ModelSerializer):
 
     quantidadePesquisadores = serializers.IntegerField(source='usuario.count', read_only = True)
     usuario = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), many=True)
-    admin_email = serializers.ReadOnlyField()
-    admin_telefone = serializers.ReadOnlyField()
+    admin_email = serializers.ReadOnlyField(source='admin.email')
+    admin_telefone = serializers.ReadOnlyField(source='admin.telefone')
     quantidadeLocais = serializers.SerializerMethodField()
 
     
@@ -62,7 +72,7 @@ class PesquisaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def update(self, instance, validated_data):
-        return super().update(instance, validated_data)
+        return super().update(instance, validated_data) 
     
     def get_quantidadeLocais(self, obj):
         return obj.bases.filter(is_active=True).count()

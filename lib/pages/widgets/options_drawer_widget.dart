@@ -53,12 +53,14 @@ try{final response = await http.post(
 
   print(response.statusCode);
   if(response.statusCode == 205){
-    await prefs.clear();
+   // await prefs.clear();
     Navigator.pushReplacementNamed(context, '/Login');
   }else{
     print('Erro ao fazer logout: ${response.body}');
   }}catch(e){
     print("Erro $e");
+    Navigator.pushReplacementNamed(context, '/Login');
+    
   }finally{
     setState(() {
       _isLoading = false;

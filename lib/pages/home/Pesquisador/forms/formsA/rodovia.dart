@@ -285,6 +285,7 @@ class _RodoviaState extends State<Rodovia> {
                                 }
                                 return null;
                               },
+                              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
                               onSaved: (newValue) {
                                 valoresjson['uf'] = newValue;
                               },
@@ -309,6 +310,7 @@ class _RodoviaState extends State<Rodovia> {
                               onSaved: (newValue) {
                                 valoresjson['regiao_turistica'] = newValue;
                               },
+                              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
                               decoration: const InputDecoration(
                                   hintText: 'Região Turística'),
                             ))
@@ -331,6 +333,7 @@ class _RodoviaState extends State<Rodovia> {
                       isDense: true,
                       hintText: 'Municipio',
                     ),
+                  inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
                     onSaved: (newValue) {
                       valoresjson['municipio'] = newValue;
                     },
@@ -452,6 +455,7 @@ class _RodoviaState extends State<Rodovia> {
                     controller: extensao_rodovia_municipio,
                     name: 'Extensão',
                     validat: validarNumero,
+                    formatter: [FilteringTextInputFormatter.digitsOnly],
                     getValue: (newValue) {
                       valoresjson['extensao_rodovia_municipio'] = newValue;
                     }),

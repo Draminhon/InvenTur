@@ -52,32 +52,26 @@ class _CustomTextFieldState extends State<CustomTextField> {
         errorMaxLines: 3,
         labelText: widget.labelText,
         contentPadding: EdgeInsets.symmetric(vertical: screenSize.height * .02),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10)
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color.fromARGB(255, 55, 111, 60))
-        ),
+            borderRadius: BorderRadius.circular(10),
+            borderSide:
+                const BorderSide(color: Color.fromARGB(255, 55, 111, 60))),
         prefixIcon: Icon(
           widget.prefixIcon,
           color: const Color.fromARGB(255, 55, 111, 60),
         ),
         suffixIcon: widget.isSecret
-        ? IconButton(
-          onPressed: () {
-            setState(() {
-              obscureText = !obscureText;
-            });
-          }, 
-          icon: Icon(
-            obscureText
-            ? Icons.visibility
-            : Icons.visibility_off,
-            color: const Color.fromARGB(255, 55, 111, 60)
-          )
-        )
-        : null,
+            ? IconButton(
+                onPressed: () {
+                  setState(() {
+                    obscureText = !obscureText;
+                  });
+                },
+                icon: Icon(
+                    obscureText ? Icons.visibility : Icons.visibility_off,
+                    color: const Color.fromARGB(255, 55, 111, 60)))
+            : null,
       ),
     );
   }

@@ -53,8 +53,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     coordenadorTelefone = info['coordenador']['email'];
   }
 
-
-  
   final _formKey = GlobalKey<FormState>();
 
   late Estado? _estadoSelecionado = Estado(id: -1, sigla: '', nome: '');
@@ -238,11 +236,16 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     void fillIfExists(String key, String value) {
       getController(key).text = value;
     }
-void safeFillIfExists(String key, List<String?>? list, int index) {
-  if (list != null && list.length > index && list[index] != null && list[index]!.isNotEmpty) {
-    fillIfExists(key, list[index]!);
-  }
-}
+
+    void safeFillIfExists(String key, List<String?>? list, int index) {
+      if (list != null &&
+          list.length > index &&
+          list[index] != null &&
+          list[index]!.isNotEmpty) {
+        fillIfExists(key, list[index]!);
+      }
+    }
+
     if (widget.hospedagemModel != null) {
       fillIfExists('uf', widget.hospedagemModel!.uf!);
       fillIfExists('rg', widget.hospedagemModel!.regiaoTuristica!);
@@ -252,19 +255,18 @@ void safeFillIfExists(String key, List<String?>? list, int index) {
       fillIfExists('CNPJ', widget.hospedagemModel!.CNPJ!);
       fillIfExists('codigo CNAE', widget.hospedagemModel!.codigoCNAE!);
 
-      
       safeFillIfExists('estado01', widget.hospedagemModel!.estadosTuristas, 0);
-safeFillIfExists('estado02', widget.hospedagemModel!.estadosTuristas, 1);
-safeFillIfExists('estado03', widget.hospedagemModel!.estadosTuristas, 2);
-safeFillIfExists('estado04', widget.hospedagemModel!.estadosTuristas, 3);
-safeFillIfExists('estado05', widget.hospedagemModel!.estadosTuristas, 4);
+      safeFillIfExists('estado02', widget.hospedagemModel!.estadosTuristas, 1);
+      safeFillIfExists('estado03', widget.hospedagemModel!.estadosTuristas, 2);
+      safeFillIfExists('estado04', widget.hospedagemModel!.estadosTuristas, 3);
+      safeFillIfExists('estado05', widget.hospedagemModel!.estadosTuristas, 4);
 
 // Para países
-safeFillIfExists('pais01', widget.hospedagemModel!.paisesTuristas, 0);
-safeFillIfExists('pais02', widget.hospedagemModel!.paisesTuristas, 1);
-safeFillIfExists('pais03', widget.hospedagemModel!.paisesTuristas, 2);
-safeFillIfExists('pais04', widget.hospedagemModel!.paisesTuristas, 3);
-safeFillIfExists('pais05', widget.hospedagemModel!.paisesTuristas, 4);
+      safeFillIfExists('pais01', widget.hospedagemModel!.paisesTuristas, 0);
+      safeFillIfExists('pais02', widget.hospedagemModel!.paisesTuristas, 1);
+      safeFillIfExists('pais03', widget.hospedagemModel!.paisesTuristas, 2);
+      safeFillIfExists('pais04', widget.hospedagemModel!.paisesTuristas, 3);
+      safeFillIfExists('pais05', widget.hospedagemModel!.paisesTuristas, 4);
 
       fillIfExists(
           'atividade economica', widget.hospedagemModel!.atividadeEconomica!);
@@ -405,6 +407,7 @@ safeFillIfExists('pais05', widget.hospedagemModel!.paisesTuristas, 4);
                               }
                               return null;
                             },
+                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
                             decoration: const InputDecoration(
                               hintText: 'UF',
                             ),
@@ -425,6 +428,8 @@ safeFillIfExists('pais05', widget.hospedagemModel!.paisesTuristas, 4);
                               }
                               return null;
                             },
+                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
+
                             decoration: const InputDecoration(
                                 hintText: 'Região Turística'),
                           ))
@@ -444,6 +449,8 @@ safeFillIfExists('pais05', widget.hospedagemModel!.paisesTuristas, 4);
                       }
                       return null;
                     },
+                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
+
                     decoration: const InputDecoration(hintText: 'Município'),
                   )),
               SizedBox(height: 50.w),
@@ -762,6 +769,7 @@ safeFillIfExists('pais05', widget.hospedagemModel!.paisesTuristas, 4);
                           controller: getController('latitude'),
                           name: 'valor',
                           keyboardType: TextInputType.numberWithOptions(),
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           getValue: (newValue) {
                             valoresjson['latitude'] = newValue;
                           },
@@ -782,6 +790,7 @@ safeFillIfExists('pais05', widget.hospedagemModel!.paisesTuristas, 4);
                         child: CustomTextField(
                           controller: getController('longitute'),
                           name: 'valor',
+                          formatter: [FilteringTextInputFormatter.digitsOnly],
                           keyboardType: TextInputType.numberWithOptions(),
                           getValue: (newValue) {
                             valoresjson['longitute'] = newValue;
@@ -3351,22 +3360,23 @@ safeFillIfExists('pais05', widget.hospedagemModel!.paisesTuristas, 4);
               ),
               SendButton(
                 onPressed: () {
-                    valoresjson['estadosTuristas'] = _estadosSelecionados;
-                    valoresjson['paisesTuristas'] = _paisesSelecionados;
+                  valoresjson['estadosTuristas'] = _estadosSelecionados;
+                  valoresjson['paisesTuristas'] = _paisesSelecionados;
 
-                    valoresjson['nome_pesquisador'] = pesquisadorNome;
-                    valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
-                    valoresjson['email_pesquisador'] = pesquisadorEmail;
-                    valoresjson['nome_coordenador'] = coordenadorNome;
-                    valoresjson['telefone_coordenador'] = coordenadorTelefone;
-                    valoresjson['email_coordenador'] = coordenadorEmail;
+                  valoresjson['nome_pesquisador'] = pesquisadorNome;
+                  valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
+                  valoresjson['email_pesquisador'] = pesquisadorEmail;
+                  valoresjson['nome_coordenador'] = coordenadorNome;
+                  valoresjson['telefone_coordenador'] = coordenadorTelefone;
+                  valoresjson['email_coordenador'] = coordenadorEmail;
                   if (_formKey.currentState!.validate()) {
-
                     _formKey.currentState!.save();
 
                     isUpdate == false
-                        ? _formService.sendForm(valoresjson, AppConstants.MEIOS_DE_HOSPEDAGEM)
-                        : _formService.updateForm(widget.hospedagemModel!.id!, valoresjson, AppConstants.MEIOS_DE_HOSPEDAGEM);
+                        ? _formService.sendForm(
+                            valoresjson, AppConstants.MEIOS_DE_HOSPEDAGEM)
+                        : _formService.updateForm(widget.hospedagemModel!.id!,
+                            valoresjson, AppConstants.MEIOS_DE_HOSPEDAGEM);
 
                     // isUpdate == false
                     //     ? Navigator.pushReplacementNamed(context, '/SendedForm')

@@ -4,7 +4,9 @@ import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/pages/widgets/divider_text_widget.dart';
+import 'package:inventur/services/offline_login.dart';
 import 'package:inventur/utils/app_constants.dart';
+import 'package:inventur/utils/check_connectivity.dart';
 import 'package:inventur/validators/cpf_validator.dart';
 import 'package:inventur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
@@ -12,6 +14,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+CheckConnectivity connection = new CheckConnectivity();
 
 Future<String?> getToken() async {
   final prefs = await SharedPreferences.getInstance();
@@ -26,6 +30,23 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool isConnected = false;
+
+  Future<void> checar() async {
+    bool online = await connection.checarConexaoUmaVez();
+    print('Conexão: $online');
+    setState(() {
+      isConnected = online;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checar();
+  }
+
   final _formLoginKey = GlobalKey<FormState>();
 
   final CPFValidator _cpfValidator = CPFValidator();
@@ -47,6 +68,10 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   @override
   Widget build(BuildContext context) {
+    // if (isConnected == false) {
+    //   initApp();
+    // }
+
     Future<void> loginUser(String cpf, String password) async {
       setState(() {
         _isLoading = true;
@@ -68,7 +93,6 @@ class _LoginPageState extends State<LoginPage> {
 
           String accessToken = responseData['access'];
           String refreshToken = responseData['refresh'];
-
           final Map<String, dynamic> user = responseData['user'];
 
           final prefs = await SharedPreferences.getInstance();
@@ -176,7 +200,6 @@ class _LoginPageState extends State<LoginPage> {
                           labelText: 'Senha',
                           controller: _passwordController,
                           prefixIcon: Icons.lock,
-
                         ),
                         SizedBox(height: screenSize.height * 0.02),
                         SizedBox(

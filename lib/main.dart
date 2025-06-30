@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -29,6 +30,11 @@ import 'package:inventur/pages/home/Pesquisador/perfil_pesquisador.dart';
 import 'package:inventur/pages/home/Pesquisador/alterarDados-pesquisador.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/placeholder.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas.dart';
+import 'package:inventur/pages/sync_page.dart';
+import 'package:inventur/services/offline_login.dart';
+import 'package:inventur/services/sync_service.dart';
+import 'package:inventur/services/temporary.dart';
+import 'package:inventur/utils/check_connectivity.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
 import 'pages/home/Pesquisador/forms/formsC/zonaCosteira.dart';
@@ -42,20 +48,36 @@ class MyHttpOverrides extends HttpOverrides {
           (X509Certificate cert, String host, int port) => true;
   }
 }
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
+
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
+  await DataSyncService().init();
+  await CheckConnectivity().inicializar();
+
   // await dep.init();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   runApp(ChangeNotifierProvider(
-      create: (context) => UserProvider(),  child: MyApp()));
+      create: (context) => UserProvider(), child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   MyApp({super.key});
 
-  @override 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initApp();
+  }
+  @override
   Widget build(BuildContext context) {
     // Get.find<RodoviaController>().getRodoviaList();
 
@@ -73,6 +95,7 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           '/Login': (_) => LoginPage(),
+          '/Ver': (_) =>  SyncQueuePage(),
           '/Register': (_) => RegisterPage(),
           '/RegisterConfirmation': (_) => RegisterConfimation(),
           '/AdminHome': (_) => AdminHomePage(),
@@ -91,11 +114,12 @@ class MyApp extends StatelessWidget {
           '/Placeholder': (_) => PlaceHolder(),
           '/AlimentosEbebidas': (_) => AlimentoseBebidas(),
           '/Rodovia': (_) => Rodovia(),
-         '/SistemaDeSeguranca': (_) => SistemaDeSeguranca(),
+          '/SistemaDeSeguranca': (_) => SistemaDeSeguranca(),
           '/ZonaCosteira': (_) => ZonaCosteira(),
           '/Hidrografia': (_) => Hidrografia(),
           '/SendedForm': (_) => SendedFormPage(),
           '/UpdatedForm': (_) => UpdatedForm(),
+          '/SyncPage': (_) => SyncPage()
         },
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

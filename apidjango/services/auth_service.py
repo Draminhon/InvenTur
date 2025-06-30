@@ -55,6 +55,11 @@ def UsuarioLoginView(request):
             status=status.HTTP_401_UNAUTHORIZED
         )
 
+
+    pesquisas_qs = user.usuario.prefetch_related('admin')
+
+    pesquisas_data = PesquisaSerializer(pesquisas_qs, many=True).data
+    
     # Geração do token JWT
     try:
         refresh = RefreshToken.for_user(user)
@@ -65,11 +70,12 @@ def UsuarioLoginView(request):
                 "id": user.id,
                 "CPF": user.CPF,
                 "name": user.username,
+                "pesquisas": pesquisas_data,
                 "email": user.email,
                 "access_level": user.acessLevel,
                 "status": user.status,
                 "telefone": user.telefone
-            }
+            } 
         }, status=status.HTTP_200_OK)
     except Exception as e:
         return JsonResponse(
@@ -86,7 +92,6 @@ class LogoutAPIView(APIView):
             refresh_token = request.data.get("refresh")
             token = RefreshToken(refresh_token)
 
-            token.blacklist()
             return Response({"detail": "Logout realizado com sucesso."}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)

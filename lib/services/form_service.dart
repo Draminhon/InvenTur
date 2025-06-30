@@ -5,12 +5,15 @@ import 'package:http/http.dart' as http;
 import 'package:inventur/main.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/updatedForm.dart';
+import 'package:inventur/pages/sync_page.dart';
 import 'package:inventur/services/admin_service.dart';
+import 'package:inventur/services/sync_service.dart';
+import 'package:inventur/services/temporary.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FormService {
-  Future<void> sendForm(
+  Future<bool> sendForm(
       Map<String, dynamic> valoresjson, String endpoint) async {
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
@@ -29,13 +32,21 @@ class FormService {
         debugPrint("Formulário enviado com sucesso!");
         navigatorKey.currentState?.pushReplacement(
             MaterialPageRoute(builder: (context) => const SendedFormPage()));
+        return true;
       } else {
         debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
         navigatorKey.currentState?.pushReplacement(MaterialPageRoute(
             builder: (context) => const SendedFormErrorPage()));
+        return false;
       }
     } catch (e) {
       print('Erro: $e');
+      await DataSyncService()
+          .enqueue(method: 'POST', endpoint: endpoint, payload: valoresjson, pesquisa_id: pesquisa_id!);
+
+      navigatorKey.currentState?.pushReplacement(
+          MaterialPageRoute(builder: (context) => const SyncPage()));
+      return false;
     }
   }
 
@@ -61,8 +72,8 @@ class FormService {
             MaterialPageRoute(builder: (context) => const UpdatedForm()));
       } else {
         debugPrint("ERRO AO ATUALIZAR O FORMULÁRIO: ${response.body}");
-        navigatorKey.currentState?.pushReplacement(MaterialPageRoute(
-            builder: (context) => const UpdatedFormError()));
+        navigatorKey.currentState?.pushReplacement(
+            MaterialPageRoute(builder: (context) => const UpdatedFormError()));
       }
     } catch (e) {
       print('Erro: $e');

@@ -13,14 +13,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranca_edit.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas_edit.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
+import 'package:inventur/services/sync_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia_edit.dart';
+import 'package:inventur/utils/check_connectivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Atualiza a quantidade de locais
 Future updateQtdeLocais(int pesquisa, int quantidade) async {
-  var url =
-      Uri.parse('${AppConstants.BASE_URI}pesquisa/${pesquisa}/');
+  var url = Uri.parse('${AppConstants.BASE_URI}pesquisa/${pesquisa}/');
   try {
     var response = await http.patch(
       url,
@@ -125,38 +126,85 @@ class Pesquisas extends StatefulWidget {
 
 class _PesquisasState extends State<Pesquisas> {
   String _searchQuery = "";
+  bool isConnected = true;
+  int qtdeBanco = 0;
+
+  CheckConnectivity connection = new CheckConnectivity();
+
+  Future<void> checar() async {
+    bool online = await connection.checarConexaoUmaVez();
+    print('Conexão: $online');
+    setState(() {
+      isConnected = online;
+    });
+  }
+
+  Future<void> getQtdeBanco() async {
+    int getqtd = await DataSyncService().getPendingCount();
+
+    setState(() {
+      qtdeBanco = getqtd;
+    });
+  }
 
   Future<List<Map<String, dynamic>>> getRodovias() async {
-
     final prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('access_token');
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     final pesquisaId = arguments['pesquisa_id'];
-    try{
-          var url = Uri.parse(
-        '${AppConstants.BASE_URI}equipamentos/?pesquisa_id=$pesquisaId');
-    final response = await http.get(url, headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $token",
-    });
-    if(response.statusCode == 200){
-          final List body = json.decode(utf8.decode(response.bodyBytes));
+    try {
+      var url = Uri.parse(
+          '${AppConstants.BASE_URI}equipamentos/?pesquisa_id=$pesquisaId');
+      final response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      });
+      if (response.statusCode == 200) {
+        final List body = json.decode(utf8.decode(response.bodyBytes));
 
-    return body.map((e) => Map<String, dynamic>.from(e)).toList();
-    }else{
-      print("Erro" + response.body);
-      return [];
-    }
-
-    }catch(e){
+        return body.map((e) => Map<String, dynamic>.from(e)).toList();
+      } else {
+        print("Erro" + response.body);
+        return [];
+      }
+    } catch (e) {
       return [];
       print("ERRO!");
     }
+  }
+  int qtdebancoPPesquisa = 0;
 
+  Future<void> checarQtdeBanco() async{
+
+    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
+    int pesquisa_id = arguments['pesquisa_id'];
+    int qtde = await  DataSyncService().filterQueue(pesquisa_id);
+      setState(() {
+        qtdebancoPPesquisa = qtde;
+      });
+  }
+
+@override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    checarQtdeBanco();
+
+  }
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    checar();
+    getQtdeBanco();
   }
 
   @override
   Widget build(BuildContext context) {
+    final bancoLeUm =
+        (qtdeBanco ?? 0) <= 1; // null vira 0, logo false em “<= 1”?
+    final conectado = (isConnected ?? false);
+    print(qtdeBanco);
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     final isadmin = arguments['is_admin'];
     Future<List<Map<String, dynamic>>> rodoviasFuture = getRodovias();
@@ -227,13 +275,23 @@ class _PesquisasState extends State<Pesquisas> {
                           child: CircularProgressIndicator()));
                 } else if (snapshot.hasData) {
                   final rodovias = snapshot.data!;
-                  if (rodovias.isEmpty) {
+                  if (rodovias.isEmpty && isConnected == true) {
                     return const Center(
                       child: Text(
                         "Não há equipamentos inventariados",
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     );
+                  } else if (isConnected == false && qtdebancoPPesquisa >= 1) {
+                    return Center(
+                        child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 25),
+                      child: Text(
+                        "Você possui pendências de sincronização, conecte-se à internet e realize a sincronização",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.justify,
+                      ),
+                    ));
                   }
                   return ShowRodoviaAux(
                       posts: rodovias, searchQuery: _searchQuery);
@@ -256,29 +314,84 @@ class _PesquisasState extends State<Pesquisas> {
         ],
       ),
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 150.52.w, ),
+        padding: EdgeInsets.only(
+          bottom: 150.52.w,
+        ),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 80.w),
-          height: 219.52.w,
+          height: (bancoLeUm ^ conectado) ? 600.w : 600.w,
           child: isadmin == true
               ? Container()
-              : ElevatedButton(
-                  style: ButtonStyle(
-                    shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                    padding: WidgetStateProperty.all(
-                        EdgeInsets.symmetric(vertical: 35.904.h)),
-                    backgroundColor: WidgetStateProperty.all(
-                        const Color.fromARGB(255, 55, 111, 60)),
-                    overlayColor: WidgetStateProperty.all(Colors.green[600]),
-                  ),
-                  onPressed: () => Navigator.pushNamed(context, '/A'),
-                  child: Center(
-                    child: Text(
-                      'inventariar novo equipamento',
-                      style: TextStyle(color: Colors.white, fontSize: 65.76.w),
+              : Column(
+                  children: [
+                    if (qtdeBanco >= 1 && isConnected == true)
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                          padding: WidgetStateProperty.all(EdgeInsets.symmetric(
+                              vertical: 35.904.h, horizontal: 400.w)),
+                          backgroundColor: WidgetStateProperty.all(
+                              const Color.fromARGB(255, 168, 220, 173)),
+                          overlayColor: WidgetStateProperty.all(
+                              const Color.fromARGB(255, 75, 112, 77)),
+                        ),
+                        onPressed: () async {
+                          await DataSyncService().syncPending();
+                        },
+                        child: Text(
+                          'Sincronizar agora',
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 65.76.w),
+                        ),
+                      ),
+                    SizedBox(
+                      height: 50.w,
                     ),
-                  ),
+                    if (qtdeBanco >= 1 && isConnected == true)
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                          padding: WidgetStateProperty.all(EdgeInsets.symmetric(
+                              vertical: 35.904.h, horizontal: 300.w)),
+                          backgroundColor: WidgetStateProperty.all(
+                              const Color.fromARGB(255, 55, 111, 60)),
+                          overlayColor:
+                              WidgetStateProperty.all(Colors.green[600]),
+                        ),
+                        onPressed: () => Navigator.pushNamed(context, '/A'),
+                        child: Center(
+                          child: Text(
+                            'inventariar novo equipamento',
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 65.76.w),
+                          ),
+                        ),
+                      ),
+                    if (isConnected == false || qtdeBanco < 1)
+                      ElevatedButton(
+                        style: ButtonStyle(
+                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                          padding: WidgetStateProperty.all(EdgeInsets.symmetric(
+                            vertical: 60.904.h,
+                          )),
+                          backgroundColor: WidgetStateProperty.all(
+                              const Color.fromARGB(255, 55, 111, 60)),
+                          overlayColor:
+                              WidgetStateProperty.all(Colors.green[600]),
+                        ),
+                        onPressed: () => Navigator.pushNamed(context, '/A'),
+                        child: Center(
+                          child: Text(
+                            'inventariar novo equipamento',
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 65.76.w),
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
         ),
       ),
@@ -523,3 +636,15 @@ String getDisplay(Map<String, dynamic> dados) {
       return '$tipoFormulario\n${dados['tipo'] ?? ''}';
   }
 }
+
+
+
+// //ElevatedButton(
+//                   onPressed: () async {
+//                     await DataSyncService().syncPending();
+//                     ScaffoldMessenger.of(context).showSnackBar(
+//                       const SnackBar(content: Text('Sincronização concluída!')),
+//                     );
+//                   },
+//                   child: const Text('Sincronizar agora'),
+//                 ),
