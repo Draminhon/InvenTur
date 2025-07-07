@@ -452,8 +452,8 @@ class MeioDeHospedagem(Base):
     estadoGeralDeConservacao = models.CharField("Estado Geral de Conservação", max_length=255, blank=True, null=True)
     
     # Dados de turismo e localização geográfica
-    estadosTuristas = models.JSONField("Estados Turistas", blank=True)
-    paisesTuristas = models.JSONField("Países Turistas", blank=True)
+    estadosTuristas = models.JSONField("Estados Turistas", blank=True, null=True)
+    paisesTuristas = models.JSONField("Países Turistas", blank=True,null=True)
     
     # Dados empresariais
     razaoSocial = models.CharField("Razão Social", max_length=255, blank=True, null=True)
