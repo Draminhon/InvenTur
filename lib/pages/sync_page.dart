@@ -30,7 +30,7 @@ class SyncPage extends StatelessWidget {
             child: Text(
               'O formulário foi salvo localmente, conecte-se à internet e realize a sincronização.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 15),
+              style: TextStyle(fontSize: 15, color: Colors.red, fontWeight: FontWeight.bold),
               
             ),
           ),

@@ -6,12 +6,15 @@ import 'package:intl/intl.dart';
 import 'package:inventur/pages/widgets/options_drawer_widget.dart';
 import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/services/offline_login.dart';
+import 'package:inventur/services/sync_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/utils/check_connectivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 Future<void> refreshToken() async {
   final prefs = await SharedPreferences.getInstance();
@@ -121,6 +124,10 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
       });
     }
   }
+  late StreamSubscription<List<ConnectivityResult>> connectivitySubscription;
+  bool isConnected = false;
+  int qtdeBanco = 0;
+  List<Pesquisa> pesquisasOff = [];
 
   @override
   void initState() {
@@ -129,8 +136,19 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
     getUserInfo();
     checar();
     getPesquisasOff();
+    getQtdeBanco();
+    initConnectivity();
+    connectivitySubscription = Connectivity().onConnectivityChanged.listen(_updateConnectionStatus);
+  pesquisasFuture = getPesquisas();
   }
-
+ Future<void> getQtdeBanco() async {
+    int getqtd = await DataSyncService().getPendingCount();
+    if (mounted) {
+      setState(() {
+        qtdeBanco = getqtd;
+      });
+    }
+  }
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -138,9 +156,31 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
     getUserInfo();
   }
 
+      @override
+  void dispose() {
+    connectivitySubscription.cancel();
+    super.dispose();
+  }
+    Future<void> initConnectivity() async {
+    final results = await Connectivity().checkConnectivity();
+    return _updateConnectionStatus(results);
+  }
+    Future<void> _updateConnectionStatus(List<ConnectivityResult> results) async {
+    // Verifica se a lista de resultados contém 'none'. Se não contiver, está conectado.
+    final newConnectionStatus = !results.contains(ConnectivityResult.none);
+    
+    // Compara com o estado anterior e chama setState apenas se houver mudança
+    if (newConnectionStatus != isConnected) {
+      setState(() {
+        isConnected = newConnectionStatus;
+        print("Status da conexão alterado para: $isConnected");
+        // Se conectar e tiver dados pendentes, pode-se até chamar a sincronização aqui
+        // ou apenas reconstruir a tela para mostrar o botão, que é o que acontece agora.
+      });
+    }
+  }
+
   CheckConnectivity connection = new CheckConnectivity();
-  bool isConnected = false;
-  List<Pesquisa> pesquisasOff = [];
 
   Future<void> getPesquisasOff() async {
     List<Pesquisa> pesquisas = await getPesquisasOffline();
@@ -244,7 +284,35 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
                   }
                 }
               },
-            )));
+            )),
+            bottomNavigationBar: (isConnected && qtdeBanco >= 1)
+            ? Container(
+                height: 250.w,
+                margin: EdgeInsets.only(left: 55.w, right: 55.w, bottom: 150.w),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10))),
+                      padding: WidgetStateProperty.all(EdgeInsets.symmetric(
+                        vertical: 34.904.h,
+                      )),
+                      backgroundColor: WidgetStateProperty.all(
+                          const Color.fromARGB(255, 55, 111, 60)),
+                      overlayColor: WidgetStateProperty.all(
+                          const Color.fromARGB(255, 55, 111, 60))),
+                  onPressed: () async {
+                    await DataSyncService().syncPending();
+                    // Após sincronizar, atualiza a contagem de itens pendentes
+                    await getQtdeBanco();
+                  },
+                  child: Text(
+                    'Sincronizar agora',
+                    style: TextStyle(color: Colors.white, fontSize: 65.76.w),
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(), // Se não estiver conectado ou não houver dados, não mostra nada
+        );
   }
 }
 

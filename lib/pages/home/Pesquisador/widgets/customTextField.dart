@@ -152,7 +152,7 @@ class CustomTextField extends StatelessWidget {
         //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
         child: TextFormField(
           keyboardType: keyboardType ?? (formatter.contains(FilteringTextInputFormatter.digitsOnly)?TextInputType.numberWithOptions():TextInputType.name),
-          inputFormatters: formatter.isEmpty ?  [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-ZÀ-ÿ@çÇ.,\s]'))] : formatter,
+          inputFormatters: formatter.isEmpty ?  [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-ZÀ-ÿ0-9@çÇ.,\s\-_]'))] : formatter,
           controller: controller,
           style:
               const TextStyle(color: Colors.black), //String? Function(String?)

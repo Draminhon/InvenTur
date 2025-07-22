@@ -769,7 +769,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                           controller: getController('latitude'),
                           name: 'valor',
                           keyboardType: TextInputType.numberWithOptions(),
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
+                          formatter: [FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))],
                           getValue: (newValue) {
                             valoresjson['latitude'] = newValue;
                           },
@@ -790,7 +790,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
                         child: CustomTextField(
                           controller: getController('longitute'),
                           name: 'valor',
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
+                          formatter: [FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))],
                           keyboardType: TextInputType.numberWithOptions(),
                           getValue: (newValue) {
                             valoresjson['longitute'] = newValue;

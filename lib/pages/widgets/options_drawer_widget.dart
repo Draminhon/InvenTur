@@ -53,12 +53,16 @@ try{final response = await http.post(
 
   print(response.statusCode);
   if(response.statusCode == 205){
-   // await prefs.clear();
+   
+     await prefs.remove('access_token');
+  await prefs.remove('user_data');
     Navigator.pushReplacementNamed(context, '/Login');
+    
   }else{
     print('Erro ao fazer logout: ${response.body}');
   }}catch(e){
-    print("Erro $e");
+    await prefs.remove('access_token');
+    await prefs.remove('user_data');
     Navigator.pushReplacementNamed(context, '/Login');
     
   }finally{

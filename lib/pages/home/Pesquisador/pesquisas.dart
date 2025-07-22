@@ -131,21 +131,9 @@ class _PesquisasState extends State<Pesquisas> {
 
   CheckConnectivity connection = new CheckConnectivity();
 
-  Future<void> checar() async {
-    bool online = await connection.checarConexaoUmaVez();
-    print('Conexão: $online');
-    setState(() {
-      isConnected = online;
-    });
-  }
 
-  Future<void> getQtdeBanco() async {
-    int getqtd = await DataSyncService().getPendingCount();
 
-    setState(() {
-      qtdeBanco = getqtd;
-    });
-  }
+ 
 
   Future<List<Map<String, dynamic>>> getRodovias() async {
     final prefs = await SharedPreferences.getInstance();
@@ -174,37 +162,24 @@ class _PesquisasState extends State<Pesquisas> {
   }
   int qtdebancoPPesquisa = 0;
 
-  Future<void> checarQtdeBanco() async{
 
-    final arguments = ModalRoute.of(context)?.settings.arguments as Map;
-    int pesquisa_id = arguments['pesquisa_id'];
-    int qtde = await  DataSyncService().filterQueue(pesquisa_id);
-      setState(() {
-        qtdebancoPPesquisa = qtde;
-      });
-  }
 
 @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    checarQtdeBanco();
 
   }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    checar();
-    getQtdeBanco();
   }
 
   @override
   Widget build(BuildContext context) {
-    final bancoLeUm =
-        (qtdeBanco ?? 0) <= 1; // null vira 0, logo false em “<= 1”?
-    final conectado = (isConnected ?? false);
-    print(qtdeBanco);
+ 
+
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     final isadmin = arguments['is_admin'];
     Future<List<Map<String, dynamic>>> rodoviasFuture = getRodovias();
@@ -319,63 +294,20 @@ class _PesquisasState extends State<Pesquisas> {
         ),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 80.w),
-          height: (bancoLeUm ^ conectado) ? 600.w : 600.w,
+          height: 400.w ,
           child: isadmin == true
               ? Container()
               : Column(
                   children: [
-                    if (qtdeBanco >= 1 && isConnected == true)
+                 
+                      SizedBox(height: 55.w,),
+
                       ElevatedButton(
                         style: ButtonStyle(
                           shape: WidgetStateProperty.all(RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10))),
                           padding: WidgetStateProperty.all(EdgeInsets.symmetric(
-                              vertical: 35.904.h, horizontal: 400.w)),
-                          backgroundColor: WidgetStateProperty.all(
-                              const Color.fromARGB(255, 168, 220, 173)),
-                          overlayColor: WidgetStateProperty.all(
-                              const Color.fromARGB(255, 75, 112, 77)),
-                        ),
-                        onPressed: () async {
-                          await DataSyncService().syncPending();
-                        },
-                        child: Text(
-                          'Sincronizar agora',
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 65.76.w),
-                        ),
-                      ),
-                    SizedBox(
-                      height: 50.w,
-                    ),
-                    if (qtdeBanco >= 1 && isConnected == true)
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                          padding: WidgetStateProperty.all(EdgeInsets.symmetric(
-                              vertical: 35.904.h, horizontal: 300.w)),
-                          backgroundColor: WidgetStateProperty.all(
-                              const Color.fromARGB(255, 55, 111, 60)),
-                          overlayColor:
-                              WidgetStateProperty.all(Colors.green[600]),
-                        ),
-                        onPressed: () => Navigator.pushNamed(context, '/A'),
-                        child: Center(
-                          child: Text(
-                            'inventariar novo equipamento',
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 65.76.w),
-                          ),
-                        ),
-                      ),
-                    if (isConnected == false || qtdeBanco < 1)
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                          padding: WidgetStateProperty.all(EdgeInsets.symmetric(
-                            vertical: 60.904.h,
+                            vertical: 70.904.h,
                           )),
                           backgroundColor: WidgetStateProperty.all(
                               const Color.fromARGB(255, 55, 111, 60)),
