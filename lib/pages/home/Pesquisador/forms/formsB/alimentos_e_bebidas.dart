@@ -531,6 +531,8 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           child: CustomTextField(
                             controller: getController('latitude'),
                             name: 'valor',
+                            keyboardType: TextInputType.numberWithOptions(),
+
                             formatter: [
                               FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'),),
                             ],
@@ -552,6 +554,8 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                           child: CustomTextField(
                             controller: getController('longitude'),
                             name: 'valor',
+                            keyboardType: TextInputType.numberWithOptions(),
+
                             formatter: [  FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))],
                             getValue: (newValue) {
                               valoresjson['longitude'] = newValue;

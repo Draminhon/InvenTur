@@ -1091,10 +1091,12 @@ class _RodoviaState extends State<Rodovia> {
                       // 'email_coordenador': 'ogaio@gmail.com',
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                
-                        formService.sendForm(
-                            valoresjson, AppConstants.RODOVIA_CREATE);
+                        print(valoresjson);
+                        // formService.sendForm(
+                        //     valoresjson, AppConstants.RODOVIA_CREATE);
                       } else {
+                            _formKey.currentState!.save();
+                        print(valoresjson);
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text('preencha os dados!')));

@@ -191,9 +191,10 @@ class _RadioStateC extends State<RadioC> {
 }
 
 class RadioD extends StatefulWidget {
-  const RadioD({super.key, required this.options, required this.getValue, this.indexModel});
+  const RadioD({super.key, required this.options, required this.getValue, this.indexModel, this.valueEmpty});
   final List<String> options;
   final String? indexModel;
+  final String? valueEmpty;
   final Function(String) getValue;
   @override
   State<RadioD> createState() => _RadioStateD();
@@ -222,6 +223,7 @@ class _RadioStateD extends State<RadioD> {
 
   @override
   Widget build(BuildContext context) {
+    print("OLHA O VALOR AI OLHA ${widget.valueEmpty}");
     final sizeScreen = MediaQuery.sizeOf(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
