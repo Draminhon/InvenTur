@@ -184,3 +184,143 @@ WidgetsBinding.instance.addPostFrameCallback((_){
     );
   }
 }
+
+class CheckboxGroupFormField extends StatefulWidget {
+  final List<String> options;
+  final List<String>? initialValue;
+  final FormFieldSetter<List<String>>? onSaved;
+  final FormFieldValidator<List<String>>? validator;
+
+  const CheckboxGroupFormField({
+    super.key,
+    required this.options,
+    this.initialValue,
+    this.onSaved,
+    this.validator,
+  });
+
+  @override
+  State<CheckboxGroupFormField> createState() => _CheckboxGroupFormFieldState();
+}
+
+class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
+  final ScrollController _scrollController = ScrollController();
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _scrollController.dispose();
+    super.dispose();
+    
+  }
+  @override
+  Widget build(BuildContext context) {
+    final sizeScreen = MediaQuery.sizeOf(context);
+
+    return FormField<List<String>>(
+      onSaved: widget.onSaved,
+      validator: widget.validator ?? (values) {
+            if (values == null || values.isEmpty) {
+              return 'Selecione pelo menos uma opção.';
+            }
+            if (values.contains('outro') &&
+                !values.any((v) => v.startsWith('outro:'))) {
+              return 'Por favor, especifique a opção "outro".';
+            }
+            return null; // Válido
+          },
+      initialValue: widget.initialValue ?? [],
+      builder: (FormFieldState<List<String>> field) {
+        
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: sizeScreen.width,
+              height: 550.h, 
+              child: RawScrollbar(
+                controller: _scrollController,
+                thumbColor: const Color.fromARGB(255, 55, 111, 60),
+                thumbVisibility: true,
+                child: ListView.builder(
+                  controller: _scrollController,
+                  itemCount: widget.options.length,
+                  itemBuilder: (context, index) {
+                    final option = widget.options[index];
+                    // O estado 'checked' é derivado diretamente do valor do FormField
+                    final bool isChecked = field.value!.contains(option);
+
+                    return Column(
+                      children: [
+                        ListTile(
+                          
+                          title: Tooltip(
+                            message: option,
+                            child: Text(
+                              option,
+                              overflow: TextOverflow.clip,
+                              // style: TextStyle(fontSize: 60.w),
+                            ),
+                          ),
+                          leading: Checkbox(
+                            value: isChecked,
+                            onChanged: (bool? value) {
+                              // ALTERAÇÃO 4: Lógica de mudança centralizada aqui
+                              // Criamos uma nova lista a partir do valor atual do campo
+                              List<String> newValues = List.from(field.value!);
+
+                              if (value == true) {
+                                // Adiciona o item se for marcado
+                                if (!newValues.contains(option)) {
+                                  newValues.add(option);
+                                }
+                              } else {
+                                // Remove o item se for desmarcado
+                                newValues.remove(option);
+                              }
+
+                              // Notifica o FormField sobre a mudança com a nova lista
+                              field.didChange(newValues);
+                            },
+                          ),
+                        ),
+                        // Lógica para o campo "outro"
+                        if (option == 'outro' && isChecked)
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+                            child: TextFormField( // Exemplo com TextFormField
+                              decoration: const InputDecoration(labelText: 'Qual?'),
+                              // ALTERAÇÃO 5: Atualiza o valor do campo "outro"
+                              onChanged: (text) {
+                                List<String> newValues = List.from(field.value!);
+                                // Remove qualquer valor "outro:" antigo para evitar duplicatas
+                                newValues.removeWhere((v) => v.startsWith('outro:'));
+                                // Adiciona o novo valor com o texto
+                                newValues.add('outro: $text');
+                                field.didChange(newValues);
+                              },
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ),
+            // ALTERAÇÃO 6: Exibe a mensagem de erro vinda do validador do FormField
+            if (field.hasError)
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 8),
+                child: Text(
+                  field.errorText!,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
+    );
+  }
+}

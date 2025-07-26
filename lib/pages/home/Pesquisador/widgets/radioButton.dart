@@ -45,7 +45,8 @@ class RadioC extends StatefulWidget {
       {super.key,
       required this.number,
       required this.options,
-      required this.getValue, this.indexModel});
+      required this.getValue,
+      this.indexModel});
   final List<String> options;
   final int number;
   final Function(String) getValue;
@@ -57,17 +58,16 @@ class _RadioStateC extends State<RadioC> {
   int? _value;
   @override
   void initState() {
-  print(widget.indexModel);
+    print(widget.indexModel);
 
     super.initState();
-        if(widget.indexModel != null){
-    _value = widget.options.indexOf(widget.indexModel!);
-    widget.getValue(widget.indexModel!);
-     // widget.getValue(widget.options[i]);
-        if(_value == -1){
-          _value = null;
-        }
-
+    if (widget.indexModel != null) {
+      _value = widget.options.indexOf(widget.indexModel!);
+      widget.getValue(widget.indexModel!);
+      // widget.getValue(widget.options[i]);
+      if (_value == -1) {
+        _value = null;
+      }
     }
   }
 
@@ -81,7 +81,6 @@ class _RadioStateC extends State<RadioC> {
     for (var i = 0; i < widget.number; i++) {
       if (i % 2 == 0) {
         radioButtons.add(ListTile(
-          
             dense: true,
             title: Tooltip(
                 message: widget.options[i],
@@ -141,21 +140,26 @@ class _RadioStateC extends State<RadioC> {
     }
 
     return ExpansionTile(
-         trailing: Icon(_isExpanded ? Icons.expand_less : Icons.expand_circle_down, color: Color.fromARGB(255, 55, 111, 60),),
-          collapsedIconColor: Color.fromARGB(255, 55, 111, 60),
-          onExpansionChanged: (bool expanded){
-            setState(() {
-              _isExpanded = expanded;
-            });
-          },
-          collapsedBackgroundColor: Colors.grey[200],
+      trailing: Icon(
+        _isExpanded ? Icons.expand_less : Icons.expand_circle_down,
+        color: Color.fromARGB(255, 55, 111, 60),
+      ),
+      collapsedIconColor: Color.fromARGB(255, 55, 111, 60),
+      onExpansionChanged: (bool expanded) {
+        setState(() {
+          _isExpanded = expanded;
+        });
+      },
+      collapsedBackgroundColor: Colors.grey[200],
       tilePadding: EdgeInsets.only(
           left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
       shape: const Border(),
       title: Container(
         child: const Text(
           'opções',
-          style: TextStyle(color: Color.fromARGB(255, 55, 111, 60), fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: Color.fromARGB(255, 55, 111, 60),
+              fontWeight: FontWeight.bold),
         ),
       ),
       children: [
@@ -191,70 +195,96 @@ class _RadioStateC extends State<RadioC> {
 }
 
 class RadioD extends StatefulWidget {
-  const RadioD({super.key, required this.options, required this.getValue, this.indexModel, this.valueEmpty});
+  const RadioD(
+      {super.key,
+      required this.options,
+      required this.getValue,
+      this.indexModel,
+      this.validator});
   final List<String> options;
   final String? indexModel;
-  final String? valueEmpty;
   final Function(String) getValue;
+  final String? Function(String?)? validator;
   @override
-  State<RadioD> createState() => _RadioStateD();
+  State<RadioD> createState() => RadioStateD();
 }
 
-class _RadioStateD extends State<RadioD> {
+class RadioStateD extends State<RadioD> {
   int? _value;
   opcoes? options = opcoes.a;
-    bool _isExpanded = false;
-
+  bool _isExpanded = false;
+  String? _errorText;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    if(widget.indexModel != null){
-    _value = widget.options.indexOf(widget.indexModel!);
-    widget.getValue(widget.indexModel!);
-     // widget.getValue(widget.options[i]);
-        if(_value == -1){
-          _value = null;
-        }
-
+    if (widget.indexModel != null) {
+      _value = widget.options.indexOf(widget.indexModel!);
+      widget.getValue(widget.indexModel!);
+      // widget.getValue(widget.options[i]);
+      if (_value == -1) {
+        _value = null;
+      }
     }
+  }
+
+  bool validate() {
+    if (widget.validator == null) return true;
+
+    String? selectedValue;
+    if (_value != null) {
+      selectedValue = widget.options[_value!];
+    }
+
+    final String? result = widget.validator!(selectedValue);
+
+    setState(() {
+      _errorText = result;
+    });
+
+    return _errorText == null;
   }
 
   @override
   Widget build(BuildContext context) {
-    print("OLHA O VALOR AI OLHA ${widget.valueEmpty}");
     final sizeScreen = MediaQuery.sizeOf(context);
-    return Column(
+    return   
+    Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ExpansionTile(
-          trailing: Icon(_isExpanded ? Icons.expand_less : Icons.expand_circle_down, color: Color.fromARGB(255, 55, 111, 60),),
-          collapsedIconColor: Color.fromARGB(255, 55, 111, 60),
-          onExpansionChanged: (bool expanded){
-            setState(() {
-              _isExpanded = expanded;
-            });
-          },
-
-          collapsedBackgroundColor: Colors.grey[200],
-          shape: Border(),
+            trailing: Icon(
+              _isExpanded ? Icons.expand_less : Icons.expand_circle_down,
+              color: Color.fromARGB(255, 55, 111, 60),
+            ),
+            collapsedIconColor: Color.fromARGB(255, 55, 111, 60),
+            onExpansionChanged: (bool expanded) {
+              setState(() {
+                _isExpanded = expanded;
+              });
+            },
+            collapsedBackgroundColor: Colors.grey[200],
+            shape: Border(),
             title: const Text(
               'OPÇÕES',
-              style: TextStyle(color: Color.fromARGB(255, 55, 111, 60), fontWeight: FontWeight.bold),
+              style: TextStyle(
+                  color: Color.fromARGB(255, 55, 111, 60),
+                  fontWeight: FontWeight.bold),
             ),
             tilePadding: EdgeInsets.only(
                 left: sizeScreen.width * 0.42, right: sizeScreen.width * 0.1),
             children: [
               for (int i = 0; i < widget.options.length; i++)
-              
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 5.0, ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: 5.0,
+                  ),
                   child: ListTile(
                       dense: true,
                       title: Text(
                         widget.options[i],
-                        style: TextStyle(fontSize: 60.w   ),
+                        style: TextStyle(fontSize: 60.w),
                       ),
                       leading: Radio<int>(
                         value: i,
@@ -263,19 +293,29 @@ class _RadioStateD extends State<RadioD> {
                             ? null
                             : (value) {
                                 setState(() {
+                                  _errorText = null;
                                   if (value != i) {
                                     _value = null;
-                                  }else{
+                                  } else {
                                     _value = value;
-                                  widget.getValue(widget.options[i]);}
-                                  
+                                    widget.getValue(widget.options[i]);
+                                  }
                                 });
                               },
                         toggleable: true,
                       )),
                 ),
             ]),
-           
+        if (_errorText != null)
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+            child: Text(
+              _errorText!,
+              style: TextStyle(color: Theme.of(context).colorScheme.error, fontSize: 12),
+            ),
+          ),
+
+          
         _value == widget.options.indexOf('outro')
             ? CustomTextField(
                 name: 'qual?',
@@ -292,6 +332,101 @@ class _RadioStateD extends State<RadioD> {
               )
             : Container(),
       ],
+    );
+  }
+}
+
+class RadioFormField extends StatefulWidget {
+  // Propriedades que seu widget vai receber
+  final List<String> options;
+  final String? initialValue;
+  final FormFieldSetter<String>? onSaved; // Função para salvar o valor
+  final FormFieldValidator<String>? validator; // Função de validação
+
+  const RadioFormField({
+    super.key,
+    required this.options,
+    this.initialValue,
+    this.onSaved,
+    this.validator,
+  });
+
+  @override
+  State<RadioFormField> createState() => _RadioFormFieldState();
+}
+
+class _RadioFormFieldState extends State<RadioFormField> {
+  // Estado para controlar apenas a UI do ExpansionTile
+  bool _isExpanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    // 1. O widget principal agora é um FormField
+    return FormField<String>(
+      // 2. Passe as propriedades do widget para o FormField
+      onSaved: widget.onSaved,
+      validator: widget.validator,
+      initialValue: widget.initialValue,
+      
+      // 3. O `builder` é responsável por construir a UI do seu campo
+      builder: (FormFieldState<String> field) {
+        // `field` é o estado do nosso campo (tem valor, erro, etc.)
+        
+        // Função para atualizar o estado do FormField quando uma opção é selecionada
+        void onChanged(String? value) {
+          field.didChange(value); // Isso atualiza o valor e revalida se necessário
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Sua UI de ExpansionTile continua a mesma
+            ExpansionTile(
+              trailing: Icon(_isExpanded ? Icons.expand_less : Icons.expand_circle_down,
+              color: Color.fromARGB(255, 55, 111, 60)),
+              onExpansionChanged: (bool expanded) {
+                setState(() {
+                  _isExpanded = expanded;
+                });
+              },
+               collapsedIconColor: Color.fromARGB(255, 55, 111, 60),
+              title: Text('OPÇÕES', style: TextStyle(
+                color: Color.fromARGB(255, 55, 111, 60),
+                fontWeight: FontWeight.bold
+              ),textAlign: TextAlign.center,
+              ),
+            collapsedBackgroundColor: Colors.grey[200],
+shape: Border(),
+              children: [
+                for (final option in widget.options)
+                  ListTile(
+                    title: Text(option),
+                    leading: Radio<String>(
+                      // Use o valor do FormField para saber qual está selecionado
+                      groupValue: field.value,
+                      value: option,
+                      // Ao mudar, atualize o estado do FormField
+                      onChanged: onChanged,
+                    ),
+                  ),
+              ],
+            ),
+            
+            // 4. Mostra o erro vindo diretamente do estado do FormField
+            if (field.hasError)
+              Padding(
+                padding: const EdgeInsets.only(left: 16, top: 8),
+                child: Text(
+                  field.errorText!,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.error,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 }

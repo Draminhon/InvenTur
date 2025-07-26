@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
@@ -9,7 +10,6 @@ import 'package:inventur/utils/validators.dart';
 
 final Map<String, dynamic> valoresjson = {};
 final Validators _validators = Validators();
-
 final Map<String, TextEditingController> controllers = {};
 
 TextEditingController getController(String key) {
@@ -33,14 +33,13 @@ class _InformacoesBasicasDoMunicipioState
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    controllers.forEach((key, controllers) => controllers.dispose());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        
+        foregroundColor: Colors.white,
         title: Text(
           "Identificação",
           style: TextStyle(color: Colors.white),
@@ -65,9 +64,9 @@ class _InformacoesBasicasDoMunicipioState
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                       } else {
-                        print(valoresjson);
                         _formKey.currentState!.save();
 
+                        print(valoresjson);
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text('preencha os dados!')));
@@ -111,11 +110,28 @@ class Identificacao extends StatelessWidget {
         SizedBox(
           height: 35.h,
         ),
-        RadioD(
-          valueEmpty: valoresjson['tipo'],
-          options: ["Caracterização do município"],
-          getValue: (p0) => valoresjson['tipo'] = p0,
+
+        RadioFormField(
+          options: ['Caracterização do município'],
+          validator: (value) {
+            if (value == null) {
+              return "Por favor, selecione uma opção";
+            }
+            return null;
+          },
+          onSaved: (newValue) => valoresjson['tipo'] = newValue,
         )
+
+        // RadioD(
+        //   validator: (p0) {
+        //     if(p0==null || p0.isEmpty){
+        //       return 'Por favor, selecione uma opção';
+        //     }
+        //     return null;
+        //   },
+        //   options: ["Caracterização do município"],
+        //   getValue: (p0) => valoresjson['tipo'] = p0,
+        // )
       ],
     );
   }
@@ -270,6 +286,7 @@ class InformacoesGerais extends StatelessWidget {
         CustomTextField(
           controller: getController('distanciaDaCapital'),
           name: "(km)",
+          keyboardType: TextInputType.numberWithOptions(),
           getValue: (p0) => valoresjson['distanciaDaCapital'] = p0,
         ),
         SizedBox(
@@ -282,11 +299,13 @@ class InformacoesGerais extends StatelessWidget {
         CustomTextField(
           controller: getController('totalFuncionarios'),
           name: "Total (nº)",
+          keyboardType: TextInputType.numberWithOptions(),
           getValue: (p0) => valoresjson['totalFuncionarios'] = p0,
         ),
         CustomTextField(
           controller: getController('porcentagemFuncionariosComDeficiencia'),
           name: "Pessoas com deficiência (%)",
+          keyboardType: TextInputType.numberWithOptions(),
           getValue: (p0) =>
               valoresjson['porcentagemFuncionariosComDeficiencia'] = p0,
         ),
@@ -397,12 +416,14 @@ class InformacoesGerais extends StatelessWidget {
         CustomTextField(
           controller: getController('totalFuncionariosOrgaoOficialTurismo'),
           name: "Total (nº)",
+          keyboardType: TextInputType.numberWithOptions(),
           getValue: (p0) =>
               valoresjson['totalFuncionariosOrgaoOficialTurismo'] = p0,
         ),
         CustomTextField(
           controller: getController('totalFormacaoSuperiorOrgaoOficialTurismo'),
           name: "Formação superior em Turismo (nº)",
+          keyboardType: TextInputType.numberWithOptions(),
           getValue: (p0) =>
               valoresjson['totalFormacaoSuperiorOrgaoOficialTurismo'] = p0,
         ),
@@ -581,7 +602,7 @@ class InformacoesGerais extends StatelessWidget {
   }
 }
 
-class Caracteristicas extends StatelessWidget{
+class Caracteristicas extends StatelessWidget {
   const Caracteristicas({super.key});
 
   @override
@@ -590,9 +611,11 @@ class Caracteristicas extends StatelessWidget{
 
     // TODO: implement build
     return Column(
-      children: [       
-        SizedBox(height: 65.h,),
-         Container(
+      children: [
+        SizedBox(
+          height: 65.h,
+        ),
+        Container(
           color: const Color.fromARGB(255, 55, 111, 60),
           height: sizeScreen.height * 0.06,
           width: sizeScreen.width,
@@ -603,8 +626,201 @@ class Caracteristicas extends StatelessWidget{
             style: TextStyle(
                 color: Colors.white, fontSize: sizeScreen.height * 0.03),
           ),
-        ),],
+        ),
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(
+          name: 'Aspectos Gerais',
+          fontWeight: FontWeight.bold,
+        ),
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(
+          name: 'Área',
+        ),
+        CustomTextField(
+          controller: getController('areaTotalMunicipio'),
+          keyboardType: TextInputType.numberWithOptions(),
+          name: "Área Total do Município (km²)",
+          getValue: (p0) => valoresjson['areaTotalMunicipio'] = p0,
+        ),
+        CustomTextField(
+          keyboardType: TextInputType.numberWithOptions(),
+          controller: getController('areaUrbana'),
+          name: "Área Urbana (km²)",
+          getValue: (p0) => valoresjson['areaUrbana'] = p0,
+        ),
+        CustomTextField(
+          keyboardType: TextInputType.numberWithOptions(),
+          controller: getController('areaRural'),
+          name: "Área Rural (km²)",
+          getValue: (p0) => valoresjson['areaRural'] = p0,
+        ),
+        CustomTextField(
+          keyboardType: TextInputType.numberWithOptions(),
+          controller: getController('anoBase'),
+          name: "Ano-Base",
+          getValue: (p0) => valoresjson['anoBase'] = p0,
+        ),
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(
+          name: 'População',
+        ),
+        CustomTextField(
+          controller: getController('populacaoTotal'),
+          keyboardType: TextInputType.numberWithOptions(),
+          name: "População Total (nº hab.)",
+          getValue: (p0) => valoresjson['populacaoTotal'] = p0,
+        ),
+        CustomTextField(
+          keyboardType: TextInputType.numberWithOptions(),
+          controller: getController('populacaoUrbana'),
+          name: "População Urbana (nº hab.)",
+          getValue: (p0) => valoresjson['populacaoUrbana'] = p0,
+        ),
+        CustomTextField(
+          keyboardType: TextInputType.numberWithOptions(),
+          controller: getController('populacaoRural'),
+          name: "População Rural (nº hab.)",
+          getValue: (p0) => valoresjson['populacaoRural'] = p0,
+        ),
+        CustomTextField(
+          keyboardType: TextInputType.numberWithOptions(),
+          controller: getController('anoBasePopulacao'),
+          name: "Ano-Base",
+          getValue: (p0) => valoresjson['anoBasePopulacao'] = p0,
+        ),
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(name: 'Temperatura e Chuvas'),
+        CustomTextField(
+          controller: getController('temperaturaMedia'),
+          name: 'Média (ºC)',
+          keyboardType: TextInputType.numberWithOptions(),
+          getValue: (p0) => valoresjson['temperaturaMedia'],
+        ),
+        CustomTextField(
+          controller: getController('temperaturaMinima'),
+          name: 'Mínima (ºC)',
+          keyboardType: TextInputType.numberWithOptions(),
+          getValue: (p0) => valoresjson['temperaturaMinima'],
+        ),
+        CustomTextField(
+          controller: getController('temperaturaMaxima'),
+          name: 'Máxima (ºC)',
+          keyboardType: TextInputType.numberWithOptions(),
+          getValue: (p0) => valoresjson['temperaturaMaxima'],
+        ),
+        SizedBox(
+          height: sizeScreen.height * 0.02,
+        ),
+        textLabel(
+          name: 'Meses Mais Frios',
+        ),
+        SizedBox(
+          height: sizeScreen.height * 0.01,
+        ),
+        CheckboxGroupFormField(
+          onSaved: (p0) => valoresjson['mesesMaisFrios'] = p0,
+          options: [
+            'Janeiro',
+            'Fevereiro',
+            'Março',
+            'Abril',
+            'Maio',
+            'Junho',
+            'Julho',
+            'Agosto',
+            'Setembro',
+            'Outubro',
+            'Novembro',
+            'Dezembro',
+            'Ano Inteiro'
+          ],
+        ),
+        textLabel(name: 'Meses Mais Quentes'),
+        SizedBox(
+          height: 55.h,
+        ),
+        CheckboxGroupFormField(
+          onSaved: (p0) => valoresjson['mesesMaisQuentes'] = p0,
+          options: [
+            'Janeiro',
+            'Fevereiro',
+            'Março',
+            'Abril',
+            'Maio',
+            'Junho',
+            'Julho',
+            'Agosto',
+            'Setembro',
+            'Outubro',
+            'Novembro',
+            'Dezembro',
+            'Ano Inteiro'
+          ],
+        ),
+        textLabel(name: 'Meses Mais Chuvosos'),
+        SizedBox(
+          height: 55.h,
+        ),
+        CheckboxGroupFormField(
+          onSaved: (p0) => valoresjson['mesesMaisChuvosos'] = p0,
+          options: [
+            'Janeiro',
+            'Fevereiro',
+            'Março',
+            'Abril',
+            'Maio',
+            'Junho',
+            'Julho',
+            'Agosto',
+            'Setembro',
+            'Outubro',
+            'Novembro',
+            'Dezembro',
+            'Ano Inteiro'
+          ],
+        ),
+        textLabel(name: 'Meses Menos Chuvosos'),
+        SizedBox(
+          height: 55.h,
+        ),
+        CheckboxGroupFormField(
+          onSaved: (p0) => valoresjson['mesesMenosChuvosos'] = p0,
+          options: [
+            'Janeiro',
+            'Fevereiro',
+            'Março',
+            'Abril',
+            'Maio',
+            'Junho',
+            'Julho',
+            'Agosto',
+            'Setembro',
+            'Outubro',
+            'Novembro',
+            'Dezembro',
+            'Ano Inteiro'
+          ],
+        ),
+        CustomTextField(
+          name: "Altitude Média (em m)",
+          getValue: (p0) => valoresjson['altitudeMedia'] = p0,
+          controller: getController('altitudeMedia'),
+          keyboardType: TextInputType.numberWithOptions(),
+        ),
+        SizedBox(height: 55.h,),
+        textLabel(name: "Equipamentos, instalações e serviços públicos", fontWeight: FontWeight.bold,),
+        SizedBox(height: 55.h,),
+
+        textLabel(name: "Abastecimento de Água")
+      ],
     );
   }
-
 }
