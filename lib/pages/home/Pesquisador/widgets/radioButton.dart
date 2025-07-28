@@ -365,7 +365,12 @@ class _RadioFormFieldState extends State<RadioFormField> {
     return FormField<String>(
       // 2. Passe as propriedades do widget para o FormField
       onSaved: widget.onSaved,
-      validator: widget.validator,
+      validator: widget.validator ?? (value) {
+            if (value == null) {
+              return "Por favor, selecione uma opção";
+            }
+            return null;
+          },
       initialValue: widget.initialValue,
       
       // 3. O `builder` é responsável por construir a UI do seu campo

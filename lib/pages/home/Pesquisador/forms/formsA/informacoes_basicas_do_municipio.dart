@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/expandedTileYoN.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/sizedBox.dart';
@@ -33,6 +34,9 @@ class _InformacoesBasicasDoMunicipioState
   void dispose() {
     // TODO: implement dispose
     super.dispose();
+
+    controllers.forEach((key, controllers) => controllers.dispose());
+    controllers.clear();
   }
 
   @override
@@ -66,7 +70,11 @@ class _InformacoesBasicasDoMunicipioState
                       } else {
                         _formKey.currentState!.save();
 
-                        print(valoresjson);
+                        print(valoresjson.containsKey(
+                            'servicoDeEsgotoOutroEntidadeResponsavel'));
+                        valoresjson.containsKey('redeUrbanaEntidadeResponsável')
+                            ? print(valoresjson)
+                            : print("too bad bitch");
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
                                 content: Text('preencha os dados!')));
@@ -113,12 +121,6 @@ class Identificacao extends StatelessWidget {
 
         RadioFormField(
           options: ['Caracterização do município'],
-          validator: (value) {
-            if (value == null) {
-              return "Por favor, selecione uma opção";
-            }
-            return null;
-          },
           onSaved: (newValue) => valoresjson['tipo'] = newValue,
         )
 
@@ -286,6 +288,7 @@ class InformacoesGerais extends StatelessWidget {
         CustomTextField(
           controller: getController('distanciaDaCapital'),
           name: "(km)",
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
           getValue: (p0) => valoresjson['distanciaDaCapital'] = p0,
         ),
@@ -299,12 +302,14 @@ class InformacoesGerais extends StatelessWidget {
         CustomTextField(
           controller: getController('totalFuncionarios'),
           name: "Total (nº)",
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
           getValue: (p0) => valoresjson['totalFuncionarios'] = p0,
         ),
         CustomTextField(
           controller: getController('porcentagemFuncionariosComDeficiencia'),
           name: "Pessoas com deficiência (%)",
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
           getValue: (p0) =>
               valoresjson['porcentagemFuncionariosComDeficiencia'] = p0,
@@ -416,12 +421,14 @@ class InformacoesGerais extends StatelessWidget {
         CustomTextField(
           controller: getController('totalFuncionariosOrgaoOficialTurismo'),
           name: "Total (nº)",
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
           getValue: (p0) =>
               valoresjson['totalFuncionariosOrgaoOficialTurismo'] = p0,
         ),
         CustomTextField(
           controller: getController('totalFormacaoSuperiorOrgaoOficialTurismo'),
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           name: "Formação superior em Turismo (nº)",
           keyboardType: TextInputType.numberWithOptions(),
           getValue: (p0) =>
@@ -590,25 +597,30 @@ class InformacoesGerais extends StatelessWidget {
         CustomTextField(
           controller: getController('fundadoresMunicipio'),
           name: "Fundadores",
-          getValue: (p0) => valoresjson['fundadoresMunicipio'],
+          getValue: (p0) => valoresjson['fundadoresMunicipio'] = p0,
         ),
         CustomTextField(
           controller: getController('outrosFatosMunicipio'),
           name: "Outros fatos de importância histórica",
-          getValue: (p0) => valoresjson['outrosFatosMunicipio'],
+          getValue: (p0) => valoresjson['outrosFatosMunicipio'] = p0,
         )
       ],
     );
   }
 }
 
-class Caracteristicas extends StatelessWidget {
+class Caracteristicas extends StatefulWidget {
   const Caracteristicas({super.key});
 
   @override
+  State<Caracteristicas> createState() => _CaracteristicasState();
+}
+
+class _CaracteristicasState extends State<Caracteristicas> {
+  @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
-
+    String respostaYoN = valoresjson['redeDeEsgoto'] ?? '';
     // TODO: implement build
     return Column(
       children: [
@@ -641,24 +653,28 @@ class Caracteristicas extends StatelessWidget {
           name: 'Área',
         ),
         CustomTextField(
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           controller: getController('areaTotalMunicipio'),
           keyboardType: TextInputType.numberWithOptions(),
           name: "Área Total do Município (km²)",
           getValue: (p0) => valoresjson['areaTotalMunicipio'] = p0,
         ),
         CustomTextField(
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
           controller: getController('areaUrbana'),
           name: "Área Urbana (km²)",
           getValue: (p0) => valoresjson['areaUrbana'] = p0,
         ),
         CustomTextField(
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
           controller: getController('areaRural'),
           name: "Área Rural (km²)",
           getValue: (p0) => valoresjson['areaRural'] = p0,
         ),
         CustomTextField(
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
           controller: getController('anoBase'),
           name: "Ano-Base",
@@ -671,24 +687,28 @@ class Caracteristicas extends StatelessWidget {
           name: 'População',
         ),
         CustomTextField(
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           controller: getController('populacaoTotal'),
           keyboardType: TextInputType.numberWithOptions(),
           name: "População Total (nº hab.)",
           getValue: (p0) => valoresjson['populacaoTotal'] = p0,
         ),
         CustomTextField(
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
           controller: getController('populacaoUrbana'),
           name: "População Urbana (nº hab.)",
           getValue: (p0) => valoresjson['populacaoUrbana'] = p0,
         ),
         CustomTextField(
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
           controller: getController('populacaoRural'),
           name: "População Rural (nº hab.)",
           getValue: (p0) => valoresjson['populacaoRural'] = p0,
         ),
         CustomTextField(
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
           controller: getController('anoBasePopulacao'),
           name: "Ano-Base",
@@ -701,20 +721,23 @@ class Caracteristicas extends StatelessWidget {
         CustomTextField(
           controller: getController('temperaturaMedia'),
           name: 'Média (ºC)',
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
-          getValue: (p0) => valoresjson['temperaturaMedia'],
+          getValue: (p0) => valoresjson['temperaturaMedia'] = p0,
         ),
         CustomTextField(
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           controller: getController('temperaturaMinima'),
           name: 'Mínima (ºC)',
           keyboardType: TextInputType.numberWithOptions(),
-          getValue: (p0) => valoresjson['temperaturaMinima'],
+          getValue: (p0) => valoresjson['temperaturaMinima'] = p0,
         ),
         CustomTextField(
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           controller: getController('temperaturaMaxima'),
           name: 'Máxima (ºC)',
           keyboardType: TextInputType.numberWithOptions(),
-          getValue: (p0) => valoresjson['temperaturaMaxima'],
+          getValue: (p0) => valoresjson['temperaturaMaxima'] = p0,
         ),
         SizedBox(
           height: sizeScreen.height * 0.02,
@@ -813,13 +836,711 @@ class Caracteristicas extends StatelessWidget {
           name: "Altitude Média (em m)",
           getValue: (p0) => valoresjson['altitudeMedia'] = p0,
           controller: getController('altitudeMedia'),
+          formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
         ),
-        SizedBox(height: 55.h,),
-        textLabel(name: "Equipamentos, instalações e serviços públicos", fontWeight: FontWeight.bold,),
-        SizedBox(height: 55.h,),
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(
+          name: "Equipamentos, instalações e serviços públicos",
+          fontWeight: FontWeight.bold,
+        ),
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(
+          name: "Abastecimento de Água",
+          fontWeight: FontWeight.bold,
+        ),
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(name: 'Tipo de Abastecimento'),
+        SizedBox(
+          height: 55.h,
+        ),
+        RadioFormField(
+            onSaved: (newValue) =>
+                valoresjson['tipoDeAbastecimento'] = newValue,
+            options: [
+              'Água Não Canalizada',
+              'Canalizada de Poço',
+              'Canalizada de Nascente',
+              'Canalizada de Curso de Água/Barragem',
+              'outro'
+            ]),
+        CustomTextField(
+          name: 'Domicílios Atendidos (%)',
+          getValue: (p0) => valoresjson['qtdeDomiciliosAtendidos'] = p0,
+          controller: getController('qtdeDomiciliosAtendidos'),
+          formatter: [FilteringTextInputFormatter.digitsOnly],
+          keyboardType: TextInputType.numberWithOptions(),
+        ),
+        CustomTextField(
+          name: 'Empresa Responsável',
+          getValue: (p0) => valoresjson['empresaResponsável'] = p0,
+          controller: getController('empresaResponsável'),
+        ),
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(
+          name: 'Serviços de Esgoto',
+          fontWeight: FontWeight.bold,
+        ),
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(name: 'Coleta e Deposição'),
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Rede de Esgoto'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['redeDeEsgoto'] == newValue) return;
 
-        textLabel(name: "Abastecimento de Água")
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['redeDeEsgoto'] = newValue;
+                  respostaYoN = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (respostaYoN == 'sim') ...[
+          CustomTextField(
+            name: 'Total Atendido (%)',
+            getValue: (p0) => valoresjson['esgotoTotalAtendidos'] = p0,
+            controller: getController('esgotoTotalAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Urbanos Atendidos (%)',
+            getValue: (p0) => valoresjson['esgotoDomiciliosAtendidos'] = p0,
+            controller: getController('esgotoDomiciliosAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Rurais Atendidos (%)',
+            getValue: (p0) => valoresjson['esgotoRuraisAtendidos'] = p0,
+            controller: getController('esgotoRuraisAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Entidade Responsável',
+            getValue: (p0) => valoresjson['esgotoEntidadeResponsavel'] = p0,
+            controller: getController('esgotoEntidadeResponsavel'),
+          )
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Fossa Séptica'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['fossaSeptica'] == newValue) return;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['fossaSeptica'] = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (valoresjson['fossaSeptica'] == 'sim') ...[
+          CustomTextField(
+            name: 'Total Atendido (%)',
+            getValue: (p0) => valoresjson['fossaSepticaTotalAtendidos'] = p0,
+            controller: getController('fossaSepticaTotalAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Urbanos Atendidos (%)',
+            getValue: (p0) =>
+                valoresjson['fossaSepticaDomiciliosAtendidos'] = p0,
+            controller: getController('fossaSepticaDomiciliosAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Rurais Atendidos (%)',
+            getValue: (p0) => valoresjson['fossaSepticaRuraisAtendidos'] = p0,
+            controller: getController('fossaSepticaRuraisAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Entidade Responsável',
+            getValue: (p0) =>
+                valoresjson['fossaSepticaEntidadeResponsavel'] = p0,
+            controller: getController('fossaSepticaEntidadeResponsavel'),
+          )
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Fossa Rudimentar'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['fossaRudimentar'] == newValue) return;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['fossaRudimentar'] = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (valoresjson['fossaRudimentar'] == 'sim') ...[
+          CustomTextField(
+            name: 'Total Atendido (%)',
+            getValue: (p0) => valoresjson['fossaRudimentarTotalAtendidos'] = p0,
+            controller: getController('fossaRudimentarTotalAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Urbanos Atendidos (%)',
+            getValue: (p0) =>
+                valoresjson['fossaRudimentarDomiciliosAtendidos'] = p0,
+            controller: getController('fossaRudimentarDomiciliosAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Rurais Atendidos (%)',
+            getValue: (p0) =>
+                valoresjson['fossaRudimentarRuraisAtendidos'] = p0,
+            controller: getController('fossaRudimentarRuraisAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Entidade Responsável',
+            getValue: (p0) =>
+                valoresjson['fossaRudimentarEntidadeResponsavel'] = p0,
+            controller: getController('fossaRudimentarEntidadeResponsavel'),
+          )
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Vala'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['vala'] == newValue) return;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['vala'] = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (valoresjson['vala'] == 'sim') ...[
+          CustomTextField(
+            name: 'Total Atendido (%)',
+            getValue: (p0) => valoresjson['valaTotalAtendidos'] = p0,
+            controller: getController('valaTotalAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Urbanos Atendidos (%)',
+            getValue: (p0) => valoresjson['valaDomiciliosAtendidos'] = p0,
+            controller: getController('valaDomiciliosAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Rurais Atendidos (%)',
+            getValue: (p0) => valoresjson['valaRuraisAtendidos'] = p0,
+            controller: getController('valaRuraisAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Entidade Responsável',
+            getValue: (p0) => valoresjson['valaEntidadeResponsavel'] = p0,
+            controller: getController('valaEntidadeResponsavel'),
+          )
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Estação de Tratamento'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['estacaoDeTratamento'] == newValue) return;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['estacaoDeTratamento'] = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (valoresjson['estacaoDeTratamento'] == 'sim') ...[
+          CustomTextField(
+            name: 'Total Atendido (%)',
+            getValue: (p0) =>
+                valoresjson['estacaoDeTratamentoTotalAtendidos'] = p0,
+            controller: getController('estacaoDeTratamentoTotalAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Urbanos Atendidos (%)',
+            getValue: (p0) =>
+                valoresjson['estacaoDeTratamentoDomiciliosAtendidos'] = p0,
+            controller: getController('estacaoDeTratamentoDomiciliosAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Rurais Atendidos (%)',
+            getValue: (p0) =>
+                valoresjson['estacaoDeTratamentoRuraisAtendidos'] = p0,
+            controller: getController('estacaoDeTratamentoRuraisAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Entidade Responsável',
+            getValue: (p0) =>
+                valoresjson['estacaoDeTratamentoEntidadeResponsavel'] = p0,
+            controller: getController('estacaoDeTratamentoEntidadeResponsavel'),
+          )
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Esgoto Tratado'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['esgotoTratado'] == newValue) return;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['esgotoTratado'] = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (valoresjson['esgotoTratado'] == 'sim') ...[
+          CustomTextField(
+            name: 'Total Atendido (%)',
+            getValue: (p0) => valoresjson['esgotoTratadoTotalAtendidos'] = p0,
+            controller: getController('esgotoTratadoTotalAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Urbanos Atendidos (%)',
+            getValue: (p0) =>
+                valoresjson['esgotoTratadoDomiciliosAtendidos'] = p0,
+            controller: getController('esgotoTratadoDomiciliosAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Rurais Atendidos (%)',
+            getValue: (p0) => valoresjson['esgotoTratadoRuraisAtendidos'] = p0,
+            controller: getController('esgotoTratadoRuraisAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Entidade Responsável',
+            getValue: (p0) =>
+                valoresjson['esgotoTratadoEntidadeResponsavel'] = p0,
+            controller: getController('esgotoTratadoEntidadeResponsavel'),
+          )
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Outros'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['servicoDeEsgotoOutro'] == newValue) return;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['servicoDeEsgotoOutro'] = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (valoresjson['servicoDeEsgotoOutro'] == 'sim') ...[
+          CustomTextField(
+            name: 'Nome',
+            getValue: (p0) => valoresjson['servicoDeEsgotoOutroNome'] = p0,
+            controller: getController('servicoDeEsgotoOutroTotalNome'),
+          ),
+          CustomTextField(
+            name: 'Total Atendido (%)',
+            getValue: (p0) =>
+                valoresjson['servicoDeEsgotoOutroTotalAtendidos'] = p0,
+            controller: getController('servicoDeEsgotoOutroTotalAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Urbanos Atendidos (%)',
+            getValue: (p0) =>
+                valoresjson['servicoDeEsgotoOutroDomiciliosAtendidos'] = p0,
+            controller:
+                getController('servicoDeEsgotoOutroDomiciliosAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Rurais Atendidos (%)',
+            getValue: (p0) =>
+                valoresjson['servicoDeEsgotoOutroRuraisAtendidos'] = p0,
+            controller: getController('servicoDeEsgotoOutroRuraisAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Entidade Responsável',
+            getValue: (p0) =>
+                valoresjson['servicoDeEsgotoOutroEntidadeResponsavel'] = p0,
+            controller:
+                getController('servicoDeEsgotoOutroEntidadeResponsavel'),
+          )
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(
+          name: 'Serviços de Energia',
+          fontWeight: FontWeight.bold,
+        ),
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(name: 'Energia Elétrica'),
+        SizedBox(
+          height: 55.h,
+        ),
+        RadioFormField(
+            onSaved: (newValue) => valoresjson['energiaEletrica'] = newValue,
+            options: ['110 Volts', '220 Volts', '110/220 Volts']),
+        CustomTextField(
+          name: 'Capacidade em KVA',
+          getValue: (p0) => valoresjson['capacidadeEmKVA'] = p0,
+          controller: getController('capacidadeEmKVA'),
+          formatter: [FilteringTextInputFormatter.digitsOnly],
+          keyboardType: TextInputType.numberWithOptions(),
+        ),
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Gerador de Emergência'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['geradorDeEmergencia'] == newValue) return;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['geradorDeEmergencia'] = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (valoresjson['geradorDeEmergencia'] == 'sim') ...[
+          CustomTextField(
+            name: 'Capacidade em KVA',
+            getValue: (p0) =>
+                valoresjson['geradorDeEmergenciaCapacidadeEmKVA'] = p0,
+            controller: getController('geradorDeEmergenciaCapacidadeEmKVA'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          )
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(name: 'Abastecimento de Energia'),
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Rede Urbana'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['redeUrbana'] == newValue) return;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['redeUrbana'] = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (valoresjson['redeUrbana'] == 'sim') ...[
+          CustomTextField(
+            name: 'Total Abastecido (%)',
+            getValue: (p0) => valoresjson['redeUrbanaTotalAbastecido'] = p0,
+            controller: getController('redeUrbanaTotalAbastecido'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Entidade Responsável',
+            getValue: (p0) => valoresjson['redeUrbanaEntidadeResponsável'] = p0,
+            controller: getController('redeUrbanaEntidadeResponsável'),
+          )
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Rede Rural'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['redeRural'] == newValue) return;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['redeRural'] = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (valoresjson['redeRural'] == 'sim') ...[
+          CustomTextField(
+            name: 'Total Abastecido (%)',
+            getValue: (p0) => valoresjson['redeRuralTotalAbastecido'] = p0,
+            controller: getController('redeRuralTotalAbastecido'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Entidade Responsável',
+            getValue: (p0) => valoresjson['redeRuralEntidadeResponsável'] = p0,
+            controller: getController('redeRuralEntidadeResponsável'),
+          )
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Abastecimento Próprio'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['abastecimentoProprio'] == newValue) return;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['abastecimentoProprio'] = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (valoresjson['abastecimentoProprio'] == 'sim') ...[
+          CustomTextField(
+            name: 'Total Atendido (%)',
+            getValue: (p0) =>
+                valoresjson['abastecimentoProprioTotalAtendidos'] = p0,
+            controller: getController('abastecimentoProprioTotalAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Urbanos Atendidos (%)',
+            getValue: (p0) =>
+                valoresjson['abastecimentoProprioDomiciliosAtendidos'] = p0,
+            controller:
+                getController('abastecimentoProprioDomiciliosAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Rurais Atendidos (%)',
+            getValue: (p0) =>
+                valoresjson['abastecimentoProprioRuraisAtendidos'] = p0,
+            controller: getController('abastecimentoProprioRuraisAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Entidade Responsável',
+            getValue: (p0) =>
+                valoresjson['abastecimentoProprioEntidadeResponsavel'] = p0,
+            controller:
+                getController('abastecimentoProprioEntidadeResponsavel'),
+          )
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        Row(children: [
+          textLabel(name: 'Outros'),
+          SizedBox(
+            width: sizeScreen.width * 0.09,
+          ),
+          SizedBox(
+              // width: sizeScreen.width * 0.5,
+              //  //height: sizeScreen.height * 0.07,
+              child: ExpansionTileYoN(
+            getValue: (newValue) {
+              if (valoresjson['servicosDeEnergiaOutro'] == newValue) return;
+
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                if (!mounted) return;
+                setState(() {
+                  valoresjson['servicosDeEnergiaOutro'] = newValue;
+                });
+              });
+            },
+          )),
+        ]),
+        if (valoresjson['servicosDeEnergiaOutro'] == 'sim') ...[
+          CustomTextField(
+            name: 'Nome',
+            getValue: (p0) => valoresjson['servicosDeEnergiaOutroNome'] = p0,
+            controller: getController('servicosDeEnergiaOutroTotalNome'),
+          ),
+          CustomTextField(
+            name: 'Total Atendido (%)',
+            getValue: (p0) =>
+                valoresjson['servicosDeEnergiaOutroTotalAtendidos'] = p0,
+            controller: getController('servicosDeEnergiaOutroTotalAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Domicílios Urbanos Atendidos (%)',
+            getValue: (p0) =>
+                valoresjson['servicosDeEnergiaOutroDomiciliosAtendidos'] = p0,
+            controller:
+                getController('servicosDeEnergiaOutroDomiciliosAtendidos'),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CustomTextField(
+            name: 'Entidade Responsável',
+            getValue: (p0) =>
+                valoresjson['servicosDeEnergiaOutroEntidadeResponsavel'] = p0,
+            controller:
+                getController('servicosDeEnergiaOutroEntidadeResponsavel'),
+          ),
+        ],
+        SizedBox(
+          height: 55.h,
+        ),
+        textLabel(
+          name: 'Serviços de Lixo',
+          fontWeight: FontWeight.bold,
+        ),
+        SizedBox(
+          height: 55.h,
+        ),
       ],
     );
   }
