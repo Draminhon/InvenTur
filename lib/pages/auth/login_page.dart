@@ -35,9 +35,12 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> checar() async {
     bool online = await connection.checarConexaoUmaVez();
     print('Conexão: $online');
+    if(mounted){
     setState(() {
       isConnected = online;
     });
+    }
+
   }
 
   @override

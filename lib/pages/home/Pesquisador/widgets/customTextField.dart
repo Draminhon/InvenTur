@@ -123,16 +123,16 @@ class CustomTextField extends StatelessWidget {
   final String name;
   final String? Function(String?)? validat;
   final TextEditingController? controller;
-  const CustomTextField(
+   CustomTextField(
       {super.key,
       required this.name,
       this.validat,
-      required this.getValue,
+      this.getValue,
       this.getChanged,
       this.keyboardType,
       this.formatter = const [],
       this.controller});
-  final Function(String) getValue;
+   Function(String)? getValue;
   final List<TextInputFormatter> formatter;
   final TextInputType? keyboardType;
   final Function(String)? getChanged;
@@ -157,7 +157,12 @@ class CustomTextField extends StatelessWidget {
           style:
               const TextStyle(color: Colors.black), //String? Function(String?)
           onSaved: (newValue) {
-            getValue(newValue!);
+            if(getValue!=null){
+              if(newValue!=null){
+            getValue!(newValue);
+
+              }
+            }
           },
           // onChanged: (newValue){
           //   getChanged!(newValue);
@@ -253,9 +258,9 @@ class CustomTextNumber extends StatelessWidget {
 
 class CustomTextDate extends StatelessWidget {
   final TextEditingController? dateController;
-  CustomTextDate({super.key, required this.getValue, this.dateController});
+  CustomTextDate({super.key,  this.getValue, this.dateController});
 
-  final Function(String) getValue;
+  final Function(String)? getValue;
   final dateFormat = DateFormat('yyyy-MM-dd'); // formato para enviar ao backend
   final inputFormat = DateFormat('dd/MM/yyyy'); // formato de entrada do usuário
 
@@ -293,7 +298,10 @@ class CustomTextDate extends StatelessWidget {
             // Convertendo para o formato 'yyyy-MM-dd' antes de enviar ao servidor
             final parsedDate = inputFormat.parse(newValue);
             final formattedDate = dateFormat.format(parsedDate);
-            getValue(formattedDate); // Enviando a data convertida
+              if(getValue!=null){
+            getValue!(formattedDate); 
+
+              }
           }
         },
         decoration: InputDecoration(
