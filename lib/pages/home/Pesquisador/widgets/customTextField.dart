@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas_do_municipio.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/expandedTileYoN.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class CustomTimeField extends StatefulWidget {
@@ -89,9 +92,7 @@ class _CustomTimeFieldState extends State<CustomTimeField> {
           _TimeInputFormatter(),
         ],
         onChanged: (newValue) {
-          setState(() {
             widget.getValue(newValue);
-          });
         },
         onTap: _selectTime,
       ),
@@ -119,6 +120,8 @@ class _TimeInputFormatter extends TextInputFormatter {
   }
 }
 
+
+ const _defaultFormatterChars = r'[a-zA-ZÀ-ÿ0-9@çÇ.,\s\-_]';
 class CustomTextField extends StatelessWidget {
   final String name;
   final String? Function(String?)? validat;
@@ -136,6 +139,9 @@ class CustomTextField extends StatelessWidget {
   final List<TextInputFormatter> formatter;
   final TextInputType? keyboardType;
   final Function(String)? getChanged;
+
+
+          
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
@@ -152,7 +158,7 @@ class CustomTextField extends StatelessWidget {
         //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
         child: TextFormField(
           keyboardType: keyboardType ?? (formatter.contains(FilteringTextInputFormatter.digitsOnly)?TextInputType.numberWithOptions():TextInputType.name),
-          inputFormatters: formatter.isEmpty ?  [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-ZÀ-ÿ0-9@çÇ.,\s\-_]'))] : formatter,
+          inputFormatters: formatter.isEmpty ?  [FilteringTextInputFormatter.allow(RegExp(_defaultFormatterChars))] : formatter,
           controller: controller,
           style:
               const TextStyle(color: Colors.black), //String? Function(String?)
@@ -256,14 +262,20 @@ class CustomTextNumber extends StatelessWidget {
   }
 }
 
-class CustomTextDate extends StatelessWidget {
+class CustomTextDate extends StatefulWidget {
   final TextEditingController? dateController;
   CustomTextDate({super.key,  this.getValue, this.dateController});
 
   final Function(String)? getValue;
-  final dateFormat = DateFormat('yyyy-MM-dd'); // formato para enviar ao backend
-  final inputFormat = DateFormat('dd/MM/yyyy'); // formato de entrada do usuário
 
+  @override
+  State<CustomTextDate> createState() => _CustomTextDateState();
+}
+
+class _CustomTextDateState extends State<CustomTextDate> { final dateFormat = DateFormat('yyyy-MM-dd');
+  final inputFormat = DateFormat('dd/MM/yyyy');
+  final _dateMaskFormatter = MaskTextInputFormatter(mask: '##/##/####');
+  final _denyLettersFormatter = FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]'));
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
@@ -276,10 +288,10 @@ class CustomTextDate extends StatelessWidget {
       ),
       child: TextFormField(
         keyboardType: TextInputType.numberWithOptions(),
-        controller: dateController,
+        controller: widget.dateController,
         inputFormatters: [
-          FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]')),
-          MaskTextInputFormatter(mask: '##/##/####'),
+          _denyLettersFormatter,
+          _dateMaskFormatter,
         ],
         validator: (value) {
           if (value == null || value.isEmpty) {
@@ -298,8 +310,8 @@ class CustomTextDate extends StatelessWidget {
             // Convertendo para o formato 'yyyy-MM-dd' antes de enviar ao servidor
             final parsedDate = inputFormat.parse(newValue);
             final formattedDate = dateFormat.format(parsedDate);
-              if(getValue!=null){
-            getValue!(formattedDate); 
+              if(widget.getValue!=null){
+            widget.getValue!(formattedDate); 
 
               }
           }
@@ -321,3 +333,5 @@ class CustomTextDate extends StatelessWidget {
     );
   }
 }
+
+
