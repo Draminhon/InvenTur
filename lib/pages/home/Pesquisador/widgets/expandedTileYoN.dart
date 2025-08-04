@@ -11,11 +11,13 @@ class ExpansionTileYoN extends StatefulWidget {
 
 class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
   String _option = 'não';
+    late final ExpansibleController _tileController;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _tileController = ExpansibleController();
     widget.getValue(_option);
     if(widget.optionModel!=null)
     _option = widget.optionModel!;
@@ -30,6 +32,7 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
          //   margin: EdgeInsets.only(bottom: sizeScreen.height * 0.01),
             width: 410.w,
             child: ExpansionTile(
+              controller: _tileController,
               iconColor: Colors.white,
               collapsedIconColor: Colors.white,
               collapsedShape: ContinuousRectangleBorder(
@@ -62,7 +65,6 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                       color: Color.fromARGB(255, 55, 111, 69),
                     ),
                     child: ListTile(
-                      
                       shape: ContinuousRectangleBorder(
                           borderRadius: BorderRadius.circular(25),),
                       title: ( Text(
@@ -73,10 +75,16 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                             fontWeight: FontWeight.bold,
                             fontSize: 50.w),
                       )),
-                      onTap: () => setState(() {
+                      onTap: () {
+                        setState(() {
                         _option = 'sim';
+                        
                         widget.getValue(_option);
-                      }),
+                      });
+                        _tileController.collapse();
+                        
+                      },
+                      
                       dense: true,
                     )),
                 Container(
@@ -98,10 +106,14 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                             fontSize:50.w),
                       )),
                       onTap: () {
+
                         setState(() {
                           _option = 'não';
                           widget.getValue(_option);
+                          
                         });
+                        _tileController.collapse();
+
                       },
                       // onTap: () => Navigator.pushNamed(context, routeName),
                     )),

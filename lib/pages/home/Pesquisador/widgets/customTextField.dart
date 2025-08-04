@@ -335,3 +335,86 @@ class _CustomTextDateState extends State<CustomTextDate> { final dateFormat = Da
 }
 
 
+class UfMunicipioRg extends StatelessWidget{
+  final Map<String, TextEditingController> controllers;
+
+  const UfMunicipioRg({super.key, required this.controllers}); 
+
+          @override
+                  Widget build(BuildContext context) {
+    final sizeScreen = MediaQuery.sizeOf(context);
+
+    return Column(children: [
+      Padding(
+          padding: EdgeInsets.only(
+              top: sizeScreen.height * 0.05, left: sizeScreen.width * 0.05),
+          child: Row(
+            children: [
+              SizedBox(
+                  width: sizeScreen.width * 0.3,
+                  height: sizeScreen.height * 0.045,
+                  child: TextFormField(
+                    controller: controllers['uf'],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Preencha o campo';
+                      }
+                                  return null;
+                    },
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                    ],
+
+                    decoration: const InputDecoration(
+                      hintText: 'UF',
+                    ),
+                  )),
+              SizedBox(
+                width: sizeScreen.width * 0.09,
+              ),
+              SizedBox(
+                  width: sizeScreen.width * 0.5,
+                  height: sizeScreen.height * 0.045,
+                  child: TextFormField(
+                    controller: controllers['regiaoTuristica'],
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Preencha o campo';
+                      }
+                      return null;
+                    },
+
+                    inputFormatters: [
+                      FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+                    ],
+                    decoration:
+                        const InputDecoration(hintText: 'Região Turística'),
+                  ))
+            ],
+          )),
+      Padding(
+        padding: EdgeInsets.only(
+            left: sizeScreen.width * 0.05,
+            right: sizeScreen.width * 0.1,
+            top: sizeScreen.height * 0.01),
+        child: TextFormField(
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Preencha o campo';
+            }
+            return null;
+          },
+          controller: controllers['municipio'],
+          decoration: const InputDecoration(
+            isDense: true,
+            hintText: 'Municipio',
+          ),
+          inputFormatters: [
+            FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
+          ],
+
+        ),
+      )
+    ]);
+  }
+}

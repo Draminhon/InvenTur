@@ -28,6 +28,7 @@ class _InformacoesBasicasDoMunicipioState
   Map<String, TextEditingController> _caracteristicasControllers = {};
 
   final List<String> _chavesInfoGerais = const [
+    'uf', 'regiaoTuristica', 'municipio',
     'enderecoPrefeitura', 'bairroPrefeitura', 'cepPrefeitura',
     'numeroPrefeitura',
     'instagramPrefeitura', 'emailPrefeitura', 'sitePrefeitura',
@@ -49,6 +50,8 @@ class _InformacoesBasicasDoMunicipioState
     'instanciaGovernancaInternacional', 'instanciaGovernancaOutras',
     'aniversarioMunicipio',
     'santoPadroeiro', 'diaDoSantoPadroeiro', 'feriadoMunicipal01',
+    'dataFeriadoMunicipal01', 'dataFeriadoMunicipal02',
+    'dataFeriadoMunicipal03',
     'feriadoMunicipal02',
     'feriadoMunicipal03', 'origemDoNome', 'dataFundacao', 'dataEmancipação',
     'fundadores', 'outrosFatosDeImportanciaHistorica'
@@ -97,6 +100,15 @@ class _InformacoesBasicasDoMunicipioState
       // Usamos a 'key' para decidir qual dado de teste colocar
       switch (key) {
         // --- Informações da Prefeitura ---
+        case 'uf':
+          controller.text = 'CE';
+          break;
+        case 'regiaoTuristica':
+          controller.text = 'Jericoacoara';
+          break;
+        case 'municipio':
+          controller.text = 'Jijoca';
+          break;
         case 'enderecoPrefeitura':
           controller.text = 'Praça da Matriz, 100';
           break;
@@ -208,6 +220,15 @@ class _InformacoesBasicasDoMunicipioState
         case 'aniversarioMunicipio':
           controller.text = '29/07/1901'; // Formato correto para a máscara
           break;
+        case 'dataFeriadoMunicipal01':
+          controller.text = '29/10/1901'; // Formato correto para a máscara
+          break;
+        case 'dataFeriadoMunicipal02':
+          controller.text = '09/07/1901'; // Formato correto para a máscara
+          break;
+        case 'dataFeriadoMunicipal03':
+          controller.text = '19/07/1901'; // Formato correto para a máscara
+          break;
         case 'santoPadroeiro':
           controller.text = 'São Sebastião';
           break;
@@ -269,7 +290,17 @@ class _InformacoesBasicasDoMunicipioState
       _infoGeraisControllers.forEach((key, controller) {
         valoresJson[key] = controller.text;
       });
-
+      if (currentStep < pages.length - 1) {
+        // Avança para a próxima página
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+      } else {
+        // Lógica para enviar o formulário final
+        print("Formulário finalizado e pronto para enviar!");
+        // _enviarFormulario(); // Você pode chamar sua função de envio aqui
+      }
       print("FORMULÁRIO COMPLETO E VÁLIDO: $valoresJson");
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Formulário enviado com sucesso!')));
@@ -302,9 +333,8 @@ class _InformacoesBasicasDoMunicipioState
         backgroundColor: Colors.white,
         body: Form(
             key: _formKey,
-            
             child: PageView.builder(
-            physics: NeverScrollableScrollPhysics(),
+              physics: NeverScrollableScrollPhysics(),
               onPageChanged: (value) {
                 setState(() {
                   currentStep = value;
@@ -315,69 +345,57 @@ class _InformacoesBasicasDoMunicipioState
                 return pages[index];
               },
             )),
-        bottomNavigationBar: 
-           Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  // Botão Voltar
-                  if (currentStep > 0)
-                    TextButton(
-                      onPressed: () {
-                        _pageController.previousPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.ease,
-                        );
-                      },
-                      child: const Text('VOLTAR'),
-                    ),
-                  // Espaçador para alinhar o botão Continuar à direita quando não houver o Voltar
-                  if (currentStep == 0) const Spacer(),
+        bottomNavigationBar:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+          // Botão Voltar
+          if (currentStep > 0)
+            TextButton(
+              onPressed: () {
+                _pageController.previousPage(
+                  duration: const Duration(milliseconds: 300),
+                  curve: Curves.ease,
+                );
+              },
+              child: const Text('VOLTAR'),
+            ),
+          // Espaçador para alinhar o botão Continuar à direita quando não houver o Voltar
+          if (currentStep == 0) const Spacer(),
 
-                  // Botão Continuar / Finalizar
-                  Container(
-                    height: 160.h,
-                    width: 550.w,
-                    margin: EdgeInsets.only(right: 55.h, bottom: 55.h),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 55, 111, 60)),
-                      onPressed: () {
-                        // Valida o formulário DA PÁGINA ATUAL usando a chave correta
-                          _formKey.currentState!.save();
-                    
-                          if (currentStep < pages.length - 1) {
-                            // Avança para a próxima página
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.ease,
-                            );
-                          } else {
-                            // Lógica para enviar o formulário final
-                            print("Formulário finalizado e pronto para enviar!");
-                            // _enviarFormulario(); // Você pode chamar sua função de envio aqui
-                          }
-                        },
-                      child: Text(
-                        currentStep < pages.length - 1
-                            ? 'CONTINUAR'
-                            : 'FINALIZAR',
-                        style: const TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  )
-                ]));
+          // Botão Continuar / Finalizar
+          Container(
+            height: 160.h,
+            width: 550.w,
+            margin: EdgeInsets.only(right: 55.h, bottom: 55.h),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
+              onPressed: () {
+                _preencherDadosParaTeste();
+                _enviarFormulario();
+              },
+              child: Text(
+                currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          )
+        ]));
   }
 }
 
 class Identificacao extends StatelessWidget {
-  const Identificacao({super.key, required this.onSaved});
+  final Map<String, TextEditingController> controllers;
+
+  const Identificacao(
+      {super.key, required this.onSaved, required this.controllers});
   final void Function(String?) onSaved;
   @override
   Widget build(Object context) {
     // TODO: implement build
     return Column(
       children: [
+        UfMunicipioRg(controllers: controllers),
+
         SizedBox(
           height: 55.h,
         ),
@@ -419,6 +437,7 @@ class InformacoesGerais extends StatelessWidget {
     final formWidgts = <Widget>[
       Identificacao(
         onSaved: (p0) => valoresJson['tipo'] = p0,
+        controllers: controllers,
       ),
       SizedBox(
         height: 65.h,
@@ -445,7 +464,6 @@ class InformacoesGerais extends StatelessWidget {
       CustomTextField(
         controller: controllers['enderecoPrefeitura'],
         name: "Avenida/rua/travessa/caminho/outro",
-
       ),
       CustomTextField(
         controller: controllers['bairroPrefeitura'],
@@ -752,13 +770,22 @@ class InformacoesGerais extends StatelessWidget {
         name: 'Feriado ',
         controller: controllers['feriadoMunicipal01'],
       ),
+      CustomTextDate(
+        dateController: controllers['dataFeriadoMunicipal01'],
+      ),
       CustomTextField(
         name: 'Feriado',
         controller: controllers['feriadoMunicipal02'],
       ),
+      CustomTextDate(
+        dateController: controllers['dataFeriadoMunicipal02'],
+      ),
       CustomTextField(
         name: 'Feriado',
         controller: controllers['feriadoMunicipal03'],
+      ),
+      CustomTextDate(
+        dateController: controllers['dataFeriadoMunicipal03'],
       ),
       SizedBox(
         height: 55.h,
@@ -841,7 +868,6 @@ class _CaracteristicasState extends State<Caracteristicas> {
     String respostaYoN = valoresJson['redeDeEsgoto'] ?? '';
     // TODO: implement build
     final List<Widget> listaWidgets = [
-
       Container(
         color: const Color.fromARGB(255, 55, 111, 60),
         height: sizeScreen.height * 0.06,
@@ -1093,95 +1119,91 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       textLabel(name: 'Coleta e Deposição'),
-      SizedBox(
-        height: 55.h,
-      ),
-
-      ConditionalFieldsGroup(title: 'Rede de Esgoto', jsonKey: 'redeDeEsgoto', children: [   CustomTextField(
-          name: 'Total Atendido (%)',
-          controller: widget.controllers['esgotoTotalAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
+      ConditionalFieldsGroup(
+          title: 'Rede de Esgoto',
+          jsonKey: 'redeDeEsgoto',
+          children: [
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller: widget.controllers['esgotoTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller: widget.controllers['esgotoDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller: widget.controllers['esgotoRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller: widget.controllers['esgotoEntidadeResponsavel'],
+            )
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Fossa Séptica',
+          jsonKey: 'fossaSeptica',
+          children: [
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller: widget.controllers['fossaSepticaTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller: widget.controllers['fossaSepticaDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller: widget.controllers['fossaSepticaRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller: widget.controllers['fossaSepticaEntidadeResponsavel'],
+            )
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Fossa Rudimentar',
+          jsonKey: 'fossaRudimentar',
+          children: [
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller: widget.controllers['fossaRudimentarTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller:
+                  widget.controllers['fossaRudimentarDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller: widget.controllers['fossaRudimentarRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['fossaRudimentarEntidadeResponsavel'],
+            )
+          ]),
+      ConditionalFieldsGroup(title: 'Vala', jsonKey: 'vala', children: [
         CustomTextField(
-          name: 'Domicílios Urbanos Atendidos (%)',
-          controller: widget.controllers['esgotoDomiciliosAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Rurais Atendidos (%)',
-          controller: widget.controllers['esgotoRuraisAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Entidade Responsável',
-          controller: widget.controllers['esgotoEntidadeResponsavel'],
-        )]),
-
-      SizedBox(
-        height: 55.h,
-      ),
-
-      ConditionalFieldsGroup(title: 'Fossa Séptica', jsonKey: 'fossaSeptica', children: [        CustomTextField(
-          name: 'Total Atendido (%)',
-          controller: widget.controllers['fossaSepticaTotalAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Urbanos Atendidos (%)',
-          controller: widget.controllers['fossaSepticaDomiciliosAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Rurais Atendidos (%)',
-          controller: widget.controllers['fossaSepticaRuraisAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Entidade Responsável',
-          controller: widget.controllers['fossaSepticaEntidadeResponsavel'],
-        )]),
-
-
-      SizedBox(
-        height: 55.h,
-      ),
-
-      ConditionalFieldsGroup(title: 'Fossa Rudimentar', jsonKey: 'fossaRudimentar', children: [CustomTextField(
-          name: 'Total Atendido (%)',
-          controller: widget.controllers['fossaRudimentarTotalAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Urbanos Atendidos (%)',
-          controller: widget.controllers['fossaRudimentarDomiciliosAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Rurais Atendidos (%)',
-          controller: widget.controllers['fossaRudimentarRuraisAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Entidade Responsável',
-          controller: widget.controllers['fossaRudimentarEntidadeResponsavel'],
-        )]),
-
-   
-      SizedBox(
-        height: 55.h,
-      ),
-
-      ConditionalFieldsGroup(title: 'Vala' 
-      , jsonKey: 'vala', children: [ CustomTextField(
           name: 'Total Atendido (%)',
           controller: widget.controllers['valaTotalAtendidos'],
           formatter: [FilteringTextInputFormatter.digitsOnly],
@@ -1202,97 +1224,103 @@ class _CaracteristicasState extends State<Caracteristicas> {
         CustomTextField(
           name: 'Entidade Responsável',
           controller: widget.controllers['valaEntidadeResponsavel'],
-        )]),
-     
-      SizedBox(
-        height: 55.h,
-      ),
-ConditionalFieldsGroup(title: 'Estação de Tratamento', jsonKey: 'estacaoDeTratamento', children: [  CustomTextField(
-          name: 'Total Atendido (%)',
-          controller: widget.controllers['estacaoDeTratamentoTotalAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Urbanos Atendidos (%)',
-          controller:
-              widget.controllers['estacaoDeTratamentoDomiciliosAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Rurais Atendidos (%)',
-          controller: widget.controllers['estacaoDeTratamentoRuraisAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Entidade Responsável',
-          controller:
-              widget.controllers['estacaoDeTratamentoEntidadeResponsavel'],
-        )]),
-
-      SizedBox(
-        height: 55.h,
-      ),
-
-      ConditionalFieldsGroup(title: 'Esgoto Tratado', jsonKey: 'esgotoTratado', children: [
-         CustomTextField(
-          name: 'Total Atendido (%)',
-          controller: widget.controllers['esgotoTratadoTotalAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Urbanos Atendidos (%)',
-          controller: widget.controllers['esgotoTratadoDomiciliosAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Rurais Atendidos (%)',
-          controller: widget.controllers['esgotoTratadoRuraisAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Entidade Responsável',
-          controller: widget.controllers['esgotoTratadoEntidadeResponsavel'],
         )
       ]),
-      SizedBox(
-        height: 55.h,
-      ),
-ConditionalFieldsGroup(title: 'Outros', jsonKey: 'servicoDeEsgotoOutros', children: [
-   CustomTextField(
-          name: 'Nome',
-          controller: widget.controllers['servicoDeEsgotoOutroTotalNome'],
-        ),
-        CustomTextField(
-          name: 'Total Atendido (%)',
-          controller: widget.controllers['servicoDeEsgotoOutroTotalAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Urbanos Atendidos (%)',
-          controller:
-              widget.controllers['servicoDeEsgotoOutroDomiciliosAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Rurais Atendidos (%)',
-          controller: widget.controllers['servicoDeEsgotoOutroRuraisAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Entidade Responsável',
-          controller:
-              widget.controllers['servicoDeEsgotoOutroEntidadeResponsavel'],
-        )
-]),
+      ConditionalFieldsGroup(
+          title: 'Estação de Tratamento',
+          jsonKey: 'estacaoDeTratamento',
+          children: [
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller:
+                  widget.controllers['estacaoDeTratamentoTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller:
+                  widget.controllers['estacaoDeTratamentoDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller:
+                  widget.controllers['estacaoDeTratamentoRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['estacaoDeTratamentoEntidadeResponsavel'],
+            )
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Esgoto Tratado',
+          jsonKey: 'esgotoTratado',
+          children: [
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller: widget.controllers['esgotoTratadoTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller:
+                  widget.controllers['esgotoTratadoDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller: widget.controllers['esgotoTratadoRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['esgotoTratadoEntidadeResponsavel'],
+            )
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Outros',
+          jsonKey: 'servicoDeEsgotoOutros',
+          children: [
+            CustomTextField(
+              name: 'Nome',
+              controller: widget.controllers['servicoDeEsgotoOutroTotalNome'],
+            ),
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller:
+                  widget.controllers['servicoDeEsgotoOutroTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller:
+                  widget.controllers['servicoDeEsgotoOutroDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller:
+                  widget.controllers['servicoDeEsgotoOutroRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['servicoDeEsgotoOutroEntidadeResponsavel'],
+            )
+          ]),
       SizedBox(
         height: 55.h,
       ),
@@ -1304,9 +1332,6 @@ ConditionalFieldsGroup(title: 'Outros', jsonKey: 'servicoDeEsgotoOutros', childr
         height: 55.h,
       ),
       textLabel(name: 'Energia Elétrica'),
-      SizedBox(
-        height: 55.h,
-      ),
       RadioFormField(
           onSaved: (newValue) => valoresJson['energiaEletrica'] = newValue,
           options: ['110 Volts', '220 Volts', '110/220 Volts']),
@@ -1315,9 +1340,6 @@ ConditionalFieldsGroup(title: 'Outros', jsonKey: 'servicoDeEsgotoOutros', childr
         controller: widget.controllers['capacidadeEmKVA'],
         formatter: [FilteringTextInputFormatter.digitsOnly],
         keyboardType: TextInputType.numberWithOptions(),
-      ),
-      SizedBox(
-        height: 55.h,
       ),
       ConditionalFieldsGroup(
           title: 'Gerador de Emergẽncia',
@@ -1334,9 +1356,9 @@ ConditionalFieldsGroup(title: 'Outros', jsonKey: 'servicoDeEsgotoOutros', childr
       SizedBox(
         height: 55.h,
       ),
-      textLabel(name: 'Abastecimento de Energia', fontWeight: FontWeight.bold,),
-      SizedBox(
-        height: 55.h,
+      textLabel(
+        name: 'Abastecimento de Energia',
+        fontWeight: FontWeight.bold,
       ),
       ConditionalFieldsGroup(
           title: 'Rede Urbana',
@@ -1353,9 +1375,6 @@ ConditionalFieldsGroup(title: 'Outros', jsonKey: 'servicoDeEsgotoOutros', childr
               controller: widget.controllers['redeUrbanaEntidadeResponsável'],
             )
           ]),
-      SizedBox(
-        height: 55.h,
-      ),
       ConditionalFieldsGroup(
           title: 'Rede Rural',
           jsonKey: 'redeRural',
@@ -1371,12 +1390,6 @@ ConditionalFieldsGroup(title: 'Outros', jsonKey: 'servicoDeEsgotoOutros', childr
               controller: widget.controllers['redeRuralEntidadeResponsável'],
             )
           ]),
-      SizedBox(
-        height: 55.h,
-      ),
-      SizedBox(
-        width: sizeScreen.width * 0.02,
-      ),
       ConditionalFieldsGroup(
           title: 'Abastecimento Próprio',
           jsonKey: 'abastecimentoProprio',
@@ -1408,9 +1421,6 @@ ConditionalFieldsGroup(title: 'Outros', jsonKey: 'servicoDeEsgotoOutros', childr
                   widget.controllers['abastecimentoProprioEntidadeResponsavel'],
             )
           ]),
-      SizedBox(
-        height: 55.h,
-      ),
       ConditionalFieldsGroup(
           title: 'Outros',
           jsonKey: 'servicosDeEnergiaOutro',
@@ -1449,7 +1459,650 @@ ConditionalFieldsGroup(title: 'Outros', jsonKey: 'servicoDeEsgotoOutros', childr
       SizedBox(
         height: 55.h,
       ),
+      textLabel(
+        name: 'Coleta',
+        fontWeight: FontWeight.bold,
+      ),
+      ConditionalFieldsGroup(
+          title: 'Seletiva',
+          jsonKey: 'coletaSeletiva',
+          children: [
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller: widget.controllers['coletaSeletivaTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller:
+                  widget.controllers['coletaSeletivaDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller: widget.controllers['coletaSeletivaRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['coletaSeletivaEntidadeResponsavel'],
+            )
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Não Seletiva',
+          jsonKey: 'coletaNaoSeletiva',
+          children: [
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller: widget.controllers['coletaNaoSeletivaTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller:
+                  widget.controllers['coletaNaoSeletivaDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller:
+                  widget.controllers['coletaNaoSeletivaRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['coletaNaoSeletivaEntidadeResponsavel'],
+            )
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Sem Coleta',
+          jsonKey: 'coletaSemColeta',
+          children: [
+            CustomTextField(
+              name: 'Total de lixo sem coleta (%)',
+              controller: widget.controllers['coletaSemColetaTotal'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios urbanos sem coleta (%)',
+              controller: widget.controllers['coletaSemColetaDomicilios'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios rurais sem coleta (%)',
+              controller: widget.controllers['coletaSemColetaRurais'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+          ]),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Deposição e tratamento',
+        fontWeight: FontWeight.bold,
+      ),
+      ConditionalFieldsGroup(
+          title: 'Aterro Sanitário',
+          jsonKey: 'deposicaoAterroSanitario',
+          children: [
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller:
+                  widget.controllers['deposicaoAterroSanitarioTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller: widget
+                  .controllers['deposicaoAterroSanitarioDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller:
+                  widget.controllers['deposicaoAterroSanitarioRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller: widget
+                  .controllers['deposicaoAterroSanitarioEntidadeResponsavel'],
+            )
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Compostagem',
+          jsonKey: 'deposicaoCompostagem',
+          children: [
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller:
+                  widget.controllers['deposicaoAterroSanitarioTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller: widget
+                  .controllers['deposicaoAterroSanitarioDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller:
+                  widget.controllers['deposicaoAterroSanitarioRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller: widget
+                  .controllers['deposicaoAterroSanitarioEntidadeResponsavel'],
+            )
+          ]),
+      ConditionalFieldsGroup(
+          title: 'A Céu Aberto (lixão)',
+          jsonKey: 'deposicaoACeuAberto',
+          children: [
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller:
+                  widget.controllers['deposicaoACeuAbertoTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller:
+                  widget.controllers['deposicaoACeuAbertoDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller:
+                  widget.controllers['deposicaoACeuAbertoRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['deposicaoACeuAbertoEntidadeResponsavel'],
+            )
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Outros',
+          jsonKey: 'deposicaoOutro',
+          children: [
+            CustomTextField(
+              name: 'Nome',
+              controller: widget.controllers['deposicaoOutroTotalNome'],
+            ),
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller: widget.controllers['deposicaoOutroTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller:
+                  widget.controllers['deposicaoOutroDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['deposicaoOutroEntidadeResponsavel'],
+            ),
+          ]),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Reciclagem',
+        fontWeight: FontWeight.bold,
+      ),
+      ConditionalFieldsGroup(
+          title: 'De Aço',
+          jsonKey: 'reciclagemDeAco',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller: widget.controllers['reciclagemDeAcoTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['reciclagemDeAcoEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De Alumínio',
+          jsonKey: 'reciclagemDeAluminio',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller:
+                  widget.controllers['reciclagemDeAluminioTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['reciclagemDeAluminioEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De Ferro',
+          jsonKey: 'reciclagemDeFerro',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller: widget.controllers['reciclagemDeFerroTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['reciclagemDeFerroEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Outro Metal',
+          jsonKey: 'reciclagemOutro',
+          children: [
+            CustomTextField(
+              name: 'Nome',
+              controller: widget.controllers['reciclagemOutroNome'],
+            ),
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller: widget.controllers['reciclagemOutroTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['reciclagemOutroEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De Baterias e Pilhas',
+          jsonKey: 'reciclagemDeBateriasPilhas',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller: widget
+                  .controllers['reciclagemDeBateriasPilhasTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller: widget
+                  .controllers['reciclagemDeBateriasPilhasEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De Borracha',
+          jsonKey: 'reciclagemDeBorracha',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller:
+                  widget.controllers['reciclagemDeBorrachaTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['reciclagemDeBorrachaEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De Eletrônicos',
+          jsonKey: 'reciclagemDeEletronicos',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller:
+                  widget.controllers['reciclagemDeEletronicosTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller: widget
+                  .controllers['reciclagemDeEletronicosEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De Embalagens\nLonga Vida',
+          jsonKey: 'reciclagemDeEmbalagensLongaVida',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller: widget
+                  .controllers['reciclagemDeEmbalagensLongaVidaTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller: widget.controllers[
+                  'reciclagemDeEmbalagensLongaVidaEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De Entulho',
+          jsonKey: 'reciclagemDeEntulho',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller:
+                  widget.controllers['reciclagemDeEntulhoTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['reciclagemDeEntulhoEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De Madeira',
+          jsonKey: 'reciclagemDeMadeira',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller:
+                  widget.controllers['reciclagemDeMadeiraTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['reciclagemDeMadeiraEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De Papel',
+          jsonKey: 'reciclagemDePapel',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller: widget.controllers['reciclagemDePapelTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['reciclagemDePapelEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De plástico e\nembalagens',
+          jsonKey: 'reciclagemDePlasticoEEmbalagens',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller: widget
+                  .controllers['reciclagemDePlasticoEEmbalagensTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller: widget.controllers[
+                  'reciclagemDePlasticoEEmbalagensEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De Vidro',
+          jsonKey: 'reciclagemDeVidro',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller: widget.controllers['reciclagemDeVidroTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['reciclagemDeVidroEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'De Óleo de\nCozinha',
+          jsonKey: 'reciclagemDeOleoDeCozinha',
+          children: [
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller:
+                  widget.controllers['reciclagemDeOleoDeCozinhaTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller: widget
+                  .controllers['reciclagemDeOleoDeCozinhaEntidadeResponsavel'],
+            ),
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Outros',
+          jsonKey: 'reciclagemOutros',
+          children: [
+            CustomTextField(
+              name: 'Nome',
+              controller: widget.controllers['reciclagemOutrosNome'],
+            ),
+            CustomTextField(
+              name: 'Total reciclado (%)',
+              controller: widget.controllers['reciclagemOutrosTotalReciclado'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller:
+                  widget.controllers['reciclagemOutrosEntidadeResponsavel'],
+            ),
+          ]),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Serviços De Comunicação',
+        fontWeight: FontWeight.bold,
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(name: 'Acesso à Internet'),
+      SizedBox(
+        height: 55.h,
+      ),
+      RadioFormField(
+          onSaved: (newValue) =>
+              valoresJson['servicosDeComunicacaoAcessoAInternet'],
+          options: [
+            'A rádio',
+            'A cabo',
+            'Banda larga',
+            'Discada',
+            'Wireless',
+            '3G'
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Telefonia Móvel',
+          jsonKey: 'servicosDeComunicacaoTelefoniaMovel',
+          children: [
+            SizedBox(
+              height: 55.h,
+            ),
+            textLabel(name: 'Área de Cobertura'),
+            RadioFormField(
+              options: ['Em Todo Município', 'Em Parte do Município'],
+              onSaved: (newValue) =>
+                  valoresJson['telefoniaMovelAreaDeCobertura'],
+            )
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Telefonia Fixa',
+          jsonKey: 'servicosDeComunicacaoTelefoniaFixa',
+          children: [
+            SizedBox(
+              height: 55.h,
+            ),
+            textLabel(name: 'Área de Cobertura'),
+            RadioFormField(
+              options: ['Em Todo Município', 'Em Parte do Município'],
+              onSaved: (newValue) =>
+                  valoresJson['telefoniaFixaAreaDeCobertura'],
+            )
+          ]),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Serviços Turísticos',
+        fontWeight: FontWeight.bold,
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Promoção Turística',
+        fontWeight: FontWeight.bold,
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      ConditionalFieldsGroup(
+          title: 'Divulgação Impressa',
+          jsonKey: 'promocaoTuristicaDivulgacaoImpressa',
+          children: [
+            CustomTextField(
+              name: 'Folder',
+              controller: widget.controllers['divulgacaoImpressaFolder'],
+            ),
+            CustomTextField(
+                name: 'Revista',
+                controller: widget.controllers['divulgacaoImpressaRevista']),
+            CustomTextField(
+                name: 'Jornal',
+                controller: widget.controllers['divulgacaoImpressaJornal']),
+            CustomTextField(
+                name: 'Outros',
+                controller: widget.controllers['divulgacaoImpressaOutros'])
+          ]),
+      ConditionalFieldsGroup(
+          title: 'Divulgação Televisiva',
+          jsonKey: 'promocaoTuristicaDivulgacaoTelevisiva',
+          children: []),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Atendimento ao Visitante',
+        fontWeight: FontWeight.bold,
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Atendimento em Língua Estrangeira',
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      RadioFormField(
+        options: ['Não', 'Inglês', 'Espanhol', 'outro'],
+        onSaved: (newValue) => valoresJson['atendimentoEmLinguaEstrangeira'],
+      ),
+      textLabel(
+        name: 'Informativos Impressos',
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      RadioFormField(
+        options: ['Não', 'Português', 'Inglês', 'Espanhol', 'outro'],
+        onSaved: (newValue) =>
+            valoresJson['atendimentoAoVisitanteInformativosImpressos'],
+      ),
+      textLabel(
+        name: 'Caracterização do Fluxo de Visitantes',
+        fontWeight: FontWeight.bold,
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(name: 'Dados de Visitação'),
+      CustomTextField(
+        name: 'Visitantes Ano (nº)',
+        controller: widget.controllers['visitantesAno'],
+        formatter: [FilteringTextInputFormatter.digitsOnly],
+      ),
+      CustomTextField(
+        name: 'Visitantes Alta Temporada (nº)',
+        controller: widget.controllers['visitantesAno'],
+        formatter: [FilteringTextInputFormatter.digitsOnly],
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(name: 'Meses Alta Temporada'),
+      SizedBox(
+        height: 55.h,
+      ),
+      CheckboxGroupFormField(
+        onSaved: (p0) => valoresJson['mesesAltaTemporada'] = p0,
+        options: [
+          'Janeiro',
+          'Fevereiro',
+          'Março',
+          'Abril',
+          'Maio',
+          'Junho',
+          'Julho',
+          'Agosto',
+          'Setembro',
+          'Outubro',
+          'Novembro',
+          'Dezembro',
+          'Ano Inteiro'
+        ],
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(name: 'Origem dos Visitantes/Turistas'),
+      SizedBox(
+        height: 55.h,
+      ),
+      RadioFormField(
+        options: ['Entorno Municipal', 'Estadual', 'Nacional', 'Internacional'],
+        onSaved: (newValue) => valoresJson['origemDosVisitantesTuristas'],
+      ),
+
+
+      
     ];
+
     return SingleChildScrollView(
       child: Column(
         children: listaWidgets,
@@ -1489,22 +2142,24 @@ class _ConditionalFieldsGroupState extends State<ConditionalFieldsGroup> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(
+          height: 55.h,
+        ),
         Row(
           children: [
             textLabel(name: widget.title),
-            const Spacer(),
             Expanded(
                 flex: 2,
                 child: ExpansionTileYoN(
                   getValue: (p0) {
-                    if (valoresJson[widget.jsonKey] == p0) return; 
+                    if (valoresJson[widget.jsonKey] == p0) return;
 
-                      WidgetsBinding.instance.addPostFrameCallback((_){
-                          if(!mounted) return;
-                          setState(() {
-                            valoresJson[widget.jsonKey] = p0;
-                          });
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (!mounted) return;
+                      setState(() {
+                        valoresJson[widget.jsonKey] = p0;
                       });
+                    });
                   },
                 ))
           ],
@@ -1514,3 +2169,371 @@ class _ConditionalFieldsGroupState extends State<ConditionalFieldsGroup> {
     );
   }
 }
+//  textLabel(
+//                 name: 'Origem dos turistas nacionais\n(Até 5 estados)',
+//                 fontWeight: FontWeight.bold,
+//               ),
+//               SizedBox(
+//                 height: sizeScreen.height * 0.02,
+//               ),
+//               SizedBox(
+//                 width: 1250.w,
+//                 child: AutocompleteTextField(
+//                   controllerAuto: getController('estado01'),
+//                   textAlign: TextAlign.start,
+//                   label: "Selecione um estado",
+//                   onSelected: (option) {
+//                     _estadoSelecionado =
+//                         _pesquisaController.getEstadoByNome(option);
+//                     _pesquisaController.setMunicipios(_estadoSelecionado!.id);
+//                     if (_estadosSelecionados.length < 5) {
+//                       _estadosSelecionados.add(_estadoSelecionado!.nome);
+//                     } else {
+//                       _estadosSelecionados.removeAt(0);
+//                       _estadosSelecionados.insert(0, _estadoSelecionado!.nome);
+//                     }
+//                   },
+//                   optionsBuilder: (textEditingValue) {
+//                     if (textEditingValue.text == '') {
+//                       return const Iterable.empty();
+//                     }
+//                     return _pesquisaController.estados.map((e) => e.nome).where(
+//                           (word) => word.toLowerCase().contains(
+//                                 textEditingValue.text.toLowerCase(),
+//                               ),
+//                         );
+//                   },
+//                   onChanged: (value) {
+//                     _estadoController.text = value;
+//                   },
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 40.h,
+//               ),
+
+//               SizedBox(
+//                 width: 1250.w,
+//                 child: AutocompleteTextField(
+//                   controllerAuto: getController('estado02'),
+//                   textAlign: TextAlign.start,
+//                   label: "Selecione um estado",
+//                   onSelected: (option) {
+//                     _estadoSelecionado =
+//                         _pesquisaController.getEstadoByNome(option);
+//                     _pesquisaController.setMunicipios(_estadoSelecionado!.id);
+//                     if (_estadosSelecionados.length < 5) {
+//                       _estadosSelecionados.add(_estadoSelecionado!.nome);
+//                     } else {
+//                       _estadosSelecionados.removeAt(1);
+//                       _estadosSelecionados.insert(1, _estadoSelecionado!.nome);
+//                     }
+//                   },
+//                   optionsBuilder: (textEditingValue) {
+//                     if (textEditingValue.text == '') {
+//                       return const Iterable.empty();
+//                     }
+//                     return _pesquisaController.estados.map((e) => e.nome).where(
+//                           (word) => word.toLowerCase().contains(
+//                                 textEditingValue.text.toLowerCase(),
+//                               ),
+//                         );
+//                   },
+//                   onChanged: (value) {
+//                     _estadoController.text = value;
+//                   },
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 40.h,
+//               ),
+
+//               SizedBox(
+//                 width: 1250.w,
+//                 child: AutocompleteTextField(
+//                   textAlign: TextAlign.start,
+//                   label: "Selecione um estado",
+//                   controllerAuto: getController('estado03'),
+//                   onSelected: (option) {
+//                     _estadoSelecionado =
+//                         _pesquisaController.getEstadoByNome(option);
+//                     _pesquisaController.setMunicipios(_estadoSelecionado!.id);
+//                     if (_estadosSelecionados.length < 5) {
+//                       _estadosSelecionados.add(_estadoSelecionado!.nome);
+//                     } else {
+//                       _estadosSelecionados.removeAt(2);
+//                       _estadosSelecionados.insert(2, _estadoSelecionado!.nome);
+//                     }
+//                   },
+//                   optionsBuilder: (textEditingValue) {
+//                     if (textEditingValue.text == '') {
+//                       return const Iterable.empty();
+//                     }
+//                     return _pesquisaController.estados.map((e) => e.nome).where(
+//                           (word) => word.toLowerCase().contains(
+//                                 textEditingValue.text.toLowerCase(),
+//                               ),
+//                         );
+//                   },
+//                   onChanged: (value) {
+//                     _estadoController.text = value;
+//                   },
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 40.h,
+//               ),
+
+//               SizedBox(
+//                 width: 1250.w,
+//                 child: AutocompleteTextField(
+//                   controllerAuto: getController('estado04'),
+//                   textAlign: TextAlign.start,
+//                   label: "Selecione um estado",
+//                   onSelected: (option) {
+//                     _estadoSelecionado =
+//                         _pesquisaController.getEstadoByNome(option);
+//                     _pesquisaController.setMunicipios(_estadoSelecionado!.id);
+//                     if (_estadosSelecionados.length < 5) {
+//                       _estadosSelecionados.add(_estadoSelecionado!.nome);
+//                     } else {
+//                       _estadosSelecionados.removeAt(3);
+//                       _estadosSelecionados.insert(3, _estadoSelecionado!.nome);
+//                     }
+//                   },
+//                   optionsBuilder: (textEditingValue) {
+//                     if (textEditingValue.text == '') {
+//                       return const Iterable.empty();
+//                     }
+//                     return _pesquisaController.estados.map((e) => e.nome).where(
+//                           (word) => word.toLowerCase().contains(
+//                                 textEditingValue.text.toLowerCase(),
+//                               ),
+//                         );
+//                   },
+//                   onChanged: (value) {
+//                     _estadoController.text = value;
+//                   },
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 40.h,
+//               ),
+//               SizedBox(
+//                 width: 1250.w,
+//                 child: AutocompleteTextField(
+//                   textAlign: TextAlign.start,
+//                   label: "Selecione um estado",
+//                   controllerAuto: getController('estado05'),
+//                   onSelected: (option) {
+//                     _estadoSelecionado =
+//                         _pesquisaController.getEstadoByNome(option);
+//                     _pesquisaController.setMunicipios(_estadoSelecionado!.id);
+//                     if (_estadosSelecionados.length < 5) {
+//                       _estadosSelecionados.add(_estadoSelecionado!.nome);
+//                     } else {
+//                       _estadosSelecionados.removeAt(4);
+//                       _estadosSelecionados.insert(4, _estadoSelecionado!.nome);
+//                     }
+//                   },
+//                   optionsBuilder: (textEditingValue) {
+//                     if (textEditingValue.text == '') {
+//                       return const Iterable.empty();
+//                     }
+//                     return _pesquisaController.estados.map((e) => e.nome).where(
+//                           (word) => word.toLowerCase().contains(
+//                                 textEditingValue.text.toLowerCase(),
+//                               ),
+//                         );
+//                   },
+//                   onChanged: (value) {
+//                     _estadoController.text = value;
+//                   },
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: sizeScreen.height * 0.02,
+//               ),
+//               textLabel(
+//                 name: 'Origem dos turistas internacionais\n(Até 5 Países)',
+//                 fontWeight: FontWeight.bold,
+//               ),
+//               SizedBox(
+//                 height: 40.h,
+//               ),
+
+//               SizedBox(
+//                 width: 1250.w,
+//                 child: AutocompleteTextField(
+//                   textAlign: TextAlign.start,
+//                   label: "Selecione um país",
+//                   controllerAuto: getController('pais01'),
+//                   onSelected: (option) {
+//                     _paisSelecionado =
+//                         _pesquisaController.getPaisesByNome(option);
+//                     if (_paisesSelecionados.length < 5) {
+//                       _paisesSelecionados.add(_paisSelecionado!.nome);
+//                     } else {
+//                       _paisesSelecionados.removeAt(0);
+//                       _paisesSelecionados.insert(0, _paisSelecionado!.nome);
+//                     }
+//                   },
+//                   optionsBuilder: (textEditingValue) {
+//                     if (textEditingValue.text == '') {
+//                       return const Iterable.empty();
+//                     }
+//                     return _pesquisaController.paises.map((e) => e.nome).where(
+//                           (word) => word.toLowerCase().contains(
+//                                 textEditingValue.text.toLowerCase(),
+//                               ),
+//                         );
+//                   },
+//                   onChanged: (value) {
+//                     _paisController.text = value;
+//                   },
+//                 ),
+//               ),
+
+//               SizedBox(
+//                 height: 40.h,
+//               ),
+
+//               SizedBox(
+//                 width: 1250.w,
+//                 child: AutocompleteTextField(
+//                   textAlign: TextAlign.start,
+//                   label: "Selecione um país",
+//                   controllerAuto: getController('pais02'),
+//                   onSelected: (option) {
+//                     _paisSelecionado =
+//                         _pesquisaController.getPaisesByNome(option);
+//                     if (_paisesSelecionados.length < 5) {
+//                       _paisesSelecionados.add(_paisSelecionado!.nome);
+//                     } else {
+//                       _paisesSelecionados.removeAt(1);
+//                       _paisesSelecionados.insert(1, _paisSelecionado!.nome);
+//                     }
+//                   },
+//                   optionsBuilder: (textEditingValue) {
+//                     if (textEditingValue.text == '') {
+//                       return const Iterable.empty();
+//                     }
+//                     return _pesquisaController.paises.map((e) => e.nome).where(
+//                           (word) => word.toLowerCase().contains(
+//                                 textEditingValue.text.toLowerCase(),
+//                               ),
+//                         );
+//                   },
+//                   onChanged: (value) {
+//                     _paisController.text = value;
+//                   },
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 40.h,
+//               ),
+
+//               SizedBox(
+//                 width: 1250.w,
+//                 child: AutocompleteTextField(
+//                   controllerAuto: getController('pais03'),
+//                   textAlign: TextAlign.start,
+//                   label: "Selecione um país",
+//                   onSelected: (option) {
+//                     _paisSelecionado =
+//                         _pesquisaController.getPaisesByNome(option);
+//                     if (_paisesSelecionados.length < 5) {
+//                       _paisesSelecionados.add(_paisSelecionado!.nome);
+//                     } else {
+//                       _paisesSelecionados.removeAt(2);
+//                       _paisesSelecionados.insert(2, _paisSelecionado!.nome);
+//                     }
+//                   },
+//                   optionsBuilder: (textEditingValue) {
+//                     if (textEditingValue.text == '') {
+//                       return const Iterable.empty();
+//                     }
+//                     return _pesquisaController.paises.map((e) => e.nome).where(
+//                           (word) => word.toLowerCase().contains(
+//                                 textEditingValue.text.toLowerCase(),
+//                               ),
+//                         );
+//                   },
+//                   onChanged: (value) {
+//                     _paisController.text = value;
+//                   },
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 40.h,
+//               ),
+
+//               SizedBox(
+//                 width: 1250.w,
+//                 child: AutocompleteTextField(
+//                   controllerAuto: getController('pais04'),
+//                   textAlign: TextAlign.start,
+//                   label: "Selecione um país",
+//                   onSelected: (option) {
+//                     _paisSelecionado =
+//                         _pesquisaController.getPaisesByNome(option);
+//                     if (_paisesSelecionados.length < 5) {
+//                       _paisesSelecionados.add(_paisSelecionado!.nome);
+//                     } else {
+//                       _paisesSelecionados.removeAt(3);
+//                       _paisesSelecionados.insert(3, _paisSelecionado!.nome);
+//                     }
+//                   },
+//                   optionsBuilder: (textEditingValue) {
+//                     if (textEditingValue.text == '') {
+//                       return const Iterable.empty();
+//                     }
+//                     return _pesquisaController.paises.map((e) => e.nome).where(
+//                           (word) => word.toLowerCase().contains(
+//                                 textEditingValue.text.toLowerCase(),
+//                               ),
+//                         );
+//                   },
+//                   onChanged: (value) {
+//                     _paisController.text = value;
+//                   },
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: 40.h,
+//               ),
+
+//               SizedBox(
+//                 width: 1250.w,
+//                 child: AutocompleteTextField(
+//                   textAlign: TextAlign.start,
+//                   label: "Selecione um país",
+//                   controllerAuto: getController('pais05'),
+//                   onSelected: (option) {
+//                     _paisSelecionado =
+//                         _pesquisaController.getPaisesByNome(option);
+//                     if (_paisesSelecionados.length < 5) {
+//                       _paisesSelecionados.add(_paisSelecionado!.nome);
+//                     } else {
+//                       _paisesSelecionados.removeAt(4);
+//                       _paisesSelecionados.insert(4, _paisSelecionado!.nome);
+//                     }
+//                   },
+//                   optionsBuilder: (textEditingValue) {
+//                     if (textEditingValue.text == '') {
+//                       return const Iterable.empty();
+//                     }
+//                     return _pesquisaController.paises.map((e) => e.nome).where(
+//                           (word) => word.toLowerCase().contains(
+//                                 textEditingValue.text.toLowerCase(),
+//                               ),
+//                         );
+//                   },
+//                   onChanged: (value) {
+//                     _paisController.text = value;
+//                   },
+//                 ),
+//               ),
+//               SizedBox(
+//                 height: sizeScreen.height * 0.05,
+//               ),

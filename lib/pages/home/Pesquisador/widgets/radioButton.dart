@@ -356,18 +356,42 @@ class RadioFormField extends StatefulWidget {
 }
 
 class _RadioFormFieldState extends State<RadioFormField> {
-  // Estado para controlar apenas a UI do ExpansionTile
+
+  late final TextEditingController _outroController;  
   bool _isExpanded = false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _outroController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+      _outroController.dispose();
+    super.dispose();
+  }
+  @override
   Widget build(BuildContext context) {
-    // 1. O widget principal agora é um FormField
     return FormField<String>(
-      // 2. Passe as propriedades do widget para o FormField
-      onSaved: widget.onSaved,
+      onSaved: (value) {
+        if(widget.onSaved == null) return;
+
+        if(value == 'outro'){
+          widget.onSaved!('outro: ${_outroController.text}');
+        }else{
+          widget.onSaved!(value);
+        }
+      },
       validator: widget.validator ?? (value) {
             if (value == null) {
               return "Por favor, selecione uma opção";
+            }
+
+            if(value =='outro' && _outroController.text.trim().isEmpty){
+              return 'Por favor, especifique a opção "outro".';
             }
             return null;
           },
@@ -379,7 +403,12 @@ class _RadioFormFieldState extends State<RadioFormField> {
         
         // Função para atualizar o estado do FormField quando uma opção é selecionada
         void onChanged(String? value) {
-          field.didChange(value); // Isso atualiza o valor e revalida se necessário
+          field.didChange(value); 
+          
+          if(value!='outro'){
+            _outroController.clear();
+          }
+
         }
 
         return Column(
@@ -413,10 +442,30 @@ shape: Border(),
                       // Ao mudar, atualize o estado do FormField
                       onChanged: onChanged,
                     ),
+                    onTap: () => onChanged(option),
                   ),
               ],
             ),
             
+            if (field.value == 'outro')
+              Padding(
+                padding: const EdgeInsets.only(top: 12.0), // Adiciona um espaçamento
+                child: CustomTextField(
+                  // Passamos o controller para o CustomTextField
+                  controller: _outroController,
+                  name: 'Qual?',
+                  // A validação principal já está no FormField,
+                  // mas podemos manter uma aqui para o feedback imediato.
+                  validat: (text) {
+                    if (text == null || text.trim().isEmpty) {
+                      return 'Preencha o campo';
+                    }
+                    return null;
+                  },
+                ),
+              ),
+
+
             // 4. Mostra o erro vindo diretamente do estado do FormField
             if (field.hasError)
               Padding(
