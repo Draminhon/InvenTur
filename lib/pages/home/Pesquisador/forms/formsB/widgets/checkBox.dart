@@ -190,13 +190,14 @@ class CheckboxGroupFormField extends StatefulWidget {
   final List<String>? initialValue;
   final FormFieldSetter<List<String>>? onSaved;
   final FormFieldValidator<List<String>>? validator;
-
+  final bool isLimitedBy3;
   const CheckboxGroupFormField({
     super.key,
     required this.options,
     this.initialValue,
     this.onSaved,
     this.validator,
+    this.isLimitedBy3 = false
   });
 
   @override
@@ -212,10 +213,10 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
     super.dispose();
     
   }
+  int countMarkd = 0;
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
-
     return FormField<List<String>>(
       onSaved: widget.onSaved,
       validator: widget.validator ?? (values) {
@@ -263,6 +264,7 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
                           ),
                           leading: Checkbox(
                             value: isChecked,
+
                             onChanged: (bool? value) {
                               // ALTERAÇÃO 4: Lógica de mudança centralizada aqui
                               // Criamos uma nova lista a partir do valor atual do campo
@@ -273,9 +275,22 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
                                 if (!newValues.contains(option)) {
                                   newValues.add(option);
                                 }
+                                countMarkd+=1;
+                                print(countMarkd);
+
                               } else {
+
                                 // Remove o item se for desmarcado
                                 newValues.remove(option);
+                                countMarkd-=1;
+                                print(countMarkd);
+
+                              }
+
+                              if(countMarkd > 3 && widget.isLimitedBy3){
+                                newValues.removeAt(0);
+                                countMarkd-=1;
+
                               }
 
                               // Notifica o FormField sobre a mudança com a nova lista
