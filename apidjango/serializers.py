@@ -21,7 +21,8 @@ class ChangePasswordSerializer(serializers.Serializer):
 class UserSerializer(serializers.ModelSerializer):
     pesquisas = serializers.PrimaryKeyRelatedField(
         many = True,
-        queryset = Pesquisa.objects.all()
+        queryset = Pesquisa.objects.all(),
+        required=False
         )
         
     class Meta:
@@ -177,6 +178,11 @@ class AlimentosEBebidasSerializer(serializers.ModelSerializer):
 class MeioDeHospedagemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeioDeHospedagem
+        fields = '__all__'
+
+class InformacoesBasicasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InformacaoBasicaDoMunicipio
         fields = '__all__'
 
 class EquipamentoSerializer(serializers.Serializer):

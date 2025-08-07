@@ -66,6 +66,14 @@ class MeioDeHospedagemViewSet(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
 
+class InformacoesBasicasViewSet(viewsets.ModelViewSet):
+
+    queryset = InformacaoBasicaDoMunicipio.objects.filter(is_active=True)
+    serializer_class = InformacoesBasicasSerializer
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
 class EquipamentosListView(APIView):
     def get(self, request, *args, **kwargs):
         pesquisa_id = request.query_params.get('pesquisa_id')

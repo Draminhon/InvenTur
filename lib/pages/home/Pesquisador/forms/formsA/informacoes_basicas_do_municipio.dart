@@ -29,8 +29,10 @@ class _InformacoesBasicasDoMunicipioState
 
   Map<String, TextEditingController> _caracteristicasControllers = {};
 
+  Map<String, TextEditingController> _legislacaoControllers = {};
+
   final List<String> _chavesInfoGerais = const [
-    'uf', 'regiaoTuristica', 'municipio',
+    'uf', 'regiao_turistica', 'municipio',
     'enderecoPrefeitura', 'bairroPrefeitura', 'cepPrefeitura',
     'numeroPrefeitura',
     'instagramPrefeitura', 'emailPrefeitura', 'sitePrefeitura',
@@ -39,7 +41,7 @@ class _InformacoesBasicasDoMunicipioState
     'distanciaDaCapital', 'totalFuncionariosPrefeitura',
     'pessoasComDeficienciaPrefeitura',
     'nomeDoPrefeito', 'nomeDasSecretariasEtc',
-    'nomeOrgaoOficialTurismo', // <-- VÍRGULA CORRIGIDA
+    'nomeOrgaoOficiaTurismo', 
     'enderecoOrgaoOfcTurismo', 'avenidaRuaOrgaoOfcTurismo',
     'distritoOrgaoOfcTurismo',
     'cepOrgaoOfcTurismo', 'numeroOrgaoOfcTurismo', 'instagramOrgaoOfcTurismo',
@@ -55,7 +57,7 @@ class _InformacoesBasicasDoMunicipioState
     'dataFeriadoMunicipal01', 'dataFeriadoMunicipal02',
     'dataFeriadoMunicipal03',
     'feriadoMunicipal02',
-    'feriadoMunicipal03', 'origemDoNome', 'dataFundacao', 'dataEmancipação',
+    'feriadoMunicipal03', 'origemDoNome', 'dataFundacao', 'dataEmancipacao',
     'fundadores', 'outrosFatosDeImportanciaHistorica'
   ];
   late List<Widget> pages;
@@ -74,10 +76,133 @@ class _InformacoesBasicasDoMunicipioState
         'temperaturaMaxima',
         'altitudeMedia',
         'qtdeDomiciliosAtendidos',
-        'empresaResponsável',
-        'energiaEletrica',
+        'empresaResponsavel',
+        'esgotoTotalAtendidos',
+        'esgotoDomiciliosAtendidos',
+        'esgotoRuraisAtendidos',
+        'esgotoEntidadeResponsavel',
+        'fossaSepticaTotalAtendidos',
+        'fossaSepticaDomiciliosAtendidos',
+        'fossaSepticaRuraisAtendidos',
+        'fossaSepticaEntidadeResponsavel',
+        'fossaRudimentarTotalAtendidos',
+        'fossaRudimentarDomiciliosAtendidos',
+        'fossaRudimentarRuraisAtendidos',
+        'fossaRudimentarEntidadeResponsavel',
+        'valaTotalAtendidos',
+        'valaDomiciliosAtendidos',
+        'valaRuraisAtendidos',
+        'valaEntidadeResponsavel',
+        'estacaoDeTratamentoTotalAtendidos',
+        'estacaoDeTratamentoDomiciliosAtendidos',
+        'estacaoDeTratamentoRuraisAtendidos',
+        'estacaoDeTratamentoEntidadeResponsavel',
+        'esgotoTratadoTotalAtendidos',
+        'esgotoTratadoDomiciliosAtendidos',
+        'esgotoTratadoRuraisAtendidos',
+        'esgotoTratadoEntidadeResponsavel',
+        'servicoDeEsgotoOutroTotalNome',
+        'servicoDeEsgotoOutroTotalAtendidos',
+        'servicoDeEsgotoOutroDomiciliosAtendidos',
+        'servicoDeEsgotoOutroRuraisAtendidos',
+        'servicoDeEsgotoOutroEntidadeResponsavel',
         'capacidadeEmKVA',
+        'geradorDeEmergenciaCapacidadeEmKVA',
+        'redeUrbanaTotalAbastecido',
+        'redeUrbanaEntidadeResponsavel',
+        'redeRuralTotalAbastecido',
+        'redeRuralEntidadeResponsável',
+        'abastecimentoProprioTotalAtendidos',
+        'abastecimentoProprioDomiciliosAtendidos',
+        'abastecimentoProprioRuraisAtendidos',
+        'abastecimentoProprioEntidadeResponsavel',
+        'servicosDeEnergiaOutroTotalNome',
+        'servicosDeEnergiaOutroTotalAtendidos',
+        'servicosDeEnergiaOutroDomiciliosAtendidos',
+        'servicosDeEnergiaOutroEntidadeResponsavel',
+        'coletaSeletivaTotalAtendidos',
+        'coletaSeletivaDomiciliosAtendidos',
+        'coletaSeletivaRuraisAtendidos',
+        'coletaSeletivaEntidadeResponsavel',
+        'coletaNaoSeletivaTotalAtendidos',
+        'coletaNaoSeletivaDomiciliosAtendidos',
+        'coletaNaoSeletivaRuraisAtendidos',
+        'coletaNaoSeletivaEntidadeResponsavel',
+        'coletaSemColetaTotal',
+        'coletaSemColetaDomicilios',
+        'coletaSemColetaRurais',
+        'deposicaoAterroSanitarioTotalAtendidos',
+        'deposicaoAterroSanitarioDomiciliosAtendidos',
+        'deposicaoAterroSanitarioRuraisAtendidos',
+        'deposicaoAterroSanitarioEntidadeResponsavel',
+        'deposicaoAterroSanitarioTotalAtendidos',
+        'deposicaoAterroSanitarioDomiciliosAtendidos',
+        'deposicaoAterroSanitarioRuraisAtendidos',
+        'deposicaoAterroSanitarioEntidadeResponsavel',
+        'deposicaoACeuAbertoTotalAtendidos',
+        'deposicaoACeuAbertoDomiciliosAtendidos',
+        'deposicaoACeuAbertoRuraisAtendidos',
+        'deposicaoACeuAbertoEntidadeResponsavel',
+        'deposicaoOutroTotalNome',
+        'deposicaoOutroTotalAtendidos',
+        'deposicaoOutroDomiciliosAtendidos',
+        'deposicaoOutroEntidadeResponsavel',
+        'reciclagemDeAcoTotalReciclado',
+        'reciclagemDeAcoEntidadeResponsavel',
+        'reciclagemDeAluminioTotalReciclado',
+        'reciclagemDeAluminioEntidadeResponsavel',
+        'reciclagemDeFerroTotalReciclado',
+        'reciclagemDeFerroEntidadeResponsavel',
+        'reciclagemOutroNome',
+        'reciclagemOutroTotalReciclado',
+        'reciclagemOutroEntidadeResponsavel',
+        'reciclagemDeBateriasPilhasTotalReciclado',
+        'reciclagemDeBateriasPilhasEntidadeResponsavel',
+        'reciclagemDeBorrachaTotalReciclado',
+        'reciclagemDeBorrachaEntidadeResponsavel',
+        'reciclagemDeEletronicosTotalReciclado',
+        'reciclagemDeEletronicosEntidadeResponsavel',
+        'reciclagemDeEmbalagensLongaVidaTotalReciclado',
+        'reciclagemDeEmbalagensLongaVidaEntidadeResponsavel',
+        'reciclagemDeEntulhoTotalReciclado',
+        'reciclagemDeEntulhoEntidadeResponsavel',
+        'reciclagemDeMadeiraTotalReciclado',
+        'reciclagemDeMadeiraEntidadeResponsavel',
+        'reciclagemDePapelTotalReciclado',
+        'reciclagemDePapelEntidadeResponsavel',
+        'reciclagemDePlasticoEEmbalagensTotalReciclado',
+        'reciclagemDePlasticoEEmbalagensEntidadeResponsavel',
+        'reciclagemDeVidroTotalReciclado',
+        'reciclagemDeVidroEntidadeResponsavel',
+        'reciclagemDeOleoDeCozinhaTotalReciclado',
+        'reciclagemDeOleoDeCozinhaEntidadeResponsavel',
+        'reciclagemOutrosNome',
+        'reciclagemOutrosTotalReciclado',
+        'reciclagemOutrosEntidadeResponsavel',
+        'divulgacaoImpressaFolder',
+        'divulgacaoImpressaRevista',
+        'divulgacaoImpressaJornal',
+        'divulgacaoImpressaOutros',
+        'visitantesAno',
+        'visitantesAnoAltaTemporada',
+        'origemInternacionalAnoBase',
+        'atrativosMaisVisitados'
   ];
+  
+  final List<String> _chavesLegislacao = const [
+    'leiOrganica',
+    'ocupacaoDoSolo',
+    'planoDeDesenvolvimentoDoTurismo',
+    'protecaoAmbiental',
+    'apoioACultura',
+    'incentivosFiscaisAoTurismo',
+    'planoDiretor',
+    'fundoMunicipalDeTurismo',
+    'legislacaoOutras',
+    'observacoes',
+    'referencias'
+  ];
+  
   @override
   void initState() {
     // TODO: implement initState
@@ -91,10 +216,14 @@ class _InformacoesBasicasDoMunicipioState
       _caracteristicasControllers[key] = TextEditingController();
     }
 
+    for (final key in _chavesLegislacao){
+      _legislacaoControllers[key] = TextEditingController();
+    }
+
     pages = [
       InformacoesGerais(controllers: _infoGeraisControllers),
       Caracteristicas(controllers: _caracteristicasControllers),
-      LegislacaoMunicipal()
+      LegislacaoMunicipal(controllers: _legislacaoControllers,)
     ];
   }
 
@@ -106,7 +235,7 @@ class _InformacoesBasicasDoMunicipioState
         case 'uf':
           controller.text = 'CE';
           break;
-        case 'regiaoTuristica':
+        case 'regiao_turistica':
           controller.text = 'Jericoacoara';
           break;
         case 'municipio':
@@ -256,7 +385,7 @@ class _InformacoesBasicasDoMunicipioState
         case 'dataFundacao':
           controller.text = '25/01/1875'; // Formato correto para a máscara
           break;
-        case 'dataEmancipação':
+        case 'dataEmancipacao':
           controller.text = '30/07/1925'; // Formato correto para a máscara
           break;
         case 'fundadores':
@@ -273,14 +402,431 @@ class _InformacoesBasicasDoMunicipioState
           break;
       }
     });
+    
   }
 
+void _preencherDadosParaTeste2() {
+      _caracteristicasControllers.forEach((key, controller) {
+      // Usamos a 'key' para decidir qual dado de teste colocar
+      switch (key) {
+        // --- Informações da Prefeitura ---
+        case 'uf':
+          controller.text = 'CE';
+          break;
+        case 'areaTotalMunicipio':
+          controller.text = '500';
+          break;
+        case 'areaUrbana':
+          controller.text = '50';
+          break;
+        case 'areaRural':
+          controller.text = '450';
+          break;
+        case 'anoBase':
+          controller.text = '2023';
+          break;
+        case 'populacaoTotal':
+          controller.text = '10000';
+          break;
+        case 'populacaoUrbana':
+          controller.text = '8000';
+          break;
+        case 'populacaoRural':
+          controller.text = '2000';
+          break;
+        case 'anoBasePopulacao':
+          controller.text = '2023';
+          break;
+        case 'temperaturaMedia':
+          controller.text = '25.5';
+          break;
+        case 'temperaturaMinima':
+          controller.text = '20.0';
+          break;
+        case 'temperaturaMaxima':
+          controller.text = '32.0';
+          break;
+        case 'altitudeMedia':
+          controller.text = '150';
+          break;
+        case 'qtdeDomiciliosAtendidos':
+          controller.text = '2500';
+          break;
+        case 'empresaResponsavel':
+          controller.text = 'SAAE';
+          break;
+        case 'esgotoTotalAtendidos':
+          controller.text = '1800';
+          break;
+        case 'esgotoDomiciliosAtendidos':
+          controller.text = '1500';
+          break;
+        case 'esgotoRuraisAtendidos':
+          controller.text = '300';
+          break;
+        case 'esgotoEntidadeResponsavel':
+          controller.text = 'SAAE Esgoto';
+          break;
+        case 'fossaSepticaTotalAtendidos':
+          controller.text = '500';
+          break;
+        case 'fossaSepticaDomiciliosAtendidos':
+          controller.text = '400';
+          break;
+        case 'fossaSepticaRuraisAtendidos':
+          controller.text = '100';
+          break;
+        case 'fossaSepticaEntidadeResponsavel':
+          controller.text = 'Privada';
+          break;
+        case 'fossaRudimentarTotalAtendidos':
+          controller.text = '200';
+          break;
+        case 'fossaRudimentarDomiciliosAtendidos':
+          controller.text = '150';
+          break;
+        case 'fossaRudimentarRuraisAtendidos':
+          controller.text = '50';
+          break;
+        case 'fossaRudimentarEntidadeResponsavel':
+          controller.text = 'Própria';
+          break;
+        case 'valaTotalAtendidos':
+          controller.text = '100';
+          break;
+        case 'valaDomiciliosAtendidos':
+          controller.text = '80';
+          break;
+        case 'valaRuraisAtendidos':
+          controller.text = '20';
+          break;
+        case 'valaEntidadeResponsavel':
+          controller.text = 'Nenhuma';
+          break;
+        case 'estacaoDeTratamentoTotalAtendidos':
+          controller.text = '1000';
+          break;
+        case 'estacaoDeTratamentoDomiciliosAtendidos':
+          controller.text = '900';
+          break;
+        case 'estacaoDeTratamentoRuraisAtendidos':
+          controller.text = '100';
+          break;
+        case 'estacaoDeTratamentoEntidadeResponsavel':
+          controller.text = 'SAAE Esgoto';
+          break;
+        case 'esgotoTratadoTotalAtendidos':
+          controller.text = '1000';
+          break;
+        case 'esgotoTratadoDomiciliosAtendidos':
+          controller.text = '900';
+          break;
+        case 'esgotoTratadoRuraisAtendidos':
+          controller.text = '100';
+          break;
+        case 'esgotoTratadoEntidadeResponsavel':
+          controller.text = 'SAAE Esgoto';
+          break;
+        case 'servicoDeEsgotoOutroTotalNome':
+          controller.text = 'Caminhão Limpa-Fossa';
+          break;
+        case 'servicoDeEsgotoOutroTotalAtendidos':
+          controller.text = '50';
+          break;
+        case 'servicoDeEsgotoOutroDomiciliosAtendidos':
+          controller.text = '40';
+          break;
+        case 'servicoDeEsgotoOutroRuraisAtendidos':
+          controller.text = '10';
+          break;
+        case 'servicoDeEsgotoOutroEntidadeResponsavel':
+          controller.text = 'Terceirizada';
+          break;
+        case 'capacidadeEmKVA':
+          controller.text = '50000';
+          break;
+        case 'geradorDeEmergenciaCapacidadeEmKVA':
+          controller.text = '1000';
+          break;
+        case 'redeUrbanaTotalAbastecido':
+          controller.text = '7500';
+          break;
+        case 'redeUrbanaEntidadeResponsavel':
+          controller.text = 'ENEL';
+          break;
+        case 'redeRuralTotalAbastecido':
+          controller.text = '1800';
+          break;
+        case 'redeRuralEntidadeResponsável':
+          controller.text = 'COELCE';
+          break;
+        case 'abastecimentoProprioTotalAtendidos':
+          controller.text = '500';
+          break;
+        case 'abastecimentoProprioDomiciliosAtendidos':
+          controller.text = '400';
+          break;
+        case 'abastecimentoProprioRuraisAtendidos':
+          controller.text = '100';
+          break;
+        case 'abastecimentoProprioEntidadeResponsavel':
+          controller.text = 'Própria';
+          break;
+        case 'servicosDeEnergiaOutroTotalNome':
+          controller.text = 'Energia Solar';
+          break;
+        case 'servicosDeEnergiaOutroTotalAtendidos':
+          controller.text = '200';
+          break;
+        case 'servicosDeEnergiaOutroDomiciliosAtendidos':
+          controller.text = '150';
+          break;
+        case 'servicosDeEnergiaOutroEntidadeResponsavel':
+          controller.text = 'Empresa Privada';
+          break;
+        case 'coletaSeletivaTotalAtendidos':
+          controller.text = '2000';
+          break;
+        case 'coletaSeletivaDomiciliosAtendidos':
+          controller.text = '1800';
+          break;
+        case 'coletaSeletivaRuraisAtendidos':
+          controller.text = '200';
+          break;
+        case 'coletaSeletivaEntidadeResponsavel':
+          controller.text = 'COOPLIX';
+          break;
+        case 'coletaNaoSeletivaTotalAtendidos':
+          controller.text = '8000';
+          break;
+        case 'coletaNaoSeletivaDomiciliosAtendidos':
+          controller.text = '6000';
+          break;
+        case 'coletaNaoSeletivaRuraisAtendidos':
+          controller.text = '2000';
+          break;
+        case 'coletaNaoSeletivaEntidadeResponsavel':
+          controller.text = 'Prefeitura';
+          break;
+        case 'coletaSemColetaTotal':
+          controller.text = '1000';
+          break;
+        case 'coletaSemColetaDomicilios':
+          controller.text = '500';
+          break;
+        case 'coletaSemColetaRurais':
+          controller.text = '500';
+          break;
+        case 'deposicaoAterroSanitarioTotalAtendidos':
+          controller.text = '7000';
+          break;
+        case 'deposicaoAterroSanitarioDomiciliosAtendidos':
+          controller.text = '6000';
+          break;
+        case 'deposicaoAterroSanitarioRuraisAtendidos':
+          controller.text = '1000';
+          break;
+        case 'deposicaoAterroSanitarioEntidadeResponsavel':
+          controller.text = 'Prefeitura';
+          break;
+        case 'deposicaoACeuAbertoTotalAtendidos':
+          controller.text = '2000';
+          break;
+        case 'deposicaoACeuAbertoDomiciliosAtendidos':
+          controller.text = '1500';
+          break;
+        case 'deposicaoACeuAbertoRuraisAtendidos':
+          controller.text = '500';
+          break;
+        case 'deposicaoACeuAbertoEntidadeResponsavel':
+          controller.text = 'Nenhuma';
+          break;
+        case 'deposicaoOutroTotalNome':
+          controller.text = 'Incinerador';
+          break;
+        case 'deposicaoOutroTotalAtendidos':
+          controller.text = '500';
+          break;
+        case 'deposicaoOutroDomiciliosAtendidos':
+          controller.text = '400';
+          break;
+        case 'deposicaoOutroEntidadeResponsavel':
+          controller.text = 'Privada';
+          break;
+        case 'reciclagemDeAcoTotalReciclado':
+          controller.text = '1500';
+          break;
+        case 'reciclagemDeAcoEntidadeResponsavel':
+          controller.text = 'RECICLAÇO';
+          break;
+        case 'reciclagemDeAluminioTotalReciclado':
+          controller.text = '2000';
+          break;
+        case 'reciclagemDeAluminioEntidadeResponsavel':
+          controller.text = 'COOPLIX';
+          break;
+        case 'reciclagemDeFerroTotalReciclado':
+          controller.text = '3000';
+          break;
+        case 'reciclagemDeFerroEntidadeResponsavel':
+          controller.text = 'RECICLAÇO';
+          break;
+        case 'reciclagemOutroNome':
+          controller.text = 'Pneus';
+          break;
+        case 'reciclagemOutroTotalReciclado':
+          controller.text = '500';
+          break;
+        case 'reciclagemOutroEntidadeResponsavel':
+          controller.text = 'ECOPNEU';
+          break;
+        case 'reciclagemDeBateriasPilhasTotalReciclado':
+          controller.text = '200';
+          break;
+        case 'reciclagemDeBateriasPilhasEntidadeResponsavel':
+          controller.text = 'Prefeitura';
+          break;
+        case 'reciclagemDeBorrachaTotalReciclado':
+          controller.text = '800';
+          break;
+        case 'reciclagemDeBorrachaEntidadeResponsavel':
+          controller.text = 'ECOPNEU';
+          break;
+        case 'reciclagemDeEletronicosTotalReciclado':
+          controller.text = '400';
+          break;
+        case 'reciclagemDeEletronicosEntidadeResponsavel':
+          controller.text = 'Prefeitura';
+          break;
+        case 'reciclagemDeEmbalagensLongaVidaTotalReciclado':
+          controller.text = '100';
+          break;
+        case 'reciclagemDeEmbalagensLongaVidaEntidadeResponsavel':
+          controller.text = 'COOPLIX';
+          break;
+        case 'reciclagemDeEntulhoTotalReciclado':
+          controller.text = '5000';
+          break;
+        case 'reciclagemDeEntulhoEntidadeResponsavel':
+          controller.text = 'Prefeitura';
+          break;
+        case 'reciclagemDeMadeiraTotalReciclado':
+          controller.text = '1200';
+          break;
+        case 'reciclagemDeMadeiraEntidadeResponsavel':
+          controller.text = 'Serralheria';
+          break;
+        case 'reciclagemDePapelTotalReciclado':
+          controller.text = '2500';
+          break;
+        case 'reciclagemDePapelEntidadeResponsavel':
+          controller.text = 'COOPLIX';
+          break;
+        case 'reciclagemDePlasticoEEmbalagensTotalReciclado':
+          controller.text = '3500';
+          break;
+        case 'reciclagemDePlasticoEEmbalagensEntidadeResponsavel':
+          controller.text = 'COOPLIX';
+          break;
+        case 'reciclagemDeVidroTotalReciclado':
+          controller.text = '1800';
+          break;
+        case 'reciclagemDeVidroEntidadeResponsavel':
+          controller.text = 'COOPLIX';
+          break;
+        case 'reciclagemDeOleoDeCozinhaTotalReciclado':
+          controller.text = '300';
+          break;
+        case 'reciclagemDeOleoDeCozinhaEntidadeResponsavel':
+          controller.text = 'COOPLIX';
+          break;
+        case 'reciclagemOutrosNome':
+          controller.text = 'Diversos';
+          break;
+        case 'reciclagemOutrosTotalReciclado':
+          controller.text = '500';
+          break;
+        case 'reciclagemOutrosEntidadeResponsavel':
+          controller.text = 'COOPLIX';
+          break;
+        case 'divulgacaoImpressaFolder':
+          controller.text = 'Sim';
+          break;
+        case 'divulgacaoImpressaRevista':
+          controller.text = 'Sim';
+          break;
+        case 'divulgacaoImpressaJornal':
+          controller.text = 'Não';
+          break;
+        case 'divulgacaoImpressaOutros':
+          controller.text = 'Online';
+          break;
+        case 'visitantesAno':
+          controller.text = '50000';
+          break;
+        case 'visitantesAnoAltaTemporada':
+          controller.text = '20000';
+          break;
+        case 'origemInternacionalAnoBase':
+          controller.text = '1000';
+          break;
+        case 'atrativosMaisVisitados':
+          controller.text = 'Praia, Centro Histórico';
+          break;
+      }
+    });
+}
+  
+  void _preencherDadosParaTeste3() {
+    _legislacaoControllers.forEach((key, controller) {
+      // Usamos a 'key' para decidir qual dado de teste colocar
+      switch (key) {
+        // --- Informações da Prefeitura ---
+        case 'leiOrganica':
+          controller.text = 'Sim';
+          break;
+        case 'ocupacaoDoSolo':
+          controller.text = 'Existe regulamentação para uso e ocupação do solo.';
+          break;
+        case 'planoDeDesenvolvimentoDoTurismo':
+          controller.text = 'Sim';
+          break;
+        case 'protecaoAmbiental':
+          controller.text = 'Código Ambiental Municipal em vigor.';
+          break;
+        case 'apoioACultura':
+          controller.text = 'Plano Municipal de Cultura e Fundo de Cultura ativos.';
+          break;
+        case 'incentivosFiscaisAoTurismo':
+          controller.text = 'Redução de ISS para novas empresas do setor de turismo.';
+          break;
+        case 'planoDiretor':
+          controller.text = 'Sim';
+          break;
+        case 'fundoMunicipalDeTurismo':
+          controller.text = 'Fundo Municipal de Turismo (FUMTUR) ativo.';
+          break;
+        case 'legislacaoOutras':
+          controller.text = 'Lei de proteção do patrimônio histórico.';
+          break;
+        case 'observacoes':
+          controller.text = 'Observações adicionais sobre as legislações em vigor.';
+          break;
+        case 'referencias':
+          controller.text = 'Prefeitura Municipal, Diário Oficial do Município.';
+          break;
+      }
+    });
+}
   @override
   void dispose() {
     for (final controller in _infoGeraisControllers.values) {
       controller.dispose();
     }
     for (final controller in _caracteristicasControllers.values) {
+      controller.dispose();
+    }
+    for(final controller in _legislacaoControllers.values){
       controller.dispose();
     }
     super.dispose();
@@ -297,6 +843,15 @@ class _InformacoesBasicasDoMunicipioState
       _caracteristicasControllers.forEach((key, controller) {
           valoresJson[key] = controller.text;
       },);
+
+      _legislacaoControllers.forEach((key, value) {
+        valoresJson[key] = value.text;
+      },);
+      valoresJson.forEach(
+        (key, value) {
+          print("$key  - $value");
+        },
+      );
       if (currentStep < pages.length - 1) {
         // Avança para a próxima página
         _pageController.nextPage(
@@ -304,8 +859,8 @@ class _InformacoesBasicasDoMunicipioState
           curve: Curves.ease,
         );
       } else {
-        // Lógica para enviar o formulário final
         print("Formulário finalizado e pronto para enviar!");
+        Navigator.pushNamed(context, '/SendedForm');
         // _enviarFormulario(); // Você pode chamar sua função de envio aqui
       }
 
@@ -320,13 +875,15 @@ class _InformacoesBasicasDoMunicipioState
       _infoGeraisControllers.forEach((key, controller) {
         valoresJson[key] = controller.text;
       });
+      _legislacaoControllers.forEach((key, value) {
+        valoresJson[key] = value.text;
+      },);
           valoresJson.forEach(
         (key, value) {
           print("$key  - $value");
         },
       );
 
-      print("FORMULÁRIO COMPLETO E VÁLIDO: $valoresJson");
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Por favor, corrija os erros no formulário.')));
     }
@@ -389,6 +946,8 @@ class _InformacoesBasicasDoMunicipioState
                   backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
               onPressed: () {
                 _preencherDadosParaTeste();
+                _preencherDadosParaTeste2();
+                _preencherDadosParaTeste3();
                 _enviarFormulario();
               },
               child: Text(
@@ -847,7 +1406,7 @@ class InformacoesGerais extends StatelessWidget {
               width: sizeScreen.width * 0.4,
               //height: sizeScreen.height * 0.07,
               child: CustomTextDate(
-                dateController: controllers['dataEmancipação'],
+                dateController: controllers['dataEmancipacao'],
               )),
         ],
       ),
@@ -893,7 +1452,6 @@ class _CaracteristicasState extends State<Caracteristicas> {
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
 
-    String respostaYoN = valoresJson['redeDeEsgoto'] ?? '';
     // TODO: implement build
     final List<Widget> listaWidgets = [
       Container(
@@ -1134,7 +1692,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       CustomTextField(
         name: 'Empresa Responsável',
-        controller: widget.controllers['empresaResponsável'],
+        controller: widget.controllers['empresaResponsavel'],
       ),
       SizedBox(
         height: 55.h,
@@ -1400,7 +1958,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
             CustomTextField(
               name: 'Entidade Responsável',
-              controller: widget.controllers['redeUrbanaEntidadeResponsável'],
+              controller: widget.controllers['redeUrbanaEntidadeResponsavel'],
             )
           ]),
       ConditionalFieldsGroup(
@@ -2089,7 +2647,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       CustomTextField(
         name: 'Visitantes Alta Temporada (nº)',
-        controller: widget.controllers['visitantesAno'],
+        controller: widget.controllers['visitantesAnoAltaTemporada'],
         formatter: [FilteringTextInputFormatter.digitsOnly],
       ),
       SizedBox(
@@ -2230,12 +2788,93 @@ class _CaracteristicasState extends State<Caracteristicas> {
 }
 
 class LegislacaoMunicipal extends StatelessWidget{
-  const LegislacaoMunicipal({super.key});
+  final Map<String, TextEditingController> controllers;
+
+  const LegislacaoMunicipal({super.key, required this.controllers});
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    final sizeScreen = MediaQuery.sizeOf(context);
+    
+    final List<Widget> listaWidgets = [
+       Container(
+        color: const Color.fromARGB(255, 55, 111, 60),
+        height: sizeScreen.height * 0.06,
+        width: sizeScreen.width,
+        padding: EdgeInsets.only(
+            top: sizeScreen.height * 0.008, left: sizeScreen.width * 0.04),
+        child: Text(
+          'Legislação Municipal',
+          style: TextStyle(
+              color: Colors.white, fontSize: sizeScreen.height * 0.03),
+        ),
+      ),
+      SizedBox(height: 55.h,),
+      textLabel(name: 'Lei Orgânica', fontWeight: FontWeight.bold,),
+      CustomTextField(name: 'tipo/número/data', controller: controllers['leiOrganica'],),
+
+      SizedBox(height: 55.h,),
+      textLabel(name: 'Ocupação do Solo', fontWeight: FontWeight.bold,),
+      CustomTextField(name: 'tipo/número/data', controller: controllers['ocupacaoDoSolo'],),
+
+      SizedBox(height: 55.h,),
+      textLabel(name: 'Plano de Desenvolvimento do Turismo', fontWeight: FontWeight.bold,),
+      CustomTextField(name: 'tipo/número/data', controller: controllers['planoDeDesenvolvimentoDoTurismo'],),
+
+      SizedBox(height: 55.h,),
+      textLabel(name: 'Proteção Ambiental', fontWeight: FontWeight.bold,),
+      CustomTextField(name: 'tipo/número/data', controller: controllers['protecaoAmbiental'],),
+
+      SizedBox(height: 55.h,),
+      textLabel(name: 'Apoio à Cultura', fontWeight: FontWeight.bold,),
+      CustomTextField(name: 'tipo/número/data', controller: controllers['apoioACultura'],),
+
+      SizedBox(height: 55.h,),
+      textLabel(name: 'Incentivos Fiscais ao Turismo', fontWeight: FontWeight.bold,),
+      CustomTextField(name: 'tipo/número/data', controller: controllers['incentivosFiscaisAoTurismo'],),
+
+      SizedBox(height: 55.h,),
+      textLabel(name: 'Plano Diretor', fontWeight: FontWeight.bold,),
+      CustomTextField(name: 'tipo/número/data', controller: controllers['planoDiretor'],),
+
+      SizedBox(height: 55.h,),
+      textLabel(name: 'Fundo Municipal de Turismo', fontWeight: FontWeight.bold,),
+      CustomTextField(name: 'tipo/número/data', controller: controllers['fundoMunicipalDeTurismo'],),
+
+      SizedBox(height: 55.h,),
+      textLabel(name: 'Outras', fontWeight: FontWeight.bold,),
+      CustomTextField(name: 'tipo/número/data', controller: controllers['legislacaoOutras'],),
+
+      SizedBox(height: 75.h,),
+      Container(
+        color: const Color.fromARGB(255, 55, 111, 60),
+        height: sizeScreen.height * 0.06,
+        width: sizeScreen.width,
+        padding: EdgeInsets.only(
+            top: sizeScreen.height * 0.008, left: sizeScreen.width * 0.04),
+        child: Text(
+          'Observações e Referências',
+          style: TextStyle(
+              color: Colors.white, fontSize: sizeScreen.height * 0.03),
+        ),
+      ),
+      SizedBox(height: 55.h,),
+      textLabel(name: 'Observações', fontWeight: FontWeight.bold,),
+      CustomTextField(name: '', controller: controllers['observacoes'],),
+      textLabel(name: 'Referências', fontWeight: FontWeight.bold,),
+      CustomTextField(name: '', controller: controllers['referencias'],),
+
+      SizedBox(height: 75.h,),
+
+
+    ];
+
+
+    return SingleChildScrollView(
+      child: Column(
+        children: listaWidgets,
+      ),
+    );
   }
 
 }

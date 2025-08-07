@@ -9,6 +9,7 @@ router.register(r'rodovias', RodoviaViewSet, basename='rodovia')
 router.register(r'alimentosEBebidas', AlimentosEBebidasViewSet, basename='alimentos e bebidas')
 router.register(r'meiosdehospedagem', MeioDeHospedagemViewSet, basename='meios de hospedagem')
 router.register(r'sistemadeseguranca', SistemaDeSegurancaViewSet, basename='sistema de seguranca')
+router.register(r'informacoesbasicasdomunicipio', InformacoesBasicasViewSet, basename='informações básicas do municipio')
 router.register(r'pesquisa', PesquisaViewSet, basename='pesquisa')
 router.register(r'user', UserViewSet, basename='user')
 

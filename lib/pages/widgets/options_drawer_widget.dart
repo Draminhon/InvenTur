@@ -60,6 +60,9 @@ try{final response = await http.post(
     
   }else{
     print('Erro ao fazer logout: ${response.body}');
+        await prefs.remove('access_token');
+    await prefs.remove('user_data');
+    Navigator.pushReplacementNamed(context, '/Login');
   }}catch(e){
     await prefs.remove('access_token');
     await prefs.remove('user_data');

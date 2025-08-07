@@ -249,11 +249,28 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
                     final option = widget.options[index];
                     // O estado 'checked' é derivado diretamente do valor do FormField
                     final bool isChecked = field.value!.contains(option);
+             void toggleCheckbox(bool? value) {
+                List<String> newValues = List.from(field.value!);
+                if (value == true) {
+                  newValues.add(option);
+                  countMarkd+=1;
 
+                } else {
+                  newValues.remove(option);
+                  countMarkd-=1;
+                }
+
+                if(countMarkd > 3 && widget.isLimitedBy3){
+                                newValues.removeAt(0);
+                                countMarkd-=1;
+
+                              }
+                field.didChange(newValues);
+              }
                     return Column(
                       children: [
                         ListTile(
-                          
+                          onTap: () => toggleCheckbox(!isChecked),
                           title: Tooltip(
                             message: option,
                             child: Text(

@@ -376,7 +376,7 @@ class UfMunicipioRg extends StatelessWidget{
                   width: sizeScreen.width * 0.5,
                   height: sizeScreen.height * 0.045,
                   child: TextFormField(
-                    controller: controllers['regiaoTuristica'],
+                    controller: controllers['regiao_turistica'],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Preencha o campo';
