@@ -3,16 +3,11 @@ import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/utils/app_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/customTextField.dart';
 import '../../widgets/expandedTileYoN.dart';
 import '../../widgets/radioButton.dart';
 import '../formsB/widgets/checkBox.dart';
-import '../formsB/widgets/sendButton.dart';
-import 'dart:convert';
 import 'package:inventur/models/forms/rodovia_model.dart';
-import 'package:http/http.dart' as http;
 
 final GlobalKey<CheckCState> checkCKey = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> postoCombustivel = GlobalKey<CheckCState>();

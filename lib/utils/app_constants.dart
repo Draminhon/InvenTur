@@ -12,6 +12,7 @@ class AppConstants {
   static const String GET_USERS = "user/";
   static const  String GET_PESQUISAS = "pesquisa";
   static const String RODOVIA_CREATE = "rodovias/";
+  static const String INFO_BASICA_CREATE = "informacoesbasicasdomunicipio/";
   static const String SISTEMAS_DE_SEGURANCA = "sistemadeseguranca/";
   static const String ALIMENTOS_E_BEBIDAS = "alimentosEBebidas/";
   static const String MEIOS_DE_HOSPEDAGEM = "meiosdehospedagem/";

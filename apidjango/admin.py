@@ -573,3 +573,8 @@ class MeiosDeHospedagemAdmin(admin.ModelAdmin):
             ),
         }),
     )
+
+@admin.register(InformacaoBasicaDoMunicipio)
+class InfoBasicaAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in InformacaoBasicaDoMunicipio._meta.fields]
+  

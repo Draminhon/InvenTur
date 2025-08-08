@@ -8,10 +8,15 @@ import 'package:inventur/pages/home/Pesquisador/widgets/expandedTileYoN.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/multi_auto_complete_form_field.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
+import 'package:inventur/services/admin_service.dart';
+import 'package:inventur/services/form_service.dart';
+import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/utils/validators.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 final Validators _validators = Validators();
-final Map<String, dynamic> valoresJson = {};
+final Map<String, dynamic> valoresJson = {
+  'tipo_formulario': 'Informações Básicas do Município',
+};
 
 class InformacoesBasicasDoMunicipio extends StatefulWidget {
   const InformacoesBasicasDoMunicipio({super.key});
@@ -23,6 +28,21 @@ class InformacoesBasicasDoMunicipio extends StatefulWidget {
 
 class _InformacoesBasicasDoMunicipioState
     extends State<InformacoesBasicasDoMunicipio> {
+
+       void getInfoUsersInPesquisa() async {
+    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
+
+    valoresJson['nome_pesquisador'] = info['pesquisador']['nome'];
+    valoresJson['telefone_pesquisador'] = info['pesquisador']['telefone'];
+    valoresJson['email_pesquisador'] = info['pesquisador']['email'];
+
+    valoresJson['nome_coordenador'] = info['coordenador']['nome'];
+    valoresJson['telefone_coordenador'] = info['coordenador']['telefone'];
+    valoresJson['email_coordenador'] = info['coordenador']['email'];
+  }
+
+
+
   final _formKey = GlobalKey<FormState>();
   final PageController _pageController = PageController();
   Map<String, TextEditingController> _infoGeraisControllers = {};
@@ -41,8 +61,8 @@ class _InformacoesBasicasDoMunicipioState
     'distanciaDaCapital', 'totalFuncionariosPrefeitura',
     'pessoasComDeficienciaPrefeitura',
     'nomeDoPrefeito', 'nomeDasSecretariasEtc',
-    'nomeOrgaoOficiaTurismo', 
-    'enderecoOrgaoOfcTurismo', 'avenidaRuaOrgaoOfcTurismo',
+    'nomeOrgaoOficialTurismo', 
+    'enderecoOrgaoOfcTurismo', 'avenidaRuaOfcTurismo',
     'distritoOrgaoOfcTurismo',
     'cepOrgaoOfcTurismo', 'numeroOrgaoOfcTurismo', 'instagramOrgaoOfcTurismo',
     'siteOrgaoOfcTurismo', 'emailOrgaoOfcTurismo',
@@ -111,7 +131,7 @@ class _InformacoesBasicasDoMunicipioState
         'redeUrbanaTotalAbastecido',
         'redeUrbanaEntidadeResponsavel',
         'redeRuralTotalAbastecido',
-        'redeRuralEntidadeResponsável',
+        'redeRuralEntidadeResponsavel',
         'abastecimentoProprioTotalAtendidos',
         'abastecimentoProprioDomiciliosAtendidos',
         'abastecimentoProprioRuraisAtendidos',
@@ -220,6 +240,8 @@ class _InformacoesBasicasDoMunicipioState
       _legislacaoControllers[key] = TextEditingController();
     }
 
+    getInfoUsersInPesquisa();
+
     pages = [
       InformacoesGerais(controllers: _infoGeraisControllers),
       Caracteristicas(controllers: _caracteristicasControllers),
@@ -300,7 +322,7 @@ class _InformacoesBasicasDoMunicipioState
         case 'enderecoOrgaoOfcTurismo':
           controller.text = 'Rua dos Viajantes, 50';
           break;
-        case 'avenidaRuaOrgaoOfcTurismo': // Assumindo ser um complemento
+        case 'avenidaRuaOfcTurismo': // Assumindo ser um complemento
           controller.text = 'Sala 10';
           break;
         case 'distritoOrgaoOfcTurismo':
@@ -557,7 +579,7 @@ void _preencherDadosParaTeste2() {
         case 'redeRuralTotalAbastecido':
           controller.text = '1800';
           break;
-        case 'redeRuralEntidadeResponsável':
+        case 'redeRuralEntidadeResponsavel':
           controller.text = 'COELCE';
           break;
         case 'abastecimentoProprioTotalAtendidos':
@@ -860,7 +882,8 @@ void _preencherDadosParaTeste2() {
         );
       } else {
         print("Formulário finalizado e pronto para enviar!");
-        Navigator.pushNamed(context, '/SendedForm');
+        //Navigator.pushNamed(context, '/SendedForm');
+        FormService().sendForm(valoresJson, AppConstants.INFO_BASICA_CREATE);
         // _enviarFormulario(); // Você pode chamar sua função de envio aqui
       }
 
@@ -1196,7 +1219,7 @@ class InformacoesGerais extends StatelessWidget {
         name: "Avenida/rua/travessa/caminho/outro",
       ),
       CustomTextField(
-        controller: controllers['avenidaRuaOrgaoOfcTurismo'],
+        controller: controllers['avenidaRuaOfcTurismo'],
         name: "Bairro/localidade",
       ),
       CustomTextField(
@@ -1973,7 +1996,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
             CustomTextField(
               name: 'Entidade Responsável',
-              controller: widget.controllers['redeRuralEntidadeResponsável'],
+              controller: widget.controllers['redeRuralEntidadeResponsavel'],
             )
           ]),
       ConditionalFieldsGroup(
