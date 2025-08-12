@@ -94,20 +94,28 @@ class EquipamentosListView(APIView):
             {"tipo": "SistemaDeSeguranca", "dados": SistemaDeSegurancaSerializer(sistema).data}
             for sistema in sistemas
         ]
-
+        # alimentos e bebidas
         alimentos = AlimentosEBebidas.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
         alimentos_serialized = [
             {"tipo": "AlimentosEBebidas", "dados": AlimentosEBebidasSerializer(alimento).data}
             for alimento in alimentos
         ]
-
+        # meios de hospedagem
         hospedagens =  MeioDeHospedagem.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
         hospedagens_serialized = [
             {"tipo": "Meios de Hospedagem", "dados": MeioDeHospedagemSerializer(hospedagem).data}
             for hospedagem in hospedagens
         ]        
 
+        #info basicas do municipio
+
+        infosBasicas = InformacaoBasicaDoMunicipio.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        infosBasicas_serialized = [
+            {"tipo": "Informações Básicas do Município", "dados": InformacoesBasicasSerializer(infoBasica).data}
+            for infoBasica in infosBasicas
+        ]
+
         # Combina os dados
-        equipamentos = rodovias_serialized + sistemas_serialized + alimentos_serialized + hospedagens_serialized
+        equipamentos = rodovias_serialized + sistemas_serialized + alimentos_serialized + hospedagens_serialized + infosBasicas_serialized
 
         return Response(equipamentos)

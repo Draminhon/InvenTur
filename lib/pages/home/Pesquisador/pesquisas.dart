@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:inventur/models/forms/alimentos_bebidas_model.dart';
+import 'package:inventur/models/forms/informacoes_basicas_model.dart';
 import 'package:inventur/models/forms/meios_hospedagem_model.dart';
 import 'package:inventur/models/forms/rodovia_model.dart';
 import 'package:inventur/models/forms/sistema_de_seguranca_model.dart';
@@ -10,6 +11,7 @@ import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas_do_municipio.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranca_edit.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas_edit.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
@@ -382,6 +384,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
 
           return GestureDetector(
             onTap: () {
+              print(dados);
               updateQtdeLocais(dados['pesquisa'], posts.length);
               if (equipamento['tipo'] == 'Rodovia') {
                 Navigator.pushReplacement(
@@ -422,6 +425,15 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                     ),
                     settings: RouteSettings(arguments: {'isUpdate': true}),
                   ),
+                ); 
+              } else if(equipamento['tipo'] == 'Informações Básicas do Município'){
+                Navigator.pushReplacement(context, 
+                MaterialPageRoute(builder: (context) => InformacoesBasicasDoMunicipio(
+                  infoModel: InformacoesBasicasModel.fromJson(equipamento['dados']),
+                ),
+                settings: RouteSettings(arguments: {'isUpdate': true})
+                ),
+                
                 );
               }
             },

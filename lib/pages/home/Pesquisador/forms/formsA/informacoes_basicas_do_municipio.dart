@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inventur/models/forms/informacoes_basicas_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
@@ -17,9 +18,10 @@ final Validators _validators = Validators();
 final Map<String, dynamic> valoresJson = {
   'tipo_formulario': 'Informações Básicas do Município',
 };
-
+  bool isUpdate = false;
 class InformacoesBasicasDoMunicipio extends StatefulWidget {
-  const InformacoesBasicasDoMunicipio({super.key});
+  final InformacoesBasicasModel? infoModel;
+  const InformacoesBasicasDoMunicipio({super.key, this.infoModel});
 
   @override
   State<InformacoesBasicasDoMunicipio> createState() =>
@@ -223,10 +225,34 @@ class _InformacoesBasicasDoMunicipioState
     'referencias'
   ];
   
+
+  
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    try {
+      final argument = ModalRoute.of(context)!.settings.arguments as Map;
+      print("ARGUMENTO: $argument");
+      if (argument.containsKey('isUpdate')) {
+        isUpdate = argument['isUpdate'];
+      }
+    } catch (e) {
+      isUpdate = false;
+    }
+    print("VARIAVEL IS UPDATE: $isUpdate");
+        if(isUpdate){
+          _preencherDadosParaTeste();
+      _preencherDadosParaTeste2();
+      _preencherDadosParaTeste3();
+    }
+  }
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+
+  
+
 
     for (final key in _chavesInfoGerais) {
       _infoGeraisControllers[key] = TextEditingController();
@@ -243,602 +269,626 @@ class _InformacoesBasicasDoMunicipioState
     getInfoUsersInPesquisa();
 
     pages = [
-      InformacoesGerais(controllers: _infoGeraisControllers),
-      Caracteristicas(controllers: _caracteristicasControllers),
+      InformacoesGerais(controllers: _infoGeraisControllers,infoModel: widget.infoModel,),
+      Caracteristicas(controllers: _caracteristicasControllers, infoModel: widget.infoModel,),
       LegislacaoMunicipal(controllers: _legislacaoControllers,)
     ];
+
+
   }
 
   void _preencherDadosParaTeste() {
+    if(widget.infoModel != null){
+    final model = widget.infoModel!;
+     final modelMap = model.toMap(); 
     _infoGeraisControllers.forEach((key, controller) {
+       if(modelMap.containsKey(key)){
+          final valor = modelMap[key];
+            controller.text = valor?.toString() ?? '';
+       }
       // Usamos a 'key' para decidir qual dado de teste colocar
-      switch (key) {
-        // --- Informações da Prefeitura ---
-        case 'uf':
-          controller.text = 'CE';
-          break;
-        case 'regiao_turistica':
-          controller.text = 'Jericoacoara';
-          break;
-        case 'municipio':
-          controller.text = 'Jijoca';
-          break;
-        // case 'enderecoPrefeitura':
-        //   controller.text = 'Praça da Matriz, 100';
-        //   break;
-        case 'bairroPrefeitura':
-          controller.text = 'Centro';
-          break;
-        case 'cepPrefeitura':
-          controller.text = '12345000'; // O formatador cuida do '12345-000'
-          break;
-        case 'numeroPrefeitura':
-          controller.text =
-              '11987654321'; // O formatador cuida do '(11) 98765-4321'
-          break;
-        case 'instagramPrefeitura':
-          controller.text = '@prefeiturateste';
-          break;
-        case 'emailPrefeitura':
-          controller.text = 'gabinete@prefeiturateste.gov.br';
-          break;
-        case 'sitePrefeitura':
-          controller.text = 'www.prefeiturateste.gov.br';
-          break;
-        case 'cnpjPrefeitura':
-          controller.text =
-              '00.139.609/0001-46'; // O formatador cuida do '12.345.678/0001-99'
-          break;
-        case 'latitudePrefeitura':
-          controller.text = '-23.550520'; // Ex: São Paulo
-          break;
-        case 'longitudePrefeitura':
-          controller.text = '-46.633308'; // Ex: São Paulo
-          break;
-        case 'municipiosLimitrofes':
-          controller.text = 'Cidadela, Vilaréjo, Outeiro';
-          break;
-        case 'distanciaDaCapital':
-          controller.text = '150 km';
-          break;
-        case 'totalFuncionariosPrefeitura':
-          controller.text = '450';
-          break;
-        case 'pessoasComDeficienciaPrefeitura':
-          controller.text = '15';
-          break;
-        case 'nomeDoPrefeito':
-          controller.text = 'José Almeida Santos';
-          break;
-        case 'nomeDasSecretariasEtc':
-          controller.text =
-              'Secretaria de Turismo, Secretaria de Cultura, Secretaria de Obras';
-          break;
+      
+      // switch (key) {
+      //   // --- Informações da Prefeitura ---
+      //   case 'uf':
+      //     controller.text = model.uf!;
+      //     break;
+      //   case 'regiao_turistica':
+      //     controller.text = model.regiaoTuristica!;
+      //     break;
+      //   case 'municipio':
+      //     controller.text = model.municipio!;
+      //     break;
+      //   case 'enderecoPrefeitura':
+      //     controller.text = model.enderecoPrefeitura!;
+      //     break;
+      //   case 'bairroPrefeitura':
+      //     controller.text = model.bairroPrefeitura!;
+      //     break;
+      //   case 'cepPrefeitura':
+      //     controller.text = model.cepPrefeitura!;
+      //     break;
+      //   case 'numeroPrefeitura':
+      //     controller.text =
+      //         model.numeroPrefeitura!;
+      //     break;
+      //   case 'instagramPrefeitura':
+      //     controller.text = model.instagramPrefeitura!;
+      //     break;
+      //   case 'emailPrefeitura':
+      //     controller.text = model.emailPrefeitura!;
+      //     break;
+      //   case 'sitePrefeitura':
+      //     controller.text = model.sitePrefeitura!;
+      //     break;
+      //   case 'cnpjPrefeitura':
+      //     controller.text =
+      //       model.cnpjPrefeitura!;
+      //     break;
+      //   case 'latitudePrefeitura':
+      //     controller.text = model.latitudePrefeitura!; 
+      //     break;
+      //   case 'longitudePrefeitura':
+      //     controller.text = model.longitudePrefeitura!; 
+      //     break;
+      //   case 'municipiosLimitrofes':
+      //     controller.text = model.municipiosLimitrofes!;
+      //     break;
+      //   case 'distanciaDaCapital':
+      //     controller.text = model.distanciaDaCapital!;
+      //     break;
+      //   case 'totalFuncionariosPrefeitura':
+      //     controller.text = model.totalFuncionariosPrefeitura!;
+      //     break;
+      //   case 'pessoasComDeficienciaPrefeitura':
+      //     controller.text = model.pessoasComDeficienciaPrefeitura!;
+      //     break;
+      //   case 'nomeDoPrefeito':
+      //     controller.text = model.nomeDoPrefeito!;
+      //     break;
+      //   case 'nomeDasSecretariasEtc':
+      //     controller.text = model.nomeDasSecretariasEtc!;
+      //     break;
 
-        // --- Órgão Oficial de Turismo ---
-        case 'nomeOrgaoOficialTurismo':
-          controller.text = 'Departamento Municipal de Turismo';
-          break;
-        case 'enderecoOrgaoOfcTurismo':
-          controller.text = 'Rua dos Viajantes, 50';
-          break;
-        case 'avenidaRuaOfcTurismo': // Assumindo ser um complemento
-          controller.text = 'Sala 10';
-          break;
-        case 'distritoOrgaoOfcTurismo':
-          controller.text = 'Distrito Turístico';
-          break;
-        case 'cepOrgaoOfcTurismo':
-          controller.text = '12345100';
-          break;
-        case 'numeroOrgaoOfcTurismo':
-          controller.text = '1122223333';
-          break;
-        case 'instagramOrgaoOfcTurismo':
-          controller.text = '@turismocidadeteste';
-          break;
-        case 'siteOrgaoOfcTurismo':
-          controller.text = 'www.turismoteste.com.br';
-          break;
-        case 'emailOrgaoOfcTurismo':
-          controller.text = 'turismo@prefeiturateste.gov.br';
-          break;
-        case 'qtdeFuncionariosOrgaoOfcTurismo':
-          controller.text = '8';
-          break;
-        case 'qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo':
-          controller.text = '3';
-          break;
+      //   // --- Órgão Oficial de Turismo ---
+      //   case 'nomeOrgaoOficialTurismo':
+      //     controller.text = model.nomeOrgaoOficialTurismo!;
+      //     break;
+      //   case 'enderecoOrgaoOfcTurismo':
+      //     controller.text = model.enderecoOrgaoOfcTurismo!;
+      //     break;
+      //   case 'avenidaRuaOfcTurismo': // Assumindo ser um complemento
+      //     controller.text = model.avenidaRuaOfcTurismo!;
+      //     break;
+      //   case 'distritoOrgaoOfcTurismo':
+      //     controller.text = model.distritoOrgaoOfcTurismo!;
+      //     break;
+      //   case 'cepOrgaoOfcTurismo':
+      //     controller.text = model.cepOrgaoOfcTurismo!;
+      //     break;
+      //   case 'numeroOrgaoOfcTurismo':
+      //     controller.text = model.numeroOrgaoOfcTurismo!;
+      //     break;
+      //   case 'instagramOrgaoOfcTurismo':
+      //     controller.text = model.instagramOrgaoOfcTurismo!;
+      //     break;
+      //   case 'siteOrgaoOfcTurismo':
+      //     controller.text = model.siteOrgaoOfcTurismo!;
+      //     break;
+      //   case 'emailOrgaoOfcTurismo':
+      //     controller.text = model.emailOrgaoOfcTurismo!;
+      //     break;
+      //   case 'qtdeFuncionariosOrgaoOfcTurismo':
+      //     controller.text = model.qtdeFuncionariosOrgaoOfcTurismo!;
+      //     break;
+      //   case 'qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo':
+      //     controller.text = model.qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo!;
+      //     break;
 
-        // --- Instâncias de Governança ---
-        case 'instanciaGovernancaMunicipal':
-          controller.text = 'Conselho Municipal de Turismo (COMTUR)';
-          break;
-        case 'instanciaGovernancaEstadual':
-          controller.text = 'Secretaria de Turismo do Estado';
-          break;
-        case 'instanciaGovernancaRegional':
-          controller.text = 'Circuito Turístico Águas da Serra';
-          break;
-        case 'instanciaGovernancaNacional':
-          controller.text = 'Ministério do Turismo';
-          break;
-        case 'instanciaGovernancaInternacional':
-          controller.text = 'Organização Mundial do Turismo (OMT)';
-          break;
-        case 'instanciaGovernancaOutras':
-          controller.text = 'Associação Comercial e Industrial';
-          break;
+      //   // --- Instâncias de Governança ---
+      //   case 'instanciaGovernancaMunicipal':
+      //     controller.text = model.instanciaGovernancaMunicipal!;
+      //     break;
+      //   case 'instanciaGovernancaEstadual':
+      //     controller.text = model.instanciaGovernancaEstadual!;
+      //     break;
+      //   case 'instanciaGovernancaRegional':
+      //     controller.text = model.instanciaGovernancaRegional!;
+      //     break;
+      //   case 'instanciaGovernancaNacional':
+      //     controller.text = model.instanciaGovernancaNacional!;
+      //     break;
+      //   case 'instanciaGovernancaInternacional':
+      //     controller.text = model.instanciaGovernancaInternacional!;
+      //     break;
+      //   case 'instanciaGovernancaOutras':
+      //     controller.text = model.instanciaGovernancaOutras!;
+      //     break;
 
-        // --- Datas e Feriados (no formato DD/MM/AAAA para o CustomTextDate) ---
-        case 'aniversarioMunicipio':
-          controller.text = '29/07/1901'; // Formato correto para a máscara
-          break;
-        case 'dataFeriadoMunicipal01':
-          controller.text = '29/10/1901'; // Formato correto para a máscara
-          break;
-        case 'dataFeriadoMunicipal02':
-          controller.text = '09/07/1901'; // Formato correto para a máscara
-          break;
-        case 'dataFeriadoMunicipal03':
-          controller.text = '19/07/1901'; // Formato correto para a máscara
-          break;
-        case 'santoPadroeiro':
-          controller.text = 'São Sebastião';
-          break;
-        case 'diaDoSantoPadroeiro':
-          controller.text = '20/01/2025'; // Formato correto para a máscara
-          break;
-        case 'feriadoMunicipal01':
-          controller.text = 'Corpus Christi';
-          break;
-        case 'feriadoMunicipal02':
-          controller.text = 'Dia da Consciência Negra';
-          break;
-        case 'feriadoMunicipal03':
-          controller.text = 'Sexta-feira Santa';
-          break;
+      //   // --- Datas e Feriados (no formato DD/MM/AAAA para o CustomTextDate) ---
+      //   case 'aniversarioMunicipio':
+      //     controller.text = model.aniversarioMunicipio!; 
+      //     break;
+      //   case 'dataFeriadoMunicipal01':
+      //     controller.text = model.dataFeriadoMunicipal01!; 
+      //     break;
+      //   case 'dataFeriadoMunicipal02':
+      //     controller.text = model.dataFeriadoMunicipal02!; 
+      //     break;
+      //   case 'dataFeriadoMunicipal03':
+      //     controller.text = model.dataFeriadoMunicipal03!; // Formato correto para a máscara
+      //     break;
+      //   case 'santoPadroeiro':
+      //     controller.text = model.santoPadroeiro!;
+      //     break;
+      //   case 'diaDoSantoPadroeiro':
+      //     controller.text = model.diaDoSantoPadroeiro!; // Formato correto para a máscara
+      //     break;
+      //   case 'feriadoMunicipal01':
+      //     controller.text = model.feriadoMunicipal01!;
+      //     break;
+      //   case 'feriadoMunicipal02':
+      //     controller.text = model.feriadoMunicipal02!;
+      //     break;
+      //   case 'feriadoMunicipal03':
+      //     controller.text = model.feriadoMunicipal03!;
+      //     break;
 
-        // --- Dados Históricos ---
-        case 'origemDoNome':
-          controller.text =
-              'O nome da cidade deriva do Tupi-Guarani, significando "rio das pedras".';
-          break;
-        case 'dataFundacao':
-          controller.text = '25/01/1875'; // Formato correto para a máscara
-          break;
-        case 'dataEmancipacao':
-          controller.text = '30/07/1925'; // Formato correto para a máscara
-          break;
-        case 'fundadores':
-          controller.text = 'Bandeirantes da família Bueno de Camargo';
-          break;
-        case 'outrosFatosDeImportanciaHistorica':
-          controller.text =
-              'A cidade foi um importante polo cafeeiro no início do século XX e rota de tropeiros.';
-          break;
+      //   // --- Dados Históricos ---
+      //   case 'origemDoNome':
+      //     controller.text =
+      //         model.origemDoNome!;
+      //     break;
+      //   case 'dataFundacao':
+      //     controller.text = model.dataFundacao!; // Formato correto para a máscara
+      //     break;
+      //   case 'dataEmancipacao':
+      //     controller.text = model.dataEmancipacao!; // Formato correto para a máscara
+      //     break;
+      //   case 'fundadores':
+      //     controller.text = model.fundadores!;
+      //     break;
+      //   case 'outrosFatosDeImportanciaHistorica':
+      //     controller.text =
+      //         model.outrosFatosDeImportanciaHistorica!;
+      //     break;
 
-        // Caso algum campo novo seja adicionado e não esteja no switch
-        default:
-          controller.text = 'Dado de Teste Padrão';
-          break;
-      }
+      //   // Caso algum campo novo seja adicionado e não esteja no switch
+      //   default:
+      //     controller.text = '';
+      //     break;
+      // }
     });
-    
+    }
   }
 
 void _preencherDadosParaTeste2() {
+  if(widget.infoModel != null){
+    
+    final model = widget.infoModel!;
+    final modelMap = model.toMap(); 
       _caracteristicasControllers.forEach((key, controller) {
+        if(modelMap.containsKey(key)){
+          final valor = modelMap[key];
+            controller.text = valor?.toString() ?? '';
+          
+                  }
       // Usamos a 'key' para decidir qual dado de teste colocar
-      switch (key) {
-        // --- Informações da Prefeitura ---
-        case 'uf':
-          controller.text = 'CE';
-          break;
-        case 'areaTotalMunicipio':
-          controller.text = '500';
-          break;
-        case 'areaUrbana':
-          controller.text = '50';
-          break;
-        case 'areaRural':
-          controller.text = '450';
-          break;
-        case 'anoBase':
-          controller.text = '2023';
-          break;
-        case 'populacaoTotal':
-          controller.text = '10000';
-          break;
-        case 'populacaoUrbana':
-          controller.text = '8000';
-          break;
-        case 'populacaoRural':
-          controller.text = '2000';
-          break;
-        case 'anoBasePopulacao':
-          controller.text = '2023';
-          break;
-        case 'temperaturaMedia':
-          controller.text = '25.5';
-          break;
-        case 'temperaturaMinima':
-          controller.text = '20.0';
-          break;
-        case 'temperaturaMaxima':
-          controller.text = '32.0';
-          break;
-        case 'altitudeMedia':
-          controller.text = '150';
-          break;
-        case 'qtdeDomiciliosAtendidos':
-          controller.text = '2500';
-          break;
-        case 'empresaResponsavel':
-          controller.text = 'SAAE';
-          break;
-        case 'esgotoTotalAtendidos':
-          controller.text = '1800';
-          break;
-        case 'esgotoDomiciliosAtendidos':
-          controller.text = '1500';
-          break;
-        case 'esgotoRuraisAtendidos':
-          controller.text = '300';
-          break;
-        case 'esgotoEntidadeResponsavel':
-          controller.text = 'SAAE Esgoto';
-          break;
-        case 'fossaSepticaTotalAtendidos':
-          controller.text = '500';
-          break;
-        case 'fossaSepticaDomiciliosAtendidos':
-          controller.text = '400';
-          break;
-        case 'fossaSepticaRuraisAtendidos':
-          controller.text = '100';
-          break;
-        case 'fossaSepticaEntidadeResponsavel':
-          controller.text = 'Privada';
-          break;
-        case 'fossaRudimentarTotalAtendidos':
-          controller.text = '200';
-          break;
-        case 'fossaRudimentarDomiciliosAtendidos':
-          controller.text = '150';
-          break;
-        case 'fossaRudimentarRuraisAtendidos':
-          controller.text = '50';
-          break;
-        case 'fossaRudimentarEntidadeResponsavel':
-          controller.text = 'Própria';
-          break;
-        case 'valaTotalAtendidos':
-          controller.text = '100';
-          break;
-        case 'valaDomiciliosAtendidos':
-          controller.text = '80';
-          break;
-        case 'valaRuraisAtendidos':
-          controller.text = '20';
-          break;
-        case 'valaEntidadeResponsavel':
-          controller.text = 'Nenhuma';
-          break;
-        case 'estacaoDeTratamentoTotalAtendidos':
-          controller.text = '1000';
-          break;
-        case 'estacaoDeTratamentoDomiciliosAtendidos':
-          controller.text = '900';
-          break;
-        case 'estacaoDeTratamentoRuraisAtendidos':
-          controller.text = '100';
-          break;
-        case 'estacaoDeTratamentoEntidadeResponsavel':
-          controller.text = 'SAAE Esgoto';
-          break;
-        case 'esgotoTratadoTotalAtendidos':
-          controller.text = '1000';
-          break;
-        case 'esgotoTratadoDomiciliosAtendidos':
-          controller.text = '900';
-          break;
-        case 'esgotoTratadoRuraisAtendidos':
-          controller.text = '100';
-          break;
-        case 'esgotoTratadoEntidadeResponsavel':
-          controller.text = 'SAAE Esgoto';
-          break;
-        case 'servicoDeEsgotoOutroTotalNome':
-          controller.text = 'Caminhão Limpa-Fossa';
-          break;
-        case 'servicoDeEsgotoOutroTotalAtendidos':
-          controller.text = '50';
-          break;
-        case 'servicoDeEsgotoOutroDomiciliosAtendidos':
-          controller.text = '40';
-          break;
-        case 'servicoDeEsgotoOutroRuraisAtendidos':
-          controller.text = '10';
-          break;
-        case 'servicoDeEsgotoOutroEntidadeResponsavel':
-          controller.text = 'Terceirizada';
-          break;
-        case 'capacidadeEmKVA':
-          controller.text = '50000';
-          break;
-        case 'geradorDeEmergenciaCapacidadeEmKVA':
-          controller.text = '1000';
-          break;
-        case 'redeUrbanaTotalAbastecido':
-          controller.text = '7500';
-          break;
-        case 'redeUrbanaEntidadeResponsavel':
-          controller.text = 'ENEL';
-          break;
-        case 'redeRuralTotalAbastecido':
-          controller.text = '1800';
-          break;
-        case 'redeRuralEntidadeResponsavel':
-          controller.text = 'COELCE';
-          break;
-        case 'abastecimentoProprioTotalAtendidos':
-          controller.text = '500';
-          break;
-        case 'abastecimentoProprioDomiciliosAtendidos':
-          controller.text = '400';
-          break;
-        case 'abastecimentoProprioRuraisAtendidos':
-          controller.text = '100';
-          break;
-        case 'abastecimentoProprioEntidadeResponsavel':
-          controller.text = 'Própria';
-          break;
-        case 'servicosDeEnergiaOutroTotalNome':
-          controller.text = 'Energia Solar';
-          break;
-        case 'servicosDeEnergiaOutroTotalAtendidos':
-          controller.text = '200';
-          break;
-        case 'servicosDeEnergiaOutroDomiciliosAtendidos':
-          controller.text = '150';
-          break;
-        case 'servicosDeEnergiaOutroEntidadeResponsavel':
-          controller.text = 'Empresa Privada';
-          break;
-        case 'coletaSeletivaTotalAtendidos':
-          controller.text = '2000';
-          break;
-        case 'coletaSeletivaDomiciliosAtendidos':
-          controller.text = '1800';
-          break;
-        case 'coletaSeletivaRuraisAtendidos':
-          controller.text = '200';
-          break;
-        case 'coletaSeletivaEntidadeResponsavel':
-          controller.text = 'COOPLIX';
-          break;
-        case 'coletaNaoSeletivaTotalAtendidos':
-          controller.text = '8000';
-          break;
-        case 'coletaNaoSeletivaDomiciliosAtendidos':
-          controller.text = '6000';
-          break;
-        case 'coletaNaoSeletivaRuraisAtendidos':
-          controller.text = '2000';
-          break;
-        case 'coletaNaoSeletivaEntidadeResponsavel':
-          controller.text = 'Prefeitura';
-          break;
-        case 'coletaSemColetaTotal':
-          controller.text = '1000';
-          break;
-        case 'coletaSemColetaDomicilios':
-          controller.text = '500';
-          break;
-        case 'coletaSemColetaRurais':
-          controller.text = '500';
-          break;
-        case 'deposicaoAterroSanitarioTotalAtendidos':
-          controller.text = '7000';
-          break;
-        case 'deposicaoAterroSanitarioDomiciliosAtendidos':
-          controller.text = '6000';
-          break;
-        case 'deposicaoAterroSanitarioRuraisAtendidos':
-          controller.text = '1000';
-          break;
-        case 'deposicaoAterroSanitarioEntidadeResponsavel':
-          controller.text = 'Prefeitura';
-          break;
-        case 'deposicaoACeuAbertoTotalAtendidos':
-          controller.text = '2000';
-          break;
-        case 'deposicaoACeuAbertoDomiciliosAtendidos':
-          controller.text = '1500';
-          break;
-        case 'deposicaoACeuAbertoRuraisAtendidos':
-          controller.text = '500';
-          break;
-        case 'deposicaoACeuAbertoEntidadeResponsavel':
-          controller.text = 'Nenhuma';
-          break;
-        case 'deposicaoOutroTotalNome':
-          controller.text = 'Incinerador';
-          break;
-        case 'deposicaoOutroTotalAtendidos':
-          controller.text = '500';
-          break;
-        case 'deposicaoOutroDomiciliosAtendidos':
-          controller.text = '400';
-          break;
-        case 'deposicaoOutroEntidadeResponsavel':
-          controller.text = 'Privada';
-          break;
-        case 'reciclagemDeAcoTotalReciclado':
-          controller.text = '1500';
-          break;
-        case 'reciclagemDeAcoEntidadeResponsavel':
-          controller.text = 'RECICLAÇO';
-          break;
-        case 'reciclagemDeAluminioTotalReciclado':
-          controller.text = '2000';
-          break;
-        case 'reciclagemDeAluminioEntidadeResponsavel':
-          controller.text = 'COOPLIX';
-          break;
-        case 'reciclagemDeFerroTotalReciclado':
-          controller.text = '3000';
-          break;
-        case 'reciclagemDeFerroEntidadeResponsavel':
-          controller.text = 'RECICLAÇO';
-          break;
-        case 'reciclagemOutroNome':
-          controller.text = 'Pneus';
-          break;
-        case 'reciclagemOutroTotalReciclado':
-          controller.text = '500';
-          break;
-        case 'reciclagemOutroEntidadeResponsavel':
-          controller.text = 'ECOPNEU';
-          break;
-        case 'reciclagemDeBateriasPilhasTotalReciclado':
-          controller.text = '200';
-          break;
-        case 'reciclagemDeBateriasPilhasEntidadeResponsavel':
-          controller.text = 'Prefeitura';
-          break;
-        case 'reciclagemDeBorrachaTotalReciclado':
-          controller.text = '800';
-          break;
-        case 'reciclagemDeBorrachaEntidadeResponsavel':
-          controller.text = 'ECOPNEU';
-          break;
-        case 'reciclagemDeEletronicosTotalReciclado':
-          controller.text = '400';
-          break;
-        case 'reciclagemDeEletronicosEntidadeResponsavel':
-          controller.text = 'Prefeitura';
-          break;
-        case 'reciclagemDeEmbalagensLongaVidaTotalReciclado':
-          controller.text = '100';
-          break;
-        case 'reciclagemDeEmbalagensLongaVidaEntidadeResponsavel':
-          controller.text = 'COOPLIX';
-          break;
-        case 'reciclagemDeEntulhoTotalReciclado':
-          controller.text = '5000';
-          break;
-        case 'reciclagemDeEntulhoEntidadeResponsavel':
-          controller.text = 'Prefeitura';
-          break;
-        case 'reciclagemDeMadeiraTotalReciclado':
-          controller.text = '1200';
-          break;
-        case 'reciclagemDeMadeiraEntidadeResponsavel':
-          controller.text = 'Serralheria';
-          break;
-        case 'reciclagemDePapelTotalReciclado':
-          controller.text = '2500';
-          break;
-        case 'reciclagemDePapelEntidadeResponsavel':
-          controller.text = 'COOPLIX';
-          break;
-        case 'reciclagemDePlasticoEEmbalagensTotalReciclado':
-          controller.text = '3500';
-          break;
-        case 'reciclagemDePlasticoEEmbalagensEntidadeResponsavel':
-          controller.text = 'COOPLIX';
-          break;
-        case 'reciclagemDeVidroTotalReciclado':
-          controller.text = '1800';
-          break;
-        case 'reciclagemDeVidroEntidadeResponsavel':
-          controller.text = 'COOPLIX';
-          break;
-        case 'reciclagemDeOleoDeCozinhaTotalReciclado':
-          controller.text = '300';
-          break;
-        case 'reciclagemDeOleoDeCozinhaEntidadeResponsavel':
-          controller.text = 'COOPLIX';
-          break;
-        case 'reciclagemOutrosNome':
-          controller.text = 'Diversos';
-          break;
-        case 'reciclagemOutrosTotalReciclado':
-          controller.text = '500';
-          break;
-        case 'reciclagemOutrosEntidadeResponsavel':
-          controller.text = 'COOPLIX';
-          break;
-        case 'divulgacaoImpressaFolder':
-          controller.text = 'Sim';
-          break;
-        case 'divulgacaoImpressaRevista':
-          controller.text = 'Sim';
-          break;
-        case 'divulgacaoImpressaJornal':
-          controller.text = 'Não';
-          break;
-        case 'divulgacaoImpressaOutros':
-          controller.text = 'Online';
-          break;
-        case 'visitantesAno':
-          controller.text = '50000';
-          break;
-        case 'visitantesAnoAltaTemporada':
-          controller.text = '20000';
-          break;
-        case 'origemInternacionalAnoBase':
-          controller.text = '1000';
-          break;
-        case 'atrativosMaisVisitados':
-          controller.text = 'Praia, Centro Histórico';
-          break;
-      }
+      // switch (key) {
+      //   // --- Informações da Prefeitura ---
+      //   case 'areaTotalMunicipio':
+      //     controller.text = model.areaTotalMunicipio!;
+      //     break;
+      //   case 'areaUrbana':
+      //     controller.text = model.areaUrbana!;
+      //     break;
+      //   case 'areaRural':
+      //     controller.text = model.areaRural!;
+      //     break;
+      //   case 'anoBase':
+      //     controller.text = model.anoBase!;
+      //     break;
+      //   case 'populacaoTotal':
+      //     controller.text = model.populacaoTotal!;
+      //     break;
+      //   case 'populacaoUrbana':
+      //     controller.text = model.populacaoUrbana!;
+      //     break;
+      //   case 'populacaoRural':
+      //     controller.text = model.populacaoRural!;
+      //     break;
+      //   case 'anoBasePopulacao':
+      //     controller.text = model.anoBasePopulacao!;
+      //     break;
+      //   case 'temperaturaMedia':
+      //     controller.text = model.temperaturaMedia!;
+      //     break;
+      //   case 'temperaturaMinima':
+      //     controller.text = model.temperaturaMinima!;
+      //     break;
+      //   case 'temperaturaMaxima':
+      //     controller.text = model.temperaturaMaxima!;
+      //     break;
+      //   case 'altitudeMedia':
+      //     controller.text = model.altitudeMedia!;
+      //     break;
+      //   case 'qtdeDomiciliosAtendidos':
+      //     controller.text = model.qtdeDomiciliosAtendidos!;
+      //     break;
+      //   case 'empresaResponsavel':
+      //     controller.text = model.empresaResponsavel!;
+      //     break;
+      //   case 'esgotoTotalAtendidos':
+      //     controller.text = model.empresaResponsavel!;
+      //     break;
+      //   case 'esgotoDomiciliosAtendidos':
+      //     controller.text = model.esgotoDomiciliosAtendidos!;
+      //     break;
+      //   case 'esgotoRuraisAtendidos':
+      //     controller.text = model.esgotoRuraisAtendidos!;
+      //     break;
+      //   case 'esgotoEntidadeResponsavel':
+      //     controller.text = model.esgotoEntidadeResponsavel!;
+      //     break;
+      //   case 'fossaSepticaTotalAtendidos':
+      //     controller.text = model.fossaSepticaTotalAtendidos!;
+      //     break;
+      //   case 'fossaSepticaDomiciliosAtendidos':
+      //     controller.text = model.fossaSepticaDomiciliosAtendidos!;
+      //     break;
+      //   case 'fossaSepticaRuraisAtendidos':
+      //     controller.text = model.fossaSepticaRuraisAtendidos!;
+      //     break;
+      //   case 'fossaSepticaEntidadeResponsavel':
+      //     controller.text = model.fossaSepticaEntidadeResponsavel!;
+      //     break;
+      //   case 'fossaRudimentarTotalAtendidos':
+      //     controller.text = model.fossaRudimentarTotalAtendidos!;
+      //     break;
+      //   case 'fossaRudimentarDomiciliosAtendidos':
+      //     controller.text = model.fossaRudimentarDomiciliosAtendidos!;
+      //     break;
+      //   case 'fossaRudimentarRuraisAtendidos':
+      //     controller.text = model.fossaRudimentarRuraisAtendidos!;
+      //     break;
+      //   case 'fossaRudimentarEntidadeResponsavel':
+      //     controller.text = model.fossaRudimentarEntidadeResponsavel!;
+      //     break;
+      //   case 'valaTotalAtendidos':
+      //     controller.text = model.valaTotalAtendidos!;
+      //     break;
+      //   case 'valaDomiciliosAtendidos':
+      //     controller.text = model.valaDomiciliosAtendidos!;
+      //     break;
+      //   case 'valaRuraisAtendidos':
+      //     controller.text = model.valaRuraisAtendidos!;
+      //     break;
+      //   case 'valaEntidadeResponsavel':
+      //     controller.text = model.valaEntidadeResponsavel!;
+      //     break;
+      //   case 'estacaoDeTratamentoTotalAtendidos':
+      //     controller.text = model.estacaoDeTratamentoTotalAtendidos!;
+      //     break;
+      //   case 'estacaoDeTratamentoDomiciliosAtendidos':
+      //     controller.text = model.estacaoDeTratamentoDomiciliosAtendidos!;
+      //     break;
+      //   case 'estacaoDeTratamentoRuraisAtendidos':
+      //     controller.text = model.estacaoDeTratamentoRuraisAtendidos!;
+      //     break;
+      //   case 'estacaoDeTratamentoEntidadeResponsavel':
+      //     controller.text = model.estacaoDeTratamentoEntidadeResponsavel!;
+      //     break;
+      //   case 'esgotoTratadoTotalAtendidos':
+      //     controller.text = model.esgotoTratadoTotalAtendidos!;
+      //     break;
+      //   case 'esgotoTratadoDomiciliosAtendidos':
+      //     controller.text = '900';
+      //     break;
+      //   case 'esgotoTratadoRuraisAtendidos':
+      //     controller.text = '100';
+      //     break;
+      //   case 'esgotoTratadoEntidadeResponsavel':
+      //     controller.text = 'SAAE Esgoto';
+      //     break;
+      //   case 'servicoDeEsgotoOutroTotalNome':
+      //     controller.text = 'Caminhão Limpa-Fossa';
+      //     break;
+      //   case 'servicoDeEsgotoOutroTotalAtendidos':
+      //     controller.text = '50';
+      //     break;
+      //   case 'servicoDeEsgotoOutroDomiciliosAtendidos':
+      //     controller.text = '40';
+      //     break;
+      //   case 'servicoDeEsgotoOutroRuraisAtendidos':
+      //     controller.text = '10';
+      //     break;
+      //   case 'servicoDeEsgotoOutroEntidadeResponsavel':
+      //     controller.text = 'Terceirizada';
+      //     break;
+      //   case 'capacidadeEmKVA':
+      //     controller.text = '50000';
+      //     break;
+      //   case 'geradorDeEmergenciaCapacidadeEmKVA':
+      //     controller.text = '1000';
+      //     break;
+      //   case 'redeUrbanaTotalAbastecido':
+      //     controller.text = '7500';
+      //     break;
+      //   case 'redeUrbanaEntidadeResponsavel':
+      //     controller.text = 'ENEL';
+      //     break;
+      //   case 'redeRuralTotalAbastecido':
+      //     controller.text = '1800';
+      //     break;
+      //   case 'redeRuralEntidadeResponsavel':
+      //     controller.text = 'COELCE';
+      //     break;
+      //   case 'abastecimentoProprioTotalAtendidos':
+      //     controller.text = '500';
+      //     break;
+      //   case 'abastecimentoProprioDomiciliosAtendidos':
+      //     controller.text = '400';
+      //     break;
+      //   case 'abastecimentoProprioRuraisAtendidos':
+      //     controller.text = '100';
+      //     break;
+      //   case 'abastecimentoProprioEntidadeResponsavel':
+      //     controller.text = 'Própria';
+      //     break;
+      //   case 'servicosDeEnergiaOutroTotalNome':
+      //     controller.text = 'Energia Solar';
+      //     break;
+      //   case 'servicosDeEnergiaOutroTotalAtendidos':
+      //     controller.text = '200';
+      //     break;
+      //   case 'servicosDeEnergiaOutroDomiciliosAtendidos':
+      //     controller.text = '150';
+      //     break;
+      //   case 'servicosDeEnergiaOutroEntidadeResponsavel':
+      //     controller.text = 'Empresa Privada';
+      //     break;
+      //   case 'coletaSeletivaTotalAtendidos':
+      //     controller.text = '2000';
+      //     break;
+      //   case 'coletaSeletivaDomiciliosAtendidos':
+      //     controller.text = '1800';
+      //     break;
+      //   case 'coletaSeletivaRuraisAtendidos':
+      //     controller.text = '200';
+      //     break;
+      //   case 'coletaSeletivaEntidadeResponsavel':
+      //     controller.text = 'COOPLIX';
+      //     break;
+      //   case 'coletaNaoSeletivaTotalAtendidos':
+      //     controller.text = '8000';
+      //     break;
+      //   case 'coletaNaoSeletivaDomiciliosAtendidos':
+      //     controller.text = '6000';
+      //     break;
+      //   case 'coletaNaoSeletivaRuraisAtendidos':
+      //     controller.text = '2000';
+      //     break;
+      //   case 'coletaNaoSeletivaEntidadeResponsavel':
+      //     controller.text = 'Prefeitura';
+      //     break;
+      //   case 'coletaSemColetaTotal':
+      //     controller.text = '1000';
+      //     break;
+      //   case 'coletaSemColetaDomicilios':
+      //     controller.text = '500';
+      //     break;
+      //   case 'coletaSemColetaRurais':
+      //     controller.text = '500';
+      //     break;
+      //   case 'deposicaoAterroSanitarioTotalAtendidos':
+      //     controller.text = '7000';
+      //     break;
+      //   case 'deposicaoAterroSanitarioDomiciliosAtendidos':
+      //     controller.text = '6000';
+      //     break;
+      //   case 'deposicaoAterroSanitarioRuraisAtendidos':
+      //     controller.text = '1000';
+      //     break;
+      //   case 'deposicaoAterroSanitarioEntidadeResponsavel':
+      //     controller.text = 'Prefeitura';
+      //     break;
+      //   case 'deposicaoACeuAbertoTotalAtendidos':
+      //     controller.text = '2000';
+      //     break;
+      //   case 'deposicaoACeuAbertoDomiciliosAtendidos':
+      //     controller.text = '1500';
+      //     break;
+      //   case 'deposicaoACeuAbertoRuraisAtendidos':
+      //     controller.text = '500';
+      //     break;
+      //   case 'deposicaoACeuAbertoEntidadeResponsavel':
+      //     controller.text = 'Nenhuma';
+      //     break;
+      //   case 'deposicaoOutroTotalNome':
+      //     controller.text = 'Incinerador';
+      //     break;
+      //   case 'deposicaoOutroTotalAtendidos':
+      //     controller.text = '500';
+      //     break;
+      //   case 'deposicaoOutroDomiciliosAtendidos':
+      //     controller.text = '400';
+      //     break;
+      //   case 'deposicaoOutroEntidadeResponsavel':
+      //     controller.text = 'Privada';
+      //     break;
+      //   case 'reciclagemDeAcoTotalReciclado':
+      //     controller.text = '1500';
+      //     break;
+      //   case 'reciclagemDeAcoEntidadeResponsavel':
+      //     controller.text = 'RECICLAÇO';
+      //     break;
+      //   case 'reciclagemDeAluminioTotalReciclado':
+      //     controller.text = '2000';
+      //     break;
+      //   case 'reciclagemDeAluminioEntidadeResponsavel':
+      //     controller.text = 'COOPLIX';
+      //     break;
+      //   case 'reciclagemDeFerroTotalReciclado':
+      //     controller.text = '3000';
+      //     break;
+      //   case 'reciclagemDeFerroEntidadeResponsavel':
+      //     controller.text = 'RECICLAÇO';
+      //     break;
+      //   case 'reciclagemOutroNome':
+      //     controller.text = 'Pneus';
+      //     break;
+      //   case 'reciclagemOutroTotalReciclado':
+      //     controller.text = '500';
+      //     break;
+      //   case 'reciclagemOutroEntidadeResponsavel':
+      //     controller.text = 'ECOPNEU';
+      //     break;
+      //   case 'reciclagemDeBateriasPilhasTotalReciclado':
+      //     controller.text = '200';
+      //     break;
+      //   case 'reciclagemDeBateriasPilhasEntidadeResponsavel':
+      //     controller.text = 'Prefeitura';
+      //     break;
+      //   case 'reciclagemDeBorrachaTotalReciclado':
+      //     controller.text = '800';
+      //     break;
+      //   case 'reciclagemDeBorrachaEntidadeResponsavel':
+      //     controller.text = 'ECOPNEU';
+      //     break;
+      //   case 'reciclagemDeEletronicosTotalReciclado':
+      //     controller.text = '400';
+      //     break;
+      //   case 'reciclagemDeEletronicosEntidadeResponsavel':
+      //     controller.text = 'Prefeitura';
+      //     break;
+      //   case 'reciclagemDeEmbalagensLongaVidaTotalReciclado':
+      //     controller.text = '100';
+      //     break;
+      //   case 'reciclagemDeEmbalagensLongaVidaEntidadeResponsavel':
+      //     controller.text = 'COOPLIX';
+      //     break;
+      //   case 'reciclagemDeEntulhoTotalReciclado':
+      //     controller.text = '5000';
+      //     break;
+      //   case 'reciclagemDeEntulhoEntidadeResponsavel':
+      //     controller.text = 'Prefeitura';
+      //     break;
+      //   case 'reciclagemDeMadeiraTotalReciclado':
+      //     controller.text = '1200';
+      //     break;
+      //   case 'reciclagemDeMadeiraEntidadeResponsavel':
+      //     controller.text = 'Serralheria';
+      //     break;
+      //   case 'reciclagemDePapelTotalReciclado':
+      //     controller.text = '2500';
+      //     break;
+      //   case 'reciclagemDePapelEntidadeResponsavel':
+      //     controller.text = 'COOPLIX';
+      //     break;
+      //   case 'reciclagemDePlasticoEEmbalagensTotalReciclado':
+      //     controller.text = '3500';
+      //     break;
+      //   case 'reciclagemDePlasticoEEmbalagensEntidadeResponsavel':
+      //     controller.text = 'COOPLIX';
+      //     break;
+      //   case 'reciclagemDeVidroTotalReciclado':
+      //     controller.text = '1800';
+      //     break;
+      //   case 'reciclagemDeVidroEntidadeResponsavel':
+      //     controller.text = 'COOPLIX';
+      //     break;
+      //   case 'reciclagemDeOleoDeCozinhaTotalReciclado':
+      //     controller.text = '300';
+      //     break;
+      //   case 'reciclagemDeOleoDeCozinhaEntidadeResponsavel':
+      //     controller.text = 'COOPLIX';
+      //     break;
+      //   case 'reciclagemOutrosNome':
+      //     controller.text = 'Diversos';
+      //     break;
+      //   case 'reciclagemOutrosTotalReciclado':
+      //     controller.text = '500';
+      //     break;
+      //   case 'reciclagemOutrosEntidadeResponsavel':
+      //     controller.text = 'COOPLIX';
+      //     break;
+      //   case 'divulgacaoImpressaFolder':
+      //     controller.text = 'Sim';
+      //     break;
+      //   case 'divulgacaoImpressaRevista':
+      //     controller.text = 'Sim';
+      //     break;
+      //   case 'divulgacaoImpressaJornal':
+      //     controller.text = 'Não';
+      //     break;
+      //   case 'divulgacaoImpressaOutros':
+      //     controller.text = 'Online';
+      //     break;
+      //   case 'visitantesAno':
+      //     controller.text = '50000';
+      //     break;
+      //   case 'visitantesAnoAltaTemporada':
+      //     controller.text = '20000';
+      //     break;
+      //   case 'origemInternacionalAnoBase':
+      //     controller.text = '1000';
+      //     break;
+      //   case 'atrativosMaisVisitados':
+      //     controller.text = 'Praia, Centro Histórico';
+      //     break;
+      // }
     });
+  }
 }
   
   void _preencherDadosParaTeste3() {
+    if(widget.infoModel != null){
+          final model = widget.infoModel!;
+    final modelMap = model.toMap(); 
     _legislacaoControllers.forEach((key, controller) {
-      // Usamos a 'key' para decidir qual dado de teste colocar
-      switch (key) {
-        // --- Informações da Prefeitura ---
-        case 'leiOrganica':
-          controller.text = 'Sim';
-          break;
-        case 'ocupacaoDoSolo':
-          controller.text = 'Existe regulamentação para uso e ocupação do solo.';
-          break;
-        case 'planoDeDesenvolvimentoDoTurismo':
-          controller.text = 'Sim';
-          break;
-        case 'protecaoAmbiental':
-          controller.text = 'Código Ambiental Municipal em vigor.';
-          break;
-        case 'apoioACultura':
-          controller.text = 'Plano Municipal de Cultura e Fundo de Cultura ativos.';
-          break;
-        case 'incentivosFiscaisAoTurismo':
-          controller.text = 'Redução de ISS para novas empresas do setor de turismo.';
-          break;
-        case 'planoDiretor':
-          controller.text = 'Sim';
-          break;
-        case 'fundoMunicipalDeTurismo':
-          controller.text = 'Fundo Municipal de Turismo (FUMTUR) ativo.';
-          break;
-        case 'legislacaoOutras':
-          controller.text = 'Lei de proteção do patrimônio histórico.';
-          break;
-        case 'observacoes':
-          controller.text = 'Observações adicionais sobre as legislações em vigor.';
-          break;
-        case 'referencias':
-          controller.text = 'Prefeitura Municipal, Diário Oficial do Município.';
-          break;
+      if(modelMap.containsKey(key)){
+        final valor = modelMap[key];
+        controller.text = valor?.toString() ?? '';
       }
+      // Usamos a 'key' para decidir qual dado de teste colocar
+      // switch (key) {
+      //   // --- Informações da Prefeitura ---
+      //   case 'leiOrganica':
+      //     controller.text = 'Sim';
+      //     break;
+      //   case 'ocupacaoDoSolo':
+      //     controller.text = 'Existe regulamentação para uso e ocupação do solo.';
+      //     break;
+      //   case 'planoDeDesenvolvimentoDoTurismo':
+      //     controller.text = 'Sim';
+      //     break;
+      //   case 'protecaoAmbiental':
+      //     controller.text = 'Código Ambiental Municipal em vigor.';
+      //     break;
+      //   case 'apoioACultura':
+      //     controller.text = 'Plano Municipal de Cultura e Fundo de Cultura ativos.';
+      //     break;
+      //   case 'incentivosFiscaisAoTurismo':
+      //     controller.text = 'Redução de ISS para novas empresas do setor de turismo.';
+      //     break;
+      //   case 'planoDiretor':
+      //     controller.text = 'Sim';
+      //     break;
+      //   case 'fundoMunicipalDeTurismo':
+      //     controller.text = 'Fundo Municipal de Turismo (FUMTUR) ativo.';
+      //     break;
+      //   case 'legislacaoOutras':
+      //     controller.text = 'Lei de proteção do patrimônio histórico.';
+      //     break;
+      //   case 'observacoes':
+      //     controller.text = 'Observações adicionais sobre as legislações em vigor.';
+      //     break;
+      //   case 'referencias':
+      //     controller.text = 'Prefeitura Municipal, Diário Oficial do Município.';
+      //     break;
+      // }
     });
+    }
 }
   @override
   void dispose() {
@@ -881,14 +931,16 @@ void _preencherDadosParaTeste2() {
           curve: Curves.ease,
         );
       } else {
-        print("Formulário finalizado e pronto para enviar!");
         //Navigator.pushNamed(context, '/SendedForm');
-        FormService().sendForm(valoresJson, AppConstants.INFO_BASICA_CREATE);
+          isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
+                      FormService().sendForm(valoresJson, AppConstants.INFO_BASICA_CREATE)
+            ;
+        print("Formulário finalizado e pronto para enviar!");
+
         // _enviarFormulario(); // Você pode chamar sua função de envio aqui
       }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Formulário enviado com sucesso!')));
+
     } else {
       _formKey.currentState!.save();
       _caracteristicasControllers.forEach((key, controllers) {
@@ -968,10 +1020,10 @@ void _preencherDadosParaTeste2() {
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
               onPressed: () {
-                _preencherDadosParaTeste();
-                _preencherDadosParaTeste2();
-                _preencherDadosParaTeste3();
-                _enviarFormulario();
+                // _preencherDadosParaTeste();
+                // _preencherDadosParaTeste2();
+                // _preencherDadosParaTeste3();
+                 _enviarFormulario();
               },
               child: Text(
                 currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
@@ -985,9 +1037,10 @@ void _preencherDadosParaTeste2() {
 
 class Identificacao extends StatelessWidget {
   final Map<String, TextEditingController> controllers;
+  final InformacoesBasicasModel? infoModel;
 
   const Identificacao(
-      {super.key, required this.onSaved, required this.controllers});
+      {super.key, required this.onSaved, required this.controllers, this.infoModel});
   final void Function(String?) onSaved;
   @override
   Widget build(Object context) {
@@ -1008,6 +1061,7 @@ class Identificacao extends StatelessWidget {
         ),
 
         RadioFormField(
+          initialValue: isUpdate ? infoModel!.tipo! : '',
             options: ['Caracterização do município'], onSaved: onSaved)
 
         // RadioD(
@@ -1027,8 +1081,9 @@ class Identificacao extends StatelessWidget {
 
 class InformacoesGerais extends StatelessWidget {
   final Map<String, TextEditingController> controllers;
+  final InformacoesBasicasModel? infoModel;
 
-  const InformacoesGerais({super.key, required this.controllers});
+  const InformacoesGerais({super.key, required this.controllers, this.infoModel});
 
   @override
   Widget build(BuildContext context) {
@@ -1038,6 +1093,7 @@ class InformacoesGerais extends StatelessWidget {
       Identificacao(
         onSaved: (p0) => valoresJson['tipo'] = p0,
         controllers: controllers,
+        infoModel: infoModel,
       ),
       SizedBox(
         height: 65.h,
@@ -1453,14 +1509,16 @@ class InformacoesGerais extends StatelessWidget {
 
 class Caracteristicas extends StatefulWidget {
   final Map<String, TextEditingController> controllers;
+  final InformacoesBasicasModel? infoModel;
 
-  const Caracteristicas({super.key, required this.controllers});
+  const Caracteristicas({super.key, required this.controllers, this.infoModel});
 
   @override
   State<Caracteristicas> createState() => _CaracteristicasState();
 }
 
 class _CaracteristicasState extends State<Caracteristicas> {
+  
   final PesquisaController _pesquisaController = PesquisaController();
 
   @override
@@ -1588,6 +1646,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: sizeScreen.height * 0.01,
       ),
       CheckboxGroupFormField(
+        initialValue: widget.infoModel!.mesesMaisFrios,
         onSaved: (p0) => valoresJson['mesesMaisFrios'] = p0,
         options: [
           'Janeiro',
@@ -1610,6 +1669,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       CheckboxGroupFormField(
+        initialValue: widget.infoModel!.mesesMaisQuentes,
         onSaved: (p0) => valoresJson['mesesMaisQuentes'] = p0,
         options: [
           'Janeiro',
@@ -1632,6 +1692,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       CheckboxGroupFormField(
+        initialValue: widget.infoModel!.mesesMaisChuvosos,
         onSaved: (p0) => valoresJson['mesesMaisChuvosos'] = p0,
         options: [
           'Janeiro',
@@ -1654,6 +1715,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       CheckboxGroupFormField(
+        initialValue: widget.infoModel!.mesesMenosChuvosos,
         onSaved: (p0) => valoresJson['mesesMenosChuvosos'] = p0,
         options: [
           'Janeiro',
@@ -1699,6 +1761,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       RadioFormField(
+        initialValue: widget.infoModel!.tipoDeAbastecimento,
           onSaved: (newValue) => valoresJson['tipoDeAbastecimento'] = newValue,
           options: [
             'Água Não Canalizada',
@@ -1729,8 +1792,10 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       textLabel(name: 'Coleta e Deposição'),
       ConditionalFieldsGroup(
+
           title: 'Rede de Esgoto',
           jsonKey: 'redeDeEsgoto',
+          optionModelValue: widget.infoModel!.redeDeEsgoto,
           children: [
             CustomTextField(
               name: 'Total Atendido (%)',
@@ -1758,6 +1823,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ConditionalFieldsGroup(
           title: 'Fossa Séptica',
           jsonKey: 'fossaSeptica',
+          optionModelValue: widget.infoModel!.fossaSeptica,
           children: [
             CustomTextField(
               name: 'Total Atendido (%)',
@@ -1785,6 +1851,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ConditionalFieldsGroup(
           title: 'Fossa Rudimentar',
           jsonKey: 'fossaRudimentar',
+          optionModelValue: widget.infoModel!.fossaRudimentar,
+
           children: [
             CustomTextField(
               name: 'Total Atendido (%)',
@@ -1811,7 +1879,10 @@ class _CaracteristicasState extends State<Caracteristicas> {
                   widget.controllers['fossaRudimentarEntidadeResponsavel'],
             )
           ]),
-      ConditionalFieldsGroup(title: 'Vala', jsonKey: 'vala', children: [
+      ConditionalFieldsGroup(title: 'Vala', jsonKey: 'vala',
+          optionModelValue: widget.infoModel!.vala,
+      
+       children: [
         CustomTextField(
           name: 'Total Atendido (%)',
           controller: widget.controllers['valaTotalAtendidos'],
@@ -1838,6 +1909,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ConditionalFieldsGroup(
           title: 'Estação de Tratamento',
           jsonKey: 'estacaoDeTratamento',
+          optionModelValue: widget.infoModel!.estacaoDeTratamento,
+
           children: [
             CustomTextField(
               name: 'Total Atendido (%)',
@@ -1869,6 +1942,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ConditionalFieldsGroup(
           title: 'Esgoto Tratado',
           jsonKey: 'esgotoTratado',
+          optionModelValue: widget.infoModel!.esgotoTratado,
+
           children: [
             CustomTextField(
               name: 'Total Atendido (%)',
@@ -1898,6 +1973,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ConditionalFieldsGroup(
           title: 'Outros',
           jsonKey: 'servicoDeEsgotoOutros',
+          optionModelValue: widget.infoModel!.servicoDeEsgotoOutros,
+
           children: [
             CustomTextField(
               name: 'Nome',
@@ -1942,6 +2019,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       textLabel(name: 'Energia Elétrica'),
       RadioFormField(
+        initialValue: widget.infoModel!.energiaEletrica,
           onSaved: (newValue) => valoresJson['energiaEletrica'] = newValue,
           options: ['110 Volts', '220 Volts', '110/220 Volts']),
       CustomTextField(
@@ -1951,6 +2029,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
         keyboardType: TextInputType.numberWithOptions(),
       ),
       ConditionalFieldsGroup(
+          optionModelValue: widget.infoModel!.geradorDeEmergencia,
+
           title: 'Gerador de Emergẽncia',
           jsonKey: 'geradorDeEmergencia',
           children: [
@@ -1971,6 +2051,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       ConditionalFieldsGroup(
           title: 'Rede Urbana',
+          optionModelValue: widget.infoModel!.redeUrbana,
+
           jsonKey: 'redeUrbana',
           children: [
             CustomTextField(
@@ -1986,10 +2068,13 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Rede Rural',
+          optionModelValue: widget.infoModel!.redeRural,
+
           jsonKey: 'redeRural',
           children: [
             CustomTextField(
               name: 'Total Abastecido (%)',
+              
               controller: widget.controllers['redeRuralTotalAbastecido'],
               formatter: [FilteringTextInputFormatter.digitsOnly],
               keyboardType: TextInputType.numberWithOptions(),
@@ -2001,6 +2086,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Abastecimento Próprio',
+          optionModelValue: widget.infoModel!.abastecimentoProprio,
+
           jsonKey: 'abastecimentoProprio',
           children: [
             CustomTextField(
@@ -2032,6 +2119,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Outros',
+          optionModelValue: widget.infoModel!.servicosDeEnergiaOutro,
+
           jsonKey: 'servicosDeEnergiaOutro',
           children: [
             CustomTextField(
@@ -2074,6 +2163,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       ConditionalFieldsGroup(
           title: 'Seletiva',
+          optionModelValue: widget.infoModel!.coletaSeletiva,
+
           jsonKey: 'coletaSeletiva',
           children: [
             CustomTextField(
@@ -2103,6 +2194,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Não Seletiva',
+          optionModelValue: widget.infoModel!.coletaNaoSeletiva,
+
           jsonKey: 'coletaNaoSeletiva',
           children: [
             CustomTextField(
@@ -2133,6 +2226,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Sem Coleta',
+          optionModelValue: widget.infoModel!.coletaSemColeta,
+
           jsonKey: 'coletaSemColeta',
           children: [
             CustomTextField(
@@ -2163,6 +2258,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       ConditionalFieldsGroup(
           title: 'Aterro Sanitário',
+          optionModelValue: widget.infoModel!.deposicaoAterroSanitario,
+
           jsonKey: 'deposicaoAterroSanitario',
           children: [
             CustomTextField(
@@ -2194,6 +2291,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Compostagem',
+          optionModelValue: widget.infoModel!.deposicaoCompostagem,
+
           jsonKey: 'deposicaoCompostagem',
           children: [
             CustomTextField(
@@ -2225,6 +2324,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'A Céu Aberto (lixão)',
+          optionModelValue: widget.infoModel!.deposicaoACeuAberto,
+          
           jsonKey: 'deposicaoACeuAberto',
           children: [
             CustomTextField(
@@ -2256,6 +2357,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Outros',
+          optionModelValue: widget.infoModel!.deposicaoOutro,
+
           jsonKey: 'deposicaoOutro',
           children: [
             CustomTextField(
@@ -2290,6 +2393,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       ConditionalFieldsGroup(
           title: 'De Aço',
+          optionModelValue: widget.infoModel!.reciclagemDeAco,
+
           jsonKey: 'reciclagemDeAco',
           children: [
             CustomTextField(
@@ -2305,6 +2410,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Alumínio',
+          optionModelValue: widget.infoModel!.reciclagemDeAluminio,
+
           jsonKey: 'reciclagemDeAluminio',
           children: [
             CustomTextField(
@@ -2321,6 +2428,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Ferro',
+          optionModelValue: widget.infoModel!.reciclagemDeFerro,
+
           jsonKey: 'reciclagemDeFerro',
           children: [
             CustomTextField(
@@ -2336,6 +2445,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Outro Metal',
+          optionModelValue: widget.infoModel!.reciclagemOutro,
+
           jsonKey: 'reciclagemOutro',
           children: [
             CustomTextField(
@@ -2355,6 +2466,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Baterias e Pilhas',
+          optionModelValue: widget.infoModel!.reciclagemDeBateriasPilhas,
+
           jsonKey: 'reciclagemDeBateriasPilhas',
           children: [
             CustomTextField(
@@ -2371,6 +2484,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Borracha',
+          optionModelValue: widget.infoModel!.reciclagemDeBorracha,
+
           jsonKey: 'reciclagemDeBorracha',
           children: [
             CustomTextField(
@@ -2387,6 +2502,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Eletrônicos',
+          optionModelValue: widget.infoModel!.reciclagemDeEletronicos,
+
           jsonKey: 'reciclagemDeEletronicos',
           children: [
             CustomTextField(
@@ -2403,6 +2520,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Embalagens\nLonga Vida',
+          optionModelValue: widget.infoModel!.reciclagemDeEmbalagensLongaVida,
+
           jsonKey: 'reciclagemDeEmbalagensLongaVida',
           children: [
             CustomTextField(
@@ -2419,6 +2538,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Entulho',
+          optionModelValue: widget.infoModel!.reciclagemDeEntulho,
+
           jsonKey: 'reciclagemDeEntulho',
           children: [
             CustomTextField(
@@ -2435,6 +2556,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Madeira',
+          optionModelValue: widget.infoModel!.reciclagemDeMadeira,
+
           jsonKey: 'reciclagemDeMadeira',
           children: [
             CustomTextField(
@@ -2451,6 +2574,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Papel',
+          optionModelValue: widget.infoModel!.reciclagemDePapel,
+
           jsonKey: 'reciclagemDePapel',
           children: [
             CustomTextField(
@@ -2466,6 +2591,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De plástico e\nembalagens',
+          optionModelValue: widget.infoModel!.reciclagemDePlasticoEEmbalagens,
+
           jsonKey: 'reciclagemDePlasticoEEmbalagens',
           children: [
             CustomTextField(
@@ -2482,6 +2609,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Vidro',
+          optionModelValue: widget.infoModel!.reciclagemDeVidro,
+
           jsonKey: 'reciclagemDeVidro',
           children: [
             CustomTextField(
@@ -2497,6 +2626,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Óleo de\nCozinha',
+          optionModelValue: widget.infoModel!.reciclagemDeOleoDeCozinha,
+
           jsonKey: 'reciclagemDeOleoDeCozinha',
           children: [
             CustomTextField(
@@ -2513,6 +2644,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Outros',
+          optionModelValue: widget.infoModel!.reciclagemOutros,
+
           jsonKey: 'reciclagemOutros',
           children: [
             CustomTextField(
@@ -2545,6 +2678,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       RadioFormField(
+        initialValue: widget.infoModel!.servicosDeComunicacaoAcessoAInternet,
           onSaved: (newValue) =>
               valoresJson['servicosDeComunicacaoAcessoAInternet'] = newValue,
           options: [
@@ -2557,6 +2691,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Telefonia Móvel',
+          optionModelValue: widget.infoModel!.servicosDeComunicacaoTelefoniaMovel,
+          
           jsonKey: 'servicosDeComunicacaoTelefoniaMovel',
           children: [
             SizedBox(
@@ -2564,6 +2700,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
             textLabel(name: 'Área de Cobertura'),
             RadioFormField(
+              initialValue: widget.infoModel!.telefoniaMovelAreaDeCobertura,
               options: ['Em Todo Município', 'Em Parte do Município'],
               onSaved: (newValue) =>
                   valoresJson['telefoniaMovelAreaDeCobertura'] = newValue,
@@ -2571,6 +2708,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Telefonia Fixa',
+          optionModelValue: widget.infoModel!.servicosDeComunicacaoTelefoniaFixa,
+
           jsonKey: 'servicosDeComunicacaoTelefoniaFixa',
           children: [
             SizedBox(
@@ -2578,6 +2717,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
             textLabel(name: 'Área de Cobertura'),
             RadioFormField(
+              initialValue: widget.infoModel!.telefoniaFixaAreaDeCobertura,
+
               options: ['Em Todo Município', 'Em Parte do Município'],
               onSaved: (newValue) =>
                   valoresJson['telefoniaFixaAreaDeCobertura'] = newValue,
@@ -2602,6 +2743,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       ConditionalFieldsGroup(
           title: 'Divulgação Impressa',
+          optionModelValue: widget.infoModel!.promocaoTuristicaDivulgacaoImpressa,
+
           jsonKey: 'promocaoTuristicaDivulgacaoImpressa',
           children: [
             CustomTextField(
@@ -2620,6 +2763,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Divulgação Televisiva',
+          optionModelValue: widget.infoModel!.promocaoTuristicaDivulgacaoTelevisiva,
+
           jsonKey: 'promocaoTuristicaDivulgacaoTelevisiva',
           children: []),
       SizedBox(
@@ -2639,6 +2784,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       RadioFormField(
+        initialValue: widget.infoModel!.atendimentoEmLinguaEstrangeira,
         options: ['Não', 'Inglês', 'Espanhol', 'outro'],
         onSaved: (newValue) =>
             valoresJson['atendimentoEmLinguaEstrangeira'] = newValue,
@@ -2650,6 +2796,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       RadioFormField(
+        initialValue: widget.infoModel!.atendimentoAoVisitanteInformativosImpressos,
         options: ['Não', 'Português', 'Inglês', 'Espanhol', 'outro'],
         onSaved: (newValue) =>
             valoresJson['atendimentoAoVisitanteInformativosImpressos'] =
@@ -2681,6 +2828,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       CheckboxGroupFormField(
+        initialValue: widget.infoModel!.mesesAltaTemporada,
         onSaved: (p0) => valoresJson['mesesAltaTemporada'] = p0,
         options: [
           'Janeiro',
@@ -2706,6 +2854,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       RadioFormField(
+        initialValue: widget.infoModel!.origemDosVisitantesTuristas,
         options: ['Entorno Municipal', 'Estadual', 'Nacional', 'Internacional'],
         onSaved: (newValue) =>
             valoresJson['origemDosVisitantesTuristas'] = newValue,
@@ -2714,6 +2863,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       MultiAutocompleteFormField(
+        initialValue: widget.infoModel!.origemNacional,
         title: 'Origem dos Turistas Nacionais (até 5 estados)',
         label: 'Selecione um Estado',
         fieldCount: 5,
@@ -2742,6 +2892,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       MultiAutocompleteFormField(
+        initialValue: widget.infoModel!.origemInternacional,
         title: 'Origem dos Turistas Internacionais (até 5 países)',
         label: 'Selecione um País',
         optionsBuilder: (textEditingValue) {
@@ -2782,6 +2933,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           name:
               'Segmentos ou Tipos de Turismo em que é Especializado (assinalar até 3)'),
       CheckboxGroupFormField(
+        initialValue: widget.infoModel!.segmentosTurismoEspecializado,
         options: [
           'Aventura',
           'Ecoturismo',
@@ -2907,12 +3059,12 @@ class ConditionalFieldsGroup extends StatefulWidget {
   final String title;
   final String jsonKey;
   final List<Widget> children;
-
+  final String? optionModelValue;
   const ConditionalFieldsGroup(
       {super.key,
       required this.title,
       required this.jsonKey,
-      required this.children});
+      required this.children, this.optionModelValue});
 
   @override
   State<ConditionalFieldsGroup> createState() => _ConditionalFieldsGroupState();
@@ -2943,6 +3095,7 @@ class _ConditionalFieldsGroupState extends State<ConditionalFieldsGroup> {
             Expanded(
                 flex: 2,
                 child: ExpansionTileYoN(
+                  optionModel: isUpdate ? widget.optionModelValue : 'não',
                   getValue: (p0) {
                     if (valoresJson[widget.jsonKey] == p0) return;
 
@@ -2956,7 +3109,7 @@ class _ConditionalFieldsGroupState extends State<ConditionalFieldsGroup> {
                 ))
           ],
         ),
-        if (isExpanded) ...widget.children
+        if (isExpanded || widget.optionModelValue =='sim')  ...widget.children
       ],
     );
   }
