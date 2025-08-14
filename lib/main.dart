@@ -9,6 +9,7 @@ import 'package:inventur/pages/auth/login_page.dart';
 import 'package:inventur/pages/auth/register_confirmation.dart';
 import 'package:inventur/pages/auth/register_page.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsA/comercio_turistico.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas_do_municipio.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%C3%A7a.dart';
@@ -121,7 +122,8 @@ class _MyAppState extends State<MyApp> {
           '/SendedForm': (_) => SendedFormPage(),
           '/UpdatedForm': (_) => UpdatedForm(),
           '/SyncPage': (_) => SyncPage(),
-          '/InfoBasicas': (_) => InformacoesBasicasDoMunicipio()
+          '/InfoBasicas': (_) => InformacoesBasicasDoMunicipio(),
+          '/ComercioTuristico': (_) => ComercioTuristico()
         },
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

@@ -365,6 +365,13 @@ class _RadioFormFieldState extends State<RadioFormField> {
     // TODO: implement initState
     super.initState();
     _outroController = TextEditingController();
+    
+    if(widget.initialValue!.contains('outro') && widget.initialValue!=null){
+      int filter = widget.initialValue!.indexOf(':');
+      String filterResult = widget.initialValue!.substring(filter + 2);
+      
+      _outroController.text = filterResult;
+    }
   }
 
   @override
@@ -386,7 +393,7 @@ class _RadioFormFieldState extends State<RadioFormField> {
         }
       },
       validator: widget.validator ?? (value) {
-            if (value == null) {
+            if (value == null || value == '') {
               return "Por favor, selecione uma opção";
             }
 
@@ -395,7 +402,7 @@ class _RadioFormFieldState extends State<RadioFormField> {
             }
             return null;
           },
-      initialValue: widget.initialValue,
+      initialValue: widget.initialValue!.contains('outro') ? 'outro': widget.initialValue,
       
       // 3. O `builder` é responsável por construir a UI do seu campo
       builder: (FormFieldState<String> field) {

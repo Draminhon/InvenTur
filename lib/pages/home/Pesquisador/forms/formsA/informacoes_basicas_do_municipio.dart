@@ -931,6 +931,7 @@ void _preencherDadosParaTeste2() {
           curve: Curves.ease,
         );
       } else {
+        
         //Navigator.pushNamed(context, '/SendedForm');
           isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
                       FormService().sendForm(valoresJson, AppConstants.INFO_BASICA_CREATE)
@@ -942,6 +943,10 @@ void _preencherDadosParaTeste2() {
 
 
     } else {
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
       _formKey.currentState!.save();
       _caracteristicasControllers.forEach((key, controllers) {
         valoresJson[key] = controllers.text;
@@ -996,17 +1001,21 @@ void _preencherDadosParaTeste2() {
               },
             )),
         bottomNavigationBar:
-            Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           // Botão Voltar
           if (currentStep > 0)
-            TextButton(
-              onPressed: () {
-                _pageController.previousPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.ease,
-                );
-              },
-              child: const Text('VOLTAR'),
+            Container(
+                          margin: EdgeInsets.only(bottom: 35.h),
+
+              child: TextButton(
+                onPressed: () {
+                  _pageController.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.ease,
+                  );
+                },
+                child: const Text('VOLTAR'),
+              ),
             ),
           // Espaçador para alinhar o botão Continuar à direita quando não houver o Voltar
           if (currentStep == 0) const Spacer(),
@@ -1015,7 +1024,7 @@ void _preencherDadosParaTeste2() {
           Container(
             height: 160.h,
             width: 550.w,
-            margin: EdgeInsets.only(right: 55.h, bottom: 55.h),
+            margin: EdgeInsets.only(bottom: 55.h),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
@@ -1646,7 +1655,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: sizeScreen.height * 0.01,
       ),
       CheckboxGroupFormField(
-        initialValue: widget.infoModel!.mesesMaisFrios,
+        initialValue: isUpdate ? widget.infoModel!.mesesMaisFrios : [],
         onSaved: (p0) => valoresJson['mesesMaisFrios'] = p0,
         options: [
           'Janeiro',
@@ -1669,7 +1678,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       CheckboxGroupFormField(
-        initialValue: widget.infoModel!.mesesMaisQuentes,
+        initialValue: isUpdate ? widget.infoModel!.mesesMaisQuentes : [],
         onSaved: (p0) => valoresJson['mesesMaisQuentes'] = p0,
         options: [
           'Janeiro',
@@ -1692,7 +1701,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       CheckboxGroupFormField(
-        initialValue: widget.infoModel!.mesesMaisChuvosos,
+        initialValue: isUpdate ? widget.infoModel!.mesesMaisChuvosos: [],
         onSaved: (p0) => valoresJson['mesesMaisChuvosos'] = p0,
         options: [
           'Janeiro',
@@ -1715,7 +1724,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       CheckboxGroupFormField(
-        initialValue: widget.infoModel!.mesesMenosChuvosos,
+        initialValue: isUpdate ? widget.infoModel!.mesesMenosChuvosos: [],
         onSaved: (p0) => valoresJson['mesesMenosChuvosos'] = p0,
         options: [
           'Janeiro',
@@ -1761,7 +1770,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       RadioFormField(
-        initialValue: widget.infoModel!.tipoDeAbastecimento,
+        initialValue: isUpdate ? widget.infoModel!.tipoDeAbastecimento: '',
           onSaved: (newValue) => valoresJson['tipoDeAbastecimento'] = newValue,
           options: [
             'Água Não Canalizada',
@@ -1795,7 +1804,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
 
           title: 'Rede de Esgoto',
           jsonKey: 'redeDeEsgoto',
-          optionModelValue: widget.infoModel!.redeDeEsgoto,
+          optionModelValue: isUpdate ? widget.infoModel!.redeDeEsgoto : '',
           children: [
             CustomTextField(
               name: 'Total Atendido (%)',
@@ -1823,7 +1832,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ConditionalFieldsGroup(
           title: 'Fossa Séptica',
           jsonKey: 'fossaSeptica',
-          optionModelValue: widget.infoModel!.fossaSeptica,
+          optionModelValue: isUpdate ? widget.infoModel!.fossaSeptica: '',
           children: [
             CustomTextField(
               name: 'Total Atendido (%)',
@@ -1851,7 +1860,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ConditionalFieldsGroup(
           title: 'Fossa Rudimentar',
           jsonKey: 'fossaRudimentar',
-          optionModelValue: widget.infoModel!.fossaRudimentar,
+          optionModelValue: isUpdate ? widget.infoModel!.fossaRudimentar: '',
 
           children: [
             CustomTextField(
@@ -1880,7 +1889,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(title: 'Vala', jsonKey: 'vala',
-          optionModelValue: widget.infoModel!.vala,
+          optionModelValue: isUpdate ? widget.infoModel!.vala: '',
       
        children: [
         CustomTextField(
@@ -1909,7 +1918,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ConditionalFieldsGroup(
           title: 'Estação de Tratamento',
           jsonKey: 'estacaoDeTratamento',
-          optionModelValue: widget.infoModel!.estacaoDeTratamento,
+          optionModelValue: isUpdate ? widget.infoModel!.estacaoDeTratamento: '',
 
           children: [
             CustomTextField(
@@ -1942,7 +1951,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ConditionalFieldsGroup(
           title: 'Esgoto Tratado',
           jsonKey: 'esgotoTratado',
-          optionModelValue: widget.infoModel!.esgotoTratado,
+          optionModelValue: isUpdate ? widget.infoModel!.esgotoTratado: '',
 
           children: [
             CustomTextField(
@@ -1973,7 +1982,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ConditionalFieldsGroup(
           title: 'Outros',
           jsonKey: 'servicoDeEsgotoOutros',
-          optionModelValue: widget.infoModel!.servicoDeEsgotoOutros,
+          optionModelValue: isUpdate ? widget.infoModel!.servicoDeEsgotoOutros: '',
 
           children: [
             CustomTextField(
@@ -2019,7 +2028,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       textLabel(name: 'Energia Elétrica'),
       RadioFormField(
-        initialValue: widget.infoModel!.energiaEletrica,
+        initialValue: isUpdate ? widget.infoModel!.energiaEletrica: '',
           onSaved: (newValue) => valoresJson['energiaEletrica'] = newValue,
           options: ['110 Volts', '220 Volts', '110/220 Volts']),
       CustomTextField(
@@ -2029,7 +2038,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         keyboardType: TextInputType.numberWithOptions(),
       ),
       ConditionalFieldsGroup(
-          optionModelValue: widget.infoModel!.geradorDeEmergencia,
+          optionModelValue: isUpdate ? widget.infoModel!.geradorDeEmergencia: '',
 
           title: 'Gerador de Emergẽncia',
           jsonKey: 'geradorDeEmergencia',
@@ -2051,7 +2060,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       ConditionalFieldsGroup(
           title: 'Rede Urbana',
-          optionModelValue: widget.infoModel!.redeUrbana,
+          optionModelValue: isUpdate ? widget.infoModel!.redeUrbana: '',
 
           jsonKey: 'redeUrbana',
           children: [
@@ -2068,7 +2077,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Rede Rural',
-          optionModelValue: widget.infoModel!.redeRural,
+          optionModelValue: isUpdate ? widget.infoModel!.redeRural: '',
 
           jsonKey: 'redeRural',
           children: [
@@ -2086,7 +2095,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Abastecimento Próprio',
-          optionModelValue: widget.infoModel!.abastecimentoProprio,
+          optionModelValue: isUpdate ? widget.infoModel!.abastecimentoProprio: '',
 
           jsonKey: 'abastecimentoProprio',
           children: [
@@ -2119,7 +2128,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Outros',
-          optionModelValue: widget.infoModel!.servicosDeEnergiaOutro,
+          optionModelValue: isUpdate ? widget.infoModel!.servicosDeEnergiaOutro: '',
 
           jsonKey: 'servicosDeEnergiaOutro',
           children: [
@@ -2163,7 +2172,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       ConditionalFieldsGroup(
           title: 'Seletiva',
-          optionModelValue: widget.infoModel!.coletaSeletiva,
+          optionModelValue: isUpdate ? widget.infoModel!.coletaSeletiva: '',
 
           jsonKey: 'coletaSeletiva',
           children: [
@@ -2194,7 +2203,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Não Seletiva',
-          optionModelValue: widget.infoModel!.coletaNaoSeletiva,
+          optionModelValue: isUpdate ? widget.infoModel!.coletaNaoSeletiva: '',
 
           jsonKey: 'coletaNaoSeletiva',
           children: [
@@ -2226,7 +2235,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Sem Coleta',
-          optionModelValue: widget.infoModel!.coletaSemColeta,
+          optionModelValue: isUpdate ? widget.infoModel!.coletaSemColeta: '',
 
           jsonKey: 'coletaSemColeta',
           children: [
@@ -2258,7 +2267,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       ConditionalFieldsGroup(
           title: 'Aterro Sanitário',
-          optionModelValue: widget.infoModel!.deposicaoAterroSanitario,
+          optionModelValue: isUpdate ? widget.infoModel!.deposicaoAterroSanitario: '',
 
           jsonKey: 'deposicaoAterroSanitario',
           children: [
@@ -2291,7 +2300,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Compostagem',
-          optionModelValue: widget.infoModel!.deposicaoCompostagem,
+          optionModelValue: isUpdate ? widget.infoModel!.deposicaoCompostagem: '',
 
           jsonKey: 'deposicaoCompostagem',
           children: [
@@ -2324,7 +2333,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'A Céu Aberto (lixão)',
-          optionModelValue: widget.infoModel!.deposicaoACeuAberto,
+          optionModelValue: isUpdate ? widget.infoModel!.deposicaoACeuAberto: '',
           
           jsonKey: 'deposicaoACeuAberto',
           children: [
@@ -2357,7 +2366,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Outros',
-          optionModelValue: widget.infoModel!.deposicaoOutro,
+          optionModelValue: isUpdate ? widget.infoModel!.deposicaoOutro: '',
 
           jsonKey: 'deposicaoOutro',
           children: [
@@ -2393,7 +2402,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       ConditionalFieldsGroup(
           title: 'De Aço',
-          optionModelValue: widget.infoModel!.reciclagemDeAco,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeAco: '',
 
           jsonKey: 'reciclagemDeAco',
           children: [
@@ -2410,7 +2419,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Alumínio',
-          optionModelValue: widget.infoModel!.reciclagemDeAluminio,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeAluminio: '',
 
           jsonKey: 'reciclagemDeAluminio',
           children: [
@@ -2428,7 +2437,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Ferro',
-          optionModelValue: widget.infoModel!.reciclagemDeFerro,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeFerro: '',
 
           jsonKey: 'reciclagemDeFerro',
           children: [
@@ -2445,7 +2454,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Outro Metal',
-          optionModelValue: widget.infoModel!.reciclagemOutro,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemOutro: '',
 
           jsonKey: 'reciclagemOutro',
           children: [
@@ -2466,7 +2475,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Baterias e Pilhas',
-          optionModelValue: widget.infoModel!.reciclagemDeBateriasPilhas,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeBateriasPilhas: '',
 
           jsonKey: 'reciclagemDeBateriasPilhas',
           children: [
@@ -2484,7 +2493,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Borracha',
-          optionModelValue: widget.infoModel!.reciclagemDeBorracha,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeBorracha: '',
 
           jsonKey: 'reciclagemDeBorracha',
           children: [
@@ -2502,7 +2511,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Eletrônicos',
-          optionModelValue: widget.infoModel!.reciclagemDeEletronicos,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeEletronicos: '',
 
           jsonKey: 'reciclagemDeEletronicos',
           children: [
@@ -2520,7 +2529,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Embalagens\nLonga Vida',
-          optionModelValue: widget.infoModel!.reciclagemDeEmbalagensLongaVida,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeEmbalagensLongaVida: '',
 
           jsonKey: 'reciclagemDeEmbalagensLongaVida',
           children: [
@@ -2538,7 +2547,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Entulho',
-          optionModelValue: widget.infoModel!.reciclagemDeEntulho,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeEntulho: '',
 
           jsonKey: 'reciclagemDeEntulho',
           children: [
@@ -2556,7 +2565,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Madeira',
-          optionModelValue: widget.infoModel!.reciclagemDeMadeira,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeMadeira: '',
 
           jsonKey: 'reciclagemDeMadeira',
           children: [
@@ -2574,7 +2583,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Papel',
-          optionModelValue: widget.infoModel!.reciclagemDePapel,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDePapel: '',
 
           jsonKey: 'reciclagemDePapel',
           children: [
@@ -2591,7 +2600,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De plástico e\nembalagens',
-          optionModelValue: widget.infoModel!.reciclagemDePlasticoEEmbalagens,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDePlasticoEEmbalagens: '',
 
           jsonKey: 'reciclagemDePlasticoEEmbalagens',
           children: [
@@ -2609,7 +2618,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Vidro',
-          optionModelValue: widget.infoModel!.reciclagemDeVidro,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeVidro: '',
 
           jsonKey: 'reciclagemDeVidro',
           children: [
@@ -2626,7 +2635,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'De Óleo de\nCozinha',
-          optionModelValue: widget.infoModel!.reciclagemDeOleoDeCozinha,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeOleoDeCozinha: '',
 
           jsonKey: 'reciclagemDeOleoDeCozinha',
           children: [
@@ -2644,7 +2653,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Outros',
-          optionModelValue: widget.infoModel!.reciclagemOutros,
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemOutros: '',
 
           jsonKey: 'reciclagemOutros',
           children: [
@@ -2678,7 +2687,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       RadioFormField(
-        initialValue: widget.infoModel!.servicosDeComunicacaoAcessoAInternet,
+        initialValue: isUpdate ? widget.infoModel!.servicosDeComunicacaoAcessoAInternet: '',
           onSaved: (newValue) =>
               valoresJson['servicosDeComunicacaoAcessoAInternet'] = newValue,
           options: [
@@ -2691,7 +2700,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Telefonia Móvel',
-          optionModelValue: widget.infoModel!.servicosDeComunicacaoTelefoniaMovel,
+          optionModelValue: isUpdate ? widget.infoModel!.servicosDeComunicacaoTelefoniaMovel: '',
           
           jsonKey: 'servicosDeComunicacaoTelefoniaMovel',
           children: [
@@ -2700,7 +2709,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
             textLabel(name: 'Área de Cobertura'),
             RadioFormField(
-              initialValue: widget.infoModel!.telefoniaMovelAreaDeCobertura,
+              initialValue: isUpdate ? widget.infoModel!.telefoniaMovelAreaDeCobertura: '',
               options: ['Em Todo Município', 'Em Parte do Município'],
               onSaved: (newValue) =>
                   valoresJson['telefoniaMovelAreaDeCobertura'] = newValue,
@@ -2708,7 +2717,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Telefonia Fixa',
-          optionModelValue: widget.infoModel!.servicosDeComunicacaoTelefoniaFixa,
+          optionModelValue: isUpdate ? widget.infoModel!.servicosDeComunicacaoTelefoniaFixa: '',
 
           jsonKey: 'servicosDeComunicacaoTelefoniaFixa',
           children: [
@@ -2717,7 +2726,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
             textLabel(name: 'Área de Cobertura'),
             RadioFormField(
-              initialValue: widget.infoModel!.telefoniaFixaAreaDeCobertura,
+              initialValue: isUpdate ? widget.infoModel!.telefoniaFixaAreaDeCobertura: '',
 
               options: ['Em Todo Município', 'Em Parte do Município'],
               onSaved: (newValue) =>
@@ -2743,7 +2752,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       ConditionalFieldsGroup(
           title: 'Divulgação Impressa',
-          optionModelValue: widget.infoModel!.promocaoTuristicaDivulgacaoImpressa,
+          optionModelValue: isUpdate ? widget.infoModel!.promocaoTuristicaDivulgacaoImpressa: '',
 
           jsonKey: 'promocaoTuristicaDivulgacaoImpressa',
           children: [
@@ -2763,7 +2772,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           ]),
       ConditionalFieldsGroup(
           title: 'Divulgação Televisiva',
-          optionModelValue: widget.infoModel!.promocaoTuristicaDivulgacaoTelevisiva,
+          optionModelValue: isUpdate ? widget.infoModel!.promocaoTuristicaDivulgacaoTelevisiva: '',
 
           jsonKey: 'promocaoTuristicaDivulgacaoTelevisiva',
           children: []),
@@ -2784,7 +2793,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       RadioFormField(
-        initialValue: widget.infoModel!.atendimentoEmLinguaEstrangeira,
+        initialValue: isUpdate ? widget.infoModel!.atendimentoEmLinguaEstrangeira: '',
         options: ['Não', 'Inglês', 'Espanhol', 'outro'],
         onSaved: (newValue) =>
             valoresJson['atendimentoEmLinguaEstrangeira'] = newValue,
@@ -2796,7 +2805,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       RadioFormField(
-        initialValue: widget.infoModel!.atendimentoAoVisitanteInformativosImpressos,
+        initialValue: isUpdate ? widget.infoModel!.atendimentoAoVisitanteInformativosImpressos: '',
         options: ['Não', 'Português', 'Inglês', 'Espanhol', 'outro'],
         onSaved: (newValue) =>
             valoresJson['atendimentoAoVisitanteInformativosImpressos'] =
@@ -2828,7 +2837,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       CheckboxGroupFormField(
-        initialValue: widget.infoModel!.mesesAltaTemporada,
+        initialValue: isUpdate ? widget.infoModel!.mesesAltaTemporada: [],
         onSaved: (p0) => valoresJson['mesesAltaTemporada'] = p0,
         options: [
           'Janeiro',
@@ -2854,7 +2863,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       RadioFormField(
-        initialValue: widget.infoModel!.origemDosVisitantesTuristas,
+        initialValue: isUpdate ? widget.infoModel!.origemDosVisitantesTuristas: '',
         options: ['Entorno Municipal', 'Estadual', 'Nacional', 'Internacional'],
         onSaved: (newValue) =>
             valoresJson['origemDosVisitantesTuristas'] = newValue,
@@ -2863,7 +2872,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       MultiAutocompleteFormField(
-        initialValue: widget.infoModel!.origemNacional,
+        initialValue: isUpdate ? widget.infoModel!.origemNacional: [],
         title: 'Origem dos Turistas Nacionais (até 5 estados)',
         label: 'Selecione um Estado',
         fieldCount: 5,
@@ -2892,7 +2901,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       MultiAutocompleteFormField(
-        initialValue: widget.infoModel!.origemInternacional,
+        initialValue: isUpdate ? widget.infoModel!.origemInternacional: [],
         title: 'Origem dos Turistas Internacionais (até 5 países)',
         label: 'Selecione um País',
         optionsBuilder: (textEditingValue) {
@@ -2933,7 +2942,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
           name:
               'Segmentos ou Tipos de Turismo em que é Especializado (assinalar até 3)'),
       CheckboxGroupFormField(
-        initialValue: widget.infoModel!.segmentosTurismoEspecializado,
+        initialValue: isUpdate ? widget.infoModel!.segmentosTurismoEspecializado: [],
         options: [
           'Aventura',
           'Ecoturismo',

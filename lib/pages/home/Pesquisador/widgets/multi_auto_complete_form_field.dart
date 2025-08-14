@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
+// --- WIDGET AUXILIAR: AutocompleteTextField ---
+// Adicionamos um novo callback: onSubmitted
+
 class AutocompleteTextField extends StatelessWidget {
   final TextEditingController controllerAuto;
   final String label;
   final AutocompleteOnSelected<String> onSelected;
   final AutocompleteOptionsBuilder<String> optionsBuilder;
   final TextAlign textAlign;
+  final ValueChanged<String>? onSubmitted; // <-- NOVO: Callback para submissão
 
   const AutocompleteTextField({
     super.key,
@@ -14,6 +18,7 @@ class AutocompleteTextField extends StatelessWidget {
     required this.onSelected,
     required this.optionsBuilder,
     this.textAlign = TextAlign.start,
+    this.onSubmitted, // <-- NOVO: Adicionado ao construtor
   });
 
   @override
@@ -24,13 +29,31 @@ class AutocompleteTextField extends StatelessWidget {
       onSelected: onSelected,
       fieldViewBuilder:
           (context, textEditingController, focusNode, onFieldSubmitted) {
+        // Conectamos o onSubmitted do widget ao onFieldSubmitted do TextFormField
+        // para capturar o valor quando o usuário finaliza a digitação.
+        focusNode.addListener(() {
+          if (!focusNode.hasFocus) {
+             // Se o campo perdeu o foco e o onSubmitted não foi disparado,
+             // garantimos que o valor atual seja salvo.
+             onSubmitted?.call(textEditingController.text);
+          }
+        });
+
         return TextFormField(
           controller: textEditingController,
           focusNode: focusNode,
           decoration: InputDecoration(
             labelText: label,
-            border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+            border: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10))),
           ),
+          textAlign: textAlign,
+          // Chamamos o onFieldSubmitted original para manter o comportamento padrão
+          // e também o nosso novo callback para salvar o estado.
+          onFieldSubmitted: (String value) {
+            onFieldSubmitted();
+            onSubmitted?.call(value); // <-- ALTERADO: Chama nosso callback
+          },
         );
       },
     );
@@ -38,6 +61,7 @@ class AutocompleteTextField extends StatelessWidget {
 }
 
 // --- O NOVO WIDGET REUTILIZÁVEL ---
+// Nenhuma alteração estrutural, apenas no uso do AutocompleteTextField
 
 class MultiAutocompleteFormField extends StatefulWidget {
   final String title;
@@ -66,15 +90,12 @@ class MultiAutocompleteFormField extends StatefulWidget {
 
 class _MultiAutocompleteFormFieldState
     extends State<MultiAutocompleteFormField> {
-  // Uma lista de controllers, um para cada campo de texto
   late final List<TextEditingController> _controllers;
-  // Uma lista para armazenar o valor selecionado de cada campo
   late final List<String?> _selectedValues;
 
   @override
   void initState() {
     super.initState();
-    // Inicializa a quantidade correta de controllers e valores
     _controllers = List.generate(
       widget.fieldCount,
       (index) => TextEditingController(
@@ -95,7 +116,6 @@ class _MultiAutocompleteFormFieldState
 
   @override
   void dispose() {
-    // Limpa todos os controllers para evitar memory leaks
     for (final controller in _controllers) {
       controller.dispose();
     }
@@ -105,12 +125,26 @@ class _MultiAutocompleteFormFieldState
   @override
   Widget build(BuildContext context) {
     return FormField<List<String>>(
-      onSaved: widget.onSaved,
+      // Ao invés de passar o onSaved diretamente, nós o envolvemos
+      // para garantir que os valores finais dos controllers sejam lidos.
+      onSaved: (value) {
+        if (widget.onSaved != null) {
+          final finalValues = _controllers
+              .map((controller) => controller.text.trim())
+              .where((text) => text.isNotEmpty) // Opcional: não salvar campos vazios
+              .toList();
+          widget.onSaved!(finalValues);
+        }
+      },
       validator: widget.validator,
       initialValue: _selectedValues.whereType<String>().toList(),
       builder: (FormFieldState<List<String>> field) {
-        void updateState(int index, String selection) {
-          _selectedValues[index] = selection;
+        // Função para atualizar o estado do FormField
+        void updateState(int index, String value) {
+          // Atualizamos tanto o valor selecionado quanto o texto do controller
+          _controllers[index].text = value;
+          _selectedValues[index] = value;
+          // Notificamos o FormField sobre a mudança, filtrando valores nulos
           field.didChange(_selectedValues.whereType<String>().toList());
         }
 
@@ -121,7 +155,7 @@ class _MultiAutocompleteFormFieldState
             children: [
               Text(
                 widget.title,
-                style: TextStyle(),
+                style: TextStyle(), // Considere adicionar um `Theme.of(context).textTheme...`
               ),
               const SizedBox(height: 16),
               ListView.separated(
@@ -130,26 +164,31 @@ class _MultiAutocompleteFormFieldState
                 itemCount: widget.fieldCount,
                 itemBuilder: (context, index) {
                   return AutocompleteTextField(
-                      controllerAuto: _controllers[index],
-                      label: "${widget.label} ${index + 1}",
-                      optionsBuilder: widget.optionsBuilder,
-                      onSelected: (String selection) {
-                        // Ao selecionar, atualiza o controller e o estado do FormField
-                        _controllers[index].text = selection;
-                        updateState(index, selection);
-                      },
-                    
+                    controllerAuto: _controllers[index],
+                    label: "${widget.label} ${index + 1}",
+                    optionsBuilder: widget.optionsBuilder,
+                    onSelected: (String selection) {
+                      // Ocorre quando uma sugestão é selecionada
+                      updateState(index, selection);
+                    },
+                    // --- AQUI ESTÁ A MÁGICA ---
+                    // Ocorre quando o usuário submete o campo (Enter)
+                    // ou quando o campo perde o foco.
+                    onSubmitted: (String value) { // <-- ALTERADO
+                      updateState(index, value);
+                    },
                   );
                 },
-                separatorBuilder: (context, index) => const SizedBox(height: 12),
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: 12),
               ),
-              // Mostra a mensagem de erro, se houver
               if (field.hasError)
                 Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
+                  padding: const EdgeInsets.only(top: 8.0, left: 12.0),
                   child: Text(
                     field.errorText!,
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                 ),
             ],

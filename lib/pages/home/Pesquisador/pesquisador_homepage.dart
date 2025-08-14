@@ -166,16 +166,12 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
     return _updateConnectionStatus(results);
   }
     Future<void> _updateConnectionStatus(List<ConnectivityResult> results) async {
-    // Verifica se a lista de resultados contém 'none'. Se não contiver, está conectado.
     final newConnectionStatus = !results.contains(ConnectivityResult.none);
     
-    // Compara com o estado anterior e chama setState apenas se houver mudança
     if (newConnectionStatus != isConnected) {
       setState(() {
         isConnected = newConnectionStatus;
         print("Status da conexão alterado para: $isConnected");
-        // Se conectar e tiver dados pendentes, pode-se até chamar a sincronização aqui
-        // ou apenas reconstruir a tela para mostrar o botão, que é o que acontece agora.
       });
     }
   }
