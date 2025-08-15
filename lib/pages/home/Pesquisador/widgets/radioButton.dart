@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 
@@ -340,15 +341,17 @@ class RadioFormField extends StatefulWidget {
   // Propriedades que seu widget vai receber
   final List<String> options;
   final String? initialValue;
+  final String? title;
   final FormFieldSetter<String>? onSaved; // Função para salvar o valor
   final FormFieldValidator<String>? validator; // Função de validação
-
+  
   const RadioFormField({
     super.key,
     required this.options,
     this.initialValue,
     this.onSaved,
     this.validator,
+    this.title = ''
   });
 
   @override
@@ -366,11 +369,15 @@ class _RadioFormFieldState extends State<RadioFormField> {
     super.initState();
     _outroController = TextEditingController();
     
-    if(widget.initialValue!.contains('outro') && widget.initialValue!=null){
+    if(widget.initialValue!=null){
+      if(widget.initialValue!.contains('outro')){
       int filter = widget.initialValue!.indexOf(':');
       String filterResult = widget.initialValue!.substring(filter + 2);
       
       _outroController.text = filterResult;
+      }
+        
+
     }
   }
 
@@ -421,7 +428,16 @@ class _RadioFormFieldState extends State<RadioFormField> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Sua UI de ExpansionTile continua a mesma
+           widget.title != '' ? SizedBox(
+            height: 55.h,
+          ) : SizedBox(),
+          widget.title != '' ? textLabel(
+            name: widget.title!,
+            fontWeight: FontWeight.bold,
+          ) : SizedBox(),
+          widget.title != '' ? SizedBox(
+            height: 55.h,
+          ) : SizedBox(),
             ExpansionTile(
               trailing: Icon(_isExpanded ? Icons.expand_less : Icons.expand_circle_down,
               color: Color.fromARGB(255, 55, 111, 60)),

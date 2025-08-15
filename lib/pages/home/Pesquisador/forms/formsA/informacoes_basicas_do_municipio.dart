@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/models/forms/informacoes_basicas_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/fields.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/expandedTileYoN.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/multi_auto_complete_form_field.dart';
@@ -1801,6 +1802,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
       textLabel(name: 'Coleta e Deposição'),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
 
           title: 'Rede de Esgoto',
           jsonKey: 'redeDeEsgoto',
@@ -1830,6 +1833,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Fossa Séptica',
           jsonKey: 'fossaSeptica',
           optionModelValue: isUpdate ? widget.infoModel!.fossaSeptica: '',
@@ -1858,6 +1863,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Fossa Rudimentar',
           jsonKey: 'fossaRudimentar',
           optionModelValue: isUpdate ? widget.infoModel!.fossaRudimentar: '',
@@ -1888,7 +1895,9 @@ class _CaracteristicasState extends State<Caracteristicas> {
                   widget.controllers['fossaRudimentarEntidadeResponsavel'],
             )
           ]),
-      ConditionalFieldsGroup(title: 'Vala', jsonKey: 'vala',
+      ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,title: 'Vala', jsonKey: 'vala',
           optionModelValue: isUpdate ? widget.infoModel!.vala: '',
       
        children: [
@@ -1916,6 +1925,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
         )
       ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Estação de Tratamento',
           jsonKey: 'estacaoDeTratamento',
           optionModelValue: isUpdate ? widget.infoModel!.estacaoDeTratamento: '',
@@ -1949,6 +1960,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Esgoto Tratado',
           jsonKey: 'esgotoTratado',
           optionModelValue: isUpdate ? widget.infoModel!.esgotoTratado: '',
@@ -1980,6 +1993,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Outros',
           jsonKey: 'servicoDeEsgotoOutros',
           optionModelValue: isUpdate ? widget.infoModel!.servicoDeEsgotoOutros: '',
@@ -2038,6 +2053,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
         keyboardType: TextInputType.numberWithOptions(),
       ),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           optionModelValue: isUpdate ? widget.infoModel!.geradorDeEmergencia: '',
 
           title: 'Gerador de Emergẽncia',
@@ -2059,6 +2076,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
         fontWeight: FontWeight.bold,
       ),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Rede Urbana',
           optionModelValue: isUpdate ? widget.infoModel!.redeUrbana: '',
 
@@ -2076,6 +2095,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Rede Rural',
           optionModelValue: isUpdate ? widget.infoModel!.redeRural: '',
 
@@ -2094,6 +2115,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Abastecimento Próprio',
           optionModelValue: isUpdate ? widget.infoModel!.abastecimentoProprio: '',
 
@@ -2127,6 +2150,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Outros',
           optionModelValue: isUpdate ? widget.infoModel!.servicosDeEnergiaOutro: '',
 
@@ -2171,6 +2196,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
         fontWeight: FontWeight.bold,
       ),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Seletiva',
           optionModelValue: isUpdate ? widget.infoModel!.coletaSeletiva: '',
 
@@ -2202,6 +2229,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Não Seletiva',
           optionModelValue: isUpdate ? widget.infoModel!.coletaNaoSeletiva: '',
 
@@ -2234,6 +2263,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Sem Coleta',
           optionModelValue: isUpdate ? widget.infoModel!.coletaSemColeta: '',
 
@@ -2266,6 +2297,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
         fontWeight: FontWeight.bold,
       ),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Aterro Sanitário',
           optionModelValue: isUpdate ? widget.infoModel!.deposicaoAterroSanitario: '',
 
@@ -2299,6 +2332,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Compostagem',
           optionModelValue: isUpdate ? widget.infoModel!.deposicaoCompostagem: '',
 
@@ -2332,6 +2367,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'A Céu Aberto (lixão)',
           optionModelValue: isUpdate ? widget.infoModel!.deposicaoACeuAberto: '',
           
@@ -2365,6 +2402,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Outros',
           optionModelValue: isUpdate ? widget.infoModel!.deposicaoOutro: '',
 
@@ -2401,6 +2440,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
         fontWeight: FontWeight.bold,
       ),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Aço',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeAco: '',
 
@@ -2418,6 +2459,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Alumínio',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeAluminio: '',
 
@@ -2436,6 +2479,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Ferro',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeFerro: '',
 
@@ -2453,6 +2498,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Outro Metal',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemOutro: '',
 
@@ -2474,6 +2521,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Baterias e Pilhas',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeBateriasPilhas: '',
 
@@ -2492,6 +2541,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Borracha',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeBorracha: '',
 
@@ -2510,6 +2561,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Eletrônicos',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeEletronicos: '',
 
@@ -2528,6 +2581,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Embalagens\nLonga Vida',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeEmbalagensLongaVida: '',
 
@@ -2546,6 +2601,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Entulho',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeEntulho: '',
 
@@ -2564,6 +2621,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Madeira',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeMadeira: '',
 
@@ -2582,6 +2641,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Papel',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDePapel: '',
 
@@ -2599,6 +2660,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De plástico e\nembalagens',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDePlasticoEEmbalagens: '',
 
@@ -2617,6 +2680,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Vidro',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeVidro: '',
 
@@ -2634,6 +2699,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'De Óleo de\nCozinha',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeOleoDeCozinha: '',
 
@@ -2652,6 +2719,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             ),
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Outros',
           optionModelValue: isUpdate ? widget.infoModel!.reciclagemOutros: '',
 
@@ -2699,6 +2768,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             '3G'
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Telefonia Móvel',
           optionModelValue: isUpdate ? widget.infoModel!.servicosDeComunicacaoTelefoniaMovel: '',
           
@@ -2716,6 +2787,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
             )
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Telefonia Fixa',
           optionModelValue: isUpdate ? widget.infoModel!.servicosDeComunicacaoTelefoniaFixa: '',
 
@@ -2751,6 +2824,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
         height: 55.h,
       ),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Divulgação Impressa',
           optionModelValue: isUpdate ? widget.infoModel!.promocaoTuristicaDivulgacaoImpressa: '',
 
@@ -2771,6 +2846,8 @@ class _CaracteristicasState extends State<Caracteristicas> {
                 controller: widget.controllers['divulgacaoImpressaOutros'])
           ]),
       ConditionalFieldsGroup(
+        isUpdate: isUpdate,
+        valoresJson: valoresJson,
           title: 'Divulgação Televisiva',
           optionModelValue: isUpdate ? widget.infoModel!.promocaoTuristicaDivulgacaoTelevisiva: '',
 
@@ -3064,62 +3141,3 @@ class LegislacaoMunicipal extends StatelessWidget{
 }
 
 
-class ConditionalFieldsGroup extends StatefulWidget {
-  final String title;
-  final String jsonKey;
-  final List<Widget> children;
-  final String? optionModelValue;
-  const ConditionalFieldsGroup(
-      {super.key,
-      required this.title,
-      required this.jsonKey,
-      required this.children, this.optionModelValue});
-
-  @override
-  State<ConditionalFieldsGroup> createState() => _ConditionalFieldsGroupState();
-}
-
-class _ConditionalFieldsGroupState extends State<ConditionalFieldsGroup> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    valoresJson.putIfAbsent(widget.jsonKey, () => 'não');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final bool isExpanded = valoresJson[widget.jsonKey] == 'sim';
-
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: 55.h,
-        ),
-        Row(
-          children: [
-            textLabel(name: widget.title),
-            Expanded(
-                flex: 2,
-                child: ExpansionTileYoN(
-                  optionModel: isUpdate ? widget.optionModelValue : 'não',
-                  getValue: (p0) {
-                    if (valoresJson[widget.jsonKey] == p0) return;
-
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (!mounted) return;
-                      setState(() {
-                        valoresJson[widget.jsonKey] = p0;
-                      });
-                    });
-                  },
-                ))
-          ],
-        ),
-        if (isExpanded || widget.optionModelValue =='sim')  ...widget.children
-      ],
-    );
-  }
-}
