@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 
 class CheckB extends StatefulWidget {
@@ -190,6 +191,7 @@ class CheckboxGroupFormField extends StatefulWidget {
   final List<String>? initialValue;
   final FormFieldSetter<List<String>>? onSaved;
   final FormFieldValidator<List<String>>? validator;
+  final String? title;
   final bool isLimitedBy3;
   const CheckboxGroupFormField({
     super.key,
@@ -197,7 +199,7 @@ class CheckboxGroupFormField extends StatefulWidget {
     this.initialValue,
     this.onSaved,
     this.validator,
-    this.isLimitedBy3 = false
+    this.isLimitedBy3 = false, this.title = ''
   });
 
   @override
@@ -235,6 +237,16 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            widget.title != '' ? SizedBox(
+            height: 55.h,
+          ) : SizedBox(),
+          widget.title != '' ? textLabel(
+            name: widget.title!,
+            fontWeight: FontWeight.bold,
+          ) : SizedBox(),
+          widget.title != '' ? SizedBox(
+            height: 55.h,
+          ) : SizedBox(),
             SizedBox(
               width: sizeScreen.width,
               height: 550.h, 

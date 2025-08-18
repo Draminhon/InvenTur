@@ -348,7 +348,7 @@ class RadioFormField extends StatefulWidget {
   const RadioFormField({
     super.key,
     required this.options,
-    this.initialValue,
+    this.initialValue = '',
     this.onSaved,
     this.validator,
     this.title = ''

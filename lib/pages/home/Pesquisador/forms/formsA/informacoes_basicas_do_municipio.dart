@@ -944,10 +944,6 @@ void _preencherDadosParaTeste2() {
 
 
     } else {
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.ease,
-        );
       _formKey.currentState!.save();
       _caracteristicasControllers.forEach((key, controllers) {
         valoresJson[key] = controllers.text;
@@ -1006,7 +1002,7 @@ void _preencherDadosParaTeste2() {
           // Botão Voltar
           if (currentStep > 0)
             Container(
-                          margin: EdgeInsets.only(bottom: 35.h),
+                          margin: EdgeInsets.only(bottom: 55.h),
 
               child: TextButton(
                 onPressed: () {
@@ -1025,7 +1021,7 @@ void _preencherDadosParaTeste2() {
           Container(
             height: 160.h,
             width: 550.w,
-            margin: EdgeInsets.only(bottom: 55.h),
+            margin: currentStep > 0 ? EdgeInsets.only(bottom: 55.h) : EdgeInsets.only(bottom: 55.h, right: 55.w),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
