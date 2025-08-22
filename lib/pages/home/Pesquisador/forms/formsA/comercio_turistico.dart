@@ -2,15 +2,17 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas_do_municipio.dart';
+import 'package:inventur/models/forms/comercio_turistico_model.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/fields.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/container_widget.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
-import 'package:inventur/pages/home/Pesquisador/widgets/sizedBox.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
 import 'package:inventur/services/admin_service.dart';
+import 'package:inventur/services/form_service.dart';
+import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/utils/validators.dart';
 
 final Validators _validators = Validators();
@@ -20,7 +22,8 @@ final Map<String, dynamic> valoresJson = {
 bool isUpdate = false;
 
 class ComercioTuristico extends StatefulWidget {
-  const ComercioTuristico({super.key});
+  final ComercioTuristicoModel? infoModel;
+  const ComercioTuristico({super.key, this.infoModel});
 
   @override
   State<ComercioTuristico> createState() => _ComercioTuristicoState();
@@ -37,6 +40,7 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
 
   Map<String, TextEditingController> _identificacaoControllers = {};
   Map<String, TextEditingController> _funcionamentoControllers = {};
+  Map<String, TextEditingController> _protecaoControllers = {};
 
   final List<String> _chavesIdentificacao = const [
     'uf',
@@ -67,11 +71,61 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
     'automoveis',
     'onibus',
   ];
+  final List<String> _chavesProtecao = const [
+    'outrasAcessibilidade',
+    'observacoes',
+    'referencias'
+  ];
+
+  void _preencherDadosParaTeste() {
+    if (widget.infoModel != null) {
+      final model = widget.infoModel!;
+      final modelMap = model.toMap();
+      _identificacaoControllers.forEach((key, controller) {
+        if (modelMap.containsKey(key)) {
+          final valor = modelMap[key];
+          controller.text = valor?.toString() ?? '';
+        }
+      });
+
+      _funcionamentoControllers.forEach((key, value) {
+        if(modelMap.containsKey(key)){
+          final valor = modelMap[key];
+          value.text = valor?.toString() ?? '';
+        }
+      },);
+
+      _protecaoControllers.forEach((key, value) {
+        if(modelMap.containsKey(key)){
+          final valor = modelMap[key];
+          value.text = valor?.toString() ?? '';
+        }
+      },);
+    }
+  }
+
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    try {
+      final argument = ModalRoute.of(context)!.settings.arguments as Map;
+      print("ARGUMENTO: $argument");
+      if (argument.containsKey('isUpdate')) {
+        isUpdate = argument['isUpdate'];
+      }
+    } catch (e) {
+      isUpdate = false;
+    }
+    print("VARIAVEL IS UPDATE: $isUpdate");
+    if (isUpdate) {
+      _preencherDadosParaTeste();
+    }
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
+    getInfoUsersInPesquisa();
     for (final key in _chavesIdentificacao) {
       _identificacaoControllers[key] = TextEditingController();
     }
@@ -80,9 +134,14 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
       _funcionamentoControllers[key] = TextEditingController();
     }
 
+    for (final key in _chavesProtecao) {
+      _protecaoControllers[key] = TextEditingController();
+    }
+
     pages = [
       Identificacao(controllers: _identificacaoControllers),
       Funcionamento(controllers: _funcionamentoControllers),
+      Protecao(controllers: _protecaoControllers),
     ];
   }
 
@@ -111,6 +170,12 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
           valoresJson[key] = controller.text;
         },
       );
+
+      _protecaoControllers.forEach(
+        (key, value) {
+          valoresJson[key] = value.text;
+        },
+      );
       valoresJson.forEach(
         (key, value) {
           print("$key  - $value");
@@ -123,9 +188,8 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
           curve: Curves.ease,
         );
       } else {
-        //Navigator.pushNamed(context, '/SendedForm');
         // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
-        //             FormService().sendForm(valoresJson, AppConstants.INFO_BASICA_CREATE);
+        FormService().sendForm(valoresJson, AppConstants.COMERCIO_TURISTICO);
         print("Formulário finalizado e pronto para enviar!");
 
         // _enviarFormulario(); // Você pode chamar sua função de envio aqui
@@ -145,7 +209,11 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
           valoresJson[key] = controller.text;
         },
       );
-
+      _protecaoControllers.forEach(
+        (key, value) {
+          valoresJson[key] = value.text;
+        },
+      );
       valoresJson.forEach(
         (key, value) {
           print("$key  - $value");
@@ -231,9 +299,11 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
 
 class Identificacao extends StatelessWidget {
   final Map<String, TextEditingController> controllers;
+  final ComercioTuristicoModel? infoModel;
+
   const Identificacao({
     super.key,
-    required this.controllers,
+    required this.controllers, this.infoModel,
   });
 
   @override
@@ -243,6 +313,7 @@ class Identificacao extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+          ContainerHeader(title: 'Identificação'),
           UfMunicipioRg(controllers: controllers),
           SizedBox(
             height: 55.h,
@@ -256,11 +327,13 @@ class Identificacao extends StatelessWidget {
           ),
           RadioFormField(
             options: ['Comércio Turístico'],
-            initialValue: '',
+            initialValue: isUpdate ? infoModel!.tipo! : '',
+
             onSaved: (newValue) => valoresJson['tipo'] = newValue,
           ),
           CheckboxGroupFormField(
             title: 'Subtipos:',
+            initialValue: isUpdate ? infoModel!.subtipo : [],
             options: [
               'Loja de artesanato/souvenir',
               'Loja de artigos fotográficos',
@@ -311,6 +384,8 @@ class Identificacao extends StatelessWidget {
           ),
           CustomTextField(
             name: 'Inscrição Municipal',
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
             controller: controllers['inscricaoMunicipal'],
           ),
           CustomTextField(
@@ -321,7 +396,8 @@ class Identificacao extends StatelessWidget {
             title: 'Natureza',
             onSaved: (newValue) => valoresJson['natureza'] = newValue,
             options: ['Pública', 'Privada', 'outro'],
-            initialValue: '',
+            initialValue: isUpdate ? infoModel!.natureza! : '',
+            
           ),
           RadioFormField(
             title: 'Tipo de Organização/Instituição',
@@ -334,13 +410,15 @@ class Identificacao extends StatelessWidget {
               'Empresa',
               'outro'
             ],
-            initialValue: '',
+            initialValue: isUpdate ? infoModel!.tipoDeOrganizacao! : '',
+
           ),
           RadioFormField(
             onSaved: (newValue) => valoresJson['localizacao'] = newValue,
             title: 'Localização',
             options: ['Urbana', 'Rural', 'outro'],
-            initialValue: '',
+            initialValue: isUpdate ? infoModel!.localizacao! : '',
+
           ),
           SizedBox(
             height: 55.h,
@@ -435,6 +513,7 @@ class Identificacao extends StatelessWidget {
             valoresJson: valoresJson,
             isUpdate: isUpdate,
             children: [],
+            optionModelValue: isUpdate ? infoModel!.sinalizacaoDeAcesso! : '',
           ),
           ConditionalFieldsGroup(
             title: 'Turística',
@@ -442,6 +521,8 @@ class Identificacao extends StatelessWidget {
             valoresJson: valoresJson,
             isUpdate: isUpdate,
             children: [],
+            optionModelValue: isUpdate ? infoModel!.sinalizacaoTuristica! : '',
+
           ),
           CustomTextField(
             name: 'Pontos de Referência',
@@ -469,6 +550,7 @@ class Funcionamento extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
+          ContainerHeader(title: 'Funcionamento'),
           SizedBox(
             height: 55.h,
           ),
@@ -487,6 +569,7 @@ class Funcionamento extends StatelessWidget {
             ],
             title: 'Formas de Pagamento',
             onSaved: (newValue) => valoresJson['formasDePagamento'] = newValue,
+            initialValue: isUpdate ? infoModel!.sinalizacaoDeAcesso! : '',
           ),
           SizedBox(
             height: 55.h,
@@ -654,6 +737,290 @@ class Funcionamento extends StatelessWidget {
                 'Cafeteria/bar/lanchonete',
                 'Vendas pela internet',
                 'outro'
+              ])
+        ],
+      ),
+    );
+  }
+}
+
+class Protecao extends StatelessWidget {
+  final Map<String, TextEditingController> controllers;
+
+  const Protecao({super.key, required this.controllers});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ContainerHeaderToBigTexts(title: 'Proteção, Qualificação e Outros'),
+          ConditionalFieldsGroup(
+              title: 'Do Equipamento/Espaço',
+              jsonKey: 'doEquipamentoEspaco',
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              children: [
+                TabelsEquipamentoEEspaco(
+                  onChanged: (p0) =>
+                      valoresJson['tabelEquipamentoEEspaco'] = p0,
+                )
+              ]),
+          ConditionalFieldsGroup(
+              title: 'Da Área ou Edificação\nem que Está\nLocalizado/Instalado',
+              jsonKey: 'areaOuEdificacaoEmQueEstaInstalado',
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              children: [
+                TabelsEquipamentoEEspaco(
+                  onChanged: (p0) => valoresJson['tabelaAreaOuEdificacao'] = p0,
+                )
+              ]),
+          SizedBox(
+            height: 55.h,
+          ),
+          ContainerHeader(title: 'Estado Geral de Conservação'),
+          RadioFormField(
+            onSaved: (newValue) =>
+                valoresJson['estadoGeralConservacao'] = newValue,
+            options: ['Muito Bom', 'Bom', 'Ruim'],
+            title: 'Estago Geral de Conservação',
+          ),
+          SizedBox(
+            height: 85.h,
+          ),
+          ContainerHeader(title: 'Acessibilidade'),
+          ConditionalFieldsGroup(
+              title:
+                  'Possui Alguma Facilidade\npara Pessoas com\nDeficiência\nou Mobilidade Reduzida?',
+              jsonKey: 'possuiFacilidade',
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              children: [
+                CheckboxGroupFormField(
+                  options: [
+                    'Não',
+                    'Física',
+                    'Auditiva',
+                    'Visual',
+                    'Mental',
+                    'Múltipla'
+                  ],
+                  title:
+                      'Pessoal Capacitado Para Receber Pessoas com Deficiência',
+                  onSaved: (newValue) =>
+                      valoresJson['pessoalCapacitado'] = newValue,
+                ),
+                CheckboxGroupFormField(
+                    title: 'Rota Externa Acessível',
+                    onSaved: (newValue) =>
+                        valoresJson['rotaExternaAcessivel'] = newValue,
+                    options: [
+                      'Não',
+                      'Estacionamento',
+                      'Calçada Rebaixada',
+                      'Faixa de Pedestre',
+                      'Rampa',
+                      'Semáforo Sonoro',
+                      'Piso Tátil de Alerta',
+                      'Piso Regular e Antiderrapante',
+                      'Livre de Obstáculos',
+                      'outro'
+                    ]),
+                CheckboxGroupFormField(
+                    title: 'Símbolo Internacional de Acesso',
+                    onSaved: (newValue) =>
+                        valoresJson['simboloInternacionalDeAcesso'] = newValue,
+                    options: [
+                      'Não',
+                      'Entrada',
+                      'Área Reservada',
+                      'Estacionamento',
+                      'Área de Embarque e Desembarque',
+                      'Sanitário',
+                      'Saída de Emergência'
+                    ]),
+                CheckboxGroupFormField(
+                    title: 'Local de Embarque e Desembarque',
+                    onSaved: (newValue) =>
+                        valoresJson['localDeEmbarqueEDesembarque'] = newValue,
+                    options: ['Não', 'Sinalizado', 'Com Acesso em Nível']),
+                CheckboxGroupFormField(
+                    title: 'Vaga em Estacionamento',
+                    onSaved: (newValue) =>
+                        valoresJson['vagaEmEstacionamento'] = newValue,
+                    options: [
+                      'Não',
+                      'Sinalizada',
+                      'Com Acesso em Nível',
+                      'Alargada para Cadeira de Rodas',
+                      'Rampa de Acesso à Calçada'
+                    ]),
+                CheckboxGroupFormField(
+                    title:
+                        'Área de Circulação/Acesso Interno para Cadeira de Rodas',
+                    onSaved: (newValue) =>
+                        valoresJson['areaDeCirculacao'] = newValue,
+                    options: [
+                      'Não',
+                      'Rampa',
+                      'Elevador',
+                      'Plataforma Elevatória',
+                      'Com Circulação Entre Mobiliário',
+                      'Porta Larga',
+                      'Piso Regular/Antiderrapante'
+                    ]),
+                CheckboxGroupFormField(
+                    title: 'Escada',
+                    onSaved: (newValue) => valoresJson['escada'] = newValue,
+                    options: [
+                      'Não',
+                      'Corrimão',
+                      'Patamar para Descanso',
+                      'Sinalização Tátil de Alerta',
+                      'Piso Antiderrapante'
+                    ]),
+                CheckboxGroupFormField(
+                    title: 'Rampa',
+                    onSaved: (newValue) => valoresJson['rampa'] = newValue,
+                    options: [
+                      'Não',
+                      'Corrimão',
+                      'Patamar para Descanso',
+                      'Piso Antiderrapante',
+                      'Sinalização Tátil',
+                      'Inclinação Adequada'
+                    ]),
+                CheckboxGroupFormField(
+                    title: "Piso",
+                    onSaved: (newValue) => valoresJson['piso'] = newValue,
+                    options: [
+                      'Não',
+                      'Tátil',
+                      'Sem Obstáculos (tapete ou desnível)',
+                      'Antiderrapante/Deslizante'
+                    ]),
+                CheckboxGroupFormField(
+                    title: "Elevador",
+                    onSaved: (newValue) => valoresJson['elevador'] = newValue,
+                    options: [
+                      'Não',
+                      'Sinalizado em Braille',
+                      'Dispositivo Sonoro',
+                      'Dispositivo Luminoso',
+                      'Sensor Eletrônico (porta)'
+                    ]),
+                CheckboxGroupFormField(
+                    title: 'Equipamento Motorizado para Deslocamento Interno',
+                    onSaved: (newValue) =>
+                        valoresJson['equipamentoMotorizado'] = newValue,
+                    options: ['Não', 'Cadeira', 'Carrinho']),
+                CheckboxGroupFormField(
+                    title: 'Sinalização Visual',
+                    onSaved: (newValue) =>
+                        valoresJson['sinalizacaoVisual'] = newValue,
+                    options: [
+                      'Não',
+                      'Entrada',
+                      'Recepção',
+                      'Porta',
+                      'Sanitário',
+                      'Elevador',
+                      'Restaurante',
+                      'Área de Lazer',
+                      'Área de Resgate'
+                    ]),
+                CheckboxGroupFormField(
+                    title: "Sinalização Tátil",
+                    onSaved: (newValue) =>
+                        valoresJson['sinalizacaoTatil'] = newValue,
+                    options: [
+                      'Não',
+                      'Entrada',
+                      'Recepção',
+                      'Porta',
+                      'Sanitário',
+                      'Elevador',
+                      'Restaurante',
+                      'Área de Lazer',
+                      'Área de Resgate'
+                    ]),
+                CheckboxGroupFormField(
+                    title: "Alarme de Emergência",
+                    onSaved: (newValue) =>
+                        valoresJson['alarmeDeEmergencia'] = newValue,
+                    options: ['Não', 'Sonoro', 'Visual', 'Vibratório']),
+                CheckboxGroupFormField(
+                    title: "Comunicação",
+                    onSaved: (newValue) =>
+                        valoresJson['comunicacao'] = newValue,
+                    options: [
+                      'Não',
+                      'Texto Informativo em Braille',
+                      'Texto Informativo em Fonte Ampliada',
+                      'Intérprete em Libras (língua brasileira de sinais)'
+                    ]),
+                CheckboxGroupFormField(
+                    title: "Balcão de Atendimento",
+                    onSaved: (newValue) =>
+                        valoresJson['balcaoDeAtendimento'] = newValue,
+                    options: [
+                      'Não',
+                      'Rebaixamento',
+                      'Preferencial para Pessoas com Deficiência ou Mobilidade Reduzida'
+                    ]),
+                CheckboxGroupFormField(
+                    title: "Mobiliário",
+                    onSaved: (newValue) => valoresJson['mobiliario'] = newValue,
+                    options: ['Não', 'Altura Adequada', 'Recuo Adequado']),
+                CheckboxGroupFormField(
+                    title: "Sanitário",
+                    onSaved: (newValue) => valoresJson['sanitario'] = newValue,
+                    options: [
+                      'Não',
+                      'Barra de Apoio',
+                      'Porta Larga Suficiente Para Entrada de Cadeira de Rodas',
+                      'Giro para Cadeira de Rodas',
+                      'Acesso para Cadeira de Rodas',
+                      'Pia Rebaixada',
+                      'Espelho Rebaixado ou com Ângulo de Alcance Visual',
+                      'Boxe ou Banheira Adaptada',
+                      'Torneira Monocomando/Alavanca'
+                    ]),
+                CheckboxGroupFormField(
+                    title: "Telefone",
+                    onSaved: (newValue) => valoresJson['telefone'] = newValue,
+                    options: [
+                      'Não',
+                      'Altura Adequada',
+                      'Para Surdos (TPS ou TTS)'
+                    ]),
+                ConditionalFieldsGroup(
+                    title:
+                        'Sinalização Indicativa\nde Atendimento\nPreferencial para Pessoas\ncom Deficiência ou\nMobilidade Reduzida',
+                    jsonKey: 'sinalizacaoIndicativaPreferencial',
+                    valoresJson: valoresJson,
+                    isUpdate: isUpdate,
+                    children: []),
+                CustomTextField(
+                  name: 'Outras',
+                  controller: controllers['outrasAcessibilidade'],
+                ),
+                SizedBox(
+                  height: 55.h,
+                ),
+                ContainerHeader(title: 'Observações e Referências'),
+                SizedBox(
+                  height: 55.h,
+                ),
+                CustomTextField(
+                  name: 'Observações',
+                  controller: controllers['observacoes'],
+                ),
+                CustomTextField(
+                  name: 'Referências',
+                  controller: controllers['referencias'],
+                )
               ])
         ],
       ),

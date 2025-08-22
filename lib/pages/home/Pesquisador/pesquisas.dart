@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:inventur/models/forms/alimentos_bebidas_model.dart';
+import 'package:inventur/models/forms/comercio_turistico_model.dart';
 import 'package:inventur/models/forms/informacoes_basicas_model.dart';
 import 'package:inventur/models/forms/meios_hospedagem_model.dart';
 import 'package:inventur/models/forms/rodovia_model.dart';
@@ -11,6 +12,7 @@ import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsA/comercio_turistico.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas_do_municipio.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranca_edit.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas_edit.dart';
@@ -435,6 +437,13 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                 ),
                 
                 );
+              }else if(equipamento['tipo'] == 'Comércio Turístico'){
+                Navigator.pushReplacement(context, 
+                MaterialPageRoute(builder: (context) => ComercioTuristico(
+                  infoModel: ComercioTuristicoModel.fromJson(equipamento['dados']),
+                ),
+                settings: RouteSettings(arguments: {'isUpdate': true})
+                ));
               }
             },
             child: isadmin == true
@@ -576,6 +585,10 @@ String getDisplay(Map<String, dynamic> dados) {
       return '$tipoFormulario\n${dados['nomeFantasia']}';
     case 'Meios de Hospedagem':
       return '$tipoFormulario\n${dados['nomeFantasia']}';
+    case 'Informações Básicas do Município':
+      return '$tipoFormulario\n${dados['tipo']}';
+    case 'Comércio Turístico':
+      return '$tipoFormulario\n${dados['tipo']}';
     default:
       return '$tipoFormulario\n${dados['tipo'] ?? ''}';
   }

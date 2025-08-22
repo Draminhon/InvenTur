@@ -74,6 +74,14 @@ class InformacoesBasicasViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+class ComercioTuristicoViewSet(viewsets.ModelViewSet):
+    queryset = ComercioTuristico.objects.filter(is_active=True)
+    serializer_class = ComercioTuristicoSerializer
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+
 class EquipamentosListView(APIView):
     def get(self, request, *args, **kwargs):
         pesquisa_id = request.query_params.get('pesquisa_id')
@@ -114,8 +122,13 @@ class EquipamentosListView(APIView):
             {"tipo": "Informações Básicas do Município", "dados": InformacoesBasicasSerializer(infoBasica).data}
             for infoBasica in infosBasicas
         ]
-
+        
+        comercioTuristicos = ComercioTuristico.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        comercioTuristicos_serialized = [
+            {"tipo": "Comércio Turístico", "dados": ComercioTuristicoSerializer(comercioTuristico).data}
+            for comercioTuristico in comercioTuristicos
+        ]
         # Combina os dados
-        equipamentos = rodovias_serialized + sistemas_serialized + alimentos_serialized + hospedagens_serialized + infosBasicas_serialized
+        equipamentos = rodovias_serialized + sistemas_serialized + alimentos_serialized + hospedagens_serialized + infosBasicas_serialized + comercioTuristicos_serialized
 
         return Response(equipamentos)

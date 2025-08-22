@@ -247,7 +247,6 @@ class InformacoesBasicasModel {
   InformacoesBasicasModel(
       {
     this.id,
-        
         this.tipoFormulario,
       this.uf,
       this.regiaoTuristica,

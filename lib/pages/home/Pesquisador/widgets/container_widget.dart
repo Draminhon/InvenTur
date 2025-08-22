@@ -15,6 +15,7 @@ class PesquisaPesquisadorCardWidget extends StatefulWidget {
 }
 
 class _PesquisaPesquisadorCardWidgetState extends State<PesquisaPesquisadorCardWidget> {
+
   
 
   bool _opened = false;
@@ -161,4 +162,51 @@ class _PesquisaPesquisadorCardWidgetState extends State<PesquisaPesquisadorCardW
       ),
     );
   }
+}
+
+class ContainerHeader extends StatelessWidget{
+ final String title;
+  const ContainerHeader({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    final sizeScreen = MediaQuery.sizeOf(context);
+    // TODO: implement build
+             return Container(
+            color: const Color.fromARGB(255, 55, 111, 60),
+            height: sizeScreen.height * 0.06,
+            width: sizeScreen.width,
+            padding: EdgeInsets.only(
+                top: sizeScreen.height * 0.008, left: sizeScreen.width * 0.04),
+            child: Text(
+              title,
+              style: TextStyle(
+                  color: Colors.white, fontSize: sizeScreen.height * 0.03),
+            ),
+          );
+  }
+
+}
+
+class ContainerHeaderToBigTexts extends StatelessWidget{
+ final String title;
+  const ContainerHeaderToBigTexts({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    final sizeScreen = MediaQuery.sizeOf(context);
+    // TODO: implement build
+             return Container(
+            color: const Color.fromARGB(255, 55, 111, 60),
+            width: sizeScreen.width,
+            padding: EdgeInsets.only(
+                top: sizeScreen.height * 0.008, left: sizeScreen.width * 0.04, bottom: sizeScreen.height * 0.01),
+            child: Text(
+              title,
+              style: TextStyle(
+                  color: Colors.white, fontSize: sizeScreen.height * 0.03),
+            ),
+          );
+  }
+
 }

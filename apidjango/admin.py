@@ -577,4 +577,7 @@ class MeiosDeHospedagemAdmin(admin.ModelAdmin):
 @admin.register(InformacaoBasicaDoMunicipio)
 class InfoBasicaAdmin(admin.ModelAdmin):
     list_display = [field.name for field in InformacaoBasicaDoMunicipio._meta.fields]
-  
+
+@admin.register(ComercioTuristico)
+class ComercioTuristicoAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in ComercioTuristico._meta.fields]
