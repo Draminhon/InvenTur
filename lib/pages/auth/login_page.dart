@@ -4,6 +4,7 @@ import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
 import 'package:inventur/pages/widgets/divider_text_widget.dart';
+import 'package:inventur/services/form_service.dart';
 import 'package:inventur/services/offline_login.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/utils/check_connectivity.dart';
@@ -93,20 +94,21 @@ class _LoginPageState extends State<LoginPage> {
 
         if (response.statusCode == 200) {
           final Map<String, dynamic> responseData = json.decode(response.body);
-
           String accessToken = responseData['access'];
           String refreshToken = responseData['refresh'];
+          int accessTokenExp = responseData['access_exp'];
           final Map<String, dynamic> user = responseData['user'];
 
           final prefs = await SharedPreferences.getInstance();
           await prefs.setString('user_data', json.encode(user));
           await prefs.setString('access_token', accessToken);
           await prefs.setString('refresh_token', refreshToken);
-
+          await prefs.setInt('access_token_exp', accessTokenExp);
           print("token armazenado: $accessToken");
           print("refresh token armazenado: $refreshToken");
-          print("Usuario logado com sucesso: ${json.encode(user)}");
+          print("expiração armazenada: $accessTokenExp");
 
+          //print("Usuario logado com sucesso: ${json.encode(user)}");
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
             return user['access_level'] == 'Pesquisador'

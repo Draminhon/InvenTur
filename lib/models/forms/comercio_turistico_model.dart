@@ -57,11 +57,11 @@ class ComercioTuristicoModel {
   String? estadoGeralConservacao;
   String? sinalizacaoIndicativaPreferencial;
   List<String>? pessoalCapacitado;
-  String? rotaExternaAcessivel;
-  String? simboloInternacionalDeAcesso;
-  String? localDeEmbarqueEDesembarque;
-  String? vagaEmEstacionamento;
-  String? areaDeCirculacao;
+  List<String>? rotaExternaAcessivel;
+  List<String>? simboloInternacionalDeAcesso;
+  List<String>? localDeEmbarqueEDesembarque;
+  List<String>? vagaEmEstacionamento;
+  List<String>? areaDeCirculacao;
   List<String>? escada;
   List<String>? rampa;
   List<String>? piso;
@@ -164,6 +164,19 @@ class ComercioTuristicoModel {
 
   Map<String, dynamic> toMap(){
     return{
+          'tipo_formulario': this.tipoFormulario,
+    'uf': this.uf,
+    'regiao_turistica': this.regiaoTuristica,
+    'municipio': this.municipio,
+    'tipo': this.tipo,
+    'observacoes': this.observacoes,
+    'referencias': this.referencias,
+    'nome_pesquisador': this.nomePesquisador,
+    'telefone_pesquisador': this.telefonePesquisador,
+    'email_pesquisador': this.emailPesquisador,
+    'nome_coordenador': this.nomeCoordenador,
+    'telefone_coordenador': this.telefoneCoordenador,
+    'email_coordenador': this.emailCoordenador,
    'sinalizacaoDeAcesso' : this.sinalizacaoDeAcesso,
    'sinalizacaoTuristica' : this.sinalizacaoTuristica,
    'subtipo' : this.subtipo,
@@ -236,6 +249,21 @@ class ComercioTuristicoModel {
   }
 
   ComercioTuristicoModel.fromJson(Map<String, dynamic> json) {
+        id = json['id'];
+
+    tipoFormulario = json['tipo_formulario'];
+    uf = json['uf'];
+    regiaoTuristica = json['regiao_turistica'];
+    municipio = json['municipio'];
+    tipo = json['tipo'];
+    observacoes = json['observacoes'];
+    referencias = json['referencias'];
+    nomePesquisador = json['nome_pesquisador'];
+    telefonePesquisador = json['telefone_pesquisador'];
+    emailPesquisador = json['email_pesquisador'];
+    nomeCoordenador = json['nome_coordenador'];
+    telefoneCoordenador = json['telefone_coordenador'];
+    emailCoordenador = json['email_coordenador'];
     sinalizacaoDeAcesso = json['sinalizacaoDeAcesso'];
     sinalizacaoTuristica = json['sinalizacaoTuristica'];
     subtipo = List<String>.from(json['subtipo']);
@@ -281,28 +309,28 @@ class ComercioTuristicoModel {
     estadoGeralConservacao = json['estadoGeralConservacao'];
     sinalizacaoIndicativaPreferencial =
         json['sinalizacaoIndicativaPreferencial'];
-    pessoalCapacitado = List<String>.from(json['pessoalCapacitado']);
-    rotaExternaAcessivel = json['rotaExternaAcessivel'];
-    simboloInternacionalDeAcesso = json['simboloInternacionalDeAcesso'];
-    localDeEmbarqueEDesembarque = json['localDeEmbarqueEDesembarque'];
-    vagaEmEstacionamento = json['vagaEmEstacionamento'];
-    areaDeCirculacao = json['areaDeCirculacao'];
-    escada = List<String>.from(json['escada']);
-    rampa = List<String>.from(json['rampa']);
-    piso = List<String>.from(json['piso']);
-    elevador = List<String>.from(json['elevador']);
-    equipamentoMotorizado = List<String>.from(json['equipamentoMotorizado']);
-    sinalizacaoVisual = List<String>.from(json['sinalizacaoVisual']);
-    sinalizacaoTatil = List<String>.from(json['sinalizacaoTatil']);
-    alarmeDeEmergencia = List<String>.from(json['alarmeDeEmergencia']);
-    comunicacao = List<String>.from(json['comunicacao']);
-    balcaoDeAtendimento = List<String>.from(json['balcaoDeAtendimento']);
-    mobiliario = List<String>.from(json['mobiliario']);
-    sanitario = List<String>.from(json['sanitario']);
-    telefone = List<String>.from(json['telefone']);
-    tabelEquipamentoEEspaco = Map<String, dynamic>.from(json['tabelEquipamentoEEspaco']);
-    tabelaAreaOuEdificacao = Map<String, dynamic>.from(json['tabelaAreaOuEdificacao']);
-    tabelaHorarios = Map<String, dynamic>.from(json['tabelaHorarios']);
+    pessoalCapacitado = List<String>.from(json['pessoalCapacitado'] ?? []);
+    rotaExternaAcessivel = List<String>.from(json['rotaExternaAcessivel'] ?? []);
+    simboloInternacionalDeAcesso = List<String>.from(json['simboloInternacionalDeAcesso'] ?? []);
+    localDeEmbarqueEDesembarque = List<String>.from(json['localDeEmbarqueEDesembarque'] ?? []);
+    vagaEmEstacionamento = List<String>.from(json['vagaEmEstacionamento'] ?? []);
+    areaDeCirculacao = List<String>.from(json['areaDeCirculacao'] ?? []);
+    escada = List<String>.from(json['escada'] ?? []);
+    rampa = List<String>.from(json['rampa'] ?? []);
+    piso = List<String>.from(json['piso'] ?? []);
+    elevador = List<String>.from(json['elevador'] ?? []);
+    equipamentoMotorizado = List<String>.from(json['equipamentoMotorizado'] ?? []);
+    sinalizacaoVisual = List<String>.from(json['sinalizacaoVisual'] ?? []);
+    sinalizacaoTatil = List<String>.from(json['sinalizacaoTatil'] ?? []);
+    alarmeDeEmergencia = List<String>.from(json['alarmeDeEmergencia'] ?? []);
+    comunicacao = List<String>.from(json['comunicacao'] ?? []);
+    balcaoDeAtendimento = List<String>.from(json['balcaoDeAtendimento'] ?? []);
+    mobiliario = List<String>.from(json['mobiliario'] ?? []);
+    sanitario = List<String>.from(json['sanitario'] ?? []);
+    telefone = List<String>.from(json['telefone'] ?? []);
+    tabelEquipamentoEEspaco = Map<String, dynamic>.from(json['tabelEquipamentoEEspaco'] ?? {});
+    tabelaAreaOuEdificacao = Map<String, dynamic>.from(json['tabelaAreaOuEdificacao'] ?? {});
+    tabelaHorarios = Map<String, dynamic>.from(json['tabelaHorarios'] ?? {});
   }
 
   Map<String, dynamic> toJson() {

@@ -66,6 +66,7 @@ def UsuarioLoginView(request):
         return JsonResponse({
             "refresh": str(refresh),
             "access": str(refresh.access_token),
+            "access_exp": refresh.access_token['exp'],
             "user": {
                 "id": user.id,
                 "CPF": user.CPF,
