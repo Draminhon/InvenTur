@@ -74,11 +74,11 @@ class MeiosDeHospedagemModel{
   List<String>? telefone;
 
   // Classificação e localização do meio de hospedagem
-  String? subtipo;
+  List<String>? subtipo;
   String? natureza;
   String? localizacao;
   String? tipoDeDiaria;
-  String? periodo;
+  List<String>? periodo;
   Map<String, dynamic>? tabelasHorario;
   String? energiaEletrica;
   String? estadoGeralDeConservacao;
@@ -140,6 +140,8 @@ class MeiosDeHospedagemModel{
   Map<String, dynamic>? tabelaEquipamentoEEspaco;
   Map<String, dynamic>? tabelaEquipamentoEEspaco2;
   String? outros;
+    List<String>? origemNacional;
+  List<String>? origemInternacional;
 
   MeiosDeHospedagemModel({
     this.id,
@@ -261,6 +263,8 @@ class MeiosDeHospedagemModel{
     this.tabelaEquipamentoEEspaco,
     this.tabelaEquipamentoEEspaco2,
     this.outros,
+          this.origemNacional,
+      this.origemInternacional,
   });
 
   MeiosDeHospedagemModel.fromJson(Map<String, dynamic> json) {
@@ -355,11 +359,11 @@ class MeiosDeHospedagemModel{
   mobiliario = List<String>.from(json['mobiliario']);
   sanitario = List<String>.from(json['sanitario']);
   telefone = List<String>.from(json['telefone']);
-  subtipo = json['subtipo'];
+  subtipo = List<String>.from(json['subtipo']);
   natureza = json['natureza'];
   localizacao = json['localizacao'];
   tipoDeDiaria = json['tipoDeDiaria'];
-  periodo = json['periodo'];
+  periodo = List<String>.from(json['periodo']);
   tabelasHorario = Map<String, dynamic>.from(json['tabelasHorario'] ?? {});
   energiaEletrica = json['energiaEletrica'];
   estadoGeralDeConservacao = json['estadoGeralDeConservacao'];
@@ -422,6 +426,8 @@ class MeiosDeHospedagemModel{
   tabelaEquipamentoEEspaco2 =
       Map<String, dynamic>.from(json['tabelaEquipamentoEEspaco2']  ?? {});
   outros = json['outros'];
+   origemNacional =  List<String>.from(json['origemNacional']);
+    origemInternacional =  List<String>.from(json['origemInternacional']);
 }
 
   Map<String, dynamic> toJson() {
@@ -554,6 +560,8 @@ class MeiosDeHospedagemModel{
     data['tabela_equipamento_e_espaco'] = tabelaEquipamentoEEspaco;
     data['tabela_equipamento_e_espaco_2'] = tabelaEquipamentoEEspaco2;
     data['outros'] = outros;
+        data['origemNacional'] = this.origemNacional;
+    data['origemInternacional'] = this.origemInternacional;
     return data;
   }
 }

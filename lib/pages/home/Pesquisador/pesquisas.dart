@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:inventur/models/forms/alimentos_bebidas_model.dart';
@@ -17,6 +18,7 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranca_edit.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas_edit.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
+import 'package:inventur/services/interceptor_service.dart';
 import 'package:inventur/services/sync_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia_edit.dart';
@@ -132,48 +134,42 @@ class _PesquisasState extends State<Pesquisas> {
   String _searchQuery = "";
   bool isConnected = true;
   int qtdeBanco = 0;
-
+  final ApiService _apiService = ApiService();
   CheckConnectivity connection = new CheckConnectivity();
 
-
-
- 
-
   Future<List<Map<String, dynamic>>> getRodovias() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     final pesquisaId = arguments['pesquisa_id'];
-    try {
-      var url = Uri.parse(
-          '${AppConstants.BASE_URI}equipamentos/?pesquisa_id=$pesquisaId');
-      final response = await http.get(url, headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      });
-      if (response.statusCode == 200) {
-        final List body = json.decode(utf8.decode(response.bodyBytes));
 
+    final String path = '/equipamentos/?pesquisa_id=$pesquisaId';
+
+    try {
+      final response = await _apiService.get(path);
+
+      if (response.statusCode == 200) {
+        final List body = response.data;
         return body.map((e) => Map<String, dynamic>.from(e)).toList();
       } else {
-        print("Erro" + response.body);
         return [];
       }
-    } catch (e) {
+    } on DioException catch (e) {
+      print("ERRO na chamada com Dio! $e");
       return [];
-      print("ERRO!");
+    } catch (e) {
+      // Outros erros
+      print("ERRO inesperado! $e");
+      return [];
     }
   }
+
   int qtdebancoPPesquisa = 0;
 
-
-
-@override
+  @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-
   }
+
   @override
   void initState() {
     // TODO: implement initState
@@ -182,8 +178,6 @@ class _PesquisasState extends State<Pesquisas> {
 
   @override
   Widget build(BuildContext context) {
- 
-
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     final isadmin = arguments['is_admin'];
     Future<List<Map<String, dynamic>>> rodoviasFuture = getRodovias();
@@ -298,35 +292,35 @@ class _PesquisasState extends State<Pesquisas> {
         ),
         child: Container(
           margin: EdgeInsets.symmetric(horizontal: 80.w),
-          height: 400.w ,
+          height: 400.w,
           child: isadmin == true
               ? Container()
               : Column(
                   children: [
-                 
-                      SizedBox(height: 55.w,),
-
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                          padding: WidgetStateProperty.all(EdgeInsets.symmetric(
-                            vertical: 70.904.h,
-                          )),
-                          backgroundColor: WidgetStateProperty.all(
-                              const Color.fromARGB(255, 55, 111, 60)),
-                          overlayColor:
-                              WidgetStateProperty.all(Colors.green[600]),
-                        ),
-                        onPressed: () => Navigator.pushNamed(context, '/A'),
-                        child: Center(
-                          child: Text(
-                            'inventariar novo equipamento',
-                            style: TextStyle(
-                                color: Colors.white, fontSize: 65.76.w),
-                          ),
+                    SizedBox(
+                      height: 55.w,
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        padding: WidgetStateProperty.all(EdgeInsets.symmetric(
+                          vertical: 70.904.h,
+                        )),
+                        backgroundColor: WidgetStateProperty.all(
+                            const Color.fromARGB(255, 55, 111, 60)),
+                        overlayColor:
+                            WidgetStateProperty.all(Colors.green[600]),
+                      ),
+                      onPressed: () => Navigator.pushNamed(context, '/A'),
+                      child: Center(
+                        child: Text(
+                          'inventariar novo equipamento',
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 65.76.w),
                         ),
                       ),
+                    ),
                   ],
                 ),
         ),
@@ -386,7 +380,6 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
 
           return GestureDetector(
             onTap: () {
-              print(dados);
               updateQtdeLocais(dados['pesquisa'], posts.length);
               if (equipamento['tipo'] == 'Rodovia') {
                 Navigator.pushReplacement(
@@ -427,23 +420,28 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                     ),
                     settings: RouteSettings(arguments: {'isUpdate': true}),
                   ),
-                ); 
-              } else if(equipamento['tipo'] == 'Informações Básicas do Município'){
-                Navigator.pushReplacement(context, 
-                MaterialPageRoute(builder: (context) => InformacoesBasicasDoMunicipio(
-                  infoModel: InformacoesBasicasModel.fromJson(equipamento['dados']),
-                ),
-                settings: RouteSettings(arguments: {'isUpdate': true})
-                ),
-                
                 );
-              }else if(equipamento['tipo'] == 'Comércio Turístico'){
-                Navigator.pushReplacement(context, 
-                MaterialPageRoute(builder: (context) => ComercioTuristico(
-                  infoModel: ComercioTuristicoModel.fromJson(equipamento['dados']),
-                ),
-                settings: RouteSettings(arguments: {'isUpdate': true})
-                ));
+              } else if (equipamento['tipo'] ==
+                  'Informações Básicas do Município') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => InformacoesBasicasDoMunicipio(
+                            infoModel: InformacoesBasicasModel.fromJson(
+                                equipamento['dados']),
+                          ),
+                      settings: RouteSettings(arguments: {'isUpdate': true})),
+                );
+              } else if (equipamento['tipo'] == 'Comércio Turístico') {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ComercioTuristico(
+                              infoModel: ComercioTuristicoModel.fromJson(
+                                  equipamento['dados']),
+                            ),
+                        settings:
+                            RouteSettings(arguments: {'isUpdate': true})));
               }
             },
             child: isadmin == true
@@ -586,9 +584,9 @@ String getDisplay(Map<String, dynamic> dados) {
     case 'Meios de Hospedagem':
       return '$tipoFormulario\n${dados['nomeFantasia']}';
     case 'Informações Básicas do Município':
-      return '$tipoFormulario\n${dados['tipo']}';
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Comércio Turístico':
-      return '$tipoFormulario\n${dados['tipo']}';
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
     default:
       return '$tipoFormulario\n${dados['tipo'] ?? ''}';
   }

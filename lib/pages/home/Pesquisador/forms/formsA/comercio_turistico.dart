@@ -88,22 +88,27 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
         }
       });
 
-      _funcionamentoControllers.forEach((key, value) {
-        if(modelMap.containsKey(key)){
-          final valor = modelMap[key];
-          value.text = valor?.toString() ?? '';
-        }
-      },);
+      _funcionamentoControllers.forEach(
+        (key, value) {
+          if (modelMap.containsKey(key)) {
+            final valor = modelMap[key];
+            value.text = valor?.toString() ?? '';
+          }
+        },
+      );
 
-      _protecaoControllers.forEach((key, value) {
-        if(modelMap.containsKey(key)){
-          final valor = modelMap[key];
-          value.text = valor?.toString() ?? '';
-        }
-      },);
+      _protecaoControllers.forEach(
+        (key, value) {
+          if (modelMap.containsKey(key)) {
+            final valor = modelMap[key];
+            value.text = valor?.toString() ?? '';
+          }
+        },
+      );
     }
   }
 
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     try {
@@ -139,12 +144,34 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
     }
 
     pages = [
-      Identificacao(controllers: _identificacaoControllers, infoModel: widget.infoModel,),
-      Funcionamento(controllers: _funcionamentoControllers, infoModel: widget.infoModel,),
-      Protecao(controllers: _protecaoControllers, infoModel: widget.infoModel,),
+      Identificacao(
+        controllers: _identificacaoControllers,
+        infoModel: widget.infoModel,
+      ),
+      Funcionamento(
+        controllers: _funcionamentoControllers,
+        infoModel: widget.infoModel,
+      ),
+      Protecao(
+        controllers: _protecaoControllers,
+        infoModel: widget.infoModel,
+      ),
     ];
   }
-
+  
+  @override
+  void dispose() {
+    for (final controller in _identificacaoControllers.values) {
+      controller.dispose();
+    }
+    for (final controller in _funcionamentoControllers.values) {
+      controller.dispose();
+    }
+    for(final controller in _protecaoControllers.values){
+      controller.dispose();
+    }
+    super.dispose();
+  }
   void getInfoUsersInPesquisa() async {
     Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
 
@@ -189,27 +216,17 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
         );
       } else {
         // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
-        isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.COMERCIO_TURISTICO ) :
-                      FormService().sendForm(valoresJson, AppConstants.COMERCIO_TURISTICO);
+        isUpdate
+            ? FormService().updateForm(widget.infoModel!.id!, valoresJson,
+                AppConstants.COMERCIO_TURISTICO)
+            : FormService()
+                .sendForm(valoresJson, AppConstants.COMERCIO_TURISTICO);
         print("Formulário finalizado e pronto para enviar!");
 
         // _enviarFormulario(); // Você pode chamar sua função de envio aqui
       }
     } else {
-      if (currentStep < pages.length - 1) {
-        // Avança para a próxima página
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.ease,
-        );
-      } else {
-        // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
-        isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.COMERCIO_TURISTICO ) :
-                      FormService().sendForm(valoresJson, AppConstants.COMERCIO_TURISTICO);
-        print("Formulário finalizado e pronto para enviar!");
 
-        // _enviarFormulario(); // Você pode chamar sua função de envio aqui
-      }
       _formKey.currentState!.save();
       _identificacaoControllers.forEach((key, controller) {
         valoresJson[key] = controller.text;
@@ -308,24 +325,35 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
   }
 }
 
-class Identificacao extends StatelessWidget {
+class Identificacao extends StatefulWidget {
   final Map<String, TextEditingController> controllers;
   final ComercioTuristicoModel? infoModel;
 
   const Identificacao({
     super.key,
-    required this.controllers, this.infoModel,
+    required this.controllers,
+    this.infoModel,
   });
 
   @override
+  State<Identificacao> createState() => _IdentificacaoState();
+}
+
+class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveClientMixin {
+    
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final sizeScreen = MediaQuery.sizeOf(context);
 
     return SingleChildScrollView(
       child: Column(
         children: [
           ContainerHeader(title: 'Identificação'),
-          UfMunicipioRg(controllers: controllers),
+          UfMunicipioRg(controllers: widget.controllers),
           SizedBox(
             height: 55.h,
           ),
@@ -338,13 +366,12 @@ class Identificacao extends StatelessWidget {
           ),
           RadioFormField(
             options: ['Comércio Turístico'],
-            initialValue: isUpdate ? infoModel!.tipo : '',
-
+            initialValue: isUpdate ? widget.infoModel!.tipo : '',
             onSaved: (newValue) => valoresJson['tipo'] = newValue,
           ),
           CheckboxGroupFormField(
             title: 'Subtipos:',
-            initialValue: isUpdate ? infoModel!.subtipo : [],
+            initialValue: isUpdate ? widget.infoModel!.subtipo : [],
             options: [
               'Loja de artesanato/souvenir',
               'Loja de artigos fotográficos',
@@ -370,45 +397,44 @@ class Identificacao extends StatelessWidget {
           ),
           CustomTextField(
             name: 'Razão Social',
-            controller: controllers['razaoSocial'],
+            controller: widget.controllers['razaoSocial'],
           ),
           CustomTextField(
             name: 'Nome Fantasia',
-            controller: controllers['nomeFantasia'],
+            controller: widget.controllers['nomeFantasia'],
           ),
           CustomTextField(
             name: 'CNPJ',
             validat: _validators.validarCNPJ,
             keyboardType: TextInputType.numberWithOptions(),
             formatter: [_validators.cnpjFormatter],
-            controller: controllers['CNPJ'],
+            controller: widget.controllers['CNPJ'],
           ),
           CustomTextField(
             name: 'Código CNAE',
             keyboardType: TextInputType.numberWithOptions(),
             formatter: [FilteringTextInputFormatter.digitsOnly],
-            controller: controllers['codigoCNAE'],
+            controller: widget.controllers['codigoCNAE'],
           ),
           CustomTextField(
             name: 'Atividade Econômica',
-            controller: controllers['atividadeEconomica'],
+            controller: widget.controllers['atividadeEconomica'],
           ),
           CustomTextField(
             name: 'Inscrição Municipal',
             formatter: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.numberWithOptions(),
-            controller: controllers['inscricaoMunicipal'],
+            controller: widget.controllers['inscricaoMunicipal'],
           ),
           CustomTextField(
-            controller: controllers['nomeDaRedeFranquia'],
+            controller: widget.controllers['nomeDaRedeFranquia'],
             name: 'Nome da Rede/Franquia',
           ),
           RadioFormField(
             title: 'Natureza',
             onSaved: (newValue) => valoresJson['natureza'] = newValue,
             options: ['Pública', 'Privada', 'outro'],
-            initialValue: isUpdate ? infoModel!.natureza! : '',
-            
+            initialValue: isUpdate ? widget.infoModel!.natureza! : '',
           ),
           RadioFormField(
             title: 'Tipo de Organização/Instituição',
@@ -421,15 +447,13 @@ class Identificacao extends StatelessWidget {
               'Empresa',
               'outro'
             ],
-            initialValue: isUpdate ? infoModel!.tipoDeOrganizacao! : '',
-
+            initialValue: isUpdate ? widget.infoModel!.tipoDeOrganizacao! : '',
           ),
           RadioFormField(
             onSaved: (newValue) => valoresJson['localizacao'] = newValue,
             title: 'Localização',
             options: ['Urbana', 'Rural', 'outro'],
-            initialValue: isUpdate ? infoModel!.localizacao! : '',
-
+            initialValue: isUpdate ? widget.infoModel!.localizacao! : '',
           ),
           SizedBox(
             height: 55.h,
@@ -439,7 +463,7 @@ class Identificacao extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
           CustomTextField(
-            controller: controllers['longitudePrefeitura'],
+            controller: widget.controllers['longitudePrefeitura'],
             name: 'Longitude',
             keyboardType: TextInputType.numberWithOptions(),
             formatter: [
@@ -447,7 +471,7 @@ class Identificacao extends StatelessWidget {
             ],
           ),
           CustomTextField(
-            controller: controllers['latitudePrefeitura'],
+            controller: widget.controllers['latitudePrefeitura'],
             name: 'Latitude',
             keyboardType: TextInputType.numberWithOptions(),
             formatter: [
@@ -465,19 +489,19 @@ class Identificacao extends StatelessWidget {
           ),
           CustomTextField(
             name: 'Avenida/Rua/Travessa/Caminho/Outro',
-            controller: controllers['avenidaRuaTravessa'],
+            controller: widget.controllers['avenidaRuaTravessa'],
           ),
           CustomTextField(
             name: 'Bairro/Localidade',
-            controller: controllers['bairroLocalidade'],
+            controller: widget.controllers['bairroLocalidade'],
           ),
           CustomTextField(
             name: 'Distrito',
-            controller: controllers['distrito'],
+            controller: widget.controllers['distrito'],
           ),
           CustomTextField(
             name: 'CEP',
-            controller: controllers['CEP'],
+            controller: widget.controllers['CEP'],
             formatter: [
               FilteringTextInputFormatter.digitsOnly,
               _validators.cepFormatter
@@ -491,7 +515,7 @@ class Identificacao extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
           CustomTextField(
-            controller: controllers['whatsapp'],
+            controller: widget.controllers['whatsapp'],
             name: 'Whatsapp',
             formatter: [
               FilteringTextInputFormatter.digitsOnly,
@@ -501,15 +525,15 @@ class Identificacao extends StatelessWidget {
           ),
           CustomTextField(
             name: 'Instagram',
-            controller: controllers['instagram'],
+            controller: widget.controllers['instagram'],
           ),
           CustomTextField(
             name: 'E-mail',
-            controller: controllers['email'],
+            controller: widget.controllers['email'],
           ),
           CustomTextField(
             name: 'Site',
-            controller: controllers['site'],
+            controller: widget.controllers['site'],
           ),
           SizedBox(
             height: 55.h,
@@ -524,7 +548,7 @@ class Identificacao extends StatelessWidget {
             valoresJson: valoresJson,
             isUpdate: isUpdate,
             children: [],
-            optionModelValue: isUpdate ? infoModel!.sinalizacaoDeAcesso! : '',
+            optionModelValue: isUpdate ? widget.infoModel!.sinalizacaoDeAcesso! : '',
           ),
           ConditionalFieldsGroup(
             title: 'Turística',
@@ -532,12 +556,11 @@ class Identificacao extends StatelessWidget {
             valoresJson: valoresJson,
             isUpdate: isUpdate,
             children: [],
-            optionModelValue: isUpdate ? infoModel!.sinalizacaoTuristica! : '',
-
+            optionModelValue: isUpdate ? widget.infoModel!.sinalizacaoTuristica! : '',
           ),
           CustomTextField(
             name: 'Pontos de Referência',
-            controller: controllers['pontosDeReferencia'],
+            controller: widget.controllers['pontosDeReferencia'],
           ),
           SizedBox(
             height: 30.h,
@@ -546,9 +569,10 @@ class Identificacao extends StatelessWidget {
       ),
     );
   }
+
 }
 
-class Funcionamento extends StatelessWidget {
+class Funcionamento extends StatefulWidget {
   final ComercioTuristicoModel? infoModel;
 
   final Map<String, TextEditingController> controllers;
@@ -556,7 +580,13 @@ class Funcionamento extends StatelessWidget {
   const Funcionamento({super.key, required this.controllers, this.infoModel});
 
   @override
+  State<Funcionamento> createState() => _FuncionamentoState();
+}
+
+class _FuncionamentoState extends State<Funcionamento> with AutomaticKeepAliveClientMixin {
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     // TODO: implement build
     final sizeScreen = MediaQuery.sizeOf(context);
 
@@ -582,7 +612,7 @@ class Funcionamento extends StatelessWidget {
             ],
             title: 'Formas de Pagamento',
             onSaved: (newValue) => valoresJson['formasDePagamento'] = newValue,
-            initialValue: isUpdate ? infoModel!.formasDePagamento! : [],
+            initialValue: isUpdate ? widget.infoModel!.formasDePagamento! : [],
           ),
           SizedBox(
             height: 55.h,
@@ -596,8 +626,8 @@ class Funcionamento extends StatelessWidget {
               'Inglês e Espanhol',
               'outro'
             ],
-            initialValue: isUpdate ? infoModel!.atendimentoEmLinguaEstrangeira! : '',
-
+            initialValue:
+                isUpdate ? widget.infoModel!.atendimentoEmLinguaEstrangeira! : '',
             title: 'Atendimento em Língua Estrangeira',
             onSaved: (newValue) =>
                 valoresJson['atendimentoEmLinguaEstrangeira'] = newValue,
@@ -607,7 +637,7 @@ class Funcionamento extends StatelessWidget {
             title: 'Informativos Impressos',
             onSaved: (newValue) =>
                 valoresJson['informativosImpressos'] = newValue,
-                initialValue: isUpdate ? infoModel!.informativosImpressos! : [],
+            initialValue: isUpdate ? widget.infoModel!.informativosImpressos! : [],
           ),
           SizedBox(
             height: 55.h,
@@ -625,7 +655,8 @@ class Funcionamento extends StatelessWidget {
           ),
           CheckboxGroupFormField(
             onSaved: (p0) => valoresJson['regrasDeFuncionamentoPeriodo'] = p0,
-            initialValue: isUpdate ? infoModel!.regrasDeFuncionamentoPeriodo! : [],
+            initialValue:
+                isUpdate ? widget.infoModel!.regrasDeFuncionamentoPeriodo! : [],
             options: [
               'Janeiro',
               'Fevereiro',
@@ -648,7 +679,7 @@ class Funcionamento extends StatelessWidget {
           ),
           TabelaHorarios(
             onChanged: (p0) => valoresJson['tabelaHorarios'] = p0,
-            getValue: isUpdate ? infoModel!.tabelaHorarios : {},
+            getValue: isUpdate ? widget.infoModel!.tabelaHorarios : {},
           ),
           SizedBox(
             height: 55.h,
@@ -658,18 +689,19 @@ class Funcionamento extends StatelessWidget {
               jsonKey: 'funcionamento24h',
               valoresJson: valoresJson,
               isUpdate: isUpdate,
-              optionModelValue: isUpdate ? infoModel!.funcionamento24h : '',
+              optionModelValue: isUpdate ? widget.infoModel!.funcionamento24h : '',
               children: []),
           ConditionalFieldsGroup(
               title: 'Funcionamento\nem Feriados',
               jsonKey: 'funcionamentoEmFeriados',
               valoresJson: valoresJson,
-              optionModelValue: isUpdate? infoModel!.funcionamentoEmFeriados : '',
+              optionModelValue:
+                  isUpdate ? widget.infoModel!.funcionamentoEmFeriados : '',
               isUpdate: isUpdate,
               children: []),
           CustomTextField(
             name: 'Outras Regras e Informações',
-            controller: controllers['outrasRegrasEInformacoes'],
+            controller: widget.controllers['outrasRegrasEInformacoes'],
           ),
           SizedBox(
             height: 55.h,
@@ -696,30 +728,30 @@ class Funcionamento extends StatelessWidget {
           RadioFormField(
             options: ['Pago', 'Gratuito', 'Coberto', 'Descoberto'],
             title: 'Estacionamento',
-            initialValue: isUpdate ? infoModel!.estacionamento! : '',
+            initialValue: isUpdate ? widget.infoModel!.estacionamento! : '',
             onSaved: (newValue) => valoresJson['estacionamento'] = newValue,
           ),
           CustomTextField(
             name: 'Capacidade de Veículos (nº)',
-            controller: controllers['capacidadeDeVeiculos'],
+            controller: widget.controllers['capacidadeDeVeiculos'],
             formatter: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.numberWithOptions(),
           ),
           CustomTextField(
             name: 'Automóveis (nº)',
-            controller: controllers['automoveis'],
+            controller: widget.controllers['automoveis'],
             formatter: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.numberWithOptions(),
           ),
           CustomTextField(
             name: 'Ônibus (nº)',
-            controller: controllers['onibus'],
+            controller: widget.controllers['onibus'],
             formatter: [FilteringTextInputFormatter.digitsOnly],
             keyboardType: TextInputType.numberWithOptions(),
           ),
           CheckboxGroupFormField(
             title: 'Produtos e Serviços',
-            initialValue: isUpdate ? infoModel!.produtosEServicos! : [],
+            initialValue: isUpdate ? widget.infoModel!.produtosEServicos! : [],
             options: [
               'Alimentos caseiros/regionais',
               'Objetos de decoração',
@@ -741,7 +773,7 @@ class Funcionamento extends StatelessWidget {
             onSaved: (newValue) => valoresJson['produtosEServicos'] = newValue,
           ),
           CheckboxGroupFormField(
-            initialValue: isUpdate ? infoModel!.outrosServicos! : [],
+              initialValue: isUpdate ? widget.infoModel!.outrosServicos! : [],
               onSaved: (newValue) => valoresJson['outrosServicos'] = newValue,
               title: 'Outros Serviços',
               options: [
@@ -763,6 +795,10 @@ class Funcionamento extends StatelessWidget {
       ),
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class Protecao extends StatelessWidget {
@@ -793,8 +829,8 @@ class Protecao extends StatelessWidget {
           ConditionalFieldsGroup(
               title: 'Da Área ou Edificação\nem que Está\nLocalizado/Instalado',
               jsonKey: 'areaOuEdificacaoEmQueEstaInstalado',
-              optionModelValue: isUpdate ? infoModel!.areaOuEdificacaoEmQueEstaInstalado : '',
-
+              optionModelValue:
+                  isUpdate ? infoModel!.areaOuEdificacaoEmQueEstaInstalado : '',
               valoresJson: valoresJson,
               isUpdate: isUpdate,
               children: [
@@ -808,8 +844,7 @@ class Protecao extends StatelessWidget {
           ),
           ContainerHeader(title: 'Estado Geral de Conservação'),
           RadioFormField(
-              initialValue:  isUpdate ? infoModel!.estadoGeralConservacao : '',
-
+            initialValue: isUpdate ? infoModel!.estadoGeralConservacao : '',
             onSaved: (newValue) =>
                 valoresJson['estadoGeralConservacao'] = newValue,
             options: ['Muito Bom', 'Bom', 'Ruim'],
@@ -820,7 +855,7 @@ class Protecao extends StatelessWidget {
           ),
           ContainerHeader(title: 'Acessibilidade'),
           ConditionalFieldsGroup(
-            optionModelValue: isUpdate ? infoModel!.possuiFacilidade : '',
+              optionModelValue: isUpdate ? infoModel!.possuiFacilidade : '',
               title:
                   'Possui Alguma Facilidade\npara Pessoas com\nDeficiência\nou Mobilidade Reduzida?',
               jsonKey: 'possuiFacilidade',
@@ -843,11 +878,11 @@ class Protecao extends StatelessWidget {
                       valoresJson['pessoalCapacitado'] = newValue,
                 ),
                 CheckboxGroupFormField(
-
                     title: 'Rota Externa Acessível',
                     onSaved: (newValue) =>
                         valoresJson['rotaExternaAcessivel'] = newValue,
-                        initialValue: isUpdate ? infoModel!.rotaExternaAcessivel : [],
+                    initialValue:
+                        isUpdate ? infoModel!.rotaExternaAcessivel : [],
                     options: [
                       'Não',
                       'Estacionamento',
@@ -861,8 +896,8 @@ class Protecao extends StatelessWidget {
                       'outro'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.simboloInternacionalDeAcesso : [],
-
+                    initialValue:
+                        isUpdate ? infoModel!.simboloInternacionalDeAcesso : [],
                     title: 'Símbolo Internacional de Acesso',
                     onSaved: (newValue) =>
                         valoresJson['simboloInternacionalDeAcesso'] = newValue,
@@ -876,14 +911,15 @@ class Protecao extends StatelessWidget {
                       'Saída de Emergência'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.localDeEmbarqueEDesembarque : [],
+                    initialValue:
+                        isUpdate ? infoModel!.localDeEmbarqueEDesembarque : [],
                     title: 'Local de Embarque e Desembarque',
                     onSaved: (newValue) =>
                         valoresJson['localDeEmbarqueEDesembarque'] = newValue,
                     options: ['Não', 'Sinalizado', 'Com Acesso em Nível']),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.vagaEmEstacionamento : [],
-
+                    initialValue:
+                        isUpdate ? infoModel!.vagaEmEstacionamento : [],
                     title: 'Vaga em Estacionamento',
                     onSaved: (newValue) =>
                         valoresJson['vagaEmEstacionamento'] = newValue,
@@ -895,8 +931,7 @@ class Protecao extends StatelessWidget {
                       'Rampa de Acesso à Calçada'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.areaDeCirculacao : [],
-
+                    initialValue: isUpdate ? infoModel!.areaDeCirculacao : [],
                     title:
                         'Área de Circulação/Acesso Interno para Cadeira de Rodas',
                     onSaved: (newValue) =>
@@ -911,8 +946,7 @@ class Protecao extends StatelessWidget {
                       'Piso Regular/Antiderrapante'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.escada : [],
-
+                    initialValue: isUpdate ? infoModel!.escada : [],
                     title: 'Escada',
                     onSaved: (newValue) => valoresJson['escada'] = newValue,
                     options: [
@@ -923,8 +957,7 @@ class Protecao extends StatelessWidget {
                       'Piso Antiderrapante'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.rampa : [],
-
+                    initialValue: isUpdate ? infoModel!.rampa : [],
                     title: 'Rampa',
                     onSaved: (newValue) => valoresJson['rampa'] = newValue,
                     options: [
@@ -936,8 +969,7 @@ class Protecao extends StatelessWidget {
                       'Inclinação Adequada'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.piso : [],
-
+                    initialValue: isUpdate ? infoModel!.piso : [],
                     title: "Piso",
                     onSaved: (newValue) => valoresJson['piso'] = newValue,
                     options: [
@@ -948,8 +980,7 @@ class Protecao extends StatelessWidget {
                     ]),
                 CheckboxGroupFormField(
                     title: "Elevador",
-                  initialValue: isUpdate ? infoModel!.elevador : [],
-
+                    initialValue: isUpdate ? infoModel!.elevador : [],
                     onSaved: (newValue) => valoresJson['elevador'] = newValue,
                     options: [
                       'Não',
@@ -959,15 +990,14 @@ class Protecao extends StatelessWidget {
                       'Sensor Eletrônico (porta)'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.equipamentoMotorizado : [],
-
+                    initialValue:
+                        isUpdate ? infoModel!.equipamentoMotorizado : [],
                     title: 'Equipamento Motorizado para Deslocamento Interno',
                     onSaved: (newValue) =>
                         valoresJson['equipamentoMotorizado'] = newValue,
                     options: ['Não', 'Cadeira', 'Carrinho']),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.sinalizacaoVisual : [],
-
+                    initialValue: isUpdate ? infoModel!.sinalizacaoVisual : [],
                     title: 'Sinalização Visual',
                     onSaved: (newValue) =>
                         valoresJson['sinalizacaoVisual'] = newValue,
@@ -983,8 +1013,7 @@ class Protecao extends StatelessWidget {
                       'Área de Resgate'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.sinalizacaoTatil : [],
-
+                    initialValue: isUpdate ? infoModel!.sinalizacaoTatil : [],
                     title: "Sinalização Tátil",
                     onSaved: (newValue) =>
                         valoresJson['sinalizacaoTatil'] = newValue,
@@ -1000,15 +1029,13 @@ class Protecao extends StatelessWidget {
                       'Área de Resgate'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.alarmeDeEmergencia : [],
-
+                    initialValue: isUpdate ? infoModel!.alarmeDeEmergencia : [],
                     title: "Alarme de Emergência",
                     onSaved: (newValue) =>
                         valoresJson['alarmeDeEmergencia'] = newValue,
                     options: ['Não', 'Sonoro', 'Visual', 'Vibratório']),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.comunicacao : [],
-
+                    initialValue: isUpdate ? infoModel!.comunicacao : [],
                     title: "Comunicação",
                     onSaved: (newValue) =>
                         valoresJson['comunicacao'] = newValue,
@@ -1019,8 +1046,8 @@ class Protecao extends StatelessWidget {
                       'Intérprete em Libras (língua brasileira de sinais)'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.balcaoDeAtendimento : [],
-
+                    initialValue:
+                        isUpdate ? infoModel!.balcaoDeAtendimento : [],
                     title: "Balcão de Atendimento",
                     onSaved: (newValue) =>
                         valoresJson['balcaoDeAtendimento'] = newValue,
@@ -1030,14 +1057,12 @@ class Protecao extends StatelessWidget {
                       'Preferencial para Pessoas com Deficiência ou Mobilidade Reduzida'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.mobiliario : [],
-
+                    initialValue: isUpdate ? infoModel!.mobiliario : [],
                     title: "Mobiliário",
                     onSaved: (newValue) => valoresJson['mobiliario'] = newValue,
                     options: ['Não', 'Altura Adequada', 'Recuo Adequado']),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.sanitario : [],
-
+                    initialValue: isUpdate ? infoModel!.sanitario : [],
                     title: "Sanitário",
                     onSaved: (newValue) => valoresJson['sanitario'] = newValue,
                     options: [
@@ -1052,8 +1077,7 @@ class Protecao extends StatelessWidget {
                       'Torneira Monocomando/Alavanca'
                     ]),
                 CheckboxGroupFormField(
-                  initialValue: isUpdate ? infoModel!.telefone : [],
-
+                    initialValue: isUpdate ? infoModel!.telefone : [],
                     title: "Telefone",
                     onSaved: (newValue) => valoresJson['telefone'] = newValue,
                     options: [
@@ -1062,8 +1086,9 @@ class Protecao extends StatelessWidget {
                       'Para Surdos (TPS ou TTS)'
                     ]),
                 ConditionalFieldsGroup(
-                  optionModelValue: isUpdate ? infoModel!.sinalizacaoIndicativaPreferencial : '',
-                  
+                    optionModelValue: isUpdate
+                        ? infoModel!.sinalizacaoIndicativaPreferencial
+                        : '',
                     title:
                         'Sinalização Indicativa\nde Atendimento\nPreferencial para Pessoas\ncom Deficiência ou\nMobilidade Reduzida',
                     jsonKey: 'sinalizacaoIndicativaPreferencial',

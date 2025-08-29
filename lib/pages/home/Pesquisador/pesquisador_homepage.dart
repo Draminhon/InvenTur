@@ -16,29 +16,29 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-Future<void> refreshToken() async {
-  final prefs = await SharedPreferences.getInstance();
-  String? refresh = prefs.getString('refresh_token');
+// Future<void> refreshToken() async {
+//   final prefs = await SharedPreferences.getInstance();
+//   String? refresh = prefs.getString('refresh_token');
 
-  if (refresh != null) {
-    var url = Uri.parse('${AppConstants.BASE_URI}api/token/refresh/');
-    var response = await http.post(
-      url,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: json.encode({"refresh": refresh}),
-    );
+//   if (refresh != null) {
+//     var url = Uri.parse('${AppConstants.BASE_URI}api/token/refresh/');
+//     var response = await http.post(
+//       url,
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: json.encode({"refresh": refresh}),
+//     );
 
-    if (response.statusCode == 200) {
-      var body = json.decode(response.body);
-      prefs.setString('access_token', body['access']);
-      print('Token atualizado com sucesso.');
-    } else {
-      print('Erro ao atualizar token: ${response.body}');
-    }
-  }
-}
+//     if (response.statusCode == 200) {
+//       var body = json.decode(response.body);
+//       prefs.setString('access_token', body['access']);
+//       print('Token atualizado com sucesso.');
+//     } else {
+//       print('Erro ao atualizar token: ${response.body}');
+//     }
+//   }
+// }
 
 class PesquisadorHome extends StatefulWidget {
   const PesquisadorHome({super.key});
@@ -66,7 +66,7 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
 
       // Se o token expirou, tenta atualizar e refazer a requisição
       if (response.statusCode == 401) {
-        await refreshToken();
+      //  await refreshToken();
         token = prefs.getString('access_token');
         if (token == null) {
           print("Falha ao atualizar o token de acesso.");

@@ -5,6 +5,7 @@ import 'package:inventur/models/forms/informacoes_basicas_model.dart';
 import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/fields.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/container_widget.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/expandedTileYoN.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/multi_auto_complete_form_field.dart';
@@ -944,6 +945,13 @@ void _preencherDadosParaTeste2() {
 
 
     } else {
+        if (currentStep < pages.length - 1) {
+        // Avança para a próxima página
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+      } 
       _formKey.currentState!.save();
       _caracteristicasControllers.forEach((key, controllers) {
         valoresJson[key] = controllers.text;
@@ -1041,19 +1049,27 @@ void _preencherDadosParaTeste2() {
   }
 }
 
-class Identificacao extends StatelessWidget {
+class Identificacao extends StatefulWidget{
   final Map<String, TextEditingController> controllers;
   final InformacoesBasicasModel? infoModel;
 
-  const Identificacao(
+  const Identificacao (
       {super.key, required this.onSaved, required this.controllers, this.infoModel});
   final void Function(String?) onSaved;
+
   @override
-  Widget build(Object context) {
+  State<Identificacao> createState() => _IdentificacaoState();
+}
+
+class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveClientMixin {
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
     // TODO: implement build
     return Column(
       children: [
-        UfMunicipioRg(controllers: controllers),
+        ContainerHeader(title: 'Identificação'),
+        UfMunicipioRg(controllers: widget.controllers),
 
         SizedBox(
           height: 55.h,
@@ -1067,8 +1083,8 @@ class Identificacao extends StatelessWidget {
         ),
 
         RadioFormField(
-          initialValue: isUpdate ? infoModel!.tipo! : '',
-            options: ['Caracterização do município'], onSaved: onSaved)
+          initialValue: isUpdate ? widget.infoModel!.tipo! : '',
+            options: ['Caracterização do município'], onSaved: widget.onSaved)
 
         // RadioD(
         //   validator: (p0) {
@@ -1083,6 +1099,10 @@ class Identificacao extends StatelessWidget {
       ],
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class InformacoesGerais extends StatelessWidget {
@@ -1523,7 +1543,7 @@ class Caracteristicas extends StatefulWidget {
   State<Caracteristicas> createState() => _CaracteristicasState();
 }
 
-class _CaracteristicasState extends State<Caracteristicas> {
+class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAliveClientMixin {
   
   final PesquisaController _pesquisaController = PesquisaController();
 
@@ -1537,6 +1557,7 @@ class _CaracteristicasState extends State<Caracteristicas> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final sizeScreen = MediaQuery.sizeOf(context);
 
     // TODO: implement build
@@ -3042,6 +3063,10 @@ class _CaracteristicasState extends State<Caracteristicas> {
       ),
     );
   }
+  
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 class LegislacaoMunicipal extends StatelessWidget{

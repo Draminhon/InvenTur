@@ -40,12 +40,15 @@ class _ConditionalFieldsGroupState extends State<ConditionalFieldsGroup> {
       children: [
         SizedBox(
           height: 55.h,
-        ),
+        ), 
         Row(
           children: [
-            textLabel(name: widget.title),
             Expanded(
-                flex: 2,
+              flex: 2,
+              child: textLabel(name: widget.title)),
+              SizedBox(width: 10), 
+            Expanded(
+              flex: 3,
                 child: ExpansionTileYoN(
                   optionModel: widget.isUpdate ? widget.optionModelValue : 'não',
                   getValue: (p0) {

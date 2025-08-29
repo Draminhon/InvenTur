@@ -91,22 +91,24 @@ class _LoginPageState extends State<LoginPage> {
               'CPF': cpf,
               'password': password,
             }));
+          final prefs = await SharedPreferences.getInstance();
 
         if (response.statusCode == 200) {
           final Map<String, dynamic> responseData = json.decode(response.body);
           String accessToken = responseData['access'];
           String refreshToken = responseData['refresh'];
+          if(responseData['access_exp'] != null){
           int accessTokenExp = responseData['access_exp'];
+          await prefs.setInt('access_token_exp', accessTokenExp);
+
+          }
           final Map<String, dynamic> user = responseData['user'];
 
-          final prefs = await SharedPreferences.getInstance();
           await prefs.setString('user_data', json.encode(user));
           await prefs.setString('access_token', accessToken);
           await prefs.setString('refresh_token', refreshToken);
-          await prefs.setInt('access_token_exp', accessTokenExp);
           print("token armazenado: $accessToken");
           print("refresh token armazenado: $refreshToken");
-          print("expiração armazenada: $accessTokenExp");
 
           //print("Usuario logado com sucesso: ${json.encode(user)}");
           Navigator.pushReplacement(context,

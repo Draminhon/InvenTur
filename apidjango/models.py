@@ -442,11 +442,11 @@ class MeioDeHospedagem(Base):
     telefone = models.JSONField("Telefone")
     
     # Classificação e localização do meio de hospedagem
-    subtipo = models.CharField("Subtipo", max_length=255, blank=True, null=True)
+    subtipo = models.JSONField(blank=True, null=True)
     natureza = models.CharField("Natureza", max_length=255, blank=True, null=True)
     localizacao = models.TextField("Localização", blank=True, null=True)
     tipoDeDiaria = models.CharField("Tipo de Diária", max_length=255, blank=True, null=True)
-    periodo = models.CharField("Período", max_length=255, blank=True, null=True)
+    periodo = models.JSONField(blank=True, null=True)
     tabelasHorario = models.JSONField("Tabelas de Horário",blank=True,null=True)
     energiaEletrica = models.TextField("Energia Elétrica", blank=True, null=True)
     estadoGeralDeConservacao = models.CharField("Estado Geral de Conservação", max_length=255, blank=True, null=True)
