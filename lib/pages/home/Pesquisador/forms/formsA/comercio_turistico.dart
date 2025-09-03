@@ -1102,7 +1102,10 @@ class Protecao extends StatelessWidget {
                 SizedBox(
                   height: 55.h,
                 ),
-                ContainerHeader(title: 'Observações e Referências'),
+               
+              ]),
+              SizedBox(height: 55.h,),
+               ContainerHeader(title: 'Observações e Referências'),
                 SizedBox(
                   height: 55.h,
                 ),
@@ -1114,7 +1117,6 @@ class Protecao extends StatelessWidget {
                   name: 'Referências',
                   controller: controllers['referencias'],
                 )
-              ])
         ],
       ),
     );

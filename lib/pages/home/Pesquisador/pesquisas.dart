@@ -19,7 +19,6 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranc
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas_edit.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
 import 'package:inventur/services/interceptor_service.dart';
-import 'package:inventur/services/sync_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia_edit.dart';
 import 'package:inventur/utils/check_connectivity.dart';
@@ -54,7 +53,6 @@ class A extends StatefulWidget {
 }
 
 class _A extends State<A> {
-  int _selectedIndex = 0;
   int paginaAtual = 0;
   late PageController pc;
 
@@ -70,11 +68,7 @@ class _A extends State<A> {
     });
   }
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {

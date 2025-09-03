@@ -27,7 +27,12 @@ class _ConditionalFieldsGroupState extends State<ConditionalFieldsGroup> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    widget.valoresJson.putIfAbsent(widget.jsonKey, () => 'não');
+
+    if(widget.isUpdate && widget.optionModelValue != null){
+      widget.valoresJson[widget.jsonKey] = widget.optionModelValue;
+    }else{
+      widget.valoresJson.putIfAbsent(widget.jsonKey, () => 'não');
+    }
   }
 
   @override
@@ -50,7 +55,7 @@ class _ConditionalFieldsGroupState extends State<ConditionalFieldsGroup> {
             Expanded(
               flex: 3,
                 child: ExpansionTileYoN(
-                  optionModel: widget.isUpdate ? widget.optionModelValue : 'não',
+                  optionModel: widget.valoresJson[widget.jsonKey] ?? 'não',
                   getValue: (p0) {
                     if (widget.valoresJson[widget.jsonKey] == p0) return;
 

@@ -13,6 +13,7 @@ class ContainerA extends StatelessWidget {
       },
       child: Container(
           margin: EdgeInsets.only(bottom: 29.92.h, left: 134.4.w, right: 134.4.w),
+          padding: EdgeInsets.symmetric(horizontal:30.w),
           height: 200.52.h,
           decoration: BoxDecoration(
             gradient: LinearGradient(colors: [const Color.fromARGB(255, 55, 111, 60), const Color.fromARGB(255, 77, 156, 84)]),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/container_form.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/sizedBox.dart';
 
 class FormularioB extends StatelessWidget {
   const FormularioB({super.key});
@@ -59,30 +60,39 @@ class FormularioB extends StatelessWidget {
               Tilee(texto: 'Serviços e equipamentos para alimentos e bebidas', routeName: '/AlimentosEbebidas'),
               SizedBox()
             ]),
-            // ExpansionTileA(titulo: 'Eventos', minhaLista: const [
-            //   Tilee(texto: 'Espaços para eventos', routeName: '/Placeholder'),
-            //   Tilee(texto: 'Serviços para eventos', routeName: '/Placeholder'),
-            //   SizedBox(),
-            //   SizedBox()
-            // ]),
-            // ExpansionTileA(titulo: 'Instalações', minhaLista: const [
-            //   Tilee(texto: 'Instalações esportivas', routeName: '/Placeholder'),
-            //   Tilee(texto: 'Instalações náuticas', routeName: '/Placeholder'),
-            //   SizedBox(),
-            //   SizedBox()
-            // ]),
-            // ExpansionTileA(titulo: 'Espaços', minhaLista: const [
-            //   Tilee(texto: 'Espaços livres e áreas verde', routeName: '/Placeholder'),
-            //   Tilee(texto: 'Espaços de diversão e cultura', routeName: '/Placeholder'),
-            //   Tilee(texto: 'Outros espaços de recreação', routeName: '/Placeholder'),
-            //   SizedBox()
-            // ]),
+            ExpansionTileA(titulo: 'Eventos', minhaLista: const [
+              Tilee(texto: 'Espaços para eventos', routeName: '/Placeholder'),
+               Tilee(texto: 'Serviços para eventos', routeName: '/Placeholder'),
+               SizedBox(),
+               SizedBox()
+             ]),
+
+            ExpansionTileA(titulo: 'Instalações', minhaLista: const [
+              Tilee(texto: 'Instalações esportivas', routeName: '/Placeholder'),
+              //Tilee(texto: 'Instalações náuticas', routeName: '/Placeholder'),
+              SizedBox(),
+              SizedBox(),
+              SizedBox()
+            ]),
+            ExpansionTileA(titulo: 'Espaços', minhaLista: const [
+             // Tilee(texto: 'Espaços livres e áreas verde', routeName: '/Placeholder'),
+              Tilee(texto: 'Espaços de diversão e cultura', routeName: '/Placeholder'),
+              //Tilee(texto: 'Outros espaços de recreação', routeName: '/Placeholder'),
+              SizedBox(),
+              SizedBox(),
+              SizedBox()
+            ]),
             ExpansionTileA(titulo: 'Hospedagem', minhaLista: const [
               Tilee(texto: 'Meios de hospedagem',routeName:'/MeiosDeHospedagem'),
               Tilee(texto: 'Outros tipos de acomodações', routeName: '/Placeholder',),
               SizedBox(),
               SizedBox()
             ]),
+            ContainerA(form: 'Informações Turísticas', routeName: '/Placeholder'),
+            ContainerA(form: 'Entidades associativas e similares', routeName: '/Placeholder'),
+            ContainerA(form: 'Guiamento e condução turística', routeName: '/Placeholder'),
+
+
 
             /*ListTile(title: (Text('aiii', textAlign: TextAlign.center,
                  style: TextStyle(color: Color.fromARGB(255, 55, 111, 60) ),)),

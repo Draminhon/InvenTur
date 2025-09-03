@@ -13,6 +13,8 @@ import 'package:inventur/pages/home/Pesquisador/widgets/multi_auto_complete_form
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
 import 'package:inventur/services/admin_service.dart';
+import 'package:inventur/services/form_service.dart';
+import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/utils/validators.dart';
 
 final Validators _validators = Validators();
@@ -40,6 +42,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
   Map<String, TextEditingController> _identificacaoControllers = {};
   Map<String, TextEditingController> _funcionamentoControllers = {};
+  Map<String, TextEditingController> _acessibilidadeControllers = {};
 
   final List<String> _chavesIdentificacao = const [
     'uf',
@@ -66,14 +69,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     'instagram',
     'email',
     'site',
-    'aeroporto',
-    'estacaoRodoviaria',
-    'estacaoFerroviaria',
-    'estacaoMaritima',
-    'estacaoMetroviaria',
-    'pontoDeOnibus',
-    'pontoDeTaxi',
-    'distanciasOutrosNome',
+
     'distanciaOutros',
     'pontosDeReferencia',
   ];
@@ -98,6 +94,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     'lanchoneteCapacidadeSimultanea',
     'lanchoneteCapacidadeSentadasSimultanea',
   ];
+  final List<String> _chavesAcessibilidade = const [
+    'outrasAcessibilidade',
+    'observacoes',
+    'referencias'
+  ];
 
   void getInfoUsersInPesquisa() async {
     Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
@@ -109,6 +110,38 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     valoresjson['nome_coordenador'] = info['coordenador']['nome'];
     valoresjson['telefone_coordenador'] = info['coordenador']['telefone'];
     valoresjson['email_coordenador'] = info['coordenador']['email'];
+  }
+
+
+void _preencherDadosParaTeste() {
+    if (widget.hospedagemModel != null) {
+      final model = widget.hospedagemModel!;
+      final modelMap = model.toMap();
+      _identificacaoControllers.forEach((key, controller) {
+        if (modelMap.containsKey(key)) {
+          final valor = modelMap[key];
+          controller.text = valor?.toString() ?? '';
+        }
+      });
+
+      _funcionamentoControllers.forEach(
+        (key, value) {
+          if (modelMap.containsKey(key)) {
+            final valor = modelMap[key];
+            value.text = valor?.toString() ?? '';
+          }
+        },
+      );
+
+      _acessibilidadeControllers.forEach(
+        (key, value) {
+          if (modelMap.containsKey(key)) {
+            final valor = modelMap[key];
+            value.text = valor?.toString() ?? '';
+          }
+        },
+      );
+    }
   }
 
   @override
@@ -125,209 +158,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     }
     print("VARIAVEL IS UPDATE: $isUpdate");
     if (isUpdate) {
-      //_preencherDadosParaTeste();
+      _preencherDadosParaTeste();
     }
   }
-
-  // final Map<String, dynamic> valoresjson = {
-  //   'tipo_formulario': 'Meios de Hospedagem',
-  //   // 'uf': null,
-  //   // 'regiao_turistica': null,
-  //   // 'municipio': null,
-  //   // 'tipo': null,
-  //   // 'subtipo': null,
-
-  //   // 'MTur_CADASTUR': null,
-  //   // 'MTur_outros': null,
-  //   // 'associacoes_e_sindicatos_do_setor_de_hospedagem': null,
-  //   // 'associcoes_de_turismo': null,
-  //   // 'associacoes_comerciais': null,
-  //   // 'guias_turisticos': null,
-  //   // 'outros_entidade_guia_turistico': null,
-  //   // 'segmentos_ou_tipos_de_turismo_em_que_e_especializado': null,
-  //   // 'tipo_de_diária': null,
-  //   // 'formas_de_pagamento': null,
-  //   // 'reservas': null,
-  //   // 'atendimento_em_lingua_estrangeira': null,
-  //   // 'informativo impressos': null,
-  //   // 'periodo': null,
-  //   // 'horario_segunda_feira_abertura': null,
-  //   // 'horario_segunda_feira_encerramento': null,
-  //   // 'horario_terca_feira_abertura': null,
-  //   // 'horario_terca_feira_encerramento': null,
-  //   // 'horario_quarta_feira_abertura': null,
-  //   // 'horario_quarta_feira_encerramento': null,
-  //   // 'horario_quinta_feira_abertura': null,
-  //   // 'horario_quinta_feira_encerramento': null,
-  //   // 'horario_sexta_feira_abertura': null,
-  //   // 'horario_sexta_feira_encerramento': null,
-  //   // 'horario_sabado_abertura': null,
-  //   // 'horario_sabado_encerramento': null,
-  //   // 'horario_domingo_abertura': null,
-  //   // 'horario_domingo_encerramento': null,
-  //   // 'funcionamento_24_horas': null,
-  //   // 'funcionamento_em_feriados': null,
-  //   // 'restricoes': null,
-
-  //   // 'area_recreacao_e_lazer_instalacoes': null,
-  //   // 'area_recreacao_e_lazer_outros_espacos_equipamentos_e_atividades': null,
-  //   // 'area_para_eventos_instalacoes': null,
-  //   // 'area_para_eventos_servicos': null,
-  //   // 'area_para_eventos_equipamentos': null,
-  //   // 'facilidade_e_servicos': null,
-  //   // 'facilidade_para_executivos': null,
-  //   // 'protecao_qualificacao_do_esquipamento_espaco': null,
-  //   // 'protecao_qualificacao_do_esquipamento_espaco_municipal': null,
-  //   // 'protecao_qualificacao_do_esquipamento_espaco_estadual_distrital': null,
-  //   // 'protecao_qualificacao_do_esquipamento_espaco_federal': null,
-  //   // 'protecao_qualificacao_do_esquipamento_espaco_internacional': null,
-  //   // 'protecao_qualificacao_do_esquipamento_espaco_outras': null,
-  //   // 'protecao_qualificacao_da_area_ou_edificacao': null,
-  //   // 'protecao_qualificacao_da_area_ou_edificacao_municipal': null,
-  //   // 'protecao_qualificacao_da_area_ou_edificacao_estadual_distrital': null,
-  //   // 'protecao_qualificacao_da_area_ou_edificacao_federal': null,
-  //   // 'protecao_qualificacao_da_area_ou_edificacao_internacional': null,
-  //   // 'protecao_qualificacao_da_area_ou_edificacao_outras': null,
-  //   // 'estado_geral_de_conservacao': null,
-  //   // 'acessibilidade_possui_alguma_facilidade_para_pcd_ou_mobilidade_reduzida':
-  //   //     null,
-  //   // 'acessibilidade_possui_pessoal_capacitado_para_receber_pcd': null,
-  //   // 'acessibilidade_rota_externa_acessivel': null,
-  //   // 'acessibilidade_simbolo_internacional_de_acesso': null,
-  //   // 'acessibilidade_local_de_embarque_e_desembarque': null,
-  //   // 'acessibilidade_vaga_em_estacionamento': null,
-  //   // 'acessibilidade_area_de_circulacao_acesso_interno_para_cadeira_de_rodas':
-  //   //     null,
-  //   // 'acessibilidade_escada': null,
-  //   // 'acessibilidade_rampa': null,
-  //   // 'acessibilidade_piso': null,
-  //   // 'acessibilidade_elevador': null,
-  //   // 'acessibilidade_equipamento_motorizado_para_deslocamento_interno': null,
-  //   // 'acessibilidade_sinalizacao_visual': null,
-  //   // 'acessibilidade_sinalizacao_tatil': null,
-  //   // 'acessibilidade_alarme_de_emergencia': null,
-  //   // 'acessibilidade_comunicacao': null,
-  //   // 'acessibilidade_balcao_de_atendimento': null,
-  //   // 'acessibilidade_mobiliário': null,
-  //   // 'acessibilidade_sanitário': null,
-  //   // 'acessibilidade_telefone': null,
-  //   // 'acessibilidade_sinalizacao_indicaiva_de_atendimento_preferencial_para_pessoas_com_deficiencia_ou_mobilidade_reduzida':
-  //   //     null,
-  //   // 'acessibilidade_outros': null,
-  //   // 'observacoes': null,
-  //   // 'referencias': null,
-  // };
-
-//Implementar o Map para os controllers
-
-//   void autoFillForm() {
-//     // Verifica se o controlador existe no Map antes de preencher
-
-//     void safeFillIfExists(String key, List<String?>? list, int index) {
-//       if (list != null &&
-//           list.length > index &&
-//           list[index] != null &&
-//           list[index]!.isNotEmpty) {
-//       }
-//     }
-
-//     if (widget.hospedagemModel != null) {
-//       fillIfExists('uf', widget.hospedagemModel!.uf!);
-//       fillIfExists('rg', widget.hospedagemModel!.regiaoTuristica!);
-//       fillIfExists('municipio', widget.hospedagemModel!.municipio!);
-//       fillIfExists('razao social', widget.hospedagemModel!.razaoSocial!);
-//       fillIfExists('nome fantasia', widget.hospedagemModel!.nomeFantasia!);
-//       fillIfExists('CNPJ', widget.hospedagemModel!.CNPJ!);
-//       fillIfExists('codigo CNAE', widget.hospedagemModel!.codigoCNAE!);
-
-//       safeFillIfExists('estado01', widget.hospedagemModel!.estadosTuristas, 0);
-//       safeFillIfExists('estado02', widget.hospedagemModel!.estadosTuristas, 1);
-//       safeFillIfExists('estado03', widget.hospedagemModel!.estadosTuristas, 2);
-//       safeFillIfExists('estado04', widget.hospedagemModel!.estadosTuristas, 3);
-//       safeFillIfExists('estado05', widget.hospedagemModel!.estadosTuristas, 4);
-
-// // Para países
-//       safeFillIfExists('pais01', widget.hospedagemModel!.paisesTuristas, 0);
-//       safeFillIfExists('pais02', widget.hospedagemModel!.paisesTuristas, 1);
-//       safeFillIfExists('pais03', widget.hospedagemModel!.paisesTuristas, 2);
-//       safeFillIfExists('pais04', widget.hospedagemModel!.paisesTuristas, 3);
-//       safeFillIfExists('pais05', widget.hospedagemModel!.paisesTuristas, 4);
-
-//       fillIfExists(
-//           'atividade economica', widget.hospedagemModel!.atividadeEconomica!);
-//       fillIfExists(
-//           'inscricao municipal', widget.hospedagemModel!.inscricaoMunicipal!);
-//       fillIfExists('nome da rede', widget.hospedagemModel!.nomeDaRede!);
-//       fillIfExists(
-//           'inicio da atividade', widget.hospedagemModel!.inicioDaAtividade!);
-//       fillIfExists('funcionarios permanentes',
-//           widget.hospedagemModel!.qtdeFuncionariosPermanentes!.toString());
-//       fillIfExists('funcionarios temporarios',
-//           widget.hospedagemModel!.qtdeFuncionariosTemporarios!.toString());
-//       fillIfExists('pessoas com deficiencia',
-//           widget.hospedagemModel!.qtdeFuncionarisComDeficiencia!.toString());
-//       fillIfExists('latitude', widget.hospedagemModel!.latitude.toString());
-//       fillIfExists('longitute', widget.hospedagemModel!.longitute.toString());
-//       fillIfExists('avenida rua', widget.hospedagemModel!.avenidaRuaEtc!);
-//       fillIfExists(
-//           'bairro localidade', widget.hospedagemModel!.bairroLocalidade!);
-//       fillIfExists('distrito', widget.hospedagemModel!.distrito!);
-//       fillIfExists('CEP', widget.hospedagemModel!.CEP!);
-//       fillIfExists('whatsapp', widget.hospedagemModel!.whatsapp!);
-//       fillIfExists('instagram', widget.hospedagemModel!.instagram!);
-//       fillIfExists('email', widget.hospedagemModel!.email!);
-//       fillIfExists('site', widget.hospedagemModel!.site!);
-//       fillIfExists(
-//           'pontos de referencia', widget.hospedagemModel!.pontosDeReferencia!);
-//       fillIfExists('regras e informacoes',
-//           widget.hospedagemModel!.outrasRegrasEInformacoes!);
-//       fillIfExists('ocupação ano n', widget.hospedagemModel!.nAnoOcupacao!);
-//       fillIfExists('ocupacao alta temporada n',
-//           widget.hospedagemModel!.nOcupacaoAltaTemporada!);
-//       fillIfExists(
-//           'total de UH', widget.hospedagemModel!.nTotalDeUH!.toString());
-//       fillIfExists('total de leitos',
-//           widget.hospedagemModel!.nTotalDeLeitos!.toString());
-//       fillIfExists('uh adaptados para pcd',
-//           widget.hospedagemModel!.nUhAdaptadasParaPCD!.toString());
-//       fillIfExists('capacidade de veiculos',
-//           widget.hospedagemModel!.nCapacidadeDeVeiculos!.toString());
-//       fillIfExists('capacidade automoveis',
-//           widget.hospedagemModel!.nAutomoveis!.toString());
-//       fillIfExists('onibus', widget.hospedagemModel!.nOnibus!.toString());
-//       fillIfExists('capacidade em KVA',
-//           widget.hospedagemModel!.capacidadeEmKVA!.toString());
-//       fillIfExists('gerador capacidade em KVA',
-//           widget.hospedagemModel!.geradorCapacidadeEmKVA!);
-//       fillIfExists('capacidade instalada por dia',
-//           widget.hospedagemModel!.nCapacidadeInstaladaPorDia!.toString());
-//       fillIfExists('pessoas atendidas sentadas',
-//           widget.hospedagemModel!.nPessoasAtendidasSentadas!.toString());
-//       fillIfExists('capacidade simultanea',
-//           widget.hospedagemModel!.nCapacidadeSimultanea!.toString());
-//       fillIfExists(
-//           'capacidade simultanea pessoas atendidas sentadas',
-//           widget.hospedagemModel!.nPessoasAtendidasSentadasSimultanea!
-//               .toString());
-//       fillIfExists(
-//           'lanchonete capacidade instalada por dia',
-//           widget.hospedagemModel!.lanchoneteCapacidadeInstaladaPorDia!
-//               .toString());
-//       fillIfExists(
-//           'lanchonete capacidade pessoas atendidas sentadas',
-//           widget.hospedagemModel!.lanchoneteCapacidadePessoasAtendidasSentadas!
-//               .toString());
-//       fillIfExists('lanchonete capacidade simultanea',
-//           widget.hospedagemModel!.lanchoneteCapacidadeSimultanea!.toString());
-//       fillIfExists(
-//           'lanchonete pessoas atendidas sentadas simultanea',
-//           widget.hospedagemModel!.lanchoneteCapacidadeSentadasSimultanea!
-//               .toString());
-//       fillIfExists('outros', widget.hospedagemModel!.outros!);
-//       fillIfExists('observacoes', widget.hospedagemModel!.observacoes!);
-//       fillIfExists('referencias', widget.hospedagemModel!.referencias!);
-//     }
-//   }
 
   @override
   void initState() {
@@ -342,6 +175,10 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
       _funcionamentoControllers[key] = TextEditingController();
     }
 
+    for (final key in _chavesAcessibilidade) {
+      _acessibilidadeControllers[key] = TextEditingController();
+    }
+
     pages = [
       Identificacao(
         controllers: _identificacaoControllers,
@@ -350,11 +187,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
       Funcionamento(
         controllers: _funcionamentoControllers,
         hospedagemModel: widget.hospedagemModel,
+      ),
+      Acessibilidade(
+        controllers: _acessibilidadeControllers,
+        hospedagemModel: widget.hospedagemModel,
       )
     ];
-
-    //_pesquisaController.setEstados();
-    //_pesquisaController.setPaises();
   }
 
   @override
@@ -363,6 +201,9 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
       controller.dispose();
     }
     for (final controller in _funcionamentoControllers.values) {
+      controller.dispose();
+    }
+    for (final controller in _acessibilidadeControllers.values) {
       controller.dispose();
     }
 
@@ -383,6 +224,12 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
         },
       );
 
+      _acessibilidadeControllers.forEach(
+        (key, value) {
+          valoresjson[key] = value.text;
+        },
+      );
+
       valoresjson.forEach(
         (key, value) {
           print("$key  - $value");
@@ -395,24 +242,15 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
           curve: Curves.ease,
         );
       } else {
-        // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
-        // isUpdate
-        //     ? FormService().updateForm(widget.infoModel!.id!, valoresJson,
-        //         AppConstants.COMERCIO_TURISTICO)
-        //     : FormService()
-        //         .sendForm(valoresJson, AppConstants.COMERCIO_TURISTICO);
+        isUpdate
+            ? FormService().updateForm(widget.hospedagemModel!.id!, valoresjson,
+                AppConstants.MEIOS_DE_HOSPEDAGEM)
+            : FormService()
+                .sendForm(valoresjson, AppConstants.MEIOS_DE_HOSPEDAGEM);
         print("Formulário finalizado e pronto para enviar!");
-
-        // _enviarFormulario(); // Você pode chamar sua função de envio aqui
       }
     } else {
-      if (currentStep < pages.length - 1) {
-        // Avança para a próxima página
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.ease,
-        );
-      }
+  
       _formKey.currentState!.save();
       _identificacaoControllers.forEach((key, controller) {
         valoresjson[key] = controller.text;
@@ -422,7 +260,11 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
           valoresjson[key] = value.text;
         },
       );
-
+      _acessibilidadeControllers.forEach(
+        (key, value) {
+          valoresjson[key] = value.text;
+        },
+      );
       valoresjson.forEach(
         (key, value) {
           print("$key  - $value");
@@ -506,7 +348,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
   }
 }
 
-class Identificacao extends StatelessWidget {
+class Identificacao extends StatefulWidget {
   final Map<String, TextEditingController> controllers;
   final MeiosDeHospedagemModel? hospedagemModel;
 
@@ -514,13 +356,23 @@ class Identificacao extends StatelessWidget {
       {super.key, required this.controllers, this.hospedagemModel});
 
   @override
+  State<Identificacao> createState() => _IdentificacaoState();
+}
+
+class _IdentificacaoState extends State<Identificacao>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final sizeScreen = MediaQuery.sizeOf(context);
 
     return SingleChildScrollView(
       child: Column(children: [
         ContainerHeader(title: 'Identificação'),
-        UfMunicipioRg(controllers: controllers),
+        UfMunicipioRg(controllers: widget.controllers),
 
         RadioFormField(
           title: 'Tipo',
@@ -528,12 +380,12 @@ class Identificacao extends StatelessWidget {
           onSaved: (newValue) {
             valoresjson['tipo'] = newValue;
           },
-          initialValue: isUpdate == true ? hospedagemModel!.tipo : "",
+          initialValue: isUpdate == true ? widget.hospedagemModel!.tipo : "",
         ),
 
         CheckboxGroupFormField(
           title: 'Subtipos',
-          initialValue: isUpdate == true ? hospedagemModel!.subtipo : [],
+          initialValue: isUpdate == true ? widget.hospedagemModel!.subtipo : [],
           options: [
             'Hotel',
             'Hotel Histórico',
@@ -569,35 +421,35 @@ class Identificacao extends StatelessWidget {
         ),
         CustomTextField(
           name: 'Razão Social',
-          controller: controllers['razaoSocial'],
+          controller: widget.controllers['razaoSocial'],
         ),
         CustomTextField(
-          controller: controllers['nomeFantasia'],
+          controller: widget.controllers['nomeFantasia'],
           name: 'Nome Fantasia',
         ),
         CustomTextField(
-          controller: controllers['codigoCNAE'],
+          controller: widget.controllers['codigoCNAE'],
           name: 'Código CNAE',
           formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
         ),
         CustomTextField(
-          controller: controllers['atividadeEconomica'],
+          controller: widget.controllers['atividadeEconomica'],
           name: 'Atividade econômica',
         ),
         CustomTextField(
-          controller: controllers['inscricaoMunicipal'],
+          controller: widget.controllers['inscricaoMunicipal'],
           name: 'Inscrição Municipal',
           formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
         ),
         CustomTextField(
-          controller: controllers['nomeDaRede'],
+          controller: widget.controllers['nomeDaRede'],
           name: 'Nome da rede/holding',
         ),
         CustomTextField(
           name: 'CNPJ',
-          controller: controllers['CNPJ'],
+          controller: widget.controllers['CNPJ'],
           validat: _validators.validarCNPJ,
           formatter: [_validators.cnpjFormatter],
           keyboardType: TextInputType.numberWithOptions(),
@@ -607,7 +459,8 @@ class Identificacao extends StatelessWidget {
           children: [
             RadioFormField(
               title: 'Natureza',
-              initialValue: isUpdate == true ? hospedagemModel!.natureza : "",
+              initialValue:
+                  isUpdate == true ? widget.hospedagemModel!.natureza : "",
               options: ['pública', 'privada', 'outro'],
               onSaved: (newValue) {
                 valoresjson['natureza'] = newValue;
@@ -620,7 +473,7 @@ class Identificacao extends StatelessWidget {
           title: 'Tipo de Organização/Instituição',
           onSaved: (p0) => valoresjson['tipoDeOrganizacao'] = p0,
           initialValue:
-              isUpdate == true ? hospedagemModel!.tipoDeOrganizacao : [],
+              isUpdate == true ? widget.hospedagemModel!.tipoDeOrganizacao : [],
           options: [
             'associação',
             'sindicato',
@@ -643,7 +496,7 @@ class Identificacao extends StatelessWidget {
                 width: sizeScreen.width * 0.4,
                 //height: sizeScreen.height * 0.07,
                 child: CustomTextDate(
-                  dateController: controllers['inicioDaAtividade'],
+                  dateController: widget.controllers['inicioDaAtividade'],
                 ))
           ],
         ),
@@ -669,7 +522,8 @@ class Identificacao extends StatelessWidget {
                     width: sizeScreen.width * 0.6,
                     //height: sizeScreen.height * 0.07,
                     child: CustomTextField(
-                      controller: controllers['qtdeFuncionariosPermanentes'],
+                      controller:
+                          widget.controllers['qtdeFuncionariosPermanentes'],
                       name: 'n°',
                       keyboardType: TextInputType.numberWithOptions(),
                       formatter: [FilteringTextInputFormatter.digitsOnly],
@@ -691,7 +545,8 @@ class Identificacao extends StatelessWidget {
                     width: sizeScreen.width * 0.6,
                     //height: sizeScreen.height * 0.07,
                     child: CustomTextField(
-                      controller: controllers['qtdeFuncionariosTemporarios'],
+                      controller:
+                          widget.controllers['qtdeFuncionariosTemporarios'],
                       name: 'n°',
                       keyboardType: TextInputType.numberWithOptions(),
                       formatter: [FilteringTextInputFormatter.digitsOnly],
@@ -708,7 +563,8 @@ class Identificacao extends StatelessWidget {
                     width: sizeScreen.width * 0.6,
                     //height: sizeScreen.height * 0.07,
                     child: CustomTextField(
-                      controller: controllers['qtdeFuncionarisComDeficiencia'],
+                      controller:
+                          widget.controllers['qtdeFuncionarisComDeficiencia'],
                       name: '%',
                       keyboardType: TextInputType.numberWithOptions(),
                       formatter: [FilteringTextInputFormatter.digitsOnly],
@@ -723,7 +579,8 @@ class Identificacao extends StatelessWidget {
 
         RadioFormField(
           title: 'Localização',
-          initialValue: isUpdate == true ? hospedagemModel!.localizacao : "",
+          initialValue:
+              isUpdate == true ? widget.hospedagemModel!.localizacao : "",
           options: ['urbana', 'rural'],
           onSaved: (newValue) {
             valoresjson['localizacao'] = newValue;
@@ -749,7 +606,7 @@ class Identificacao extends StatelessWidget {
                   width: sizeScreen.width * 0.6,
                   //height: sizeScreen.height * 0.07,
                   child: CustomTextField(
-                    controller: controllers['latitude'],
+                    controller: widget.controllers['latitude'],
                     name: 'valor',
                     keyboardType: TextInputType.numberWithOptions(),
                     formatter: [
@@ -770,7 +627,7 @@ class Identificacao extends StatelessWidget {
                   width: sizeScreen.width * 0.6,
                   //height: sizeScreen.height * 0.07,
                   child: CustomTextField(
-                    controller: controllers['longitute'],
+                    controller: widget.controllers['longitute'],
                     name: 'valor',
                     formatter: [
                       FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))
@@ -786,19 +643,19 @@ class Identificacao extends StatelessWidget {
         textLabel(name: 'Endereço:', fontWeight: FontWeight.bold),
 
         CustomTextField(
-          controller: controllers['avenidaRuaEtc'],
+          controller: widget.controllers['avenidaRuaEtc'],
           name: 'avenida/rua/travessa/caminho/outro',
         ),
         CustomTextField(
-          controller: controllers['bairroLocalidade'],
+          controller: widget.controllers['bairroLocalidade'],
           name: 'bairro/localidade',
         ),
         CustomTextField(
-          controller: controllers['distrito'],
+          controller: widget.controllers['distrito'],
           name: 'distrito',
         ),
         CustomTextField(
-          controller: controllers['CEP'],
+          controller: widget.controllers['CEP'],
           formatter: [
             FilteringTextInputFormatter.digitsOnly,
             _validators.cepFormatter
@@ -820,7 +677,7 @@ class Identificacao extends StatelessWidget {
                   width: sizeScreen.width * 0.6,
                   //height: sizeScreen.height * 0.07,
                   child: CustomTextField(
-                    controller: controllers['whatsapp'],
+                    controller: widget.controllers['whatsapp'],
                     formatter: [
                       FilteringTextInputFormatter.digitsOnly,
                       _validators.phoneFormatter
@@ -839,7 +696,7 @@ class Identificacao extends StatelessWidget {
                   width: sizeScreen.width * 0.6,
                   //height: sizeScreen.height * 0.07,
                   child: CustomTextField(
-                    controller: controllers['instagram'],
+                    controller: widget.controllers['instagram'],
                     name: '@',
                   ))
             ],
@@ -857,7 +714,7 @@ class Identificacao extends StatelessWidget {
                   width: sizeScreen.width * 0.5,
                   //height: sizeScreen.height * 0.07,
                   child: CustomTextField(
-                    controller: controllers['email'],
+                    controller: widget.controllers['email'],
                     keyboardType: TextInputType.emailAddress,
                     name: 'e-mail',
                   ))
@@ -879,7 +736,7 @@ class Identificacao extends StatelessWidget {
                   width: sizeScreen.width * 0.5,
                   //height: sizeScreen.height * 0.07,
                   child: CustomTextField(
-                    controller: controllers['site'],
+                    controller: widget.controllers['site'],
                     keyboardType: TextInputType.url,
                     name: 'www.endereço.com',
                   ))
@@ -898,11 +755,13 @@ class Identificacao extends StatelessWidget {
             jsonKey: 'sinalizacaoDeAcesso',
             valoresJson: valoresjson,
             isUpdate: isUpdate,
+            optionModelValue: isUpdate ? widget.hospedagemModel!.sinalizacaoDeAcesso : '',
             children: []),
         ConditionalFieldsGroup(
             title: 'turística',
             jsonKey: 'sinalizacaoTuristica',
             valoresJson: valoresjson,
+            optionModelValue: isUpdate ? widget.hospedagemModel!.sinalizacaoTuristica : '',
             isUpdate: isUpdate,
             children: []),
 
@@ -910,7 +769,8 @@ class Identificacao extends StatelessWidget {
         CheckboxGroupFormField(
           title: 'Proximidades',
           onSaved: (p0) => valoresjson['proximidades'] = p0,
-          initialValue: isUpdate == true ? hospedagemModel!.proximidades : [],
+          initialValue:
+              isUpdate == true ? widget.hospedagemModel!.proximidades : [],
           options: [
             'Restaurante',
             'Centro de Convenções exposições',
@@ -921,71 +781,13 @@ class Identificacao extends StatelessWidget {
             'outro'
           ],
         ),
-        textLabel(
-          name: 'Distâncias (km)',
-          fontWeight: FontWeight.bold,
-        ),
-        CustomTextField(
-          name: 'Aeroporto',
-          controller: controllers['aeroporto'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Estação Rodoviária',
-          controller: controllers['estacaoRodoviaria'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Estação Ferroviária',
-          controller: controllers['estacaoFerroviaria'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Estação Marítima/Fluvial',
-          controller: controllers['estacaoMaritima'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Estação Metroviária',
-          controller: controllers['estacaoMetroviaria'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Ponto de Ônibus',
-          controller: controllers['pontoDeOnibus'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Ponto de Táxi',
-          controller: controllers['pontoDeTaxi'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Outras - nome',
-          controller: controllers['distanciasOutrosNome'],
-        ),
-        CustomTextField(
-          name: 'Outras',
-          controller: controllers['distanciaOutros'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        SizedBox(
-          height: 50.w,
-        ),
+        
         textLabel(name: 'Pontos de Referência', fontWeight: FontWeight.bold),
         SizedBox(
           height: 20.w,
         ),
         CustomTextField(
-          controller: controllers['pontosDeReferencia'],
+          controller: widget.controllers['pontosDeReferencia'],
           name: 'Ponto de Referência',
         ),
         SizedBox(
@@ -996,8 +798,8 @@ class Identificacao extends StatelessWidget {
           fontWeight: FontWeight.bold,
         ),
         TableMtur(
-          getValues: isUpdate ? hospedagemModel!.tabelaMTUR : {},
-          onChanged: (p0) => valoresjson['tabelaMtur'] = p0,
+          getValues: isUpdate ? widget.hospedagemModel!.tabelaMTUR : {},
+          onChanged: (p0) => valoresjson['tabelaMTUR'] = p0,
         ),
 
         CheckboxGroupFormField(
@@ -1020,8 +822,9 @@ class Identificacao extends StatelessWidget {
               'Segmentos ou tipos de turismo em que é especializado (assinalar até 3)',
           onSaved: (newValue) =>
               valoresjson['segmentosOuTurismoEspecializado'] = newValue,
-          initialValue:
-              isUpdate ? hospedagemModel!.segmentosOuTurismoEspecializado : [],
+          initialValue: isUpdate
+              ? widget.hospedagemModel!.segmentosOuTurismoEspecializado
+              : [],
         )
       ]),
     );
@@ -1038,7 +841,8 @@ class Funcionamento extends StatefulWidget {
   State<Funcionamento> createState() => _FuncionamentoState();
 }
 
-class _FuncionamentoState extends State<Funcionamento> {
+class _FuncionamentoState extends State<Funcionamento>
+    with AutomaticKeepAliveClientMixin {
   final PesquisaController _pesquisaController = PesquisaController();
   @override
   void initState() {
@@ -1049,7 +853,11 @@ class _FuncionamentoState extends State<Funcionamento> {
   }
 
   @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final sizeScreen = MediaQuery.sizeOf(context);
 
     return SingleChildScrollView(
@@ -1310,7 +1118,7 @@ class _FuncionamentoState extends State<Funcionamento> {
         height: sizeScreen.height * 0.02,
       ),
       MultiAutocompleteFormField(
-        initialValue: isUpdate ? widget.hospedagemModel!.origemNacional : [],
+        initialValue: isUpdate ? widget.hospedagemModel!.estadosTuristas : [],
         title: 'Origem dos Turistas Nacionais (até 5 estados)',
         label: 'Selecione um Estado',
         fieldCount: 5,
@@ -1325,7 +1133,7 @@ class _FuncionamentoState extends State<Funcionamento> {
                   ));
         },
         onSaved: (newValue) {
-          valoresjson['origemNacional'] = newValue;
+          valoresjson['estadosTuristas'] = newValue;
         },
         validator: (values) {
           // Exemplo de validação: exigir pelo menos um estado
@@ -1340,7 +1148,7 @@ class _FuncionamentoState extends State<Funcionamento> {
       ),
       MultiAutocompleteFormField(
         initialValue:
-            isUpdate ? widget.hospedagemModel!.origemInternacional : [],
+            isUpdate ? widget.hospedagemModel!.paisesTuristas : [],
         title: 'Origem dos Turistas Internacionais (até 5 países)',
         label: 'Selecione um País',
         optionsBuilder: (textEditingValue) {
@@ -1354,7 +1162,7 @@ class _FuncionamentoState extends State<Funcionamento> {
                   ));
         },
         onSaved: (newValue) {
-          valoresjson['origemInternacional'] = newValue;
+          valoresjson['paisesTuristas'] = newValue;
         },
         validator: (values) {
           if (values == null || values.isEmpty) {
@@ -1845,7 +1653,7 @@ class _FuncionamentoState extends State<Funcionamento> {
         height: 30.w,
       ),
       textLabel(
-        name: 'Facilidades para Executivos:',
+        name: 'Facilidades para Executivos',
         fontWeight: FontWeight.bold,
       ),
       SizedBox(
@@ -1888,694 +1696,384 @@ class _FuncionamentoState extends State<Funcionamento> {
   }
 }
 
-//           Container(
-//             color: const Color.fromARGB(255, 55, 111, 60),
-//             height: sizeScreen.height * 0.15,
-//             padding: EdgeInsets.only(
-//                 top: sizeScreen.height * 0.008, left: sizeScreen.width * 0.04),
-//             child: Text(
-//               'Proteção, Qualificação, Certificação, Premiação, destaques e outros',
-//               style: TextStyle(
-//                   color: Colors.white, fontSize: sizeScreen.height * 0.03),
-//             ),
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.05,
-//           ),
-//           Row(children: [
-//             textLabel(
-//               name: 'Do equipamento/espaço:',
-//               fontWeight: FontWeight.bold,
-//             ),
-//             SizedBox(
-//               width: sizeScreen.width * 0.04,
-//             ),
-//             SizedBox(
-//                 // width: sizeScreen.width * 0.5,
-//                 //  //height: sizeScreen.height * 0.07,
-//                 child: ExpansionTileYoN(
-//               optionModel: isUpdate == true
-//                   ? widget.hospedagemModel!.doEquipamentoEspaco
-//                   : "não",
-//               getValue: (newValue) {
-//                 valoresjson['doEquipamentoEspaco'] = newValue;
-//               },
-//             ))
-//           ]),
-//           SizedBox(
-//             height: sizeScreen.height * 0.02,
-//           ),
-//           TabelsEquipamentoEEspaco(
-//             getValue: isUpdate == true
-//                 ? widget.hospedagemModel!.tabelaEquipamentoEEspaco
-//                 : {},
-//             onChanged: (p0) {
-//               setState(() {
-//                 valoresjson['tabelaEquipamentoEEspaco'] = p0;
-//               });
-//             },
-//           ),
-//           SizedBox(
-//             height: 100.w,
-//           ),
-//           Row(children: [
-//             textLabel(
-//               name:
-//                   'Da área ou edificação \nem que está\nlocalizado / Instalado',
-//               fontWeight: FontWeight.bold,
-//             ),
-//             SizedBox(
-//               width: sizeScreen.width * 0.04,
-//             ),
-//             SizedBox(
-//                 // width: sizeScreen.width * 0.5,
-//                 //  //height: sizeScreen.height * 0.07,
-//                 child: ExpansionTileYoN(
-//               optionModel: isUpdate == true
-//                   ? widget
-//                       .hospedagemModel!.daAreaOuEdificacaoEmQueEstaLocalizado
-//                   : "não",
-//               getValue: (newValue) {
-//                 valoresjson['daAreaOuEdificacaoEmQueEstaLocalizado'] = newValue;
-//               },
-//             ))
-//           ]),
-//           SizedBox(
-//             height: 100.w,
-//           ),
-//           TabelsEquipamentoEEspaco(
-//             getValue: isUpdate == true
-//                 ? widget.hospedagemModel!.tabelaEquipamentoEEspaco2
-//                 : {},
-//             onChanged: (p0) {
-//               setState(() {
-//                 valoresjson['tabelaEquipamentoEEspaco2'] = p0;
-//               });
-//             },
-//           ),
+class Acessibilidade extends StatefulWidget {
+  final Map<String, TextEditingController> controllers;
+  final MeiosDeHospedagemModel? hospedagemModel;
+  const Acessibilidade(
+      {super.key, required this.controllers, this.hospedagemModel});
 
-//           SizedBox(
-//             height: sizeScreen.height * 0.05,
-//           ),
-//           Container(
-//             color: const Color.fromARGB(255, 55, 111, 60),
-//             height: sizeScreen.height * 0.06,
-//             width: sizeScreen.width,
-//             padding: EdgeInsets.only(
-//                 top: sizeScreen.height * 0.008, left: sizeScreen.width * 0.04),
-//             child: Text(
-//               'Estado geral de conservação',
-//               style: TextStyle(
-//                   color: Colors.white, fontSize: sizeScreen.height * 0.03),
-//             ),
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.05,
-//           ),
-//           RadioD(
-//             indexModel: isUpdate == true
-//                 ? widget.hospedagemModel!.estadoGeralDeConservacao
-//                 : "",
-//             options: ['Muito bom', 'Bom', 'Ruim'],
-//             getValue: (newValue) {
-//               valoresjson['estadoGeralDeConservacao'] = newValue;
-//             },
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.05,
-//           ),
-//           Container(
-//             color: const Color.fromARGB(255, 55, 111, 60),
-//             height: sizeScreen.height * 0.06,
-//             width: sizeScreen.width,
-//             padding: EdgeInsets.only(
-//                 top: sizeScreen.height * 0.008, left: sizeScreen.width * 0.04),
-//             child: Text(
-//               'Acessibilidade',
-//               style: TextStyle(
-//                   color: Colors.white, fontSize: sizeScreen.height * 0.03),
-//             ),
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.02,
-//           ),
-//           textLabel(
-//             name:
-//                 'Possui alguma facilidade para pessoas  com deficiência ou mobilidade reduzida?',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.04,
-//           ),
-//           ExpansionTileYoN(
-//             optionModel: isUpdate == true
-//                 ? widget.hospedagemModel!.possuiFacilidade
-//                 : "não",
-//             getValue: (newValue) {
-//               valoresjson['possuiFacilidade'] = newValue;
-//             },
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.02,
-//           ),
-//           textLabel(
-//             name: 'obs: caso sim, responder às questões seguintes',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.02,
-//           ),
-//           textLabel(
-//             name: 'Pessoal capacitado para receber PCD:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.02,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true
-//                 ? widget.hospedagemModel!.pessoalCapacitadoParaReceberPCD
-//                 : [],
-//             onChanged: (p0) =>
-//                 valoresjson['pessoalCapacitadoParaReceberPCD'] = p0,
-//             nomes: [
-//               'Não',
-//               'Física',
-//               'Auditiva',
-//               'Visual',
-//               'Mental',
-//               'Múltipla'
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Rota externa acessível:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.02,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true
-//                 ? widget.hospedagemModel!.rotaExternaAcessivel
-//                 : [],
-//             onChanged: (p0) => valoresjson['rotaExternaAcessivel'] = p0,
-//             nomes: [
-//               'Não',
-//               'Estacionamento',
-//               'Calçada rebaixada',
-//               'Faixa de pedestre',
-//               'Rampa',
-//               'Semáforo sonoro',
-//               'Piso tátil de alerta',
-//               'Piso regular antiderrapante',
-//               'Livre de obstáculos',
-//               'outro'
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Símbolo internacional de acesso:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.02,
-//           ),
+  @override
+  State<Acessibilidade> createState() => _AcessibilidadeState();
+}
 
-//           CheckC(
-//             nomesModel: isUpdate == true
-//                 ? widget.hospedagemModel!.simboloInternacionalDeAcesso
-//                 : [],
-//             onChanged: (p0) => valoresjson['simboloInternacionalDeAcesso'] = p0,
-//             nomes: [
-//               'Não',
-//               'Entrada',
-//               'Área reservada',
-//               'Estacionamento',
-//               'Área de embarque e desembarque',
-//               'Sanitário',
-//               'Saída de emergência',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Local de embarque e desembarque',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.02,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true
-//                 ? widget.hospedagemModel!.localDeEmbarqueEDesembarque
-//                 : [],
-//             onChanged: (p0) => valoresjson['localDeEmbarqueEDesembarque'] = p0,
-//             nomes: ['Não', 'Sinalizado', 'Com acesso em nível'],
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.02,
-//           ),
-//           textLabel(
-//             name: 'Vaga em estacionamento:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(height: 50.w),
-//           CheckC(
-//             nomesModel: isUpdate == true
-//                 ? widget.hospedagemModel!.vagaEmEstacionamento
-//                 : [],
-//             onChanged: (p0) => valoresjson['vagaEmEstacionamento'] = p0,
-//             nomes: [
-//               'Não',
-//               'Sinalizado',
-//               'Com acesso em nível',
-//               'Alargada para cadeira de rodas',
-//               'Rampa de acesso á calçada'
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Área de circulação / acesso interno\npara cadeira de rodas:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true
-//                 ? widget.hospedagemModel!.areaDeCirculacaoAcessoInterno
-//                 : [],
-//             onChanged: (p0) =>
-//                 valoresjson['areaDeCirculacaoAcessoInterno'] = p0,
-//             nomes: [
-//               'Não',
-//               'Rampa',
-//               'Elevador',
-//               'Plataforma elevatória',
-//               'Porta larga',
-//               'Piso regular / antiderrapante'
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Escada:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true ? widget.hospedagemModel!.escada : [],
-//             onChanged: (p0) => valoresjson['escada'] = p0,
-//             nomes: [
-//               'Não',
-//               'Corrimão',
-//               'Patamar para descanso',
-//               'Sinalização tátil de alerta',
-//               'Piso antiderrapante',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Rampa:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true ? widget.hospedagemModel!.rampa : [],
-//             onChanged: (p0) => valoresjson['rampa'] = p0,
-//             nomes: [
-//               'Não',
-//               'Corrimão',
-//               'Patamar para descanso',
-//               'Sinalização tátil de alerta',
-//               'Piso antiderrapante',
-//               'Inclinação adequada',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Piso:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true ? widget.hospedagemModel!.piso : [],
-//             onChanged: (p0) => valoresjson['piso'] = p0,
-//             nomes: [
-//               'Não',
-//               'Tátil',
-//               'Sem obstáculos',
-//               'Antiderrapante/deslizante',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Elevador:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel:
-//                 isUpdate == true ? widget.hospedagemModel!.elevador : [],
-//             onChanged: (p0) => valoresjson['elevador'] = p0,
-//             nomes: [
-//               'Não',
-//               'Sinalizado em braile',
-//               'Dispositivo sonoro',
-//               'Dispositivo luminoso',
-//               'Sensor eletrônico (porta)'
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Equipamento motorizado para deslocamento interno:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true
-//                 ? widget.hospedagemModel!
-//                     .equipamentoMotorizadoParaDeslocamentoInterno
-//                 : [],
-//             onChanged: (p0) =>
-//                 valoresjson['equipamentoMotorizadoParaDeslocamentoInterno'] =
-//                     p0,
-//             nomes: [
-//               'Não',
-//               'Cadeira',
-//               'Carrinho',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Sinalização visual:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true
-//                 ? widget.hospedagemModel!.sinalizacaoVisual
-//                 : [],
-//             onChanged: (p0) => valoresjson['sinalizacaoVisual'] = p0,
-//             nomes: [
-//               'Não',
-//               'Entrada',
-//               'Recepção',
-//               'Porta',
-//               'Sanitário',
-//               'Elevador',
-//               'Restaurante',
-//               'Área de lazer',
-//               'Área de resgate',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Sinalização tátil:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true
-//                 ? widget.hospedagemModel!.sinalizacaoTatil
-//                 : [],
-//             onChanged: (p0) => valoresjson['sinalizacaoTatil'] = p0,
-//             nomes: [
-//               'Não',
-//               'Entrada',
-//               'Recepção',
-//               'Porta',
-//               'Sanitário',
-//               'Elevador',
-//               'Restaurante',
-//               'Área de lazer',
-//               'Área de resgate',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Alarme de emergência:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true
-//                 ? widget.hospedagemModel!.alarmeDeEmergencia
-//                 : [],
-//             onChanged: (p0) => valoresjson['alarmeDeEmergencia'] = p0,
-//             nomes: [
-//               'Não',
-//               'Sonoro',
-//               'Visual',
-//               'Vibratório',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Comunicação:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel:
-//                 isUpdate == true ? widget.hospedagemModel!.comunicacao : [],
-//             onChanged: (p0) => valoresjson['comunicacao'] = p0,
-//             nomes: [
-//               'Não',
-//               'Texto informativo em braile',
-//               'Texto informativo em fonte ampliada',
-//               'Intérprete em libras',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Balcão de atendimento:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel: isUpdate == true
-//                 ? widget.hospedagemModel!.balcaoDeAtendimento
-//                 : [],
-//             onChanged: (p0) => valoresjson['balcaoDeAtendimento'] = p0,
-//             nomes: [
-//               'Não',
-//               'Rebaixado',
-//               'Preferencial para PCD ou com deficiência ou mobilidade reduzida',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Mobiliário:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             onChanged: (p0) => valoresjson['mobiliario'] = p0,
-//             nomesModel:
-//                 isUpdate == true ? widget.hospedagemModel!.mobiliario : [],
-//             nomes: [
-//               'Não',
-//               'Altura adequada',
-//               'Recuo adequado',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Sanitário:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             onChanged: (p0) => valoresjson['sanitario'] = p0,
-//             nomesModel:
-//                 isUpdate == true ? widget.hospedagemModel!.sanitario : [],
-//             nomes: [
-//               'Não',
-//               'Porta larga suficiente para entrada de cadeira de rodas ',
-//               'Acesso para cadeira de rodas',
-//               'Espelho rebaixado ou com ângulo de alcance visual',
-//               'Torneira monocomando / alavanca',
-//               'Barra de apoio',
-//               'Giro para cadeira de rodas',
-//               'Pia rebaixada',
-//               'Boxe ou banheira daptada',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name: 'Telefone:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           CheckC(
-//             nomesModel:
-//                 isUpdate == true ? widget.hospedagemModel!.telefone : [],
-//             onChanged: (p0) => valoresjson['telefone'] = p0,
-//             nomes: [
-//               'Não',
-//               'Altura adequada',
-//               'Para surdos (TPS ou TTS)',
-//             ],
-//           ),
-//           SizedBox(
-//             height: 50.w,
-//           ),
-//           textLabel(
-//             name:
-//                 'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida:',
-//             fontWeight: FontWeight.bold,
-//           ),
-//           const SizedBox(
-//             height: 50,
-//           ),
+class _AcessibilidadeState extends State<Acessibilidade>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final sizeScreen = MediaQuery.sizeOf(context);
 
-//           ExpansionTileYoN(
-//             optionModel: isUpdate == true
-//                 ? widget.hospedagemModel!.sinalizacaoIndicativa
-//                 : "não",
-//             getValue: (newValue) {
-//               valoresjson['sinalizacaoIndicativa'] = newValue;
-//             },
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.02,
-//           ),
-//           Row(
-//             children: [
-//               textLabel(
-//                 name: 'Outros',
-//                 fontWeight: FontWeight.bold,
-//               ),
-//               SizedBox(
-//                 width: sizeScreen.width * 0.1,
-//               ),
-//               SizedBox(
-//                   width: sizeScreen.width * 0.6,
-//                   //eight: sizeScreen.height * 0.07,
-//                   child: CustomTextField(
-//                     controller: getController('outros'),
-//                     name: '',
-//                     getValue: (newValue) {
-//                       valoresjson['outros'] = newValue;
-//                     },
-//                   ))
-//             ],
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.05,
-//           ),
-//           Container(
-//             color: const Color.fromARGB(255, 55, 111, 60),
-//             height: sizeScreen.height * 0.06,
-//             width: sizeScreen.width,
-//             padding: EdgeInsets.only(
-//                 top: sizeScreen.height * 0.008, left: sizeScreen.width * 0.04),
-//             child: Text(
-//               'Observações',
-//               style: TextStyle(
-//                   color: Colors.white, fontSize: sizeScreen.height * 0.03),
-//             ),
-//           ),
-//           CustomTextField(
-//             controller: getController('observacoes'),
-//             name: '',
-//             getValue: (newValue) {
-//               valoresjson['observacoes'] = newValue;
-//             },
-//           ),
-//           SizedBox(
-//             height: sizeScreen.height * 0.05,
-//           ),
-
-//           Container(
-//             color: const Color.fromARGB(255, 55, 111, 60),
-//             height: sizeScreen.height * 0.06,
-//             width: sizeScreen.width,
-//             padding: EdgeInsets.only(
-//                 top: sizeScreen.height * 0.008, left: sizeScreen.width * 0.04),
-//             child: Text(
-//               'Referências',
-//               style: TextStyle(
-//                   color: Colors.white, fontSize: sizeScreen.height * 0.03),
-//             ),
-//           ),
-//           CustomTextField(
-//             controller: getController('referencias'),
-//             name: '',
-//             getValue: (newValue) {
-//               valoresjson['referencias'] = newValue;
-//             },
-//           ),
-
-//           SizedBox(
-//             height: sizeScreen.height * 0.05,
-//           ),
-
-//           SizedBox(
-//             height: sizeScreen.height * 0.05,
-//           )
-//         ],
-//       ),
-//     );
-//   }
-// }
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ContainerHeaderToBigTexts(
+              title:
+                  'Proteção, Qualificação, Certificação, Premiação, Destaques e Outros'),
+          SizedBox(
+            height: sizeScreen.height * 0.05,
+          ),
+          ConditionalFieldsGroup(
+            optionModelValue: isUpdate == true
+                ? widget.hospedagemModel!.doEquipamentoEspaco
+                : "não",
+            title: 'Do Equipamento/Espaço',
+            jsonKey: 'doEquipamentoEspaco',
+            valoresJson: valoresjson,
+            isUpdate: isUpdate,
+            children: [
+              TabelsEquipamentoEEspaco(
+                getValue: isUpdate == true
+                    ? widget.hospedagemModel!.tabelaEquipamentoEEspaco
+                    : {},
+                onChanged: (p0) {
+                  valoresjson['tabelaEquipamentoEEspaco'] = p0;
+                },
+              ),
+            ],
+          ),
+          ConditionalFieldsGroup(
+            optionModelValue: isUpdate == true
+                ? widget.hospedagemModel!.daAreaOuEdificacaoEmQueEstaLocalizado
+                : "não",
+            isUpdate: isUpdate,
+            jsonKey: 'daAreaOuEdificacaoEmQueEstaLocalizado',
+            title: 'Da Área ou Edificação em que Está Localizado/Instalado',
+            valoresJson: valoresjson,
+            children: [
+              TabelsEquipamentoEEspaco(
+                getValue: isUpdate == true
+                    ? widget.hospedagemModel!.tabelaEquipamentoEEspaco2
+                    : {},
+                onChanged: (p0) {
+                  valoresjson['tabelaEquipamentoEEspaco2'] = p0;
+                },
+              ),
+            ],
+          ),
+          SizedBox(
+            height: sizeScreen.height * 0.05,
+          ),
+          ContainerHeader(title: 'Estado Geral de Conservação'),
+          SizedBox(
+            height: 55.h,
+          ),
+          RadioFormField(
+            initialValue: isUpdate == true
+                ? widget.hospedagemModel!.estadoGeralDeConservacao
+                : "",
+            options: ['Muito bom', 'Bom', 'Ruim'],
+            onSaved: (newValue) {
+              valoresjson['estadoGeralDeConservacao'] = newValue;
+            },
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+          ContainerHeader(title: 'Acessibilidade'),
+          ConditionalFieldsGroup(
+              optionModelValue:
+                  isUpdate ? widget.hospedagemModel!.possuiFacilidade : '',
+              title:
+                  'Possui Alguma Facilidade\npara Pessoas com\nDeficiência\nou Mobilidade Reduzida?',
+              jsonKey: 'possuiFacilidade',
+              valoresJson: valoresjson,
+              isUpdate: isUpdate,
+              children: [
+                CheckboxGroupFormField(
+                  options: [
+                    'Não',
+                    'Física',
+                    'Auditiva',
+                    'Visual',
+                    'Mental',
+                    'Múltipla'
+                  ],
+                  initialValue: isUpdate
+                      ? widget.hospedagemModel!.pessoalCapacitadoParaReceberPCD
+                      : [],
+                  title:
+                      'Pessoal Capacitado Para Receber Pessoas com Deficiência',
+                  onSaved: (newValue) =>
+                      valoresjson['pessoalCapacitadoParaReceberPCD'] = newValue,
+                ),
+                CheckboxGroupFormField(
+                    title: 'Rota Externa Acessível',
+                    onSaved: (newValue) =>
+                        valoresjson['rotaExternaAcessivel'] = newValue,
+                    initialValue: isUpdate
+                        ? widget.hospedagemModel!.rotaExternaAcessivel
+                        : [],
+                    options: [
+                      'Não',
+                      'Estacionamento',
+                      'Calçada Rebaixada',
+                      'Faixa de Pedestre',
+                      'Rampa',
+                      'Semáforo Sonoro',
+                      'Piso Tátil de Alerta',
+                      'Piso Regular e Antiderrapante',
+                      'Livre de Obstáculos',
+                      'outro'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate
+                        ? widget.hospedagemModel!.simboloInternacionalDeAcesso
+                        : [],
+                    title: 'Símbolo Internacional de Acesso',
+                    onSaved: (newValue) =>
+                        valoresjson['simboloInternacionalDeAcesso'] = newValue,
+                    options: [
+                      'Não',
+                      'Entrada',
+                      'Área Reservada',
+                      'Estacionamento',
+                      'Área de Embarque e Desembarque',
+                      'Sanitário',
+                      'Saída de Emergência'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate
+                        ? widget.hospedagemModel!.localDeEmbarqueEDesembarque
+                        : [],
+                    title: 'Local de Embarque e Desembarque',
+                    onSaved: (newValue) =>
+                        valoresjson['localDeEmbarqueEDesembarque'] = newValue,
+                    options: ['Não', 'Sinalizado', 'Com Acesso em Nível']),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate
+                        ? widget.hospedagemModel!.vagaEmEstacionamento
+                        : [],
+                    title: 'Vaga em Estacionamento',
+                    onSaved: (newValue) =>
+                        valoresjson['vagaEmEstacionamento'] = newValue,
+                    options: [
+                      'Não',
+                      'Sinalizada',
+                      'Com Acesso em Nível',
+                      'Alargada para Cadeira de Rodas',
+                      'Rampa de Acesso à Calçada'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate
+                        ? widget.hospedagemModel!.areaDeCirculacaoAcessoInterno
+                        : [],
+                    title:
+                        'Área de Circulação/Acesso Interno para Cadeira de Rodas',
+                    onSaved: (newValue) =>
+                        valoresjson['areaDeCirculacaoAcessoInterno'] = newValue,
+                    options: [
+                      'Não',
+                      'Rampa',
+                      'Elevador',
+                      'Plataforma Elevatória',
+                      'Com Circulação Entre Mobiliário',
+                      'Porta Larga',
+                      'Piso Regular/Antiderrapante'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue:
+                        isUpdate ? widget.hospedagemModel!.escada : [],
+                    title: 'Escada',
+                    onSaved: (newValue) => valoresjson['escada'] = newValue,
+                    options: [
+                      'Não',
+                      'Corrimão',
+                      'Patamar para Descanso',
+                      'Sinalização Tátil de Alerta',
+                      'Piso Antiderrapante'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? widget.hospedagemModel!.rampa : [],
+                    title: 'Rampa',
+                    onSaved: (newValue) => valoresjson['rampa'] = newValue,
+                    options: [
+                      'Não',
+                      'Corrimão',
+                      'Patamar para Descanso',
+                      'Piso Antiderrapante',
+                      'Sinalização Tátil',
+                      'Inclinação Adequada'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? widget.hospedagemModel!.piso : [],
+                    title: "Piso",
+                    onSaved: (newValue) => valoresjson['piso'] = newValue,
+                    options: [
+                      'Não',
+                      'Tátil',
+                      'Sem Obstáculos (tapete ou desnível)',
+                      'Antiderrapante/Deslizante'
+                    ]),
+                CheckboxGroupFormField(
+                    title: "Elevador",
+                    initialValue:
+                        isUpdate ? widget.hospedagemModel!.elevador : [],
+                    onSaved: (newValue) => valoresjson['elevador'] = newValue,
+                    options: [
+                      'Não',
+                      'Sinalizado em Braille',
+                      'Dispositivo Sonoro',
+                      'Dispositivo Luminoso',
+                      'Sensor Eletrônico (porta)'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate
+                        ? widget.hospedagemModel!
+                            .equipamentoMotorizadoParaDeslocamentoInterno
+                        : [],
+                    title: 'Equipamento Motorizado para Deslocamento Interno',
+                    onSaved: (newValue) => valoresjson[
+                            'equipamentoMotorizadoParaDeslocamentoInterno'] =
+                        newValue,
+                    options: ['Não', 'Cadeira', 'Carrinho']),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate
+                        ? widget.hospedagemModel!.sinalizacaoVisual
+                        : [],
+                    title: 'Sinalização Visual',
+                    onSaved: (newValue) =>
+                        valoresjson['sinalizacaoVisual'] = newValue,
+                    options: [
+                      'Não',
+                      'Entrada',
+                      'Recepção',
+                      'Porta',
+                      'Sanitário',
+                      'Elevador',
+                      'Restaurante',
+                      'Área de Lazer',
+                      'Área de Resgate'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate
+                        ? widget.hospedagemModel!.sinalizacaoTatil
+                        : [],
+                    title: "Sinalização Tátil",
+                    onSaved: (newValue) =>
+                        valoresjson['sinalizacaoTatil'] = newValue,
+                    options: [
+                      'Não',
+                      'Entrada',
+                      'Recepção',
+                      'Porta',
+                      'Sanitário',
+                      'Elevador',
+                      'Restaurante',
+                      'Área de Lazer',
+                      'Área de Resgate'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate
+                        ? widget.hospedagemModel!.alarmeDeEmergencia
+                        : [],
+                    title: "Alarme de Emergência",
+                    onSaved: (newValue) =>
+                        valoresjson['alarmeDeEmergencia'] = newValue,
+                    options: ['Não', 'Sonoro', 'Visual', 'Vibratório']),
+                CheckboxGroupFormField(
+                    initialValue:
+                        isUpdate ? widget.hospedagemModel!.comunicacao : [],
+                    title: "Comunicação",
+                    onSaved: (newValue) =>
+                        valoresjson['comunicacao'] = newValue,
+                    options: [
+                      'Não',
+                      'Texto Informativo em Braille',
+                      'Texto Informativo em Fonte Ampliada',
+                      'Intérprete em Libras (língua brasileira de sinais)'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate
+                        ? widget.hospedagemModel!.balcaoDeAtendimento
+                        : [],
+                    title: "Balcão de Atendimento",
+                    onSaved: (newValue) =>
+                        valoresjson['balcaoDeAtendimento'] = newValue,
+                    options: [
+                      'Não',
+                      'Rebaixamento',
+                      'Preferencial para Pessoas com Deficiência ou Mobilidade Reduzida'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue:
+                        isUpdate ? widget.hospedagemModel!.mobiliario : [],
+                    title: "Mobiliário",
+                    onSaved: (newValue) => valoresjson['mobiliario'] = newValue,
+                    options: ['Não', 'Altura Adequada', 'Recuo Adequado']),
+                CheckboxGroupFormField(
+                    initialValue:
+                        isUpdate ? widget.hospedagemModel!.sanitario : [],
+                    title: "Sanitário",
+                    onSaved: (newValue) => valoresjson['sanitario'] = newValue,
+                    options: [
+                      'Não',
+                      'Barra de Apoio',
+                      'Porta Larga Suficiente Para Entrada de Cadeira de Rodas',
+                      'Giro para Cadeira de Rodas',
+                      'Acesso para Cadeira de Rodas',
+                      'Pia Rebaixada',
+                      'Espelho Rebaixado ou com Ângulo de Alcance Visual',
+                      'Boxe ou Banheira Adaptada',
+                      'Torneira Monocomando/Alavanca'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue:
+                        isUpdate ? widget.hospedagemModel!.telefone : [],
+                    title: "Telefone",
+                    onSaved: (newValue) => valoresjson['telefone'] = newValue,
+                    options: [
+                      'Não',
+                      'Altura Adequada',
+                      'Para Surdos (TPS ou TTS)'
+                    ]),
+                ConditionalFieldsGroup(
+                    optionModelValue: isUpdate
+                        ? widget.hospedagemModel!.sinalizacaoIndicativa
+                        : '',
+                    title:
+                        'Sinalização Indicativa\nde Atendimento\nPreferencial para Pessoas\ncom Deficiência ou\nMobilidade Reduzida',
+                    jsonKey: 'sinalizacaoIndicativa',
+                    valoresJson: valoresjson,
+                    isUpdate: isUpdate,
+                    children: []),
+                CustomTextField(
+                  name: 'Outras',
+                  controller: widget.controllers['outrasAcessibilidade'],
+                ),
+                SizedBox(
+                  height: 55.h,
+                ),
+              ]),
+          SizedBox(
+            height: 55.h,
+          ),
+          ContainerHeader(title: 'Observações e Referências'),
+          SizedBox(
+            height: 55.h,
+          ),
+          CustomTextField(
+            name: 'Observações',
+            controller: widget.controllers['observacoes'],
+          ),
+          CustomTextField(
+            name: 'Referências',
+            controller: widget.controllers['referencias'],
+          )
+        ],
+      ),
+    );
+  }
+}

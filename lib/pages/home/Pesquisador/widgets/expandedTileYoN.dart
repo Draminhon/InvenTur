@@ -18,9 +18,10 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
     // TODO: implement initState
     super.initState();
     _tileController = ExpansibleController();
-    widget.getValue(_option);
-    if(widget.optionModel!=null)
+    if(widget.optionModel!=null){
     _option = widget.optionModel!;
+
+    }
   }
 
   @override

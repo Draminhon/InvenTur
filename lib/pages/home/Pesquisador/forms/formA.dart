@@ -49,7 +49,7 @@ class FormularioA extends StatelessWidget {
             const ContainerA(
               form: 'Informações básicas do município', routeName: '/InfoBasicas',
             ),
-            // const ContainerA(form: 'Locadoras de imóveis para temporadas'),
+            const ContainerA(form: 'Locadoras de imóveis para temporadas',routeName: '/LocadoraDeImoveis',),
             // const ContainerA(form: 'Compras especiais'),
             const ContainerA(form: 'Comércio turístico', routeName: '/ComercioTuristico',),
             

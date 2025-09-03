@@ -47,34 +47,34 @@ class FormularioC extends StatelessWidget {
           ),
           Expanded(
               child: ListView(children: [
-            const ContainerA(
-              form: 'Zona Costeira', routeName: '/ZonaCosteira',
-            ),
-            const ContainerA(form: 'Hidrografia', routeName: '/Hidrografia',),
+            // const ContainerA(
+            //   form: 'Zona Costeira', routeName: '/ZonaCosteira',
+            // ),
+            //const ContainerA(form: 'Hidrografia', routeName: '/Hidrografia',),
             const ContainerA(form: 'Unidades de conservação',routeName: '/Placeholder'),
-            const ContainerA(form: 'Conjuntos arquitetônicos',routeName: '/Placeholder'),
-            const ContainerA(form: 'Sítios etc',routeName: '/Placeholder'),
-            const ContainerA(form: 'Lugares de manifestação da fé',routeName: '/Placeholder'),
+           // const ContainerA(form: 'Conjuntos arquitetônicos',routeName: '/Placeholder'),
+            //const ContainerA(form: 'Sítios etc',routeName: '/Placeholder'),
+           // const ContainerA(form: 'Lugares de manifestação da fé',routeName: '/Placeholder'),
            // ContainerA(form: 'Obras de interesse artístico'),
          //   ContainerA(form: 'Ruínas, teatros, centros culturais e cineclubes'),
             const ContainerA(form: 'Gastronomia, artesanato e trabalhos manuais',routeName: '/Placeholder'),
-            const ContainerA(form: 'Formas de expressão',routeName: '/Placeholder'),
-            const ContainerA(form: 'Personalidades',routeName: '/Placeholder'),
+           // const ContainerA(form: 'Formas de expressão',routeName: '/Placeholder'),
+            //const ContainerA(form: 'Personalidades',routeName: '/Placeholder'),
         //    ContainerA(form: 'Atividades econômicas'),
-            const ContainerA(form: 'Atrações técnicas e ciêntificas',routeName: '/Placeholder'),
-            const ContainerA(form: 'Eventos programados',routeName: '/Placeholder'),
-            ExpansionTileA(titulo: 'Relevos', minhaLista: const [
-              Tilee(texto: 'Relevo continental', routeName: '/Placeholder'),
-              Tilee(texto: 'Relevo cárstico', routeName: '/Placeholder'),
-              SizedBox(),
-              SizedBox()
-            ]),
-            ExpansionTileA(titulo: 'Arquiteturas', minhaLista: const [
-              Tilee(texto: 'Arquitetura oficial, militar e religiosa', routeName: '/Placeholder'),
-              Tilee(texto: 'Arquitetura industrial, agrícola e funerária', routeName: '/Placeholder'),
-               Tilee(texto: 'Arquitetura civil', routeName: '/Placeholder'),
-              SizedBox()
-            ]),
+            //const ContainerA(form: 'Atrações técnicas e ciêntificas',routeName: '/Placeholder'),
+             const ContainerA(form: 'Eventos programados',routeName: '/Placeholder'),
+            // ExpansionTileA(titulo: 'Relevos', minhaLista: const [
+            //   Tilee(texto: 'Relevo continental', routeName: '/Placeholder'),
+            //   Tilee(texto: 'Relevo cárstico', routeName: '/Placeholder'),
+            //   SizedBox(),
+            //   SizedBox()
+            // ]),
+            // ExpansionTileA(titulo: 'Arquiteturas', minhaLista: const [
+            //   Tilee(texto: 'Arquitetura oficial, militar e religiosa', routeName: '/Placeholder'),
+              // Tilee(texto: 'Arquitetura industrial, agrícola e funerária', routeName: '/Placeholder'),
+            //    Tilee(texto: 'Arquitetura civil', routeName: '/Placeholder'),
+            //   SizedBox()
+            // ]),
             
             
 
