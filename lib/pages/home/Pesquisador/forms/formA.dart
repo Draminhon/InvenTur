@@ -62,7 +62,8 @@ class FormularioA extends StatelessWidget {
             // ]),
             ExpansionTileA(titulo: 'Rodoviário', minhaLista: const [
               Tilee(texto: 'Rodovia', routeName: '/Rodovia'),
-              Tilee(texto: 'Estação rodoviária', routeName: '/Placeholder'),
+              //Tilee(texto: 'Estação rodoviária', routeName: '/Placeholder'),
+              SizedBox(),
               SizedBox(),
               SizedBox()
             ]),
@@ -91,9 +92,10 @@ class FormularioA extends StatelessWidget {
                 Tilee(
                   texto: 'Sistemas de segurança', routeName: '/SistemaDeSeguranca'
                 ),
-                Tilee(
-                  texto: 'Sistemas de saúde', routeName: '/Placeholder'
-                ),
+                // Tilee(
+                //   texto: 'Sistemas de saúde', routeName: '/Placeholder'
+                // ),
+                SizedBox(),
                SizedBox(),
               ],
             ),

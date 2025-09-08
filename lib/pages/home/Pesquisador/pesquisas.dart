@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:inventur/models/forms/alimentos_bebidas_model.dart';
 import 'package:inventur/models/forms/comercio_turistico_model.dart';
 import 'package:inventur/models/forms/informacoes_basicas_model.dart';
+import 'package:inventur/models/forms/locadora_de_imoveis_model.dart';
 import 'package:inventur/models/forms/meios_hospedagem_model.dart';
 import 'package:inventur/models/forms/rodovia_model.dart';
 import 'package:inventur/models/forms/sistema_de_seguranca_model.dart';
@@ -15,6 +16,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/comercio_turistico.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas_do_municipio.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsA/locadora_de_imoveis.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranca_edit.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas_edit.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
@@ -67,8 +69,6 @@ class _A extends State<A> {
       paginaAtual = pagina;
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -372,7 +372,10 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
           final equipamento = filteredPosts[index];
           final dados = equipamento['dados'];
 
+          print(dados);
+
           return GestureDetector(
+            
             onTap: () {
               updateQtdeLocais(dados['pesquisa'], posts.length);
               if (equipamento['tipo'] == 'Rodovia') {
@@ -432,6 +435,17 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                     MaterialPageRoute(
                         builder: (context) => ComercioTuristico(
                               infoModel: ComercioTuristicoModel.fromJson(
+                                  equipamento['dados']),
+                            ),
+                        settings:
+                            RouteSettings(arguments: {'isUpdate': true})));
+              } else if (equipamento['tipo'] ==
+                  'Locadora de Imóveis') {
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => LocadoraDeImoveis(
+                              infoModel: LocadoraDeImoveisModel.fromJson(
                                   equipamento['dados']),
                             ),
                         settings:

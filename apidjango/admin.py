@@ -51,6 +51,7 @@ admin.site.register(SistemaDeSeguranca, SistemaDeSegurancaAdmin)
 admin.site.register(ContatoInfo, ContatoInfoAdmin)
 admin.site.register(ServicoEspecializadoInfo, ServicoEspecializadoInfoAdmin)
 
+
 class RodoviaAdmin(admin.ModelAdmin):
     ordering = ['id']
     list_display = [
@@ -581,3 +582,16 @@ class InfoBasicaAdmin(admin.ModelAdmin):
 @admin.register(ComercioTuristico)
 class ComercioTuristicoAdmin(admin.ModelAdmin):
     list_display = [field.name for field in ComercioTuristico._meta.fields]
+
+@admin.register(LocadorasDeImoveis)
+class LocadorasDeImoveisAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in LocadorasDeImoveis._meta.fields]
+
+
+@admin.register(InfoGerais)
+class InfoGeraisAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in InfoGerais._meta.fields]
+
+@admin.register(EnderecoInfo)
+class EnderecoInfoAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in EnderecoInfo._meta.fields]

@@ -164,6 +164,26 @@ class ServicoEspecializadoInfo(models.Model):
     servicos_especializados = models.TextField(null=True, blank=True)
     outras_informacoes = models.TextField(null=True, blank=True)
     
+class LocadorasDeImoveis(Base):
+    contatos = models.ManyToManyField("InfoGerais", related_name="sistemas_de_seguranca")
+    servicos_especializados = models.ManyToManyField("EnderecoInfo", related_name="sistemas_de_servicos_especializados")
+
+class InfoGerais(models.Model):
+    locadora_de_imoveis = models.ManyToManyField("LocadorasDeImoveis", related_name="info_gerais")
+
+    razao_social = models.CharField(max_length=255, null=True, blank=True)
+    nome_fantasia = models.CharField(max_length=255, null=True, blank=True)
+    cnpj = models.CharField(max_length=255, null=True, blank=True)
+    endereco = models.CharField(max_length=255, null=True, blank=True)
+    telefone = models.CharField(max_length=255, null=True, blank=True)
+
+class EnderecoInfo(models.Model):
+    locadora_de_imoveis = models.ManyToManyField("LocadorasDeImoveis", related_name="endereco_info")
+
+    email = models.CharField(max_length=255, null=True, blank=True)
+    site = models.CharField(max_length=255, null=True, blank=True)
+    tipoImoveis = models.CharField(max_length=255, null=True, blank=True)
+    outrasInfo = models.CharField(max_length=255, null=True, blank=True)
 
 class AlimentosEBebidas(Base):
 
@@ -299,7 +319,6 @@ class AlimentosEBebidas(Base):
 
     outrosAcessibilidade = models.CharField(max_length=255)
     
-
 class Rodovia(Base):
 
     subtipos = models.CharField(max_length=255)
@@ -749,7 +768,6 @@ class InformacaoBasicaDoMunicipio(Base):
     fundoMunicipalDeTurismo  = models.CharField(max_length=255,blank=True, null=True)
     legislacaoOutras  = models.CharField(max_length=255,blank=True, null=True)
     
-
 class ComercioTuristico(Base):
      sinalizacaoDeAcesso =  models.CharField(max_length=255,blank=True, null=True)
      sinalizacaoTuristica = models.CharField(max_length=255,blank=True, null=True)

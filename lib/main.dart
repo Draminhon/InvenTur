@@ -1,8 +1,6 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:get/get.dart';
 import 'package:inventur/helper/providers.dart';
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/pages/auth/login_page.dart';
@@ -11,6 +9,7 @@ import 'package:inventur/pages/auth/register_page.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/comercio_turistico.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas_do_municipio.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsA/locadora_de_imoveis.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%C3%A7a.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
@@ -23,13 +22,9 @@ import 'package:inventur/pages/password_recover/changepasswordsucess_page.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisas.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
-import 'package:inventur/pages/password_recover/changepassword_page.dart';
-import 'package:inventur/pages/password_recover/changePassword_page.dart';
 import 'package:inventur/pages/password_recover/passwordrecover_page.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
-import 'package:inventur/pages/home/Pesquisador/perfil_pesquisador.dart';
-import 'package:inventur/pages/home/Pesquisador/alterarDados-pesquisador.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/placeholder.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas.dart';
 import 'package:inventur/pages/sync_page.dart';
@@ -123,7 +118,8 @@ class _MyAppState extends State<MyApp> {
           '/UpdatedForm': (_) => UpdatedForm(),
           '/SyncPage': (_) => SyncPage(),
           '/InfoBasicas': (_) => InformacoesBasicasDoMunicipio(),
-          '/ComercioTuristico': (_) => ComercioTuristico()
+          '/ComercioTuristico': (_) => ComercioTuristico(),
+          '/LocadoraDeImoveis': (_) => LocadoraDeImoveis()
         },
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

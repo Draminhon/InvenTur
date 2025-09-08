@@ -1,9 +1,11 @@
 import 'dart:ffi';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
+import 'package:inventur/utils/validators.dart';
 
 class Tables extends StatelessWidget {
   final _formKey = GlobalKey<FormState>();
@@ -281,6 +283,379 @@ class Tables2 extends StatelessWidget {
                       ),
                     ),
                   ),
+                ],
+              )
+            ],
+          ),
+          SizedBox(
+            height: 130.w,
+          ),
+        ]));
+  }
+}
+
+class TabelaInfoGerais extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
+
+  TabelaInfoGerais({super.key});
+  TextEditingController _razaoSocialController = new TextEditingController();
+  TextEditingController _nomeFantasiaController = new TextEditingController();
+  TextEditingController _cnpjController = new TextEditingController();
+  TextEditingController _enderecoController = new TextEditingController();
+  TextEditingController _telefoneController = new TextEditingController();
+
+
+  
+
+  Map<String, String> getData() {
+    return {
+      "razao_social": _razaoSocialController.text,
+      "nome_fantasia": _nomeFantasiaController.text,
+      "cnpj": _cnpjController.text,
+      "endereco": _enderecoController.text,
+      "telefone": _telefoneController.text
+    };
+  }
+
+  fillForm(String razaoSocial, String nomeFantasia, String cnpj, String endereco, String telefone) {
+    _razaoSocialController.text = razaoSocial;
+    _enderecoController.text = endereco;
+    _nomeFantasiaController.text = nomeFantasia;
+    _cnpjController.text = cnpj;
+    _telefoneController.text =  telefone;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+        key: _formKey,
+        child: Column(children: [
+          Container(
+            height: 190.w,
+            margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Preencha o campo';
+                }
+                return null;
+              },
+              controller: _razaoSocialController,
+              style: const TextStyle(
+                  color: Colors.black), //String? Function(String?)
+
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+
+                isDense: true,
+                hintText: 'Razão Social',
+                hintStyle: const TextStyle(color: Colors.grey),
+                contentPadding: EdgeInsets.only(top: 150.h, left: 50.h),
+                //errorBorder: UnderlineInputBorder()
+                fillColor: Colors.white,
+                filled: true,
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Container(
+                  margin: EdgeInsets.only(left: 30.w, top: 45.h),
+                  width: 168.w,
+                  child: Image.asset('./assets/images/Rectangle.png')),
+              Column(
+                children: [
+                  Container(
+                    height: 190.w,
+                    width: 1080.w,
+                    margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      controller: _nomeFantasiaController,
+                      style: const TextStyle(
+                          color: Colors.black), //String? Function(String?)
+
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        isDense: true,
+                        hintText: 'Nome Fantasia',
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        contentPadding: EdgeInsets.only(top: 150.h, left: 50.h),
+                        //errorBorder: UnderlineInputBorder()
+                        fillColor: Colors.white,
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 190.w,
+                    width: 1080.w,
+                    margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
+                    child: TextFormField(
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly, Validators().cnpjFormatter],
+                      keyboardType: TextInputType.numberWithOptions(),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      controller: _cnpjController,
+                      style: const TextStyle(
+                          color: Colors.black), //String? Function(String?)
+
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        isDense: true,
+                        hintText: 'CNPJ',
+                        
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        contentPadding: EdgeInsets.only(top: 150.h, left: 50.h),
+                        //errorBorder: UnderlineInputBorder()
+                        fillColor: Colors.white,
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 190.w,
+                    width: 1080.w,
+                    margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      controller: _enderecoController,
+                      style: const TextStyle(
+                          color: Colors.black), //String? Function(String?)
+
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        isDense: true,
+                        hintText: 'Endereço',
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        contentPadding: EdgeInsets.only(top: 150.h, left: 50.h),
+                        //errorBorder: UnderlineInputBorder()
+                        fillColor: Colors.white,
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                                    Container(
+                    height: 190.w,
+                    width: 1080.w,
+                    margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
+                    child: TextFormField(
+                      keyboardType: TextInputType.numberWithOptions(),
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly, Validators().phoneFormatter],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      controller: _telefoneController,
+                      style: const TextStyle(
+                          color: Colors.black), //String? Function(String?)
+
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        isDense: true,
+                        hintText: 'Telefone',
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        contentPadding: EdgeInsets.only(top: 150.h, left: 50.h),
+                        //errorBorder: UnderlineInputBorder()
+                        fillColor: Colors.white,
+                        filled: true,
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+          SizedBox(
+            height: 130.w,
+          ),
+        ]));
+  }
+}
+
+class TabelaInfoGerais2 extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
+
+  TabelaInfoGerais2({super.key});
+  TextEditingController _siteController = new TextEditingController();
+  TextEditingController _tipoDeImoveisController = new TextEditingController();
+  TextEditingController _outrasInfoController = new TextEditingController();
+  TextEditingController _emailController = new TextEditingController();
+
+
+  
+
+  Map<String, String> getData() {
+    return {
+      "site": _siteController.text,
+      "tipoImoveis": _tipoDeImoveisController.text,
+      "outrasInfo": _outrasInfoController.text,
+      "email": _emailController.text
+    };
+  }
+
+  fillForm(String email, String site, String tipoDeImoveis, String outrasInfo) {
+    _siteController.text = site;
+    _tipoDeImoveisController.text = tipoDeImoveis;
+    _outrasInfoController.text = outrasInfo;
+    _emailController.text = email;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+        key: _formKey,
+        child: Column(children: [
+          Container(
+            height: 190.w,
+            margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
+            child: TextFormField(
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Preencha o campo';
+                }
+                return null;
+              },
+              controller: _emailController,
+              style: const TextStyle(
+                  color: Colors.black), //String? Function(String?)
+
+              decoration: InputDecoration(
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+
+                isDense: true,
+                hintText: 'Email',
+                hintStyle: const TextStyle(color: Colors.grey),
+                contentPadding: EdgeInsets.only(top: 150.h, left: 50.h),
+                //errorBorder: UnderlineInputBorder()
+                fillColor: Colors.white,
+                filled: true,
+              ),
+            ),
+          ),
+          Row(
+            children: [
+              Container(
+                  margin: EdgeInsets.only(left: 30.w, top: 45.h),
+                  width: 168.w,
+                  child: Image.asset('./assets/images/Rectangle.png')),
+              Column(
+                children: [
+                  Container(
+                    height: 190.w,
+                    width: 1080.w,
+                    margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      controller: _siteController,
+                      style: const TextStyle(
+                          color: Colors.black), //String? Function(String?)
+
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        isDense: true,
+                        hintText: 'Site',
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        contentPadding: EdgeInsets.only(top: 150.h, left: 50.h),
+                        //errorBorder: UnderlineInputBorder()
+                        fillColor: Colors.white,
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 190.w,
+                    width: 1080.w,
+                    margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      controller: _tipoDeImoveisController,
+                      style: const TextStyle(
+                          color: Colors.black), //String? Function(String?)
+
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        isDense: true,
+                        hintText: 'Tipo de Imóveis e Serviços Fornecidos',
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        contentPadding: EdgeInsets.only(top: 150.h, left: 50.h),
+                        //errorBorder: UnderlineInputBorder()
+                        fillColor: Colors.white,
+                        filled: true,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    height: 190.w,
+                    width: 1080.w,
+                    margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Preencha o campo';
+                        }
+                        return null;
+                      },
+                      controller: _outrasInfoController,
+                      style: const TextStyle(
+                          color: Colors.black), //String? Function(String?)
+
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        isDense: true,
+                        hintText: 'Outras Informações',
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        contentPadding: EdgeInsets.only(top: 150.h, left: 50.h),
+                        //errorBorder: UnderlineInputBorder()
+                        fillColor: Colors.white,
+                        filled: true,
+                      ),
+                    ),
+                  )
                 ],
               )
             ],

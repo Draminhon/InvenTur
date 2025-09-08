@@ -266,7 +266,7 @@ class ComercioTuristicoModel {
     emailCoordenador = json['email_coordenador'];
     sinalizacaoDeAcesso = json['sinalizacaoDeAcesso'];
     sinalizacaoTuristica = json['sinalizacaoTuristica'];
-    subtipo = List<String>.from(json['subtipo']);
+    subtipo = List<String>.from(json['subtipo'] ?? []);
     natureza = json['natureza'];
     tipoDeOrganizacao = json['tipoDeOrganizacao'];
     localizacao = json['localizacao'];
@@ -295,13 +295,13 @@ class ComercioTuristicoModel {
     outrasAcessibilidade = json['outrasAcessibilidade'];
     funcionamento24h = json['funcionamento24h'];
     funcionamentoEmFeriados = json['funcionamentoEmFeriados'];
-    formasDePagamento = List<String>.from(json['formasDePagamento']);
+    formasDePagamento = List<String>.from(json['formasDePagamento'] ?? []);
     atendimentoEmLinguaEstrangeira = json['atendimentoEmLinguaEstrangeira'];
-    informativosImpressos = List<String>.from(json['informativosImpressos']);
-    regrasDeFuncionamentoPeriodo = List<String>.from(json['regrasDeFuncionamentoPeriodo']);
+    informativosImpressos = List<String>.from(json['informativosImpressos'] ?? []);
+    regrasDeFuncionamentoPeriodo = List<String>.from(json['regrasDeFuncionamentoPeriodo'] ?? []);
     estacionamento = json['estacionamento'];
-    produtosEServicos = List<String>.from(json['produtosEServicos']);
-    outrosServicos = List<String>.from(json['outrosServicos']);
+    produtosEServicos = List<String>.from(json['produtosEServicos'] ?? []);
+    outrosServicos = List<String>.from(json['outrosServicos'] ?? []);
     doEquipamentoEspaco = json['doEquipamentoEspaco'];
     areaOuEdificacaoEmQueEstaInstalado =
         json['areaOuEdificacaoEmQueEstaInstalado'];

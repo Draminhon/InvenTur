@@ -11,6 +11,7 @@ router.register(r'meiosdehospedagem', MeioDeHospedagemViewSet, basename='meios d
 router.register(r'sistemadeseguranca', SistemaDeSegurancaViewSet, basename='sistema de seguranca')
 router.register(r'informacoesbasicasdomunicipio', InformacoesBasicasViewSet, basename='informações básicas do municipio')
 router.register(r'comercioturistico', ComercioTuristicoViewSet, basename='comercio turistico')
+router.register(r'locadoraimoveis', LocadoraDeImoveisViewSet, basename='locadora de imoveis')
 router.register(r'pesquisa', PesquisaViewSet, basename='pesquisa')
 router.register(r'user', UserViewSet, basename='user')
 

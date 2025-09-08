@@ -6,12 +6,8 @@ import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
 import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../widgets/customOutro.dart';
 import '../../widgets/customTextField.dart';
-import '../formsB/widgets/sendButton.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class SistemaDeSeguranca extends StatefulWidget {
   SistemaDeSeguranca({super.key});

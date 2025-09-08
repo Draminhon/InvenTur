@@ -40,6 +40,19 @@ class SistemaDeSegurancaViewSet(viewsets.ModelViewSet):
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
+    
+class LocadoraDeImoveisViewSet(viewsets.ModelViewSet):
+
+    queryset = LocadorasDeImoveis.objects.filter(is_active=True)
+    serializer_class = LocadorasDeImoveisSerializer
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+
 
 class AlimentosEBebidasViewSet(viewsets.ModelViewSet):
 
@@ -128,7 +141,13 @@ class EquipamentosListView(APIView):
             {"tipo": "Comércio Turístico", "dados": ComercioTuristicoSerializer(comercioTuristico).data}
             for comercioTuristico in comercioTuristicos
         ]
+
+        locadoraImoveis = LocadorasDeImoveis.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        locadoraImoveis_serialized = [
+            {"tipo": "Locadora de Imóveis", "dados": LocadorasDeImoveisSerializer(locadoraImovel).data}
+            for locadoraImovel in locadoraImoveis
+        ]
         # Combina os dados
-        equipamentos = rodovias_serialized + sistemas_serialized + alimentos_serialized + hospedagens_serialized + infosBasicas_serialized + comercioTuristicos_serialized
+        equipamentos = rodovias_serialized + sistemas_serialized + alimentos_serialized + hospedagens_serialized + infosBasicas_serialized + comercioTuristicos_serialized + locadoraImoveis_serialized
 
         return Response(equipamentos)

@@ -89,6 +89,84 @@ class ServicoEspecializadoInfoSerializer(serializers.ModelSerializer):
         fields = ['email', 'servicos_especializados', 'outras_informacoes']
 
 
+class InfoGeraisSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InfoGerais
+        fields = ['razao_social', 'nome_fantasia', 'cnpj', 'endereco', 'telefone']
+
+class EnderecoInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EnderecoInfo
+        fields = ['email', 'site', 'tipoImoveis', 'outrasInfo']
+
+class LocadorasDeImoveisSerializer(serializers.ModelSerializer):
+    contatos = InfoGeraisSerializer(many=True)  # Aninhando os dados completos
+    servicos_especializados = EnderecoInfoSerializer(many=True)
+
+    
+    class Meta:
+        model = LocadorasDeImoveis
+        fields = [
+            'id', 'pesquisa', 'contatos', 'servicos_especializados',
+            'tipo_formulario', 'uf', 'regiao_turistica', 'municipio',
+            'tipo', 'observacoes', 'referencias',
+            'nome_pesquisador', 'telefone_pesquisador', 'email_pesquisador',
+            'nome_coordenador', 'telefone_coordenador', 'email_coordenador'
+        ]
+
+    def create(self, validated_data):
+        contatos_data = validated_data.pop('contatos', [])
+        servicos_data = validated_data.pop('servicos_especializados', [])
+        
+        sistema_de_seguranca = LocadorasDeImoveis.objects.create(**validated_data)
+        
+        for contato_data in contatos_data:
+            contato = InfoGerais.objects.create(**contato_data)
+            sistema_de_seguranca.contatos.add(contato)
+        
+        for servico_data in servicos_data:
+            servico = EnderecoInfo.objects.create(**servico_data)
+            sistema_de_seguranca.servicos_especializados.add(servico)
+        
+        return sistema_de_seguranca
+
+    def update(self, instance, validated_data):
+        contatos_data = validated_data.pop('contatos', None)
+        servicos_data = validated_data.pop('servicos_especializados', None)
+        
+        instance.tipo_formulario = validated_data.get('tipo_formulario', instance.tipo_formulario)
+        instance.uf = validated_data.get('uf', instance.uf)
+        instance.regiao_turistica = validated_data.get('regiao_turistica', instance.regiao_turistica)
+        instance.municipio = validated_data.get('municipio', instance.municipio)
+        instance.tipo = validated_data.get('tipo', instance.tipo)
+        instance.observacoes = validated_data.get('observacoes', instance.observacoes)
+        instance.referencias = validated_data.get('referencias', instance.referencias)
+        instance.nome_pesquisador = validated_data.get('nome_pesquisador', instance.nome_pesquisador)
+        instance.telefone_pesquisador = validated_data.get('telefone_pesquisador', instance.telefone_pesquisador)
+        instance.email_pesquisador = validated_data.get('email_pesquisador', instance.email_pesquisador)
+        instance.nome_coordenador = validated_data.get('nome_coordenador', instance.nome_coordenador)
+        instance.telefone_coordenador = validated_data.get('telefone_coordenador', instance.telefone_coordenador)
+        instance.email_coordenador = validated_data.get('email_coordenador', instance.email_coordenador)
+
+        # Salva os campos principais atualizados
+        instance.save()
+
+        
+        if contatos_data is not None:
+            instance.contatos.clear()
+            for contato_data in contatos_data:
+                contato = InfoGerais.objects.create(**contato_data)
+                instance.contatos.add(contato)
+        
+        if servicos_data is not None:
+            instance.servicos_especializados.clear()
+            for servico_data in servicos_data:
+                servico = EnderecoInfo.objects.create(**servico_data)
+                instance.servicos_especializados.add(servico)
+        
+        return instance
+
+        
 
 class SistemaDeSegurancaSerializer(serializers.ModelSerializer):
     contatos = ContatoInfoSerializer(many=True)  # Aninhando os dados completos
