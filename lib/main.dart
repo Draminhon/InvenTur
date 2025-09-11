@@ -114,7 +114,7 @@ class _MyAppState extends State<MyApp> {
           '/AlterarDados': (_) => RegisterPage(),
           '/MeiosDeHospedagem': (_) => MeiosDeHospedagem(),
           '/Placeholder': (_) => PlaceHolder(),
-          '/AlimentosEbebidas': (_) => AlimentoseBebidas(),
+          '/AlimentosEbebidas': (_) => AlimentosEBebidas(),
           '/Rodovia': (_) => Rodovia(),
           '/SistemaDeSeguranca': (_) => SistemaDeSeguranca(),
           '/ZonaCosteira': (_) => ZonaCosteira(),

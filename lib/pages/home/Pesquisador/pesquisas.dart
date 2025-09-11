@@ -406,7 +406,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                   MaterialPageRoute(
                     builder: (context) => AlimentoseBebidasEdit(
                       alimentosModel:
-                          AlimentosEBebidas.fromJson(equipamento['dados']),
+                          AlimentosEBebidasModel.fromJson(equipamento['dados']),
                     ),
                   ),
                 );

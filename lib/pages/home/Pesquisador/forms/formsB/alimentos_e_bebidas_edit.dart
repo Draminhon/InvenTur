@@ -19,13 +19,11 @@ final GlobalKey<CheckCState> tipo_de_organizacao_key = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> proximidades_key = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> formas_de_pagamento_key = GlobalKey<CheckCState>();
 final GlobalKey<CheckCState> vendas_e_reservas_key = GlobalKey<CheckCState>();
-final GlobalKey<CheckCState> atendimento_em_lingua_estrangeira_key =
-    GlobalKey<CheckCState>();
-final GlobalKey<CheckCState> informativos_impressos_key =
-    GlobalKey<CheckCState>();
+final GlobalKey<CheckCState> atendimento_em_lingua_estrangeira_key = GlobalKey<CheckCState>();
+final GlobalKey<CheckCState> informativos_impressos_key = GlobalKey<CheckCState>();
 
 class AlimentoseBebidasEdit extends StatefulWidget {
-  final AlimentosEBebidas? alimentosModel;
+  final AlimentosEBebidasModel? alimentosModel;
   AlimentoseBebidasEdit({super.key, this.alimentosModel});
 
   @override

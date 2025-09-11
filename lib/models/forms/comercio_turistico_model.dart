@@ -334,7 +334,9 @@ class ComercioTuristicoModel {
   }
 
   Map<String, dynamic> toJson() {
+
     final Map<String, dynamic> data = new Map<String, dynamic>();
+
     data['sinalizacaoDeAcesso'] = this.sinalizacaoDeAcesso;
     data['sinalizacaoTuristica'] = this.sinalizacaoTuristica;
     data['subtipo'] = this.subtipo;
@@ -403,6 +405,7 @@ class ComercioTuristicoModel {
     data['tabelEquipamentoEEspaco'] = this.tabelEquipamentoEEspaco;
     data['tabelaAreaOuEdificacao'] = this.tabelaAreaOuEdificacao;
     data['tabelaHorarios'] = this.tabelaHorarios;
+    
     return data;
   }
 }

@@ -696,7 +696,7 @@ class _FuncionamentoState extends State<Funcionamento> with AutomaticKeepAliveCl
               jsonKey: 'funcionamentoEmFeriados',
               valoresJson: valoresJson,
               optionModelValue:
-                  isUpdate ? widget.infoModel!.funcionamentoEmFeriados : '',
+                isUpdate ? widget.infoModel!.funcionamentoEmFeriados : '',
               isUpdate: isUpdate,
               children: []),
           CustomTextField(

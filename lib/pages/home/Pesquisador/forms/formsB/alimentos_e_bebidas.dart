@@ -1,8 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inventur/models/forms/alimentos_bebidas_model.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas_do_municipio.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/fields.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/container_widget.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
@@ -18,1712 +23,1279 @@ import '../../widgets/expandedTileYoN.dart';
 import 'widgets/checkBox.dart';
 import 'widgets/sendButton.dart';
 
-final GlobalKey<CheckCState> tipo_de_organizacao_key = GlobalKey<CheckCState>();
-final GlobalKey<CheckCState> proximidades_key = GlobalKey<CheckCState>();
-final GlobalKey<CheckCState> formas_de_pagamento_key = GlobalKey<CheckCState>();
-final GlobalKey<CheckCState> vendas_e_reservas_key = GlobalKey<CheckCState>();
-final GlobalKey<CheckCState> atendimento_em_lingua_estrangeira_key =
-    GlobalKey<CheckCState>();
-final GlobalKey<CheckCState> informativos_impressos_key =
-    GlobalKey<CheckCState>();
+final Validators _validators = Validators();
+final Map<String, dynamic> valoresJson = {
+  'tipo_formulario': 'Alimentos e bebidas',
+};
+bool isUpdate = false;
 
-class AlimentoseBebidas extends StatefulWidget {
-  AlimentoseBebidas({super.key});
+//formulario
+class AlimentosEBebidas extends StatefulWidget {
+  final AlimentosEBebidasModel? infoModel;
+  const AlimentosEBebidas({super.key, this.infoModel});
 
   @override
-  State<AlimentoseBebidas> createState() => _AlimentoseBebidasState();
+  State<AlimentosEBebidas> createState() => _AlimentosEBebidasState();
 }
 
-class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
-  String pesquisadorNome = '';
-  String pesquisadorTelefone = '';
-  String pesquisadorEmail = '';
+class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
 
-  String coordenadorNome = '';
-  String coordenadorTelefone = '';
-  String coordenadorEmail = '';
+  int currentStep = 0;
+  late List<Widget> pages;
+  final _formKey = GlobalKey<FormState>();
+  final PageController _pageController = PageController();
 
-  void getInfoUsersInPesquisa() async {
-    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
+  bool isUpdate = false;
 
-    pesquisadorNome = info['pesquisador']['nome'];
-    pesquisadorTelefone = info['pesquisador']['telefone'];
-    pesquisadorEmail = info['pesquisador']['email'];
+  Map<String, TextEditingController>  _informacoesGeralController = {};
+  Map<String, TextEditingController>  _funcionamentoControllers = {};
+  Map<String, TextEditingController>  _acessibilidadeController = {};
 
-    coordenadorNome = info['coordenador']['nome'];
-    coordenadorEmail = info['coordenador']['telefone'];
-    coordenadorTelefone = info['coordenador']['email'];
+  final List<String> _chavesInfo = const[
+    'uf',
+    'regiaoTuristica',
+    'municipio',
+    'razaoSocial',
+    'nomeFantasia',
+    'CNPJ',
+    'codigoCNAE',
+    'atividadeEconomica',
+    'inscricaoMunicipal',
+    'nomeDaRede',
+    'inicioDaAtividade',
+    'qtdeFuncionariosPermanentes',
+    'qtdeFuncionariosTemporarios',
+    'qtdeFuncionariosComDeficiencia',
+    'longitude',
+    'latitude',
+    'avenidaRuaEtc',
+    'bairroLocalidade',
+    'distrito',
+    'CEP',
+    'whatsapp',
+    'instagram',
+    'email',
+    'distanciasAeroporto',
+    'distanciasRodoviaria',
+    'distanciasFerroviaria',
+    'distanciasMaritima',
+    'distanciasMetroviaria',
+    'distanciasPontoOnibus',
+    'distanciasPontoTaxi',
+    'distanciasOutraNome;',
+    'distanciasOutra',
+    'pontoReferencia', 
+  ];
+  final List<String> _chavesFun = const[
+    'capInstaladaPdia',
+    'capInstaladasSentadas',
+    'capSimultanea',
+    'capSimultaneaSentadas',
+    'capacidadeVeiculos',
+    'numeroAutomoveis',
+    'numeroOnibus',
+  ];
+  final List<String> _chavesAcessi = const[
+    'outrosAcessibilidade',
+    'observacoes',
+    'referencias',
+  ];
+
+  void _preencherDadosParaTeste() {
+    if (widget.infoModel != null) {
+      final model = widget.infoModel!;
+      final modelMap = model.toMap();
+
+      _informacoesGeralController.forEach((key, controller) {
+        if (modelMap.containsKey(key)) {
+          final valor = modelMap[key];
+          controller.text = valor?.toString() ?? '';
+        }
+      });
+
+      _funcionamentoControllers.forEach(
+        (key, value) {
+          if (modelMap.containsKey(key)) {
+            final valor = modelMap[key];
+            value.text = valor?.toString() ?? '';
+          }
+        },
+      );
+
+      _acessibilidadeController.forEach(
+        (key, value) {
+          if (modelMap.containsKey(key)) {
+            final valor = modelMap[key];
+            value.text = valor?.toString() ?? '';
+          }
+        },
+      );
+    }
   }
 
-  FormService _formService = FormService();
-
-  final Map<String, dynamic> valoresjson = {
-    'tipo_formulario': 'Alimentos e bebidas',
-  };
-  final Validators _validators = Validators();
-  final cnpjFormatter = MaskTextInputFormatter(
-    mask: '##.###.###/####-##',
-    filter: {"#": RegExp(r'[0-9]')},
-  );
-
-  final somenteNumerosFormatter = MaskTextInputFormatter(
-    mask: '',
-    filter: {"#": RegExp(r'[0-9]')},
-  );
-
-  final Map<String, TextEditingController> controllers = {};
-  void autoFillForm() {
-    // Verifica se o controlador existe no Map antes de preencher
-    void fillIfExists(String key, String value) {
-      if (controllers.containsKey(key)) {
-        controllers[key]!.text = value;
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    try {
+      final argument = ModalRoute.of(context)!.settings.arguments as Map;
+      print("ARGUMENTO: $argument");
+      if (argument.containsKey('isUpdate')) {
+        isUpdate = argument['isUpdate'];
       }
+    } catch (e) {
+      isUpdate = false;
+    }
+    print("VARIAVEL IS UPDATE: $isUpdate");
+    if (isUpdate) {
+      _preencherDadosParaTeste();
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getInfoUsersInPesquisa();
+    for (final key in _chavesInfo) {
+      _informacoesGeralController[key] = TextEditingController();
     }
 
-    // Preenche os valores dos controladores
-    fillIfExists('uf', 'CE');
-    fillIfExists('rg', '1234567');
-    fillIfExists('municipio', 'Viçosa do Ceará');
-    fillIfExists('razão social', 'Razão Social Exemplo');
-    fillIfExists('nome fantasia', 'Nome Fantasia Exemplo');
-    fillIfExists('CNPJ', '00.000.000/0000-00');
-    fillIfExists('Código CNAE', '12345');
-    fillIfExists('Atividade Economica', 'Atividade Econômica Exemplo');
-    fillIfExists('Inscrição Municipal', '123456');
-    fillIfExists('Nome da rede', 'Nome da Rede Exemplo');
-    fillIfExists('inicio da atividade', '01/01/2023');
-    fillIfExists('quantidade funcionarios permanentes', '10');
-    fillIfExists('Quantidade de funcionarios temporarios', '5');
-    fillIfExists('quantidade funcionarios com definicencia', '2');
-    fillIfExists('latitude', '-3.7319');
-    fillIfExists('longitude', '-38.5267');
-    fillIfExists('avenida rua', 'Rua Exemplo');
-    fillIfExists('bairro localidade', 'Bairro Exemplo');
-    fillIfExists('distrito', 'Distrito Exemplo');
-    fillIfExists('CEP', '60000-000');
-    fillIfExists('Instagram', '@exemplo');
-    fillIfExists('email', 'exemplo@email.com');
-    fillIfExists('ponto de referencia', 'Ponto de Referência Exemplo');
-    fillIfExists('distancia aeroporto', '10 km');
-    fillIfExists('estação rodoviária', 'Estação Rodoviária Exemplo');
-    fillIfExists('estação ferroviária', 'Estação Ferroviária Exemplo');
-    fillIfExists('Estacao maritima', 'Estação Marítima Exemplo');
-    fillIfExists('estacao metroviaria', 'Estação Metroviária Exemplo');
-    fillIfExists('ponto de onibus', 'Ponto de Ônibus Exemplo');
-    fillIfExists('ponto de taxi', 'Ponto de Táxi Exemplo');
-    fillIfExists('outras distancias', 'Outras Distâncias Exemplo');
-    fillIfExists(
-        'outras distancias nome', 'Nome das Outras Distâncias Exemplo');
-    fillIfExists(
-        'outras regras e informações', 'Informações adicionais e regras');
-    fillIfExists('capacidade instalada por dia', '100');
-    fillIfExists('instaladas pessoas atendidas sentadas', '50');
-    fillIfExists('capacidade simultanea', '75');
-    fillIfExists('simultanea pessoas atendidas sentadas', '40');
-    fillIfExists('capacidade de veículos', '200');
-    fillIfExists('numero automoveis', '30');
-    fillIfExists('numero onibus', '5');
-    fillIfExists('outrosSinalizacao', 'Outras sinalizações');
-    fillIfExists('observacoes', 'Observações importantes');
-    fillIfExists('referencias', 'Referências ou links');
-  }
+    for (final key in _chavesFun) {
+      _funcionamentoControllers[key] = TextEditingController();
+    }
 
-  TextEditingController getController(String key) {
-    controllers[key] ??= TextEditingController();
-    return controllers[key]!;
+    for (final key in _chavesAcessi) {
+      _acessibilidadeController[key] = TextEditingController();
+    }
+
+    pages = [
+      InformacaoPage(
+        controllers: _informacoesGeralController,
+        infoModel: widget.infoModel,
+      ),
+      FuncionamentoPage(
+        controllers: _funcionamentoControllers,
+        infoModel: widget.infoModel,
+      ),
+      ProtecaoPage(
+        controllers: _acessibilidadeController,
+        infoModel: widget.infoModel,
+      ),
+    ];
   }
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    for (final controller in _informacoesGeralController.values) {
+      controller.dispose();
+    }
+    for (final controller in _funcionamentoControllers.values) {
+      controller.dispose();
+    }
+    for(final controller in _acessibilidadeController.values){
+      controller.dispose();
+    }
     super.dispose();
-    controllers.forEach((key, controllers) => controllers.dispose());
   }
 
-  final _formKey = GlobalKey<FormState>();
+  void getInfoUsersInPesquisa() async {
+    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
 
-  Widget build(BuildContext context) {
-    getInfoUsersInPesquisa();
-    final sizeScreen = MediaQuery.sizeOf(context);
-    return Scaffold(
-        backgroundColor: Colors.white,
+    valoresJson['nome_pesquisador'] = info['pesquisador']['nome'];
+    valoresJson['telefone_pesquisador'] = info['pesquisador']['telefone'];
+    valoresJson['email_pesquisador'] = info['pesquisador']['email'];
+
+    valoresJson['nome_coordenador'] = info['coordenador']['nome'];
+    valoresJson['telefone_coordenador'] = info['coordenador']['telefone'];
+    valoresJson['email_coordenador'] = info['coordenador']['email'];
+  }
+
+  void _enviarFormulario() async{
+    if (_formKey.currentState?.validate() ?? false) {
+      _formKey.currentState!.save();
+
+      _informacoesGeralController.forEach((key, controller) {
+        valoresJson[key] = controller.text;
+      });
+      _funcionamentoControllers.forEach(
+        (key, controller) {
+          valoresJson[key] = controller.text;
+        },
+      );
+      _acessibilidadeController.forEach(
+        (key, value) {
+          valoresJson[key] = value.text;
+        },
+      );
+      valoresJson.forEach(
+        (key, value) {
+          print("$key  - $value");
+        },
+      );
+      if (currentStep < pages.length - 1) {
+        // Avança para a próxima página
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+      } else {
+        // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
+        isUpdate
+            ? FormService().updateForm(widget.infoModel!.id!, valoresJson,
+                AppConstants.ALIMENTOS_E_BEBIDAS)
+            : FormService()
+                .sendForm(valoresJson, AppConstants.ALIMENTOS_E_BEBIDAS);
+        print("Formulário finalizado e pronto para enviar!");
+
+        // _enviarFormulario(); // Você pode chamar sua função de envio aqui
+      }
+    } else {
+      _formKey.currentState!.save();
+      _informacoesGeralController.forEach((key, controller) {
+        valoresJson[key] = controller.text;
+      });
+
+      _funcionamentoControllers.forEach((key, controller) {
+          valoresJson[key] = controller.text;
+        },
+      );
+      _acessibilidadeController.forEach((key, value) {
+          valoresJson[key] = value.text;
+        },
+      );
+      valoresJson.forEach(
+        (key, value) {
+          print("$key  - $value");
+        },
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Por favor, corrija os erros no formulário.')));
+    }
+  }
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
         appBar: AppBar(
           foregroundColor: Colors.white,
+          title: DotsIndicator(
+            dotsCount: pages.length,
+            position: currentStep.toDouble(),
+            decorator: DotsDecorator(
+                activeColor: Colors.white, activeSize: Size(18, 9)),
+          ),
+          centerTitle: true,
           backgroundColor: const Color.fromARGB(255, 55, 111, 60),
-          title: const Text(
-            'Identificação',
-            style: TextStyle(color: Colors.white),
+        ),
+        backgroundColor: Colors.white,
+        body: Form(
+          key: _formKey,
+          child: PageView.builder(
+            physics: NeverScrollableScrollPhysics(),
+            onPageChanged: (value) {
+              setState(() {
+                currentStep = value;
+              });
+            },
+            controller: _pageController,
+            itemBuilder: (context, index) {
+              return pages[index];
+            },
           ),
         ),
-        body: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-                child: Column(
-              children: [
-                Padding(
-                    padding: EdgeInsets.only(
-                        top: sizeScreen.height * 0.05,
-                        left: sizeScreen.width * 0.05),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                            width: sizeScreen.width * 0.3,
-                            height: sizeScreen.height * 0.045,
-                            child: TextFormField(
-                              controller: getController('uf'),
-                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
+        bottomNavigationBar:
+            Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+          // Botão Voltar
+          if (currentStep > 0)
+            Container(
+              margin: EdgeInsets.only(bottom: 35.h),
+              child: TextButton(
+                onPressed: () {
+                  _pageController.previousPage(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.ease,
+                  );
+                },
+                child: const Text('VOLTAR'),
+              ),
+            ),
+          // Espaçador para alinhar o botão Continuar à direita quando não houver o Voltar
+          if (currentStep == 0) const Spacer(),
 
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Preencha o campo';
-                                }
-                                return null;
-                              },
-                              onSaved: (newValue) {
-                                valoresjson['uf'] = newValue;
-                              },
-                              decoration: InputDecoration(
-                                  hintText: 'UF',
-                                  hintStyle: TextStyle(fontSize: 50.w)),
-                            )),
-                        SizedBox(
-                          width: sizeScreen.width * 0.09,
-                        ),
-                        SizedBox(
-                            width: sizeScreen.width * 0.5,
-                            height: sizeScreen.height * 0.045,
-                            child: TextFormField(
-                              controller: getController('rg'),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Preencha o campo';
-                                }
-                                return null;
-                              },
-                              onSaved: (newValue) {
-                                valoresjson['regiao_turistica'] = newValue;
-                              },
-                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
+          // Botão Continuar / Finalizar
+          Container(
+            height: 160.h,
+            width: 550.w,
+            margin: currentStep > 0
+                ? EdgeInsets.only(bottom: 55.h)
+                : EdgeInsets.only(bottom: 55.h, right: 55.w),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
+              onPressed: () {
+                _enviarFormulario();
+              },
+              child: Text(
+                currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          )
+        ]));
+  }
 
-                              decoration: InputDecoration(
-                                  hintText: 'Região Turística',
-                                  hintStyle: TextStyle(fontSize: 50.w)),
-                            ))
-                      ],
-                    )),
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: sizeScreen.width * 0.05,
-                      right: sizeScreen.width * 0.1,
-                      top: sizeScreen.height * 0.01),
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Preencha o campo';
-                      }
-                      return null;
-                    },
-                    
-                    controller: getController('municipio'),
-                            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
+}
 
-                    decoration: InputDecoration(
-                        isDense: true,
-                        hintText: 'Municipio',
-                        hintStyle: TextStyle(fontSize: 50.w)),
-                    onSaved: (newValue) {
-                      valoresjson['municipio'] = newValue;
-                    },
-                  ),
-                ),
-                SizedBox(
-                  height: 20.w,
-                ),
-                textLabel(
-                  name: 'Tipo:',
+class InformacaoPage extends StatefulWidget {
+  final Map<String, TextEditingController> controllers;
+  final AlimentosEBebidasModel? infoModel;
+
+  const InformacaoPage({
+    super.key,
+    required this.controllers,
+    this.infoModel,
+  });
+
+  @override
+  State<InformacaoPage> createState() => _InformacaoPageState();
+}
+
+
+class FuncionamentoPage extends StatefulWidget {
+  final AlimentosEBebidasModel? infoModel;
+
+  final Map<String, TextEditingController> controllers;
+
+  const FuncionamentoPage({
+    super.key, 
+    required this.controllers,
+    this.infoModel
+  });
+
+  @override
+  State<FuncionamentoPage> createState() => _FuncionamentoPageState();
+}
+
+/*construção*/
+
+class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context); 
+    final sizeScreen = MediaQuery.sizeOf(context);
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ContainerHeader(title: 'Identificação'),
+          UfMunicipioRg(controllers: widget.controllers),
+          SizedBox(
+            height: 55.h,
+          ),
+          RadioFormField(options:   const [
+            'Restaurante',
+            'Bar',
+            'Lanchonete',
+            'Cafeteria',
+            'Quiosque',
+            'Barraca de praia',
+            'Sorveteria',
+            'Confeitaria\nPadaria',
+            'outro'
+          ],),
+          SizedBox(
+            height: 55.h,
+          ),
+          ContainerHeaderToBigTexts(title: 'Informações Gerais'),
+          SizedBox(
+            height: 55.h,
+          ),
+          CustomTextField(
+            name: "Razão Social", 
+            controller: widget.controllers['razaoSocial'],
+          ),
+          CustomTextField(
+            name: "Nome Fantasia", 
+            controller: widget.controllers['nomeFantasia'],
+          ),
+          CustomTextField(
+            name: 'CNPJ',
+            validat: _validators.validarCNPJ,
+            keyboardType: TextInputType.numberWithOptions(),
+            formatter: [_validators.cnpjFormatter],
+            controller: widget.controllers['CNPJ'],
+          ),
+          CustomTextField(
+            name: 'Código CNAE',
+            keyboardType: TextInputType.numberWithOptions(),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            controller: widget.controllers['codigoCNAE'],
+          ),
+          CustomTextField(
+            name: 'Atividade Econômica',
+            controller: widget.controllers['atividadeEconomica'],
+          ),
+          CustomTextField(
+            name: 'Nome da Rede/holding',
+            controller: widget.controllers['nomeDaRedeFranquia'],
+          ),
+          CustomTextField(
+            name: 'Inscrição Municipal',
+            keyboardType: TextInputType.numberWithOptions(),
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            controller: widget.controllers['inscricaoMunicipal'],
+          ),
+          RadioFormField(
+            title: 'Natureza',
+            onSaved: (newValue) => valoresJson['natureza'] = newValue,
+            options: ['Pública', 'Privada', 'outro'],
+            initialValue: isUpdate ? widget.infoModel!.natureza! : '',
+          ),
+          CheckboxGroupFormField(
+            title: 'Tipo de Organização/Instituição',
+            onSaved: (newValue) => valoresJson['tipoDeOrganizacaoInstituicao'] = newValue,
+            options: [
+              'Associação',
+              'Sindicato',
+              'Cooperativa',
+              'Sistema S',
+              'Empresa',
+              'outro'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.tipoDeOrganizacaoInstituicao! : [],
+          ),
+          //formatação inicio da atividade
+          Row(
+            children: [
+              textLabel(
+                  name: "Inicio da atividade",
                   fontWeight: FontWeight.bold,
+              ),
+              SizedBox(
+                width: sizeScreen.width * 0.1,
+              ),
+              Container(
+                height: sizeScreen.height * 0.1,
+                width: sizeScreen.width * 0.4,
+                child: CustomTextDate(
+                  dateController: widget.controllers['inicioDaAtividade'],
                 ),
-                SizedBox(
-                  height: 50.w,
-                ),
-                RadioD(
-                  options: const [
-                    'Restaurante',
-                    'Bar',
-                    'Lanchonete',
-                    'Cafeteria',
-                    'Quiosque',
-                    'Barraca de praia',
-                    'Sorveteria',
-                    'Confeitaria\nPadaria',
-                    'outro'
-                  ],
-                  getValue: (newValue) {
-                    valoresjson['tipo'] = newValue;
-                  },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-                Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
-                  height: sizeScreen.height * 0.06,
-                  width: sizeScreen.width,
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.008,
-                      left: sizeScreen.width * 0.04),
-                  child: Text(
-                    'Informações Gerais',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: sizeScreen.height * 0.03),
-                  ),
-                ),
-                SizedBox(
-                  height: 30.w,
-                ),
-                CustomTextField(
-                    controller: getController('razão social'),
-                    name: 'Razão Social',
-                    getValue: (newValue) {
-                      valoresjson['razaoSocial'] = newValue;
-                    }),
-                CustomTextField(
-                    controller: getController('nome fantasia'),
-                    name: 'Nome Fantasia',
-                    getValue: (newValue) {
-                      valoresjson['nomeFantasia'] = newValue;
-                    }),
-                CustomTextField(
+              )] 
+          ),
+          //formatação quantidade de funcionários
+          textLabel(
+            name: 'Quantidade de Funcionários',
+            fontWeight: FontWeight.bold,
+          ),
+          Row(children: [
+              textLabel(name: 'Permanentes'),
+              SizedBox(
+                width: sizeScreen.width * 0.026,
+              ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: 'n°',
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.numberWithOptions(),
-                    controller: getController('CNPJ'),
-                    name: 'CNPJ',
-                    validat: _validators.validarCNPJ,
-                    formatter: [cnpjFormatter],
-                    getValue: (newValue) {
-                      valoresjson['CNPJ'] = newValue;
-                    }),
-
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 600.w,
-                      child: CustomTextField(
-                          controller: getController('Código CNAE'),
-                          name: 'Código CNAE',
-                          validat: _validators.validarNumero,
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
-                          getValue: (newValue) {
-                            valoresjson['codigoCNAE'] = newValue;
-                          }),
-                    ),
-                    Expanded(
-                      child: CustomTextField(
-                        controller: getController('Atividade Economica'),
-                        name: 'Atividade Econômica',
-                        getValue: (value) {
-                          valoresjson['atividadeEconomica'] = value;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 600.w,
-                      child: CustomTextField(
-                          controller: getController('Inscrição Municipal'),
-                          name: 'Inscrição Municipal',
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
-                          keyboardType: TextInputType.numberWithOptions(),
-                          getValue: (newValue) {
-                            valoresjson['inscricaoMunicipal'] = newValue;
-                          }),
-                    ),
-                    Expanded(
-                      child: CustomTextField(
-                        controller: getController('Nome da rede'),
-                        name: 'Nome da rede/holding',
-                        getValue: (p0) {
-                          valoresjson['nomeDaRede'] = p0;
-                        },
-                      ),
-                    )
-                  ],
-                ),
-
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                Column(
-                  children: [
-                    textLabel(
-                      name: 'Natureza:',
-                      fontWeight: FontWeight.w600,
-                    ),
-                    SizedBox(
-                      height: sizeScreen.height * 0.03,
-                    ),
-                    RadioD(
-                        options: const ['pública', 'privada', 'outro'],
-                        getValue: (newValue) {
-                          valoresjson['natureza'] = newValue;
-                        })
-                  ],
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                Column(
-                  children: [
-                    textLabel(
-                      name: 'Tipo de organização/instituição:',
-                      fontWeight: FontWeight.bold,
-                    ),
-                    SizedBox(
-                      height: sizeScreen.height * 0.03,
-                    ),
-                    CheckC(
-                      key: tipo_de_organizacao_key,
-                      nomes: [
-                        'associação',
-                        'sindicato',
-                        'cooperativa',
-                        'sistema S',
-                        'empresa',
-                        'outro'
-                      ],
-                    )
-                  ],
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                Row(
-                  children: [
-                    textLabel(
-                      name: 'início da atividade:',
-                      fontWeight: FontWeight.bold,
-                    ),
-                    SizedBox(
-                      width: sizeScreen.width * 0.1,
-                    ),
-                    SizedBox(
-                        width: sizeScreen.width * 0.4,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextDate(
-                            dateController:
-                                getController('inicio da atividade'),
-                            getValue: (newValue) {
-                              valoresjson['inicioDaAtividade'] = newValue;
-                            }))
-                  ],
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                textLabel(
-                    name: 'Quantidade de Funcionários:',
-                    fontWeight: FontWeight.bold),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                Column(children: [
-                  Row(
-                    children: [
-                      textLabel(name: 'Permanentes'),
-                      SizedBox(
-                        width: sizeScreen.width * 0.026,
-                      ),
-                      SizedBox(
-                          width: sizeScreen.width * 0.6,
-                          //height: sizeScreen.height * 0.07,
-                          child: CustomTextField(
-                            controller: getController(
-                                'quantidade funcionarios permanentes'),
-                            name: 'n°',
-                            formatter: [FilteringTextInputFormatter.digitsOnly],
-                            getValue: (newValue) {
-                              valoresjson['qtdeFuncionariosPermanentes'] =
-                                  newValue;
-                            },
-                          ))
-                    ],
-                  ),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  Row(
-                    children: [
-                      textLabel(name: 'Temporários'),
-                      SizedBox(
-                        width: sizeScreen.width * 0.038,
-                      ),
-                      SizedBox(
-                          width: sizeScreen.width * 0.6,
-                          //height: sizeScreen.height * 0.07,
-                          child: CustomTextField(
-                            controller: getController(
-                                'Quantidade de funcionarios temporarios'),
-                            name: 'n°',
-                            formatter: [FilteringTextInputFormatter.digitsOnly],
-                            getValue: (newValue) {
-                              valoresjson['qtdeFuncionariosTemporarios'] =
-                                  newValue;
-                            },
-                          ))
-                    ],
-                  ),
-                  SizedBox(height: sizeScreen.height * 0.02),
-                  Row(
-                    children: [
-                      textLabel(name: 'Pessoas com\ndefiicência (%)'),
-                      SizedBox(
-                          width: sizeScreen.width * 0.6,
-                          //height: sizeScreen.height * 0.07,
-                          child: CustomTextField(
-                            controller: getController(
-                                'quantidade funcionarios com definicencia'),
-                            name: '%',
-                            formatter: [FilteringTextInputFormatter.digitsOnly],
-                            getValue: (newValue) {
-                              valoresjson['qtdeFuncionariosComDeficiencia'] =
-                                  newValue;
-                            },
-                          ))
-                    ],
-                  ),
-                ]),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(name: 'Localização:', fontWeight: FontWeight.bold),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                RadioD(
-                  options: const ['urbana', 'rural'],
-                  getValue: (newValue) {
-                    valoresjson['localizacao'] = newValue;
-                  },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                    name: 'Coordenadas Geográficas:',
-                    fontWeight: FontWeight.bold),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                Column(children: [
-                  Row(
-                    children: [
-                      textLabel(name: 'Latitude'),
-                      SizedBox(
-                        width: sizeScreen.width * 0.032,
-                      ),
-                      SizedBox(
-                          width: sizeScreen.width * 0.6,
-                          //height: sizeScreen.height * 0.07,
-                          child: CustomTextField(
-                            controller: getController('latitude'),
-                            name: 'valor',
-                            keyboardType: TextInputType.numberWithOptions(),
-
-                            formatter: [
-                              FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'),),
-                            ],
-                            getValue: (newValue) {
-                              valoresjson['latitude'] = newValue;
-                            },
-                          ))
-                    ],
-                  ),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  Row(
-                    children: [
-                      textLabel(name: 'Longitude'),
-                      SizedBox(
-                          width: sizeScreen.width * 0.6,
-                          //height: sizeScreen.height * 0.07,
-                          child: CustomTextField(
-                            controller: getController('longitude'),
-                            name: 'valor',
-                            keyboardType: TextInputType.numberWithOptions(),
-
-                            formatter: [  FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))],
-                            getValue: (newValue) {
-                              valoresjson['longitude'] = newValue;
-                            },
-                          ))
-                    ],
-                  ),
-                ]),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Endereço:',
-                  fontWeight: FontWeight.bold,
-                ),
-                CustomTextField(
-                  controller: getController('avenida rua'),
-                  name: 'avenida/rua/travessa/caminho/outro',
-                  getValue: (newValue) {
-                    valoresjson['avenidaRuaEtc'] = newValue;
-                  },
-                ),
-                CustomTextField(
-                  controller: getController('bairro localidade'),
-                  name: 'bairro/localidade',
-                  getValue: (newValue) {
-                    valoresjson['bairroLocalidade'] = newValue;
-                  },
-                ),
-                CustomTextField(
-                  controller: getController('distrito'),
-                  name: 'distrito',
-                  getValue: (newValue) {
-                    valoresjson['distrito'] = newValue;
-                  },
-                ),
-                CustomTextField(
-                  controller: getController('CEP'),
-                  formatter: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    _validators.cepFormatter
-                  ],
-                  name: 'CEP',
-                  getValue: (newValue) {
-                    valoresjson['CEP'] = newValue;
-                  },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-
-                Column(children: [
-                  Row(
-                    children: [
-                      textLabel(
-                        name: 'Whatsapp',
-                        fontWeight: FontWeight.bold,
-                      ),
-                      SizedBox(
-                        width: sizeScreen.width * 0.03,
-                      ),
-                      SizedBox(
-                          width: sizeScreen.width * 0.6,
-                          //height: sizeScreen.height * 0.07,
-                          child: CustomTextNumber(
-                            labelText: '(DD) n°',
-                            getValue: (newValue) {
-                              valoresjson['whatsapp'] = newValue;
-                            },
-                          ))
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      textLabel(
-                        name: 'Instagram',
-                        fontWeight: FontWeight.bold,
-                      ),
-                      SizedBox(
-                        width: sizeScreen.width * 0.03,
-                      ),
-                      SizedBox(
-                          width: sizeScreen.width * 0.6,
-                          //height: sizeScreen.height * 0.07,
-                          child: CustomTextField(
-                            controller: getController('Instagram'),
-                            getValue: (newValue) {
-                              valoresjson['instagram'] = newValue;
-                            },
-                            name: '@',
-                          ))
-                    ],
-                  ),
-                  SizedBox(
-                    height: sizeScreen.height * 0.03,
-                  ),
-                ]),
-
-                Row(
-                  children: [
-                    textLabel(
-                      name: 'E-mail',
-                      fontWeight: FontWeight.bold,
-                    ),
-                    SizedBox(
-                      width: sizeScreen.width * 0.04,
-                    ),
-                    SizedBox(
-                        width: sizeScreen.width * 0.5,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          controller: getController('email'),
-                          name: 'e-mail',
-                          getValue: (newValue) {
-                            valoresjson['email'] = newValue;
-                          },
-                        ))
-                  ],
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Sinalização:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.04,
-                ),
-                Row(children: [
-                  textLabel(name: 'de acessso -'),
-                  SizedBox(
-                    width: sizeScreen.width * 0.09,
-                  ),
-                  SizedBox(
-                      // width: sizeScreen.width * 0.5,
-                      //  //height: sizeScreen.height * 0.07,
-                      child: ExpansionTileYoN(
-                    getValue: (newValue) {
-                      valoresjson['sinalizacaoDeAcesso'] = newValue;
-                    },
-                  ))
-                ]),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                Row(children: [
-                  textLabel(name: 'turística -'),
-                  SizedBox(
-                    width: sizeScreen.width * 0.14,
-                  ),
-                  SizedBox(
-                      //width: sizeScreen.width * 0.5,
-                      //  //height: sizeScreen.height * 0.07,
-                      child: ExpansionTileYoN(
-                    getValue: (newValue) {
-                      valoresjson['sinalizacaoTuristica'] = newValue;
-                    },
-                  ))
-                ]),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Proximidades:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                //  RadioD(number: 6, options: options)
-                CheckC(
-                  key: proximidades_key,
-                  nomes: [
-                    'Meio de hospedagem',
-                    'Shopping',
-                    'Galeria/rua comercial',
-                    'Centro de convenções/exposições',
-                    'Posto de combustível',
-                    'outro'
-                  ],
-                  // getValue: (newValue) {
-                  //   valoresjson['Proximidades'] = newValue;
-                  // },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Distâncias (km):',
-                  fontWeight: FontWeight.bold,
-                ),
-
-                Row(
-                  children: [
-                    textLabel(name: 'Aeroporto:'),
-                    SizedBox(
-                      width: sizeScreen.width * 0.06,
-                    ),
-                    SizedBox(
-                        width: sizeScreen.width * 0.6,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
-                          controller: getController('distancia aeroporto'),
-                          name: '(km)',
-                          getValue: (newValue) {
-                            valoresjson['distanciasAeroporto'] = newValue;
-                          },
-                        ))
-                  ],
-                ),
-
-                Row(
-                  children: [
-                    textLabel(name: 'Estação\nrodoviária:'),
-                    SizedBox(
-                      width: sizeScreen.width * 0.06,
-                    ),
-                    SizedBox(
-                        width: sizeScreen.width * 0.6,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          controller: getController('estação rodoviária'),
-                          name: '(km)',
-                          getValue: (newValue) {
-                            valoresjson['distanciasRodoviaria'] = newValue;
-                          },
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
-                        ))
-                  ],
-                ),
-
-                Row(
-                  children: [
-                    textLabel(name: 'Estação\nferroviária:'),
-                    SizedBox(
-                      width: 70.w,
-                    ),
-                    SizedBox(
-                        width: sizeScreen.width * 0.6,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          controller: getController('estação ferroviária'),
-                          name: '(km)',
-                          getValue: (newValue) {
-                            valoresjson['distanciaEstacaoFerroviaria'] =
-                                newValue;
-                          },
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
-                        ))
-                  ],
-                ),
-
-                Row(
-                  children: [
-                    textLabel(name: 'Estação\nmarítima\n/fluvial:'),
-                    SizedBox(
-                      width: 120.w,
-                    ),
-                    SizedBox(
-                        width: sizeScreen.width * 0.6,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          controller: getController('Estacao maritima'),
-                          name: '(km)',
-                          getValue: (newValue) {
-                            valoresjson['distanciaEstacaoMaritima'] = newValue;
-                          },
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
-                        ))
-                  ],
-                ),
-
-                Row(
-                  children: [
-                    textLabel(name: 'Estação\nmetroviária:'),
-                    SizedBox(width: 35.w),
-                    SizedBox(
-                        width: sizeScreen.width * 0.6,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          controller: getController('estacao metroviaria'),
-                          name: '(km)',
-                          getValue: (newValue) {
-                            valoresjson['distanciaEstacaoMetroviaria'] =
-                                newValue;
-                          },
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
-                        ))
-                  ],
-                ),
-
-                Row(
-                  children: [
-                    textLabel(name: 'Ponto\nde ônibus'),
-                    SizedBox(
-                      width: 110.w,
-                    ),
-                    SizedBox(
-                        width: sizeScreen.width * 0.6,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          controller: getController('ponto de onibus'),
-                          name: '(km)',
-                          getValue: (newValue) {
-                            valoresjson['distanciaPontoDeOnibus'] = newValue;
-                          },
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
-                        ))
-                  ],
-                ),
-
-                Row(
-                  children: [
-                    textLabel(name: 'Ponto\nde taxi'),
-                    SizedBox(
-                      width: 190.w,
-                    ),
-                    SizedBox(
-                        width: sizeScreen.width * 0.6,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          controller: getController('ponto de taxi'),
-                          name: '(km)',
-                          getValue: (newValue) {
-                            valoresjson['distanciaPontoDeTaxi'] = newValue;
-                          },
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
-                        ))
-                  ],
-                ),
-
-                Row(
-                  children: [
-                    textLabel(name: 'Outras:'),
-                    SizedBox(width: 170.w),
-                    SizedBox(
-                        width: sizeScreen.width * 0.4,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          controller: getController('outras distancias nome'),
-                          name: 'nome',
-                          getValue: (newValue) {
-                            valoresjson['distanciasOutraNome'] = newValue;
-                          },
-                        )),
-                    SizedBox(
-                        width: sizeScreen.width * 0.2,
-                        //height: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          controller: getController('outras distancias'),
-                          name: '(km)',
-                          getValue: (newValue) {
-                            valoresjson['distanciaOutras'] = newValue;
-                          },
-                          formatter: [FilteringTextInputFormatter.digitsOnly],
-                        ))
-                  ],
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-
-                textLabel(
-                  name: 'Pontos de referência:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                CustomTextField(
-                  controller: getController('ponto de referencia'),
-                  name: 'ponto de referência',
-                  getValue: (newValue) {
-                    valoresjson['pontosDeReferencia'] = newValue;
-                  },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.1,
-                ),
-
-                Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
-                  height: 300.h,
-                  width: sizeScreen.width,
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.008,
-                      left: sizeScreen.width * 0.04),
-                  child: Text(
-                    'Cadastro, classificação e outros',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: sizeScreen.height * 0.03),
-                  ),
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-                TableMtur(
-                  onChanged: (p0) {
-                    setState(() {
-                      valoresjson['tabelaMTUR'] = p0;
-                    });
-                  },
-                  associacao_e_sindicato:
-                      'associações e sindicatos do setor de alimentação',
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-
-                Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
-                  height: sizeScreen.height * 0.06,
-                  width: sizeScreen.width,
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.008,
-                      left: sizeScreen.width * 0.04),
-                  child: Text(
-                    'Funcionamento',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: sizeScreen.height * 0.03),
-                  ),
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                textLabel(
-                  name: 'Estrutura de funcionamento:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-                textLabel(
-                  name: 'Formas de pagamento:',
-                  fontWeight: FontWeight.bold,
-                ),
-
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                CheckC(
-                  key: formas_de_pagamento_key,
-                  nomes: [
-                    'Dinheiro',
-                    'Pix',
-                    'Cartão de Crédito',
-                    'Cartão de Débito'
-                  ],
-                  // getValue: (newValue) {
-                  //   valoresjson['FormaPagamento'] = newValue;
-                  // },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Vendas e Reservas:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                CheckC(
-                  key: vendas_e_reservas_key,
-                  nomes: ['Balcão', 'Whatsapp', 'Site', 'Instagram', 'outro'],
-                ),
-                SizedBox(
-                  height: 70.w,
-                ),
-
-                textLabel(
-                  name: 'Atendimento ao público:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Atendimento em língua estrangeira:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                CheckC(
-                  key: atendimento_em_lingua_estrangeira_key,
-                  nomes: ['Não', 'Inglês', 'Espanhol', 'outro'],
-                  // getValue: (newValue) {
-                  //   valoresjson['LinguaEstrangeira'] = newValue;
-                  // }
-                ),
-                SizedBox(
-                  height: 70.w,
-                ),
-                textLabel(
-                  name: 'Informativos impressos:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                CheckC(
-                  key: informativos_impressos_key,
-                  nomes: ['Não', 'Inglês', 'Espanhol', 'Português', 'outro'],
-                  // getValue: (newValue) {
-                  //   valoresjson['InformativosImpressos'] = newValue;
-                  // },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-
-                Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
-                  height: sizeScreen.height * 0.06,
-                  width: sizeScreen.width,
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.008,
-                      left: sizeScreen.width * 0.04),
-                  child: Text(
-                    'Regras de Funcionamento',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: sizeScreen.height * 0.03),
-                  ),
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Período:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['periodo'] = p0;
-                  },
-                  nomes: [
-                    'Janeiro',
-                    'Fevereiro',
-                    'Março',
-                    'Abril',
-                    'Maio',
-                    'Junho',
-                    'Julho',
-                    'Agosto',
-                    'Setembro',
-                    'Outubro',
-                    'Novembro',
-                    'Dezembro',
-                    'Ano Inteiro'
-                  ],
-                ),
-                SizedBox(
-                  height: 70.w,
-                ),
-                textLabel(
-                  name: 'Horário:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.01,
-                ),
-
-                TabelaHorarios(
-                  onChanged: (p0) {
-                    setState(() {
-                      valoresjson['tabelasHorario'] = p0;
-                    });
-                  },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-                textLabel(
-                  name: 'Funcionamento 24 horas:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                ExpansionTileYoN(
-                  getValue: (newValue) {
-                    valoresjson['funcionamento24h'] = newValue;
-                  },
-                ),
-                textLabel(
-                  name: 'Funcionamento em feriados:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                ExpansionTileYoN(
-                  getValue: (newValue) {
-                    valoresjson['funcionamentoEmFeriados'] = newValue;
-                  },
-                ),
-                textLabel(
-                  name: 'Restrições:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['restricoes'] = p0;
-                  },
-                  nomes: ['Crianças', 'Fumantes', 'Animais', 'outro'],
-                  //getValue: (newValue) {},
-                ),
-                SizedBox(
-                  height: 50.w,
-                ),
-                textLabel(
-                  name: 'Outras regras e informações:',
-                  fontWeight: FontWeight.bold,
-                ),
-
-                CustomTextField(
-                  controller: getController('outras regras e informações'),
-                  name: 'Outras regras e informações',
-                  getValue: (newValue) {
-                    valoresjson['outrasRegraseInformacoes'] = newValue;
-                  },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Capacidade de atendimento:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Capacidade instalada por dia nº:',
-                  fontWeight: FontWeight.bold,
-                ),
-
-                CustomTextField(
-                  controller: getController('capacidade instalada por dia'),
+                  controller: widget.controllers['qtdeFuncionariosPermanentes'],
+                ),
+              ),
+          ],), 
+          Row(children: [
+              textLabel(name: 'Temporários '),
+              SizedBox(
+                width: sizeScreen.width * 0.026,
+              ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: 'n°',
                   formatter: [FilteringTextInputFormatter.digitsOnly],
-                  name: 'nº',
-                  getValue: (newValue) {
-                    valoresjson['capInstaladaPdia'] = newValue;
-                  },
+                  keyboardType: TextInputType.numberWithOptions(),
+                  controller: widget.controllers['qtdeFuncionariosTemporarios'],
                 ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 50.w,
-                    ),
-                    textLabel(
-                      name: 'Pessoas atendidas sentadas nº:',
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(left: 100.w, right: 50.w),
-                  child: CustomTextField(
-                    controller:
-                        getController('instaladas pessoas atendidas sentadas'),
-                    formatter: [FilteringTextInputFormatter.digitsOnly],
-                    name: 'nº',
-                    getValue: (newValue) {
-                      valoresjson['capInstaladasSentadas'] = newValue;
-                    },
-                  ),
-                ),
-                textLabel(
-                  name: 'Capacidade simultânea nº:',
-                  fontWeight: FontWeight.bold,
-                ),
-
-                CustomTextField(
-                  controller: getController('capacidade simultanea'),
+              ),
+          ],),
+          Row(children: [
+              textLabel(name: 'Pessoas com \nDeficiência'),
+              SizedBox(
+                width: sizeScreen.width * 0.026,
+              ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: '%',
                   formatter: [FilteringTextInputFormatter.digitsOnly],
-                  name: 'nº',
-                  getValue: (newValue) {
-                    valoresjson['capSimultanea'] = newValue;
-                  },
+                  keyboardType: TextInputType.numberWithOptions(),
+                  controller: widget.controllers['qtdeFuncionariosComDeficiencia'],
                 ),
+              ),
+          ],),
+          SizedBox(
+            height: 20.w,
+          ),
+          //localização
+          RadioFormField(
+            onSaved: (newValue) => valoresJson['localizacao'] = newValue,
+            title: 'Localização',
+            options: ['Urbana', 'Rural'],
+            initialValue: isUpdate ? widget.infoModel!.localizacao! : '',
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+          textLabel(
+            name: 'Coordenadas Geográficas',
+            fontWeight: FontWeight.bold,
+          ),
+          CustomTextField(
+            controller: widget.controllers['longitudePrefeitura'],
+            name: 'Longitude',
+            keyboardType: TextInputType.numberWithOptions(),
+            formatter: [
+              FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))
+            ],
+          ),
+          CustomTextField(
+            controller: widget.controllers['latitudePrefeitura'],
+            name: 'Latitude',
+            keyboardType: TextInputType.numberWithOptions(),
+            formatter: [
+              FilteringTextInputFormatter.allow(
+                RegExp(r'^-?\d*\.?\d*'),
+              ),
+            ],
+          ),
+          textLabel(
+            name: 'Endereço:',
+            fontWeight: FontWeight.bold,
+          ),
+          CustomTextField(
+            name: 'Avenida/Rua/Travessa/Caminho/Outro',
+            controller: widget.controllers['avenidaRuaTravessa'],
+          ),
+          CustomTextField(
+            name: 'Bairro/Localidade',
+            controller: widget.controllers['bairroLocalidade'],
+          ),
+          CustomTextField(
+            name: 'Distrito',
+            controller: widget.controllers['distrito'],
+          ),
+          CustomTextField(
+            name: 'CEP',
+            controller: widget.controllers['CEP'],
+            formatter: [
+              FilteringTextInputFormatter.digitsOnly,
+              _validators.cepFormatter
+            ],
+          ),
+          //contato
+          textLabel(
+            name: 'Contato:', 
+            fontWeight: FontWeight.bold
+          ),
+          Row(children: [
+            textLabel(name: "WhatsApp"),
+            SizedBox(
+              width: sizeScreen.width * 0.1,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.6,
+              child: CustomTextField(
+                name: '(DD) *****-****',
+                keyboardType: TextInputType.numberWithOptions(),
+                formatter: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  _validators.phoneFormatter
+                ],
+                controller: widget.controllers['whatsapp'],
+              ),
+            ),
+            ],
+          ),
+          Row(children: [
+            textLabel(name: "Instagram"),
+            SizedBox(
+              width: sizeScreen.width * 0.1,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.6,
+              child: CustomTextField(
+                name: '@username',
+                controller: widget.controllers['instagram'],
+              ),
+            ),
+            ],
+          ),
+          Row(children: [
+            textLabel(name: "E-mail"),
+            SizedBox(
+              width: sizeScreen.width * 0.17,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.6,
+              child: CustomTextField(
+                name: 'E-mail',
+                controller: widget.controllers['email'],
+              ),
+            ),
+            ],
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+          textLabel(
+            name: 'Sinalização',
+            fontWeight: FontWeight.bold,
+          ),
+          ConditionalFieldsGroup(
+            title: 'De Acesso',
+            jsonKey: 'sinalizacaoDeAcesso',
+            valoresJson: valoresJson,
+            isUpdate: isUpdate,
+            children: [],
+            optionModelValue: isUpdate ? widget.infoModel!.sinalizacaoDeAcesso! : '',
+          ),
+          ConditionalFieldsGroup(
+            title: 'Turística',
+            jsonKey: 'sinalizacaoTuristica',
+            valoresJson: valoresJson,
+            isUpdate: isUpdate,
+            children: [],
+            optionModelValue: isUpdate ? widget.infoModel!.sinalizacaoTuristica! : '',
+          ),
+          CheckboxGroupFormField(
+            title: 'Proximidades: ',
+            onSaved: (newValue) => valoresJson['proximidades'] = newValue,
+            options: [
+              'Meio de Hospedagem',
+              'Shopping',
+              'Galeria/rua comercial',
+              'Centro de convenções/exposições',
+              'Posto de combustível',
+              'outro'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.proximidades! : [],
+          ),
+          SizedBox(
+            height: 30.w,
+          ),
+          //distancias
+          textLabel(
+            name: 'Distâncias até:', 
+            fontWeight: FontWeight.bold
+          ),
+          Row(children: [
+            textLabel(name: "Aeroporto:"),
+            SizedBox(
+              width: sizeScreen.width * 0.1,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.6,
+              child: CustomTextField(
+                name: '(km)',
+                controller: widget.controllers['distanciasAeroporto'],
+              ),
+            ),
+            ],
+          ),
+          Row(children: [
+            textLabel(name: "Estação \nrodoviária:"),
+            SizedBox(
+              width: sizeScreen.width * 0.1,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.6,
+              child: CustomTextField(
+                name: '(km)',
+                controller: widget.controllers['distanciasRodoviaria'],
+              ),
+            ),
+            ],
+          ),
+          Row(children: [
+            textLabel(name: "Estação \nferroviária:"),
+            SizedBox(
+              width: sizeScreen.width * 0.1,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.6,
+              child: CustomTextField(
+                name: '(km)',
+                controller: widget.controllers['distanciasFerroviaria'],
+              ),
+            ),
+            ],
+          ),
+          Row(children: [
+            textLabel(name: "Estação \nmarítima/\nfluvial:"),
+            SizedBox(
+              width: sizeScreen.width * 0.1,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.6,
+              child: CustomTextField(
+                name: '(km)',
+                controller: widget.controllers['distanciasMaritima'],
+              ),
+            ),
+            ],
+          ),
+          Row(children: [
+            textLabel(name: "Estação \nmetroviária:"),
+            SizedBox(
+              width: sizeScreen.width * 0.05,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.6,
+              child: CustomTextField(
+                name: '(km)',
+                controller: widget.controllers['distanciasMetroviaria'],
+              ),
+            ),
+            ],
+          ),
+          Row(children: [
+            textLabel(name: "Ponto de\nônibus:"),
+            SizedBox(
+              width: sizeScreen.width * 0.1,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.6,
+              child: CustomTextField(
+                name: '(km)',
+                controller: widget.controllers['distanciasPontoOnibus'],
+              ),
+            ),
+            ],
+          ),
+          Row(children: [
+            textLabel(name: "Ponto de\ntaxi:"),
+            SizedBox(
+              width: sizeScreen.width * 0.1,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.6,
+              child: CustomTextField(
+                name: '(km)',
+                controller: widget.controllers['distanciasPontoTaxi'],
+              ),
+            ),
+            ],
+          ),
+          Row(children: [
+            textLabel(name: "Outros:"),
+            SizedBox(
+              width: sizeScreen.width * 0.1,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.37,
+              child: CustomTextField(
+                name: 'nome',
+                controller: widget.controllers['distanciasOutraNome;'],
+              ),
+            ),
+             SizedBox(
+              width: sizeScreen.width * 0.2,
+              child: CustomTextField(
+                name: '(km)',
+                controller: widget.controllers['distanciasOutra'],
+              ),
+            ),
+            ],
+          ),
+          textLabel(
+            name: 'Ponto de referência:', 
+            fontWeight: FontWeight.bold
+          ),
+          CustomTextField(
+            name: 'Ponto de referência',
+            controller: widget.controllers['pontoReferencia'],
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+          ContainerHeaderToBigTexts(title: 'Cadastro, classificação e outros'),
+          SizedBox(
+            height: 55.h,
+          ),
+          TableMtur(
 
-                Row(
-                  children: [
-                    SizedBox(
-                      width: 50.w,
-                    ),
-                    textLabel(
-                      name: 'Pessoas atendidas sentadas nº:',
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ],
-                ),
+            
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+        ],
+      ),
+    );
+  }
 
-                Padding(
-                  padding: EdgeInsets.only(left: 100.w, right: 50.w),
-                  child: CustomTextField(
-                    controller:
-                        getController('simultanea pessoas atendidas sentadas'),
-                    formatter: [FilteringTextInputFormatter.digitsOnly],
-                    name: 'nº',
-                    getValue: (newValue) {
-                      valoresjson['capSimultaneaSentadas'] = newValue;
-                    },
-                  ),
-                ),
+}
 
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
+class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKeepAliveClientMixin {
+  @override
+    // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 
-                Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
-                  height: sizeScreen.height * 0.06,
-                  width: sizeScreen.width,
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.008,
-                      left: sizeScreen.width * 0.04),
-                  child: Text(
-                    'Características',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: sizeScreen.height * 0.03),
-                  ),
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Instalações:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                textLabel(
-                  name: 'Estacionamento:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['estacionamento'] = p0;
-                  },
-                  nomes: ['Pago', 'Gratuito', 'Coberto', 'Descoberto'],
-                ),
-                SizedBox(
-                  height: 50.w,
-                ),
-                Column(children: [
-                  Row(
-                    children: [
-                      textLabel(name: 'Capacidade de\nveículos nº'),
-                      SizedBox(
-                        width: sizeScreen.width * 0.01,
-                      ),
-                      SizedBox(
-                          width: sizeScreen.width * 0.6,
-                          //height: sizeScreen.height * 0.07,
-                          child: CustomTextField(
-                              controller:
-                                  getController('capacidade de veículos'),
-                              formatter: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              name: 'nº',
-                              getValue: (newValue) {
-                                valoresjson['capacidadeVeiculos'] = newValue;
-                              }))
-                    ],
-                  ),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  Row(
-                    children: [
-                      textLabel(name: 'Automóveis nº'),
-                      SizedBox(
-                        width: sizeScreen.width * 0.005,
-                      ),
-                      SizedBox(
-                          width: sizeScreen.width * 0.6,
-                          //height: sizeScreen.height * 0.07,
-                          child: CustomTextField(
-                              controller: getController('numero automoveis'),
-                              formatter: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              name: 'nº',
-                              getValue: (newValue) {
-                                valoresjson['numeroAutomoveis'] = newValue;
-                              }))
-                    ],
-                  ),
-                  SizedBox(
-                    height: sizeScreen.height * 0.02,
-                  ),
-                  Row(
-                    children: [
-                      textLabel(name: 'Ônibus nº'),
-                      SizedBox(
-                        width: sizeScreen.width * 0.1,
-                      ),
-                      SizedBox(
-                          width: sizeScreen.width * 0.6,
-                          //height: sizeScreen.height * 0.07,
-                          child: CustomTextField(
-                              controller: getController('numero onibus'),
-                              formatter: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              name: 'nº',
-                              getValue: (newValue) {
-                                valoresjson['numeroOnibus'] = newValue;
-                              }))
-                    ],
-                  ),
-                ]),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                textLabel(
-                  name: 'Serviços e Equipamentos:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                CheckC(
-                  onChanged: (p0) => valoresjson['servicosEEquipamentos'] = p0,
-                  nomes: [
-                    'Música ao vivo',
-                    'Atendimento a grupos',
-                    'Ventilador',
-                    'Adega',
-                    'Recreação para crianças',
-                    'Cardápio em língua estrangeira',
-                    'Música ambiente',
-                    'Manobrista',
-                    'Internet sem fio',
-                    'Área para fumantes',
-                    'Carta de vinhos',
-                    'Espaço para eventos',
-                    'Ar condicionado',
-                    'Lareira',
-                    'Área de lazer para crianças',
-                    'Cardápio em braile',
-                    'Sanitário próprio',
-                    'outro',
-                  ],
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                textLabel(
-                  name: 'Especificação da gastronomia por país:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                CheckC(
-                  onChanged: (p0) =>
-                      valoresjson['especificacaoDaGastronomiaPorPais'] = p0,
-                  nomes: [
-                    'Não',
-                    'Argentina',
-                    'Coreana',
-                    'Grega',
-                    'Judaica',
-                    'Polonesa',
-                    'Turca',
-                    'Alemã',
-                    'Asiática',
-                    'Escandinava',
-                    'Indiana',
-                    'Libanesa',
-                    'Portuguesa',
-                    'Uruguaia',
-                    'Americana',
-                    'Brasileira',
-                    'Espanhola',
-                    'Italiana',
-                    'Marroquina',
-                    'Suíça',
-                    'Vietnamita',
-                    'Árabe',
-                    'Chinesa',
-                    'Francesa',
-                    'Japonesa',
-                    'Mexicana',
-                    'Tailandesa',
-                    'outro',
-                  ],
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                textLabel(
-                  name: 'Se for brasileira, por região:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                CheckC(
-                  onChanged: (p0) =>
-                      valoresjson['seForBrasileiraPorRegiao'] = p0,
-                  nomes: [
-                    'Não',
-                    'Amazônica',
-                    'Campeira gaúcha',
-                    'Capixaba',
-                    'Goiana',
-                    'Mineira',
-                    'Carioca',
-                    'Nordestina',
-                    'Pantaneira',
-                    'Paulista',
-                    'outro'
-                  ],
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                textLabel(
-                  name: 'Por especialização:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.03,
-                ),
-                CheckC(
-                  onChanged: (p0) => valoresjson['porEspecializacao'] = p0,
-                  nomes: [
-                    'Não',
-                    'cachaçaria',
-                    'cafeteria',
-                    'café colonial',
-                    'cervejaria',
-                    'churrascaria',
-                    'creperia',
-                    'tapiocaria',
-                    'doceria',
-                    'empaderia',
-                    'frutos do mar',
-                    'grelhados (grill)',
-                    'galeteria',
-                    'pastelaria',
-                    'petisqueria',
-                    'pizzaria',
-                    'sanduicheria',
-                    'sucos',
-                    'chás',
-                    'whiskeria',
-                    'sorveteria',
-                    'outros'
-                  ],
-                ),
-                SizedBox(
-                  height: 55.w,
-                ),
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final sizeScreen = MediaQuery.sizeOf(context);
 
-                textLabel(
-                  name: 'Por tipo de dieta:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: 55.w,
-                ),
-                CheckC(
-                    onChanged: (p0) => valoresjson['porTipoDeDieta'] = p0,
-                    nomes: [
-                      'não',
-                      'macrobiótica',
-                      'vegetariana',
-                      'natural',
-                      'outros'
-                    ]),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          ContainerHeaderToBigTexts(title: 'funcionamento'),
+          SizedBox(
+            height: 55.h,
+          ),
+          textLabel(
+            name: 'Estrutura de funcionamento:', 
+            fontWeight: FontWeight.bold
+          ),
+          //pagamentos
+          CheckboxGroupFormField(
+            title: 'Formas de pagamento: ',
+            onSaved: (newValue) => valoresJson['formasDePagamento'] = newValue,
+            options: [
+              'Dinheiro',
+              'Pix',
+              'Cartão de Crédito',
+              'Cartão de Débito'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.formasDePagamento! : [],
+          ),
+          CheckboxGroupFormField(
+            title: 'Vendas e Reservas: ',
+            onSaved: (newValue) => valoresJson['vendasEReservas'] = newValue,
+            options: [
+              'Balcão',
+              'Whatsapp',
+              'Site',
+              'Instagram',
+              'Outro'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.vendasEReservas! : [],
+          ),
+          //atendimento
+          textLabel(
+            name: 'Atendimento ao público:', 
+            fontWeight: FontWeight.bold
+          ),
+          CheckboxGroupFormField(
+            title: 'Atendimento em língua estrangueira: ',
+            onSaved: (newValue) => valoresJson['atendimentoEmLinguasEstrangeiras'] = newValue,
+            options: [
+              'Não',
+              'Inglês',
+              'Espanhol',
+              'Outro'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.atendimentoEmLinguasEstrangeiras! : [],
+          ),
+          CheckboxGroupFormField(
+            title: 'Informativos impressos: ',
+            onSaved: (newValue) => valoresJson['informativosImpressos'] = newValue,
+            options: [
+              'Não',
+              'Inglês',
+              'Espanhol',
+              'Português',
+              'Outro'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.informativosImpressos! : [],
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+          ContainerHeaderToBigTexts(title: 'Regras de funcionamento'),       
+          SizedBox(
+            height: 55.h,
+          ),
+          CheckboxGroupFormField(
+            title: 'Périodo: ',
+            onSaved: (newValue) => valoresJson['periodo'] = newValue,
+            options: [
+              'Janeiro',
+              'Fevereiro',
+              'Março',
+              'Abril',
+              'Maio',
+              'Junho',
+              'Julho',
+              'Agosto',
+              'Setembro',
+              'Outubro',
+              'Novembro',
+              'Dezembro',
+              'Ano inteiro'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.periodo! : [],
+          ),
+          textLabel(name: 'Horário'),
+          SizedBox(
+            height: 55.h,
+          ),
+          TabelaHorarios(
+            onChanged: (p0) => valoresJson['tabelasHorario'] = p0,
+            getValue: isUpdate ? widget.infoModel!.tabelasHorario : {},
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+          ConditionalFieldsGroup(
+              title: 'Funcionamento\n24 Horas',
+              jsonKey: 'funcionamento24h',
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              optionModelValue: isUpdate ? widget.infoModel!.funcionamento24h : '',
+              children: []),
+          ConditionalFieldsGroup(
+              title: 'Funcionamento\nem Feriados',
+              jsonKey: 'funcionamentoEmFeriados',
+              valoresJson: valoresJson,
+              optionModelValue:
+                isUpdate ? widget.infoModel!.funcionamentoEmFeriados : '',
+              isUpdate: isUpdate,
+              children: []),
+          SizedBox(
+            height: 55.h,
+          ),
+          CheckboxGroupFormField(
+            title: 'Restrições: ',
+            onSaved: (newValue) => valoresJson['restricoes'] = newValue,
+            options: [
+              'Crianças', 
+              'Fumantes', 
+              'Animais', 
+              'outro'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.restricoes! : [],
+          ),
+          textLabel(
+            name: 'Outras regras e informações:',
+            fontWeight: FontWeight.bold
+          ),
+          CustomTextField(
+            name: 'Outras Regras e Informações',
+            controller: widget.controllers['outrasRegrasEInformacoes'],
+          ),
+          //capacidade
+          SizedBox(
+            height: 55.h,
+          ),
+          textLabel(
+            name: 'Capacidade de atendimento:',
+            fontWeight: FontWeight.bold
+          ),
+          textLabel(
+            name: 'Capacidade instalada por dia nº:',
+            fontWeight: FontWeight.bold
+          ),
+          CustomTextField(
+            name: 'nº',
+            controller: widget.controllers['capInstaladaPdia'],
+          ),
+          textLabel(
+            name: 'Pessoas atendidas sentadas nº:',
+            fontWeight: FontWeight.bold
+          ),
+          CustomTextField(
+            name: 'nº',
+            controller: widget.controllers['capInstaladasSentadas'],
+          ),
+          textLabel(
+            name: 'Capacidade simultânea nº:',
+            fontWeight: FontWeight.bold
+          ),
+          CustomTextField(
+            name: 'nº',
+            controller: widget.controllers['capSimultanea'],
+          ),
+          textLabel(
+            name: 'Pessoas atendidas sentadas nº:',
+            fontWeight: FontWeight.bold
+          ),
+          CustomTextField(
+            name: 'nº',
+            controller: widget.controllers['capSimultaneaSentadas'],
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+          //caracteriscas do local
+          ContainerHeaderToBigTexts(title: 'Características'),
+          SizedBox(
+            height: 55.h,
+          ),
+          textLabel(
+            name: 'Instalações',
+            fontWeight: FontWeight.bold,
+          ),
+          //veiculos
+          CheckboxGroupFormField(
+            title: 'Estacionamento: ',
+            onSaved: (newValue) => valoresJson['estacionamento'] = newValue,
+            options: [
+              'Pago', 
+              'Gratuito', 
+              'Coberto', 
+              'Descoberto'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.estacionamento! : [],
+          ),
+          Row(children: [
+            textLabel(name: "Capacidade de\n veiculos nº:"),
+            SizedBox(
+              width: sizeScreen.width * 0.1,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.5,
+              child:CustomTextField(
+                name: '(nº)',
+                controller: widget.controllers['capacidadeVeiculos'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
+              ),
+            ),
+            ],
+          ),
+          Row(children: [
+            textLabel(name: "Automóveis nº:"),
+            SizedBox(
+              width: sizeScreen.width * 0.08,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.5,
+              child:CustomTextField(
+                name: '(nº)',
+                controller: widget.controllers['numeroAutomoveis'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
+              ),
+            ),
+            ],
+          ),
+          Row(children: [
+            textLabel(name: "Ônibus nº:"),
+            SizedBox(
+              width: sizeScreen.width * 0.18,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.5,
+              child:CustomTextField(
+                name: '(nº)',
+                controller: widget.controllers['numeroOnibus'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
+              ),
+            ),
+            ],
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+          CheckboxGroupFormField(
+            title: 'Serviços e Equipamentos: ',
+            onSaved: (newValue) => valoresJson['servicosEEquipamentos'] = newValue,
+            options: [
+              'Música ao vivo',
+              'Atendimento a grupos',
+              'Ventilador',
+              'Adega',
+              'Recreação para crianças',
+              'Cardápio em língua estrangeira',
+              'Música ambiente',
+              'Manobrista',
+              'Internet sem fio',
+              'Área para fumantes',
+              'Carta de vinhos',
+              'Espaço para eventos',
+              'Ar condicionado',
+              'Lareira',
+              'Área de lazer para crianças',
+              'Cardápio em braile',
+              'Sanitário próprio',
+              'outro',
+            ],
+            initialValue: isUpdate ? widget.infoModel!.servicosEEquipamentos! : [],
+          ),
+          CheckboxGroupFormField(
+            title: 'Especificação da gastromia pro país: ',
+            onSaved: (newValue) => valoresJson['especificacaoDaGastronomiaPorPais'] = newValue,
+            options: [
+              'Não',
+              'Argentina',
+              'Coreana',
+              'Grega',
+              'Judaica',
+              'Polonesa',
+              'Turca',
+              'Alemã',
+              'Asiática',
+              'Escandinava',
+              'Indiana',
+              'Libanesa',
+              'Portuguesa',
+              'Uruguaia',
+              'Americana',
+              'Brasileira',
+              'Espanhola',
+              'Italiana',
+              'Marroquina',
+              'Suíça',
+              'Vietnamita',
+              'Árabe',
+              'Chinesa',
+              'Francesa',
+              'Japonesa',
+              'Mexicana',
+              'Tailandesa',
+              'outro',
+            ],
+            initialValue: isUpdate ? widget.infoModel!.especificacaoDaGastronomiaPorPais! : [],
+          ),
+          CheckboxGroupFormField(
+            title: 'Se for brasileira, por região: ',
+            onSaved: (newValue) => valoresJson['seForBrasileiraPorRegiao'] = newValue,
+            options: [
+              'Não',
+              'Amazônica',
+              'Campeira gaúcha',
+              'Capixaba',
+              'Goiana',
+              'Mineira',
+              'Carioca',
+              'Nordestina',
+              'Pantaneira',
+              'Paulista',
+              'Outras'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.seForBrasileiraPorRegiao! : [],
+          ),
+          CheckboxGroupFormField(
+            title: 'Por especialização: ',
+            onSaved: (newValue) => valoresJson['porEspecializacao'] = newValue,
+            options: [
+              'Não',
+              'Cachaçaria',
+              'Cafeteria',
+              'Café colonial',
+              'Cervejaria',
+              'Churrascaria',
+              'Creperia',
+              'Tapiocaria',
+              'Doceria',
+              'Empaderia',
+              'Frutos do mar',
+              'Grelhados (grill)',
+              'Galeteria',
+              'Pastelaria',
+              'Petisqueria (snack bar)',
+              'Pizzaria',
+              'Sanduicheria',
+              'Sucos',
+              'Chás',
+              'Whiskeria',
+              'Sorveteria',
+              'Outros'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.porEspecializacao! : [],
+          ),
+          CheckboxGroupFormField(
+            title: 'Por tipo de dieta: ',
+            onSaved: (newValue) => valoresJson['porTipoDeDieta'] = newValue,
+            options: [
+              'Não',
+              'Macrobiótica',
+              'Vegetariana',
+              'Natural',
+              'Outros'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.porTipoDeDieta! : [],
+          ),
+          CheckboxGroupFormField(
+            title: 'Por tipo de serviço: ',
+            onSaved: (newValue) => valoresJson['porTipoDeServico'] = newValue,
+            options: [
+              'A la carte',
+              'self service por preço fixo',
+              'self service por quilo',
+              'Rodízio',
+              'Rodízio com bufê (buffet)',
+              'drive-thru',
+              'fast food',
+              'delivery',
+              'Outros'
+            ],
+            initialValue: isUpdate ? widget.infoModel!.porTipoDeServico! : [],
+          ),
+          SizedBox(
+            height: 55.h,
+          ),        
+        ],
+      ),
+    );
+  }
+}
 
-                SizedBox(
-                  height: 55.w,
-                ),
+class ProtecaoPage extends StatelessWidget{
+  final Map<String, TextEditingController> controllers;
+  final AlimentosEBebidasModel? infoModel;
 
-                textLabel(
-                  name: 'Por tipo de serviço:',
-                  fontWeight: FontWeight.bold,
-                ),
-
-                CheckC(
-                    onChanged: (p0) => valoresjson['porTipoDeServico'] = p0,
-                    nomes: [
-                      'a la carte',
-                      'self service por preço fixo',
-                      'self service por quilo',
-                      'rodízio',
-                      'rodízio com bufê (buffet)',
-                      'drive-thru',
-                      'fast food',
-                      'delivery',
-                      'outros'
-                    ]),
-
-                SizedBox(
-                  height: 70.w,
-                ),
-
-                Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
-                  height: sizeScreen.height * 0.15,
-                  width: sizeScreen.width,
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.008,
-                      left: sizeScreen.width * 0.04),
-                  child: Text(
-                    'Proteção, Qualificação, Certificação, Premiação, destaques e outros',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: sizeScreen.height * 0.03),
-                  ),
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-                Row(children: [
-                  textLabel(
-                    name: 'Do equipamento/espaço:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                  SizedBox(
-                    width: sizeScreen.width * 0.04,
-                  ),
-                  SizedBox(
-                      // width: sizeScreen.width * 0.5,
-                      //  //height: sizeScreen.height * 0.07,
-                      child: Padding(
-                    padding: EdgeInsets.only(top: sizeScreen.height * 0.04),
-                    child: ExpansionTileYoN(
-                      getValue: (newValue) {
-                        valoresjson['doEquipamento'] = newValue;
-                      },
-                    ),
-                  ))
-                ]),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-
+  const ProtecaoPage({super.key, required this.controllers, this.infoModel});
+  
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child:Column(
+        children: [
+          ContainerHeaderToBigTexts(title: 'Proteção, Qualificação, Certificação, Premiação, destaques e outros'),
+          ConditionalFieldsGroup(
+              title: 'Do Equipamento/Espaço',
+              jsonKey: 'doEquipamento',
+              optionModelValue: isUpdate ? infoModel!.doEquipamento : '',
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              children: [
                 TabelsEquipamentoEEspaco(
-                  onChanged: (p0) {
-                    setState(() {
-                      valoresjson['tabelaEquipamentoEEspaco'] = p0;
-                    });
-                  },
-                ),
-
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-                Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
-                  height: sizeScreen.height * 0.06,
-                  width: sizeScreen.width,
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.008,
-                      left: sizeScreen.width * 0.04),
-                  child: Text(
-                    'Estado geral de conservação',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: sizeScreen.height * 0.03),
-                  ),
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-                RadioD(
-                  options: const ['Muito bom', 'Bom', 'Ruim'],
-                  getValue: (newValue) {
-                    valoresjson['estadoGeralDeConservacao'] = newValue;
-                  },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-                Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
-                  height: sizeScreen.height * 0.06,
-                  width: sizeScreen.width,
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.008,
-                      left: sizeScreen.width * 0.04),
-                  child: Text(
-                    'Acessibilidade',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: sizeScreen.height * 0.03),
-                  ),
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name:
-                      'Possui alguma facilidade para pessoas com deficiência ou mobilidade reduzida?',
-                  textAlign: TextAlign.center,
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.04,
-                ),
-                ExpansionTileYoN(
-                  getValue: (newValue) {
-                    valoresjson['possuiFacilidade'] = newValue;
-                  },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'obs: caso sim, responder às questões seguintes',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Pessoal capacitado para receber PCD:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['pessoalCapacitadoParaReceberPCD'] = p0;
-                  },
-                  nomes: [
+                  getValue: isUpdate ? infoModel!.tabelaEquipamentoEEspaco : {},
+                  onChanged: (p0) => valoresJson['tabelaEquipamentoEEspaco'] = p0,
+                )
+              ]),
+          SizedBox(
+            height: 35.h,
+          ),
+          ContainerHeader(title: 'Estado Geral de Conservação'),
+          RadioFormField(
+            initialValue: isUpdate ? infoModel!.estadoGeralDeConservacao : '',
+            onSaved: (newValue) => valoresJson['estadoGeralDeConservacao'] = newValue,
+            options: ['Muito Bom', 'Bom', 'Ruim'],
+            title: 'Estado Geral de Conservação',
+          ),
+          SizedBox(
+            height: 85.h,
+          ),
+          SizedBox(
+            height: 85.h,
+          ),
+          ContainerHeader(title: 'Acessibilidade'),
+          ConditionalFieldsGroup(
+              optionModelValue: isUpdate ? infoModel!.possuiFacilidade : '',
+              title:
+                  'Possui Alguma Facilidade\npara Pessoas com\nDeficiência\nou Mobilidade Reduzida?',
+              jsonKey: 'possuiFacilidade',
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              children: [
+                CheckboxGroupFormField(
+                  options: [
                     'Não',
                     'Física',
                     'Auditiva',
@@ -1731,548 +1303,252 @@ class _AlimentoseBebidasState extends State<AlimentoseBebidas> {
                     'Mental',
                     'Múltipla'
                   ],
+                  initialValue: isUpdate ? infoModel!.pessoalCapacitadoParaReceberPCD : [],
+                  title:
+                      'Pessoal Capacitado Para Receber Pessoas com Deficiência',
+                  onSaved: (newValue) =>
+                      valoresJson['pessoalCapacitadoParaReceberPCD'] = newValue,
                 ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                textLabel(
-                  name: 'Rota externa acessível:',
-                  fontWeight: FontWeight.bold,
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['rotaExternaAcessível'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Estacionamento',
-                    'Calçada rebaixada',
-                    'Faixa de pedestre',
-                    'Rampa',
-                    'Semáforo sonoro',
-                    'Piso tátil de alerta',
-                    'Piso regular antiderrapante',
-                    'Livre de obstáculos',
-                    'outro'
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Símbolo internacional de acesso:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['simboloInternacionalDeAcesso'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Entrada',
-                    'Área reservada',
-                    'Estacionamento',
-                    'Área de embarque e desembarque',
-                    'Sanitário',
-                    'Saída de emergência',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Local de embarque e desembarque:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['localDeEmbarqueEDesembarque'] = p0;
-                  },
-                  nomes: ['Não', 'Sinalizado', 'Com acesso em nível'],
-                ),
-
-                SizedBox(
-                  height: 50.w,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Vaga em estacionamento:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['vagaEmEstacionamento'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Sinalizado',
-                    'Com acesso em nível',
-                    'Alargada para cadeira de rodas',
-                    'Rampa de acesso à calçada'
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name:
-                        'Área de circulação / acesso interno para cadeira de rodas:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson[
-                        'areaDeCirculacaoAcessoInternoParaCadeiraDeRodas'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Rampa',
-                    'Elevador',
-                    'Plataforma elevatória',
-                    'Porta larga',
-                    'Piso regular / antiderrapante'
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Escada:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['escada'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Corrimão',
-                    'Patamar para descanso',
-                    'Sinalização tátil de alerta',
-                    'Piso antiderrapante',
-                  ],
-                ),
-
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Rampa:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['rampa'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Corrimão',
-                    'Patamar para descanso',
-                    'Sinalização tátil de alerta',
-                    'Piso antiderrapante',
-                    'Inclinação adequada',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Piso:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['piso'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Tátil',
-                    'Sem obstáculos',
-                    'Antiderrapante/deslizante',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Elevador:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['elevador'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Sinalizado em braile',
-                    'Dispositivo sonoro',
-                    'Dispositivo luminoso',
-                    'Sensor eletrônico (porta)'
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Equipamento motorizado para deslocamento interno:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson[
-                        'equipamentoMotorizadoParaDeslocamentoInterno'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Cadeira',
-                    'Carrinho',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Sinalização visual:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['sinalizacaoVisual'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Entrada',
-                    'Recepção',
-                    'Porta',
-                    'Sanitário',
-                    'Elevador',
-                    'Restaurante',
-                    'Área de lazer',
-                    'Área de resgate',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Sinalização tátil:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['sinalizacaoTatil'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Entrada',
-                    'Recepção',
-                    'Porta',
-                    'Sanitário',
-                    'Elevador',
-                    'Restaurante',
-                    'Área de lazer',
-                    'Área de resgate',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Alarme de emergência:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['alarmeDeEmergencia'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Sonoro',
-                    'Visual',
-                    'Vibratório',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Comunicação:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['comunicacao'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Texto informativo em braile',
-                    'Texto informativo em fonte ampliada',
-                    'Intérprete em libras',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Balcão de atendimento:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['balcaoDeAtendimento'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Rebaixado',
-                    'Preferencial para PCD ou com deficiência ou mobilidade reduzida',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Mobiliário:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['mobiliario'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Altura adequada',
-                    'Recuo adequado',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Sanitário',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['sanitario'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Porta larga suficiente para entrada de cadeira de rodas ',
-                    'Acesso para cadeira de rodas',
-                    'Espelho rebaixado ou com ângulo de alcance visual',
-                    'Torneira monocomando / alavanca',
-                    'Barra de apoio',
-                    'Giro para cadeira de rodas',
-                    'Pia rebaixada',
-                    'Boxe ou banheira daptada',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.02),
-                  child: textLabel(
-                    name: 'Telefone:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                CheckC(
-                  onChanged: (p0) {
-                    valoresjson['telefone'] = p0;
-                  },
-                  nomes: [
-                    'Não',
-                    'Altura adequada',
-                    'Para surdos (TPS ou TTS)',
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.02,
-                      bottom: sizeScreen.height * 0.04),
-                  child: textLabel(
-                    name:
-                        'Sinalização indicativa de atendimento preferencial para pessoas com deficiência ou mobilidade reduzida:',
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-
-                ExpansionTileYoN(
-                  getValue: (newValue) {
-                    valoresjson['sinalizacaoIndicativa'] = newValue;
-                  },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.02,
-                ),
-                Row(
-                  children: [
-                    textLabel(
-                      name: 'Outros',
-                      fontWeight: FontWeight.bold,
-                    ),
-                    SizedBox(
-                      width: sizeScreen.width * 0.1,
-                    ),
-                    SizedBox(
-                        width: sizeScreen.width * 0.6,
-                        //eight: sizeScreen.height * 0.07,
-                        child: CustomTextField(
-                          controller: getController('outrosSinalizacao'),
-                          name: '',
-                          getValue: (newValue) {
-                            valoresjson['outrosAcessibilidade'] = newValue;
-                          },
-                        ))
-                  ],
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-                Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
-                  height: sizeScreen.height * 0.06,
-                  width: sizeScreen.width,
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.008,
-                      left: sizeScreen.width * 0.04),
-                  child: Text(
-                    'Observações',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: sizeScreen.height * 0.03),
-                  ),
-                ),
+                CheckboxGroupFormField(
+                    title: 'Rota Externa Acessível',
+                    onSaved: (newValue) =>
+                        valoresJson['rotaExternaAcessivel'] = newValue,
+                    initialValue:
+                        isUpdate ? infoModel!.rotaExternaAcessivel : [],
+                    options: [
+                      'Não',
+                      'Estacionamento',
+                      'Calçada Rebaixada',
+                      'Faixa de Pedestre',
+                      'Rampa',
+                      'Semáforo Sonoro',
+                      'Piso Tátil de Alerta',
+                      'Piso Regular e Antiderrapante',
+                      'Livre de Obstáculos',
+                      'outro'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue:
+                        isUpdate ? infoModel!.simboloInternacionalDeAcesso : [],
+                    title: 'Símbolo Internacional de Acesso',
+                    onSaved: (newValue) =>
+                        valoresJson['simboloInternacionalDeAcesso'] = newValue,
+                    options: [
+                      'Não',
+                      'Entrada',
+                      'Área Reservada',
+                      'Estacionamento',
+                      'Área de Embarque e Desembarque',
+                      'Sanitário',
+                      'Saída de Emergência'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue:
+                        isUpdate ? infoModel!.localDeEmbarqueEDesembarque : [],
+                    title: 'Local de Embarque e Desembarque',
+                    onSaved: (newValue) =>
+                        valoresJson['localDeEmbarqueEDesembarque'] = newValue,
+                    options: ['Não', 'Sinalizado', 'Com Acesso em Nível']),
+                CheckboxGroupFormField(
+                    initialValue:
+                        isUpdate ? infoModel!.vagaEmEstacionamento : [],
+                    title: 'Vaga em Estacionamento',
+                    onSaved: (newValue) =>
+                        valoresJson['vagaEmEstacionamento'] = newValue,
+                    options: [
+                      'Não',
+                      'Sinalizada',
+                      'Com Acesso em Nível',
+                      'Alargada para Cadeira de Rodas',
+                      'Rampa de Acesso à Calçada'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? infoModel!.areaDeCirculacaoAcessoInternoParaCadeiraDeRodas : [],
+                    title:
+                        'Área de Circulação/Acesso Interno para Cadeira de Rodas',
+                    onSaved: (newValue) =>
+                        valoresJson['areaDeCirculacaoAcessoInternoParaCadeiraDeRodas'] = newValue,
+                    options: [
+                      'Não',
+                      'Rampa',
+                      'Elevador',
+                      'Plataforma Elevatória',
+                      'Com Circulação Entre Mobiliário',
+                      'Porta Larga',
+                      'Piso Regular/Antiderrapante'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? infoModel!.escada : [],
+                    title: 'Escada',
+                    onSaved: (newValue) => valoresJson['escada'] = newValue,
+                    options: [
+                      'Não',
+                      'Corrimão',
+                      'Patamar para Descanso',
+                      'Sinalização Tátil de Alerta',
+                      'Piso Antiderrapante'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? infoModel!.rampa : [],
+                    title: 'Rampa',
+                    onSaved: (newValue) => valoresJson['rampa'] = newValue,
+                    options: [
+                      'Não',
+                      'Corrimão',
+                      'Patamar para Descanso',
+                      'Piso Antiderrapante',
+                      'Sinalização Tátil',
+                      'Inclinação Adequada'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? infoModel!.piso : [],
+                    title: "Piso",
+                    onSaved: (newValue) => valoresJson['piso'] = newValue,
+                    options: [
+                      'Não',
+                      'Tátil',
+                      'Sem Obstáculos (tapete ou desnível)',
+                      'Antiderrapante/Deslizante'
+                    ]),
+                CheckboxGroupFormField(
+                    title: "Elevador",
+                    initialValue: isUpdate ? infoModel!.elevador : [],
+                    onSaved: (newValue) => valoresJson['elevador'] = newValue,
+                    options: [
+                      'Não',
+                      'Sinalizado em Braille',
+                      'Dispositivo Sonoro',
+                      'Dispositivo Luminoso',
+                      'Sensor Eletrônico (porta)'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue:
+                        isUpdate ? infoModel!.equipamentoMotorizadoParaDeslocamentoInterno : [],
+                    title: 'Equipamento Motorizado para Deslocamento Interno',
+                    onSaved: (newValue) =>
+                        valoresJson['equipamentoMotorizadoParaDeslocamentoInterno'] = newValue,
+                    options: ['Não', 'Cadeira', 'Carrinho']),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? infoModel!.sinalizacaoVisual : [],
+                    title: 'Sinalização Visual',
+                    onSaved: (newValue) =>
+                        valoresJson['sinalizacaoVisual'] = newValue,
+                    options: [
+                      'Não',
+                      'Entrada',
+                      'Recepção',
+                      'Porta',
+                      'Sanitário',
+                      'Elevador',
+                      'Restaurante',
+                      'Área de Lazer',
+                      'Área de Resgate'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? infoModel!.sinalizacaoTatil : [],
+                    title: "Sinalização Tátil",
+                    onSaved: (newValue) =>
+                        valoresJson['sinalizacaoTatil'] = newValue,
+                    options: [
+                      'Não',
+                      'Entrada',
+                      'Recepção',
+                      'Porta',
+                      'Sanitário',
+                      'Elevador',
+                      'Restaurante',
+                      'Área de Lazer',
+                      'Área de Resgate'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? infoModel!.alarmeDeEmergencia : [],
+                    title: "Alarme de Emergência",
+                    onSaved: (newValue) =>
+                        valoresJson['alarmeDeEmergencia'] = newValue,
+                    options: ['Não', 'Sonoro', 'Visual', 'Vibratório']),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? infoModel!.comunicacao : [],
+                    title: "Comunicação",
+                    onSaved: (newValue) =>
+                        valoresJson['comunicacao'] = newValue,
+                    options: [
+                      'Não',
+                      'Texto Informativo em Braille',
+                      'Texto Informativo em Fonte Ampliada',
+                      'Intérprete em Libras (língua brasileira de sinais)'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue:
+                        isUpdate ? infoModel!.balcaoDeAtendimento : [],
+                    title: "Balcão de Atendimento",
+                    onSaved: (newValue) =>
+                        valoresJson['balcaoDeAtendimento'] = newValue,
+                    options: [
+                      'Não',
+                      'Rebaixamento',
+                      'Preferencial para Pessoas com Deficiência ou Mobilidade Reduzida'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? infoModel!.mobiliario : [],
+                    title: "Mobiliário",
+                    onSaved: (newValue) => valoresJson['mobiliario'] = newValue,
+                    options: ['Não', 'Altura Adequada', 'Recuo Adequado']),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? infoModel!.sanitario : [],
+                    title: "Sanitário",
+                    onSaved: (newValue) => valoresJson['sanitario'] = newValue,
+                    options: [
+                      'Não',
+                      'Barra de Apoio',
+                      'Porta Larga Suficiente Para Entrada de Cadeira de Rodas',
+                      'Giro para Cadeira de Rodas',
+                      'Acesso para Cadeira de Rodas',
+                      'Pia Rebaixada',
+                      'Espelho Rebaixado ou com Ângulo de Alcance Visual',
+                      'Boxe ou Banheira Adaptada',
+                      'Torneira Monocomando/Alavanca'
+                    ]),
+                CheckboxGroupFormField(
+                    initialValue: isUpdate ? infoModel!.telefone : [],
+                    title: "Telefone",
+                    onSaved: (newValue) => valoresJson['telefone'] = newValue,
+                    options: [
+                      'Não',
+                      'Altura Adequada',
+                      'Para Surdos (TPS ou TTS)'
+                    ]),
+                ConditionalFieldsGroup(
+                    optionModelValue: isUpdate
+                        ? infoModel!.sinalizacaoIndicativa
+                        : '',
+                    title:
+                        'Sinalização Indicativa\nde Atendimento\nPreferencial para Pessoas\ncom Deficiência ou\nMobilidade Reduzida',
+                    jsonKey: 'sinalizacaoIndicativa',
+                    valoresJson: valoresJson,
+                    isUpdate: isUpdate,
+                    children: []),
                 CustomTextField(
-                  controller: getController('observacoes'),
-                  name: '',
-                  getValue: (newValue) {
-                    valoresjson['observacoes'] = newValue;
-                  },
+                  name: 'Outras',
+                  controller: controllers['outrasAcessibilidade'],
                 ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-
-                Container(
-                  color: const Color.fromARGB(255, 55, 111, 60),
-                  height: sizeScreen.height * 0.06,
-                  width: sizeScreen.width,
-                  padding: EdgeInsets.only(
-                      top: sizeScreen.height * 0.008,
-                      left: sizeScreen.width * 0.04),
-                  child: Text(
-                    'Referências',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: sizeScreen.height * 0.03),
-                  ),
-                ),
-                CustomTextField(
-                  controller: getController('referencias'),
-                  name: '',
-                  getValue: (newValue) {
-                    valoresjson['referencias'] = newValue;
-                  },
-                ),
-                SizedBox(
-                  height: sizeScreen.height * 0.05,
-                ),
-
-                SendButton(
-                  onPressed: () {
-                    // controllers.forEach((key, value) {
-                    //   print(value.text);
-                    // },);
-                    valoresjson['nome_pesquisador'] = pesquisadorNome;
-                    valoresjson['telefone_pesquisador'] = pesquisadorTelefone;
-                    valoresjson['email_pesquisador'] = pesquisadorEmail;
-                    valoresjson['nome_coordenador'] = coordenadorNome;
-                    valoresjson['telefone_coordenador'] = coordenadorTelefone;
-                    valoresjson['email_coordenador'] = coordenadorEmail;
-                    valoresjson['tipoDeOrganizacaoInstituicao'] =
-                        tipo_de_organizacao_key.currentState!
-                            .getSelectedValues()
-                            .toList();
-                    valoresjson['proximidades'] = proximidades_key.currentState!
-                        .getSelectedValues()
-                        .toList();
-                    valoresjson['formasDePagamento'] = formas_de_pagamento_key
-                        .currentState!
-                        .getSelectedValues()
-                        .toList();
-                    valoresjson['vendasEReservas'] = vendas_e_reservas_key
-                        .currentState!
-                        .getSelectedValues()
-                        .toList();
-                    valoresjson['atendimentoEmLinguasEstrangeiras'] =
-                        atendimento_em_lingua_estrangeira_key.currentState!
-                            .getSelectedValues()
-                            .toList();
-                    valoresjson['informativosImpressos'] =
-                        informativos_impressos_key.currentState!
-                            .getSelectedValues()
-                            .toList();
-
-                    //  sendForm(valoresjson);
-                    //   valoresjson.forEach(
-                    //     (key, value) {
-                    //       debugPrint('$key ');
-                    //     },
-                    //   );
-
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-
-                      _formService.sendForm(
-                          valoresjson, AppConstants.ALIMENTOS_E_BEBIDAS);
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('preencha os dados!')));
-                    }
-                  },
-                ),
-                const SizedBox(
-                  height: 15,
-                )
-              ],
-            )),
+              ]),
+          SizedBox(
+            height: 55.h,
           ),
-        ));
+          ContainerHeader(title: 'Observações e Referências'),
+          SizedBox(
+            height: 55.h,
+          ),
+          CustomTextField(
+            name: 'Observações',
+            controller: controllers['observacoes'],
+          ),
+          CustomTextField(
+          name: 'Referências',
+          controller: controllers['referencias'],
+          )
+        ],    
+      ),
+    );
   }
 }
