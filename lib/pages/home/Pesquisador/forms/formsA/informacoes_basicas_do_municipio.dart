@@ -7,10 +7,10 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.da
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/fields.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/container_widget.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
-import 'package:inventur/pages/home/Pesquisador/widgets/expandedTileYoN.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/multi_auto_complete_form_field.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
+import 'package:inventur/pages/widgets/map.dart';
 import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
@@ -21,6 +21,7 @@ final Map<String, dynamic> valoresJson = {
   'tipo_formulario': 'Informações Básicas do Município',
 };
   bool isUpdate = false;
+  double mapHeight = 950.h;
 class InformacoesBasicasDoMunicipio extends StatefulWidget {
   final InformacoesBasicasModel? infoModel;
   const InformacoesBasicasDoMunicipio({super.key, this.infoModel});
@@ -529,21 +530,54 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
   bool get wantKeepAlive => true;
 }
 
-class InformacoesGerais extends StatelessWidget {
+class InformacoesGerais extends StatefulWidget {
   final Map<String, TextEditingController> controllers;
   final InformacoesBasicasModel? infoModel;
 
   const InformacoesGerais({super.key, required this.controllers, this.infoModel});
 
   @override
+  State<InformacoesGerais> createState() => _InformacoesGeraisState();
+}
+
+class _InformacoesGeraisState extends State<InformacoesGerais> {
+    bool _isFullScreen = false;
+
+  // Altura inicial do mapa quando não está em tela cheia
+  final double _initialMapHeight = 300.0;
+
+  void _toggleFullScreen() {
+    setState(() {
+      _isFullScreen = !_isFullScreen;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+
     final sizeScreen = MediaQuery.sizeOf(context);
+    final double currentMapHeight = _isFullScreen ? sizeScreen.height : _initialMapHeight;
     // TODO: implement build
+        if (_isFullScreen) {
+      return Scaffold(
+        // Usamos um SafeArea para evitar que o mapa fique sob a barra de status
+        body: SafeArea(
+          child: GestureDetector(
+            onDoubleTap: _toggleFullScreen,
+            child: SizedBox(
+              height: currentMapHeight,
+              width: 1300.h,
+              child: const MeuMapa(),
+            ),
+          ),
+        ),
+      );
+    }
     final formWidgts = <Widget>[
       Identificacao(
         onSaved: (p0) => valoresJson['tipo'] = p0,
-        controllers: controllers,
-        infoModel: infoModel,
+        controllers: widget.controllers,
+        infoModel: widget.infoModel,
       ),
       SizedBox(
         height: 65.h,
@@ -568,15 +602,15 @@ class InformacoesGerais extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
       CustomTextField(
-        controller: controllers['enderecoPrefeitura'],
+        controller: widget.controllers['enderecoPrefeitura'],
         name: "Avenida/rua/travessa/caminho/outro",
       ),
       CustomTextField(
-        controller: controllers['bairroPrefeitura'],
+        controller: widget.controllers['bairroPrefeitura'],
         name: "Bairro",
       ),
       CustomTextField(
-        controller: controllers['cepPrefeitura'],
+        controller: widget.controllers['cepPrefeitura'],
         formatter: [
           FilteringTextInputFormatter.digitsOnly,
           _validators.cepFormatter
@@ -595,24 +629,24 @@ class InformacoesGerais extends StatelessWidget {
           FilteringTextInputFormatter.digitsOnly,
           _validators.phoneFormatter
         ],
-        controller: controllers['numeroPrefeitura'],
+        controller: widget.controllers['numeroPrefeitura'],
         name: 'Número',
       ),
       CustomTextField(
-        controller: controllers['instagramPrefeitura'],
+        controller: widget.controllers['instagramPrefeitura'],
         name: 'Instagram',
       ),
       CustomTextField(
-        controller: controllers['emailPrefeitura'],
+        controller: widget.controllers['emailPrefeitura'],
         name: 'E-mail',
       ),
       CustomTextField(
         name: 'Site Prefeitura',
-        controller: controllers['sitePrefeitura'],
+        controller: widget.controllers['sitePrefeitura'],
       ),
       CustomTextField(
         keyboardType: TextInputType.numberWithOptions(),
-        controller: controllers['cnpjPrefeitura'],
+        controller: widget.controllers['cnpjPrefeitura'],
         name: 'CNPJ',
         validat: _validators.validarCNPJ,
         formatter: [_validators.cnpjFormatter],
@@ -624,22 +658,29 @@ class InformacoesGerais extends StatelessWidget {
         name: "Coordenadas Geográficas",
         fontWeight: FontWeight.bold,
       ),
-      CustomTextField(
-        controller: controllers['longitudePrefeitura'],
-        name: 'Longitude',
-        keyboardType: TextInputType.numberWithOptions(),
-        formatter: [FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))],
-      ),
-      CustomTextField(
-        controller: controllers['latitudePrefeitura'],
-        name: 'Latitude',
-        keyboardType: TextInputType.numberWithOptions(),
-        formatter: [
-          FilteringTextInputFormatter.allow(
-            RegExp(r'^-?\d*\.?\d*'),
-          ),
-        ],
-      ),
+      // CustomTextField(
+      //   controller: controllers['longitudePrefeitura'],
+      //   name: 'Longitude',
+      //   keyboardType: TextInputType.numberWithOptions(),
+      //   formatter: [FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))],
+      // ),
+      // CustomTextField(
+      //   controller: controllers['latitudePrefeitura'],
+      //   name: 'Latitude',
+      //   keyboardType: TextInputType.numberWithOptions(),
+      //   formatter: [
+      //     FilteringTextInputFormatter.allow(
+      //       RegExp(r'^-?\d*\.?\d*'),
+      //     ),
+      //   ],
+      // ),
+      SizedBox(
+        
+        height: currentMapHeight,
+        width: 1300.h,
+        child: GestureDetector(
+          onDoubleTap:() =>  _toggleFullScreen(),
+          child: MeuMapa())),
       SizedBox(
         height: 55.h,
       ),
@@ -648,7 +689,7 @@ class InformacoesGerais extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
       CustomTextField(
-        controller: controllers['municipiosLimitrofes'],
+        controller: widget.controllers['municipiosLimitrofes'],
         name: "Municípios",
       ),
       SizedBox(
@@ -659,7 +700,7 @@ class InformacoesGerais extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
       CustomTextField(
-        controller: controllers['distanciaDaCapital'],
+        controller: widget.controllers['distanciaDaCapital'],
         name: "(km)",
         formatter: [FilteringTextInputFormatter.digitsOnly],
         keyboardType: TextInputType.numberWithOptions(),
@@ -672,13 +713,13 @@ class InformacoesGerais extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
       CustomTextField(
-        controller: controllers['totalFuncionariosPrefeitura'],
+        controller: widget.controllers['totalFuncionariosPrefeitura'],
         name: "Total (nº)",
         formatter: [FilteringTextInputFormatter.digitsOnly],
         keyboardType: TextInputType.numberWithOptions(),
       ),
       CustomTextField(
-        controller: controllers['pessoasComDeficienciaPrefeitura'],
+        controller: widget.controllers['pessoasComDeficienciaPrefeitura'],
         name: "Pessoas com deficiência (%)",
         formatter: [FilteringTextInputFormatter.digitsOnly],
         keyboardType: TextInputType.numberWithOptions(),
@@ -691,7 +732,7 @@ class InformacoesGerais extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
       CustomTextField(
-        controller: controllers['nomeDoPrefeito'],
+        controller: widget.controllers['nomeDoPrefeito'],
         name: 'Nome',
       ),
       SizedBox(
@@ -702,7 +743,7 @@ class InformacoesGerais extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
       CustomTextField(
-        controller: controllers['nomeDasSecretariasEtc'],
+        controller: widget.controllers['nomeDasSecretariasEtc'],
         name: 'Nome(s)',
       ),
       SizedBox(
@@ -714,26 +755,26 @@ class InformacoesGerais extends StatelessWidget {
       ),
       CustomTextField(
         name: "Nome",
-        controller: controllers['nomeOrgaoOficialTurismo'],
+        controller: widget.controllers['nomeOrgaoOficialTurismo'],
       ),
       SizedBox(
         height: 55.h,
       ),
       textLabel(name: "Endereço"),
       CustomTextField(
-        controller: controllers['enderecoOrgaoOfcTurismo'],
+        controller: widget.controllers['enderecoOrgaoOfcTurismo'],
         name: "Avenida/rua/travessa/caminho/outro",
       ),
       CustomTextField(
-        controller: controllers['avenidaRuaOfcTurismo'],
+        controller: widget.controllers['avenidaRuaOfcTurismo'],
         name: "Bairro/localidade",
       ),
       CustomTextField(
-        controller: controllers['distritoOrgaoOfcTurismo'],
+        controller: widget.controllers['distritoOrgaoOfcTurismo'],
         name: "Distrito",
       ),
       CustomTextField(
-        controller: controllers['cepOrgaoOfcTurismo'],
+        controller: widget.controllers['cepOrgaoOfcTurismo'],
         formatter: [
           FilteringTextInputFormatter.digitsOnly,
           _validators.cepFormatter
@@ -751,20 +792,20 @@ class InformacoesGerais extends StatelessWidget {
           FilteringTextInputFormatter.digitsOnly,
           _validators.phoneFormatter
         ],
-        controller: controllers['numeroOrgaoOfcTurismo'],
+        controller: widget.controllers['numeroOrgaoOfcTurismo'],
         name: 'Número',
       ),
       CustomTextField(
-        controller: controllers['instagramOrgaoOfcTurismo'],
+        controller: widget.controllers['instagramOrgaoOfcTurismo'],
         name: 'Instagram',
       ),
       CustomTextField(
-        controller: controllers['emailOrgaoOfcTurismo'],
+        controller: widget.controllers['emailOrgaoOfcTurismo'],
         name: 'E-mail',
       ),
       CustomTextField(
         name: 'Site',
-        controller: controllers['siteOrgaoOfcTurismo'],
+        controller: widget.controllers['siteOrgaoOfcTurismo'],
       ),
       SizedBox(
         height: 55.h,
@@ -773,13 +814,13 @@ class InformacoesGerais extends StatelessWidget {
         name: "Quantidade de Funcionários",
       ),
       CustomTextField(
-        controller: controllers['qtdeFuncionariosOrgaoOfcTurismo'],
+        controller: widget.controllers['qtdeFuncionariosOrgaoOfcTurismo'],
         name: "Total (nº)",
         formatter: [FilteringTextInputFormatter.digitsOnly],
         keyboardType: TextInputType.numberWithOptions(),
       ),
       CustomTextField(
-        controller: controllers['qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo'],
+        controller: widget.controllers['qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo'],
         formatter: [FilteringTextInputFormatter.digitsOnly],
         name: "Formação superior em Turismo (nº)",
         keyboardType: TextInputType.numberWithOptions(),
@@ -792,27 +833,27 @@ class InformacoesGerais extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
       CustomTextField(
-        controller: controllers["instanciaGovernancaMunicipal"],
+        controller: widget.controllers["instanciaGovernancaMunicipal"],
         name: "Municipal",
       ),
       CustomTextField(
-        controller: controllers["instanciaGovernancaEstadual"],
+        controller: widget.controllers["instanciaGovernancaEstadual"],
         name: "Estadual",
       ),
       CustomTextField(
-        controller: controllers["instanciaGovernancaRegional"],
+        controller: widget.controllers["instanciaGovernancaRegional"],
         name: "Regional",
       ),
       CustomTextField(
-        controller: controllers["instanciaGovernancaNacional"],
+        controller: widget.controllers["instanciaGovernancaNacional"],
         name: "Nacional",
       ),
       CustomTextField(
-        controller: controllers["instanciaGovernancaInternacional"],
+        controller: widget.controllers["instanciaGovernancaInternacional"],
         name: "Internacional",
       ),
       CustomTextField(
-        controller: controllers["instanciaGovernancaOutras"],
+        controller: widget.controllers["instanciaGovernancaOutras"],
         name: "Outras",
       ),
       SizedBox(
@@ -831,7 +872,7 @@ class InformacoesGerais extends StatelessWidget {
               width: sizeScreen.width * 0.4,
               //height: sizeScreen.height * 0.07,
               child: CustomTextDate(
-                dateController: controllers['aniversarioMunicipio'],
+                dateController: widget.controllers['aniversarioMunicipio'],
               )),
         ],
       ),
@@ -844,7 +885,7 @@ class InformacoesGerais extends StatelessWidget {
       ),
       CustomTextField(
         name: "Nome do(a) Santo(a) Padroeiro(a)",
-        controller: controllers['santoPadroeiro'],
+        controller: widget.controllers['santoPadroeiro'],
       ),
       SizedBox(
         height: 55.h,
@@ -861,7 +902,7 @@ class InformacoesGerais extends StatelessWidget {
               width: sizeScreen.width * 0.4,
               //height: sizeScreen.height * 0.07,
               child: CustomTextDate(
-                dateController: controllers['diaDoSantoPadroeiro'],
+                dateController: widget.controllers['diaDoSantoPadroeiro'],
               )),
         ],
       ),
@@ -874,24 +915,24 @@ class InformacoesGerais extends StatelessWidget {
       ),
       CustomTextField(
         name: 'Feriado ',
-        controller: controllers['feriadoMunicipal01'],
+        controller: widget.controllers['feriadoMunicipal01'],
       ),
       CustomTextDate(
-        dateController: controllers['dataFeriadoMunicipal01'],
+        dateController: widget.controllers['dataFeriadoMunicipal01'],
       ),
       CustomTextField(
         name: 'Feriado',
-        controller: controllers['feriadoMunicipal02'],
+        controller: widget.controllers['feriadoMunicipal02'],
       ),
       CustomTextDate(
-        dateController: controllers['dataFeriadoMunicipal02'],
+        dateController: widget.controllers['dataFeriadoMunicipal02'],
       ),
       CustomTextField(
         name: 'Feriado',
-        controller: controllers['feriadoMunicipal03'],
+        controller: widget.controllers['feriadoMunicipal03'],
       ),
       CustomTextDate(
-        dateController: controllers['dataFeriadoMunicipal03'],
+        dateController: widget.controllers['dataFeriadoMunicipal03'],
       ),
       SizedBox(
         height: 55.h,
@@ -901,7 +942,7 @@ class InformacoesGerais extends StatelessWidget {
         fontWeight: FontWeight.bold,
       ),
       CustomTextField(
-        controller: controllers['origemDoNome'],
+        controller: widget.controllers['origemDoNome'],
         name: "Origem do Nome",
       ),
       Row(
@@ -916,7 +957,7 @@ class InformacoesGerais extends StatelessWidget {
               width: sizeScreen.width * 0.4,
               //height: sizeScreen.height * 0.07,
               child: CustomTextDate(
-                dateController: controllers['dataFundacao'],
+                dateController: widget.controllers['dataFundacao'],
               )),
         ],
       ),
@@ -935,16 +976,16 @@ class InformacoesGerais extends StatelessWidget {
               width: sizeScreen.width * 0.4,
               //height: sizeScreen.height * 0.07,
               child: CustomTextDate(
-                dateController: controllers['dataEmancipacao'],
+                dateController: widget.controllers['dataEmancipacao'],
               )),
         ],
       ),
       CustomTextField(
-        controller: controllers['fundadores'],
+        controller: widget.controllers['fundadores'],
         name: "Fundadores",
       ),
       CustomTextField(
-        controller: controllers['outrosFatosDeImportanciaHistorica'],
+        controller: widget.controllers['outrosFatosDeImportanciaHistorica'],
         name: "Outros fatos de importância histórica",
       )
     ];
