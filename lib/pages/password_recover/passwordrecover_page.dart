@@ -26,7 +26,7 @@ class RecuperarSenha extends StatelessWidget {
 
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-            return ChangePasswordPage(email: _emailController.text);
+            return MudarSenha(email: _emailController.text);
           }));
         } else {
           print(response.body);
