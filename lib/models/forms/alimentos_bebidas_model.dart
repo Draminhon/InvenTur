@@ -76,7 +76,10 @@ class AlimentosEBebidasModel {
   List<String>? porTipoDeDieta;
   List<String>? porTipoDeServico;
   String? doEquipamento;
+  String? areaOuEdificacao;
   Map<String, dynamic>? tabelaEquipamentoEEspaco;
+  Map<String, dynamic>? tabelaAreaOuEdificacao;
+
   String? estadoGeralDeConservacao;
   String? possuiFacilidade;
   List<String>? pessoalCapacitadoParaReceberPCD;
@@ -153,6 +156,8 @@ class AlimentosEBebidasModel {
     this.distanciaOutras,
     this.pontosDeReferencia,
     this.tabelaMTUR,
+    this.tabelaAreaOuEdificacao,
+    this.areaOuEdificacao,
     this.formasDePagamento,
     this.vendasEReservas,
     this.atendimentoEmLinguasEstrangeiras,
@@ -281,7 +286,10 @@ AlimentosEBebidasModel.fromJson(Map<String, dynamic> json) {
   porTipoDeDieta = List<String>.from(json['porTipoDeDieta']);
   porTipoDeServico = List<String>.from(json['porTipoDeServico']);
   doEquipamento = json['doEquipamento'];
+  areaOuEdificacao = json['tabelaAreaOuEdificacao'];
+  tabelaAreaOuEdificacao = Map<String, dynamic>.from(json['tabelaAreaOuEdificacao']);
   tabelaEquipamentoEEspaco = Map<String, dynamic>.from(json['tabelaEquipamentoEEspaco']);
+  
   estadoGeralDeConservacao = json['estadoGeralDeConservacao'];
   possuiFacilidade = json['possuiFacilidade'];
   pessoalCapacitadoParaReceberPCD = List<String>.from(json['pessoalCapacitadoParaReceberPCD']);
@@ -385,7 +393,9 @@ Map<String, dynamic> toMap() {
     data['por_tipo_de_dieta'] = porTipoDeDieta;
     data['por_tipo_de_servico'] = porTipoDeServico;
     data['do_equipamento'] = doEquipamento;
+    data['area_ediificacao'] = areaOuEdificacao;
     data['tabela_equipamento_e_espaco'] = tabelaEquipamentoEEspaco;
+    data['tabelaAreaOuEdificacao'] = tabelaAreaOuEdificacao;
     data['estado_geral_de_conservacao'] = estadoGeralDeConservacao;
     data['possui_facilidade'] = possuiFacilidade;
     data['pessoal_capacitado_para_receber_pcd'] = pessoalCapacitadoParaReceberPCD;

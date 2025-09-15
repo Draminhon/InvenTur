@@ -251,6 +251,42 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
       }
     } else {
       _formKey.currentState!.save();
+
+      _informacoesGeralController.forEach((key, controller) {
+        valoresJson[key] = controller.text;
+      });
+      _funcionamentoControllers.forEach(
+        (key, controller) {
+          valoresJson[key] = controller.text;
+        },
+      );
+      _acessibilidadeController.forEach(
+        (key, value) {
+          valoresJson[key] = value.text;
+        },
+      );
+      valoresJson.forEach(
+        (key, value) {
+          print("$key  - $value");
+        },
+      );
+      if (currentStep < pages.length - 1) {
+        // Avança para a próxima página
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+      } else {
+        // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
+        isUpdate
+            ? FormService().updateForm(widget.infoModel!.id!, valoresJson,
+                AppConstants.ALIMENTOS_E_BEBIDAS)
+            : FormService()
+                .sendForm(valoresJson, AppConstants.ALIMENTOS_E_BEBIDAS);
+        print("Formulário finalizado e pronto para enviar!");
+      }
+        
+     /* _formKey.currentState!.save();
       _informacoesGeralController.forEach((key, controller) {
         valoresJson[key] = controller.text;
       });
@@ -269,7 +305,7 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
         },
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Por favor, corrija os erros no formulário.')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Por favor, corrija os erros no formulário.')));*/
     }
   }
 
@@ -1267,6 +1303,18 @@ class ProtecaoPage extends StatelessWidget{
                 TabelsEquipamentoEEspaco(
                   getValue: isUpdate ? infoModel!.tabelaEquipamentoEEspaco : {},
                   onChanged: (p0) => valoresJson['tabelaEquipamentoEEspaco'] = p0,
+                )
+              ]),
+          ConditionalFieldsGroup(
+              title: 'Da área ou edificação em que está localizado/instalado ',
+              jsonKey: 'areaOuEdificacao',
+              optionModelValue: isUpdate ? infoModel!.areaOuEdificacao : '',
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              children: [
+                TabelsEquipamentoEEspaco(
+                  getValue: isUpdate ? infoModel!.tabelaAreaOuEdificacao : {},
+                  onChanged: (p0) => valoresJson['tabelaAreaOuEdificacao'] = p0,
                 )
               ]),
           SizedBox(

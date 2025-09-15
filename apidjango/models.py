@@ -252,6 +252,7 @@ class AlimentosEBebidas(Base):
     doEquipamento = models.CharField(max_length=255)
 
     tabelaEquipamentoEEspaco = models.JSONField(null=True, blank=True)
+    tabelaAreaOuEdificacao = models.JSONField(null=True, blank=True)
 
     estadoGeralDeConservacao = models.CharField(max_length=255)
 
