@@ -376,7 +376,22 @@ void _preencherDadosParaTeste2() {
 
 
     } else {
+if (currentStep < pages.length - 1) {
+        // Avança para a próxima página
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.ease,
+        );
+      } else {
+        
+        //Navigator.pushNamed(context, '/SendedForm');
+          isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
+                      FormService().sendForm(valoresJson, AppConstants.INFO_BASICA_CREATE)
+            ;
+        print("Formulário finalizado e pronto para enviar!");
 
+        // _enviarFormulario(); // Você pode chamar sua função de envio aqui
+      }
       _formKey.currentState!.save();
       _caracteristicasControllers.forEach((key, controllers) {
         valoresJson[key] = controllers.text;
@@ -554,7 +569,7 @@ class _InformacoesGeraisState extends State<InformacoesGerais> {
 
   @override
   Widget build(BuildContext context) {
-
+    print(valoresJson); 
     final sizeScreen = MediaQuery.sizeOf(context);
     final double currentMapHeight = _isFullScreen ? sizeScreen.height : _initialMapHeight;
     // TODO: implement build
@@ -680,7 +695,17 @@ class _InformacoesGeraisState extends State<InformacoesGerais> {
         width: 1300.h,
         child: GestureDetector(
           onDoubleTap:() =>  _toggleFullScreen(),
-          child: MeuMapa())),
+          child: MeuMapa(onPlaceSelected: (value) {
+            setState(() {
+              value.forEach(
+                (key, value) {
+                  
+                  valoresJson[key] = value;
+                },
+              );
+              
+            });
+          },))),
       SizedBox(
         height: 55.h,
       ),

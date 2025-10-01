@@ -24,15 +24,25 @@ class LugarInfo {
     this.displayName = 'Nenhuma informação encontrada.',
   });
 
-  // Factory constructor para criar uma instância a partir do JSON da API Mapbox
+
+  Map<String, dynamic> toMap(){
+    return {
+      'latitude': coordenadas.latitude,
+      'longitude': coordenadas.longitude,
+      'displayName': displayName,
+      'rua': rua,
+      'bairro': bairro,
+      'cidade': cidade,
+      'estado': estado,
+      'pais': pais
+    };
+  }
+
   factory LugarInfo.fromMapboxJson(
       Map<String, dynamic> json, LatLng originalPoint) {
-    // CORREÇÃO CRÍTICA: O campo 'context' está no nível superior do 'feature', não dentro de 'properties'.
-    // Esta era a causa principal de os campos virem vazios.
     final context = json['context'] ?? [];
     final properties = json['properties'] ?? {};
 
-    // Função auxiliar para procurar um tipo de informação no array de 'context'.
     String findInContext(String key) {
       for (var item in (context as List)) {
         if ((item['id'] as String).startsWith(key)) {
@@ -42,9 +52,6 @@ class LugarInfo {
       return '';
     }
 
-    // Lógica melhorada para determinar a rua.
-    // Se o resultado principal for um endereço ('id' começa com 'address'), o 'text' é o nome da rua.
-    // Senão, procuramos por uma rua no 'context'.
     String rua = '';
     final featureId = json['id'] as String? ?? '';
     if (featureId.startsWith('address')) {
@@ -61,20 +68,18 @@ class LugarInfo {
       rua: rua.isNotEmpty ? rua : 'N/A',
       bairro: findInContext('neighborhood'),
       cidade: findInContext(
-          'place'), // A cidade é quase sempre encontrada no contexto como 'place'.
+          'place'), 
       estado: findInContext('region'),
       pais: findInContext('country'),
     );
   }
 }
 
-// Exceção personalizada para erros de localização
 class LocationServiceException implements Exception {
   final String message;
   LocationServiceException(this.message);
 }
 
-// Classe de serviço para encapsular a lógica de localização e API
 class MapService {
   final String mapboxAccessToken;
 

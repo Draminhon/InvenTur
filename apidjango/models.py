@@ -534,7 +534,14 @@ class MeioDeHospedagem(Base):
     outros = models.TextField("Outros", blank=True, null=True)
 
 class InformacaoBasicaDoMunicipio(Base):
-    
+    latitude = models.CharField(max_length=255,blank=True, null=True)
+    longitude = models.CharField(max_length=255,blank=True, null=True)
+    displayName = models.CharField(max_length=255,blank=True, null=True)
+    rua = models.CharField(max_length=255,blank=True, null=True)
+    bairro = models.CharField(max_length=255,blank=True, null=True)
+    cidade = models.CharField(max_length=255,blank=True, null=True)
+    estado = models.CharField(max_length=255,blank=True, null=True)
+    pais = models.CharField(max_length=255,blank=True, null=True)
     enderecoPrefeitura = models.CharField(max_length=255,blank=True, null=True)
     bairroPrefeitura = models.CharField(max_length=255,blank=True, null=True)
     cepPrefeitura = models.CharField(max_length=255,blank=True, null=True)

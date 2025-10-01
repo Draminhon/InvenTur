@@ -7,8 +7,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class MeuMapa extends StatefulWidget {
-  const MeuMapa({super.key});
-
+  const MeuMapa({super.key, this.onPlaceSelected});
+  final ValueChanged<Map<String, dynamic>>? onPlaceSelected;
   @override
   State<MeuMapa> createState() => _MeuMapaState();
 }
@@ -17,13 +17,11 @@ class _MeuMapaState extends State<MeuMapa> {
   final MapController _mapController = MapController();
   final MapService _mapService = MapService(mapboxAccessToken: 'pk.eyJ1IjoibXVyaWxvcm9kIiwiYSI6ImNtZjFhajJmdzBpOTMya3BweDR0bTE0Y3IifQ.bNCRgdKwVbeeY1pHeFUAaQ');
 
-  // Estado da UI
   LugarInfo? _tappedPlaceInfo;
-  LatLng? _currentLocationMarker; // Posição da "bolinha azul"
-  LatLng? _tappedMarker; // Posição do marcador vermelho (clique)
+  LatLng? _currentLocationMarker; 
+  LatLng? _tappedMarker; 
   bool _isLoading = false;
 
-  // Stream para ouvir as atualizações de localização
   StreamSubscription<Position>? _positionStreamSubscription;
 
   @override
@@ -34,12 +32,10 @@ class _MeuMapaState extends State<MeuMapa> {
 
   @override
   void dispose() {
-    // É crucial cancelar a inscrição do stream para evitar vazamentos de memória
     _positionStreamSubscription?.cancel();
     super.dispose();
   }
 
-  // Inicia o listener para a localização em tempo real
   void _startLocationStream() {
     _positionStreamSubscription = _mapService.getPositionStream().listen((Position position) {
       if (mounted) {
@@ -56,16 +52,14 @@ class _MeuMapaState extends State<MeuMapa> {
     });
   }
 
-  // Centraliza o mapa na localização atual do usuário (botão)
   Future<void> _centerMapOnUserLocation() async {
     try {
       final position = await _mapService.getCurrentPosition();
       final userLocation = LatLng(position.latitude, position.longitude);
       
       setState(() {
-        // Coloca o marcador vermelho na posição do usuário ao centralizar
         _tappedMarker = userLocation;
-        _tappedPlaceInfo = null; // Limpa info de outros lugares
+        _tappedPlaceInfo = null; 
       });
 
       _mapController.move(userLocation, 15.0);
@@ -76,15 +70,18 @@ class _MeuMapaState extends State<MeuMapa> {
     }
   }
 
-  // Lida com o toque no mapa para buscar informações
   Future<void> _handleMapTap(LatLng point) async {
     setState(() {
       _isLoading = true;
-      _tappedMarker = point; // Define a posição do marcador vermelho
+      _tappedMarker = point; 
     });
 
     try {
       final info = await _mapService.getInfoFromCoordinates(point);
+
+      if(widget.onPlaceSelected != null){
+        widget.onPlaceSelected!(info.toMap());
+      }
       if(mounted){
       setState(() {
         _tappedPlaceInfo = info;
@@ -144,7 +141,6 @@ class _MeuMapaState extends State<MeuMapa> {
               ),
             ],
           ),
-          // Posiciona o painel de informações na parte inferior
           Positioned(
             bottom: 0,
             left: 0,
@@ -161,11 +157,9 @@ class _MeuMapaState extends State<MeuMapa> {
     );
   }
 
-  // Constrói a lista de marcadores dinamicamente
   List<Marker> _buildMarkers() {
     final markers = <Marker>[];
 
-    // Adiciona o marcador da "bolinha azul" da localização atual
     if (_currentLocationMarker != null) {
       markers.add(
         Marker(
@@ -186,7 +180,6 @@ class _MeuMapaState extends State<MeuMapa> {
       );
     }
     
-    // Adiciona o marcador vermelho do local clicado
     if (_tappedMarker != null) {
       markers.add(
         Marker(
@@ -201,7 +194,6 @@ class _MeuMapaState extends State<MeuMapa> {
     return markers;
   }
 
-  // Constrói o painel de informações
   Widget _buildInfoPanel() {
     return Card(
       margin: const EdgeInsets.all(8.0),
