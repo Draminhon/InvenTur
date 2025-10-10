@@ -776,6 +776,8 @@ class InformacaoBasicaDoMunicipio(Base):
     legislacaoOutras  = models.CharField(max_length=255,blank=True, null=True)
     
 class ComercioTuristico(Base):
+     latitude = models.CharField(max_length=255,blank=True, null=True)
+     longitude = models.CharField(max_length=255,blank=True, null=True)
      sinalizacaoDeAcesso =  models.CharField(max_length=255,blank=True, null=True)
      sinalizacaoTuristica = models.CharField(max_length=255,blank=True, null=True)
      subtipo =  models.JSONField(blank=True, null=True) 
@@ -789,8 +791,6 @@ class ComercioTuristico(Base):
      atividadeEconomica = models.CharField(max_length=255,blank=True, null=True)  
      inscricaoMunicipal =  models.CharField(max_length=255,blank=True, null=True) 
      nomeDaRedeFranquia =  models.CharField(max_length=255,blank=True, null=True) 
-     longitudePrefeitura =  models.CharField(max_length=255,blank=True, null=True) 
-     latitudePrefeitura =  models.CharField(max_length=255,blank=True, null=True) 
      avenidaRuaTravessa =  models.CharField(max_length=255,blank=True, null=True) 
      bairroLocalidade =   models.CharField(max_length=255,blank=True, null=True)
      distrito =   models.CharField(max_length=255,blank=True, null=True)

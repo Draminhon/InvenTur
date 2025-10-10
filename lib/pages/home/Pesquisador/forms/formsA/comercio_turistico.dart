@@ -10,6 +10,7 @@ import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
+import 'package:inventur/pages/widgets/map.dart';
 import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
@@ -340,7 +341,16 @@ class Identificacao extends StatefulWidget {
 }
 
 class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveClientMixin {
-    
+        bool _isFullScreen = false;
+
+  // Altura inicial do mapa quando não está em tela cheia
+  final double _initialMapHeight = 300.0;
+
+  void _toggleFullScreen() {
+    setState(() {
+      _isFullScreen = !_isFullScreen;
+    });
+  }
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
@@ -348,7 +358,7 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
   Widget build(BuildContext context) {
     super.build(context);
     final sizeScreen = MediaQuery.sizeOf(context);
-
+    final double currentMapHeight = _isFullScreen ? sizeScreen.height * 0.8 : _initialMapHeight;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -462,24 +472,28 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
             name: "Coordenadas Geográficas",
             fontWeight: FontWeight.bold,
           ),
-          CustomTextField(
-            controller: widget.controllers['longitudePrefeitura'],
-            name: 'Longitude',
-            keyboardType: TextInputType.numberWithOptions(),
-            formatter: [
-              FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))
-            ],
-          ),
-          CustomTextField(
-            controller: widget.controllers['latitudePrefeitura'],
-            name: 'Latitude',
-            keyboardType: TextInputType.numberWithOptions(),
-            formatter: [
-              FilteringTextInputFormatter.allow(
-                RegExp(r'^-?\d*\.?\d*'),
-              ),
-            ],
-          ),
+             SizedBox(
+        
+        height: _isFullScreen ? currentMapHeight : currentMapHeight,
+
+        width: 1300.h,
+        child: GestureDetector(
+          onDoubleTap:() =>  _toggleFullScreen(),
+          child: MeuMapa(onPlaceSelected: (value) {
+            setState(() {
+              value.forEach(
+                (key, value) {
+                  
+                  valoresJson[key] = value;
+                },
+              );
+              
+            });
+          },
+         
+          initialLatitude: isUpdate ? double.tryParse(widget.infoModel!.latitude!) : null,
+          initialLongitute: isUpdate ? double.tryParse(widget.infoModel!.longitude!) : null,
+          ))),
           SizedBox(
             height: 55.h,
           ),

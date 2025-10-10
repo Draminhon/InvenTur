@@ -376,22 +376,7 @@ void _preencherDadosParaTeste2() {
 
 
     } else {
-if (currentStep < pages.length - 1) {
-        // Avança para a próxima página
-        _pageController.nextPage(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.ease,
-        );
-      } else {
-        
-        //Navigator.pushNamed(context, '/SendedForm');
-          isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
-                      FormService().sendForm(valoresJson, AppConstants.INFO_BASICA_CREATE)
-            ;
-        print("Formulário finalizado e pronto para enviar!");
 
-        // _enviarFormulario(); // Você pode chamar sua função de envio aqui
-      }
       _formKey.currentState!.save();
       _caracteristicasControllers.forEach((key, controllers) {
         valoresJson[key] = controllers.text;
@@ -571,23 +556,9 @@ class _InformacoesGeraisState extends State<InformacoesGerais> {
   Widget build(BuildContext context) {
     print(valoresJson); 
     final sizeScreen = MediaQuery.sizeOf(context);
-    final double currentMapHeight = _isFullScreen ? sizeScreen.height : _initialMapHeight;
+    final double currentMapHeight = _isFullScreen ? sizeScreen.height * 0.8 : _initialMapHeight;
     // TODO: implement build
-        if (_isFullScreen) {
-      return Scaffold(
-        // Usamos um SafeArea para evitar que o mapa fique sob a barra de status
-        body: SafeArea(
-          child: GestureDetector(
-            onDoubleTap: _toggleFullScreen,
-            child: SizedBox(
-              height: currentMapHeight,
-              width: 1300.h,
-              child: const MeuMapa(),
-            ),
-          ),
-        ),
-      );
-    }
+
     final formWidgts = <Widget>[
       Identificacao(
         onSaved: (p0) => valoresJson['tipo'] = p0,
@@ -691,7 +662,8 @@ class _InformacoesGeraisState extends State<InformacoesGerais> {
       // ),
       SizedBox(
         
-        height: currentMapHeight,
+        height: _isFullScreen ? currentMapHeight : currentMapHeight,
+
         width: 1300.h,
         child: GestureDetector(
           onDoubleTap:() =>  _toggleFullScreen(),
@@ -705,7 +677,11 @@ class _InformacoesGeraisState extends State<InformacoesGerais> {
               );
               
             });
-          },))),
+          },
+         
+          initialLatitude: isUpdate ? double.tryParse(widget.infoModel!.latitude!) : null,
+          initialLongitute: isUpdate ? double.tryParse(widget.infoModel!.longitude!) : null,
+          ))),
       SizedBox(
         height: 55.h,
       ),

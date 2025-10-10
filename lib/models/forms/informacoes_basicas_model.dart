@@ -21,8 +21,8 @@ class InformacoesBasicasModel {
   String? emailPrefeitura;
   String? sitePrefeitura;
   String? cnpjPrefeitura;
-  String? latitudePrefeitura;
-  String? longitudePrefeitura;
+  String? latitude;
+  String? longitude;
   String? municipiosLimitrofes;
   String? distanciaDaCapital;
   String? totalFuncionariosPrefeitura;
@@ -268,8 +268,8 @@ class InformacoesBasicasModel {
       this.emailPrefeitura,
       this.sitePrefeitura,
       this.cnpjPrefeitura,
-      this.latitudePrefeitura,
-      this.longitudePrefeitura,
+      this.latitude,
+      this.longitude,
       this.municipiosLimitrofes,
       this.distanciaDaCapital,
       this.totalFuncionariosPrefeitura,
@@ -515,8 +515,8 @@ class InformacoesBasicasModel {
     'emailPrefeitura': this.emailPrefeitura,
     'sitePrefeitura': this.sitePrefeitura,
     'cnpjPrefeitura': this.cnpjPrefeitura,
-    'latitudePrefeitura': this.latitudePrefeitura,
-    'longitudePrefeitura': this.longitudePrefeitura,
+    'latitude': this.latitude,
+    'longitude': this.longitude,
     'municipiosLimitrofes': this.municipiosLimitrofes,
     'distanciaDaCapital': this.distanciaDaCapital,
     'totalFuncionariosPrefeitura': this.totalFuncionariosPrefeitura,
@@ -846,8 +846,8 @@ class InformacoesBasicasModel {
     emailPrefeitura = json['emailPrefeitura'];
     sitePrefeitura = json['sitePrefeitura'];
     cnpjPrefeitura = json['cnpjPrefeitura'];
-    latitudePrefeitura = json['latitudePrefeitura'];
-    longitudePrefeitura = json['longitudePrefeitura'];
+    latitude = json['latitude'];
+    longitude = json['longitude'];
     municipiosLimitrofes = json['municipiosLimitrofes'];
     distanciaDaCapital = json['distanciaDaCapital'];
     totalFuncionariosPrefeitura = json['totalFuncionariosPrefeitura'];
@@ -1158,8 +1158,8 @@ class InformacoesBasicasModel {
     data['emailPrefeitura'] = this.emailPrefeitura;
     data['sitePrefeitura'] = this.sitePrefeitura;
     data['cnpjPrefeitura'] = this.cnpjPrefeitura;
-    data['latitudePrefeitura'] = this.latitudePrefeitura;
-    data['longitudePrefeitura'] = this.longitudePrefeitura;
+    data['latitude'] = this.latitude;
+    data['longitude'] = this.longitude;
     data['municipiosLimitrofes'] = this.municipiosLimitrofes;
     data['distanciaDaCapital'] = this.distanciaDaCapital;
     data['totalFuncionariosPrefeitura'] = this.totalFuncionariosPrefeitura;

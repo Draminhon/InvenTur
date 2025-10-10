@@ -7,8 +7,16 @@ import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 class MeuMapa extends StatefulWidget {
-  const MeuMapa({super.key, this.onPlaceSelected});
+  final VoidCallback? onDoubleClick;
   final ValueChanged<Map<String, dynamic>>? onPlaceSelected;
+  final double? initialLatitude;
+  final double? initialLongitute;
+
+  const MeuMapa({super.key, this.onPlaceSelected, this.onDoubleClick,
+   this.initialLatitude,
+   this.initialLongitute
+   });
+
   @override
   State<MeuMapa> createState() => _MeuMapaState();
 }
@@ -28,12 +36,53 @@ class _MeuMapaState extends State<MeuMapa> {
   void initState() {
     super.initState();
     _startLocationStream();
+
+
+    if(widget.initialLatitude != null && widget.initialLongitute != null){
+      WidgetsBinding.instance.addPostFrameCallback((_){
+        centerOnCoordinates(widget.initialLatitude!, widget.initialLongitute!);
+      });
+    }
   }
+
 
   @override
   void dispose() {
     _positionStreamSubscription?.cancel();
     super.dispose();
+  }
+
+
+  Future<void> centerOnCoordinates(double lat, double lon, {double zoom = 15.0}) async{
+    final point = LatLng(lat, lon);
+
+    _mapController.move(point, zoom);
+
+    setState(() {
+      _isLoading = true;
+      _tappedMarker = point;
+    });
+
+    try{
+      final info = await _mapService.getInfoFromCoordinates(point);
+
+      widget.onPlaceSelected?.call(info.toMap());
+
+      if(mounted){
+        setState(() => _tappedPlaceInfo,);
+      }
+    }catch(e){
+      if(mounted){
+        setState(() {
+          _tappedPlaceInfo = LugarInfo(coordenadas: point,
+          displayName: 'Erro ao buscar informações: ${e.toString()}');
+        });
+      }
+    }finally{
+      if(mounted){
+        setState(() => _isLoading = false,);
+      }
+    }
   }
 
   void _startLocationStream() {
@@ -118,6 +167,9 @@ class _MeuMapaState extends State<MeuMapa> {
               initialCenter: LatLng(-15.7942, -47.8825), // Brasília
               initialZoom: 4.0,
               onTap: (tapPosition, latLng) => _handleMapTap(latLng),
+              onSecondaryTap: (tapPosition, point) {
+                widget.onDoubleClick?.call();
+              },
             ),
             children: [
               TileLayer(

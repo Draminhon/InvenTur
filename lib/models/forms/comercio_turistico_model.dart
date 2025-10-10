@@ -26,8 +26,8 @@ class ComercioTuristicoModel {
   String? atividadeEconomica;
   String? inscricaoMunicipal;
   String? nomeDaRedeFranquia;
-  String? longitudePrefeitura;
-  String? latitudePrefeitura;
+  String? longitude;
+  String? latitude;
   String? avenidaRuaTravessa;
   String? bairroLocalidade;
   String? distrito;
@@ -108,8 +108,8 @@ class ComercioTuristicoModel {
       this.atividadeEconomica,
       this.inscricaoMunicipal,
       this.nomeDaRedeFranquia,
-      this.longitudePrefeitura,
-      this.latitudePrefeitura,
+      this.longitude,
+      this.latitude,
       this.avenidaRuaTravessa,
       this.bairroLocalidade,
       this.distrito,
@@ -190,8 +190,8 @@ class ComercioTuristicoModel {
    'atividadeEconomica' : this.atividadeEconomica,
    'inscricaoMunicipal' : this.inscricaoMunicipal,
    'nomeDaRedeFranquia' : this.nomeDaRedeFranquia,
-   'longitudePrefeitura' : this.longitudePrefeitura,
-   'latitudePrefeitura' : this.latitudePrefeitura,
+   'longitude' : this.longitude,
+   'latitude' : this.latitude,
    'avenidaRuaTravessa' : this.avenidaRuaTravessa,
    'bairroLocalidade' : this.bairroLocalidade,
    'distrito' : this.distrito,
@@ -277,8 +277,8 @@ class ComercioTuristicoModel {
     atividadeEconomica = json['atividadeEconomica'];
     inscricaoMunicipal = json['inscricaoMunicipal'];
     nomeDaRedeFranquia = json['nomeDaRedeFranquia'];
-    longitudePrefeitura = json['longitudePrefeitura'];
-    latitudePrefeitura = json['latitudePrefeitura'];
+    longitude = json['longitude'];
+    latitude = json['latitude'];
     avenidaRuaTravessa = json['avenidaRuaTravessa'];
     bairroLocalidade = json['bairroLocalidade'];
     distrito = json['distrito'];
@@ -348,8 +348,8 @@ class ComercioTuristicoModel {
     data['atividadeEconomica'] = this.atividadeEconomica;
     data['inscricaoMunicipal'] = this.inscricaoMunicipal;
     data['nomeDaRedeFranquia'] = this.nomeDaRedeFranquia;
-    data['longitudePrefeitura'] = this.longitudePrefeitura;
-    data['latitudePrefeitura'] = this.latitudePrefeitura;
+    data['longitude'] = this.longitude;
+    data['latitude'] = this.latitude;
     data['avenidaRuaTravessa'] = this.avenidaRuaTravessa;
     data['bairroLocalidade'] = this.bairroLocalidade;
     data['distrito'] = this.distrito;
