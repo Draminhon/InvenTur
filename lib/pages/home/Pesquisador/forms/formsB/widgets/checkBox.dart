@@ -222,13 +222,13 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
     return FormField<List<String>>(
       onSaved: widget.onSaved,
       validator: widget.validator ?? (values) {
-            if (values == null || values.isEmpty) {
-              return 'Selecione pelo menos uma opção.';
-            }
-            if (values.contains('outro') &&
-                !values.any((v) => v.startsWith('outro:'))) {
-              return 'Por favor, especifique a opção "outro".';
-            }
+            // if (values == null || values.isEmpty) {
+            //   return 'Selecione pelo menos uma opção.';
+            // }
+            // if (values.contains('outro') &&
+            //     !values.any((v) => v.startsWith('outro:'))) {
+            //   return 'Por favor, especifique a opção "outro".';
+            // }
             return null; // Válido
           },
       initialValue: widget.initialValue ?? [],

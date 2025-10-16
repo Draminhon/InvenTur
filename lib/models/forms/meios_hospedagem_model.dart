@@ -102,7 +102,7 @@ class MeiosDeHospedagemModel {
   String? qtdeFuncionariosTemporarios;
   String? qtdeFuncionarisComDeficiencia;
   String? latitude;
-  String? longitute;
+  String? longitude;
 
   // Endereço e contato
   String? avenidaRuaEtc;
@@ -227,7 +227,7 @@ class MeiosDeHospedagemModel {
     this.qtdeFuncionariosTemporarios,
     this.qtdeFuncionarisComDeficiencia,
     this.latitude,
-    this.longitute,
+    this.longitude,
     this.avenidaRuaEtc,
     this.bairroLocalidade,
     this.distrito,
@@ -353,7 +353,7 @@ class MeiosDeHospedagemModel {
       'qtdeFuncionariosTemporarios': qtdeFuncionariosTemporarios,
       'qtdeFuncionarisComDeficiencia': qtdeFuncionarisComDeficiencia,
       'latitude': latitude,
-      'longitute': longitute,
+      'longitude': longitude,
       'avenidaRuaEtc': avenidaRuaEtc,
       'bairroLocalidade': bairroLocalidade,
       'distrito': distrito,
@@ -501,7 +501,7 @@ class MeiosDeHospedagemModel {
     qtdeFuncionariosTemporarios = json['qtdeFuncionariosTemporarios'];
     qtdeFuncionarisComDeficiencia = json['qtdeFuncionarisComDeficiencia'];
     latitude = json['latitude'];
-    longitute = json['longitute'];
+    longitude = json['longitude'];
     avenidaRuaEtc = json['avenidaRuaEtc'];
     bairroLocalidade = json['bairroLocalidade'];
     distrito = json['distrito'];
@@ -636,7 +636,7 @@ class MeiosDeHospedagemModel {
   //   data['qtde_funcionarios_temporarios'] = qtdeFuncionariosTemporarios;
   //   data['qtde_funcionarios_com_deficiencia'] = qtdeFuncionarisComDeficiencia;
   //   data['latitude'] = latitude;
-  //   data['longitute'] = longitute;
+  //   data['longitude'] = longitude;
   //   data['avenida_rua_etc'] = avenidaRuaEtc;
   //   data['bairro_localidade'] = bairroLocalidade;
   //   data['distrito'] = distrito;

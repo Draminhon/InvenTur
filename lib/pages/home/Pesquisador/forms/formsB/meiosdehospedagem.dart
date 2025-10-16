@@ -9,6 +9,7 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/fields.dart
 import 'package:inventur/pages/home/Pesquisador/widgets/container_widget.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/mapa_widget.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/multi_auto_complete_form_field.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/tables.dart';
@@ -59,8 +60,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     'qtdeFuncionariosPermanentes',
     'qtdeFuncionariosTemporarios',
     'qtdeFuncionarisComDeficiencia',
-    'latitude',
-    'longitute',
     'avenidaRuaEtc',
     'bairroLocalidade',
     'distrito',
@@ -450,7 +449,7 @@ class _IdentificacaoState extends State<Identificacao>
         CustomTextField(
           name: 'CNPJ',
           controller: widget.controllers['CNPJ'],
-          validat: _validators.validarCNPJ,
+          //validat: _validators.validarCNPJ,
           formatter: [_validators.cnpjFormatter],
           keyboardType: TextInputType.numberWithOptions(),
         ),
@@ -593,53 +592,10 @@ class _IdentificacaoState extends State<Identificacao>
         SizedBox(
           height: sizeScreen.height * 0.02,
         ),
-        Column(children: [
-          Row(
-            children: [
-              textLabel(
-                name: 'Latitude',
-              ),
-              SizedBox(
-                width: sizeScreen.width * 0.032,
-              ),
-              SizedBox(
-                  width: sizeScreen.width * 0.6,
-                  //height: sizeScreen.height * 0.07,
-                  child: CustomTextField(
-                    controller: widget.controllers['latitude'],
-                    name: 'valor',
-                    keyboardType: TextInputType.numberWithOptions(),
-                    formatter: [
-                      FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))
-                    ],
-                  ))
-            ],
-          ),
-          SizedBox(
-            height: sizeScreen.height * 0.02,
-          ),
-          Row(
-            children: [
-              textLabel(
-                name: 'Longitude',
-              ),
-              SizedBox(
-                  width: sizeScreen.width * 0.6,
-                  //height: sizeScreen.height * 0.07,
-                  child: CustomTextField(
-                    controller: widget.controllers['longitute'],
-                    name: 'valor',
-                    formatter: [
-                      FilteringTextInputFormatter.allow(RegExp(r'^-?\d*\.?\d*'))
-                    ],
-                    keyboardType: TextInputType.numberWithOptions(),
-                  ))
-            ],
-          ),
-          SizedBox(
-            height: sizeScreen.height * 0.02,
-          ),
-        ]),
+          MapaWidget(valoresJson: valoresjson,
+           isUpdate: isUpdate,
+            latitude: isUpdate ? widget.hospedagemModel!.latitude! : "0",
+             longitude: isUpdate ? widget.hospedagemModel!.longitude! : "0"),
         textLabel(name: 'Endereço:', fontWeight: FontWeight.bold),
 
         CustomTextField(
@@ -1137,9 +1093,9 @@ class _FuncionamentoState extends State<Funcionamento>
         },
         validator: (values) {
           // Exemplo de validação: exigir pelo menos um estado
-          if (values == null || values.isEmpty) {
-            return 'Por favor, selecione pelo menos um estado.';
-          }
+          // if (values == null || values.isEmpty) {
+          //   return 'Por favor, selecione pelo menos um estado.';
+          // }
           return null;
         },
       ),
@@ -1165,9 +1121,9 @@ class _FuncionamentoState extends State<Funcionamento>
           valoresjson['paisesTuristas'] = newValue;
         },
         validator: (values) {
-          if (values == null || values.isEmpty) {
-            return 'Por favor, selecione pelo menos um pais.';
-          }
+          // if (values == null || values.isEmpty) {
+          //   return 'Por favor, selecione pelo menos um pais.';
+          // }
           return null;
         },
       ),

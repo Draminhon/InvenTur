@@ -357,7 +357,7 @@ class MeiosDeHospedagemAdmin(admin.ModelAdmin):
         "qtdeFuncionariosTemporarios",
         "qtdeFuncionarisComDeficiencia",
         "latitude",
-        "longitute",
+        "longitude",
         "avenidaRuaEtc",
         "bairroLocalidade",
         "distrito",

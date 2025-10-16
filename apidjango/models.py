@@ -186,138 +186,146 @@ class EnderecoInfo(models.Model):
     outrasInfo = models.CharField(max_length=255, null=True, blank=True)
 
 class AlimentosEBebidas(Base):
+    latitude = models.CharField(max_length=255,blank=True, null=True)
+    longitude = models.CharField(max_length=255,blank=True, null=True)
+    displayName = models.CharField(max_length=255,blank=True, null=True)
+    rua = models.CharField(max_length=255,blank=True, null=True)
+    bairro = models.CharField(max_length=255,blank=True, null=True)
+    cidade = models.CharField(max_length=255,blank=True, null=True)
+    estado = models.CharField(max_length=255,blank=True, null=True)
+    pais = models.CharField(max_length=255,blank=True, null=True)
+    razaoSocial = models.CharField(max_length=255, null=True, blank=True)
+    nomeFantasia = models.CharField(max_length=255, null=True, blank=True)
+    CNPJ = models.CharField(max_length=255, null=True, blank=True)
+    codigoCNAE = models.CharField(max_length=255, null=True, blank=True)
+    atividadeEconomica =models.CharField(max_length=255, null=True, blank=True)
+    inscricaoMunicipal = models.CharField(max_length=255, null=True, blank=True)
+    nomeDaRede =models.CharField(max_length=255, null=True, blank=True)
 
-    razaoSocial = models.CharField(max_length=255)
-    nomeFantasia = models.CharField(max_length=255)
-    CNPJ = models.CharField(max_length=255)
-    codigoCNAE = models.CharField(max_length=255)
-    atividadeEconomica =models.CharField(max_length=255)
-    inscricaoMunicipal = models.CharField(max_length=255)
-    nomeDaRede =models.CharField(max_length=255)
-
-    natureza = models.CharField(max_length=255)
-    tipoDeOrganizacaoInstituicao = models.JSONField()
-    inicioDaAtividade = models.DateField()
-    qtdeFuncionariosPermanentes = models.CharField(max_length=255)
-    qtdeFuncionariosTemporarios = models.CharField(max_length=255)
-    qtdeFuncionariosComDeficiencia = models.CharField(max_length=255)
-    localizacao = models.CharField(max_length=255)
-    latitude = models.CharField(max_length=255)
-    longitude =models.CharField(max_length=255)
-    avenidaRuaEtc = models.CharField(max_length=255)
-    bairroLocalidade = models.CharField(max_length=255)
-    distrito = models.CharField(max_length=255)
-    CEP = models.CharField(max_length=255)
+    natureza = models.CharField(max_length=255, null=True, blank=True)
+    tipoDeOrganizacaoInstituicao = models.JSONField(null=True, blank=True)
+    inicioDaAtividade = models.CharField(max_length=255, null=True, blank=True)
+    qtdeFuncionariosPermanentes = models.CharField(max_length=255, null=True, blank=True)
+    qtdeFuncionariosTemporarios = models.CharField(max_length=255, null=True, blank=True)
+    qtdeFuncionariosComDeficiencia = models.CharField(max_length=255, null=True, blank=True)
+    localizacao = models.CharField(max_length=255, null=True, blank=True)
+    avenidaRuaEtc = models.CharField(max_length=255, null=True, blank=True)
+    bairroLocalidade = models.CharField(max_length=255, null=True, blank=True)
+    distrito = models.CharField(max_length=255, null=True, blank=True)
+    CEP = models.CharField(max_length=255, null=True, blank=True)
 
     
-    whatsapp = models.CharField(max_length=50)
-    instagram = models.CharField(max_length=50)
-    email = models.CharField(max_length=50)
-    sinalizacaoDeAcesso = models.CharField(max_length=50)
-    sinalizacaoTuristica = models.CharField(max_length=50)
+    whatsapp = models.CharField(max_length=50, null=True, blank=True)
+    instagram = models.CharField(max_length=50, null=True, blank=True)
+    email = models.CharField(max_length=50, null=True, blank=True)
+    sinalizacaoDeAcesso = models.CharField(max_length=50, null=True, blank=True)
+    sinalizacaoTuristica = models.CharField(max_length=50, null=True, blank=True)
 
-    proximidades = models.JSONField()
+    proximidades = models.JSONField(null=True, blank=True)
 
-    distanciasAeroporto = models.CharField(max_length=255)
-    distanciasRodoviaria  = models.CharField(max_length=255)
-    distanciaEstacaoFerroviaria  = models.CharField(max_length=255)
-    distanciaEstacaoMaritima  = models.CharField(max_length=255)
-    distanciaEstacaoMetroviaria  = models.CharField(max_length=255)
-    distanciaPontoDeOnibus  = models.CharField(max_length=255)
-    distanciaPontoDeTaxi  = models.CharField(max_length=255)
-    distanciasOutraNome  = models.CharField(max_length=255)
-    distanciaOutras  = models.CharField(max_length=255)
+    distanciasAeroporto = models.CharField(max_length=255, null=True, blank=True)
+    distanciasRodoviaria  = models.CharField(max_length=255, null=True, blank=True)
+    distanciaEstacaoFerroviaria  = models.CharField(max_length=255, null=True, blank=True)
+    distanciaEstacaoMaritima  = models.CharField(max_length=255, null=True, blank=True)
+    distanciaEstacaoMetroviaria  = models.CharField(max_length=255, null=True, blank=True)
+    distanciaPontoDeOnibus  = models.CharField(max_length=255, null=True, blank=True)
+    distanciaPontoDeTaxi  = models.CharField(max_length=255, null=True, blank=True)
+    distanciasOutraNome  = models.CharField(max_length=255, null=True, blank=True)
+    distanciaOutras  = models.CharField(max_length=255, null=True, blank=True)
 
-    pontosDeReferencia  = models.CharField(max_length=255)
+    pontosDeReferencia  = models.CharField(max_length=255, null=True, blank=True)
 
     tabelaMTUR = models.JSONField(null=True, blank=True)
 
-    formasDePagamento = models.JSONField()
-    vendasEReservas = models.JSONField()
-    atendimentoEmLinguasEstrangeiras = models.JSONField()
-    informativosImpressos = models.JSONField()
+    formasDePagamento = models.JSONField(null=True, blank=True)
+    vendasEReservas = models.JSONField(null=True, blank=True)
+    atendimentoEmLinguasEstrangeiras = models.JSONField(null=True, blank=True)
+    informativosImpressos = models.JSONField(null=True, blank=True)
 
-    periodo = models.JSONField()
+    periodo = models.JSONField(null=True, blank=True)
     tabelasHorario = models.JSONField(null=True, blank=True)
 
-    funcionamento24h = models.CharField(max_length=255)
-    funcionamentoEmFeriados = models.CharField(max_length=255)
+    funcionamento24h = models.CharField(max_length=255, null=True, blank=True)
+    funcionamentoEmFeriados = models.CharField(max_length=255, null=True, blank=True)
 
-    restricoes = models.JSONField()
+    restricoes = models.JSONField(null=True, blank=True)
 
-    outrasRegraseInformacoes  = models.CharField(max_length=255)
+    outrasRegrasEInformacoes  = models.CharField(max_length=255, null=True, blank=True)
 
-    capInstaladaPdia  = models.CharField(max_length=255)
-    capInstaladasSentadas  = models.CharField(max_length=255)
-    capSimultanea  = models.CharField(max_length=255)
-    capSimultaneaSentadas  = models.CharField(max_length=255)
+    capInstaladaPdia  = models.CharField(max_length=255, null=True, blank=True)
+    capInstaladasSentadas  = models.CharField(max_length=255, null=True, blank=True)
+    capSimultanea  = models.CharField(max_length=255, null=True, blank=True)
+    capSimultaneaSentadas  = models.CharField(max_length=255, null=True, blank=True)
 
-    estacionamento = models.JSONField()
+    estacionamento = models.JSONField(null=True, blank=True)
 
-    capacidadeVeiculos  = models.CharField(max_length=255)
+    capacidadeVeiculos  = models.CharField(max_length=255, null=True, blank=True)
 
-    numeroAutomoveis  = models.CharField(max_length=255)
+    numeroAutomoveis  = models.CharField(max_length=255, null=True, blank=True)
 
-    numeroOnibus  = models.CharField(max_length=255)
+    numeroOnibus  = models.CharField(max_length=255, null=True, blank=True)
 
-    servicosEEquipamentos = models.JSONField()
+    servicosEEquipamentos = models.JSONField(null=True, blank=True)
 
-    especificacaoDaGastronomiaPorPais = models.JSONField()
+    especificacaoDaGastronomiaPorPais = models.JSONField(null=True, blank=True)
 
-    seForBrasileiraPorRegiao = models.JSONField()
-    porEspecializacao = models.JSONField()
-    porTipoDeDieta = models.JSONField()
-    porTipoDeServico = models.JSONField()
+    seForBrasileiraPorRegiao = models.JSONField(null=True, blank=True)
+    porEspecializacao = models.JSONField(null=True, blank=True)
+    porTipoDeDieta = models.JSONField(null=True, blank=True)
+    porTipoDeServico = models.JSONField(null=True, blank=True)
 
-    doEquipamento = models.CharField(max_length=255)
+    doEquipamento = models.CharField(max_length=255, null=True, blank=True)
 
     tabelaEquipamentoEEspaco = models.JSONField(null=True, blank=True)
 
-    estadoGeralDeConservacao = models.CharField(max_length=255)
+    estadoGeralDeConservacao = models.CharField(max_length=255, null=True, blank=True)
 
-    possuiFacilidade = models.CharField(max_length=255)
+    possuiFacilidade = models.CharField(max_length=255, null=True, blank=True)
 
-    pessoalCapacitadoParaReceberPCD = models.JSONField()
+    pessoalCapacitadoParaReceberPCD = models.JSONField(null=True, blank=True)
 
-    rotaExternaAcessível  = models.JSONField()
+    rotaExternaAcessível  = models.JSONField(null=True, blank=True)
 
-    simboloInternacionalDeAcesso  = models.JSONField()
+    simboloInternacionalDeAcesso  = models.JSONField(null=True, blank=True)
 
-    localDeEmbarqueEDesembarque  = models.JSONField()
+    localDeEmbarqueEDesembarque  = models.JSONField(null=True, blank=True)
 
-    vagaEmEstacionamento  = models.JSONField()
+    vagaEmEstacionamento  = models.JSONField(null=True, blank=True)
 
-    areaDeCirculacaoAcessoInternoParaCadeiraDeRodas  = models.JSONField()
+    areaDeCirculacaoAcessoInternoParaCadeiraDeRodas  = models.JSONField(null=True, blank=True)
 
-    escada  = models.JSONField()
+    escada  = models.JSONField(null=True, blank=True)
 
-    rampa  = models.JSONField()
+    rampa  = models.JSONField(null=True, blank=True)
 
-    piso  = models.JSONField()
+    piso  = models.JSONField(null=True, blank=True)
 
-    elevador =  models.JSONField()
+    elevador =  models.JSONField(null=True, blank=True)
 
-    equipamentoMotorizadoParaDeslocamentoInterno = models.JSONField()
+    equipamentoMotorizadoParaDeslocamentoInterno = models.JSONField(null=True, blank=True)
 
-    sinalizacaoVisual = models.JSONField()
+    sinalizacaoVisual = models.JSONField(null=True, blank=True)
 
-    sinalizacaoTatil = models.JSONField()
+    sinalizacaoTatil = models.JSONField(null=True, blank=True)
 
-    alarmeDeEmergencia = models.JSONField()
+    alarmeDeEmergencia = models.JSONField(null=True, blank=True)
 
-    comunicacao = models.JSONField()
+    comunicacao = models.JSONField(null=True, blank=True)
 
-    balcaoDeAtendimento = models.JSONField()
+    balcaoDeAtendimento = models.JSONField(null=True, blank=True)
 
-    mobiliario = models.JSONField()
+    mobiliario = models.JSONField(null=True, blank=True)
 
-    sanitario = models.JSONField()
+    sanitario = models.JSONField(null=True, blank=True)
 
-    telefone = models.JSONField()
+    telefone = models.JSONField(null=True, blank=True)
 
-    sinalizacaoIndicativa = models.CharField(max_length=255)
+    sinalizacaoIndicativa = models.CharField(max_length=255, null=True, blank=True)
+    
+    tabelaAreaOuEdificacao = models.JSONField(blank=True, null=True)
+    rotaExternaAcessivel = models.JSONField("Rota Externa Acessível",blank=True, null=True)
 
-    outrosAcessibilidade = models.CharField(max_length=255)
+    outrosAcessibilidade = models.CharField(max_length=255, null=True, blank=True)
     
 class Rodovia(Base):
 
@@ -489,7 +497,7 @@ class MeioDeHospedagem(Base):
     qtdeFuncionariosTemporarios = models.CharField("Qtd. Funcionários Temporários", max_length = 254, blank=True, null=True)
     qtdeFuncionarisComDeficiencia = models.CharField("Qtd. Funcionários com Deficiência", max_length = 254, blank=True, null=True)
     latitude = models.CharField(max_length=255,blank=True, null=True)
-    longitute = models.CharField(max_length=255,blank=True, null=True)
+    longitude = models.CharField(max_length=255,blank=True, null=True)
     
     # Endereço e contato
     avenidaRuaEtc = models.CharField("Avenida/Rua/etc.", max_length=255, blank=True, null=True)

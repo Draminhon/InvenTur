@@ -400,7 +400,7 @@ class _RadioFormFieldState extends State<RadioFormField> {
         }
       },
       validator: widget.validator ?? (value) {
-            if (value == null || value == '') {
+            if ((widget.title == "Tipo" || widget.title == "Tipo:")  && value == null || (widget.title == "Tipo"|| widget.title == "Tipo:")  && value == '') {
               return "Por favor, selecione uma opção";
             }
 

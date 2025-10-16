@@ -367,14 +367,8 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
           SizedBox(
             height: 55.h,
           ),
-          textLabel(
-            name: 'Tipo:',
-            fontWeight: FontWeight.bold,
-          ),
-          SizedBox(
-            height: 35.h,
-          ),
           RadioFormField(
+            title: 'Tipo:',
             options: ['Comércio Turístico'],
             initialValue: isUpdate ? widget.infoModel!.tipo : '',
             onSaved: (newValue) => valoresJson['tipo'] = newValue,
@@ -415,7 +409,7 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
           ),
           CustomTextField(
             name: 'CNPJ',
-            validat: _validators.validarCNPJ,
+           // validat: _validators.validarCNPJ,
             keyboardType: TextInputType.numberWithOptions(),
             formatter: [_validators.cnpjFormatter],
             controller: widget.controllers['CNPJ'],

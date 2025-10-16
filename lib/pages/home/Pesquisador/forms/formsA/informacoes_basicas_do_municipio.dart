@@ -7,21 +7,23 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/checkBox.da
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/fields.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/container_widget.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
+import 'package:inventur/pages/home/Pesquisador/widgets/mapa_widget.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/multi_auto_complete_form_field.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/radioButton.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customTextField.dart';
-import 'package:inventur/pages/widgets/map.dart';
 import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/utils/validators.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+
 final Validators _validators = Validators();
 final Map<String, dynamic> valoresJson = {
   'tipo_formulario': 'Informações Básicas do Município',
 };
-  bool isUpdate = false;
-  double mapHeight = 950.h;
+bool isUpdate = false;
+double mapHeight = 950.h;
+
 class InformacoesBasicasDoMunicipio extends StatefulWidget {
   final InformacoesBasicasModel? infoModel;
   const InformacoesBasicasDoMunicipio({super.key, this.infoModel});
@@ -33,8 +35,7 @@ class InformacoesBasicasDoMunicipio extends StatefulWidget {
 
 class _InformacoesBasicasDoMunicipioState
     extends State<InformacoesBasicasDoMunicipio> {
-
-       void getInfoUsersInPesquisa() async {
+  void getInfoUsersInPesquisa() async {
     Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
 
     valoresJson['nome_pesquisador'] = info['pesquisador']['nome'];
@@ -46,8 +47,6 @@ class _InformacoesBasicasDoMunicipioState
     valoresJson['email_coordenador'] = info['coordenador']['email'];
   }
 
-
-
   final _formKey = GlobalKey<FormState>();
   final PageController _pageController = PageController();
   Map<String, TextEditingController> _infoGeraisControllers = {};
@@ -57,163 +56,186 @@ class _InformacoesBasicasDoMunicipioState
   Map<String, TextEditingController> _legislacaoControllers = {};
 
   final List<String> _chavesInfoGerais = const [
-    'uf', 'regiao_turistica', 'municipio',
-    'enderecoPrefeitura', 'bairroPrefeitura', 'cepPrefeitura',
+    'uf',
+    'regiao_turistica',
+    'municipio',
+    'enderecoPrefeitura',
+    'bairroPrefeitura',
+    'cepPrefeitura',
     'numeroPrefeitura',
-    'instagramPrefeitura', 'emailPrefeitura', 'sitePrefeitura',
+    'instagramPrefeitura',
+    'emailPrefeitura',
+    'sitePrefeitura',
     'cnpjPrefeitura',
-    'latitudePrefeitura', 'longitudePrefeitura', 'municipiosLimitrofes',
-    'distanciaDaCapital', 'totalFuncionariosPrefeitura',
+    'latitudePrefeitura',
+    'longitudePrefeitura',
+    'municipiosLimitrofes',
+    'distanciaDaCapital',
+    'totalFuncionariosPrefeitura',
     'pessoasComDeficienciaPrefeitura',
-    'nomeDoPrefeito', 'nomeDasSecretariasEtc',
-    'nomeOrgaoOficialTurismo', 
-    'enderecoOrgaoOfcTurismo', 'avenidaRuaOfcTurismo',
+    'nomeDoPrefeito',
+    'nomeDasSecretariasEtc',
+    'nomeOrgaoOficialTurismo',
+    'enderecoOrgaoOfcTurismo',
+    'avenidaRuaOfcTurismo',
     'distritoOrgaoOfcTurismo',
-    'cepOrgaoOfcTurismo', 'numeroOrgaoOfcTurismo', 'instagramOrgaoOfcTurismo',
-    'siteOrgaoOfcTurismo', 'emailOrgaoOfcTurismo',
+    'cepOrgaoOfcTurismo',
+    'numeroOrgaoOfcTurismo',
+    'instagramOrgaoOfcTurismo',
+    'siteOrgaoOfcTurismo',
+    'emailOrgaoOfcTurismo',
     'qtdeFuncionariosOrgaoOfcTurismo',
     'qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo',
     'instanciaGovernancaMunicipal',
-    'instanciaGovernancaEstadual', 'instanciaGovernancaRegional',
+    'instanciaGovernancaEstadual',
+    'instanciaGovernancaRegional',
     'instanciaGovernancaNacional',
-    'instanciaGovernancaInternacional', 'instanciaGovernancaOutras',
+    'instanciaGovernancaInternacional',
+    'instanciaGovernancaOutras',
     'aniversarioMunicipio',
-    'santoPadroeiro', 'diaDoSantoPadroeiro', 'feriadoMunicipal01',
-    'dataFeriadoMunicipal01', 'dataFeriadoMunicipal02',
+    'santoPadroeiro',
+    'diaDoSantoPadroeiro',
+    'feriadoMunicipal01',
+    'dataFeriadoMunicipal01',
+    'dataFeriadoMunicipal02',
     'dataFeriadoMunicipal03',
     'feriadoMunicipal02',
-    'feriadoMunicipal03', 'origemDoNome', 'dataFundacao', 'dataEmancipacao',
-    'fundadores', 'outrosFatosDeImportanciaHistorica'
+    'feriadoMunicipal03',
+    'origemDoNome',
+    'dataFundacao',
+    'dataEmancipacao',
+    'fundadores',
+    'outrosFatosDeImportanciaHistorica'
   ];
   late List<Widget> pages;
 
   final List<String> _chavesCaracteristicas = const [
     'areaTotalMunicipio',
-        'areaUrbana',
-        'areaRural',
-        'anoBase',
-        'populacaoTotal',
-        'populacaoUrbana',
-        'populacaoRural',
-        'anoBasePopulacao',
-        'temperaturaMedia',
-        'temperaturaMinima',
-        'temperaturaMaxima',
-        'altitudeMedia',
-        'qtdeDomiciliosAtendidos',
-        'empresaResponsavel',
-        'esgotoTotalAtendidos',
-        'esgotoDomiciliosAtendidos',
-        'esgotoRuraisAtendidos',
-        'esgotoEntidadeResponsavel',
-        'fossaSepticaTotalAtendidos',
-        'fossaSepticaDomiciliosAtendidos',
-        'fossaSepticaRuraisAtendidos',
-        'fossaSepticaEntidadeResponsavel',
-        'fossaRudimentarTotalAtendidos',
-        'fossaRudimentarDomiciliosAtendidos',
-        'fossaRudimentarRuraisAtendidos',
-        'fossaRudimentarEntidadeResponsavel',
-        'valaTotalAtendidos',
-        'valaDomiciliosAtendidos',
-        'valaRuraisAtendidos',
-        'valaEntidadeResponsavel',
-        'estacaoDeTratamentoTotalAtendidos',
-        'estacaoDeTratamentoDomiciliosAtendidos',
-        'estacaoDeTratamentoRuraisAtendidos',
-        'estacaoDeTratamentoEntidadeResponsavel',
-        'esgotoTratadoTotalAtendidos',
-        'esgotoTratadoDomiciliosAtendidos',
-        'esgotoTratadoRuraisAtendidos',
-        'esgotoTratadoEntidadeResponsavel',
-        'servicoDeEsgotoOutroTotalNome',
-        'servicoDeEsgotoOutroTotalAtendidos',
-        'servicoDeEsgotoOutroDomiciliosAtendidos',
-        'servicoDeEsgotoOutroRuraisAtendidos',
-        'servicoDeEsgotoOutroEntidadeResponsavel',
-        'capacidadeEmKVA',
-        'geradorDeEmergenciaCapacidadeEmKVA',
-        'redeUrbanaTotalAbastecido',
-        'redeUrbanaEntidadeResponsavel',
-        'redeRuralTotalAbastecido',
-        'redeRuralEntidadeResponsavel',
-        'abastecimentoProprioTotalAtendidos',
-        'abastecimentoProprioDomiciliosAtendidos',
-        'abastecimentoProprioRuraisAtendidos',
-        'abastecimentoProprioEntidadeResponsavel',
-        'servicosDeEnergiaOutroTotalNome',
-        'servicosDeEnergiaOutroTotalAtendidos',
-        'servicosDeEnergiaOutroDomiciliosAtendidos',
-        'servicosDeEnergiaOutroEntidadeResponsavel',
-        'coletaSeletivaTotalAtendidos',
-        'coletaSeletivaDomiciliosAtendidos',
-        'coletaSeletivaRuraisAtendidos',
-        'coletaSeletivaEntidadeResponsavel',
-        'coletaNaoSeletivaTotalAtendidos',
-        'coletaNaoSeletivaDomiciliosAtendidos',
-        'coletaNaoSeletivaRuraisAtendidos',
-        'coletaNaoSeletivaEntidadeResponsavel',
-        'coletaSemColetaTotal',
-        'coletaSemColetaDomicilios',
-        'coletaSemColetaRurais',
-        'deposicaoAterroSanitarioTotalAtendidos',
-        'deposicaoAterroSanitarioDomiciliosAtendidos',
-        'deposicaoAterroSanitarioRuraisAtendidos',
-        'deposicaoAterroSanitarioEntidadeResponsavel',
-        'deposicaoAterroSanitarioTotalAtendidos',
-        'deposicaoAterroSanitarioDomiciliosAtendidos',
-        'deposicaoAterroSanitarioRuraisAtendidos',
-        'deposicaoAterroSanitarioEntidadeResponsavel',
-        'deposicaoACeuAbertoTotalAtendidos',
-        'deposicaoACeuAbertoDomiciliosAtendidos',
-        'deposicaoACeuAbertoRuraisAtendidos',
-        'deposicaoACeuAbertoEntidadeResponsavel',
-        'deposicaoOutroTotalNome',
-        'deposicaoOutroTotalAtendidos',
-        'deposicaoOutroDomiciliosAtendidos',
-        'deposicaoOutroEntidadeResponsavel',
-        'reciclagemDeAcoTotalReciclado',
-        'reciclagemDeAcoEntidadeResponsavel',
-        'reciclagemDeAluminioTotalReciclado',
-        'reciclagemDeAluminioEntidadeResponsavel',
-        'reciclagemDeFerroTotalReciclado',
-        'reciclagemDeFerroEntidadeResponsavel',
-        'reciclagemOutroNome',
-        'reciclagemOutroTotalReciclado',
-        'reciclagemOutroEntidadeResponsavel',
-        'reciclagemDeBateriasPilhasTotalReciclado',
-        'reciclagemDeBateriasPilhasEntidadeResponsavel',
-        'reciclagemDeBorrachaTotalReciclado',
-        'reciclagemDeBorrachaEntidadeResponsavel',
-        'reciclagemDeEletronicosTotalReciclado',
-        'reciclagemDeEletronicosEntidadeResponsavel',
-        'reciclagemDeEmbalagensLongaVidaTotalReciclado',
-        'reciclagemDeEmbalagensLongaVidaEntidadeResponsavel',
-        'reciclagemDeEntulhoTotalReciclado',
-        'reciclagemDeEntulhoEntidadeResponsavel',
-        'reciclagemDeMadeiraTotalReciclado',
-        'reciclagemDeMadeiraEntidadeResponsavel',
-        'reciclagemDePapelTotalReciclado',
-        'reciclagemDePapelEntidadeResponsavel',
-        'reciclagemDePlasticoEEmbalagensTotalReciclado',
-        'reciclagemDePlasticoEEmbalagensEntidadeResponsavel',
-        'reciclagemDeVidroTotalReciclado',
-        'reciclagemDeVidroEntidadeResponsavel',
-        'reciclagemDeOleoDeCozinhaTotalReciclado',
-        'reciclagemDeOleoDeCozinhaEntidadeResponsavel',
-        'reciclagemOutrosNome',
-        'reciclagemOutrosTotalReciclado',
-        'reciclagemOutrosEntidadeResponsavel',
-        'divulgacaoImpressaFolder',
-        'divulgacaoImpressaRevista',
-        'divulgacaoImpressaJornal',
-        'divulgacaoImpressaOutros',
-        'visitantesAno',
-        'visitantesAnoAltaTemporada',
-        'origemInternacionalAnoBase',
-        'atrativosMaisVisitados'
+    'areaUrbana',
+    'areaRural',
+    'anoBase',
+    'populacaoTotal',
+    'populacaoUrbana',
+    'populacaoRural',
+    'anoBasePopulacao',
+    'temperaturaMedia',
+    'temperaturaMinima',
+    'temperaturaMaxima',
+    'altitudeMedia',
+    'qtdeDomiciliosAtendidos',
+    'empresaResponsavel',
+    'esgotoTotalAtendidos',
+    'esgotoDomiciliosAtendidos',
+    'esgotoRuraisAtendidos',
+    'esgotoEntidadeResponsavel',
+    'fossaSepticaTotalAtendidos',
+    'fossaSepticaDomiciliosAtendidos',
+    'fossaSepticaRuraisAtendidos',
+    'fossaSepticaEntidadeResponsavel',
+    'fossaRudimentarTotalAtendidos',
+    'fossaRudimentarDomiciliosAtendidos',
+    'fossaRudimentarRuraisAtendidos',
+    'fossaRudimentarEntidadeResponsavel',
+    'valaTotalAtendidos',
+    'valaDomiciliosAtendidos',
+    'valaRuraisAtendidos',
+    'valaEntidadeResponsavel',
+    'estacaoDeTratamentoTotalAtendidos',
+    'estacaoDeTratamentoDomiciliosAtendidos',
+    'estacaoDeTratamentoRuraisAtendidos',
+    'estacaoDeTratamentoEntidadeResponsavel',
+    'esgotoTratadoTotalAtendidos',
+    'esgotoTratadoDomiciliosAtendidos',
+    'esgotoTratadoRuraisAtendidos',
+    'esgotoTratadoEntidadeResponsavel',
+    'servicoDeEsgotoOutroTotalNome',
+    'servicoDeEsgotoOutroTotalAtendidos',
+    'servicoDeEsgotoOutroDomiciliosAtendidos',
+    'servicoDeEsgotoOutroRuraisAtendidos',
+    'servicoDeEsgotoOutroEntidadeResponsavel',
+    'capacidadeEmKVA',
+    'geradorDeEmergenciaCapacidadeEmKVA',
+    'redeUrbanaTotalAbastecido',
+    'redeUrbanaEntidadeResponsavel',
+    'redeRuralTotalAbastecido',
+    'redeRuralEntidadeResponsavel',
+    'abastecimentoProprioTotalAtendidos',
+    'abastecimentoProprioDomiciliosAtendidos',
+    'abastecimentoProprioRuraisAtendidos',
+    'abastecimentoProprioEntidadeResponsavel',
+    'servicosDeEnergiaOutroTotalNome',
+    'servicosDeEnergiaOutroTotalAtendidos',
+    'servicosDeEnergiaOutroDomiciliosAtendidos',
+    'servicosDeEnergiaOutroEntidadeResponsavel',
+    'coletaSeletivaTotalAtendidos',
+    'coletaSeletivaDomiciliosAtendidos',
+    'coletaSeletivaRuraisAtendidos',
+    'coletaSeletivaEntidadeResponsavel',
+    'coletaNaoSeletivaTotalAtendidos',
+    'coletaNaoSeletivaDomiciliosAtendidos',
+    'coletaNaoSeletivaRuraisAtendidos',
+    'coletaNaoSeletivaEntidadeResponsavel',
+    'coletaSemColetaTotal',
+    'coletaSemColetaDomicilios',
+    'coletaSemColetaRurais',
+    'deposicaoAterroSanitarioTotalAtendidos',
+    'deposicaoAterroSanitarioDomiciliosAtendidos',
+    'deposicaoAterroSanitarioRuraisAtendidos',
+    'deposicaoAterroSanitarioEntidadeResponsavel',
+    'deposicaoAterroSanitarioTotalAtendidos',
+    'deposicaoAterroSanitarioDomiciliosAtendidos',
+    'deposicaoAterroSanitarioRuraisAtendidos',
+    'deposicaoAterroSanitarioEntidadeResponsavel',
+    'deposicaoACeuAbertoTotalAtendidos',
+    'deposicaoACeuAbertoDomiciliosAtendidos',
+    'deposicaoACeuAbertoRuraisAtendidos',
+    'deposicaoACeuAbertoEntidadeResponsavel',
+    'deposicaoOutroTotalNome',
+    'deposicaoOutroTotalAtendidos',
+    'deposicaoOutroDomiciliosAtendidos',
+    'deposicaoOutroEntidadeResponsavel',
+    'reciclagemDeAcoTotalReciclado',
+    'reciclagemDeAcoEntidadeResponsavel',
+    'reciclagemDeAluminioTotalReciclado',
+    'reciclagemDeAluminioEntidadeResponsavel',
+    'reciclagemDeFerroTotalReciclado',
+    'reciclagemDeFerroEntidadeResponsavel',
+    'reciclagemOutroNome',
+    'reciclagemOutroTotalReciclado',
+    'reciclagemOutroEntidadeResponsavel',
+    'reciclagemDeBateriasPilhasTotalReciclado',
+    'reciclagemDeBateriasPilhasEntidadeResponsavel',
+    'reciclagemDeBorrachaTotalReciclado',
+    'reciclagemDeBorrachaEntidadeResponsavel',
+    'reciclagemDeEletronicosTotalReciclado',
+    'reciclagemDeEletronicosEntidadeResponsavel',
+    'reciclagemDeEmbalagensLongaVidaTotalReciclado',
+    'reciclagemDeEmbalagensLongaVidaEntidadeResponsavel',
+    'reciclagemDeEntulhoTotalReciclado',
+    'reciclagemDeEntulhoEntidadeResponsavel',
+    'reciclagemDeMadeiraTotalReciclado',
+    'reciclagemDeMadeiraEntidadeResponsavel',
+    'reciclagemDePapelTotalReciclado',
+    'reciclagemDePapelEntidadeResponsavel',
+    'reciclagemDePlasticoEEmbalagensTotalReciclado',
+    'reciclagemDePlasticoEEmbalagensEntidadeResponsavel',
+    'reciclagemDeVidroTotalReciclado',
+    'reciclagemDeVidroEntidadeResponsavel',
+    'reciclagemDeOleoDeCozinhaTotalReciclado',
+    'reciclagemDeOleoDeCozinhaEntidadeResponsavel',
+    'reciclagemOutrosNome',
+    'reciclagemOutrosTotalReciclado',
+    'reciclagemOutrosEntidadeResponsavel',
+    'divulgacaoImpressaFolder',
+    'divulgacaoImpressaRevista',
+    'divulgacaoImpressaJornal',
+    'divulgacaoImpressaOutros',
+    'visitantesAno',
+    'visitantesAnoAltaTemporada',
+    'origemInternacionalAnoBase',
+    'atrativosMaisVisitados'
   ];
-  
+
   final List<String> _chavesLegislacao = const [
     'leiOrganica',
     'ocupacaoDoSolo',
@@ -227,9 +249,7 @@ class _InformacoesBasicasDoMunicipioState
     'observacoes',
     'referencias'
   ];
-  
 
-  
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -243,19 +263,17 @@ class _InformacoesBasicasDoMunicipioState
       isUpdate = false;
     }
     print("VARIAVEL IS UPDATE: $isUpdate");
-        if(isUpdate){
-          _preencherDadosParaTeste();
+    if (isUpdate) {
+      _preencherDadosParaTeste();
       _preencherDadosParaTeste2();
       _preencherDadosParaTeste3();
     }
   }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
-  
-
 
     for (final key in _chavesInfoGerais) {
       _infoGeraisControllers[key] = TextEditingController();
@@ -265,64 +283,66 @@ class _InformacoesBasicasDoMunicipioState
       _caracteristicasControllers[key] = TextEditingController();
     }
 
-    for (final key in _chavesLegislacao){
+    for (final key in _chavesLegislacao) {
       _legislacaoControllers[key] = TextEditingController();
     }
 
     getInfoUsersInPesquisa();
 
     pages = [
-      InformacoesGerais(controllers: _infoGeraisControllers,infoModel: widget.infoModel,),
-      Caracteristicas(controllers: _caracteristicasControllers, infoModel: widget.infoModel,),
-      LegislacaoMunicipal(controllers: _legislacaoControllers,)
+      InformacoesGerais(
+        controllers: _infoGeraisControllers,
+        infoModel: widget.infoModel,
+      ),
+      Caracteristicas(
+        controllers: _caracteristicasControllers,
+        infoModel: widget.infoModel,
+      ),
+      LegislacaoMunicipal(
+        controllers: _legislacaoControllers,
+      )
     ];
-
-
   }
 
   void _preencherDadosParaTeste() {
-    if(widget.infoModel != null){
-    final model = widget.infoModel!;
-     final modelMap = model.toMap(); 
-    _infoGeraisControllers.forEach((key, controller) {
-       if(modelMap.containsKey(key)){
+    if (widget.infoModel != null) {
+      final model = widget.infoModel!;
+      final modelMap = model.toMap();
+      _infoGeraisControllers.forEach((key, controller) {
+        if (modelMap.containsKey(key)) {
           final valor = modelMap[key];
-            controller.text = valor?.toString() ?? '';
-       }
-  
-    });
+          controller.text = valor?.toString() ?? '';
+        }
+      });
     }
   }
 
-void _preencherDadosParaTeste2() {
-  if(widget.infoModel != null){
-    
-    final model = widget.infoModel!;
-    final modelMap = model.toMap(); 
+  void _preencherDadosParaTeste2() {
+    if (widget.infoModel != null) {
+      final model = widget.infoModel!;
+      final modelMap = model.toMap();
       _caracteristicasControllers.forEach((key, controller) {
-        if(modelMap.containsKey(key)){
+        if (modelMap.containsKey(key)) {
           final valor = modelMap[key];
-            controller.text = valor?.toString() ?? '';
-          
-                  }
-    
-    });
-  }
-}
-  
-  void _preencherDadosParaTeste3() {
-    if(widget.infoModel != null){
-          final model = widget.infoModel!;
-    final modelMap = model.toMap(); 
-    _legislacaoControllers.forEach((key, controller) {
-      if(modelMap.containsKey(key)){
-        final valor = modelMap[key];
-        controller.text = valor?.toString() ?? '';
-      }
-      
-    });
+          controller.text = valor?.toString() ?? '';
+        }
+      });
     }
-}
+  }
+
+  void _preencherDadosParaTeste3() {
+    if (widget.infoModel != null) {
+      final model = widget.infoModel!;
+      final modelMap = model.toMap();
+      _legislacaoControllers.forEach((key, controller) {
+        if (modelMap.containsKey(key)) {
+          final valor = modelMap[key];
+          controller.text = valor?.toString() ?? '';
+        }
+      });
+    }
+  }
+
   @override
   void dispose() {
     for (final controller in _infoGeraisControllers.values) {
@@ -331,7 +351,7 @@ void _preencherDadosParaTeste2() {
     for (final controller in _caracteristicasControllers.values) {
       controller.dispose();
     }
-    for(final controller in _legislacaoControllers.values){
+    for (final controller in _legislacaoControllers.values) {
       controller.dispose();
     }
     super.dispose();
@@ -345,13 +365,17 @@ void _preencherDadosParaTeste2() {
         valoresJson[key] = controller.text;
       });
 
-      _caracteristicasControllers.forEach((key, controller) {
+      _caracteristicasControllers.forEach(
+        (key, controller) {
           valoresJson[key] = controller.text;
-      },);
+        },
+      );
 
-      _legislacaoControllers.forEach((key, value) {
-        valoresJson[key] = value.text;
-      },);
+      _legislacaoControllers.forEach(
+        (key, value) {
+          valoresJson[key] = value.text;
+        },
+      );
       valoresJson.forEach(
         (key, value) {
           print("$key  - $value");
@@ -364,31 +388,33 @@ void _preencherDadosParaTeste2() {
           curve: Curves.ease,
         );
       } else {
-        
         //Navigator.pushNamed(context, '/SendedForm');
-          isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
-                      FormService().sendForm(valoresJson, AppConstants.INFO_BASICA_CREATE)
-            ;
+        isUpdate
+            ? FormService().updateForm(widget.infoModel!.id!, valoresJson,
+                AppConstants.INFO_BASICA_CREATE)
+            : FormService()
+                .sendForm(valoresJson, AppConstants.INFO_BASICA_CREATE);
         print("Formulário finalizado e pronto para enviar!");
 
         // _enviarFormulario(); // Você pode chamar sua função de envio aqui
       }
-
-
     } else {
-
       _formKey.currentState!.save();
-      _caracteristicasControllers.forEach((key, controllers) {
-        valoresJson[key] = controllers.text;
-      },);
-  
+      _caracteristicasControllers.forEach(
+        (key, controllers) {
+          valoresJson[key] = controllers.text;
+        },
+      );
+
       _infoGeraisControllers.forEach((key, controller) {
         valoresJson[key] = controller.text;
       });
-      _legislacaoControllers.forEach((key, value) {
-        valoresJson[key] = value.text;
-      },);
-          valoresJson.forEach(
+      _legislacaoControllers.forEach(
+        (key, value) {
+          valoresJson[key] = value.text;
+        },
+      );
+      valoresJson.forEach(
         (key, value) {
           print("$key  - $value");
         },
@@ -405,12 +431,11 @@ void _preencherDadosParaTeste2() {
     return Scaffold(
         appBar: AppBar(
           foregroundColor: Colors.white,
-          title: DotsIndicator(dotsCount: pages.length,
-          position: currentStep.toDouble(),
-          decorator: DotsDecorator(activeColor: Colors.white,
-          activeSize: Size(18, 9)
-          ),
-
+          title: DotsIndicator(
+            dotsCount: pages.length,
+            position: currentStep.toDouble(),
+            decorator: DotsDecorator(
+                activeColor: Colors.white, activeSize: Size(18, 9)),
           ),
           centerTitle: true,
           backgroundColor: const Color.fromARGB(255, 55, 111, 60),
@@ -435,8 +460,7 @@ void _preencherDadosParaTeste2() {
           // Botão Voltar
           if (currentStep > 0)
             Container(
-                          margin: EdgeInsets.only(bottom: 55.h),
-
+              margin: EdgeInsets.only(bottom: 55.h),
               child: TextButton(
                 onPressed: () {
                   _pageController.previousPage(
@@ -454,7 +478,9 @@ void _preencherDadosParaTeste2() {
           Container(
             height: 160.h,
             width: 550.w,
-            margin: currentStep > 0 ? EdgeInsets.only(bottom: 55.h) : EdgeInsets.only(bottom: 55.h, right: 55.w),
+            margin: currentStep > 0
+                ? EdgeInsets.only(bottom: 55.h)
+                : EdgeInsets.only(bottom: 55.h, right: 55.w),
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
                   backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
@@ -462,7 +488,7 @@ void _preencherDadosParaTeste2() {
                 // _preencherDadosParaTeste();
                 // _preencherDadosParaTeste2();
                 // _preencherDadosParaTeste3();
-                 _enviarFormulario();
+                _enviarFormulario();
               },
               child: Text(
                 currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
@@ -474,19 +500,23 @@ void _preencherDadosParaTeste2() {
   }
 }
 
-class Identificacao extends StatefulWidget{
+class Identificacao extends StatefulWidget {
   final Map<String, TextEditingController> controllers;
   final InformacoesBasicasModel? infoModel;
 
-  const Identificacao (
-      {super.key, required this.onSaved, required this.controllers, this.infoModel});
+  const Identificacao(
+      {super.key,
+      required this.onSaved,
+      required this.controllers,
+      this.infoModel});
   final void Function(String?) onSaved;
 
   @override
   State<Identificacao> createState() => _IdentificacaoState();
 }
 
-class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveClientMixin {
+class _IdentificacaoState extends State<Identificacao>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -499,17 +529,12 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
         SizedBox(
           height: 55.h,
         ),
-        textLabel(
-          name: "Tipo:",
-          fontWeight: FontWeight.bold,
-        ),
-        SizedBox(
-          height: 35.h,
-        ),
 
         RadioFormField(
-          initialValue: isUpdate ? widget.infoModel!.tipo! : '',
-            options: ['Caracterização do município'], onSaved: widget.onSaved)
+          title: "Tipo",
+            initialValue: isUpdate ? widget.infoModel!.tipo! : '',
+            options: ['Caracterização do município'],
+            onSaved: widget.onSaved)
 
         // RadioD(
         //   validator: (p0) {
@@ -524,7 +549,7 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
       ],
     );
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
@@ -534,29 +559,18 @@ class InformacoesGerais extends StatefulWidget {
   final Map<String, TextEditingController> controllers;
   final InformacoesBasicasModel? infoModel;
 
-  const InformacoesGerais({super.key, required this.controllers, this.infoModel});
+  const InformacoesGerais(
+      {super.key, required this.controllers, this.infoModel});
 
   @override
   State<InformacoesGerais> createState() => _InformacoesGeraisState();
 }
 
 class _InformacoesGeraisState extends State<InformacoesGerais> {
-    bool _isFullScreen = false;
-
-  // Altura inicial do mapa quando não está em tela cheia
-  final double _initialMapHeight = 300.0;
-
-  void _toggleFullScreen() {
-    setState(() {
-      _isFullScreen = !_isFullScreen;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    print(valoresJson); 
+    print(valoresJson);
     final sizeScreen = MediaQuery.sizeOf(context);
-    final double currentMapHeight = _isFullScreen ? sizeScreen.height * 0.8 : _initialMapHeight;
     // TODO: implement build
 
     final formWidgts = <Widget>[
@@ -634,7 +648,7 @@ class _InformacoesGeraisState extends State<InformacoesGerais> {
         keyboardType: TextInputType.numberWithOptions(),
         controller: widget.controllers['cnpjPrefeitura'],
         name: 'CNPJ',
-        validat: _validators.validarCNPJ,
+        //  validat: _validators.validarCNPJ,
         formatter: [_validators.cnpjFormatter],
       ),
       SizedBox(
@@ -660,28 +674,11 @@ class _InformacoesGeraisState extends State<InformacoesGerais> {
       //     ),
       //   ],
       // ),
-      SizedBox(
-        
-        height: _isFullScreen ? currentMapHeight : currentMapHeight,
-
-        width: 1300.h,
-        child: GestureDetector(
-          onDoubleTap:() =>  _toggleFullScreen(),
-          child: MeuMapa(onPlaceSelected: (value) {
-            setState(() {
-              value.forEach(
-                (key, value) {
-                  
-                  valoresJson[key] = value;
-                },
-              );
-              
-            });
-          },
-         
-          initialLatitude: isUpdate ? double.tryParse(widget.infoModel!.latitude!) : null,
-          initialLongitute: isUpdate ? double.tryParse(widget.infoModel!.longitude!) : null,
-          ))),
+      MapaWidget(
+          valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          latitude: isUpdate ? widget.infoModel!.latitude! : "0",
+          longitude: isUpdate ? widget.infoModel!.longitude! : "0"),
       SizedBox(
         height: 55.h,
       ),
@@ -821,7 +818,8 @@ class _InformacoesGeraisState extends State<InformacoesGerais> {
         keyboardType: TextInputType.numberWithOptions(),
       ),
       CustomTextField(
-        controller: widget.controllers['qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo'],
+        controller:
+            widget.controllers['qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo'],
         formatter: [FilteringTextInputFormatter.digitsOnly],
         name: "Formação superior em Turismo (nº)",
         keyboardType: TextInputType.numberWithOptions(),
@@ -1009,8 +1007,8 @@ class Caracteristicas extends StatefulWidget {
   State<Caracteristicas> createState() => _CaracteristicasState();
 }
 
-class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAliveClientMixin {
-  
+class _CaracteristicasState extends State<Caracteristicas>
+    with AutomaticKeepAliveClientMixin {
   final PesquisaController _pesquisaController = PesquisaController();
 
   @override
@@ -1185,7 +1183,7 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         height: 55.h,
       ),
       CheckboxGroupFormField(
-        initialValue: isUpdate ? widget.infoModel!.mesesMaisChuvosos: [],
+        initialValue: isUpdate ? widget.infoModel!.mesesMaisChuvosos : [],
         onSaved: (p0) => valoresJson['mesesMaisChuvosos'] = p0,
         options: [
           'Janeiro',
@@ -1208,7 +1206,7 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         height: 55.h,
       ),
       CheckboxGroupFormField(
-        initialValue: isUpdate ? widget.infoModel!.mesesMenosChuvosos: [],
+        initialValue: isUpdate ? widget.infoModel!.mesesMenosChuvosos : [],
         onSaved: (p0) => valoresJson['mesesMenosChuvosos'] = p0,
         options: [
           'Janeiro',
@@ -1254,7 +1252,7 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         height: 55.h,
       ),
       RadioFormField(
-        initialValue: isUpdate ? widget.infoModel!.tipoDeAbastecimento: '',
+          initialValue: isUpdate ? widget.infoModel!.tipoDeAbastecimento : '',
           onSaved: (newValue) => valoresJson['tipoDeAbastecimento'] = newValue,
           options: [
             'Água Não Canalizada',
@@ -1285,9 +1283,8 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
       ),
       textLabel(name: 'Coleta e Deposição'),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
-
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Rede de Esgoto',
           jsonKey: 'redeDeEsgoto',
           optionModelValue: isUpdate ? widget.infoModel!.redeDeEsgoto : '',
@@ -1316,11 +1313,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Fossa Séptica',
           jsonKey: 'fossaSeptica',
-          optionModelValue: isUpdate ? widget.infoModel!.fossaSeptica: '',
+          optionModelValue: isUpdate ? widget.infoModel!.fossaSeptica : '',
           children: [
             CustomTextField(
               name: 'Total Atendido (%)',
@@ -1346,12 +1343,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Fossa Rudimentar',
           jsonKey: 'fossaRudimentar',
-          optionModelValue: isUpdate ? widget.infoModel!.fossaRudimentar: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.fossaRudimentar : '',
           children: [
             CustomTextField(
               name: 'Total Atendido (%)',
@@ -1379,41 +1375,42 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,title: 'Vala', jsonKey: 'vala',
-          optionModelValue: isUpdate ? widget.infoModel!.vala: '',
-      
-       children: [
-        CustomTextField(
-          name: 'Total Atendido (%)',
-          controller: widget.controllers['valaTotalAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Urbanos Atendidos (%)',
-          controller: widget.controllers['valaDomiciliosAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Domicílios Rurais Atendidos (%)',
-          controller: widget.controllers['valaRuraisAtendidos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
-        CustomTextField(
-          name: 'Entidade Responsável',
-          controller: widget.controllers['valaEntidadeResponsavel'],
-        )
-      ]),
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
+          title: 'Vala',
+          jsonKey: 'vala',
+          optionModelValue: isUpdate ? widget.infoModel!.vala : '',
+          children: [
+            CustomTextField(
+              name: 'Total Atendido (%)',
+              controller: widget.controllers['valaTotalAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Urbanos Atendidos (%)',
+              controller: widget.controllers['valaDomiciliosAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Domicílios Rurais Atendidos (%)',
+              controller: widget.controllers['valaRuraisAtendidos'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+              keyboardType: TextInputType.numberWithOptions(),
+            ),
+            CustomTextField(
+              name: 'Entidade Responsável',
+              controller: widget.controllers['valaEntidadeResponsavel'],
+            )
+          ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Estação de Tratamento',
           jsonKey: 'estacaoDeTratamento',
-          optionModelValue: isUpdate ? widget.infoModel!.estacaoDeTratamento: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.estacaoDeTratamento : '',
           children: [
             CustomTextField(
               name: 'Total Atendido (%)',
@@ -1443,12 +1440,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Esgoto Tratado',
           jsonKey: 'esgotoTratado',
-          optionModelValue: isUpdate ? widget.infoModel!.esgotoTratado: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.esgotoTratado : '',
           children: [
             CustomTextField(
               name: 'Total Atendido (%)',
@@ -1476,12 +1472,12 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Outros',
           jsonKey: 'servicoDeEsgotoOutros',
-          optionModelValue: isUpdate ? widget.infoModel!.servicoDeEsgotoOutros: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.servicoDeEsgotoOutros : '',
           children: [
             CustomTextField(
               name: 'Nome',
@@ -1526,7 +1522,7 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
       ),
       textLabel(name: 'Energia Elétrica'),
       RadioFormField(
-        initialValue: isUpdate ? widget.infoModel!.energiaEletrica: '',
+          initialValue: isUpdate ? widget.infoModel!.energiaEletrica : '',
           onSaved: (newValue) => valoresJson['energiaEletrica'] = newValue,
           options: ['110 Volts', '220 Volts', '110/220 Volts']),
       CustomTextField(
@@ -1536,10 +1532,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         keyboardType: TextInputType.numberWithOptions(),
       ),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
-          optionModelValue: isUpdate ? widget.infoModel!.geradorDeEmergencia: '',
-
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
+          optionModelValue:
+              isUpdate ? widget.infoModel!.geradorDeEmergencia : '',
           title: 'Gerador de Emergẽncia',
           jsonKey: 'geradorDeEmergencia',
           children: [
@@ -1559,11 +1555,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         fontWeight: FontWeight.bold,
       ),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Rede Urbana',
-          optionModelValue: isUpdate ? widget.infoModel!.redeUrbana: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.redeUrbana : '',
           jsonKey: 'redeUrbana',
           children: [
             CustomTextField(
@@ -1578,16 +1573,14 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Rede Rural',
-          optionModelValue: isUpdate ? widget.infoModel!.redeRural: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.redeRural : '',
           jsonKey: 'redeRural',
           children: [
             CustomTextField(
               name: 'Total Abastecido (%)',
-              
               controller: widget.controllers['redeRuralTotalAbastecido'],
               formatter: [FilteringTextInputFormatter.digitsOnly],
               keyboardType: TextInputType.numberWithOptions(),
@@ -1598,11 +1591,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Abastecimento Próprio',
-          optionModelValue: isUpdate ? widget.infoModel!.abastecimentoProprio: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.abastecimentoProprio : '',
           jsonKey: 'abastecimentoProprio',
           children: [
             CustomTextField(
@@ -1633,11 +1626,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Outros',
-          optionModelValue: isUpdate ? widget.infoModel!.servicosDeEnergiaOutro: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.servicosDeEnergiaOutro : '',
           jsonKey: 'servicosDeEnergiaOutro',
           children: [
             CustomTextField(
@@ -1679,11 +1672,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         fontWeight: FontWeight.bold,
       ),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Seletiva',
-          optionModelValue: isUpdate ? widget.infoModel!.coletaSeletiva: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.coletaSeletiva : '',
           jsonKey: 'coletaSeletiva',
           children: [
             CustomTextField(
@@ -1712,11 +1704,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Não Seletiva',
-          optionModelValue: isUpdate ? widget.infoModel!.coletaNaoSeletiva: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.coletaNaoSeletiva : '',
           jsonKey: 'coletaNaoSeletiva',
           children: [
             CustomTextField(
@@ -1746,11 +1737,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Sem Coleta',
-          optionModelValue: isUpdate ? widget.infoModel!.coletaSemColeta: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.coletaSemColeta : '',
           jsonKey: 'coletaSemColeta',
           children: [
             CustomTextField(
@@ -1780,11 +1770,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         fontWeight: FontWeight.bold,
       ),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Aterro Sanitário',
-          optionModelValue: isUpdate ? widget.infoModel!.deposicaoAterroSanitario: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.deposicaoAterroSanitario : '',
           jsonKey: 'deposicaoAterroSanitario',
           children: [
             CustomTextField(
@@ -1815,11 +1805,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Compostagem',
-          optionModelValue: isUpdate ? widget.infoModel!.deposicaoCompostagem: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.deposicaoCompostagem : '',
           jsonKey: 'deposicaoCompostagem',
           children: [
             CustomTextField(
@@ -1850,11 +1840,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'A Céu Aberto (lixão)',
-          optionModelValue: isUpdate ? widget.infoModel!.deposicaoACeuAberto: '',
-          
+          optionModelValue:
+              isUpdate ? widget.infoModel!.deposicaoACeuAberto : '',
           jsonKey: 'deposicaoACeuAberto',
           children: [
             CustomTextField(
@@ -1885,11 +1875,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Outros',
-          optionModelValue: isUpdate ? widget.infoModel!.deposicaoOutro: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.deposicaoOutro : '',
           jsonKey: 'deposicaoOutro',
           children: [
             CustomTextField(
@@ -1923,11 +1912,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         fontWeight: FontWeight.bold,
       ),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Aço',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeAco: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeAco : '',
           jsonKey: 'reciclagemDeAco',
           children: [
             CustomTextField(
@@ -1942,11 +1930,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Alumínio',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeAluminio: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.reciclagemDeAluminio : '',
           jsonKey: 'reciclagemDeAluminio',
           children: [
             CustomTextField(
@@ -1962,11 +1950,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Ferro',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeFerro: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeFerro : '',
           jsonKey: 'reciclagemDeFerro',
           children: [
             CustomTextField(
@@ -1981,11 +1968,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Outro Metal',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemOutro: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemOutro : '',
           jsonKey: 'reciclagemOutro',
           children: [
             CustomTextField(
@@ -2004,11 +1990,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Baterias e Pilhas',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeBateriasPilhas: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.reciclagemDeBateriasPilhas : '',
           jsonKey: 'reciclagemDeBateriasPilhas',
           children: [
             CustomTextField(
@@ -2024,11 +2010,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Borracha',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeBorracha: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.reciclagemDeBorracha : '',
           jsonKey: 'reciclagemDeBorracha',
           children: [
             CustomTextField(
@@ -2044,11 +2030,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Eletrônicos',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeEletronicos: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.reciclagemDeEletronicos : '',
           jsonKey: 'reciclagemDeEletronicos',
           children: [
             CustomTextField(
@@ -2064,11 +2050,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Embalagens\nLonga Vida',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeEmbalagensLongaVida: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.reciclagemDeEmbalagensLongaVida : '',
           jsonKey: 'reciclagemDeEmbalagensLongaVida',
           children: [
             CustomTextField(
@@ -2084,11 +2070,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Entulho',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeEntulho: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.reciclagemDeEntulho : '',
           jsonKey: 'reciclagemDeEntulho',
           children: [
             CustomTextField(
@@ -2104,11 +2090,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Madeira',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeMadeira: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.reciclagemDeMadeira : '',
           jsonKey: 'reciclagemDeMadeira',
           children: [
             CustomTextField(
@@ -2124,11 +2110,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Papel',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDePapel: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDePapel : '',
           jsonKey: 'reciclagemDePapel',
           children: [
             CustomTextField(
@@ -2143,11 +2128,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De plástico e\nembalagens',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDePlasticoEEmbalagens: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.reciclagemDePlasticoEEmbalagens : '',
           jsonKey: 'reciclagemDePlasticoEEmbalagens',
           children: [
             CustomTextField(
@@ -2163,11 +2148,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Vidro',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeVidro: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeVidro : '',
           jsonKey: 'reciclagemDeVidro',
           children: [
             CustomTextField(
@@ -2182,11 +2166,11 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'De Óleo de\nCozinha',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemDeOleoDeCozinha: '',
-
+          optionModelValue:
+              isUpdate ? widget.infoModel!.reciclagemDeOleoDeCozinha : '',
           jsonKey: 'reciclagemDeOleoDeCozinha',
           children: [
             CustomTextField(
@@ -2202,11 +2186,10 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Outros',
-          optionModelValue: isUpdate ? widget.infoModel!.reciclagemOutros: '',
-
+          optionModelValue: isUpdate ? widget.infoModel!.reciclagemOutros : '',
           jsonKey: 'reciclagemOutros',
           children: [
             CustomTextField(
@@ -2239,7 +2222,9 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         height: 55.h,
       ),
       RadioFormField(
-        initialValue: isUpdate ? widget.infoModel!.servicosDeComunicacaoAcessoAInternet: '',
+          initialValue: isUpdate
+              ? widget.infoModel!.servicosDeComunicacaoAcessoAInternet
+              : '',
           onSaved: (newValue) =>
               valoresJson['servicosDeComunicacaoAcessoAInternet'] = newValue,
           options: [
@@ -2251,11 +2236,12 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             '3G'
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Telefonia Móvel',
-          optionModelValue: isUpdate ? widget.infoModel!.servicosDeComunicacaoTelefoniaMovel: '',
-          
+          optionModelValue: isUpdate
+              ? widget.infoModel!.servicosDeComunicacaoTelefoniaMovel
+              : '',
           jsonKey: 'servicosDeComunicacaoTelefoniaMovel',
           children: [
             SizedBox(
@@ -2263,18 +2249,21 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
             textLabel(name: 'Área de Cobertura'),
             RadioFormField(
-              initialValue: isUpdate ? widget.infoModel!.telefoniaMovelAreaDeCobertura: '',
+              initialValue: isUpdate
+                  ? widget.infoModel!.telefoniaMovelAreaDeCobertura
+                  : '',
               options: ['Em Todo Município', 'Em Parte do Município'],
               onSaved: (newValue) =>
                   valoresJson['telefoniaMovelAreaDeCobertura'] = newValue,
             )
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Telefonia Fixa',
-          optionModelValue: isUpdate ? widget.infoModel!.servicosDeComunicacaoTelefoniaFixa: '',
-
+          optionModelValue: isUpdate
+              ? widget.infoModel!.servicosDeComunicacaoTelefoniaFixa
+              : '',
           jsonKey: 'servicosDeComunicacaoTelefoniaFixa',
           children: [
             SizedBox(
@@ -2282,8 +2271,9 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
             ),
             textLabel(name: 'Área de Cobertura'),
             RadioFormField(
-              initialValue: isUpdate ? widget.infoModel!.telefoniaFixaAreaDeCobertura: '',
-
+              initialValue: isUpdate
+                  ? widget.infoModel!.telefoniaFixaAreaDeCobertura
+                  : '',
               options: ['Em Todo Município', 'Em Parte do Município'],
               onSaved: (newValue) =>
                   valoresJson['telefoniaFixaAreaDeCobertura'] = newValue,
@@ -2307,11 +2297,12 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         height: 55.h,
       ),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Divulgação Impressa',
-          optionModelValue: isUpdate ? widget.infoModel!.promocaoTuristicaDivulgacaoImpressa: '',
-
+          optionModelValue: isUpdate
+              ? widget.infoModel!.promocaoTuristicaDivulgacaoImpressa
+              : '',
           jsonKey: 'promocaoTuristicaDivulgacaoImpressa',
           children: [
             CustomTextField(
@@ -2329,11 +2320,12 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
                 controller: widget.controllers['divulgacaoImpressaOutros'])
           ]),
       ConditionalFieldsGroup(
-        isUpdate: isUpdate,
-        valoresJson: valoresJson,
+          isUpdate: isUpdate,
+          valoresJson: valoresJson,
           title: 'Divulgação Televisiva',
-          optionModelValue: isUpdate ? widget.infoModel!.promocaoTuristicaDivulgacaoTelevisiva: '',
-
+          optionModelValue: isUpdate
+              ? widget.infoModel!.promocaoTuristicaDivulgacaoTelevisiva
+              : '',
           jsonKey: 'promocaoTuristicaDivulgacaoTelevisiva',
           children: []),
       SizedBox(
@@ -2353,7 +2345,8 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         height: 55.h,
       ),
       RadioFormField(
-        initialValue: isUpdate ? widget.infoModel!.atendimentoEmLinguaEstrangeira: '',
+        initialValue:
+            isUpdate ? widget.infoModel!.atendimentoEmLinguaEstrangeira : '',
         options: ['Não', 'Inglês', 'Espanhol', 'outro'],
         onSaved: (newValue) =>
             valoresJson['atendimentoEmLinguaEstrangeira'] = newValue,
@@ -2365,7 +2358,9 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         height: 55.h,
       ),
       RadioFormField(
-        initialValue: isUpdate ? widget.infoModel!.atendimentoAoVisitanteInformativosImpressos: '',
+        initialValue: isUpdate
+            ? widget.infoModel!.atendimentoAoVisitanteInformativosImpressos
+            : '',
         options: ['Não', 'Português', 'Inglês', 'Espanhol', 'outro'],
         onSaved: (newValue) =>
             valoresJson['atendimentoAoVisitanteInformativosImpressos'] =
@@ -2397,7 +2392,7 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         height: 55.h,
       ),
       CheckboxGroupFormField(
-        initialValue: isUpdate ? widget.infoModel!.mesesAltaTemporada: [],
+        initialValue: isUpdate ? widget.infoModel!.mesesAltaTemporada : [],
         onSaved: (p0) => valoresJson['mesesAltaTemporada'] = p0,
         options: [
           'Janeiro',
@@ -2423,7 +2418,8 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         height: 55.h,
       ),
       RadioFormField(
-        initialValue: isUpdate ? widget.infoModel!.origemDosVisitantesTuristas: '',
+        initialValue:
+            isUpdate ? widget.infoModel!.origemDosVisitantesTuristas : '',
         options: ['Entorno Municipal', 'Estadual', 'Nacional', 'Internacional'],
         onSaved: (newValue) =>
             valoresJson['origemDosVisitantesTuristas'] = newValue,
@@ -2432,7 +2428,7 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         height: 55.h,
       ),
       MultiAutocompleteFormField(
-        initialValue: isUpdate ? widget.infoModel!.origemNacional: [],
+        initialValue: isUpdate ? widget.infoModel!.origemNacional : [],
         title: 'Origem dos Turistas Nacionais (até 5 estados)',
         label: 'Selecione um Estado',
         fieldCount: 5,
@@ -2451,9 +2447,9 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         },
         validator: (values) {
           // Exemplo de validação: exigir pelo menos um estado
-          if (values == null || values.isEmpty) {
-            return 'Por favor, selecione pelo menos um estado.';
-          }
+          // if (values == null || values.isEmpty) {
+          //   return 'Por favor, selecione pelo menos um estado.';
+          // }
           return null;
         },
       ),
@@ -2461,7 +2457,7 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
         height: 55.h,
       ),
       MultiAutocompleteFormField(
-        initialValue: isUpdate ? widget.infoModel!.origemInternacional: [],
+        initialValue: isUpdate ? widget.infoModel!.origemInternacional : [],
         title: 'Origem dos Turistas Internacionais (até 5 países)',
         label: 'Selecione um País',
         optionsBuilder: (textEditingValue) {
@@ -2478,9 +2474,9 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
           valoresJson['origemInternacional'] = newValue;
         },
         validator: (values) {
-          if (values == null || values.isEmpty) {
-            return 'Por favor, selecione pelo menos um pais.';
-          }
+          // if (values == null || values.isEmpty) {
+          //   return 'Por favor, selecione pelo menos um pais.';
+          // }
           return null;
         },
       ),
@@ -2502,7 +2498,8 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
           name:
               'Segmentos ou Tipos de Turismo em que é Especializado (assinalar até 3)'),
       CheckboxGroupFormField(
-        initialValue: isUpdate ? widget.infoModel!.segmentosTurismoEspecializado: [],
+        initialValue:
+            isUpdate ? widget.infoModel!.segmentosTurismoEspecializado : [],
         options: [
           'Aventura',
           'Ecoturismo',
@@ -2529,13 +2526,13 @@ class _CaracteristicasState extends State<Caracteristicas> with AutomaticKeepAli
       ),
     );
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
 
-class LegislacaoMunicipal extends StatelessWidget{
+class LegislacaoMunicipal extends StatelessWidget {
   final Map<String, TextEditingController> controllers;
 
   const LegislacaoMunicipal({super.key, required this.controllers});
@@ -2543,9 +2540,9 @@ class LegislacaoMunicipal extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
-    
+
     final List<Widget> listaWidgets = [
-       Container(
+      Container(
         color: const Color.fromARGB(255, 55, 111, 60),
         height: sizeScreen.height * 0.06,
         width: sizeScreen.width,
@@ -2557,43 +2554,108 @@ class LegislacaoMunicipal extends StatelessWidget{
               color: Colors.white, fontSize: sizeScreen.height * 0.03),
         ),
       ),
-      SizedBox(height: 55.h,),
-      textLabel(name: 'Lei Orgânica', fontWeight: FontWeight.bold,),
-      CustomTextField(name: 'tipo/número/data', controller: controllers['leiOrganica'],),
-
-      SizedBox(height: 55.h,),
-      textLabel(name: 'Ocupação do Solo', fontWeight: FontWeight.bold,),
-      CustomTextField(name: 'tipo/número/data', controller: controllers['ocupacaoDoSolo'],),
-
-      SizedBox(height: 55.h,),
-      textLabel(name: 'Plano de Desenvolvimento do Turismo', fontWeight: FontWeight.bold,),
-      CustomTextField(name: 'tipo/número/data', controller: controllers['planoDeDesenvolvimentoDoTurismo'],),
-
-      SizedBox(height: 55.h,),
-      textLabel(name: 'Proteção Ambiental', fontWeight: FontWeight.bold,),
-      CustomTextField(name: 'tipo/número/data', controller: controllers['protecaoAmbiental'],),
-
-      SizedBox(height: 55.h,),
-      textLabel(name: 'Apoio à Cultura', fontWeight: FontWeight.bold,),
-      CustomTextField(name: 'tipo/número/data', controller: controllers['apoioACultura'],),
-
-      SizedBox(height: 55.h,),
-      textLabel(name: 'Incentivos Fiscais ao Turismo', fontWeight: FontWeight.bold,),
-      CustomTextField(name: 'tipo/número/data', controller: controllers['incentivosFiscaisAoTurismo'],),
-
-      SizedBox(height: 55.h,),
-      textLabel(name: 'Plano Diretor', fontWeight: FontWeight.bold,),
-      CustomTextField(name: 'tipo/número/data', controller: controllers['planoDiretor'],),
-
-      SizedBox(height: 55.h,),
-      textLabel(name: 'Fundo Municipal de Turismo', fontWeight: FontWeight.bold,),
-      CustomTextField(name: 'tipo/número/data', controller: controllers['fundoMunicipalDeTurismo'],),
-
-      SizedBox(height: 55.h,),
-      textLabel(name: 'Outras', fontWeight: FontWeight.bold,),
-      CustomTextField(name: 'tipo/número/data', controller: controllers['legislacaoOutras'],),
-
-      SizedBox(height: 75.h,),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Lei Orgânica',
+        fontWeight: FontWeight.bold,
+      ),
+      CustomTextField(
+        name: 'tipo/número/data',
+        controller: controllers['leiOrganica'],
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Ocupação do Solo',
+        fontWeight: FontWeight.bold,
+      ),
+      CustomTextField(
+        name: 'tipo/número/data',
+        controller: controllers['ocupacaoDoSolo'],
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Plano de Desenvolvimento do Turismo',
+        fontWeight: FontWeight.bold,
+      ),
+      CustomTextField(
+        name: 'tipo/número/data',
+        controller: controllers['planoDeDesenvolvimentoDoTurismo'],
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Proteção Ambiental',
+        fontWeight: FontWeight.bold,
+      ),
+      CustomTextField(
+        name: 'tipo/número/data',
+        controller: controllers['protecaoAmbiental'],
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Apoio à Cultura',
+        fontWeight: FontWeight.bold,
+      ),
+      CustomTextField(
+        name: 'tipo/número/data',
+        controller: controllers['apoioACultura'],
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Incentivos Fiscais ao Turismo',
+        fontWeight: FontWeight.bold,
+      ),
+      CustomTextField(
+        name: 'tipo/número/data',
+        controller: controllers['incentivosFiscaisAoTurismo'],
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Plano Diretor',
+        fontWeight: FontWeight.bold,
+      ),
+      CustomTextField(
+        name: 'tipo/número/data',
+        controller: controllers['planoDiretor'],
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Fundo Municipal de Turismo',
+        fontWeight: FontWeight.bold,
+      ),
+      CustomTextField(
+        name: 'tipo/número/data',
+        controller: controllers['fundoMunicipalDeTurismo'],
+      ),
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Outras',
+        fontWeight: FontWeight.bold,
+      ),
+      CustomTextField(
+        name: 'tipo/número/data',
+        controller: controllers['legislacaoOutras'],
+      ),
+      SizedBox(
+        height: 75.h,
+      ),
       Container(
         color: const Color.fromARGB(255, 55, 111, 60),
         height: sizeScreen.height * 0.06,
@@ -2606,17 +2668,29 @@ class LegislacaoMunicipal extends StatelessWidget{
               color: Colors.white, fontSize: sizeScreen.height * 0.03),
         ),
       ),
-      SizedBox(height: 55.h,),
-      textLabel(name: 'Observações', fontWeight: FontWeight.bold,),
-      CustomTextField(name: '', controller: controllers['observacoes'],),
-      textLabel(name: 'Referências', fontWeight: FontWeight.bold,),
-      CustomTextField(name: '', controller: controllers['referencias'],),
-
-      SizedBox(height: 75.h,),
-
-
+      SizedBox(
+        height: 55.h,
+      ),
+      textLabel(
+        name: 'Observações',
+        fontWeight: FontWeight.bold,
+      ),
+      CustomTextField(
+        name: '',
+        controller: controllers['observacoes'],
+      ),
+      textLabel(
+        name: 'Referências',
+        fontWeight: FontWeight.bold,
+      ),
+      CustomTextField(
+        name: '',
+        controller: controllers['referencias'],
+      ),
+      SizedBox(
+        height: 75.h,
+      ),
     ];
-
 
     return SingleChildScrollView(
       child: Column(
@@ -2624,7 +2698,4 @@ class LegislacaoMunicipal extends StatelessWidget{
       ),
     );
   }
-
 }
-
-

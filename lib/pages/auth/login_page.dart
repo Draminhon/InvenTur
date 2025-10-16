@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
 import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
 import 'package:inventur/pages/widgets/text_field_widget.dart';
@@ -36,12 +37,11 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> checar() async {
     bool online = await connection.checarConexaoUmaVez();
     print('Conexão: $online');
-    if(mounted){
-    setState(() {
-      isConnected = online;
-    });
+    if (mounted) {
+      setState(() {
+        isConnected = online;
+      });
     }
-
   }
 
   @override
@@ -49,6 +49,40 @@ class _LoginPageState extends State<LoginPage> {
     // TODO: implement initState
     super.initState();
     checar();
+    handleLocationPermission();
+  }
+
+  Future<bool> handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'O serviço de localização está desativado. Por favor, habilite-o nas configurações.')));
+      return false;
+    }
+
+    permission = await Geolocator.checkPermission();
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('A permissão de localização foi negada.')));
+        return false;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'A permissão de localização foi negada permanentemente. Abra as configurações para habilitá-la.')));
+      return false;
+    }
+
+    return true;
   }
 
   final _formLoginKey = GlobalKey<FormState>();
@@ -91,16 +125,15 @@ class _LoginPageState extends State<LoginPage> {
               'CPF': cpf,
               'password': password,
             }));
-          final prefs = await SharedPreferences.getInstance();
+        final prefs = await SharedPreferences.getInstance();
 
         if (response.statusCode == 200) {
           final Map<String, dynamic> responseData = json.decode(response.body);
           String accessToken = responseData['access'];
           String refreshToken = responseData['refresh'];
-          if(responseData['access_exp'] != null){
-          int accessTokenExp = responseData['access_exp'];
-          await prefs.setInt('access_token_exp', accessTokenExp);
-
+          if (responseData['access_exp'] != null) {
+            int accessTokenExp = responseData['access_exp'];
+            await prefs.setInt('access_token_exp', accessTokenExp);
           }
           final Map<String, dynamic> user = responseData['user'];
 

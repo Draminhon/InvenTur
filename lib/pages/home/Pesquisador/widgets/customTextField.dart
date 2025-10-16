@@ -92,7 +92,7 @@ class _CustomTimeFieldState extends State<CustomTimeField> {
           _TimeInputFormatter(),
         ],
         onChanged: (newValue) {
-            widget.getValue(newValue);
+          widget.getValue(newValue);
         },
         onTap: _selectTime,
       ),
@@ -120,13 +120,13 @@ class _TimeInputFormatter extends TextInputFormatter {
   }
 }
 
+const _defaultFormatterChars = r'[a-zA-ZÀ-ÿ0-9@çÇ.,\s\-_]';
 
- const _defaultFormatterChars = r'[a-zA-ZÀ-ÿ0-9@çÇ.,\s\-_]';
 class CustomTextField extends StatelessWidget {
   final String name;
   final String? Function(String?)? validat;
   final TextEditingController? controller;
-   CustomTextField(
+  CustomTextField(
       {super.key,
       required this.name,
       this.validat,
@@ -135,13 +135,11 @@ class CustomTextField extends StatelessWidget {
       this.keyboardType,
       this.formatter = const [],
       this.controller});
-   Function(String)? getValue;
+  Function(String)? getValue;
   final List<TextInputFormatter> formatter;
   final TextInputType? keyboardType;
   final Function(String)? getChanged;
 
-
-          
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
@@ -157,16 +155,23 @@ class CustomTextField extends StatelessWidget {
         //   padding: EdgeInsets.only(
         //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
         child: TextFormField(
-          keyboardType: keyboardType ?? (formatter.contains(FilteringTextInputFormatter.digitsOnly)?TextInputType.numberWithOptions():TextInputType.name),
-          inputFormatters: formatter.isEmpty ?  [FilteringTextInputFormatter.allow(RegExp(_defaultFormatterChars))] : formatter,
+          keyboardType: keyboardType ??
+              (formatter.contains(FilteringTextInputFormatter.digitsOnly)
+                  ? TextInputType.numberWithOptions()
+                  : TextInputType.name),
+          inputFormatters: formatter.isEmpty
+              ? [
+                  FilteringTextInputFormatter.allow(
+                      RegExp(_defaultFormatterChars))
+                ]
+              : formatter,
           controller: controller,
           style:
               const TextStyle(color: Colors.black), //String? Function(String?)
           onSaved: (newValue) {
-            if(getValue!=null){
-              if(newValue!=null){
-            getValue!(newValue);
-
+            if (getValue != null) {
+              if (newValue != null) {
+                getValue!(newValue);
               }
             }
           },
@@ -175,9 +180,9 @@ class CustomTextField extends StatelessWidget {
           // },
           validator: validat ??
               (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Preencha o campo';
-                }
+                // if (value == null || value.isEmpty) {
+                //   return 'Preencha o campo';
+                // }
                 return null;
               },
           decoration: InputDecoration(
@@ -222,11 +227,11 @@ class CustomTextNumber extends StatelessWidget {
         child: TextFormField(
           keyboardType: TextInputType.numberWithOptions(),
           validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Preencha o campo';
-                  }
-                  return null;
-                },
+            if (value == null || value.isEmpty) {
+              return 'Preencha o campo';
+            }
+            return null;
+          },
           controller: controller,
           inputFormatters: [
             FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]')),
@@ -264,7 +269,7 @@ class CustomTextNumber extends StatelessWidget {
 
 class CustomTextDate extends StatefulWidget {
   final TextEditingController? dateController;
-  CustomTextDate({super.key,  this.getValue, this.dateController});
+  CustomTextDate({super.key, this.getValue, this.dateController});
 
   final Function(String)? getValue;
 
@@ -272,10 +277,12 @@ class CustomTextDate extends StatefulWidget {
   State<CustomTextDate> createState() => _CustomTextDateState();
 }
 
-class _CustomTextDateState extends State<CustomTextDate> { final dateFormat = DateFormat('yyyy-MM-dd');
+class _CustomTextDateState extends State<CustomTextDate> {
+  final dateFormat = DateFormat('yyyy-MM-dd');
   final inputFormat = DateFormat('dd/MM/yyyy');
   final _dateMaskFormatter = MaskTextInputFormatter(mask: '##/##/####');
-  final _denyLettersFormatter = FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]'));
+  final _denyLettersFormatter =
+      FilteringTextInputFormatter.deny(RegExp('[a-zA-Z]'));
   @override
   Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
@@ -294,15 +301,15 @@ class _CustomTextDateState extends State<CustomTextDate> { final dateFormat = Da
           _dateMaskFormatter,
         ],
         validator: (value) {
-          if (value == null || value.isEmpty) {
-            return 'Por favor, insira uma data';
-          }
-          try {
-            inputFormat
-                .parseStrict(value); // verificar se o formato está correto
-          } catch (e) {
-            return 'Insira uma data válida no formato DD/MM/AAAA';
-          }
+          // if (value == null || value.isEmpty) {
+          //   return 'Por favor, insira uma data';
+          // }
+          // try {
+          //   inputFormat
+          //       .parseStrict(value); // verificar se o formato está correto
+          // } catch (e) {
+          //   return 'Insira uma data válida no formato DD/MM/AAAA';
+          // }
           return null;
         },
         onSaved: (newValue) {
@@ -310,10 +317,9 @@ class _CustomTextDateState extends State<CustomTextDate> { final dateFormat = Da
             // Convertendo para o formato 'yyyy-MM-dd' antes de enviar ao servidor
             final parsedDate = inputFormat.parse(newValue);
             final formattedDate = dateFormat.format(parsedDate);
-              if(widget.getValue!=null){
-            widget.getValue!(formattedDate); 
-
-              }
+            if (widget.getValue != null) {
+              widget.getValue!(formattedDate);
+            }
           }
         },
         decoration: InputDecoration(
@@ -334,14 +340,13 @@ class _CustomTextDateState extends State<CustomTextDate> { final dateFormat = Da
   }
 }
 
-
-class UfMunicipioRg extends StatelessWidget{
+class UfMunicipioRg extends StatelessWidget {
   final Map<String, TextEditingController> controllers;
 
-  const UfMunicipioRg({super.key, required this.controllers}); 
+  const UfMunicipioRg({super.key, required this.controllers});
 
-          @override
-                  Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     final sizeScreen = MediaQuery.sizeOf(context);
 
     return Column(children: [
@@ -359,12 +364,11 @@ class UfMunicipioRg extends StatelessWidget{
                       if (value == null || value.isEmpty) {
                         return 'Preencha o campo';
                       }
-                                  return null;
+                      return null;
                     },
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
                     ],
-
                     decoration: const InputDecoration(
                       hintText: 'UF',
                     ),
@@ -383,7 +387,6 @@ class UfMunicipioRg extends StatelessWidget{
                       }
                       return null;
                     },
-
                     inputFormatters: [
                       FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
                     ],
@@ -412,7 +415,6 @@ class UfMunicipioRg extends StatelessWidget{
           inputFormatters: [
             FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))
           ],
-
         ),
       )
     ]);

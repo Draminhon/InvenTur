@@ -18,7 +18,7 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsA/comercio_turistico.
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas_do_municipio.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/locadora_de_imoveis.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranca_edit.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas_edit.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
 import 'package:inventur/services/interceptor_service.dart';
 import 'package:inventur/utils/app_constants.dart';
@@ -401,10 +401,12 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => AlimentoseBebidasEdit(
-                      alimentosModel:
-                          AlimentosEBebidas.fromJson(equipamento['dados']),
+                    builder: (context) => AlimentosEBebidas(
+                      infoModel:
+                          AlimentosEBebidasModel.fromJson(equipamento['dados']),
                     ),
+                    settings: RouteSettings(arguments: {'isUpdate': true}),
+
                   ),
                 );
               } else if (equipamento['tipo'] == 'Meios de Hospedagem') {
