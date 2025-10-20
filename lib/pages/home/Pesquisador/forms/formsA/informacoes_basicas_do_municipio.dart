@@ -354,6 +354,9 @@ class _InformacoesBasicasDoMunicipioState
     for (final controller in _legislacaoControllers.values) {
       controller.dispose();
     }
+        valoresJson.clear();
+    valoresJson['tipo_formulario'] = 'Informações Básicas do Município';
+    isUpdate = false;
     super.dispose();
   }
 

@@ -329,77 +329,76 @@ class AlimentosEBebidas(Base):
     
 class Rodovia(Base):
 
-    subtipos = models.CharField(max_length=255)
+    subtipos = models.CharField(max_length=100, blank=True, null=True)
 
-    nome_oficial = models.CharField(max_length=255)
-    nome_popular = models.CharField(max_length=255)
+    nome_oficial = models.CharField(max_length=255,blank=True, null=True)
+    nome_popular = models.CharField(max_length=255,blank=True, null=True)
 
-    jurisdicao = models.CharField(max_length=50)
-    natureza = models.CharField(max_length=50)
+    jurisdicao = models.CharField(max_length=50,blank=True, null=True)
+    natureza = models.CharField(max_length=50,blank=True, null=True)
     
-    tipo_de_organizacao_instituicao = models.JSONField()
+    tipo_de_organizacao_instituicao = models.JSONField(blank=True, null=True)
     
 
-    extensao_rodovia_municipio = models.DecimalField(max_digits=10, decimal_places=2)
+    extensao_rodovia_municipio = models.CharField(max_length=255,blank=True, null=True)
 
-    faixas_de_rolamento = models.CharField(max_length=50)
+    faixas_de_rolamento = models.CharField(max_length=255,blank=True, null=True)
 
-    pavimentacao = models.CharField(max_length=50)
+    pavimentacao = models.CharField(max_length=255,blank=True, null=True)
 
-    pedagio = models.CharField(max_length=10)
+    pedagio = models.CharField(max_length=255,blank=True, null=True)
 
-    municipios_vizinhos_interligados_rodovia = models.TextField()
+    municipios_vizinhos_interligados_rodovia = models.CharField(max_length=255,blank=True, null=True)
 
-    inicio_atividade = models.DateField()
-
+    inicio_atividade = models.CharField(max_length=255,blank=True, null=True)
     ##Entidade mantedora
 
-    whatsapp = models.CharField(max_length=50)
-    instagram = models.CharField(max_length=50)
+    whatsapp = models.CharField(max_length=255,blank=True, null=True)
+    instagram = models.CharField(max_length=255,blank=True, null=True)
 
     ##Sinalização
 
-    sinalizacao_de_acesso = models.CharField(max_length=10)
-    sinalizacao_turistica = models.CharField(max_length=10)
+    sinalizacao_de_acesso = models.CharField(max_length=255,blank=True, null=True)
+    sinalizacao_turistica = models.CharField(max_length=255,blank=True, null=True)
 
     ##Características
 
-    posto_de_combustivel = models.JSONField()
-    outros_servicos = models.JSONField()
-    estruturas_ao_longo_da_via = models.JSONField()
+    posto_de_combustivel = models.JSONField(blank=True, null=True)
+    outros_servicos = models.JSONField(blank=True, null=True)
+    estruturas_ao_longo_da_via = models.JSONField(blank=True, null=True)
 
     ##Questões ambientais/Sociais
 
-    poluicao = models.CharField(max_length=10)
-    poluicao_especificacao = models.TextField()
+    poluicao = models.CharField(max_length=255,blank=True, null=True)
+    poluicao_especificacao = models.CharField(max_length=255,blank=True, null=True)
 
-    lixo = models.CharField(max_length=10)
-    lixo_especificacao = models.TextField()
+    lixo = models.CharField(max_length=255,blank=True, null=True)
+    lixo_especificacao = models.CharField(max_length=255,blank=True, null=True)
 
-    desmatamento = models.CharField(max_length=10)
-    desmatamento_especificacao = models.TextField()
+    desmatamento = models.CharField(max_length=255,blank=True, null=True)
+    desmatamento_especificacao = models.CharField(max_length=255,blank=True, null=True)
 
-    queimadas = models.CharField(max_length=10)
-    queimadas_especificacao = models.TextField()
+    queimadas = models.CharField(max_length=255,blank=True, null=True)
+    queimadas_especificacao = models.CharField(max_length=255,blank=True, null=True)
 
-    inseguranca = models.CharField(max_length=10)
-    inseguranca_especificacao = models.TextField()
+    inseguranca = models.CharField(max_length=255,blank=True, null=True)
+    inseguranca_especificacao = models.CharField(max_length=255,blank=True, null=True)
 
-    extrativismo = models.CharField(max_length=10)
-    extrativismo_especificacao = models.TextField()
+    extrativismo = models.CharField(max_length=255,blank=True, null=True)
+    extrativismo_especificacao = models.CharField(max_length=255,blank=True, null=True)
 
-    prostituicao = models.CharField(max_length=10)
-    prostituicao_especificacao = models.TextField()
+    prostituicao = models.CharField(max_length=255,blank=True, null=True)
+    prostituicao_especificacao = models.CharField(max_length=255,blank=True, null=True)
 
-    ocupacao_irregular_invasao = models.CharField(max_length=10)
-    ocupacao_irregular_invasao_especificacao = models.TextField()
+    ocupacao_irregular_invasao = models.CharField(max_length=255,blank=True, null=True)
+    ocupacao_irregular_invasao_especificacao = models.CharField(max_length=255,blank=True, null=True)
 
-    outras = models.CharField(max_length=10)
-    outras_especificacao = models.TextField()
+    outras = models.CharField(max_length=255,blank=True, null=True)
+    outras_especificacao = models.CharField(max_length=255,blank=True, null=True)
 
     ##Estado geral de conservação
 
-    estado_geral_de_conservacao = models.CharField(max_length=20)
+    estado_geral_de_conservacao = models.CharField(max_length=255,blank=True, null=True)
 
     ##Observações
 

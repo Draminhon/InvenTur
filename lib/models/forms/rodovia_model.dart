@@ -132,7 +132,7 @@ class RodoviaModel{
     nomePopular = json['nome_popular'];
     jurisdicao = json['jurisdicao'];
     natureza = json['natureza'];
-    tipoDeOrganizacaoInstituicao = List<String>.from(json['tipo_de_organizacao_instituicao']);
+    tipoDeOrganizacaoInstituicao = List<String>.from(json['tipo_de_organizacao_instituicao'] ?? []);
     extensaoRodoviaMunicipio = json['extensao_rodovia_municipio'];
     faixasDeRolamento = json['faixas_de_rolamento'];
     pavimentacao = json['pavimentacao'];
@@ -144,9 +144,9 @@ class RodoviaModel{
     instagram = json['instagram'];
     sinalizacaoDeAcesso = json['sinalizacao_de_acesso'];
     sinalizacaoTuristica = json['sinalizacao_turistica'];
-    postoDeCombustivel = List<String>.from(json['posto_de_combustivel']);
-    outrosServicos = List<String>.from(json['outros_servicos']);
-    estruturasAoLongoDaVia = List<String>.from(json['estruturas_ao_longo_da_via']);
+    postoDeCombustivel = List<String>.from(json['posto_de_combustivel']?? []);
+    outrosServicos = List<String>.from(json['outros_servicos']?? []);
+    estruturasAoLongoDaVia = List<String>.from(json['estruturas_ao_longo_da_via']?? []);
     poluicao = json['poluicao'];
     poluicaoEspecificacao = json['poluicao_especificacao'];
     lixo = json['lixo'];
@@ -241,5 +241,65 @@ class RodoviaModel{
     data['telefone_coordenador'] = telefoneCoordenador;
     data['email_coordenador'] = emailCoordenador;
     return data;
+  }
+
+   Map<String, dynamic> toMap() {
+    return {
+    'id': id,
+    'criacao': criacao,
+    'atualizacao': atualizacao,
+    'uf': uf,
+    'regiao_turistica': regiaoTuristica,
+    'municipio': municipio,
+    'tipo': tipo,
+    'subtipos': subtipos,
+    'nome_oficial': nomeOficial,
+    'nome_popular': nomePopular,
+    'jurisdicao': jurisdicao,
+    'natureza': natureza,
+    'tipo_de_organizacao_instituicao': tipoDeOrganizacaoInstituicao,
+    'extensao_rodovia_municipio': extensaoRodoviaMunicipio,
+    'faixas_de_rolamento': faixasDeRolamento,
+    'pavimentacao': pavimentacao,
+    'pedagio': pedagio,
+    'municipios_vizinhos_interligados_rodovia':
+        municipiosVizinhosInterligadosRodovia,
+    'inicio_atividade': inicioAtividade,
+    'whatsapp': whatsapp,
+    'instagram': instagram,
+    'sinalizacao_de_acesso': sinalizacaoDeAcesso,
+    'sinalizacao_turistica': sinalizacaoTuristica,
+    'posto_de_combustivel': postoDeCombustivel,
+    'outros_servicos': outrosServicos,
+    'estruturas_ao_longo_da_via': estruturasAoLongoDaVia,
+    'poluicao': poluicao,
+    'poluicao_especificacao': poluicaoEspecificacao,
+    'lixo': lixo,
+    'lixo_especificacao': lixoEspecificacao,
+    'desmatamento': desmatamento,
+    'desmatamento_especificacao': desmatamentoEspecificacao,
+    'queimadas': queimadas,
+    'queimadas_especificacao': queimadasEspecificacao,
+    'inseguranca': inseguranca,
+    'inseguranca_especificacao': insegurancaEspecificacao,
+    'extrativismo': extrativismo,
+    'extrativismo_especificacao': extrativismoEspecificacao,
+    'prostituicao': prostituicao,
+    'prostituicao_especificacao': prostituicaoEspecificacao,
+    'ocupacao_irregular_invasao': ocupacaoIrregularInvasao,
+    'ocupacao_irregular_invasao_especificacao':
+        ocupacaoIrregularInvasaoEspecificacao,
+    'outras': outras,
+    'outras_especificacao': outrasEspecificacao,
+    'estado_geral_de_conservacao': estadoGeralDeConservacao,
+    'observacoes': observacoes,
+    'referencias': referencias,
+    'nome_pesquisador': nomePesquisador,
+    'telefone_pesquisador': telefonePesquisador,
+    'email_pesquisador': emailPesquisador,
+    'nome_coordenador': nomeCoordenador,
+    'telefone_coordenador': telefoneCoordenador,
+    'email_coordenador': emailCoordenador,
+    };
   }
 }

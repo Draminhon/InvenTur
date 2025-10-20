@@ -74,7 +74,6 @@ class RodoviaAdmin(admin.ModelAdmin):
     ]
     search_fields = ['nome_oficial', 'municipio', 'uf']
     list_filter = ['jurisdicao', 'natureza', 'estado_geral_de_conservacao']
-    date_hierarchy = 'inicio_atividade'
 
     def display_pesquisas(self, obj):
         # Exibe as pesquisas associadas ao usuário como uma string

@@ -68,7 +68,6 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     'instagram',
     'email',
     'site',
-
     'distanciaOutros',
     'pontosDeReferencia',
   ];
@@ -111,8 +110,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     valoresjson['email_coordenador'] = info['coordenador']['email'];
   }
 
-
-void _preencherDadosParaTeste() {
+  void _preencherDadosParaTeste() {
     if (widget.hospedagemModel != null) {
       final model = widget.hospedagemModel!;
       final modelMap = model.toMap();
@@ -205,7 +203,9 @@ void _preencherDadosParaTeste() {
     for (final controller in _acessibilidadeControllers.values) {
       controller.dispose();
     }
-
+valoresjson.clear();
+    valoresjson['tipo_formulario'] = 'Meios de Hospedagem';
+    isUpdate = false;
     super.dispose();
   }
 
@@ -249,7 +249,6 @@ void _preencherDadosParaTeste() {
         print("Formulário finalizado e pronto para enviar!");
       }
     } else {
-  
       _formKey.currentState!.save();
       _identificacaoControllers.forEach((key, controller) {
         valoresjson[key] = controller.text;
@@ -592,10 +591,11 @@ class _IdentificacaoState extends State<Identificacao>
         SizedBox(
           height: sizeScreen.height * 0.02,
         ),
-          MapaWidget(valoresJson: valoresjson,
-           isUpdate: isUpdate,
+        MapaWidget(
+            valoresJson: valoresjson,
+            isUpdate: isUpdate,
             latitude: isUpdate ? widget.hospedagemModel!.latitude! : "0",
-             longitude: isUpdate ? widget.hospedagemModel!.longitude! : "0"),
+            longitude: isUpdate ? widget.hospedagemModel!.longitude! : "0"),
         textLabel(name: 'Endereço:', fontWeight: FontWeight.bold),
 
         CustomTextField(
@@ -711,13 +711,15 @@ class _IdentificacaoState extends State<Identificacao>
             jsonKey: 'sinalizacaoDeAcesso',
             valoresJson: valoresjson,
             isUpdate: isUpdate,
-            optionModelValue: isUpdate ? widget.hospedagemModel!.sinalizacaoDeAcesso : '',
+            optionModelValue:
+                isUpdate ? widget.hospedagemModel!.sinalizacaoDeAcesso : '',
             children: []),
         ConditionalFieldsGroup(
             title: 'turística',
             jsonKey: 'sinalizacaoTuristica',
             valoresJson: valoresjson,
-            optionModelValue: isUpdate ? widget.hospedagemModel!.sinalizacaoTuristica : '',
+            optionModelValue:
+                isUpdate ? widget.hospedagemModel!.sinalizacaoTuristica : '',
             isUpdate: isUpdate,
             children: []),
 
@@ -737,7 +739,7 @@ class _IdentificacaoState extends State<Identificacao>
             'outro'
           ],
         ),
-        
+
         textLabel(name: 'Pontos de Referência', fontWeight: FontWeight.bold),
         SizedBox(
           height: 20.w,
@@ -1103,8 +1105,7 @@ class _FuncionamentoState extends State<Funcionamento>
         height: 55.h,
       ),
       MultiAutocompleteFormField(
-        initialValue:
-            isUpdate ? widget.hospedagemModel!.paisesTuristas : [],
+        initialValue: isUpdate ? widget.hospedagemModel!.paisesTuristas : [],
         title: 'Origem dos Turistas Internacionais (até 5 países)',
         label: 'Selecione um País',
         optionsBuilder: (textEditingValue) {

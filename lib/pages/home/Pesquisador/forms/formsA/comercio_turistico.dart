@@ -171,6 +171,9 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
     for(final controller in _protecaoControllers.values){
       controller.dispose();
     }
+     valoresJson.clear();
+    valoresJson['tipo_formulario'] = 'Comércio Turístico';
+    isUpdate = false;
     super.dispose();
   }
   void getInfoUsersInPesquisa() async {

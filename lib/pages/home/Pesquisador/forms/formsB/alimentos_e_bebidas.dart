@@ -186,6 +186,9 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
     for(final controller in _acessibilidadeController.values){
       controller.dispose();
     }
+    valoresJson.clear();
+    valoresJson['tipo_formulario'] = 'Alimentos e bebidas';
+    isUpdate = false;
     super.dispose();
   }
 
