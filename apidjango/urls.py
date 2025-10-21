@@ -14,7 +14,7 @@ router.register(r'comercioturistico', ComercioTuristicoViewSet, basename='comerc
 router.register(r'locadoraimoveis', LocadoraDeImoveisViewSet, basename='locadora de imoveis')
 router.register(r'pesquisa', PesquisaViewSet, basename='pesquisa')
 router.register(r'user', UserViewSet, basename='user')
-
+router.register(r'outromeiodehospedagem', OutromeiodehospedagemViewSet, basename='outros meios de hospedagem')
 urlpatterns = [
 
     path('', include(router.urls)),

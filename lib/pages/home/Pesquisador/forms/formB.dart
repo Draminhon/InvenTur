@@ -84,7 +84,7 @@ class FormularioB extends StatelessWidget {
             ]),
             ExpansionTileA(titulo: 'Hospedagem', minhaLista: const [
               Tilee(texto: 'Meios de hospedagem',routeName:'/MeiosDeHospedagem'),
-              Tilee(texto: 'Outros tipos de acomodações', routeName: '/Placeholder',),
+              Tilee(texto: 'Outros tipos de acomodações', routeName: '/OutrasAcomodacoes',),
               SizedBox(),
               SizedBox()
             ]),

@@ -594,8 +594,8 @@ class _IdentificacaoState extends State<Identificacao>
         MapaWidget(
             valoresJson: valoresjson,
             isUpdate: isUpdate,
-            latitude: isUpdate ? widget.hospedagemModel!.latitude! : "0",
-            longitude: isUpdate ? widget.hospedagemModel!.longitude! : "0"),
+            latitude: widget.hospedagemModel?.latitude?? "0",
+            longitude: widget.hospedagemModel?.longitude?? "0"),
         textLabel(name: 'Endereço:', fontWeight: FontWeight.bold),
 
         CustomTextField(

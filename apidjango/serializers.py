@@ -258,6 +258,11 @@ class MeioDeHospedagemSerializer(serializers.ModelSerializer):
         model = MeioDeHospedagem
         fields = '__all__'
 
+class OutrosMeiosDeHospedagemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OutrosMeiosDeHospedagem
+        fields = '__all__'
+
 class ComercioTuristicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComercioTuristico

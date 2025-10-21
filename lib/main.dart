@@ -13,6 +13,7 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsA/locadora_de_imoveis
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%C3%A7a.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/outros_tipos_de_acomodacao.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsC/hidrografia.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/updatedForm.dart';
@@ -119,7 +120,8 @@ class _MyAppState extends State<MyApp> {
           '/SyncPage': (_) => SyncPage(),
           '/InfoBasicas': (_) => InformacoesBasicasDoMunicipio(),
           '/ComercioTuristico': (_) => ComercioTuristico(),
-          '/LocadoraDeImoveis': (_) => LocadoraDeImoveis()
+          '/LocadoraDeImoveis': (_) => LocadoraDeImoveis(),
+          '/OutrasAcomodacoes': (_) => OutrosTiposDeAcomodacao()
         },
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
