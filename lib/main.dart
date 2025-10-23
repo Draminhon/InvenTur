@@ -12,6 +12,7 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/locadora_de_imoveis.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%C3%A7a.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/agencias_de_turismo.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/outros_tipos_de_acomodacao.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.dart';
@@ -121,7 +122,8 @@ class _MyAppState extends State<MyApp> {
           '/InfoBasicas': (_) => InformacoesBasicasDoMunicipio(),
           '/ComercioTuristico': (_) => ComercioTuristico(),
           '/LocadoraDeImoveis': (_) => LocadoraDeImoveis(),
-          '/OutrasAcomodacoes': (_) => OutrosTiposDeAcomodacao()
+          '/OutrasAcomodacoes': (_) => OutrosTiposDeAcomodacao(),
+          '/AgenciasDeTurismo': (_) => AgenciasDeTurismo()
         },
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
