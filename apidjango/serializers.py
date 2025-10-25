@@ -267,7 +267,11 @@ class AgenciaDeTurismoSerializer(serializers.ModelSerializer):
     class Meta:
         model = AgenciaDeTurismo
         fields = '__all__'
-
+class TransporteTuristicoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TransporteTuristico
+        fields = '__all__'
+        
 class ComercioTuristicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ComercioTuristico

@@ -598,3 +598,7 @@ class EnderecoInfoAdmin(admin.ModelAdmin):
 @admin.register(OutrosMeiosDeHospedagem)
 class OutrosMeiosDeHospedagemAdmin(admin.ModelAdmin):
     list_display = [field.name for field in OutrosMeiosDeHospedagem._meta.fields]
+
+@admin.register(AgenciaDeTurismo)
+class AgenciaDeTurismoAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in AgenciaDeTurismo._meta.fields]

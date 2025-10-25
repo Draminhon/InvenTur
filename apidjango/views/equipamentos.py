@@ -100,6 +100,22 @@ class OutromeiodehospedagemViewSet(viewsets.ModelViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
+class AgenciaDeTurismoViewSet(viewsets.ModelViewSet):
+    queryset = AgenciaDeTurismo.objects.filter(is_active=True)
+    serializer_class = AgenciaDeTurismoSerializer
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+class TransporteTuristicoViewSet(viewsets.ModelViewSet):
+    queryset = TransporteTuristico.objects.filter(is_active=True)
+    serializer_class = TransporteTuristicoSerializer
+    
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+
 class EquipamentosListView(APIView):
     def get(self, request, *args, **kwargs):
         pesquisa_id = request.query_params.get('pesquisa_id')
@@ -158,7 +174,29 @@ class EquipamentosListView(APIView):
             {"tipo": "Outros Tipos de Acomodação", "dados": OutrosMeiosDeHospedagemSerializer(outroMeioHospedagem).data}
             for outroMeioHospedagem in outrosMeios
         ]
+
+        agenciasTurismo = AgenciaDeTurismo.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        agenciasTurismo_serialized = [
+            {"tipo": "Agência de Turismo", "dados": AgenciaDeTurismoSerializer(agenciaDeTurismo).data}
+            for agenciaDeTurismo in agenciasTurismo
+        ]
+        
+        transportesTuristicos = TransporteTuristico.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        transportesTuristicos_serialized = [
+            {"tipo": "Transporte Turistico", "dados": TransporteTuristicoSerializer(transporteTuristico).data}
+            for transporteTuristico in transportesTuristicos
+        ]
         # Combina os dados
-        equipamentos = rodovias_serialized + sistemas_serialized + alimentos_serialized + hospedagens_serialized + infosBasicas_serialized + comercioTuristicos_serialized + locadoraImoveis_serialized + outrosMeios_serialized
+        equipamentos = (
+            rodovias_serialized +
+            sistemas_serialized +
+            alimentos_serialized +
+            hospedagens_serialized +
+            infosBasicas_serialized +
+            comercioTuristicos_serialized +
+            locadoraImoveis_serialized +
+            outrosMeios_serialized +
+            agenciasTurismo_serialized +
+            transportesTuristicos_serialized)
 
         return Response(equipamentos)

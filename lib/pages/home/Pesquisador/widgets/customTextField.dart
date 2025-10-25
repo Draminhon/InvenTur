@@ -155,6 +155,7 @@ class CustomTextField extends StatelessWidget {
         //   padding: EdgeInsets.only(
         //     left: sizeScreen.width * 0.02, right: sizeScreen.width * 0.02, top: sizeScreen.height * 0.01),
         child: TextFormField(
+          
           keyboardType: keyboardType ??
               (formatter.contains(FilteringTextInputFormatter.digitsOnly)
                   ? TextInputType.numberWithOptions()
@@ -186,11 +187,11 @@ class CustomTextField extends StatelessWidget {
                 return null;
               },
           decoration: InputDecoration(
+            labelText: name,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
             ),
             isDense: true,
-            hintText: name,
             hintStyle: const TextStyle(color: Colors.grey),
             //errorBorder: UnderlineInputBorder()
             fillColor: Colors.white,

@@ -20,7 +20,7 @@ import 'widgets/checkBox.dart';
 
 final Validators _validators = Validators();
 final Map<String, dynamic> valoresJson = {
-  'tipo_formulario': 'Alimentos e bebidas',
+  'tipo_formulario': 'Agência de Turismo',
 };
 bool isUpdate = false;
 
@@ -77,7 +77,6 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
     'pontosDeReferencia',
   ];
   final List<String> _chavesFun = const [
-
     'capacidadeVeiculos',
     'numeroAutomoveis',
     'totalVendasEmissivos',
@@ -196,7 +195,7 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
       controller.dispose();
     }
     valoresJson.clear();
-    valoresJson['tipo_formulario'] = 'Alimentos e bebidas';
+    valoresJson['tipo_formulario'] = 'Agência de Turismo';
     isUpdate = false;
     super.dispose();
   }
@@ -245,9 +244,8 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
         // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
         isUpdate
             ? FormService().updateForm(widget.infoModel!.id!, valoresJson,
-                AppConstants.ALIMENTOS_E_BEBIDAS)
-            : FormService()
-                .sendForm(valoresJson, AppConstants.ALIMENTOS_E_BEBIDAS);
+                AppConstants.AGENCIA_TURISMO)
+            : FormService().sendForm(valoresJson, AppConstants.AGENCIA_TURISMO);
         print("Formulário finalizado e pronto para enviar!");
 
         // _enviarFormulario(); // Você pode chamar sua função de envio aqui
@@ -566,8 +564,8 @@ class _InformacaoPageState extends State<InformacaoPage>
           MapaWidget(
               valoresJson: valoresJson,
               isUpdate: isUpdate,
-               latitude: widget.infoModel?.latitude?? "0",
-            longitude: widget.infoModel?.longitude?? "0"),
+              latitude: widget.infoModel?.latitude ?? "-3.73",
+              longitude: widget.infoModel?.longitude ?? "-38.52"),
           textLabel(
             name: 'Endereço:',
             fontWeight: FontWeight.bold,
@@ -834,24 +832,27 @@ class _InformacaoPageState extends State<InformacaoPage>
           ),
 
           CheckboxGroupFormField(
-            isLimitedBy3: true,
-            onSaved: (newValue) => valoresJson['segmentosEspecializado'] = newValue,
-            initialValue: isUpdate ? widget.infoModel!.segmentosEspecializado : [],
-            title: 'Segmentos ou Tipos de Turismo em que é Especializado (assinalar até 3)',
-            options: [
-            'Aventura',
-            'Ecoturismo',
-            'Sol e praia',
-            'Rural',
-            'Estudos e intercâmbio',
-            'Negócio e eventos',
-            'Cultural (cívico, étnico, religioso, místico e esotérico)',
-            'Náutico',
-            'Esporte',
-            'Saúde (bem-estar e médico)',
-            'Pesca',
-            'Não é especializado em nenhum segmento'
-          ]),
+              isLimitedBy3: true,
+              onSaved: (newValue) =>
+                  valoresJson['segmentosEspecializado'] = newValue,
+              initialValue:
+                  isUpdate ? widget.infoModel!.segmentosEspecializado : [],
+              title:
+                  'Segmentos ou Tipos de Turismo em que é Especializado (assinalar até 3)',
+              options: [
+                'Aventura',
+                'Ecoturismo',
+                'Sol e praia',
+                'Rural',
+                'Estudos e intercâmbio',
+                'Negócio e eventos',
+                'Cultural (cívico, étnico, religioso, místico e esotérico)',
+                'Náutico',
+                'Esporte',
+                'Saúde (bem-estar e médico)',
+                'Pesca',
+                'Não é especializado em nenhum segmento'
+              ]),
           SizedBox(
             height: 55.h,
           ),
@@ -863,7 +864,7 @@ class _InformacaoPageState extends State<InformacaoPage>
 
 class _FuncionamentoPageState extends State<FuncionamentoPage>
     with AutomaticKeepAliveClientMixin {
-        final PesquisaController _pesquisaController = PesquisaController();
+  final PesquisaController _pesquisaController = PesquisaController();
   @override
   void initState() {
     // TODO: implement initState
@@ -871,6 +872,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
     _pesquisaController.setEstados();
     _pesquisaController.setPaises();
   }
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
@@ -901,7 +903,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
             ],
             initialValue: isUpdate ? widget.infoModel!.formasDePagamento! : [],
           ),
-    
+
           //atendimento
           textLabel(
               name: 'Atendimento ao público:', fontWeight: FontWeight.bold),
@@ -987,184 +989,224 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
             name: 'Outras Regras e Informações',
             controller: widget.controllers['outrasRegrasEInformacoes'],
           ),
-          SizedBox(height: 55.h,),
-          textLabel(name: 'Caracterização do Fluxo Turístico', fontWeight: FontWeight.bold,),
-          
-          CustomTextField(name: 'Total de Vendas Emissivo (nº)',
-          controller: widget.controllers['totalVendasEmissivos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
+          SizedBox(
+            height: 55.h,
           ),
-          SizedBox(height: 55.h,),
-      
-      MultiAutocompleteFormField(
-        initialValue: isUpdate ? widget.infoModel!.destinosEmissivosNacionais : [],
-        title: 'Principais Destinos Emissivos Nacionais (até 5)',
-        label: 'Selecione um Estado',
-        fieldCount: 5,
-        optionsBuilder: (textEditingValue) {
-          if (textEditingValue.text.isEmpty) {
-            return const Iterable.empty();
-          }
-          return _pesquisaController.estados
-              .map((e) => e.nome)
-              .where((nome) => nome.toLowerCase().contains(
-                    textEditingValue.text.toLowerCase(),
-                  ));
-        },
-        onSaved: (newValue) {
-          valoresJson['destinosEmissivosNacionais'] = newValue;
-        },
-        validator: (values) {
-          // Exemplo de validação: exigir pelo menos um estado
-          // if (values == null || values.isEmpty) {
-          //   return 'Por favor, selecione pelo menos um estado.';
-          // }
-          return null;
-        },
-      ),
-      SizedBox(
-        height: 55.h,
-      ),
-      MultiAutocompleteFormField(
-        initialValue: isUpdate ? widget.infoModel!.destinosEmissivosInternacionais : [],
-        title: 'Principais Destinos Emissivos Internacionais (até 5)',
-        label: 'Selecione um País',
-        optionsBuilder: (textEditingValue) {
-          if (textEditingValue.text.isEmpty) {
-            return const Iterable.empty();
-          }
-          return _pesquisaController.paises
-              .map((e) => e.nome)
-              .where((nome) => nome.toLowerCase().contains(
-                    textEditingValue.text.toLowerCase(),
-                  ));
-        },
-        onSaved: (newValue) {
-          valoresJson['destinosEmissivosInternacionais'] = newValue;
-        },
-        validator: (values) {
-          // if (values == null || values.isEmpty) {
-          //   return 'Por favor, selecione pelo menos um pais.';
-          // }
-          return null;
-        },
-      ),
+          textLabel(
+            name: 'Caracterização do Fluxo Turístico',
+            fontWeight: FontWeight.bold,
+          ),
 
-          CustomTextField(name: 'Total de Vendas Receptivo (nº)',
-          controller: widget.controllers['totalVendasReceptivos'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
+          CustomTextField(
+            name: 'Total de Vendas Emissivo (nº)',
+            controller: widget.controllers['totalVendasEmissivos'],
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+
+          textLabel(
+            name: 'Destinos Emissivos',
+            fontWeight: FontWeight.bold,
+          ),
+          SizedBox(
+            height: 55.h,
           ),
           MultiAutocompleteFormField(
-        initialValue: isUpdate ? widget.infoModel!.origemEmissivosNacionais : [],
-        title: 'Origem do Receptivo Nacional (até 5)',
-        label: 'Selecione um Estado',
-        fieldCount: 5,
-        optionsBuilder: (textEditingValue) {
-          if (textEditingValue.text.isEmpty) {
-            return const Iterable.empty();
-          }
-          return _pesquisaController.estados
-              .map((e) => e.nome)
-              .where((nome) => nome.toLowerCase().contains(
-                    textEditingValue.text.toLowerCase(),
-                  ));
-        },
-        onSaved: (newValue) {
-          valoresJson['origemEmissivosNacionais'] = newValue;
-        },
-        validator: (values) {
-          // Exemplo de validação: exigir pelo menos um estado
-          // if (values == null || values.isEmpty) {
-          //   return 'Por favor, selecione pelo menos um estado.';
-          // }
-          return null;
-        },
-      ),
-      SizedBox(
-        height: 55.h,
-      ),
-      MultiAutocompleteFormField(
-        initialValue: isUpdate ? widget.infoModel!.origemEmissivosInternacionais : [],
-        title: 'Origem do Receptivo Internacionais (até 5)',
-        label: 'Selecione um País',
-        optionsBuilder: (textEditingValue) {
-          if (textEditingValue.text.isEmpty) {
-            return const Iterable.empty();
-          }
-          return _pesquisaController.paises
-              .map((e) => e.nome)
-              .where((nome) => nome.toLowerCase().contains(
-                    textEditingValue.text.toLowerCase(),
-                  ));
-        },
-        onSaved: (newValue) {
-          valoresJson['origemEmissivosInternacionais'] = newValue;
-        },
-        validator: (values) {
-          // if (values == null || values.isEmpty) {
-          //   return 'Por favor, selecione pelo menos um pais.';
-          // }
-          return null;
-        },
-      ),
-      textLabel(name: 'Ano Base', fontWeight: FontWeight.bold,),
-      CustomTextDate(dateController: widget.controllers['anoBaseEmissivos'],),
-      CustomTextField(name: 'Vendas Alta Temporada (nº pax)',
-      controller: widget.controllers['vendasAltaTemporada'],
-      formatter: [FilteringTextInputFormatter.digitsOnly],
-      keyboardType: TextInputType.numberWithOptions(),
-      ),
-           CheckboxGroupFormField(
-        title: 'Meses de Alta Temporada',
-        initialValue:
-            isUpdate == true ? widget.infoModel!.mesesAltaTemporada : [],
-        onSaved: (p0) => valoresJson['mesesAltaTemporada'] = p0,
-        options: [
-          'Janeiro',
-          'Fevereiro',
-          'Março',
-          'Abril',
-          'Maio',
-          'Junho',
-          'Julho',
-          'Agosto',
-          'Setembro',
-          'Outubro',
-          'Novembro',
-          'Dezembro',
-          'Ano Inteiro'
-        ],
-      ),
-          
-          CustomTextField(name: 'Vendas Baixa Temporada (nº pax)',
-      controller: widget.controllers['vendasBaixaTemporada'],
-      formatter: [FilteringTextInputFormatter.digitsOnly],
-      keyboardType: TextInputType.numberWithOptions(),
-      ),
-           CheckboxGroupFormField(
-        title: 'Meses de Baixa Temporada',
-        initialValue:
-            isUpdate == true ? widget.infoModel!.mesesBaixaTemporada : [],
-        onSaved: (p0) => valoresJson['mesesBaixaTemporada'] = p0,
-        options: [
-          'Janeiro',
-          'Fevereiro',
-          'Março',
-          'Abril',
-          'Maio',
-          'Junho',
-          'Julho',
-          'Agosto',
-          'Setembro',
-          'Outubro',
-          'Novembro',
-          'Dezembro',
-          'Ano Inteiro'
-        ],
-      ),
-      SizedBox(
+            initialValue:
+                isUpdate ? widget.infoModel!.destinosEmissivosNacionais : [],
+            title: 'Principais Destinos Emissivos Nacionais (até 5)',
+            label: 'Selecione um Estado',
+            fieldCount: 5,
+            optionsBuilder: (textEditingValue) {
+              if (textEditingValue.text.isEmpty) {
+                return const Iterable.empty();
+              }
+              return _pesquisaController.estados
+                  .map((e) => e.nome)
+                  .where((nome) => nome.toLowerCase().contains(
+                        textEditingValue.text.toLowerCase(),
+                      ));
+            },
+            onSaved: (newValue) {
+              valoresJson['destinosEmissivosNacionais'] = newValue;
+            },
+            validator: (values) {
+              // Exemplo de validação: exigir pelo menos um estado
+              // if (values == null || values.isEmpty) {
+              //   return 'Por favor, selecione pelo menos um estado.';
+              // }
+              return null;
+            },
+          ),
+          SizedBox(
+            height: 120.h,
+          ),
+          MultiAutocompleteFormField(
+            initialValue: isUpdate
+                ? widget.infoModel!.destinosEmissivosInternacionais
+                : [],
+            title: 'Principais Destinos Emissivos Internacionais (até 5)',
+            label: 'Selecione um País',
+            optionsBuilder: (textEditingValue) {
+              if (textEditingValue.text.isEmpty) {
+                return const Iterable.empty();
+              }
+              return _pesquisaController.paises
+                  .map((e) => e.nome)
+                  .where((nome) => nome.toLowerCase().contains(
+                        textEditingValue.text.toLowerCase(),
+                      ));
+            },
+            onSaved: (newValue) {
+              valoresJson['destinosEmissivosInternacionais'] = newValue;
+            },
+            validator: (values) {
+              // if (values == null || values.isEmpty) {
+              //   return 'Por favor, selecione pelo menos um pais.';
+              // }
+              return null;
+            },
+          ),
+
+          CustomTextField(
+            name: 'Total de Vendas Receptivo (nº)',
+            controller: widget.controllers['totalVendasReceptivos'],
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+
+          textLabel(
+            name: 'Receptivos',
+            fontWeight: FontWeight.bold,
+          ),
+          SizedBox(
+            height: 55.h,
+          ),
+
+          MultiAutocompleteFormField(
+            initialValue:
+                isUpdate ? widget.infoModel!.origemEmissivosNacionais : [],
+            title: 'Origem do Receptivo Nacional (até 5)',
+            label: 'Selecione um Estado',
+            fieldCount: 5,
+            optionsBuilder: (textEditingValue) {
+              if (textEditingValue.text.isEmpty) {
+                return const Iterable.empty();
+              }
+              return _pesquisaController.estados
+                  .map((e) => e.nome)
+                  .where((nome) => nome.toLowerCase().contains(
+                        textEditingValue.text.toLowerCase(),
+                      ));
+            },
+            onSaved: (newValue) {
+              valoresJson['origemEmissivosNacionais'] = newValue;
+            },
+            validator: (values) {
+              // Exemplo de validação: exigir pelo menos um estado
+              // if (values == null || values.isEmpty) {
+              //   return 'Por favor, selecione pelo menos um estado.';
+              // }
+              return null;
+            },
+          ),
+          SizedBox(
+            height: 120.h,
+          ),
+          MultiAutocompleteFormField(
+            initialValue:
+                isUpdate ? widget.infoModel!.origemEmissivosInternacionais : [],
+            title: 'Origem do Receptivo Internacionais (até 5)',
+            label: 'Selecione um País',
+            optionsBuilder: (textEditingValue) {
+              if (textEditingValue.text.isEmpty) {
+                return const Iterable.empty();
+              }
+              return _pesquisaController.paises
+                  .map((e) => e.nome)
+                  .where((nome) => nome.toLowerCase().contains(
+                        textEditingValue.text.toLowerCase(),
+                      ));
+            },
+            onSaved: (newValue) {
+              valoresJson['origemEmissivosInternacionais'] = newValue;
+            },
+            validator: (values) {
+              // if (values == null || values.isEmpty) {
+              //   return 'Por favor, selecione pelo menos um pais.';
+              // }
+              return null;
+            },
+          ),
+          textLabel(
+            name: 'Ano Base',
+            fontWeight: FontWeight.bold,
+          ),
+          CustomTextDate(
+            dateController: widget.controllers['anoBaseEmissivos'],
+          ),
+          CustomTextField(
+            name: 'Vendas Alta Temporada (nº pax)',
+            controller: widget.controllers['vendasAltaTemporada'],
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CheckboxGroupFormField(
+            title: 'Meses de Alta Temporada',
+            initialValue:
+                isUpdate == true ? widget.infoModel!.mesesAltaTemporada : [],
+            onSaved: (p0) => valoresJson['mesesAltaTemporada'] = p0,
+            options: [
+              'Janeiro',
+              'Fevereiro',
+              'Março',
+              'Abril',
+              'Maio',
+              'Junho',
+              'Julho',
+              'Agosto',
+              'Setembro',
+              'Outubro',
+              'Novembro',
+              'Dezembro',
+              'Ano Inteiro'
+            ],
+          ),
+
+          CustomTextField(
+            name: 'Vendas Baixa Temporada (nº pax)',
+            controller: widget.controllers['vendasBaixaTemporada'],
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
+          ),
+          CheckboxGroupFormField(
+            title: 'Meses de Baixa Temporada',
+            initialValue:
+                isUpdate == true ? widget.infoModel!.mesesBaixaTemporada : [],
+            onSaved: (p0) => valoresJson['mesesBaixaTemporada'] = p0,
+            options: [
+              'Janeiro',
+              'Fevereiro',
+              'Março',
+              'Abril',
+              'Maio',
+              'Junho',
+              'Julho',
+              'Agosto',
+              'Setembro',
+              'Outubro',
+              'Novembro',
+              'Dezembro',
+              'Ano Inteiro'
+            ],
+          ),
+          SizedBox(
             height: 55.h,
           ),
           //caracteriscas do local
@@ -1181,10 +1223,15 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
             title: 'Bilhetes Terrestres',
             onSaved: (newValue) => valoresJson['bilhetesTerrestres'] = newValue,
             options: [
-              'Reserva', 'Emissão', 'Alteração', 'Remarcação',
-              'Cancelamento', 'Tarifa net', 'Tarifa comissionada',
+              'Reserva',
+              'Emissão',
+              'Alteração',
+              'Remarcação',
+              'Cancelamento',
+              'Tarifa net',
+              'Tarifa comissionada',
               'Tarifa especial para agentes de viagem',
-               'Tarifa especial para empresas'
+              'Tarifa especial para empresas'
             ],
             initialValue: isUpdate ? widget.infoModel!.bilhetesTerrestres! : [],
           ),
@@ -1193,10 +1240,15 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
             title: 'Bilhetes Aereos',
             onSaved: (newValue) => valoresJson['bilhetesAereos'] = newValue,
             options: [
-              'Reserva', 'Emissão', 'Alteração', 'Remarcação',
-              'Cancelamento', 'Tarifa net', 'Tarifa comissionada',
+              'Reserva',
+              'Emissão',
+              'Alteração',
+              'Remarcação',
+              'Cancelamento',
+              'Tarifa net',
+              'Tarifa comissionada',
               'Tarifa especial para agentes de viagem',
-               'Tarifa especial para empresas'
+              'Tarifa especial para empresas'
             ],
             initialValue: isUpdate ? widget.infoModel!.bilhetesAereos! : [],
           ),
@@ -1205,12 +1257,13 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
             title: 'Pacotes Turísticos',
             onSaved: (newValue) => valoresJson['pacotesTuristicos'] = newValue,
             options: [
-            'Reserva', 'Emissão',
-            'Alteração',
-            'Remarcação',
-            'Cancelamento',
-            'Venda direta',
-            'Venda via agentes'
+              'Reserva',
+              'Emissão',
+              'Alteração',
+              'Remarcação',
+              'Cancelamento',
+              'Venda direta',
+              'Venda via agentes'
             ],
             initialValue: isUpdate ? widget.infoModel!.pacotesTuristicos! : [],
           ),
@@ -1218,12 +1271,13 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
             title: 'Cruzeiros Marítimos',
             onSaved: (newValue) => valoresJson['cruzeirosMaritimos'] = newValue,
             options: [
-            'Reserva', 'Emissão',
-            'Alteração',
-            'Remarcação',
-            'Cancelamento',
-            'Venda direta',
-            'Venda via agentes'
+              'Reserva',
+              'Emissão',
+              'Alteração',
+              'Remarcação',
+              'Cancelamento',
+              'Venda direta',
+              'Venda via agentes'
             ],
             initialValue: isUpdate ? widget.infoModel!.cruzeirosMaritimos! : [],
           ),
@@ -1231,29 +1285,31 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
             title: 'Meios de Hospedgem',
             onSaved: (newValue) => valoresJson['meiosDeHospedagem'] = newValue,
             options: [
-            'Reserva', 'Emissão',
-            'Alteração',
-            'Remarcação',
-            'Cancelamento',
-            'Venda direta',
-            'Venda via agentes',
-            'Tarifas Especiais para Agentes de Viagem',
-            'Tarifas Especiais para Empresas',
+              'Reserva',
+              'Emissão',
+              'Alteração',
+              'Remarcação',
+              'Cancelamento',
+              'Venda direta',
+              'Venda via agentes',
+              'Tarifas Especiais para Agentes de Viagem',
+              'Tarifas Especiais para Empresas',
             ],
             initialValue: isUpdate ? widget.infoModel!.meiosDeHospedagem! : [],
           ),
-                    CheckboxGroupFormField(
+          CheckboxGroupFormField(
             title: 'Serviços de Traslados, Passeios, Visitas e Outros',
             onSaved: (newValue) => valoresJson['servicosTraslados'] = newValue,
             options: [
-            'Reserva', 'Emissão',
-            'Alteração',
-            'Remarcação',
-            'Cancelamento',
-            'Venda direta',
-            'Venda via agentes',
-            'Tarifas Especiais para Agentes de Viagem',
-            'Tarifas Especiais para Empresas',
+              'Reserva',
+              'Emissão',
+              'Alteração',
+              'Remarcação',
+              'Cancelamento',
+              'Venda direta',
+              'Venda via agentes',
+              'Tarifas Especiais para Agentes de Viagem',
+              'Tarifas Especiais para Empresas',
             ],
             initialValue: isUpdate ? widget.infoModel!.servicosTraslados! : [],
           ),
@@ -1261,305 +1317,376 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
             title: 'Seguro de Viagem',
             onSaved: (newValue) => valoresJson['seguroDeViagem'] = newValue,
             options: [
-            'Reserva', 'Emissão',
-            'Alteração',
-            'Remarcação',
-            'Cancelamento',
-            'Venda direta',
-            'Venda via agentes',
-            'Tarifas Especiais para Agentes de Viagem',
-            'Tarifas Especiais para Empresas',
+              'Reserva',
+              'Emissão',
+              'Alteração',
+              'Remarcação',
+              'Cancelamento',
+              'Venda direta',
+              'Venda via agentes',
+              'Tarifas Especiais para Agentes de Viagem',
+              'Tarifas Especiais para Empresas',
             ],
             initialValue: isUpdate ? widget.infoModel!.seguroDeViagem! : [],
           ),
           CheckboxGroupFormField(
             title: 'Locação de Automóveis',
-            onSaved: (newValue) => valoresJson['locacaoDeAutomoveis'] = newValue,
+            onSaved: (newValue) =>
+                valoresJson['locacaoDeAutomoveis'] = newValue,
             options: [
-            'Reserva', 'Emissão',
-            'Alteração',
-            'Remarcação',
-            'Cancelamento',
-            'Venda direta',
-            'Venda via agentes',
-            'Tarifas Especiais para Agentes de Viagem',
-            'Tarifas Especiais para Empresas',
+              'Reserva',
+              'Emissão',
+              'Alteração',
+              'Remarcação',
+              'Cancelamento',
+              'Venda direta',
+              'Venda via agentes',
+              'Tarifas Especiais para Agentes de Viagem',
+              'Tarifas Especiais para Empresas',
             ],
-            initialValue: isUpdate ? widget.infoModel!.locacaoDeAutomoveis! : [],
+            initialValue:
+                isUpdate ? widget.infoModel!.locacaoDeAutomoveis! : [],
           ),
-          ConditionalFieldsGroup(title: 'Câmbio',
-           jsonKey: 'cambio',
-            valoresJson: valoresJson,
-             isUpdate: isUpdate,
+          ConditionalFieldsGroup(
+              title: 'Câmbio',
+              jsonKey: 'cambio',
+              optionModelValue: isUpdate ? widget.infoModel!.cambio : "",
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
               children: []),
 
-          RadioFormField(options: ['Passaporte', 'Visto', 'outro'], 
-          title: 'Apoio a Despachos de Documentos',
-          initialValue: isUpdate ? widget.infoModel!.apoioADespachos! :"",
-          onSaved: (newValue) => valoresJson['apoioADespachos'] = newValue,
-
+          RadioFormField(
+            options: ['Passaporte', 'Visto', 'outro'],
+            title: 'Apoio a Despachos de Documentos',
+            initialValue: isUpdate ? widget.infoModel!.apoioADespachos! : "",
+            onSaved: (newValue) => valoresJson['apoioADespachos'] = newValue,
           ),
-          CustomTextField(name: 'Outros', controller: widget.controllers['servicosBasicosOutros'],)
-       
-          ,
+          CustomTextField(
+            name: 'Outros',
+            controller: widget.controllers['servicosBasicosOutros'],
+          ),
           CheckboxGroupFormField(
-            title: 'Serviços e Atividades Especializadas',
-            onSaved: (newValue) => valoresJson['servicosEAtividadesEspecializadas'] = newValue,
-            initialValue: isUpdate ? widget.infoModel!.servicosEAtividadesEspecializadas! : [],
-            options: [
-            'Visita técnica e missões empresariais',
-            'Atividades pedagógicas',
-            'Viagens corporativas',
-            'Viagens para torcedores esportivos',
-            'Visitas a propriedades rurais',
-            'Cursos técnicos e estágios',
-            'Organização de eventos esportivos',
-            'Organização de viagens de equipes esportivas',
-            'Cruzeiros',
-            'Viagens para estâncias hidrominerais, spas, balneários, resorts, clínicas naturalistas',
-            'Intercâmbio estudantil e/ou universitário',
-            'Realização de cursos, seminários, feiras',
-            'Viagens para fins médico-hospitalares',
-            'Kitesurf e/ou Windsurf',
-            'Escalada',
-            'Observação da fauna',
-            'Acampamentos',
-            'Degustação gastronômica',
-            'Passeios para compras',
-            'Visitas a sítios históricos',
-            'Pesca amadora',
-            'Atividades equestres',
-            'Atividades em caverna (Espeleoturismo)',
-            'Atividades fora de estrada (veículos 4x4, buggys, motos)',
-            'Atividades com bicicleta',
-            'Atividades aquáticas (jet ski, banana boat, esqui-aquático)',
-            'Passeios náuticos',
-            'Passeios para festas, festivais, celebrações locais e manifestações populares',
-            'Safáris fotográficos',
-            'Visitas a sítios arqueológicos/paleontológicos',
-            'Visitas a locais e eventos religiosos',
-            'Visitas a monumentos e celebrações cívicas',
-            'Visitas a museus e casas de cultura',
-            'Visitas a comunidades tradicionais e/ou étnicas',
-            'Visitas a locais místicos e esotéricos',
-            'Visitas a feiras e mercados',
-            'Caminhada de curta duração (sem pernoite)',
-            'Caminhada de longa duração (com pernoite)',
-            'Arvorismo',
-            'Canoagem',
-            'Mergulho',
-            'Boia-cross',
-            'Flutuação',
-            'Rafting',
-            'Balonismo',
-            'Tirolesa',
-            'Surfe',
-            'Rapel',
-            'Canoismo',
-            'Montanhismo',
-            'Bungee-jump',
-            'Voo livre',
-            'Parapente',
-            'Paraquedismo',
-            'Cachoeirismo',
-            'outro'
-          ]),
+              title: 'Serviços e Atividades Especializadas',
+              onSaved: (newValue) =>
+                  valoresJson['servicosEAtividadesEspecializadas'] = newValue,
+              initialValue: isUpdate
+                  ? widget.infoModel!.servicosEAtividadesEspecializadas!
+                  : [],
+              options: [
+                'Visita técnica e missões empresariais',
+                'Atividades pedagógicas',
+                'Viagens corporativas',
+                'Viagens para torcedores esportivos',
+                'Visitas a propriedades rurais',
+                'Cursos técnicos e estágios',
+                'Organização de eventos esportivos',
+                'Organização de viagens de equipes esportivas',
+                'Cruzeiros',
+                'Viagens para estâncias hidrominerais, spas, balneários, resorts, clínicas naturalistas',
+                'Intercâmbio estudantil e/ou universitário',
+                'Realização de cursos, seminários, feiras',
+                'Viagens para fins médico-hospitalares',
+                'Kitesurf e/ou Windsurf',
+                'Escalada',
+                'Observação da fauna',
+                'Acampamentos',
+                'Degustação gastronômica',
+                'Passeios para compras',
+                'Visitas a sítios históricos',
+                'Pesca amadora',
+                'Atividades equestres',
+                'Atividades em caverna (Espeleoturismo)',
+                'Atividades fora de estrada (veículos 4x4, buggys, motos)',
+                'Atividades com bicicleta',
+                'Atividades aquáticas (jet ski, banana boat, esqui-aquático)',
+                'Passeios náuticos',
+                'Passeios para festas, festivais, celebrações locais e manifestações populares',
+                'Safáris fotográficos',
+                'Visitas a sítios arqueológicos/paleontológicos',
+                'Visitas a locais e eventos religiosos',
+                'Visitas a monumentos e celebrações cívicas',
+                'Visitas a museus e casas de cultura',
+                'Visitas a comunidades tradicionais e/ou étnicas',
+                'Visitas a locais místicos e esotéricos',
+                'Visitas a feiras e mercados',
+                'Caminhada de curta duração (sem pernoite)',
+                'Caminhada de longa duração (com pernoite)',
+                'Arvorismo',
+                'Canoagem',
+                'Mergulho',
+                'Boia-cross',
+                'Flutuação',
+                'Rafting',
+                'Balonismo',
+                'Tirolesa',
+                'Surfe',
+                'Rapel',
+                'Canoismo',
+                'Montanhismo',
+                'Bungee-jump',
+                'Voo livre',
+                'Parapente',
+                'Paraquedismo',
+                'Cachoeirismo',
+                'outro'
+              ]),
 
-          textLabel(name: 'Serviços de Transporte',fontWeight: FontWeight.bold,),
-          ConditionalFieldsGroup(title: 'Transporte Terreste',
-           jsonKey: 'transporteTerrestre',
-            valoresJson: valoresJson,
-             isUpdate: isUpdate,
+          textLabel(
+            name: 'Serviços de Transporte',
+            fontWeight: FontWeight.bold,
+          ),
+          ConditionalFieldsGroup(
+              title: 'Transporte Terreste',
+              jsonKey: 'transporteTerrestre',
+              valoresJson: valoresJson,
+              optionModelValue:
+                  isUpdate ? widget.infoModel!.transporteTerrestre : "",
+              isUpdate: isUpdate,
               children: [
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Automóvel de Passeio',
-                initialValue: isUpdate ? widget.infoModel!.aumovelDePasseio! : "",
-                onSaved: (newValue) => valoresJson['aumovelDePasseio'] = newValue,
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Automóvel de Passeio',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.aumovelDePasseio : "",
+                  onSaved: (newValue) =>
+                      valoresJson['aumovelDePasseio'] = newValue,
                 ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Buggy',
-                initialValue: isUpdate ? widget.infoModel!.buggy! : "",
-                onSaved: (newValue) => valoresJson['buggy'] = newValue,
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Buggy',
+                  initialValue: isUpdate ? widget.infoModel!.buggy : "",
+                  onSaved: (newValue) => valoresJson['buggy'] = newValue,
                 ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Motocicleta',
-                initialValue: isUpdate ? widget.infoModel!.motocicleta! : "",
-                onSaved: (newValue) => valoresJson['motocicleta'] = newValue,
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Motocicleta',
+                  initialValue: isUpdate ? widget.infoModel!.motocicleta : "",
+                  onSaved: (newValue) => valoresJson['motocicleta'] = newValue,
                 ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Caminhão',
-                initialValue: isUpdate ? widget.infoModel!.caminhao! : "",
-                onSaved: (newValue) => valoresJson['caminhao'] = newValue,
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Caminhão',
+                  initialValue: isUpdate ? widget.infoModel!.caminhao : "",
+                  onSaved: (newValue) => valoresJson['caminhao'] = newValue,
                 ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Caminhonete',
-                initialValue: isUpdate ? widget.infoModel!.caminhonete! : "",
-                onSaved: (newValue) => valoresJson['caminhonete'] = newValue,
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Caminhonete',
+                  initialValue: isUpdate ? widget.infoModel!.caminhonete : "",
+                  onSaved: (newValue) => valoresJson['caminhonete'] = newValue,
                 ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Ônibus',
-                initialValue: isUpdate ? widget.infoModel!.onibus! : "",
-                onSaved: (newValue) => valoresJson['onibus'] = newValue,
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Ônibus',
+                  initialValue: isUpdate ? widget.infoModel!.onibus : "",
+                  onSaved: (newValue) => valoresJson['onibus'] = newValue,
                 ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Utilitário',
-                initialValue: isUpdate ? widget.infoModel!.utilitario! : "",
-                onSaved: (newValue) => valoresJson['utilitario'] = newValue,
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Utilitário',
+                  initialValue: isUpdate ? widget.infoModel!.utilitario : "",
+                  onSaved: (newValue) => valoresJson['utilitario'] = newValue,
                 ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Trem',
-                initialValue: isUpdate ? widget.infoModel!.trem! : "",
-                onSaved: (newValue) => valoresJson['trem'] = newValue,
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Trem',
+                  initialValue: isUpdate ? widget.infoModel!.trem : "",
+                  onSaved: (newValue) => valoresJson['trem'] = newValue,
                 ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Outros',
-                initialValue: isUpdate ? widget.infoModel!.outrosTipoVeiculo! : "",
-                onSaved: (newValue) => valoresJson['outrosTipoVeiculo'] = newValue,
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'outro',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.outrosTipoVeiculo : "",
+                  onSaved: (newValue) =>
+                      valoresJson['outrosTipoVeiculo'] = newValue,
+                ),
+                CustomTextField(
+                  name: 'Total de Veículos',
+                  controller: widget.controllers['totalDeVeiculos'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CustomTextField(
+                  name: 'Veículos Adaptados',
+                  controller: widget.controllers['totalDeVeiculosAdaptados'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CheckboxGroupFormField(
+                  options: ['Aluguel', 'Carga', 'Passeio'],
+                  title: 'Tipo de Serviço',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.tipoDeServico! : [],
+                  onSaved: (newValue) =>
+                      valoresJson['tipoDeServico'] = newValue,
                 ),
               ]),
 
-              CustomTextField(name: 'Total de Veículos', 
-              controller: widget.controllers['totalDeVeiculos'],
-              formatter: [FilteringTextInputFormatter.digitsOnly],
-              keyboardType: TextInputType.numberWithOptions(),
-              ),
-              CustomTextField(name: 'Veículos Adaptados', 
-              controller: widget.controllers['totalDeVeiculosAdaptados'],
-              formatter: [FilteringTextInputFormatter.digitsOnly],
-              keyboardType: TextInputType.numberWithOptions(),
-              ),
+          ConditionalFieldsGroup(
+              title: 'Transporte Aquático',
+              jsonKey: 'transporteAquatico',
+              optionModelValue:
+                  isUpdate ? widget.infoModel!.transporteAquatico : "",
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              children: [
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Iate',
+                  initialValue: isUpdate ? widget.infoModel!.iate : "",
+                  onSaved: (newValue) => valoresJson['iate'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Chalana',
+                  initialValue: isUpdate ? widget.infoModel!.chalana : "",
+                  onSaved: (newValue) => valoresJson['chalana'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Navio',
+                  initialValue: isUpdate ? widget.infoModel!.navio : "",
+                  onSaved: (newValue) => valoresJson['navio'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Saveiro',
+                  initialValue: isUpdate ? widget.infoModel!.saveiro : "",
+                  onSaved: (newValue) => valoresJson['saveiro'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Escuna',
+                  initialValue: isUpdate ? widget.infoModel!.escuna : "",
+                  onSaved: (newValue) => valoresJson['escuna'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Jangada',
+                  initialValue: isUpdate ? widget.infoModel!.jangada : "",
+                  onSaved: (newValue) => valoresJson['jangada'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Traineira',
+                  initialValue: isUpdate ? widget.infoModel!.traineira : "",
+                  onSaved: (newValue) => valoresJson['traineira'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Catamarã',
+                  initialValue: isUpdate ? widget.infoModel!.catarama : "",
+                  onSaved: (newValue) => valoresJson['catarama'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Veleiro',
+                  initialValue: isUpdate ? widget.infoModel!.veleiro : "",
+                  onSaved: (newValue) => valoresJson['veleiro'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Ferry Boat',
+                  initialValue: isUpdate ? widget.infoModel!.ferryBoat : "",
+                  onSaved: (newValue) => valoresJson['ferryBoat'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Lancha',
+                  initialValue: isUpdate ? widget.infoModel!.lancha : "",
+                  onSaved: (newValue) => valoresJson['lancha'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'outros',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.outrosEmbarcacao : "",
+                  onSaved: (newValue) =>
+                      valoresJson['outrosEmbarcacao'] = newValue,
+                ),
+                CustomTextField(
+                  name: 'Total de Veículos',
+                  controller: widget.controllers['totalDeVeiculosAquaticos'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CustomTextField(
+                  name: 'Veículos Adaptados',
+                  controller:
+                      widget.controllers['totalDeVeiculosAquaticosAdaptados'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CheckboxGroupFormField(
+                  options: ['Aluguel', 'Carga', 'Passeio'],
+                  title: 'Tipo de Serviço',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.tipoDeServicoAquatico! : [],
+                  onSaved: (newValue) =>
+                      valoresJson['tipoDeServicoAquatico'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Mar Aberto', 'Interior'],
+                  initialValue:
+                      isUpdate ? widget.infoModel!.caracterizacaoServico : "",
+                  onSaved: (newValue) =>
+                      valoresJson['caracterizacaoServico'] = newValue,
+                  title: 'Caracterização do Serviço',
+                ),
+              ]),
 
-              CheckboxGroupFormField(options: ['Aluguel', 'Carga', 'Passeio'], 
-              title: 'Tipo de Serviço',
-              initialValue: isUpdate ? widget.infoModel!.tipoDeServico! : [],
-              onSaved: (newValue) => valoresJson['tipoDeServico'] = newValue,
-              ),
+          ConditionalFieldsGroup(
+              title: 'Transporte Aéreo',
+              jsonKey: 'transporteAereo',
+              optionModelValue:
+                  isUpdate ? widget.infoModel!.transporteAereo : "",
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              children: [
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Helicóptero',
+                  initialValue: isUpdate ? widget.infoModel!.helicoptero : "",
+                  onSaved: (newValue) => valoresJson['helicoptero'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Avião',
+                  initialValue: isUpdate ? widget.infoModel!.aviao : "",
+                  onSaved: (newValue) => valoresJson['aviao'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'outros',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.outrosAeronave : "",
+                  onSaved: (newValue) =>
+                      valoresJson['outrosAeronave'] = newValue,
+                ),
+                CustomTextField(
+                  name: 'Total de Veículos',
+                  controller: widget.controllers['totalDeVeiculosAeronaves'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CustomTextField(
+                  name: 'Veículos Adaptados',
+                  controller:
+                      widget.controllers['totalDeVeiculosAeronavesAdaptados'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CheckboxGroupFormField(
+                  options: ['Aluguel', 'Carga', 'Passeio'],
+                  title: 'Tipo de Serviço',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.tipoDeServicoAeronave! : [],
+                  onSaved: (newValue) =>
+                      valoresJson['tipoDeServicoAeronave'] = newValue,
+                ),
+              ]),
 
-              ConditionalFieldsGroup(title: 'Transporte Aquático',
-               jsonKey: 'transporteAquatico',
-                valoresJson: valoresJson,
-                 isUpdate: isUpdate,
-                  children: [
-                      RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Iate',
-                initialValue: isUpdate ? widget.infoModel!.iate! : "",
-                onSaved: (newValue) => valoresJson['iate'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Chalana',
-                initialValue: isUpdate ? widget.infoModel!.chalana! : "",
-                onSaved: (newValue) => valoresJson['chalana'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Navio',
-                initialValue: isUpdate ? widget.infoModel!.navio! : "",
-                onSaved: (newValue) => valoresJson['navio'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Saveiro',
-                initialValue: isUpdate ? widget.infoModel!.saveiro! : "",
-                onSaved: (newValue) => valoresJson['saveiro'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Escuna',
-                initialValue: isUpdate ? widget.infoModel!.escuna! : "",
-                onSaved: (newValue) => valoresJson['escuna'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Jangada',
-                initialValue: isUpdate ? widget.infoModel!.jangada! : "",
-                onSaved: (newValue) => valoresJson['jangada'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Traineira',
-                initialValue: isUpdate ? widget.infoModel!.traineira! : "",
-                onSaved: (newValue) => valoresJson['traineira'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Catamarã',
-                initialValue: isUpdate ? widget.infoModel!.catarama! : "",
-                onSaved: (newValue) => valoresJson['catarama'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Veleiro',
-                initialValue: isUpdate ? widget.infoModel!.veleiro! : "",
-                onSaved: (newValue) => valoresJson['veleiro'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Ferry Boat',
-                initialValue: isUpdate ? widget.infoModel!.ferryBoat! : "",
-                onSaved: (newValue) => valoresJson['ferryBoat'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Lancha',
-                initialValue: isUpdate ? widget.infoModel!.lancha! : "",
-                onSaved: (newValue) => valoresJson['lancha'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'outros',
-                initialValue: isUpdate ? widget.infoModel!.outrosEmbarcacao! : "",
-                onSaved: (newValue) => valoresJson['outrosEmbarcacao'] = newValue,
-                ),
-                  ]),
-
-                                CustomTextField(name: 'Total de Veículos', 
-              controller: widget.controllers['totalDeVeiculosAquaticos'],
-              formatter: [FilteringTextInputFormatter.digitsOnly],
-              keyboardType: TextInputType.numberWithOptions(),
-              ),
-              CustomTextField(name: 'Veículos Adaptados', 
-              controller: widget.controllers['totalDeVeiculosAquaticosAdaptados'],
-              formatter: [FilteringTextInputFormatter.digitsOnly],
-              keyboardType: TextInputType.numberWithOptions(),
-              ),
-                          CheckboxGroupFormField(options: ['Aluguel', 'Carga', 'Passeio'], 
-              title: 'Tipo de Serviço',
-              initialValue: isUpdate ? widget.infoModel!.tipoDeServicoAquatico! : [],
-              onSaved: (newValue) => valoresJson['tipoDeServicoAquatico'] = newValue,
-              ),
-
-        RadioFormField(options: ['Mar Aberto', 'Interior'],
-        initialValue: isUpdate ? widget.infoModel!.caracterizacaoServico : "",
-        onSaved: (newValue) => valoresJson['caracterizacaoServico'] = newValue,
-        title: 'Caracterização do Serviço',
-        ),
-        ConditionalFieldsGroup(title: 'Transporte Aéreo', 
-        jsonKey: 'transporteAereo',
-         valoresJson: valoresJson,
-          isUpdate: isUpdate,
-           children: [
-            RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Helicóptero',
-                initialValue: isUpdate ? widget.infoModel!.helicoptero! : "",
-                onSaved: (newValue) => valoresJson['helicoptero'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'Avião',
-                initialValue: isUpdate ? widget.infoModel!.aviao! : "",
-                onSaved: (newValue) => valoresJson['aviao'] = newValue,
-                ),
-                RadioFormField(options: ['Próprio', 'De Terceiros'],
-                title: 'outros',
-                initialValue: isUpdate ? widget.infoModel!.outrosAeronave! : "",
-                onSaved: (newValue) => valoresJson['outrosAeronave'] = newValue,
-                ),
-           ]),
-    CustomTextField(name: 'Total de Veículos', 
-              controller: widget.controllers['totalDeVeiculosAeronaves'],
-              formatter: [FilteringTextInputFormatter.digitsOnly],
-              keyboardType: TextInputType.numberWithOptions(),
-              ),
-              CustomTextField(name: 'Veículos Adaptados', 
-              controller: widget.controllers['totalDeVeiculosAeronavesAdaptados'],
-              formatter: [FilteringTextInputFormatter.digitsOnly],
-              keyboardType: TextInputType.numberWithOptions(),
-              ),
-                          CheckboxGroupFormField(options: ['Aluguel', 'Carga', 'Passeio'], 
-              title: 'Tipo de Serviço',
-              initialValue: isUpdate ? widget.infoModel!.tipoDeServicoAeronave! : [],
-              onSaved: (newValue) => valoresJson['tipoDeServicoAeronave'] = newValue,
-              ),
-           
           SizedBox(
             height: 55.h,
           ),

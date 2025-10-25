@@ -19,6 +19,10 @@ class AppConstants {
   static const String ALIMENTOS_E_BEBIDAS = "alimentosEBebidas/";
   static const String MEIOS_DE_HOSPEDAGEM = "meiosdehospedagem/";
   static const String LOCADORA_IMOVEIS = "locadoraimoveis/";
+  static const String AGENCIA_TURISMO = "agenciadeturismo/";
+  static const String TRANSPORTE_TURISTICO = "transporteturistico/";
+
+  
   static const String SET_PESQUISA_STATUS = "pesquisa/<int:pk>/";
 
   static const Color MAIN_GREEN = Color.fromARGB(255, 55, 111, 60);

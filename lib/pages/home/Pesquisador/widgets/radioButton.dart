@@ -389,6 +389,8 @@ class _RadioFormFieldState extends State<RadioFormField> {
   }
   @override
   Widget build(BuildContext context) {
+  final String effectiveInitialValue = widget.initialValue ?? '';
+   
     return FormField<String>(
       onSaved: (value) {
         if(widget.onSaved == null) return;
@@ -409,7 +411,7 @@ class _RadioFormFieldState extends State<RadioFormField> {
             }
             return null;
           },
-      initialValue: widget.initialValue!.contains('outro') ? 'outro': widget.initialValue,
+      initialValue: effectiveInitialValue.contains('outro') ? 'outro': effectiveInitialValue,
       
       // 3. O `builder` é responsável por construir a UI do seu campo
       builder: (FormFieldState<String> field) {

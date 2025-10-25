@@ -155,7 +155,9 @@ class _MultiAutocompleteFormFieldState
             children: [
               Text(
                 widget.title,
-                style: TextStyle(), // Considere adicionar um `Theme.of(context).textTheme...`
+                style: TextStyle(
+                  fontWeight: FontWeight.bold
+                ), // Considere adicionar um `Theme.of(context).textTheme...`
               ),
               const SizedBox(height: 16),
               ListView.separated(

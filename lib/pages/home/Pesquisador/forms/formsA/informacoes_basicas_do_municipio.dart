@@ -680,8 +680,8 @@ class _InformacoesGeraisState extends State<InformacoesGerais> {
       MapaWidget(
           valoresJson: valoresJson,
           isUpdate: isUpdate,
-          latitude: isUpdate ? widget.infoModel!.latitude! : "0",
-          longitude: isUpdate ? widget.infoModel!.longitude! : "0"),
+          latitude: widget.infoModel?.latitude??"-3.73",
+            longitude: widget.infoModel?.longitude?? "-38.52"),
       SizedBox(
         height: 55.h,
       ),

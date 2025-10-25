@@ -15,6 +15,7 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/agencias_de_turismo.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/outros_tipos_de_acomodacao.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/transporte_turistico.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsC/hidrografia.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/updatedForm.dart';
@@ -123,7 +124,8 @@ class _MyAppState extends State<MyApp> {
           '/ComercioTuristico': (_) => ComercioTuristico(),
           '/LocadoraDeImoveis': (_) => LocadoraDeImoveis(),
           '/OutrasAcomodacoes': (_) => OutrosTiposDeAcomodacao(),
-          '/AgenciasDeTurismo': (_) => AgenciasDeTurismo()
+          '/AgenciasDeTurismo': (_) => AgenciasDeTurismo(),
+          '/TransporteTuristico': (_) =>  TransporteTuristico(),
         },
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

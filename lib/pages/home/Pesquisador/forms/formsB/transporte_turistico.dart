@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/models/forms/alimentos_bebidas_model.dart';
+import 'package:inventur/models/forms/transporte_turistico_model.dart';
+import 'package:inventur/pages/controllers/pesquisa_controller.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/fields.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/container_widget.dart';
 import 'package:inventur/pages/home/Pesquisador/widgets/customOutro.dart';
@@ -18,32 +19,30 @@ import 'widgets/checkBox.dart';
 
 final Validators _validators = Validators();
 final Map<String, dynamic> valoresJson = {
-  'tipo_formulario': 'Alimentos e bebidas',
+  'tipo_formulario': 'Transporte Turistico',
 };
 bool isUpdate = false;
 
 //formulario
-class AlimentosEBebidas extends StatefulWidget {
-  final AlimentosEBebidasModel? infoModel;
-  const AlimentosEBebidas({super.key, this.infoModel});
+class TransporteTuristico extends StatefulWidget {
+  final TransporteTuristicoModel? infoModel;
+  const TransporteTuristico({super.key, this.infoModel});
 
   @override
-  State<AlimentosEBebidas> createState() => _AlimentosEBebidasState();
+  State<TransporteTuristico> createState() => _TransporteTuristicoState();
 }
 
-class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
-
+class _TransporteTuristicoState extends State<TransporteTuristico> {
   int currentStep = 0;
   late List<Widget> pages;
   final _formKey = GlobalKey<FormState>();
   final PageController _pageController = PageController();
 
+  Map<String, TextEditingController> _informacoesGeralController = {};
+  Map<String, TextEditingController> _funcionamentoControllers = {};
+  Map<String, TextEditingController> _acessibilidadeController = {};
 
-  Map<String, TextEditingController>  _informacoesGeralController = {};
-  Map<String, TextEditingController>  _funcionamentoControllers = {};
-  Map<String, TextEditingController>  _acessibilidadeController = {};
-
-  final List<String> _chavesInfo = const[
+  final List<String> _chavesInfo = const [
     'uf',
     'regiao_turistica',
     'municipio',
@@ -74,19 +73,33 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
     'distanciaPontoDeTaxi',
     'distanciasOutraNome',
     'distanciaOutras',
-    'pontosDeReferencia', 
+    'pontosDeReferencia',
+              'entidadeAmbitoMunicipal',
+          'categoriaAmbitoMunicipal',
+          'entidadeAmbitoEstadual',
+          'categoriaAmbitoEstadual',
+          'entidadeAmbitoFederal',
+          'categoriaAmbitoFederal',
+          'entidadeAmbitoInternacional',
+          'categoriaAmbitoInternacional',
   ];
-  final List<String> _chavesFun = const[
-    'capInstaladaPdia',
-    'capInstaladasSentadas',
-    'capSimultanea',
-    'capSimultaneaSentadas',
+  final List<String> _chavesFun = const [
     'capacidadeVeiculos',
     'numeroAutomoveis',
+    'mediaAnualPassageiros',
     'numeroOnibus',
     'outrasRegrasEInformacoes',
+    'servicosBasicosOutros',
+    'totalDeVeiculos',
+    'totalDeVeiculosAdaptados',
+    'totalDeVeiculosAquaticos',
+    'totalDeVeiculosAquaticosAdaptados',
+    'totalDeVeiculosAeronaves',
+    'totalDeVeiculosAeronavesAdaptados',
+    'idadeMediaVeiculos',
+'quantidadeVeiculosAdaptados'
   ];
-  final List<String> _chavesAcessi = const[
+  final List<String> _chavesAcessi = const [
     'outrosAcessibilidade',
     'observacoes',
     'referencias',
@@ -183,11 +196,11 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
     for (final controller in _funcionamentoControllers.values) {
       controller.dispose();
     }
-    for(final controller in _acessibilidadeController.values){
+    for (final controller in _acessibilidadeController.values) {
       controller.dispose();
     }
     valoresJson.clear();
-    valoresJson['tipo_formulario'] = 'Alimentos e bebidas';
+    valoresJson['tipo_formulario'] = 'Transporte Turistico';
     isUpdate = false;
     super.dispose();
   }
@@ -204,7 +217,7 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
     valoresJson['email_coordenador'] = info['coordenador']['email'];
   }
 
-  void _enviarFormulario() async{
+  void _enviarFormulario() async {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState!.save();
 
@@ -236,9 +249,8 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
         // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
         isUpdate
             ? FormService().updateForm(widget.infoModel!.id!, valoresJson,
-                AppConstants.ALIMENTOS_E_BEBIDAS)
-            : FormService()
-                .sendForm(valoresJson, AppConstants.ALIMENTOS_E_BEBIDAS);
+                AppConstants.TRANSPORTE_TURISTICO)
+            : FormService().sendForm(valoresJson, AppConstants.TRANSPORTE_TURISTICO);
         print("Formulário finalizado e pronto para enviar!");
 
         // _enviarFormulario(); // Você pode chamar sua função de envio aqui
@@ -264,15 +276,14 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
         },
       );
 
-        
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Por favor, corrija os erros no formulário.')));
     }
   }
 
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
         appBar: AppBar(
           foregroundColor: Colors.white,
           title: DotsIndicator(
@@ -340,12 +351,11 @@ Widget build(BuildContext context) {
           )
         ]));
   }
-
 }
 
 class InformacaoPage extends StatefulWidget {
   final Map<String, TextEditingController> controllers;
-  final AlimentosEBebidasModel? infoModel;
+  final TransporteTuristicoModel? infoModel;
 
   const InformacaoPage({
     super.key,
@@ -357,17 +367,13 @@ class InformacaoPage extends StatefulWidget {
   State<InformacaoPage> createState() => _InformacaoPageState();
 }
 
-
 class FuncionamentoPage extends StatefulWidget {
-  final AlimentosEBebidasModel? infoModel;
+  final TransporteTuristicoModel? infoModel;
 
   final Map<String, TextEditingController> controllers;
 
-  const FuncionamentoPage({
-    super.key, 
-    required this.controllers,
-    this.infoModel
-  });
+  const FuncionamentoPage(
+      {super.key, required this.controllers, this.infoModel});
 
   @override
   State<FuncionamentoPage> createState() => _FuncionamentoPageState();
@@ -375,13 +381,14 @@ class FuncionamentoPage extends StatefulWidget {
 
 /*construção*/
 
-class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAliveClientMixin {
+class _InformacaoPageState extends State<InformacaoPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
   @override
   Widget build(BuildContext context) {
-    super.build(context); 
+    super.build(context);
     final sizeScreen = MediaQuery.sizeOf(context);
 
     return SingleChildScrollView(
@@ -392,22 +399,17 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
           SizedBox(
             height: 55.h,
           ),
-          RadioFormField(options:   const [
-            'Restaurante',
-            'Bar',
-            'Lanchonete',
-            'Cafeteria',
-            'Quiosque',
-            'Barraca de praia',
-            'Sorveteria',
-            'Confeitaria\nPadaria',
-            'outro'
-          ],
-          title: 'Tipo',
-          onSaved: (newValue) {
-            valoresJson['tipo'] = newValue;
-          },
-          initialValue: isUpdate == true ? widget.infoModel!.tipo : "",
+          RadioFormField(
+            options: const [
+              'Transportadora turística e similares',
+              'Locadora de veículos',
+              'Outros tipos de transporte',
+            ],
+            title: 'Tipo',
+            onSaved: (newValue) {
+              valoresJson['tipo'] = newValue;
+            },
+            initialValue: isUpdate == true ? widget.infoModel!.tipo : "",
           ),
           SizedBox(
             height: 55.h,
@@ -417,16 +419,16 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             height: 55.h,
           ),
           CustomTextField(
-            name: "Razão Social", 
+            name: "Razão Social",
             controller: widget.controllers['razaoSocial'],
           ),
           CustomTextField(
-            name: "Nome Fantasia", 
+            name: "Nome Fantasia",
             controller: widget.controllers['nomeFantasia'],
           ),
           CustomTextField(
             name: 'CNPJ',
-         //   validat: _validators.validarCNPJ,
+            //   validat: _validators.validarCNPJ,
             keyboardType: TextInputType.numberWithOptions(),
             formatter: [_validators.cnpjFormatter],
             controller: widget.controllers['CNPJ'],
@@ -459,7 +461,8 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
           ),
           CheckboxGroupFormField(
             title: 'Tipo de Organização/Instituição',
-            onSaved: (newValue) => valoresJson['tipoDeOrganizacaoInstituicao'] = newValue,
+            onSaved: (newValue) =>
+                valoresJson['tipoDeOrganizacaoInstituicao'] = newValue,
             options: [
               'Associação',
               'Sindicato',
@@ -468,32 +471,33 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
               'Empresa',
               'outro'
             ],
-            initialValue: isUpdate ? widget.infoModel!.tipoDeOrganizacaoInstituicao! : [],
+            initialValue:
+                isUpdate ? widget.infoModel!.tipoDeOrganizacaoInstituicao! : [],
           ),
           //formatação inicio da atividade
-          Row(
-            children: [
-              textLabel(
-                  name: "Inicio da atividade",
-                  fontWeight: FontWeight.bold,
+          Row(children: [
+            textLabel(
+              name: "Inicio da atividade",
+              fontWeight: FontWeight.bold,
+            ),
+            SizedBox(
+              width: sizeScreen.width * 0.1,
+            ),
+            Container(
+              height: sizeScreen.height * 0.1,
+              width: sizeScreen.width * 0.4,
+              child: CustomTextDate(
+                dateController: widget.controllers['inicioDaAtividade'],
               ),
-              SizedBox(
-                width: sizeScreen.width * 0.1,
-              ),
-              Container(
-                height: sizeScreen.height * 0.1,
-                width: sizeScreen.width * 0.4,
-                child: CustomTextDate(
-                  dateController: widget.controllers['inicioDaAtividade'],
-                ),
-              )] 
-          ),
+            )
+          ]),
           //formatação quantidade de funcionários
           textLabel(
             name: 'Quantidade de Funcionários',
             fontWeight: FontWeight.bold,
           ),
-          Row(children: [
+          Row(
+            children: [
               textLabel(name: 'Permanentes'),
               SizedBox(
                 width: sizeScreen.width * 0.026,
@@ -507,8 +511,10 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
                   controller: widget.controllers['qtdeFuncionariosPermanentes'],
                 ),
               ),
-          ],), 
-          Row(children: [
+            ],
+          ),
+          Row(
+            children: [
               textLabel(name: 'Temporários '),
               SizedBox(
                 width: sizeScreen.width * 0.026,
@@ -522,8 +528,10 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
                   controller: widget.controllers['qtdeFuncionariosTemporarios'],
                 ),
               ),
-          ],),
-          Row(children: [
+            ],
+          ),
+          Row(
+            children: [
               textLabel(name: 'Pessoas com \nDeficiência'),
               SizedBox(
                 width: sizeScreen.width * 0.026,
@@ -534,10 +542,12 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
                   name: '%',
                   formatter: [FilteringTextInputFormatter.digitsOnly],
                   keyboardType: TextInputType.numberWithOptions(),
-                  controller: widget.controllers['qtdeFuncionariosComDeficiencia'],
+                  controller:
+                      widget.controllers['qtdeFuncionariosComDeficiencia'],
                 ),
               ),
-          ],),
+            ],
+          ),
           SizedBox(
             height: 20.w,
           ),
@@ -555,9 +565,11 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             name: 'Coordenadas Geográficas',
             fontWeight: FontWeight.bold,
           ),
-        MapaWidget(valoresJson: valoresJson, isUpdate: isUpdate,
-         latitude: widget.infoModel?.latitude??"-3.73",
-            longitude: widget.infoModel?.longitude?? "-38.52"),
+          MapaWidget(
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              latitude: widget.infoModel?.latitude ?? "-3.73",
+              longitude: widget.infoModel?.longitude ?? "-38.52"),
           textLabel(
             name: 'Endereço:',
             fontWeight: FontWeight.bold,
@@ -583,55 +595,55 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             ],
           ),
           //contato
-          textLabel(
-            name: 'Contato:', 
-            fontWeight: FontWeight.bold
-          ),
-          Row(children: [
-            textLabel(name: "WhatsApp"),
-            SizedBox(
-              width: sizeScreen.width * 0.1,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.6,
-              child: CustomTextField(
-                name: '(DD) *****-****',
-                keyboardType: TextInputType.numberWithOptions(),
-                formatter: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  _validators.phoneFormatter
-                ],
-                controller: widget.controllers['whatsapp'],
+          textLabel(name: 'Contato:', fontWeight: FontWeight.bold),
+          Row(
+            children: [
+              textLabel(name: "WhatsApp"),
+              SizedBox(
+                width: sizeScreen.width * 0.1,
               ),
-            ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: '(DD) *****-****',
+                  keyboardType: TextInputType.numberWithOptions(),
+                  formatter: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    _validators.phoneFormatter
+                  ],
+                  controller: widget.controllers['whatsapp'],
+                ),
+              ),
             ],
           ),
-          Row(children: [
-            textLabel(name: "Instagram"),
-            SizedBox(
-              width: sizeScreen.width * 0.1,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.6,
-              child: CustomTextField(
-                name: '@username',
-                controller: widget.controllers['instagram'],
+          Row(
+            children: [
+              textLabel(name: "Instagram"),
+              SizedBox(
+                width: sizeScreen.width * 0.1,
               ),
-            ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: '@username',
+                  controller: widget.controllers['instagram'],
+                ),
+              ),
             ],
           ),
-          Row(children: [
-            textLabel(name: "E-mail"),
-            SizedBox(
-              width: sizeScreen.width * 0.17,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.6,
-              child: CustomTextField(
-                name: 'E-mail',
-                controller: widget.controllers['email'],
+          Row(
+            children: [
+              textLabel(name: "E-mail"),
+              SizedBox(
+                width: sizeScreen.width * 0.17,
               ),
-            ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: 'E-mail',
+                  controller: widget.controllers['email'],
+                ),
+              ),
             ],
           ),
           SizedBox(
@@ -647,7 +659,8 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             valoresJson: valoresJson,
             isUpdate: isUpdate,
             children: [],
-            optionModelValue: isUpdate ? widget.infoModel!.sinalizacaoDeAcesso! : '',
+            optionModelValue:
+                isUpdate ? widget.infoModel!.sinalizacaoDeAcesso! : '',
           ),
           ConditionalFieldsGroup(
             title: 'Turística',
@@ -655,13 +668,16 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             valoresJson: valoresJson,
             isUpdate: isUpdate,
             children: [],
-            optionModelValue: isUpdate ? widget.infoModel!.sinalizacaoTuristica! : '',
+            optionModelValue:
+                isUpdate ? widget.infoModel!.sinalizacaoTuristica! : '',
           ),
           CheckboxGroupFormField(
             title: 'Proximidades: ',
             onSaved: (newValue) => valoresJson['proximidades'] = newValue,
             options: [
-              'Meio de Hospedagem',
+              'Restaurante',
+              'Bar/lanchonete',
+              'Meios de hospedagem',
               'Shopping',
               'Galeria/rua comercial',
               'Centro de convenções/exposições',
@@ -674,133 +690,135 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             height: 30.w,
           ),
           //distancias
-          textLabel(
-            name: 'Distâncias até:', 
-            fontWeight: FontWeight.bold
-          ),
-          Row(children: [
-            textLabel(name: "Aeroporto:"),
-            SizedBox(
-              width: sizeScreen.width * 0.1,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.6,
-              child: CustomTextField(
-                name: '(km)',
-                controller: widget.controllers['distanciasAeroporto'],
+          textLabel(name: 'Distâncias até:', fontWeight: FontWeight.bold),
+          Row(
+            children: [
+              textLabel(name: "Aeroporto:"),
+              SizedBox(
+                width: sizeScreen.width * 0.1,
               ),
-            ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: '(km)',
+                  controller: widget.controllers['distanciasAeroporto'],
+                ),
+              ),
             ],
           ),
-          Row(children: [
-            textLabel(name: "Estação \nrodoviária:"),
-            SizedBox(
-              width: sizeScreen.width * 0.1,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.6,
-              child: CustomTextField(
-                name: '(km)',
-                controller: widget.controllers['distanciasRodoviaria'],
+          Row(
+            children: [
+              textLabel(name: "Estação \nrodoviária:"),
+              SizedBox(
+                width: sizeScreen.width * 0.1,
               ),
-            ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: '(km)',
+                  controller: widget.controllers['distanciasRodoviaria'],
+                ),
+              ),
             ],
           ),
-          Row(children: [
-            textLabel(name: "Estação \nferroviária:"),
-            SizedBox(
-              width: sizeScreen.width * 0.1,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.6,
-              child: CustomTextField(
-                name: '(km)',
-                controller: widget.controllers['distanciaEstacaoFerroviaria'],
+          Row(
+            children: [
+              textLabel(name: "Estação \nferroviária:"),
+              SizedBox(
+                width: sizeScreen.width * 0.1,
               ),
-            ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: '(km)',
+                  controller: widget.controllers['distanciaEstacaoFerroviaria'],
+                ),
+              ),
             ],
           ),
-          Row(children: [
-            textLabel(name: "Estação \nmarítima/\nfluvial:"),
-            SizedBox(
-              width: sizeScreen.width * 0.1,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.6,
-              child: CustomTextField(
-                name: '(km)',
-                controller: widget.controllers['distanciaEstacaoMaritima'],
+          Row(
+            children: [
+              textLabel(name: "Estação \nmarítima/\nfluvial:"),
+              SizedBox(
+                width: sizeScreen.width * 0.1,
               ),
-            ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: '(km)',
+                  controller: widget.controllers['distanciaEstacaoMaritima'],
+                ),
+              ),
             ],
           ),
-          Row(children: [
-            textLabel(name: "Estação \nmetroviária:"),
-            SizedBox(
-              width: sizeScreen.width * 0.05,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.6,
-              child: CustomTextField(
-                name: '(km)',
-                controller: widget.controllers['distanciaEstacaoMetroviaria'],
+          Row(
+            children: [
+              textLabel(name: "Estação \nmetroviária:"),
+              SizedBox(
+                width: sizeScreen.width * 0.05,
               ),
-            ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: '(km)',
+                  controller: widget.controllers['distanciaEstacaoMetroviaria'],
+                ),
+              ),
             ],
           ),
-          Row(children: [
-            textLabel(name: "Ponto de\nônibus:"),
-            SizedBox(
-              width: sizeScreen.width * 0.1,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.6,
-              child: CustomTextField(
-                name: '(km)',
-                controller: widget.controllers['distanciaPontoDeOnibus'],
+          Row(
+            children: [
+              textLabel(name: "Ponto de\nônibus:"),
+              SizedBox(
+                width: sizeScreen.width * 0.1,
               ),
-            ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: '(km)',
+                  controller: widget.controllers['distanciaPontoDeOnibus'],
+                ),
+              ),
             ],
           ),
-          Row(children: [
-            textLabel(name: "Ponto de\ntaxi:"),
-            SizedBox(
-              width: sizeScreen.width * 0.1,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.6,
-              child: CustomTextField(
-                name: '(km)',
-                controller: widget.controllers['distanciaPontoDeTaxi'],
+          Row(
+            children: [
+              textLabel(name: "Ponto de\ntaxi:"),
+              SizedBox(
+                width: sizeScreen.width * 0.1,
               ),
-            ),
+              SizedBox(
+                width: sizeScreen.width * 0.6,
+                child: CustomTextField(
+                  name: '(km)',
+                  controller: widget.controllers['distanciaPontoDeTaxi'],
+                ),
+              ),
             ],
           ),
-          Row(children: [
-            textLabel(name: "Outros:"),
-            SizedBox(
-              width: sizeScreen.width * 0.1,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.37,
-              child: CustomTextField(
-                name: 'nome',
-                controller: widget.controllers['distanciasOutraNome'],
+          Row(
+            children: [
+              textLabel(name: "Outros:"),
+              SizedBox(
+                width: sizeScreen.width * 0.1,
               ),
-            ),
-             SizedBox(
-              width: sizeScreen.width * 0.2,
-              child: CustomTextField(
-                name: '(km)',
-                controller: widget.controllers['distanciaOutras'],
+              SizedBox(
+                width: sizeScreen.width * 0.37,
+                child: CustomTextField(
+                  name: 'nome',
+                  controller: widget.controllers['distanciasOutraNome'],
+                ),
               ),
-            ),
+              SizedBox(
+                width: sizeScreen.width * 0.2,
+                child: CustomTextField(
+                  name: '(km)',
+                  controller: widget.controllers['distanciaOutras'],
+                ),
+              ),
             ],
           ),
-          textLabel(
-            name: 'Ponto de referência:', 
-            fontWeight: FontWeight.bold
-          ),
+          textLabel(name: 'Ponto de referência:', fontWeight: FontWeight.bold),
           CustomTextField(
             name: 'Ponto de referência',
             controller: widget.controllers['pontosDeReferencia'],
@@ -813,9 +831,41 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             height: 55.h,
           ),
           TableMtur(
-         getValues: isUpdate ? widget.infoModel!.tabelaMTUR : {},
-          onChanged: (p0) => valoresJson['tabelaMTUR'] = p0,
-            
+            getValues: isUpdate ? widget.infoModel!.tabelaMTUR : {},
+            onChanged: (p0) => valoresJson['tabelaMTUR'] = p0,
+          ),
+
+          textLabel(name: 'Licenciamentos, registros e outros', fontWeight: FontWeight.bold,),
+
+
+          textLabel(name: 'Âmbito Municipal',),
+          CustomTextField(name: 'Entidade', 
+          controller: widget.controllers['entidadeAmbitoMunicipal'],),
+          CustomTextField(name: 'Categoria/tipo/classificação/número',
+          controller: widget.controllers['categoriaAmbitoMunicipal']),
+          SizedBox(height: 55.h,),
+          textLabel(name: 'Âmbito Estadual/Distrital',),
+          CustomTextField(name: 'Entidade'
+          , controller: widget.controllers['entidadeAmbitoEstadual']
+          ),
+          CustomTextField(name: 'Categoria/tipo/classificação/número'
+          , controller: widget.controllers['categoriaAmbitoEstadual']
+          ),
+          SizedBox(height: 55.h,),
+          textLabel(name: 'Âmbito Federal',),
+          CustomTextField(name: 'Entidade'
+          , controller: widget.controllers['entidadeAmbitoFederal']
+          ),
+          CustomTextField(name: 'Categoria/tipo/classificação/número'
+          , controller: widget.controllers['categoriaAmbitoFederal']
+          ),
+          SizedBox(height: 55.h,),
+          textLabel(name: 'Âmbito Internacional',),
+          CustomTextField(name: 'Entidade'
+          , controller: widget.controllers['entidadeAmbitoInternacional']
+          ),
+          CustomTextField(name: 'Categoria/tipo/classificação/número'
+          , controller: widget.controllers['categoriaAmbitoInternacional']
           ),
           SizedBox(
             height: 55.h,
@@ -824,12 +874,21 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
       ),
     );
   }
-
 }
 
-class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKeepAliveClientMixin {
+class _FuncionamentoPageState extends State<FuncionamentoPage>
+    with AutomaticKeepAliveClientMixin {
+  final PesquisaController _pesquisaController = PesquisaController();
   @override
-    // TODO: implement wantKeepAlive
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _pesquisaController.setEstados();
+    _pesquisaController.setPaises();
+  }
+
+  @override
+  // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
   @override
@@ -840,14 +899,12 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
     return SingleChildScrollView(
       child: Column(
         children: [
-          ContainerHeaderToBigTexts(title: 'funcionamento'),
+          ContainerHeaderToBigTexts(title: 'Funcionamento'),
           SizedBox(
             height: 55.h,
           ),
           textLabel(
-            name: 'Estrutura de funcionamento:', 
-            fontWeight: FontWeight.bold
-          ),
+              name: 'Estrutura de funcionamento:', fontWeight: FontWeight.bold),
           //pagamentos
           CheckboxGroupFormField(
             title: 'Formas de pagamento: ',
@@ -860,50 +917,37 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
             ],
             initialValue: isUpdate ? widget.infoModel!.formasDePagamento! : [],
           ),
+
           CheckboxGroupFormField(
-            title: 'Vendas e Reservas: ',
+            title: 'Vendas e Reservas',
+            initialValue: isUpdate ? widget.infoModel!.vendasEReservas : [],
             onSaved: (newValue) => valoresJson['vendasEReservas'] = newValue,
-            options: [
-              'Balcão',
-              'Whatsapp',
-              'Site',
-              'Instagram',
-              'Outro'
-            ],
-            initialValue: isUpdate ? widget.infoModel!.vendasEReservas! : [],
-          ),
+            options: ['Balcão', 'Telefone', 'Whatsapp', 'Instagram', 'Site', 'outro']),
           //atendimento
-          textLabel(
-            name: 'Atendimento ao público:', 
-            fontWeight: FontWeight.bold
-          ),
+          SizedBox(height: 55.h,)
+,          textLabel(
+              name: 'Atendimento ao público:', fontWeight: FontWeight.bold),
           CheckboxGroupFormField(
             title: 'Atendimento em língua estrangueira: ',
-            onSaved: (newValue) => valoresJson['atendimentoEmLinguasEstrangeiras'] = newValue,
-            options: [
-              'Não',
-              'Inglês',
-              'Espanhol',
-              'Outro'
-            ],
-            initialValue: isUpdate ? widget.infoModel!.atendimentoEmLinguasEstrangeiras! : [],
+            onSaved: (newValue) =>
+                valoresJson['atendimentoEmLinguasEstrangeiras'] = newValue,
+            options: ['Não', 'Inglês', 'Espanhol', 'Outro'],
+            initialValue: isUpdate
+                ? widget.infoModel!.atendimentoEmLinguasEstrangeiras!
+                : [],
           ),
           CheckboxGroupFormField(
             title: 'Informativos impressos: ',
-            onSaved: (newValue) => valoresJson['informativosImpressos'] = newValue,
-            options: [
-              'Não',
-              'Inglês',
-              'Espanhol',
-              'Português',
-              'Outro'
-            ],
-            initialValue: isUpdate ? widget.infoModel!.informativosImpressos! : [],
+            onSaved: (newValue) =>
+                valoresJson['informativosImpressos'] = newValue,
+            options: ['Não', 'Inglês', 'Espanhol', 'Português', 'Outro'],
+            initialValue:
+                isUpdate ? widget.infoModel!.informativosImpressos! : [],
           ),
           SizedBox(
             height: 55.h,
           ),
-          ContainerHeaderToBigTexts(title: 'Regras de funcionamento'),       
+          ContainerHeaderToBigTexts(title: 'Regras de funcionamento'),
           SizedBox(
             height: 55.h,
           ),
@@ -943,340 +987,391 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               jsonKey: 'funcionamento24h',
               valoresJson: valoresJson,
               isUpdate: isUpdate,
-              optionModelValue: isUpdate ? widget.infoModel!.funcionamento24h : '',
+              optionModelValue:
+                  isUpdate ? widget.infoModel!.funcionamento24h : '',
               children: []),
           ConditionalFieldsGroup(
               title: 'Funcionamento\nem Feriados',
               jsonKey: 'funcionamentoEmFeriados',
               valoresJson: valoresJson,
               optionModelValue:
-                isUpdate ? widget.infoModel!.funcionamentoEmFeriados : '',
+                  isUpdate ? widget.infoModel!.funcionamentoEmFeriados : '',
               isUpdate: isUpdate,
               children: []),
           SizedBox(
             height: 55.h,
           ),
-          CheckboxGroupFormField(
-            title: 'Restrições: ',
-            onSaved: (newValue) => valoresJson['restricoes'] = newValue,
-            options: [
-              'Crianças', 
-              'Fumantes', 
-              'Animais', 
-              'outro'
-            ],
-            initialValue: isUpdate ? widget.infoModel!.restricoes! : [],
-          ),
+
           textLabel(
-            name: 'Outras regras e informações:',
-            fontWeight: FontWeight.bold
-          ),
+              name: 'Outras regras e informações:',
+              fontWeight: FontWeight.bold),
           CustomTextField(
             name: 'Outras Regras e Informações',
             controller: widget.controllers['outrasRegrasEInformacoes'],
           ),
-          //capacidade
           SizedBox(
             height: 55.h,
           ),
-          textLabel(
-            name: 'Capacidade de atendimento:',
-            fontWeight: FontWeight.bold
-          ),
-          textLabel(
-            name: 'Capacidade instalada por dia nº:',
-            fontWeight: FontWeight.bold
-          ),
-          CustomTextField(
-            name: 'nº',
-            controller: widget.controllers['capInstaladaPdia'],
-          ),
-          textLabel(
-            name: 'Pessoas atendidas sentadas nº:',
-            fontWeight: FontWeight.bold
-          ),
-          CustomTextField(
-            name: 'nº',
-            controller: widget.controllers['capInstaladasSentadas'],
-          ),
-          textLabel(
-            name: 'Capacidade simultânea nº:',
-            fontWeight: FontWeight.bold
-          ),
-          CustomTextField(
-            name: 'nº',
-            controller: widget.controllers['capSimultanea'],
-          ),
-          textLabel(
-            name: 'Pessoas atendidas sentadas nº:',
-            fontWeight: FontWeight.bold
-          ),
-          CustomTextField(
-            name: 'nº',
-            controller: widget.controllers['capSimultaneaSentadas'],
-          ),
+       
+        textLabel(name: 'Caracterização do Fluxo de Passageiros',
+         fontWeight: FontWeight.bold,),
+
+        CustomTextField(name: 'Média Anual de Passageiros (n°)',
+        formatter: [FilteringTextInputFormatter.digitsOnly],
+        keyboardType: TextInputType.numberWithOptions(),
+        controller: widget.controllers['mediaAnualPassageiros'],
+
+        ),
+    
+         
+      
+         
+        
           SizedBox(
             height: 55.h,
           ),
           //caracteriscas do local
           ContainerHeaderToBigTexts(title: 'Características'),
-          SizedBox(
+     
+
+        RadioFormField(options: ['Municipal',
+         'Intermunicipal metropolitano',
+          'Intermunicipal estadual',
+           'Interestadual',
+            'Internacional continental',
+             'Internacional intercontinental'],
+             title: 'Abrangência',
+             initialValue: isUpdate ? widget.infoModel!.abrangencia : "",
+             onSaved: (newValue) => valoresJson['abrangencia'] = newValue,
+             ),
+     SizedBox(
             height: 55.h,
           ),
+          textLabel(name: 'Perfil dos Veículos', fontWeight: FontWeight.bold,),
+
+          textLabel(name: 'Quantidade de veículos'),
+
+          CustomTextField(name: 'Idade Média dos Veículos (nº)',
+          controller: widget.controllers['idadeMediaVeiculos'],
+          formatter: [FilteringTextInputFormatter.digitsOnly],
+          keyboardType: TextInputType.numberWithOptions(),
+          ),
+
+                    CustomTextField(name: 'Quantidade de Veículos Adaptados (nº)',
+          controller: widget.controllers['quantidadeVeiculosAdaptados'],
+          formatter: [FilteringTextInputFormatter.digitsOnly],
+          keyboardType: TextInputType.numberWithOptions(),
+          ),
+
+          SizedBox(height: 55.h,),
           textLabel(
-            name: 'Instalações',
+            name: 'Serviços básicos',
             fontWeight: FontWeight.bold,
           ),
           //veiculos
-          CheckboxGroupFormField(
-            title: 'Estacionamento: ',
-            onSaved: (newValue) => valoresJson['estacionamento'] = newValue,
-            options: [
-              'Pago', 
-              'Gratuito', 
-              'Coberto', 
-              'Descoberto'
-            ],
-            initialValue: isUpdate ? widget.infoModel!.estacionamento! : [],
+          textLabel(
+            name: 'Serviços de Transporte',
+            fontWeight: FontWeight.bold,
           ),
-          Row(children: [
-            textLabel(name: "Capacidade de\n veiculos nº:"),
-            SizedBox(
-              width: sizeScreen.width * 0.1,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.5,
-              child:CustomTextField(
-                name: '(nº)',
-                controller: widget.controllers['capacidadeVeiculos'],
-                formatter: [FilteringTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.numberWithOptions(),
-              ),
-            ),
-            ],
-          ),
-          Row(children: [
-            textLabel(name: "Automóveis nº:"),
-            SizedBox(
-              width: sizeScreen.width * 0.08,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.5,
-              child:CustomTextField(
-                name: '(nº)',
-                controller: widget.controllers['numeroAutomoveis'],
-                formatter: [FilteringTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.numberWithOptions(),
-              ),
-            ),
-            ],
-          ),
-          Row(children: [
-            textLabel(name: "Ônibus nº:"),
-            SizedBox(
-              width: sizeScreen.width * 0.18,
-            ),
-            SizedBox(
-              width: sizeScreen.width * 0.5,
-              child:CustomTextField(
-                name: '(nº)',
-                controller: widget.controllers['numeroOnibus'],
-                formatter: [FilteringTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.numberWithOptions(),
-              ),
-            ),
-            ],
-          ),
+          ConditionalFieldsGroup(
+              title: 'Transporte Terreste',
+              jsonKey: 'transporteTerrestre',
+              valoresJson: valoresJson,
+              optionModelValue:
+                  isUpdate ? widget.infoModel!.transporteTerrestre : "",
+              isUpdate: isUpdate,
+              children: [
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Automóvel de Passeio',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.aumovelDePasseio : "",
+                  onSaved: (newValue) =>
+                      valoresJson['aumovelDePasseio'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Buggy',
+                  initialValue: isUpdate ? widget.infoModel!.buggy : "",
+                  onSaved: (newValue) => valoresJson['buggy'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Motocicleta',
+                  initialValue: isUpdate ? widget.infoModel!.motocicleta : "",
+                  onSaved: (newValue) => valoresJson['motocicleta'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Caminhão',
+                  initialValue: isUpdate ? widget.infoModel!.caminhao : "",
+                  onSaved: (newValue) => valoresJson['caminhao'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Caminhonete',
+                  initialValue: isUpdate ? widget.infoModel!.caminhonete : "",
+                  onSaved: (newValue) => valoresJson['caminhonete'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Ônibus',
+                  initialValue: isUpdate ? widget.infoModel!.onibus : "",
+                  onSaved: (newValue) => valoresJson['onibus'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Utilitário',
+                  initialValue: isUpdate ? widget.infoModel!.utilitario : "",
+                  onSaved: (newValue) => valoresJson['utilitario'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Trem',
+                  initialValue: isUpdate ? widget.infoModel!.trem : "",
+                  onSaved: (newValue) => valoresJson['trem'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'outro',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.outrosTipoVeiculo : "",
+                  onSaved: (newValue) =>
+                      valoresJson['outrosTipoVeiculo'] = newValue,
+                ),
+                CustomTextField(
+                  name: 'Total de Veículos',
+                  controller: widget.controllers['totalDeVeiculos'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CustomTextField(
+                  name: 'Veículos Adaptados',
+                  controller: widget.controllers['totalDeVeiculosAdaptados'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CheckboxGroupFormField(
+                  options: ['Aluguel', 'Carga', 'Passeio'],
+                  title: 'Tipo de Serviço',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.tipoDeServico! : [],
+                  onSaved: (newValue) =>
+                      valoresJson['tipoDeServico'] = newValue,
+                ),
+              ]),
+
+          ConditionalFieldsGroup(
+              title: 'Transporte Aquático',
+              jsonKey: 'transporteAquatico',
+              optionModelValue:
+                  isUpdate ? widget.infoModel!.transporteAquatico : "",
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              children: [
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Iate',
+                  initialValue: isUpdate ? widget.infoModel!.iate : "",
+                  onSaved: (newValue) => valoresJson['iate'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Chalana',
+                  initialValue: isUpdate ? widget.infoModel!.chalana : "",
+                  onSaved: (newValue) => valoresJson['chalana'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Navio',
+                  initialValue: isUpdate ? widget.infoModel!.navio : "",
+                  onSaved: (newValue) => valoresJson['navio'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Saveiro',
+                  initialValue: isUpdate ? widget.infoModel!.saveiro : "",
+                  onSaved: (newValue) => valoresJson['saveiro'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Escuna',
+                  initialValue: isUpdate ? widget.infoModel!.escuna : "",
+                  onSaved: (newValue) => valoresJson['escuna'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Jangada',
+                  initialValue: isUpdate ? widget.infoModel!.jangada : "",
+                  onSaved: (newValue) => valoresJson['jangada'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Traineira',
+                  initialValue: isUpdate ? widget.infoModel!.traineira : "",
+                  onSaved: (newValue) => valoresJson['traineira'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Catamarã',
+                  initialValue: isUpdate ? widget.infoModel!.catarama : "",
+                  onSaved: (newValue) => valoresJson['catarama'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Veleiro',
+                  initialValue: isUpdate ? widget.infoModel!.veleiro : "",
+                  onSaved: (newValue) => valoresJson['veleiro'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Ferry Boat',
+                  initialValue: isUpdate ? widget.infoModel!.ferryBoat : "",
+                  onSaved: (newValue) => valoresJson['ferryBoat'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Lancha',
+                  initialValue: isUpdate ? widget.infoModel!.lancha : "",
+                  onSaved: (newValue) => valoresJson['lancha'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'outros',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.outrosEmbarcacao : "",
+                  onSaved: (newValue) =>
+                      valoresJson['outrosEmbarcacao'] = newValue,
+                ),
+                CustomTextField(
+                  name: 'Total de Veículos',
+                  controller: widget.controllers['totalDeVeiculosAquaticos'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CustomTextField(
+                  name: 'Veículos Adaptados',
+                  controller:
+                      widget.controllers['totalDeVeiculosAquaticosAdaptados'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CheckboxGroupFormField(
+                  options: ['Aluguel', 'Carga', 'Passeio'],
+                  title: 'Tipo de Serviço',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.tipoDeServicoAquatico! : [],
+                  onSaved: (newValue) =>
+                      valoresJson['tipoDeServicoAquatico'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Mar Aberto', 'Interior'],
+                  initialValue:
+                      isUpdate ? widget.infoModel!.caracterizacaoServico : "",
+                  onSaved: (newValue) =>
+                      valoresJson['caracterizacaoServico'] = newValue,
+                  title: 'Caracterização do Serviço',
+                ),
+              ]),
+
+          ConditionalFieldsGroup(
+              title: 'Transporte Aéreo',
+              jsonKey: 'transporteAereo',
+              optionModelValue:
+                  isUpdate ? widget.infoModel!.transporteAereo : "",
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              children: [
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Helicóptero',
+                  initialValue: isUpdate ? widget.infoModel!.helicoptero : "",
+                  onSaved: (newValue) => valoresJson['helicoptero'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'Avião',
+                  initialValue: isUpdate ? widget.infoModel!.aviao : "",
+                  onSaved: (newValue) => valoresJson['aviao'] = newValue,
+                ),
+                RadioFormField(
+                  options: ['Próprio', 'De Terceiros'],
+                  title: 'outros',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.outrosAeronave : "",
+                  onSaved: (newValue) =>
+                      valoresJson['outrosAeronave'] = newValue,
+                ),
+                CustomTextField(
+                  name: 'Total de Veículos',
+                  controller: widget.controllers['totalDeVeiculosAeronaves'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CustomTextField(
+                  name: 'Veículos Adaptados',
+                  controller:
+                      widget.controllers['totalDeVeiculosAeronavesAdaptados'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.numberWithOptions(),
+                ),
+                CheckboxGroupFormField(
+                  options: ['Aluguel', 'Carga', 'Passeio'],
+                  title: 'Tipo de Serviço',
+                  initialValue:
+                      isUpdate ? widget.infoModel!.tipoDeServicoAeronave! : [],
+                  onSaved: (newValue) =>
+                      valoresJson['tipoDeServicoAeronave'] = newValue,
+                ),
+              ]),
+
+      CheckboxGroupFormField(options: ['Motorista',
+       'Motorista bilíngue',
+        'Navegador GPS',
+        'Assistência 24h',
+        'Seguro para ocupantes e terceiros',
+        'Disponibilidade de cadeira de bebê',
+        'Folhetos/mapas',
+        'Cobrança de taxa de retorno',
+        'Hora/período',
+        'Diária',
+        'Mensal',
+        'Km livre',
+        'Km controlada',
+        'Entrega do veículo em local solicitado pelo cliente',
+        'outro',
+        ],
+        title: 'Outros Serviços',
+        initialValue: isUpdate ? widget.infoModel!.outrosServicos :[],
+        onSaved: (newValue) => valoresJson['outrosServicos'] = newValue,
+        ),
+
           SizedBox(
             height: 55.h,
           ),
-          CheckboxGroupFormField(
-            title: 'Serviços e Equipamentos: ',
-            onSaved: (newValue) => valoresJson['servicosEEquipamentos'] = newValue,
-            options: [
-              'Música ao vivo',
-              'Atendimento a grupos',
-              'Ventilador',
-              'Adega',
-              'Recreação para crianças',
-              'Cardápio em língua estrangeira',
-              'Música ambiente',
-              'Manobrista',
-              'Internet sem fio',
-              'Área para fumantes',
-              'Carta de vinhos',
-              'Espaço para eventos',
-              'Ar condicionado',
-              'Lareira',
-              'Área de lazer para crianças',
-              'Cardápio em braile',
-              'Sanitário próprio',
-              'outro',
-            ],
-            initialValue: isUpdate ? widget.infoModel!.servicosEEquipamentos! : [],
-          ),
-          CheckboxGroupFormField(
-            title: 'Especificação da gastromia pro país: ',
-            onSaved: (newValue) => valoresJson['especificacaoDaGastronomiaPorPais'] = newValue,
-            options: [
-              'Não',
-              'Argentina',
-              'Coreana',
-              'Grega',
-              'Judaica',
-              'Polonesa',
-              'Turca',
-              'Alemã',
-              'Asiática',
-              'Escandinava',
-              'Indiana',
-              'Libanesa',
-              'Portuguesa',
-              'Uruguaia',
-              'Americana',
-              'Brasileira',
-              'Espanhola',
-              'Italiana',
-              'Marroquina',
-              'Suíça',
-              'Vietnamita',
-              'Árabe',
-              'Chinesa',
-              'Francesa',
-              'Japonesa',
-              'Mexicana',
-              'Tailandesa',
-              'outro',
-            ],
-            initialValue: isUpdate ? widget.infoModel!.especificacaoDaGastronomiaPorPais! : [],
-          ),
-          CheckboxGroupFormField(
-            title: 'Se for brasileira, por região: ',
-            onSaved: (newValue) => valoresJson['seForBrasileiraPorRegiao'] = newValue,
-            options: [
-              'Não',
-              'Amazônica',
-              'Campeira gaúcha',
-              'Capixaba',
-              'Goiana',
-              'Mineira',
-              'Carioca',
-              'Nordestina',
-              'Pantaneira',
-              'Paulista',
-              'Outras'
-            ],
-            initialValue: isUpdate ? widget.infoModel!.seForBrasileiraPorRegiao! : [],
-          ),
-          CheckboxGroupFormField(
-            title: 'Por especialização: ',
-            onSaved: (newValue) => valoresJson['porEspecializacao'] = newValue,
-            options: [
-              'Não',
-              'Cachaçaria',
-              'Cafeteria',
-              'Café colonial',
-              'Cervejaria',
-              'Churrascaria',
-              'Creperia',
-              'Tapiocaria',
-              'Doceria',
-              'Empaderia',
-              'Frutos do mar',
-              'Grelhados (grill)',
-              'Galeteria',
-              'Pastelaria',
-              'Petisqueria (snack bar)',
-              'Pizzaria',
-              'Sanduicheria',
-              'Sucos',
-              'Chás',
-              'Whiskeria',
-              'Sorveteria',
-              'Outros'
-            ],
-            initialValue: isUpdate ? widget.infoModel!.porEspecializacao! : [],
-          ),
-          CheckboxGroupFormField(
-            title: 'Por tipo de dieta: ',
-            onSaved: (newValue) => valoresJson['porTipoDeDieta'] = newValue,
-            options: [
-              'Não',
-              'Macrobiótica',
-              'Vegetariana',
-              'Natural',
-              'Outros'
-            ],
-            initialValue: isUpdate ? widget.infoModel!.porTipoDeDieta! : [],
-          ),
-          CheckboxGroupFormField(
-            title: 'Por tipo de serviço: ',
-            onSaved: (newValue) => valoresJson['porTipoDeServico'] = newValue,
-            options: [
-              'A la carte',
-              'self service por preço fixo',
-              'self service por quilo',
-              'Rodízio',
-              'Rodízio com bufê (buffet)',
-              'drive-thru',
-              'fast food',
-              'delivery',
-              'Outros'
-            ],
-            initialValue: isUpdate ? widget.infoModel!.porTipoDeServico! : [],
-          ),
-          SizedBox(
-            height: 55.h,
-          ),        
         ],
       ),
     );
   }
 }
 
-class ProtecaoPage extends StatelessWidget{
+class ProtecaoPage extends StatelessWidget {
   final Map<String, TextEditingController> controllers;
-  final AlimentosEBebidasModel? infoModel;
+  final TransporteTuristicoModel? infoModel;
 
   const ProtecaoPage({super.key, required this.controllers, this.infoModel});
-  
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child:Column(
+      child: Column(
         children: [
-          ContainerHeaderToBigTexts(title: 'Proteção, Qualificação, Certificação, Premiação, destaques e outros'),
-          ConditionalFieldsGroup(
-              title: 'Do Equipamento/Espaço',
-              jsonKey: 'doEquipamento',
-              optionModelValue: isUpdate ? infoModel!.doEquipamento : '',
-              valoresJson: valoresJson,
-              isUpdate: isUpdate,
-              children: [
-                TabelsEquipamentoEEspaco(
-                  getValue: isUpdate ? infoModel!.tabelaEquipamentoEEspaco : {},
-                  onChanged: (p0) => valoresJson['tabelaEquipamentoEEspaco'] = p0,
-                )
-              ]),
-          ConditionalFieldsGroup(
-              title: 'Da área ou edificação em que está localizado/instalado ',
-              jsonKey: 'areaOuEdificacao',
-              optionModelValue: isUpdate ? infoModel!.areaOuEdificacao : '',
-              valoresJson: valoresJson,
-              isUpdate: isUpdate,
-              children: [
-                TabelsEquipamentoEEspaco(
-                  getValue: isUpdate ? infoModel!.tabelaAreaOuEdificacao : {},
-                  onChanged: (p0) => valoresJson['tabelaAreaOuEdificacao'] = p0,
-                )
-              ]),
-          SizedBox(
-            height: 35.h,
-          ),
+       
           ContainerHeader(title: 'Estado Geral de Conservação'),
           RadioFormField(
             initialValue: isUpdate ? infoModel!.estadoGeralDeConservacao : '',
-            onSaved: (newValue) => valoresJson['estadoGeralDeConservacao'] = newValue,
+            onSaved: (newValue) =>
+                valoresJson['estadoGeralDeConservacao'] = newValue,
             options: ['Muito Bom', 'Bom', 'Ruim'],
             title: 'Estado Geral de Conservação',
           ),
@@ -1304,7 +1399,9 @@ class ProtecaoPage extends StatelessWidget{
                     'Mental',
                     'Múltipla'
                   ],
-                  initialValue: isUpdate ? infoModel!.pessoalCapacitadoParaReceberPCD : [],
+                  initialValue: isUpdate
+                      ? infoModel!.pessoalCapacitadoParaReceberPCD
+                      : [],
                   title:
                       'Pessoal Capacitado Para Receber Pessoas com Deficiência',
                   onSaved: (newValue) =>
@@ -1364,11 +1461,15 @@ class ProtecaoPage extends StatelessWidget{
                       'Rampa de Acesso à Calçada'
                     ]),
                 CheckboxGroupFormField(
-                    initialValue: isUpdate ? infoModel!.areaDeCirculacaoAcessoInternoParaCadeiraDeRodas : [],
+                    initialValue: isUpdate
+                        ? infoModel!
+                            .areaDeCirculacaoAcessoInternoParaCadeiraDeRodas
+                        : [],
                     title:
                         'Área de Circulação/Acesso Interno para Cadeira de Rodas',
-                    onSaved: (newValue) =>
-                        valoresJson['areaDeCirculacaoAcessoInternoParaCadeiraDeRodas'] = newValue,
+                    onSaved: (newValue) => valoresJson[
+                            'areaDeCirculacaoAcessoInternoParaCadeiraDeRodas'] =
+                        newValue,
                     options: [
                       'Não',
                       'Rampa',
@@ -1423,11 +1524,14 @@ class ProtecaoPage extends StatelessWidget{
                       'Sensor Eletrônico (porta)'
                     ]),
                 CheckboxGroupFormField(
-                    initialValue:
-                        isUpdate ? infoModel!.equipamentoMotorizadoParaDeslocamentoInterno : [],
+                    initialValue: isUpdate
+                        ? infoModel!
+                            .equipamentoMotorizadoParaDeslocamentoInterno
+                        : [],
                     title: 'Equipamento Motorizado para Deslocamento Interno',
-                    onSaved: (newValue) =>
-                        valoresJson['equipamentoMotorizadoParaDeslocamentoInterno'] = newValue,
+                    onSaved: (newValue) => valoresJson[
+                            'equipamentoMotorizadoParaDeslocamentoInterno'] =
+                        newValue,
                     options: ['Não', 'Cadeira', 'Carrinho']),
                 CheckboxGroupFormField(
                     initialValue: isUpdate ? infoModel!.sinalizacaoVisual : [],
@@ -1519,9 +1623,8 @@ class ProtecaoPage extends StatelessWidget{
                       'Para Surdos (TPS ou TTS)'
                     ]),
                 ConditionalFieldsGroup(
-                    optionModelValue: isUpdate
-                        ? infoModel!.sinalizacaoIndicativa
-                        : '',
+                    optionModelValue:
+                        isUpdate ? infoModel!.sinalizacaoIndicativa : '',
                     title:
                         'Sinalização Indicativa\nde Atendimento\nPreferencial para Pessoas\ncom Deficiência ou\nMobilidade Reduzida',
                     jsonKey: 'sinalizacaoIndicativa',
@@ -1545,10 +1648,10 @@ class ProtecaoPage extends StatelessWidget{
             controller: controllers['observacoes'],
           ),
           CustomTextField(
-          name: 'Referências',
-          controller: controllers['referencias'],
+            name: 'Referências',
+            controller: controllers['referencias'],
           )
-        ],    
+        ],
       ),
     );
   }

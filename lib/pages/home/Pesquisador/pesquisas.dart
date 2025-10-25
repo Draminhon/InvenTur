@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:inventur/models/forms/agencia_de_turismo_model.dart';
 import 'package:inventur/models/forms/alimentos_bebidas_model.dart';
 import 'package:inventur/models/forms/comercio_turistico_model.dart';
 import 'package:inventur/models/forms/informacoes_basicas_model.dart';
@@ -10,6 +11,7 @@ import 'package:inventur/models/forms/meios_hospedagem_model.dart';
 import 'package:inventur/models/forms/outros_tipos_de_acomodacao_model.dart';
 import 'package:inventur/models/forms/rodovia_model.dart';
 import 'package:inventur/models/forms/sistema_de_seguranca_model.dart';
+import 'package:inventur/models/forms/transporte_turistico_model.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
@@ -20,9 +22,11 @@ import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/locadora_de_imoveis.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguranca_edit.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/agencias_de_turismo.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
 import 'package:inventur/pages/home/Pesquisador/forms/formsB/outros_tipos_de_acomodacao.dart';
+import 'package:inventur/pages/home/Pesquisador/forms/formsB/transporte_turistico.dart';
 import 'package:inventur/services/interceptor_service.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/utils/check_connectivity.dart';
@@ -393,13 +397,37 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                 );
               
               } 
+              else if(equipamento['tipo'] == 'Transporte Turistico'){
+                             Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => TransporteTuristico(
+                      infoModel: TransporteTuristicoModel.fromJson(
+                          equipamento['dados']),
+                    ),
+                    settings: RouteSettings(arguments: {'isUpdate': true}),
+
+                  ),
+                );
+              }
               else if(equipamento['tipo'] == 'Outros Tipos de Acomodação'){
-                print("GO!!!");
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => OutrosTiposDeAcomodacao(
                       hospedagemModel: OutrosTiposDeAcomodacaoModel.fromJson(
+                          equipamento['dados']),
+                    ),
+                    settings: RouteSettings(arguments: {'isUpdate': true}),
+
+                  ),
+                );
+              }else if(equipamento['tipo'] == 'Agência de Turismo'){
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AgenciasDeTurismo(
+                      infoModel: AgenciasDeTurismoModel.fromJson(
                           equipamento['dados']),
                     ),
                     settings: RouteSettings(arguments: {'isUpdate': true}),
@@ -618,6 +646,10 @@ String getDisplay(Map<String, dynamic> dados) {
     case 'Comércio Turístico':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Outros Tipos de Acomodação':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Agência de Turismo':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Transporte Turistico':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
     default:
       return '$tipoFormulario\n${dados['tipo'] ?? ''}';
