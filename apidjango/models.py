@@ -65,9 +65,6 @@ class CustomUser(AbstractUser):
         super().clean()
         validate_cpf(self.CPF)
 # Create your models here.
-
-
-
 class Pesquisa(models.Model):
 
     usuario = models.ManyToManyField("CustomUser", related_name="usuario")
@@ -105,7 +102,6 @@ class Pesquisa(models.Model):
     def quantidadeLocais(self):
         return self.bases.filter(is_active=True).count()
 
-
 class Base(models.Model):
     
     pesquisa = models.ForeignKey(Pesquisa, on_delete=models.CASCADE, related_name="bases")
@@ -139,7 +135,6 @@ class Inventariacao(models.Model):
 
     criacao = models.DateField(auto_now_add=True)
     atualizacao = models.DateTimeField(auto_now = True)
-
 
 class SistemaDeSeguranca(Base):
     contatos = models.ManyToManyField("ContatoInfo", related_name="sistemas_de_seguranca")
@@ -718,8 +713,6 @@ class OutrosMeiosDeHospedagem(Base):
     # Observações e referências
     outros = models.TextField("Outros", blank=True, null=True)
 
-
-
 class InformacaoBasicaDoMunicipio(Base):
     latitude = models.CharField(max_length=255,blank=True, null=True)
     longitude = models.CharField(max_length=255,blank=True, null=True)
@@ -1207,7 +1200,6 @@ class AgenciaDeTurismo(Base):
 
     outrosAcessibilidade = models.CharField(max_length=255, null=True, blank=True)
 
-
 class TransporteTuristico(Base):
     latitude = models.CharField(max_length=255,blank=True, null=True)
     longitude = models.CharField(max_length=255,blank=True, null=True)
@@ -1375,4 +1367,202 @@ class TransporteTuristico(Base):
 
     outrosAcessibilidade = models.CharField(max_length=255, null=True, blank=True)
 
+class EspacoParaEventos(Base):
+
+    sinalizacaoDeAcesso = models.CharField("Sinalização de Acesso",max_length=255,blank=True, null=True)
+    sinalizacaoTuristica = models.CharField("Sinalização Turística",max_length=255,blank=True, null=True)
+    funcionamento24h = models.CharField("Funcionamento 24h",max_length=255,blank=True, null=True)
+    funcionamentoEmFeriados = models.CharField("Funcionamento em Feriados",max_length=255,blank=True, null=True)
+    geradorDeEmergencia = models.CharField("Gerador de Emergência",max_length=255,blank=True, null=True)
     
+    # Infraestrutura e localização do equipamento/edificação
+    doEquipamentoEspaco = models.TextField("Do Equipamento/Espaço", blank=True, null=True)
+    daAreaOuEdificacaoEmQueEstaLocalizado = models.TextField("Da Área/Edificação em que Está Localizado", blank=True, null=True)
+    possuiFacilidade = models.CharField("Possui Facilidade",max_length=255,blank=True, null=True)
+    sinalizacaoIndicativa = models.CharField("Sinalização Indicativa", max_length=255,blank=True, null=True)
+    tipoDeOrganizacao = models.JSONField("Tipo de Organização",blank=True, null=True)
+    proximidades = models.JSONField("Proximidades",blank=True, null=True)
+    
+    # Dados relacionados ao turismo e pagamentos
+    formasDePagamento = models.JSONField("Formas de Pagamento",blank=True, null=True)
+    reservas = models.JSONField("Reservas",blank=True, null=True)
+    atendimentoEmLinguaEstrangeira = models.JSONField("Atendimento em Língua Estrangeira",blank=True, null=True)
+    informativosImpressos = models.JSONField("Informativos Impressos",blank=True, null=True)
+    restricoes = models.JSONField("Restrições",blank=True, null=True)
+    mesesAltaTemporada = models.JSONField("Meses de Alta Temporada",blank=True, null=True)
+
+
+    sanitarioEspec = models.CharField(max_length=255,blank=True, null=True)
+    chuveiroQuente = models.CharField(max_length=255,blank=True, null=True)
+    chuveiroFrio = models.CharField(max_length=255,blank=True, null=True)
+    piaParaLouca = models.CharField(max_length=255,blank=True, null=True)
+
+
+    # Produtos e serviços
+    estacionamento = models.JSONField("Estacionamento",blank=True, null=True)
+    lanchonete = models.JSONField("Lanchonete",blank=True, null=True)
+    servicos = models.JSONField("Serviços",blank=True, null=True)
+    equipamentos = models.JSONField("Equipamentos",blank=True, null=True)
+    facilidadesEServicos = models.JSONField("Facilidades e Serviços",blank=True, null=True)
+    facilidadesParaExecutivos = models.JSONField("Facilidades para Executivos",blank=True, null=True)
+    pessoalCapacitadoParaReceberPCD = models.JSONField("Pessoal Capacitado para Receber PCD",blank=True, null=True)
+    
+    # Acessibilidade
+    rotaExternaAcessivel = models.JSONField("Rota Externa Acessível",blank=True, null=True)
+    simboloInternacionalDeAcesso = models.JSONField("Símbolo Internacional de Acesso",blank=True, null=True)
+    localDeEmbarqueEDesembarque = models.JSONField("Local de Embarque e Desembarque",blank=True, null=True)
+    vagaEmEstacionamento = models.JSONField("Vaga em Estacionamento",blank=True, null=True)
+    areaDeCirculacaoAcessoInterno = models.JSONField("Área de Circulação/Acesso Interno",blank=True, null=True)
+    escada = models.JSONField("Escada",blank=True, null=True)
+    rampa = models.JSONField("Rampa",blank=True, null=True)
+    piso = models.JSONField("Piso",blank=True, null=True)
+    elevador = models.JSONField("Elevador",blank=True, null=True)
+    equipamentoMotorizadoParaDeslocamentoInterno = models.JSONField("Equipamento Motorizado para Deslocamento Interno",blank=True, null=True)
+    sinalizacaoVisual = models.JSONField("Sinalização Visual",blank=True, null=True)
+    sinalizacaoTatil = models.JSONField("Sinalização Tátil",blank=True, null=True)
+    alarmeDeEmergencia = models.JSONField("Alarme de Emergência",blank=True, null=True)
+    comunicacao = models.JSONField("Comunicação",blank=True, null=True)
+    balcaoDeAtendimento = models.JSONField("Balcão de Atendimento",blank=True, null=True)
+    mobiliario = models.JSONField("Mobiliário",blank=True, null=True)
+    sanitario = models.JSONField("Sanitário",blank=True, null=True)
+    telefone = models.JSONField("Telefone",blank=True, null=True)
+    
+    # Classificação e localização do meio de hospedagem
+    subtipo = models.JSONField(blank=True, null=True)
+    natureza = models.CharField("Natureza", max_length=255, blank=True, null=True)
+    localizacao = models.TextField("Localização", blank=True, null=True)
+    tipoDeDiaria = models.CharField("Tipo de Diária", max_length=255, blank=True, null=True)
+    periodo = models.JSONField(blank=True, null=True)
+    tabelasHorario = models.JSONField("Tabelas de Horário",blank=True,null=True)
+    estadoGeralDeConservacao = models.CharField("Estado Geral de Conservação", max_length=255, blank=True, null=True)
+    
+    # Dados de turismo e localização geográfica
+    
+    # Dados empresariais
+    razaoSocial = models.CharField("Razão Social", max_length=255, blank=True, null=True)
+    nomeFantasia = models.CharField("Nome Fantasia", max_length=255, blank=True, null=True)
+    codigoCNAE = models.CharField("Código CNAE", max_length=50, blank=True, null=True)
+    atividadeEconomica = models.TextField("Atividade Econômica", blank=True, null=True)
+    inscricaoMunicipal = models.CharField("Inscrição Municipal", max_length=50, blank=True, null=True)
+    nomeDaRede = models.CharField("Nome da Rede", max_length=255, blank=True, null=True)
+    CNPJ = models.CharField("CNPJ", max_length=20, blank=True, null=True)
+    inicioDaAtividade = models.CharField("Início da Atividade",max_length=255, blank=True, null=True)
+    
+    # Dados de quantitativos e capacidade
+    qtdeFuncionariosPermanentes = models.CharField("Qtd. Funcionários Permanentes", max_length = 254, blank=True, null=True)
+    qtdeFuncionariosTemporarios = models.CharField("Qtd. Funcionários Temporários", max_length = 254, blank=True, null=True)
+    qtdeFuncionarisComDeficiencia = models.CharField("Qtd. Funcionários com Deficiência", max_length = 254, blank=True, null=True)
+    latitude = models.CharField(max_length=255,blank=True, null=True)
+    longitude = models.CharField(max_length=255,blank=True, null=True)
+    
+    # Endereço e contato
+    avenidaRuaEtc = models.CharField("Avenida/Rua/etc.", max_length=255, blank=True, null=True)
+    bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
+    distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
+    CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
+    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
+    email = models.CharField("Email", max_length=254, blank=True, null=True)
+    site = models.CharField("Site", max_length=255,blank=True, null=True)
+    pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
+    
+    # Dados de tabelas e informações adicionais
+    tabelaMTUR = models.JSONField("Tabela MTUR",blank=True,null=True)
+    outrasRegrasEInformacoes = models.TextField("Outras Regras e Informações", blank=True, null=True)
+    nAnoOcupacao = models.CharField("Ano de Ocupação", max_length=255,blank=True, null=True)
+    nOcupacaoAltaTemporada = models.CharField("Ocupação em Alta Temporada", max_length=255,blank=True, null=True)
+    nCapacidadeDeVeiculos = models.CharField("Capacidade de Veículos", max_length = 254, blank=True, null=True)
+    nAutomoveis = models.CharField("Número de Automóveis", max_length = 254, blank=True, null=True)
+    nOnibus = models.CharField("Número de Ônibus", max_length = 254, blank=True, null=True)
+    outrasAcessibilidade = models.CharField(max_length=255,blank=True, null=True)
+    
+    # Tabelas de instalações e equipamentos/espaços
+    tabelaEquipamentoEEspaco = models.JSONField("Tabela Equipamento e Espaço",blank=True,null=True)
+    tabelaEquipamentoEEspaco2 = models.JSONField("Tabela Equipamento e Espaço 2",blank=True,null=True )
+    
+    # Observações e referências
+    outros = models.TextField("Outros", blank=True, null=True)
+    
+    areaTotalConstruida = models.CharField(max_length=255, blank=True, null=True)
+    areaLocavel = models.CharField(max_length=255, blank=True, null=True)
+    
+    quantidadeAreaDeCarga = models.CharField("Quantidade area de carga", max_length=255, blank=True, null=True)
+    areaTotalAreaDeCarga = models.CharField("Area total area de carga", max_length=255, blank=True, null=True)
+    capacidadeeAreaDeCarga = models.CharField("Capacidadee area de carga", max_length=255, blank=True, null=True)
+    quantidadeAreaDeExposicaoCoberta = models.CharField("Quantidade area de exposicao coberta", max_length=255, blank=True, null=True)
+    areaTotalAreaDeExposicaoCoberta = models.CharField("Area total area de exposicao coberta", max_length=255, blank=True, null=True)
+    capacidadeeAreaDeExposicaoCoberta = models.CharField("Capacidadee area de exposicao coberta", max_length=255, blank=True, null=True)
+    quantidadeAreaDeExposicaoNaoCoberta = models.CharField("Quantidade area de exposicao nao coberta", max_length=255, blank=True, null=True)
+    areaTotalAreaDeExposicaoNaoCoberta = models.CharField("Area total area de exposicao nao coberta", max_length=255, blank=True, null=True)
+    capacidadeeAreaDeExposicaoNaoCoberta = models.CharField("Capacidadee area de exposicao nao coberta", max_length=255, blank=True, null=True)
+    quantidadeAreaParaCozinha = models.CharField("Quantidade area para cozinha", max_length=255, blank=True, null=True)
+    areaTotalAreaParaCozinha = models.CharField("Area total area para cozinha", max_length=255, blank=True, null=True)
+    capacidadeeAreaParaCozinha = models.CharField("Capacidadee area para cozinha", max_length=255, blank=True, null=True)
+    quantidadeAuditorio = models.CharField("Quantidade auditorio", max_length=255, blank=True, null=True)
+    areaTotalAuditorio = models.CharField("Area total auditorio", max_length=255, blank=True, null=True)
+    capacidadeeAuditorio = models.CharField("Capacidadee auditorio", max_length=255, blank=True, null=True) 
+    quantidadeBarELanchonete = models.CharField("Quantidade bar e lanchonete", max_length=255, blank=True, null=True)
+    areaTotalBarELanchonete = models.CharField("Area total bar e lanchonete", max_length=255, blank=True, null=True)
+    capacidadeeBarELanchonete = models.CharField("Capacidadee bar e lanchonete", max_length=255, blank=True, null=True)
+    quantidadeCabineDeSom = models.CharField("Quantidade cabine de som", max_length=255, blank=True, null=True)
+    areaTotalCabineDeSom = models.CharField("Area total cabine de som", max_length=255, blank=True, null=True)
+    capacidadeeCabineDeSom = models.CharField("Capacidadee cabine de som", max_length=255, blank=True, null=True)
+    quantidadeElevador = models.CharField("Quantidade elevador", max_length=255, blank=True, null=True)
+    areaTotalElevador = models.CharField("Area total elevador", max_length=255, blank=True, null=True)
+    capacidadeeElevador = models.CharField("Capacidadee elevador", max_length=255, blank=True, null=True)
+    quantidadeEscaninho = models.CharField("Quantidade escaninho", max_length=255, blank=True, null=True)
+    areaTotalEscaninho = models.CharField("Area total escaninho", max_length=255, blank=True, null=True)
+    capacidadeeEscaninho = models.CharField("Capacidadee escaninho", max_length=255, blank=True, null=True)
+    quantidadeEspacoMultiuso = models.CharField("Quantidade espaco multiuso", max_length=255, blank=True, null=True)
+    areaTotalEspacoMultiuso = models.CharField("Area total espaco multiuso", max_length=255, blank=True, null=True)
+    capacidadeeEspacoMultiuso = models.CharField("Capacidadee espaco multiuso", max_length=255, blank=True, null=True)
+    quantidadeInstalacoesSanitarias = models.CharField("Quantidade instalacoes sanitarias", max_length=255, blank=True, null=True)
+    areaTotalInstalacoesSanitarias = models.CharField("Area total instalacoes sanitarias", max_length=255, blank=True, null=True)
+    capacidadeeInstalacoesSanitarias = models.CharField("Capacidadee instalacoes sanitarias", max_length=255, blank=True, null=True)
+    quantidadePavilhaoDeFeiras = models.CharField("Quantidade pavilhao de feiras", max_length=255, blank=True, null=True)
+    areaTotalPavilhaoDeFeiras = models.CharField("Area total pavilhao de feiras", max_length=255, blank=True, null=True)
+    capacidadeePavilhaoDeFeiras = models.CharField("Capacidadee pavilhao de feiras", max_length=255, blank=True, null=True)
+    quantidadePracaDeAlimentacao = models.CharField("Quantidade praca de alimentacao", max_length=255, blank=True, null=True)
+    areaTotalPracaDeAlimentacao = models.CharField("Area total praca de alimentacao", max_length=255, blank=True, null=True)
+    capacidadeePracaDeAlimentacao = models.CharField("Capacidadee praca de alimentacao", max_length=255, blank=True, null=True)
+    quantidadeRestaurante = models.CharField("Quantidade restaurante", max_length=255, blank=True, null=True)
+    areaTotalRestaurante = models.CharField("Area total restaurante", max_length=255, blank=True, null=True)
+    capacidadeeRestaurante = models.CharField("Capacidadee restaurante", max_length=255, blank=True, null=True)
+    quantidadeSala = models.CharField("Quantidade sala", max_length=255, blank=True, null=True)
+    areaTotalSala = models.CharField("Area total sala", max_length=255, blank=True, null=True)
+    capacidadeeSala = models.CharField("Capacidadee sala", max_length=255, blank=True, null=True)
+    quantidadeSalasModulares = models.CharField("Quantidade salas modulares", max_length=255, blank=True, null=True)
+    areaTotalSalasModulares = models.CharField("Area total salas modulares", max_length=255, blank=True, null=True)
+    capacidadeeSalasModulares = models.CharField("Capacidadee salas modulares", max_length=255, blank=True, null=True)
+    quantidadeSistemaDeSom = models.CharField("Quantidade sistema de som", max_length=255, blank=True, null=True)
+    areaTotalSistemaDeSom = models.CharField("Area total sistema de som", max_length=255, blank=True, null=True)
+    capacidadeeSistemaDeSom = models.CharField("Capacidadee sistema de som", max_length=255, blank=True, null=True)
+    quantidadeTeatro = models.CharField("Quantidade teatro", max_length=255, blank=True, null=True)
+    areaTotalTeatro = models.CharField("Area total teatro", max_length=255, blank=True, null=True)
+    capacidadeeTeatro = models.CharField("Capacidadee teatro", max_length=255, blank=True, null=True)
+    quantidadeDetectorDeMetais = models.CharField("Quantidade detector de metais", max_length=255, blank=True, null=True)
+    areaTotalDetectorDeMetais = models.CharField("Area total detector de metais", max_length=255, blank=True, null=True)
+    capacidadeeDetectorDeMetais = models.CharField("Capacidadee detector de metais", max_length=255, blank=True, null=True)
+    quantidadeSaidaDeEmergencia = models.CharField("Quantidade saida de emergencia", max_length=255, blank=True, null=True)
+    areaTotalSaidaDeEmergencia = models.CharField("Area total saida de emergencia", max_length=255, blank=True, null=True)
+    capacidadeeSaidaDeEmergencia = models.CharField("Capacidadee saida de emergencia", max_length=255, blank=True, null=True)
+    quantidadeOutros = models.CharField("Quantidade outros", max_length=255, blank=True, null=True)
+    areaTotalOutros = models.CharField("Area total outros", max_length=255, blank=True, null=True)
+    capacidadeeOutros = models.CharField("Capacidadee outros", max_length=255, blank=True, null=True)
+    cadeiraMovel = models.CharField("Cadeira movel", max_length=255, blank=True, null=True)
+    cadeiraMovelQuantidade = models.CharField("Cadeira movel quantidade", max_length=255, blank=True, null=True)
+    cadeiraComPrancheta = models.CharField("Cadeira com prancheta", max_length=255, blank=True, null=True)
+    cadeiraComPranchetaQuantidade = models.CharField("Cadeira com prancheta quantidade", max_length=255, blank=True, null=True)
+    cadeiraComBraco = models.CharField("Cadeira com braco", max_length=255, blank=True, null=True)
+    cadeiraComBracoQuantidade = models.CharField("Cadeira com braco quantidade", max_length=255, blank=True, null=True)
+    cadeiraSemBraco = models.CharField("Cadeira sem braco", max_length=255, blank=True, null=True)
+    cadeiraSemBracoQuantidade = models.CharField("Cadeira sem braco quantidade", max_length=255, blank=True, null=True)
+    mesa = models.CharField("Mesa", max_length=255, blank=True, null=True)
+    mesaQuantidade = models.CharField("Mesa quantidade", max_length=255, blank=True, null=True)
+    poltrona = models.CharField("Poltrona", max_length=255, blank=True, null=True)
+    poltronaQuantidade = models.CharField("Poltrona quantidade", max_length=255,blank=True, null=True)
+    energiaEletrica = models.CharField(max_length=255, blank=True, null=True)
+    capacidadeEmKVA = models.CharField(max_length=255, blank=True, null=True)
+    geradorCapacidadeEmKVA = models.CharField(max_length=255, blank=True, null=True)
+    outrosOutros = models.CharField(max_length=255, blank=True, null=True)
+    equipamentosEServicos = models.JSONField(blank=True, null=True)

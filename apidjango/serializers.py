@@ -277,6 +277,11 @@ class ComercioTuristicoSerializer(serializers.ModelSerializer):
         model = ComercioTuristico
         fields = '__all__'
 
+class EspacoParaEventosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EspacoParaEventos
+        fields = '__all__'
+
 class InformacoesBasicasSerializer(serializers.ModelSerializer):
     class Meta:
         model = InformacaoBasicaDoMunicipio

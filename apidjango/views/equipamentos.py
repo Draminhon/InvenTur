@@ -115,6 +115,12 @@ class TransporteTuristicoViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+class EspacoParaEventosViewSet(viewsets.ModelViewSet):
+    queryset = EspacoParaEventos.objects.filter(is_active=True)
+    serializer_class = EspacoParaEventosSerializer
+    
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 
 class EquipamentosListView(APIView):
     def get(self, request, *args, **kwargs):
@@ -186,6 +192,12 @@ class EquipamentosListView(APIView):
             {"tipo": "Transporte Turistico", "dados": TransporteTuristicoSerializer(transporteTuristico).data}
             for transporteTuristico in transportesTuristicos
         ]
+        
+        espacosParaEventos = EspacoParaEventos.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        espacosParaEventos_serialized = [
+            {"tipo": "Espaço para Eventos", "dados": EspacoParaEventosSerializer(espacoParaEvento).data}
+            for espacoParaEvento in espacosParaEventos
+        ]
         # Combina os dados
         equipamentos = (
             rodovias_serialized +
@@ -197,6 +209,8 @@ class EquipamentosListView(APIView):
             locadoraImoveis_serialized +
             outrosMeios_serialized +
             agenciasTurismo_serialized +
-            transportesTuristicos_serialized)
+            transportesTuristicos_serialized +
+            espacosParaEventos_serialized
+            )
 
         return Response(equipamentos)

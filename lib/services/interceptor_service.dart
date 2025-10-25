@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:inventur/main.dart';
-import 'package:inventur/pages/auth/login_page.dart';
+import 'package:inventur/ui/screens/auth%20screens/login_page.dart';
 import 'package:inventur/utils/app_constants.dart'; // Certifique-se que o caminho está correto
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';

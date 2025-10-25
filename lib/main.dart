@@ -1,43 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:inventur/helper/providers.dart';
+import 'package:inventur/providers/providers.dart';
+import 'package:inventur/ui/forms/formsB/espacos_para_eventos.dart';
 //import 'package:google_fonts/google_fonts.dart';
-import 'package:inventur/pages/auth/login_page.dart';
-import 'package:inventur/pages/auth/register_confirmation.dart';
-import 'package:inventur/pages/auth/register_page.dart';
-import 'package:inventur/pages/home/Administrador/admin_home_page.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsA/comercio_turistico.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsA/informacoes_basicas_do_municipio.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsA/locadora_de_imoveis.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsA/rodovia.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsA/sistema_de_seguran%C3%A7a.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsB/agencias_de_turismo.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsB/meiosdehospedagem.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsB/outros_tipos_de_acomodacao.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsB/transporte_turistico.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsB/widgets/sendButton.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsC/hidrografia.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/updatedForm.dart';
-import 'package:inventur/pages/pesquisas/edit_pesquisa.dart';
-import 'package:inventur/pages/pesquisas/register_pesquisa_page.dart';
-import 'package:inventur/pages/password_recover/changepasswordsucess_page.dart';
-import 'package:inventur/pages/home/Pesquisador/pesquisador_homepage.dart';
-import 'package:inventur/pages/home/Pesquisador/pesquisas.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formA.dart';
-import 'package:inventur/pages/password_recover/passwordrecover_page.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formB.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formC.dart';
-import 'package:inventur/pages/home/Pesquisador/widgets/placeholder.dart';
-import 'package:inventur/pages/home/Pesquisador/forms/formsB/alimentos_e_bebidas.dart';
-import 'package:inventur/pages/sync_page.dart';
+import 'package:inventur/ui/screens/auth%20screens/login_page.dart';
+import 'package:inventur/ui/screens/auth%20screens/register_confirmation.dart';
+import 'package:inventur/ui/screens/auth%20screens/register_page.dart';
+import 'package:inventur/ui/home/Administrador/admin_home_page.dart';
+import 'package:inventur/ui/forms/formsA/comercio_turistico.dart';
+import 'package:inventur/ui/forms/formsA/informacoes_basicas_do_municipio.dart';
+import 'package:inventur/ui/forms/formsA/locadora_de_imoveis.dart';
+import 'package:inventur/ui/forms/formsA/rodovia.dart';
+import 'package:inventur/ui/forms/formsA/sistema_de_seguran%C3%A7a.dart';
+import 'package:inventur/ui/forms/formsB/agencias_de_turismo.dart';
+import 'package:inventur/ui/forms/formsB/meiosdehospedagem.dart';
+import 'package:inventur/ui/forms/formsB/outros_tipos_de_acomodacao.dart';
+import 'package:inventur/ui/forms/formsB/transporte_turistico.dart';
+import 'package:inventur/ui/widgets/widgets/sendButton.dart';
+import 'package:inventur/ui/forms/formsC/hidrografia.dart';
+import 'package:inventur/ui/screens/updatedForm_screen.dart';
+import 'package:inventur/ui/screens/pesquisa%20screens/edit_pesquisa.dart';
+import 'package:inventur/ui/screens/pesquisa%20screens/register_pesquisa_page.dart';
+import 'package:inventur/ui/screens/password%20recover%20screens/changepasswordsucess_page.dart';
+import 'package:inventur/ui/home/Pesquisador/pesquisador_homepage.dart';
+import 'package:inventur/ui/home/Pesquisador/pesquisas.dart';
+import 'package:inventur/ui/screens/forms%20screens/formA_screen.dart';
+import 'package:inventur/ui/screens/password%20recover%20screens/passwordrecover_page.dart';
+import 'package:inventur/ui/screens/forms%20screens/formB._screen.dart';
+import 'package:inventur/ui/screens/forms%20screens/formC_screen.dart';
+import 'package:inventur/ui/widgets/placeholder.dart';
+import 'package:inventur/ui/forms/formsB/alimentos_e_bebidas.dart';
+import 'package:inventur/ui/screens/sync_page.dart';
 import 'package:inventur/services/offline_login.dart';
 import 'package:inventur/services/sync_service.dart';
 import 'package:inventur/services/temporary.dart';
 import 'package:inventur/utils/check_connectivity.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
-import 'pages/home/Pesquisador/forms/formsC/zonaCosteira.dart';
+import 'ui/forms/formsC/zonaCosteira.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MyHttpOverrides extends HttpOverrides {
@@ -126,6 +127,7 @@ class _MyAppState extends State<MyApp> {
           '/OutrasAcomodacoes': (_) => OutrosTiposDeAcomodacao(),
           '/AgenciasDeTurismo': (_) => AgenciasDeTurismo(),
           '/TransporteTuristico': (_) =>  TransporteTuristico(),
+          '/EspacoParaEventos': (_) => EspacosParaEventos()
         },
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
