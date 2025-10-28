@@ -121,6 +121,13 @@ class EspacoParaEventosViewSet(viewsets.ModelViewSet):
     
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+    
+class ServicosParaEventosViewSet(viewsets.ModelViewSet):
+    queryset = ServicosParaEventos.objects.filter(is_active=True)
+    serializer_class = ServicosParaEventosSerializer
+    
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]   
 
 class EquipamentosListView(APIView):
     def get(self, request, *args, **kwargs):
@@ -198,6 +205,14 @@ class EquipamentosListView(APIView):
             {"tipo": "Espaço para Eventos", "dados": EspacoParaEventosSerializer(espacoParaEvento).data}
             for espacoParaEvento in espacosParaEventos
         ]
+        
+        servicosParaEventos = ServicosParaEventos.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        servicosParaEventos__serialized = [
+            {"tipo": "Serviços para Eventos", "dados": ServicosParaEventosSerializer(servicoParaEvento).data}
+            for servicoParaEvento in servicosParaEventos
+        ]
+        
+        
         # Combina os dados
         equipamentos = (
             rodovias_serialized +
@@ -210,7 +225,8 @@ class EquipamentosListView(APIView):
             outrosMeios_serialized +
             agenciasTurismo_serialized +
             transportesTuristicos_serialized +
-            espacosParaEventos_serialized
+            espacosParaEventos_serialized +
+            servicosParaEventos__serialized
             )
 
         return Response(equipamentos)

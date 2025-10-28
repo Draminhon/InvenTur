@@ -22,7 +22,7 @@ class AppConstants {
   static const String AGENCIA_TURISMO = "agenciadeturismo/";
   static const String ESPACO_PARA_EVENTOS = "espacoparaeventos/";
   static const String TRANSPORTE_TURISTICO = "transporteturistico/";
-
+  static const String SERVICO_PARA_EVENTOS = "servicoparaeventos/";
   
   static const String SET_PESQUISA_STATUS = "pesquisa/<int:pk>/";
 

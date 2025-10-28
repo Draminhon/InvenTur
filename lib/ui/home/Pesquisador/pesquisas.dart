@@ -12,8 +12,10 @@ import 'package:inventur/models/forms/forms%20B/meios_hospedagem_model.dart';
 import 'package:inventur/models/forms/forms%20B/outros_tipos_de_acomodacao_model.dart';
 import 'package:inventur/models/forms/forms%20A/rodovia_model.dart';
 import 'package:inventur/models/forms/forms%20A/sistema_de_seguranca_model.dart';
+import 'package:inventur/models/forms/forms%20B/servicos_para_eventos_model.dart';
 import 'package:inventur/models/forms/forms%20B/transporte_turistico_model.dart';
 import 'package:inventur/ui/forms/formsB/espacos_para_eventos.dart';
+import 'package:inventur/ui/forms/formsB/servicos_para_eventos.dart';
 import 'package:inventur/ui/screens/forms%20screens/formA_screen.dart';
 import 'package:inventur/ui/screens/forms%20screens/formB._screen.dart';
 import 'package:inventur/ui/screens/forms%20screens/formC_screen.dart';
@@ -405,6 +407,19 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                   MaterialPageRoute(
                     builder: (context) => TransporteTuristico(
                       infoModel: TransporteTuristicoModel.fromJson(
+                          equipamento['dados']),
+                    ),
+                    settings: RouteSettings(arguments: {'isUpdate': true}),
+
+                  ),
+                );
+              }
+              else if(equipamento['tipo'] == 'Serviços para Eventos'){
+                             Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ServicosParaEventos(
+                      hospedagemModel: ServicosParaEventosModel.fromJson(
                           equipamento['dados']),
                     ),
                     settings: RouteSettings(arguments: {'isUpdate': true}),

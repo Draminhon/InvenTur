@@ -13,11 +13,6 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError("A senha deve ter pelo menos 8 caracteres.")
         return value
 
-
-
-        
-
-
 class UserSerializer(serializers.ModelSerializer):
     pesquisas = serializers.PrimaryKeyRelatedField(
         many = True,
@@ -87,7 +82,6 @@ class ServicoEspecializadoInfoSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServicoEspecializadoInfo
         fields = ['email', 'servicos_especializados', 'outras_informacoes']
-
 
 class InfoGeraisSerializer(serializers.ModelSerializer):
     class Meta:
@@ -165,8 +159,6 @@ class LocadorasDeImoveisSerializer(serializers.ModelSerializer):
                 instance.servicos_especializados.add(servico)
         
         return instance
-
-        
 
 class SistemaDeSegurancaSerializer(serializers.ModelSerializer):
     contatos = ContatoInfoSerializer(many=True)  # Aninhando os dados completos
@@ -251,8 +243,6 @@ class AlimentosEBebidasSerializer(serializers.ModelSerializer):
         model = AlimentosEBebidas
         fields = '__all__'
 
-
-
 class MeioDeHospedagemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeioDeHospedagem
@@ -267,6 +257,7 @@ class AgenciaDeTurismoSerializer(serializers.ModelSerializer):
     class Meta:
         model = AgenciaDeTurismo
         fields = '__all__'
+
 class TransporteTuristicoSerializer(serializers.ModelSerializer):
     class Meta:
         model = TransporteTuristico
@@ -280,6 +271,11 @@ class ComercioTuristicoSerializer(serializers.ModelSerializer):
 class EspacoParaEventosSerializer(serializers.ModelSerializer):
     class Meta:
         model = EspacoParaEventos
+        fields = '__all__'
+        
+class ServicosParaEventosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ServicosParaEventos
         fields = '__all__'
 
 class InformacoesBasicasSerializer(serializers.ModelSerializer):
@@ -336,7 +332,6 @@ class OTPVerificationSerializer(serializers.Serializer):
         user.save()
 
         return data
-
 
 class PasswordResetSerializer(serializers.Serializer):
     email = serializers.EmailField()
