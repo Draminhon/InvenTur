@@ -136,6 +136,20 @@ class ParquesViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+class EspacosDeDiversaoECulturaViewSet(viewsets.ModelViewSet):
+    queryset = EspacosDeDiversaoECultura.objects.filter(is_active=True)
+    serializer_class = EspacosDeDiversaoECulturaSerializer
+    
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+class InformacoesTuristicasViewSet(viewsets.ModelViewSet):
+    queryset = InformacoesTuristicas.objects.filter(is_active=True)
+    serializer_class = InformacoesTuristicasSerializer
+    
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
 class EquipamentosListView(APIView):
     def get(self, request, *args, **kwargs):
         pesquisa_id = request.query_params.get('pesquisa_id')
@@ -225,6 +239,17 @@ class EquipamentosListView(APIView):
             for parque in parques
         ]
         
+        espacosParaDiversao = EspacosDeDiversaoECultura.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        espacosParaDiversao__serialized = [
+            {"tipo": "Espaços Para Diversão e Cultura", "dados": EspacosDeDiversaoECulturaSerializer(espacoParaDiversao).data}
+            for espacoParaDiversao in espacosParaDiversao
+        ]
+        
+        informacoesTuristicas = InformacoesTuristicas.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        informacoesTuristicas__serialized = [
+            {"tipo": "Informações Turisticas", "dados": InformacoesTuristicasSerializer(informacaoTuristica).data}
+            for informacaoTuristica in informacoesTuristicas
+        ]
         # Combina os dados
         equipamentos = (
             rodovias_serialized +
@@ -239,7 +264,9 @@ class EquipamentosListView(APIView):
             transportesTuristicos_serialized +
             espacosParaEventos_serialized +
             servicosParaEventos__serialized +
-            parques__serialized
+            parques__serialized +
+            espacosParaDiversao__serialized +
+            informacoesTuristicas__serialized
             )
 
         return Response(equipamentos)

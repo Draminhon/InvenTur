@@ -2,15 +2,14 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/controllers/pesquisa_controller.dart';
-import 'package:inventur/models/forms/forms%20B/parques_model.dart';
+import 'package:inventur/models/forms/forms%20B/espacos_de_diversao_e_cultura_model.dart';
+import 'package:inventur/models/forms/forms%20B/informacoes_turisticas_model.dart';
 import 'package:inventur/ui/widgets/widgets/checkBox.dart';
 import 'package:inventur/ui/widgets/widgets/fields.dart';
 import 'package:inventur/ui/widgets/container_widget.dart';
 import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
 import 'package:inventur/ui/widgets/text%20fields/customTextField.dart';
 import 'package:inventur/ui/widgets/maps/mapa_widget.dart';
-import 'package:inventur/ui/widgets/text%20fields/multi_auto_complete_form_field.dart';
 import 'package:inventur/ui/widgets/radioButton.dart';
 import 'package:inventur/ui/widgets/text%20fields/tables.dart';
 import 'package:inventur/services/admin_service.dart';
@@ -20,19 +19,19 @@ import 'package:inventur/validators/validators.dart';
 
 final Validators _validators = Validators();
 final Map<String, dynamic> valoresjson = {
-  'tipo_formulario': 'Parques',
+  'tipo_formulario': 'Informações Turísticas',
 };
 bool isUpdate = false;
 
-class Parques extends StatefulWidget {
-  final ParquesModel? hospedagemModel;
-  const Parques({super.key, this.hospedagemModel});
+class InformacoesTuristicas extends StatefulWidget {
+  final InformacoesTuristicasModel? hospedagemModel;
+  const InformacoesTuristicas({super.key, this.hospedagemModel});
 
   @override
-  State<Parques> createState() => _ParquesState();
+  State<InformacoesTuristicas> createState() => _InformacoesTuristicasState();
 }
 
-class _ParquesState extends State<Parques> {
+class _InformacoesTuristicasState extends State<InformacoesTuristicas> {
   int currentStep = 0;
 
   late List<Widget> pages;
@@ -49,13 +48,11 @@ class _ParquesState extends State<Parques> {
     'uf',
     'regiao_turistica',
     'municipio',
-    'razaoSocial',
-    'nomeFantasia',
+    'nomeOficial',
+    'nomePopular',
     'codigoCNAE',
     'atividadeEconomica',
     'inscricaoMunicipal',
-    'nomeDaRede',
-    'CNPJ',
     'inicioDaAtividade',
     'qtdeFuncionariosPermanentes',
     'qtdeFuncionariosTemporarios',
@@ -65,7 +62,6 @@ class _ParquesState extends State<Parques> {
     'distrito',
     'CEP',
     'whatsapp',
-    'areaTotalDoEstabelecimento',
     'instagram',
     'email',
     'site',
@@ -195,7 +191,7 @@ class _ParquesState extends State<Parques> {
       controller.dispose();
     }
     valoresjson.clear();
-    valoresjson['tipo_formulario'] = 'Parques';
+    valoresjson['tipo_formulario'] = 'Informações Turísticas';
     isUpdate = false;
     super.dispose();
   }
@@ -234,9 +230,9 @@ class _ParquesState extends State<Parques> {
       } else {
         isUpdate
             ? FormService().updateForm(widget.hospedagemModel!.id!, valoresjson,
-                AppConstants.PARQUES)
+                AppConstants.INFORMACAO_TURISTICA)
             : FormService()
-                .sendForm(valoresjson, AppConstants.PARQUES);
+                .sendForm(valoresjson, AppConstants.INFORMACAO_TURISTICA);
         print("Formulário finalizado e pronto para enviar!");
       }
     } else {
@@ -339,7 +335,7 @@ class _ParquesState extends State<Parques> {
 
 class Identificacao extends StatefulWidget {
   final Map<String, TextEditingController> controllers;
-  final ParquesModel? hospedagemModel;
+  final InformacoesTuristicasModel? hospedagemModel;
 
   const Identificacao(
       {super.key, required this.controllers, this.hospedagemModel});
@@ -365,7 +361,7 @@ class _IdentificacaoState extends State<Identificacao>
 
         RadioFormField(
           title: 'Tipo',
-          options: ['Parques'],
+          options: ['Informações turísticas'],
           onSaved: (newValue) {
             valoresjson['tipo'] = newValue;
           },
@@ -376,9 +372,9 @@ class _IdentificacaoState extends State<Identificacao>
           title: 'Subtipos',
           initialValue: isUpdate == true ? widget.hospedagemModel!.subtipo : [],
           options: [
-            'Aquático',
-            'Temático',
-            'Diversões',
+            'Posto',
+            'Centro de atendimento',
+            'Central',
             'outro',
           ],
           onSaved: (newValue) {
@@ -394,12 +390,12 @@ class _IdentificacaoState extends State<Identificacao>
           height: sizeScreen.height * 0.02,
         ),
         CustomTextField(
-          name: 'Razão Social',
-          controller: widget.controllers['razaoSocial'],
+          name: 'Nome Oficial',
+          controller: widget.controllers['nomeOficial'],
         ),
         CustomTextField(
-          controller: widget.controllers['nomeFantasia'],
-          name: 'Nome Fantasia',
+          controller: widget.controllers['nomePopular'],
+          name: 'Nome Popular',
         ),
         CustomTextField(
           controller: widget.controllers['codigoCNAE'],
@@ -417,39 +413,10 @@ class _IdentificacaoState extends State<Identificacao>
           formatter: [FilteringTextInputFormatter.digitsOnly],
           keyboardType: TextInputType.numberWithOptions(),
         ),
-        CustomTextField(
-          controller: widget.controllers['nomeDaRede'],
-          name: 'Nome da rede/holding',
-        ),
-        CustomTextField(
-          name: 'CNPJ',
-          controller: widget.controllers['CNPJ'],
-          //validat: _validators.validarCNPJ,
-          formatter: [_validators.cnpjFormatter],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
 
-        CustomTextField(
-          name: 'Área Total do Estabelecimento (m²)',
-          controller: widget.controllers['areaTotalDoEstabelecimento'],
-          formatter: [FilteringTextInputFormatter.digitsOnly],
-          keyboardType: TextInputType.numberWithOptions(),
-        ),
 
-        RadioFormField(
-          options: [
-            'Aventura',
-            'Histórico',
-            'Infantil',
-            'Água',
-            'Multitemático',
-            'outro'
-          ],
-          initialValue:
-              isUpdate ? widget.hospedagemModel!.ambientacaoTematica : "",
-          title: 'Ambientação Temática Principal',
-          onSaved: (newValue) => valoresjson['ambientacaoTematica'] = newValue,
-        ),
+
+
 
         Column(
           children: [
@@ -753,10 +720,7 @@ class _IdentificacaoState extends State<Identificacao>
           name: 'Cadastros, Classificações e Outros',
           fontWeight: FontWeight.bold,
         ),
-        TableMtur(
-          getValues: isUpdate ? widget.hospedagemModel!.tabelaMTUR : {},
-          onChanged: (p0) => valoresjson['tabelaMTUR'] = p0,
-        ),
+ 
 
         SizedBox(
           height: 55.h,
@@ -787,7 +751,7 @@ class _IdentificacaoState extends State<Identificacao>
 
 class Funcionamento extends StatefulWidget {
   final Map<String, TextEditingController> controllers;
-  final ParquesModel? hospedagemModel;
+  final InformacoesTuristicasModel? hospedagemModel;
   const Funcionamento(
       {super.key, this.hospedagemModel, required this.controllers});
 
@@ -797,14 +761,7 @@ class Funcionamento extends StatefulWidget {
 
 class _FuncionamentoState extends State<Funcionamento>
     with AutomaticKeepAliveClientMixin {
-  final PesquisaController _pesquisaController = PesquisaController();
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _pesquisaController.setEstados();
-    _pesquisaController.setPaises();
-  }
+
 
   @override
   // TODO: implement wantKeepAlive
@@ -825,45 +782,9 @@ class _FuncionamentoState extends State<Funcionamento>
         fontWeight: FontWeight.bold,
       ),
 
-      ConditionalFieldsGroup(
-          title: 'Entrada Gratuita',
-          jsonKey: 'entradaGratuita',
-          optionModelValue:
-              isUpdate ? widget.hospedagemModel!.entradaGratuita : '',
-          valoresJson: valoresjson,
-          isUpdate: isUpdate,
-          children: []),
+   
 
-      ConditionalFieldsGroup(
-          title: 'Entrada Paga',
-          jsonKey: 'entradaPaga',
-          options: ['Inteira', 'Completa'],
-          optionModelValue: isUpdate ? widget.hospedagemModel!.entradaPaga : '',
-          valoresJson: valoresjson,
-          isUpdate: isUpdate,
-          children: []),
-
-      CheckboxGroupFormField(
-        title: 'Formas de Pagamento',
-        initialValue:
-            isUpdate == true ? widget.hospedagemModel!.formasDePagamento : [],
-        onSaved: (p0) => valoresjson['formasDePagamento'] = p0,
-        options: ['Dinheiro', 'Pix', 'Cartão de Crédito', 'Cartão de Débito'],
-      ),
-
-      CheckboxGroupFormField(
-        title: 'Reservas',
-        initialValue: isUpdate == true ? widget.hospedagemModel!.reservas : [],
-        onSaved: (p0) => valoresjson['reservas'] = p0,
-        options: [
-          'Balcão',
-          'Whatsapp',
-          'Instagram',
-          'Site',
-          'Agência de turismo',
-          'Antecipado'
-        ],
-      ),
+   
       SizedBox(
         height: sizeScreen.height * 0.02,
       ),
@@ -968,159 +889,12 @@ class _FuncionamentoState extends State<Funcionamento>
       SizedBox(
         height: 50.w,
       ),
-      textLabel(
-        name: 'Outras Regras e Informações',
-        fontWeight: FontWeight.bold,
-      ),
+     
+     CustomTextField(name: 'Outras Regras e Informações',
+     controller: widget.controllers['outrasRegrasEInformacoes'],
+     ),
 
-      CustomTextField(
-        controller: widget.controllers['outrasRegrasEInformacoes'],
-        name: 'Regras e informações',
-      ),
-      SizedBox(
-        height: sizeScreen.height * 0.02,
-      ),
-      textLabel(
-        name: 'Dados da Visitação',
-        fontWeight: FontWeight.bold,
-      ),
-      SizedBox(
-        height: sizeScreen.height * 0.02,
-      ),
-      textLabel(
-        name: 'Ocupação Ano nº',
-        fontWeight: FontWeight.bold,
-      ),
-
-      CustomTextField(
-        controller: widget.controllers['nAnoOcupacao'],
-        formatter: [FilteringTextInputFormatter.digitsOnly],
-        name: 'nº',
-      ),
-      SizedBox(
-        height: sizeScreen.height * 0.02,
-      ),
-      textLabel(
-        name: 'Ocupação na Alta Temporada nº',
-        fontWeight: FontWeight.bold,
-      ),
-
-      CustomTextField(
-        controller: widget.controllers['nOcupacaoAltaTemporada'],
-        formatter: [FilteringTextInputFormatter.digitsOnly],
-        name: 'nº',
-      ),
-      SizedBox(
-        height: sizeScreen.height * 0.02,
-      ),
-      textLabel(
-        name: 'Meses de Alta Temporada',
-        fontWeight: FontWeight.bold,
-      ),
-      SizedBox(
-        height: sizeScreen.height * 0.01,
-      ),
-
-      CheckboxGroupFormField(
-        title: 'Meses de Alta Temporada',
-        initialValue:
-            isUpdate == true ? widget.hospedagemModel!.mesesAltaTemporada : [],
-        onSaved: (p0) => valoresjson['mesesAltaTemporada'] = p0,
-        options: [
-          'Janeiro',
-          'Fevereiro',
-          'Março',
-          'Abril',
-          'Maio',
-          'Junho',
-          'Julho',
-          'Agosto',
-          'Setembro',
-          'Outubro',
-          'Novembro',
-          'Dezembro',
-          'Ano Inteiro'
-        ],
-      ),
-      SizedBox(
-        height: 50.w,
-      ),
-      textLabel(
-        name: 'Origem dos Visitantes/Turistas',
-        fontWeight: FontWeight.bold,
-      ),
-      SizedBox(
-        height: 25.w,
-      ),
-      CheckboxGroupFormField(
-        onSaved: (p0) => valoresjson['origemDosVisitantes'] = p0,
-        initialValue:
-            isUpdate == true ? widget.hospedagemModel!.origemDosVisitantes : [],
-        options: ['Entorno municipal', 'Estadual', 'Nacional', 'Internacional'],
-      ),
-      SizedBox(
-        height: 50.w,
-      ),
-      textLabel(
-        name: 'Origem dos Turistas Nacionais e Internacionais',
-        fontWeight: FontWeight.bold,
-      ),
-      SizedBox(
-        height: sizeScreen.height * 0.02,
-      ),
-      MultiAutocompleteFormField(
-        initialValue: isUpdate ? widget.hospedagemModel!.estadosTuristas : [],
-        title: 'Origem dos Turistas Nacionais (até 5 estados)',
-        label: 'Selecione um Estado',
-        fieldCount: 5,
-        optionsBuilder: (textEditingValue) {
-          if (textEditingValue.text.isEmpty) {
-            return const Iterable.empty();
-          }
-          return _pesquisaController.estados
-              .map((e) => e.nome)
-              .where((nome) => nome.toLowerCase().contains(
-                    textEditingValue.text.toLowerCase(),
-                  ));
-        },
-        onSaved: (newValue) {
-          valoresjson['estadosTuristas'] = newValue;
-        },
-        validator: (values) {
-          // Exemplo de validação: exigir pelo menos um estado
-          // if (values == null || values.isEmpty) {
-          //   return 'Por favor, selecione pelo menos um estado.';
-          // }
-          return null;
-        },
-      ),
-      SizedBox(
-        height: 55.h,
-      ),
-      MultiAutocompleteFormField(
-        initialValue: isUpdate ? widget.hospedagemModel!.paisesTuristas : [],
-        title: 'Origem dos Turistas Internacionais (até 5 países)',
-        label: 'Selecione um País',
-        optionsBuilder: (textEditingValue) {
-          if (textEditingValue.text.isEmpty) {
-            return const Iterable.empty();
-          }
-          return _pesquisaController.paises
-              .map((e) => e.nome)
-              .where((nome) => nome.toLowerCase().contains(
-                    textEditingValue.text.toLowerCase(),
-                  ));
-        },
-        onSaved: (newValue) {
-          valoresjson['paisesTuristas'] = newValue;
-        },
-        validator: (values) {
-          // if (values == null || values.isEmpty) {
-          //   return 'Por favor, selecione pelo menos um pais.';
-          // }
-          return null;
-        },
-      ),
+  
       SizedBox(
         height: sizeScreen.height * 0.05,
       ),
@@ -1158,110 +932,31 @@ class _FuncionamentoState extends State<Funcionamento>
       SizedBox(
         height: 55.h,
       ),
-      textLabel(
-        name: 'Outras Instalações, Equipamentos e Serviços',
-        fontWeight: FontWeight.bold,
-      ),
+  
 
       CheckboxGroupFormField(
+        title: 'Outras Instalações e Serviços',
         initialValue:
             isUpdate == true ? widget.hospedagemModel!.outrasIntalacoes : [],
         onSaved: (p0) => valoresjson['outrasIntalacoes'] = p0,
         options: [
-          'Área de exposição coberta',
-          'Área de exposição não coberta',
-          'Sistema de amplificação',
-          'Sala de descanso',
-          'Sala de imprensa',
-          'Som ambiente',
-          'Sinalização interna',
-          'Saída de emergência',
-          'Iluminação noturna',
+          'Folhetos de atrativos',
+          'Folhetos de serviços',
+          'Mapa',
+          'Reserva de hotéis',
+          'Reserva de pacotes',
+          'Reserva de passeios',
+          'Reserva de transporte',
           'Instalações sanitárias',
-          'Piso antiderrapante',
-          'Palco para eventos',
-          'Quadra polivalente',
-          'Detector de metais',
-          'Grade ou proteção',
-          'Refletores',
-          'Telões',
-          'Bebedouro',
-          'Chafariz',
-          'Coreto',
-          'Fraldário',
-          'Guarda-volume',
-          'Loja de souvenir',
+          'Venda de souvenir',
+          'Atendimento telefônico',
+          'Atendimento online',
           'Caixa eletrônico',
-          'Hospedagem',
-          'Restaurante',
-          'Bar/lanchonete',
-          'Telefone público',
-          'Achados e perdidos',
-          'Disponibilidade de carrinho de bebê',
-          'Disponibilidade de cadeira de rodas',
+          'Exposição de produtos',
           'outro'
         ],
       ),
 
-      CheckboxGroupFormField(options: [
-        'Arcade games',
-        'Evolution',
-        'Teatro',
-        'Barco viking',
-        'Jogos eletrônicos',
-        'Roda-gigante',
-        'Barco',
-        'Labirinto',
-        'Rotor',
-        'Brinquedo com reboque',
-        'Brinquedo educativo',
-        'Brinquedo giratório',
-        'Montanha-russa aquática',
-        'Montanha-russa',
-        'Quadra poliesportiva',
-        'Show temático',
-        'Carrossel',
-        'Simuladores diversos',
-        'Campo de futebol',
-        'Kartódromo',
-        'Carro de bate-bate',
-        'Casa assombrada',
-        'Parede de escalada',
-        'Teleférico',
-        'Cascata',
-        'Piscina adulto',
-        'Piscina olímpica',
-        'Piscina infantil',
-        'Piscina com ondas',
-        'Piscina semiolímpica',
-        'Tobogã',
-        'Toboágua altura alta',
-        'Toboágua altura média',
-        'Toboágua altura baixa',
-        'Torre aquática alta',
-        'Torre aquática média',
-        'Torre aquática baixa',
-        'Cataclisma',
-        'Catapulta',
-        'Cinema',
-        'Pula-pula aquático',
-        'Escorregadores',
-        'Playground aquático',
-        'Playground',
-        'Elevador (brinquedos)',
-        'Trem-fantasma',
-        'Trenzinho',
-        'Aquário',
-        'Zoológico',
-        'Galeria',
-        'Hidromassagem',
-        'Sauna',
-        'outro'
-      ],
-      title: 'Outros Equipamentos e Espaços',
-      initialValue: isUpdate ? widget.hospedagemModel!.outrosEquipamentosEEspacos : [],
-      onSaved: (newValue) => valoresjson['outrosEquipamentosEEspacos']= newValue
-      ),
 
       SizedBox(
         height: sizeScreen.height * 0.02,
@@ -1272,7 +967,7 @@ class _FuncionamentoState extends State<Funcionamento>
 
 class Acessibilidade extends StatefulWidget {
   final Map<String, TextEditingController> controllers;
-  final ParquesModel? hospedagemModel;
+  final InformacoesTuristicasModel? hospedagemModel;
   const Acessibilidade(
       {super.key, required this.controllers, this.hospedagemModel});
 

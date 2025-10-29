@@ -8,6 +8,8 @@ import 'package:inventur/models/forms/forms%20A/comercio_turistico_model.dart';
 import 'package:inventur/models/forms/forms%20A/informacoes_basicas_model.dart';
 import 'package:inventur/models/forms/forms%20A/locadora_de_imoveis_model.dart';
 import 'package:inventur/models/forms/forms%20B/espaco_para_eventos_model.dart';
+import 'package:inventur/models/forms/forms%20B/espacos_de_diversao_e_cultura_model.dart';
+import 'package:inventur/models/forms/forms%20B/informacoes_turisticas_model.dart';
 import 'package:inventur/models/forms/forms%20B/meios_hospedagem_model.dart';
 import 'package:inventur/models/forms/forms%20B/outros_tipos_de_acomodacao_model.dart';
 import 'package:inventur/models/forms/forms%20A/rodovia_model.dart';
@@ -15,7 +17,9 @@ import 'package:inventur/models/forms/forms%20A/sistema_de_seguranca_model.dart'
 import 'package:inventur/models/forms/forms%20B/parques_model.dart';
 import 'package:inventur/models/forms/forms%20B/servicos_para_eventos_model.dart';
 import 'package:inventur/models/forms/forms%20B/transporte_turistico_model.dart';
+import 'package:inventur/ui/forms/formsB/espacos_de_diversao_e_cultura.dart';
 import 'package:inventur/ui/forms/formsB/espacos_para_eventos.dart';
+import 'package:inventur/ui/forms/formsB/informacoes_turisticas.dart';
 import 'package:inventur/ui/forms/formsB/parques.dart';
 import 'package:inventur/ui/forms/formsB/servicos_para_eventos.dart';
 import 'package:inventur/ui/screens/forms%20screens/formA_screen.dart';
@@ -385,167 +389,65 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
           final dados = equipamento['dados'];
 
           print(equipamento['tipo']);
-
+          final Map<String, Widget Function(dynamic data)> pageBuilders = {
+            'Rodovia': (data) =>
+                Rodovia(infoModel: RodoviaModel.fromJson(data)),
+            'Transporte Turistico': (data) => TransporteTuristico(
+                infoModel: TransporteTuristicoModel.fromJson(data)),
+            'Serviços para Eventos': (data) => ServicosParaEventos(
+                hospedagemModel: ServicosParaEventosModel.fromJson(data)),
+            'Espaço para Eventos': (data) => EspacosParaEventos(
+                hospedagemModel: EspacosParaEventosModel.fromJson(data)),
+            'Outros Tipos de Acomodação': (data) => OutrosTiposDeAcomodacao(
+                hospedagemModel: OutrosTiposDeAcomodacaoModel.fromJson(data)),
+            'Agência de Turismo': (data) => AgenciasDeTurismo(
+                infoModel: AgenciasDeTurismoModel.fromJson(data)),
+            'SistemaDeSeguranca': (data) => SistemaDeSegurancaEdit(
+                sistemaModel: SistemaDeSegurancaModel.fromJson(data)),
+            'AlimentosEBebidas': (data) => AlimentosEBebidas(
+                infoModel: AlimentosEBebidasModel.fromJson(data)),
+            'Meios de Hospedagem': (data) => MeiosDeHospedagem(
+                hospedagemModel: MeiosDeHospedagemModel.fromJson(data)),
+            'Parques': (data) =>
+                Parques(hospedagemModel: ParquesModel.fromJson(data)),
+            'Espaços Para Diversão e Cultura': (data) =>
+                EspacosDeDiversaoECultura(
+                    hospedagemModel:
+                        EspacosDeDiversaoECulturaModel.fromJson(data)),
+            'Informações Turisticas': (data) => InformacoesTuristicas(
+                hospedagemModel: InformacoesTuristicasModel.fromJson(data)),
+            'Informações Básicas do Município': (data) =>
+                InformacoesBasicasDoMunicipio(
+                    infoModel: InformacoesBasicasModel.fromJson(data)),
+            'Comércio Turístico': (data) => ComercioTuristico(
+                infoModel: ComercioTuristicoModel.fromJson(data)),
+            'Locadora de Imóveis': (data) => LocadoraDeImoveis(
+                infoModel: LocadoraDeImoveisModel.fromJson(data)),
+          };
           return GestureDetector(
-            
             onTap: () {
               updateQtdeLocais(dados['pesquisa'], posts.length);
-              if (equipamento['tipo'] == 'Rodovia') {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Rodovia(
-                      infoModel: RodoviaModel.fromJson(equipamento['dados']),
-                    ),
-                    settings: RouteSettings(arguments: {'isUpdate': true}),
-                    
-                  ),
-                );
-              
-              } 
-              else if(equipamento['tipo'] == 'Transporte Turistico'){
-                             Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => TransporteTuristico(
-                      infoModel: TransporteTuristicoModel.fromJson(
-                          equipamento['dados']),
-                    ),
-                    settings: RouteSettings(arguments: {'isUpdate': true}),
 
-                  ),
-                );
-              }
-              else if(equipamento['tipo'] == 'Serviços para Eventos'){
-                             Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ServicosParaEventos(
-                      hospedagemModel: ServicosParaEventosModel.fromJson(
-                          equipamento['dados']),
-                    ),
-                    settings: RouteSettings(arguments: {'isUpdate': true}),
+              final String tipo = equipamento['tipo'];
+              final dynamic data = equipamento['dados'];
 
-                  ),
-                );
-              }
-              else if(equipamento['tipo'] == 'Espaço para Eventos'){
-                             Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EspacosParaEventos(
-                      hospedagemModel: EspacosParaEventosModel.fromJson(
-                          equipamento['dados']),
-                    ),
-                    settings: RouteSettings(arguments: {'isUpdate': true}),
+              final pageBuilder = pageBuilders[tipo];
 
-                  ),
-                );
-              }              
-              else if(equipamento['tipo'] == 'Outros Tipos de Acomodação'){
+              if (pageBuilder != null) {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => OutrosTiposDeAcomodacao(
-                      hospedagemModel: OutrosTiposDeAcomodacaoModel.fromJson(
-                          equipamento['dados']),
-                    ),
-                    settings: RouteSettings(arguments: {'isUpdate': true}),
-
-                  ),
-                );
-              }else if(equipamento['tipo'] == 'Agência de Turismo'){
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AgenciasDeTurismo(
-                      infoModel: AgenciasDeTurismoModel.fromJson(
-                          equipamento['dados']),
-                    ),
-                    settings: RouteSettings(arguments: {'isUpdate': true}),
-
-                  ),
-                );
-              }
-              else if (equipamento['tipo'] == 'SistemaDeSeguranca') {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SistemaDeSegurancaEdit(
-                      sistemaModel: SistemaDeSegurancaModel.fromJson(
-                          equipamento['dados']),
-                    ),
-                  ),
-                );
-              } else if (equipamento['tipo'] == 'AlimentosEBebidas') {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AlimentosEBebidas(
-                      infoModel:
-                          AlimentosEBebidasModel.fromJson(equipamento['dados']),
-                    ),
-                    settings: RouteSettings(arguments: {'isUpdate': true}),
-
-                  ),
-                );
-              } else if (equipamento['tipo'] == 'Meios de Hospedagem') {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MeiosDeHospedagem(
-                      hospedagemModel:
-                          MeiosDeHospedagemModel.fromJson(equipamento['dados']),
-                    ),
+                    builder: (context) => pageBuilder(data),
                     settings: RouteSettings(arguments: {'isUpdate': true}),
                   ),
                 );
-              }
-              else if (equipamento['tipo'] == 'Parques') {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Parques(
-                      hospedagemModel:
-                          ParquesModel.fromJson(equipamento['dados']),
-                    ),
-                    settings: RouteSettings(arguments: {'isUpdate': true}),
-                  ),
+              } else {
+                print('ERRO: Tipo de equipamento desconhecido: $tipo');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text(
+                          'Erro: Tipo de formulário desconhecido ($tipo)')),
                 );
-              } 
-              
-              else if (equipamento['tipo'] ==
-                  'Informações Básicas do Município') {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => InformacoesBasicasDoMunicipio(
-                            infoModel: InformacoesBasicasModel.fromJson(
-                                equipamento['dados']),
-                          ),
-                      settings: RouteSettings(arguments: {'isUpdate': true})),
-                );
-              } else if (equipamento['tipo'] == 'Comércio Turístico') {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ComercioTuristico(
-                              infoModel: ComercioTuristicoModel.fromJson(
-                                  equipamento['dados']),
-                            ),
-                        settings:
-                            RouteSettings(arguments: {'isUpdate': true})));
-              } else if (equipamento['tipo'] ==
-                  'Locadora de Imóveis') {
-                Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LocadoraDeImoveis(
-                              infoModel: LocadoraDeImoveisModel.fromJson(
-                                  equipamento['dados']),
-                            ),
-                        settings:
-                            RouteSettings(arguments: {'isUpdate': true})));
               }
             },
             child: isadmin == true
@@ -702,14 +604,3 @@ String getDisplay(Map<String, dynamic> dados) {
   }
 }
 
-
-
-// //ElevatedButton(
-//                   onPressed: () async {
-//                     await DataSyncService().syncPending();
-//                     ScaffoldMessenger.of(context).showSnackBar(
-//                       const SnackBar(content: Text('Sincronização concluída!')),
-//                     );
-//                   },
-//                   child: const Text('Sincronizar agora'),
-//                 ),

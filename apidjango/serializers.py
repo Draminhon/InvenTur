@@ -283,6 +283,15 @@ class ParquesSerializer(serializers.ModelSerializer):
         model = Parques
         fields = '__all__'
 
+class EspacosDeDiversaoECulturaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EspacosDeDiversaoECultura
+        fields = '__all__'
+
+class InformacoesTuristicasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InformacoesTuristicas
+        fields = '__all__'
 
 class InformacoesBasicasSerializer(serializers.ModelSerializer):
     class Meta:

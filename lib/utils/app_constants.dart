@@ -24,6 +24,8 @@ class AppConstants {
   static const String TRANSPORTE_TURISTICO = "transporteturistico/";
   static const String SERVICO_PARA_EVENTOS = "servicoparaeventos/";
   static const String PARQUES = "parques/";
+  static const String ESPACOS_DE_DIVERSAO_E_CULTURA = "espacoparadiversaoecultura/";
+  static const String INFORMACAO_TURISTICA = "informacoesturisticas/";
   
     static const String SET_PESQUISA_STATUS = "pesquisa/<int:pk>/";
 
