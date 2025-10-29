@@ -129,6 +129,13 @@ class ServicosParaEventosViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]   
 
+class ParquesViewSet(viewsets.ModelViewSet):
+    queryset = Parques.objects.filter(is_active=True)
+    serializer_class = ParquesSerializer
+    
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
 class EquipamentosListView(APIView):
     def get(self, request, *args, **kwargs):
         pesquisa_id = request.query_params.get('pesquisa_id')
@@ -212,6 +219,11 @@ class EquipamentosListView(APIView):
             for servicoParaEvento in servicosParaEventos
         ]
         
+        parques = Parques.objects.filter(pesquisa__id=pesquisa_id,is_active=True)
+        parques__serialized = [
+            {"tipo": "Parques", "dados": ParquesSerializer(parque).data}
+            for parque in parques
+        ]
         
         # Combina os dados
         equipamentos = (
@@ -226,7 +238,8 @@ class EquipamentosListView(APIView):
             agenciasTurismo_serialized +
             transportesTuristicos_serialized +
             espacosParaEventos_serialized +
-            servicosParaEventos__serialized
+            servicosParaEventos__serialized +
+            parques__serialized
             )
 
         return Response(equipamentos)

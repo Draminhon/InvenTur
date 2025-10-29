@@ -607,3 +607,8 @@ class AgenciaDeTurismoAdmin(admin.ModelAdmin):
 @admin.register(EspacoParaEventos)
 class EspacoParaEventosAdmin(admin.ModelAdmin):
     list_display = [field.name for field in EspacoParaEventos._meta.fields]
+
+@admin.register(Parques)
+class ParquesAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in Parques._meta.fields]
+    

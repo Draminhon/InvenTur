@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ExpansionTileYoN extends StatefulWidget {
-  const ExpansionTileYoN({super.key, required this.getValue, this.optionModel});
+  const ExpansionTileYoN({super.key, required this.getValue, this.optionModel, this.options, this.isUpdate});
   final Function(String) getValue;
   final String? optionModel;
+  final bool? isUpdate;
+  final List<String>? options;
   @override
   State<ExpansionTileYoN> createState() => _ExpansionTileYoNState();
 }
 
 class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
-  String _option = 'não';
+  String _option = 'não' ;
     late final ExpansibleController _tileController;
 
   @override
@@ -18,10 +20,14 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
     // TODO: implement initState
     super.initState();
     _tileController = ExpansibleController();
-    if(widget.optionModel!=null){
+    if(widget.optionModel!=null && widget.isUpdate == true){
     _option = widget.optionModel!;
 
+    }else if(widget.optionModel!=null && widget.isUpdate == false){
+      _option = widget.options != null ? widget.options![0] : 'não';
     }
+
+
   }
 
   @override
@@ -31,7 +37,7 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
       children: [
         SizedBox(
          //   margin: EdgeInsets.only(bottom: sizeScreen.height * 0.01),
-            width: 410.w,
+            width: widget.options != null ? 520.w : 410.w,
             child: ExpansionTile(
               controller: _tileController,
               iconColor: Colors.white,
@@ -69,7 +75,7 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                       shape: ContinuousRectangleBorder(
                           borderRadius: BorderRadius.circular(25),),
                       title: ( Text(
-                        'sim',
+                        widget.options != null ? widget.options![0] : 'sim',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white,
@@ -78,7 +84,7 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                       )),
                       onTap: () {
                         setState(() {
-                        _option = 'sim';
+                        _option = widget.options != null ? widget.options![0] : 'sim';
                         
                         widget.getValue(_option);
                       });
@@ -99,7 +105,7 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                       dense: true,
                     
                       title: (Text(
-                        'não',
+                       widget.options != null ? widget.options![1] : 'não',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: Colors.white,
@@ -109,7 +115,7 @@ class _ExpansionTileYoNState extends State<ExpansionTileYoN> {
                       onTap: () {
 
                         setState(() {
-                          _option = 'não';
+                          _option =widget.options != null ? widget.options![1] : 'não';
                           widget.getValue(_option);
                           
                         });

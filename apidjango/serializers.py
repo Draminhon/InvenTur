@@ -278,6 +278,12 @@ class ServicosParaEventosSerializer(serializers.ModelSerializer):
         model = ServicosParaEventos
         fields = '__all__'
 
+class ParquesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Parques
+        fields = '__all__'
+
+
 class InformacoesBasicasSerializer(serializers.ModelSerializer):
     class Meta:
         model = InformacaoBasicaDoMunicipio

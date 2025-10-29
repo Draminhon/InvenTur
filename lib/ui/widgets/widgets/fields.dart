@@ -10,13 +10,14 @@ class ConditionalFieldsGroup extends StatefulWidget {
   final String? optionModelValue;
   final Map<String, dynamic> valoresJson;
   final bool isUpdate;
+  final List<String>? options;
   const ConditionalFieldsGroup(
       {super.key,
       required this.title,
       required this.jsonKey,
       required this.valoresJson,
       required this.isUpdate,
-      required this.children, this.optionModelValue});
+      required this.children, this.optionModelValue, this.options});
 
   @override
   State<ConditionalFieldsGroup> createState() => _ConditionalFieldsGroupState();
@@ -55,6 +56,8 @@ class _ConditionalFieldsGroupState extends State<ConditionalFieldsGroup> {
             Expanded(
               flex: 3,
                 child: ExpansionTileYoN(
+                  isUpdate: widget.isUpdate,
+                  options: widget.options,
                   optionModel: widget.valoresJson[widget.jsonKey] ?? 'não',
                   getValue: (p0) {
                     if (widget.valoresJson[widget.jsonKey] == p0) return;

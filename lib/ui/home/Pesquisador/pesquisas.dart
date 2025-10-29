@@ -12,9 +12,11 @@ import 'package:inventur/models/forms/forms%20B/meios_hospedagem_model.dart';
 import 'package:inventur/models/forms/forms%20B/outros_tipos_de_acomodacao_model.dart';
 import 'package:inventur/models/forms/forms%20A/rodovia_model.dart';
 import 'package:inventur/models/forms/forms%20A/sistema_de_seguranca_model.dart';
+import 'package:inventur/models/forms/forms%20B/parques_model.dart';
 import 'package:inventur/models/forms/forms%20B/servicos_para_eventos_model.dart';
 import 'package:inventur/models/forms/forms%20B/transporte_turistico_model.dart';
 import 'package:inventur/ui/forms/formsB/espacos_para_eventos.dart';
+import 'package:inventur/ui/forms/formsB/parques.dart';
 import 'package:inventur/ui/forms/formsB/servicos_para_eventos.dart';
 import 'package:inventur/ui/screens/forms%20screens/formA_screen.dart';
 import 'package:inventur/ui/screens/forms%20screens/formB._screen.dart';
@@ -498,7 +500,21 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                     settings: RouteSettings(arguments: {'isUpdate': true}),
                   ),
                 );
-              } else if (equipamento['tipo'] ==
+              }
+              else if (equipamento['tipo'] == 'Parques') {
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Parques(
+                      hospedagemModel:
+                          ParquesModel.fromJson(equipamento['dados']),
+                    ),
+                    settings: RouteSettings(arguments: {'isUpdate': true}),
+                  ),
+                );
+              } 
+              
+              else if (equipamento['tipo'] ==
                   'Informações Básicas do Município') {
                 Navigator.pushReplacement(
                   context,

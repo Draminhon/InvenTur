@@ -19,6 +19,7 @@ router.register(r'agenciadeturismo', AgenciaDeTurismoViewSet, basename='agencia 
 router.register(r'transporteturistico', TransporteTuristicoViewSet, basename='transporte turistico')
 router.register(r'espacoparaeventos', EspacoParaEventosViewSet, basename='Espaco Para Eventos' )
 router.register(r'servicoparaeventos', ServicosParaEventosViewSet, basename='Servicos Para Eventos')
+router.register(r'parques', ParquesViewSet, basename='Parques')
 urlpatterns = [
 
     path('', include(router.urls)),

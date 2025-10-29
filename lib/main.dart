@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:inventur/providers/providers.dart';
 import 'package:inventur/ui/forms/formsB/espacos_para_eventos.dart';
+import 'package:inventur/ui/forms/formsB/parques.dart';
 import 'package:inventur/ui/forms/formsB/servicos_para_eventos.dart';
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/ui/screens/auth%20screens/login_page.dart';
@@ -129,7 +130,8 @@ class _MyAppState extends State<MyApp> {
           '/AgenciasDeTurismo': (_) => AgenciasDeTurismo(),
           '/TransporteTuristico': (_) =>  TransporteTuristico(),
           '/EspacoParaEventos': (_) => EspacosParaEventos(),
-          '/ServicosParaEventos': (_) => ServicosParaEventos()
+          '/ServicosParaEventos': (_) => ServicosParaEventos(),
+          '/Parques': (_) => Parques(),
         },
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
