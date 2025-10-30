@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:inventur/providers/providers.dart';
+import 'package:inventur/ui/forms/formsB/entidades_associativas.dart';
 import 'package:inventur/ui/forms/formsB/espacos_de_diversao_e_cultura.dart';
 import 'package:inventur/ui/forms/formsB/espacos_para_eventos.dart';
+import 'package:inventur/ui/forms/formsB/guiamento_e_conducao_turistica.dart';
 import 'package:inventur/ui/forms/formsB/informacoes_turisticas.dart';
+import 'package:inventur/ui/forms/formsB/instalacoes_esportivas.dart';
 import 'package:inventur/ui/forms/formsB/parques.dart';
 import 'package:inventur/ui/forms/formsB/servicos_para_eventos.dart';
 //import 'package:google_fonts/google_fonts.dart';
@@ -136,6 +139,9 @@ class _MyAppState extends State<MyApp> {
           '/Parques': (_) => Parques(),
           '/EspacosDeDiversao': (_) => EspacosDeDiversaoECultura(),
           '/InformacoesTuristicas': (_) => InformacoesTuristicas(),
+          '/EntidadesAssociativas': (_) => EntidadesAssociativas(),
+          '/GuiamentoEConducaoTuristica': (_) => GuiamentoEConducaoTurististica(),
+          '/InstalacoesEsportivas': (_) => InstalacoesEsportivas()
         },
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

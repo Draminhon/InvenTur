@@ -159,6 +159,84 @@ class LocadorasDeImoveisSerializer(serializers.ModelSerializer):
                 instance.servicos_especializados.add(servico)
         
         return instance
+    
+class InformacoesGuiamentoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InformacoesGuiamento
+        fields = ['nome_completo', 'cpf', 'email', 'endereco', 'telefone']
+
+class InformacoesGuiamentoCadasturSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InformacoesGuiamentoCadastur
+        fields = ['escolaridade', 'servicos_especializados_formulario', 'numero_cadastur', 'outras_informacoes', 'outros_cadastros']
+
+class GuiamentoEConducaoTuristicaSerializer(serializers.ModelSerializer):
+    contatos = InformacoesGuiamentoSerializer(many=True)  # Aninhando os dados completos
+    servicos_especializados = InformacoesGuiamentoCadasturSerializer(many=True)
+
+    
+    class Meta:
+        model = GuiamentoEConducaoTuristica
+        fields = [
+            'id', 'pesquisa', 'contatos', 'subtipos', 'servicos_especializados',
+            'tipo_formulario', 'uf', 'regiao_turistica', 'municipio',
+            'tipo', 'observacoes', 'referencias',
+            'nome_pesquisador', 'telefone_pesquisador', 'email_pesquisador',
+            'nome_coordenador', 'telefone_coordenador', 'email_coordenador'
+        ]
+
+    def create(self, validated_data):
+        contatos_data = validated_data.pop('contatos', [])
+        servicos_data = validated_data.pop('servicos_especializados', [])
+        
+        sistema_de_seguranca = GuiamentoEConducaoTuristica.objects.create(**validated_data)
+        
+        for contato_data in contatos_data:
+            contato = InformacoesGuiamento.objects.create(**contato_data)
+            sistema_de_seguranca.contatos.add(contato)
+        
+        for servico_data in servicos_data:
+            servico = InformacoesGuiamentoCadastur.objects.create(**servico_data)
+            sistema_de_seguranca.servicos_especializados.add(servico)
+        
+        return sistema_de_seguranca
+
+    def update(self, instance, validated_data):
+        contatos_data = validated_data.pop('contatos', None)
+        servicos_data = validated_data.pop('servicos_especializados', None)
+        
+        instance.tipo_formulario = validated_data.get('tipo_formulario', instance.tipo_formulario)
+        instance.uf = validated_data.get('uf', instance.uf)
+        instance.regiao_turistica = validated_data.get('regiao_turistica', instance.regiao_turistica)
+        instance.municipio = validated_data.get('municipio', instance.municipio)
+        instance.tipo = validated_data.get('tipo', instance.tipo)
+        instance.subtipos = validated_data.get('subtipos', instance.subtipos)
+        instance.observacoes = validated_data.get('observacoes', instance.observacoes)
+        instance.referencias = validated_data.get('referencias', instance.referencias)
+        instance.nome_pesquisador = validated_data.get('nome_pesquisador', instance.nome_pesquisador)
+        instance.telefone_pesquisador = validated_data.get('telefone_pesquisador', instance.telefone_pesquisador)
+        instance.email_pesquisador = validated_data.get('email_pesquisador', instance.email_pesquisador)
+        instance.nome_coordenador = validated_data.get('nome_coordenador', instance.nome_coordenador)
+        instance.telefone_coordenador = validated_data.get('telefone_coordenador', instance.telefone_coordenador)
+        instance.email_coordenador = validated_data.get('email_coordenador', instance.email_coordenador)
+
+        # Salva os campos principais atualizados
+        instance.save()
+
+        
+        if contatos_data is not None:
+            instance.contatos.clear()
+            for contato_data in contatos_data:
+                contato = InformacoesGuiamento.objects.create(**contato_data)
+                instance.contatos.add(contato)
+        
+        if servicos_data is not None:
+            instance.servicos_especializados.clear()
+            for servico_data in servicos_data:
+                servico = InformacoesGuiamentoCadastur.objects.create(**servico_data)
+                instance.servicos_especializados.add(servico)
+        
+        return instance
 
 class SistemaDeSegurancaSerializer(serializers.ModelSerializer):
     contatos = ContatoInfoSerializer(many=True)  # Aninhando os dados completos
@@ -292,10 +370,20 @@ class InformacoesTuristicasSerializer(serializers.ModelSerializer):
     class Meta:
         model = InformacoesTuristicas
         fields = '__all__'
+        
+class EntidadesAssociativasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EntidadesAssociativas
+        fields = '__all__'
 
 class InformacoesBasicasSerializer(serializers.ModelSerializer):
     class Meta:
         model = InformacaoBasicaDoMunicipio
+        fields = '__all__'
+        
+class InstalacoesEsportivasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InstalacoesEsportivas
         fields = '__all__'
 
 class EquipamentoSerializer(serializers.Serializer):

@@ -1,27 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/models/forms/forms%20A/locadora_de_imoveis_model.dart';
+import 'package:inventur/models/forms/forms%20B/guiamento_e_conducao_turisttica_model.dart';
 import 'package:inventur/ui/widgets/radioButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/ui/widgets/text%20fields/tables.dart';
 import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/services/form_service.dart';
+import 'package:inventur/ui/widgets/widgets/checkBox.dart';
 import 'package:inventur/utils/app_constants.dart';
 import '../../widgets/text fields/customTextField.dart';
 bool isUpdate = false;
 
-class LocadoraDeImoveis extends StatefulWidget {
-  final LocadoraDeImoveisModel? infoModel;
+class GuiamentoEConducaoTurististica extends StatefulWidget {
+  final GuiamentoEConducaoTurististicaModel? infoModel;
 
-  LocadoraDeImoveis({super.key, this.infoModel});
+  GuiamentoEConducaoTurististica({super.key, this.infoModel});
 
   @override
-  State<LocadoraDeImoveis> createState() => _LocadoraDeImoveisState();
+  State<GuiamentoEConducaoTurististica> createState() => _GuiamentoEConducaoTurististicaState();
 }
 
 FormService _formService = FormService();
 
-class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
+class _GuiamentoEConducaoTurististicaState extends State<GuiamentoEConducaoTurististica> {
   String pesquisadorNome = '';
   String pesquisadorTelefone = '';
   String pesquisadorEmail = '';
@@ -66,27 +67,27 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
 
     if (qtdeInfo >= 0) {
       for (int i = 1; i < qtdeInfo; i++) {
-        sections.add(TabelaInfoGerais());
+        sections.add(TabelaGuiamentoTuristico());
       }
       for (int i = 0; i < qtdeInfo; i++) {
         if (i < widget.infoModel!.contatos!.length) {
           var contato = widget.infoModel!.contatos![i];
-          sections[i].fillForm(contato.razao_social!, contato.nome_fantasia!,
-              contato.cnpj!, contato.endereco!, contato.telefone!);
+          sections[i].fillForm(contato.nome_completo!, contato.cpf!,
+              contato.endereco!, contato.email!, contato.telefone!);
         }
       }
     }
 
     if (qtdeServicosEspecializados >= 0) {
       for (int i = 1; i < qtdeServicosEspecializados; i++) {
-        sections2.add(TabelaInfoGerais2());
+        sections2.add(TabelaGuiamentoTuristico2());
       }
 
       for (int i = 0; i < qtdeServicosEspecializados; i++) {
         if (i < widget.infoModel!.servicosEspecializados!.length) {
           var servicos = widget.infoModel!.servicosEspecializados![i];
-          sections2[i].fillForm(servicos.email!, servicos.site!,
-              servicos.tipoImoveis!, servicos.outrasInfo!);
+          sections2[i].fillForm(servicos.escolaridade!, servicos.servicos_especializados_formulario!,
+              servicos.numero_cadastur!, servicos.outros_cadastros!, servicos.outras_informacoes!);
         }
       }
     }
@@ -100,14 +101,14 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
   TextEditingController observacoes = TextEditingController();
   TextEditingController referencias = TextEditingController();
   TextEditingController regiao_turistica = TextEditingController();
-  List<TabelaInfoGerais> sections = [TabelaInfoGerais()];
-  List<TabelaInfoGerais2> sections2 = [TabelaInfoGerais2()];
+  List<TabelaGuiamentoTuristico> sections = [TabelaGuiamentoTuristico()];
+  List<TabelaGuiamentoTuristico2> sections2 = [TabelaGuiamentoTuristico2()];
   TextEditingController telefone_coordenador = TextEditingController();
   TextEditingController telefone_pesquisador = TextEditingController();
   TextEditingController tipo = TextEditingController();
   final TextEditingController uf = TextEditingController();
   final Map<String, dynamic> valoresjson = {
-    'tipo_formulario': 'Locadora de Imóveis',
+    'tipo_formulario': 'Guiamento E Condução Turística',
     'uf': null,
     'regiao_turistica': null,
     'municipio': null,
@@ -317,13 +318,19 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
                     RadioFormField(
                       title: 'Tipo',
                       options: [
-                         'Locadoras de imóveis para temporada'
+                         'Guiamento e condução turística'
                       ],
                       onSaved: (newValue) {
                         valoresjson['tipo'] = newValue;
                       },
                       initialValue: isUpdate ? widget.infoModel!.tipo : ''
                     ),
+
+                    CheckboxGroupFormField(
+                      title: 'Subtipos',
+                      initialValue: isUpdate ? widget.infoModel!.subtipos : [],
+                      onSaved: (newValue) => valoresjson['subtipos'] = newValue,
+                      options: ['Guia de turismo', 'Monitor', 'Condutor', 'outro']),
                     SizedBox(
                       height: sizeScreen.height * 0.03,
                     ),
@@ -384,7 +391,7 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              sections.add(TabelaInfoGerais());
+                              sections.add(TabelaGuiamentoTuristico());
                             });
                           },
                           child: Container(
@@ -462,7 +469,7 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
                         GestureDetector(
                           onTap: () {
                             setState(() {
-                              sections2.add(TabelaInfoGerais2());
+                              sections2.add(TabelaGuiamentoTuristico2());
                             });
                           },
                           child: Container(
@@ -570,13 +577,16 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
                             //      SnackBar(content: Text('processing data')));
 
                             _formKey.currentState!.save();
-                            debugPrint(valoresjson.toString(), wrapWidth: 1024);
-                          isUpdate ? _formService.updateForm(widget.infoModel!.id!, valoresjson, AppConstants.LOCADORA_IMOVEIS) :  _formService.sendForm(valoresjson,
-                                AppConstants.LOCADORA_IMOVEIS);
+                          isUpdate ? _formService.updateForm(widget.infoModel!.id!, valoresjson, AppConstants.GUIAMENTO_E_CONDUCAO_TURISTICA) :  _formService.sendForm(valoresjson,
+                                AppConstants.GUIAMENTO_E_CONDUCAO_TURISTICA);
+      
+
+                          }
+                                                     debugPrint(valoresjson.toString(), wrapWidth: 1024);
+
                             sections2
                                 .forEach((element) => print(element.getData()));
 
-                          }
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: Colors.green[800],

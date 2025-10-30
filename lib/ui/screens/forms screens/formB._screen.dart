@@ -68,7 +68,7 @@ class FormularioB extends StatelessWidget {
              ]),
 
             ExpansionTileA(titulo: 'Instalações', minhaLista: const [
-              Tilee(texto: 'Instalações esportivas', routeName: '/Placeholder'),
+              Tilee(texto: 'Instalações esportivas', routeName: '/InstalacoesEsportivas'),
               //Tilee(texto: 'Instalações náuticas', routeName: '/Placeholder'),
               SizedBox(),
               SizedBox(),
@@ -89,8 +89,8 @@ class FormularioB extends StatelessWidget {
               SizedBox()
             ]),
             ContainerA(form: 'Informações Turísticas', routeName: '/InformacoesTuristicas'),
-            ContainerA(form: 'Entidades associativas e similares', routeName: '/Placeholder'),
-            ContainerA(form: 'Guiamento e condução turística', routeName: '/Placeholder'),
+            ContainerA(form: 'Entidades associativas e similares', routeName: '/EntidadesAssociativas'),
+            ContainerA(form: 'Guiamento e condução turística', routeName: '/GuiamentoEConducaoTuristica'),
 
 
 

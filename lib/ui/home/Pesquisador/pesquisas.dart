@@ -7,9 +7,12 @@ import 'package:inventur/models/forms/forms%20B/alimentos_bebidas_model.dart';
 import 'package:inventur/models/forms/forms%20A/comercio_turistico_model.dart';
 import 'package:inventur/models/forms/forms%20A/informacoes_basicas_model.dart';
 import 'package:inventur/models/forms/forms%20A/locadora_de_imoveis_model.dart';
+import 'package:inventur/models/forms/forms%20B/entidades_associativas_model.dart';
 import 'package:inventur/models/forms/forms%20B/espaco_para_eventos_model.dart';
 import 'package:inventur/models/forms/forms%20B/espacos_de_diversao_e_cultura_model.dart';
+import 'package:inventur/models/forms/forms%20B/guiamento_e_conducao_turisttica_model.dart';
 import 'package:inventur/models/forms/forms%20B/informacoes_turisticas_model.dart';
+import 'package:inventur/models/forms/forms%20B/instalacoes_esportivas_model.dart';
 import 'package:inventur/models/forms/forms%20B/meios_hospedagem_model.dart';
 import 'package:inventur/models/forms/forms%20B/outros_tipos_de_acomodacao_model.dart';
 import 'package:inventur/models/forms/forms%20A/rodovia_model.dart';
@@ -17,9 +20,13 @@ import 'package:inventur/models/forms/forms%20A/sistema_de_seguranca_model.dart'
 import 'package:inventur/models/forms/forms%20B/parques_model.dart';
 import 'package:inventur/models/forms/forms%20B/servicos_para_eventos_model.dart';
 import 'package:inventur/models/forms/forms%20B/transporte_turistico_model.dart';
+import 'package:inventur/ui/forms/formsA/comercio_turistico.dart';
+import 'package:inventur/ui/forms/formsB/entidades_associativas.dart';
 import 'package:inventur/ui/forms/formsB/espacos_de_diversao_e_cultura.dart';
 import 'package:inventur/ui/forms/formsB/espacos_para_eventos.dart';
+import 'package:inventur/ui/forms/formsB/guiamento_e_conducao_turistica.dart';
 import 'package:inventur/ui/forms/formsB/informacoes_turisticas.dart';
+import 'package:inventur/ui/forms/formsB/instalacoes_esportivas.dart';
 import 'package:inventur/ui/forms/formsB/parques.dart';
 import 'package:inventur/ui/forms/formsB/servicos_para_eventos.dart';
 import 'package:inventur/ui/screens/forms%20screens/formA_screen.dart';
@@ -27,7 +34,6 @@ import 'package:inventur/ui/screens/forms%20screens/formB._screen.dart';
 import 'package:inventur/ui/screens/forms%20screens/formC_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/forms/formsA/comercio_turistico.dart';
 import 'package:inventur/ui/forms/formsA/informacoes_basicas_do_municipio.dart';
 import 'package:inventur/ui/forms/formsA/locadora_de_imoveis.dart';
 import 'package:inventur/ui/forms/formsA/rodovia.dart';
@@ -423,6 +429,17 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                 infoModel: ComercioTuristicoModel.fromJson(data)),
             'Locadora de Imóveis': (data) => LocadoraDeImoveis(
                 infoModel: LocadoraDeImoveisModel.fromJson(data)),
+            'Entidades Associativas e Similares': (data) =>
+                EntidadesAssociativas(
+                    hospedagemModel: EntidadesAssociativasModel.fromJson(data)),
+            'Guiamento e Condução Turística': (data) =>
+                GuiamentoEConducaoTurististica(
+                    infoModel:
+                        GuiamentoEConducaoTurististicaModel.fromJson(data)),
+                                    'Instalações Esportivas': (data) =>
+                InstalacoesEsportivas(
+                    hospedagemModel:
+                        InstalacoesEsportivasModel.fromJson(data)),
           };
           return GestureDetector(
             onTap: () {
@@ -582,13 +599,13 @@ String getDisplay(Map<String, dynamic> dados) {
   final tipoFormulario = dados['tipo_formulario'] ?? '';
   switch (tipoFormulario) {
     case 'Rodovia':
-      return '$tipoFormulario\n${dados['nome_oficial']}';
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Sistema de Segurança':
-      return '$tipoFormulario\n${dados['tipo']}';
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Alimentos e bebidas':
-      return '$tipoFormulario\n${dados['nomeFantasia']}';
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Meios de Hospedagem':
-      return '$tipoFormulario\n${dados['nomeFantasia']}';
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Informações Básicas do Município':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Comércio Turístico':
@@ -599,8 +616,21 @@ String getDisplay(Map<String, dynamic> dados) {
       return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Transporte Turistico':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Serviços para Eventos':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Espaço para Eventos':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Parques':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Espaços de Diversão e Cultura':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Informações Turísticas':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Locadora de Imóveis':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Entidades Associativas e Similares':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
     default:
       return '$tipoFormulario\n${dados['tipo'] ?? ''}';
   }
 }
-

@@ -53,7 +53,18 @@ class LocadoraDeImoveisViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
 
+class GuiamentoEConducaoTuristicaViewSet(viewsets.ModelViewSet):
 
+    queryset = GuiamentoEConducaoTuristica.objects.filter(is_active=True)
+    serializer_class = GuiamentoEConducaoTuristicaSerializer
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def partial_update(self, request, *args, **kwargs):
+        kwargs['partial'] = True
+        return super().update(request, *args, **kwargs)
+    
 class AlimentosEBebidasViewSet(viewsets.ModelViewSet):
 
     queryset = AlimentosEBebidas.objects.filter(is_active=True)
@@ -149,7 +160,21 @@ class InformacoesTuristicasViewSet(viewsets.ModelViewSet):
     
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+
+class EntidadesAssociativasViewSet(viewsets.ModelViewSet):
+    queryset = EntidadesAssociativas.objects.filter(is_active=True)
+    serializer_class = EntidadesAssociativasSerializer
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
     
+class InstalacoesEsportivasViewSet(viewsets.ModelViewSet):
+    queryset = InstalacoesEsportivas.objects.filter(is_active=True)
+    serializer_class = InstalacoesEsportivasSerializer
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+        
 class EquipamentosListView(APIView):
     def get(self, request, *args, **kwargs):
         pesquisa_id = request.query_params.get('pesquisa_id')
@@ -250,6 +275,25 @@ class EquipamentosListView(APIView):
             {"tipo": "Informações Turisticas", "dados": InformacoesTuristicasSerializer(informacaoTuristica).data}
             for informacaoTuristica in informacoesTuristicas
         ]
+        
+        entidadesAssociativas = EntidadesAssociativas.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        entidadesAssociativas__serialized = [
+            {"tipo": "Entidades Associativas e Similares", "dados": EntidadesAssociativasSerializer(entidadeAssociativa).data}
+            for entidadeAssociativa in entidadesAssociativas
+        ]
+        
+        guiamentosTuristicos = GuiamentoEConducaoTuristica.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        guiamentosTuristicos_serialized = [
+            {"tipo": "Guiamento e Condução Turística", "dados": GuiamentoEConducaoTuristicaSerializer(locadoraImovel).data}
+            for locadoraImovel in guiamentosTuristicos
+        ]
+        
+        intalacoesEsportivas = InstalacoesEsportivas.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        instalacoesEsportivas_serialized = [
+            {"tipo": "Instalações Esportivas", "dados": InstalacoesEsportivasSerializer(instalacaoEsportiva).data}
+            for instalacaoEsportiva in intalacoesEsportivas
+        ]
+        
         # Combina os dados
         equipamentos = (
             rodovias_serialized +
@@ -266,7 +310,10 @@ class EquipamentosListView(APIView):
             servicosParaEventos__serialized +
             parques__serialized +
             espacosParaDiversao__serialized +
-            informacoesTuristicas__serialized
+            informacoesTuristicas__serialized +
+            entidadesAssociativas__serialized +
+            guiamentosTuristicos_serialized +
+            instalacoesEsportivas_serialized
             )
 
         return Response(equipamentos)

@@ -32,7 +32,13 @@ class _ConditionalFieldsGroupState extends State<ConditionalFieldsGroup> {
     if(widget.isUpdate && widget.optionModelValue != null){
       widget.valoresJson[widget.jsonKey] = widget.optionModelValue;
     }else{
+      if(widget.options != null){
+      widget.valoresJson.putIfAbsent(widget.jsonKey, () => widget.options![0]);
+        
+      }else{
       widget.valoresJson.putIfAbsent(widget.jsonKey, () => 'não');
+
+      }
     }
   }
 

@@ -611,4 +611,30 @@ class EspacoParaEventosAdmin(admin.ModelAdmin):
 @admin.register(Parques)
 class ParquesAdmin(admin.ModelAdmin):
     list_display = [field.name for field in Parques._meta.fields]
+
+@admin.register(GuiamentoEConducaoTuristica)
+class GuiamentoEConducaoTuristicaAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in GuiamentoEConducaoTuristica._meta.fields]
+
+@admin.register(InformacoesGuiamento)
+class InformacoesGuiamentoAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in InformacoesGuiamento._meta.fields]
+@admin.register(InformacoesGuiamentoCadastur)
+class InformacoesGuiamentoCadasturAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in InformacoesGuiamentoCadastur._meta.fields]
     
+@admin.register(EspacosDeDiversaoECultura)
+class EspacosDeDiversaoECulturaAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in EspacosDeDiversaoECultura._meta.fields]  
+    
+@admin.register(InstalacoesEsportivas)
+class InstalacoesEsportivasAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in InstalacoesEsportivas._meta.fields]  
+
+@admin.register(InformacoesTuristicas)
+class InformacoesTuristicasAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in InformacoesTuristicas._meta.fields]  
+    
+@admin.register(EntidadesAssociativas)
+class EntidadesAssociativasAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in EntidadesAssociativas._meta.fields]  

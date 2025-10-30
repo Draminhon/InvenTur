@@ -26,7 +26,11 @@ class AppConstants {
   static const String PARQUES = "parques/";
   static const String ESPACOS_DE_DIVERSAO_E_CULTURA = "espacoparadiversaoecultura/";
   static const String INFORMACAO_TURISTICA = "informacoesturisticas/";
-  
+  static const String ENTIDADES_ASSOCIATIVAS = 'entidadesassociativas/';
+  static const String GUIAMENTO_E_CONDUCAO_TURISTICA = 'guiamentoeconducaoturistica/';
+  static const String INSTALACOES_ESPORTIVAS = 'instalacoesesportivas/';
+
+
     static const String SET_PESQUISA_STATUS = "pesquisa/<int:pk>/";
 
   static const Color MAIN_GREEN = Color.fromARGB(255, 55, 111, 60);
