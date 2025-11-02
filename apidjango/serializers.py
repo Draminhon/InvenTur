@@ -376,6 +376,16 @@ class EntidadesAssociativasSerializer(serializers.ModelSerializer):
         model = EntidadesAssociativas
         fields = '__all__'
 
+class UnidadesDeConservacaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UnidadesDeConservacao
+        fields = '__all__'
+
+class EventosProgramadosSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventosProgramados
+        fields = '__all__'
+        
 class InformacoesBasicasSerializer(serializers.ModelSerializer):
     class Meta:
         model = InformacaoBasicaDoMunicipio

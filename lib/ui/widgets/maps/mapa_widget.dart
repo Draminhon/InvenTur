@@ -33,7 +33,8 @@ class _MapaWidgetState extends State<MapaWidget> {
     final sizeScreen = MediaQuery.sizeOf(context);
     final double currentMapHeight =
         _isFullScreen ? sizeScreen.height * 0.8 : _initialMapHeight;
-    return SizedBox(
+    return Container(
+      margin: EdgeInsets.only(bottom: 25.h),
         height: _isFullScreen ? currentMapHeight : currentMapHeight,
         width: 1300.h,
         child: GestureDetector(

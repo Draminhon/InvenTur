@@ -174,7 +174,20 @@ class InstalacoesEsportivasViewSet(viewsets.ModelViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-        
+
+class UnidadesDeConservacaoViewSet(viewsets.ModelViewSet):
+    queryset = UnidadesDeConservacao.objects.filter(is_active=True)
+    serializer_class = UnidadesDeConservacaoSerializer
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    
+class EventosProgramadosViewSet(viewsets.ModelViewSet):
+    queryset = EventosProgramados.objects.filter(is_active=True)
+    serializer_class = EventosProgramadosSerializer
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 class EquipamentosListView(APIView):
     def get(self, request, *args, **kwargs):
         pesquisa_id = request.query_params.get('pesquisa_id')
@@ -294,6 +307,17 @@ class EquipamentosListView(APIView):
             for instalacaoEsportiva in intalacoesEsportivas
         ]
         
+        unidadesConservacao = UnidadesDeConservacao.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        unidadesConservacao_serialized = [
+            {"tipo": "Unidades De Conservação", "dados": UnidadesDeConservacaoSerializer(unidadeConservacao).data}
+            for unidadeConservacao in unidadesConservacao
+        ]
+        
+        eventosProgramadoss = EventosProgramados.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        eventosProgramadoss_serialized = [
+            {"tipo": "Eventos Programados", "dados": EventosProgramadosSerializer(eventoProgramado).data}
+            for eventoProgramado in eventosProgramadoss
+        ]
         # Combina os dados
         equipamentos = (
             rodovias_serialized +
@@ -313,7 +337,9 @@ class EquipamentosListView(APIView):
             informacoesTuristicas__serialized +
             entidadesAssociativas__serialized +
             guiamentosTuristicos_serialized +
-            instalacoesEsportivas_serialized
+            instalacoesEsportivas_serialized +
+            unidadesConservacao_serialized +
+            eventosProgramadoss_serialized
             )
 
         return Response(equipamentos)

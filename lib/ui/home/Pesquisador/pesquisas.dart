@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:inventur/models/forms/Forms%20C/eventos_programados_model.dart';
+import 'package:inventur/models/forms/Forms%20C/unidades_de_conservacao_model.dart';
 import 'package:inventur/models/forms/forms%20B/agencia_de_turismo_model.dart';
 import 'package:inventur/models/forms/forms%20B/alimentos_bebidas_model.dart';
 import 'package:inventur/models/forms/forms%20A/comercio_turistico_model.dart';
@@ -29,6 +31,8 @@ import 'package:inventur/ui/forms/formsB/informacoes_turisticas.dart';
 import 'package:inventur/ui/forms/formsB/instalacoes_esportivas.dart';
 import 'package:inventur/ui/forms/formsB/parques.dart';
 import 'package:inventur/ui/forms/formsB/servicos_para_eventos.dart';
+import 'package:inventur/ui/forms/formsC/eventos_programados.dart';
+import 'package:inventur/ui/forms/formsC/unidades_de_conservacao.dart';
 import 'package:inventur/ui/screens/forms%20screens/formA_screen.dart';
 import 'package:inventur/ui/screens/forms%20screens/formB._screen.dart';
 import 'package:inventur/ui/screens/forms%20screens/formC_screen.dart';
@@ -436,10 +440,15 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                 GuiamentoEConducaoTurististica(
                     infoModel:
                         GuiamentoEConducaoTurististicaModel.fromJson(data)),
-                                    'Instalações Esportivas': (data) =>
-                InstalacoesEsportivas(
-                    hospedagemModel:
-                        InstalacoesEsportivasModel.fromJson(data)),
+            'Instalações Esportivas': (data) => InstalacoesEsportivas(
+                hospedagemModel: InstalacoesEsportivasModel.fromJson(data)),
+            'Unidades De Conservação': (data) => UnidadesDeConservacao(
+                  hospedagemModel: UnidadesDeConservacaoModel.fromJson(data),
+                ),
+
+            'Eventos Programados': (data) => EventosProgramados(
+              hospedagemModel: EventosProgramadosModel.fromJson(data),
+            )
           };
           return GestureDetector(
             onTap: () {
