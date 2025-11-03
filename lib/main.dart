@@ -11,6 +11,7 @@ import 'package:inventur/ui/forms/formsB/instalacoes_esportivas.dart';
 import 'package:inventur/ui/forms/formsB/parques.dart';
 import 'package:inventur/ui/forms/formsB/servicos_para_eventos.dart';
 import 'package:inventur/ui/forms/formsC/eventos_programados.dart';
+import 'package:inventur/ui/forms/formsC/gastronomia_artesanato_trabalhos_manuais.dart';
 import 'package:inventur/ui/forms/formsC/unidades_de_conservacao.dart';
 //import 'package:google_fonts/google_fonts.dart';
 import 'package:inventur/ui/screens/auth%20screens/login_page.dart';
@@ -145,7 +146,8 @@ class _MyAppState extends State<MyApp> {
           '/GuiamentoEConducaoTuristica': (_) => GuiamentoEConducaoTurististica(),
           '/InstalacoesEsportivas': (_) => InstalacoesEsportivas(),
           '/UnidadesDeConservacao': (_) => UnidadesDeConservacao(),
-          '/EventosProgramados': (_) => EventosProgramados()
+          '/EventosProgramados': (_) => EventosProgramados(),
+          '/GastronomiaArtesanatoTrabalhosManuais': (_) => GastronomiaArtesanatoTrabalhosManuais()
         },
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,

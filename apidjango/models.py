@@ -201,6 +201,66 @@ class InformacoesGuiamentoCadastur(models.Model):
     numero_cadastur = models.CharField(max_length=255, null=True, blank=True)
     outras_informacoes = models.CharField(max_length=255, null=True, blank=True)
     outros_cadastros = models.CharField(max_length=255, null=True, blank=True)
+    
+class GastronomiaArtesanato(Base):
+    contatos = models.ManyToManyField("GastronomiaArtesanatoInfo", related_name="sistemas_de_seguranca")
+    servicos_especializados = models.ManyToManyField("GastronomiaArtesanatoInfoAtelie", related_name="sistemas_de_servicos_especializados")
+    subtipos = models.JSONField(null=True, blank=True)
+    nomeProduto = models.CharField(max_length=255, blank=True, null=True)
+    historicoProduto01 = models.CharField(max_length=255, blank=True, null=True)
+    historicoProduto02 = models.CharField(max_length=255, blank=True, null=True)
+    historicoProduto03 = models.CharField(max_length=255, blank=True, null=True)
+    historicoProduto04 = models.CharField(max_length=255, blank=True, null=True)
+    modoPreparo01 = models.CharField(max_length=255, blank=True, null=True)
+    modoPreparo02 = models.CharField(max_length=255, blank=True, null=True)
+    modoPreparo03 = models.CharField(max_length=255, blank=True, null=True)
+    modoPreparo04 = models.CharField(max_length=255, blank=True, null=True)
+    
+    integraRoteiros = models.CharField(max_length=255, blank=True, null=True)
+    integraGuiaTuristico = models.CharField(max_length=255, blank=True, null=True)
+    roteiro1 = models.CharField(max_length=255, blank=True, null=True)
+    siteRoteiro1 = models.CharField(max_length=255, blank=True, null=True)
+    roteiro2 = models.CharField(max_length=255, blank=True, null=True)
+    siteRoteiro2 = models.CharField(max_length=255, blank=True, null=True)
+    roteiro3 = models.CharField(max_length=255, blank=True, null=True)
+    siteRoteiro3 = models.CharField(max_length=255, blank=True, null=True)
+    roteiro4 = models.CharField(max_length=255, blank=True, null=True)
+    siteRoteiro4 = models.CharField(max_length=255, blank=True, null=True)
+    roteiro5 = models.CharField(max_length=255, blank=True, null=True)
+    siteRoteiro5 = models.CharField(max_length=255, blank=True, null=True)
+    Guia1 = models.CharField(max_length=255, blank=True, null=True)
+    siteGuia1 = models.CharField(max_length=255, blank=True, null=True)
+    Guia2 = models.CharField(max_length=255, blank=True, null=True)
+    siteGuia2 = models.CharField(max_length=255, blank=True, null=True)
+    Guia3 = models.CharField(max_length=255, blank=True, null=True)
+    siteGuia3 = models.CharField(max_length=255, blank=True, null=True)
+    Guia4 = models.CharField(max_length=255, blank=True, null=True)
+    siteGuia4 = models.CharField(max_length=255, blank=True, null=True)
+    Guia5 = models.CharField(max_length=255, blank=True, null=True)
+    siteGuia5 = models.CharField(max_length=255, blank=True, null=True)
+    locaisDeComercializacao = models.JSONField(blank=True, null=True)
+    descritivoEspecialidades = models.CharField(max_length=255, blank=True, null=True)
+    
+    tabelaEquipamentoEEspaco = models.JSONField(blank=True, null=True)
+    tabelaEquipamentoEEspaco2 = models.JSONField(blank=True, null=True)
+    doEquipamentoEspaco = models.CharField(max_length=255, blank=True, null=True)
+    daAreaOuEdificacaoEmQueEstaLocalizado = models.CharField(max_length=255, blank=True, null=True)
+    
+class GastronomiaArtesanatoInfo(models.Model):
+    guiamento_e_conducao = models.ManyToManyField("GastronomiaArtesanato", related_name="info_gerais")
+
+    nome_completo = models.CharField(max_length=255, null=True, blank=True)
+    atelie_aberto = models.CharField(max_length=255, null=True, blank=True)
+    email = models.CharField(max_length=255, null=True, blank=True)
+    endereco = models.CharField(max_length=255, null=True, blank=True)
+    telefone = models.CharField(max_length=255, null=True, blank=True)
+
+class GastronomiaArtesanatoInfoAtelie(models.Model):
+    guiamento_e_conducao = models.ManyToManyField("GastronomiaArtesanato", related_name="endereco_info")
+
+    ano_inicio_atividade = models.CharField(max_length=255, null=True, blank=True)
+    premiacao = models.CharField(max_length=255, null=True, blank=True)
+    outras_informacoes = models.CharField(max_length=255, null=True, blank=True)
 
 class AlimentosEBebidas(Base):
     areaOuEdificacao =  models.CharField(max_length=255,blank=True, null=True)

@@ -238,6 +238,131 @@ class GuiamentoEConducaoTuristicaSerializer(serializers.ModelSerializer):
         
         return instance
 
+class GastronomiaArtesanatoInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GastronomiaArtesanatoInfo
+        fields = ['nome_completo', 'atelie_aberto', 'email', 'endereco', 'telefone']
+
+class GastronomiaArtesanatoInfoAtelieSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GastronomiaArtesanatoInfoAtelie
+        fields = ['ano_inicio_atividade', 'premiacao', 'outras_informacoes',]
+
+class GastronomiaArtesanatoSerializer(serializers.ModelSerializer):
+    contatos = GastronomiaArtesanatoInfoSerializer(many=True)  # Aninhando os dados completos
+    servicos_especializados = GastronomiaArtesanatoInfoAtelieSerializer(many=True)
+
+    
+    class Meta:
+        model = GastronomiaArtesanato
+        fields = [
+            'id', 'pesquisa', 'contatos', 'subtipos', 'servicos_especializados',
+            'tipo_formulario', 'uf', 'regiao_turistica', 'municipio',
+            'tipo', 'observacoes', 'referencias',
+            'nome_pesquisador', 'telefone_pesquisador', 'email_pesquisador',
+            'nome_coordenador', 'telefone_coordenador', 'email_coordenador',
+            'nomeProduto', 'historicoProduto01', 'historicoProduto02', 'historicoProduto03',
+            'historicoProduto04', 'modoPreparo01', 'modoPreparo02', 'modoPreparo03', 'modoPreparo04',
+            'integraRoteiros', 'integraGuiaTuristico', 'roteiro1', 'siteRoteiro1',
+            'roteiro2', 'siteRoteiro2', 'roteiro3', 'siteRoteiro3', 'roteiro4',
+            'siteRoteiro4', 'roteiro5', 'siteRoteiro5', 'Guia1', 'siteGuia1',
+            'Guia2', 'siteGuia2', 'Guia3', 'siteGuia3', 'Guia4', 'siteGuia4',
+            'Guia5', 'siteGuia5', 'locaisDeComercializacao', 'descritivoEspecialidades',
+            'tabelaEquipamentoEEspaco', 'tabelaEquipamentoEEspaco2', 'doEquipamentoEspaco', 'daAreaOuEdificacaoEmQueEstaLocalizado'
+        ]
+
+    def create(self, validated_data):
+        contatos_data = validated_data.pop('contatos', [])
+        servicos_data = validated_data.pop('servicos_especializados', [])
+        
+        sistema_de_seguranca = GastronomiaArtesanato.objects.create(**validated_data)
+        
+        for contato_data in contatos_data:
+            contato = GastronomiaArtesanatoInfo.objects.create(**contato_data)
+            sistema_de_seguranca.contatos.add(contato)
+        
+        for servico_data in servicos_data:
+            servico = GastronomiaArtesanatoInfoAtelie.objects.create(**servico_data)
+            sistema_de_seguranca.servicos_especializados.add(servico)
+        
+        return sistema_de_seguranca
+
+    def update(self, instance, validated_data):
+        contatos_data = validated_data.pop('contatos', None)
+        servicos_data = validated_data.pop('servicos_especializados', None)
+        
+        instance.tipo_formulario = validated_data.get('tipo_formulario', instance.tipo_formulario)
+        instance.uf = validated_data.get('uf', instance.uf)
+        instance.regiao_turistica = validated_data.get('regiao_turistica', instance.regiao_turistica)
+        instance.municipio = validated_data.get('municipio', instance.municipio)
+        instance.tipo = validated_data.get('tipo', instance.tipo)
+        instance.subtipos = validated_data.get('subtipos', instance.subtipos)
+        instance.nomeProduto = validated_data.get('nomeProduto', instance.nomeProduto)
+        instance.historicoProduto01 = validated_data.get('historicoProduto01', instance.historicoProduto01)
+        instance.historicoProduto02 = validated_data.get('historicoProduto02', instance.historicoProduto02)
+        instance.historicoProduto03 = validated_data.get('historicoProduto03', instance.historicoProduto03)
+        instance.historicoProduto04 = validated_data.get('historicoProduto04', instance.historicoProduto04)
+        instance.modoPreparo01 = validated_data.get('modoPreparo01', instance.modoPreparo01)
+        instance.modoPreparo02 = validated_data.get('modoPreparo02', instance.modoPreparo02)
+        instance.modoPreparo03 = validated_data.get('modoPreparo03', instance.modoPreparo03)
+        instance.modoPreparo04 = validated_data.get('modoPreparo04', instance.modoPreparo04)
+        instance.integraRoteiros = validated_data.get('integraRoteiros', instance.integraRoteiros)
+        instance.integraGuiaTuristico = validated_data.get('integraGuiaTuristico', instance.integraGuiaTuristico)
+        instance.roteiro1 = validated_data.get('roteiro1', instance.roteiro1)
+        instance.siteRoteiro1 = validated_data.get('siteRoteiro1', instance.siteRoteiro1)
+        instance.roteiro2 = validated_data.get('roteiro2', instance.roteiro2)
+        instance.siteRoteiro2 = validated_data.get('siteRoteiro2', instance.siteRoteiro2)
+        instance.roteiro3 = validated_data.get('roteiro3', instance.roteiro3)
+        instance.siteRoteiro3 = validated_data.get('siteRoteiro3', instance.siteRoteiro3)
+        instance.roteiro4 = validated_data.get('roteiro4', instance.roteiro4)
+        instance.siteRoteiro4 = validated_data.get('siteRoteiro4', instance.siteRoteiro4)
+        instance.roteiro5 = validated_data.get('roteiro5', instance.roteiro5)
+        instance.siteRoteiro5 = validated_data.get('siteRoteiro5', instance.siteRoteiro5)
+        instance.Guia1 = validated_data.get('Guia1', instance.Guia1)
+        instance.siteGuia1 = validated_data.get('siteGuia1', instance.siteGuia1)
+        instance.Guia2 = validated_data.get('Guia2', instance.Guia2)
+        instance.siteGuia2 = validated_data.get('siteGuia2', instance.siteGuia2)
+        instance.Guia3 = validated_data.get('Guia3', instance.Guia3)
+        instance.siteGuia3 = validated_data.get('siteGuia3', instance.siteGuia3)
+        instance.Guia4 = validated_data.get('Guia4', instance.Guia4)
+        instance.siteGuia4 = validated_data.get('siteGuia4', instance.siteGuia4)
+        instance.Guia5 = validated_data.get('Guia5', instance.Guia5)
+        instance.siteGuia5 = validated_data.get('siteGuia5', instance.siteGuia5)
+        instance.locaisDeComercializacao = validated_data.get('locaisDeComercializacao', instance.locaisDeComercializacao)
+        instance.descritivoEspecialidades = validated_data.get('descritivoEspecialidades', instance.descritivoEspecialidades)
+        instance.subtipos = validated_data.get('subtipos', instance.subtipos)
+        instance.observacoes = validated_data.get('observacoes', instance.observacoes)
+        instance.referencias = validated_data.get('referencias', instance.referencias)
+        instance.nome_pesquisador = validated_data.get('nome_pesquisador', instance.nome_pesquisador)
+        instance.telefone_pesquisador = validated_data.get('telefone_pesquisador', instance.telefone_pesquisador)
+        instance.email_pesquisador = validated_data.get('email_pesquisador', instance.email_pesquisador)
+        instance.nome_coordenador = validated_data.get('nome_coordenador', instance.nome_coordenador)
+        instance.telefone_coordenador = validated_data.get('telefone_coordenador', instance.telefone_coordenador)
+        instance.email_coordenador = validated_data.get('email_coordenador', instance.email_coordenador)
+        instance.tabelaEquipamentoEEspaco = validated_data.get('tabelaEquipamentoEEspaco', instance.tabelaEquipamentoEEspaco)
+        instance.tabelaEquipamentoEEspaco2 = validated_data.get('tabelaEquipamentoEEspaco2', instance.tabelaEquipamentoEEspaco2)
+        instance.doEquipamentoEspaco= validated_data.get('doEquipamentoEspaco', instance.doEquipamentoEspaco)
+        instance.daAreaOuEdificacaoEmQueEstaLocalizado = validated_data.get('daAreaOuEdificacaoEmQueEstaLocalizado', instance.daAreaOuEdificacaoEmQueEstaLocalizado)
+        # Salva os campos principais atualizados
+        instance.save()
+
+        
+        if contatos_data is not None:
+            instance.contatos.clear()
+            for contato_data in contatos_data:
+                contato = GastronomiaArtesanatoInfo.objects.create(**contato_data)
+                instance.contatos.add(contato)
+        
+        if servicos_data is not None:
+            instance.servicos_especializados.clear()
+            for servico_data in servicos_data:
+                servico = GastronomiaArtesanatoInfoAtelie.objects.create(**servico_data)
+                instance.servicos_especializados.add(servico)
+        
+        return instance
+
+
+
 class SistemaDeSegurancaSerializer(serializers.ModelSerializer):
     contatos = ContatoInfoSerializer(many=True)  # Aninhando os dados completos
     servicos_especializados = ServicoEspecializadoInfoSerializer(many=True)

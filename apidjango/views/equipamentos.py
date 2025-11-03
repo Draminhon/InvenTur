@@ -188,6 +188,13 @@ class EventosProgramadosViewSet(viewsets.ModelViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+    
+class GastronomiaArtesanatoViewSet(viewsets.ModelViewSet):
+    queryset = GastronomiaArtesanato.objects.filter(is_active=True)
+    serializer_class = GastronomiaArtesanatoSerializer
+
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
 class EquipamentosListView(APIView):
     def get(self, request, *args, **kwargs):
         pesquisa_id = request.query_params.get('pesquisa_id')
@@ -318,6 +325,12 @@ class EquipamentosListView(APIView):
             {"tipo": "Eventos Programados", "dados": EventosProgramadosSerializer(eventoProgramado).data}
             for eventoProgramado in eventosProgramadoss
         ]
+        
+        gastronomiaArtesanatos = GastronomiaArtesanato.objects.filter(pesquisa__id=pesquisa_id,is_active=True)
+        gastronomiaArtesanatos_serialized = [
+            {"tipo": "Gastronomia e Artesanatos", "dados": GastronomiaArtesanatoSerializer(gastronomiaArtesanato).data}
+            for gastronomiaArtesanato in gastronomiaArtesanatos
+        ]
         # Combina os dados
         equipamentos = (
             rodovias_serialized +
@@ -339,7 +352,8 @@ class EquipamentosListView(APIView):
             guiamentosTuristicos_serialized +
             instalacoesEsportivas_serialized +
             unidadesConservacao_serialized +
-            eventosProgramadoss_serialized
+            eventosProgramadoss_serialized +
+            gastronomiaArtesanatos_serialized
             )
 
         return Response(equipamentos)

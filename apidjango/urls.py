@@ -27,6 +27,7 @@ router.register(r'guiamentoeconducaoturistica', GuiamentoEConducaoTuristicaViewS
 router.register(r'instalacoesesportivas', InstalacoesEsportivasViewSet, basename='Instalações Esportivas')
 router.register(r'unidadesconservacao', UnidadesDeConservacaoViewSet, basename='Unidades De Conservação')
 router.register(r'eventosprogramados', EventosProgramadosViewSet, basename='Eventos Programados')
+router.register(r'gastronomiaartesanato', GastronomiaArtesanatoViewSet, basename='Gastronomia Artesanato')
 
 urlpatterns = [
 

@@ -57,7 +57,7 @@ class FormularioC extends StatelessWidget {
            // const ContainerA(form: 'Lugares de manifestação da fé',routeName: '/Placeholder'),
            // ContainerA(form: 'Obras de interesse artístico'),
          //   ContainerA(form: 'Ruínas, teatros, centros culturais e cineclubes'),
-            const ContainerA(form: 'Gastronomia, artesanato e trabalhos manuais',routeName: '/Placeholder'),
+            const ContainerA(form: 'Gastronomia, artesanato e trabalhos manuais',routeName: '/GastronomiaArtesanatoTrabalhosManuais'),
            // const ContainerA(form: 'Formas de expressão',routeName: '/Placeholder'),
             //const ContainerA(form: 'Personalidades',routeName: '/Placeholder'),
         //    ContainerA(form: 'Atividades econômicas'),
