@@ -91,7 +91,6 @@ class _UnidadesDeConservacaoState extends State<UnidadesDeConservacao> {
     'nTotalDeUH',
     'nTotalDeLeitos',
     'nUhAdaptadasParaPCD',
-  
     'capacidadeEmKVA',
     'geradorCapacidadeEmKVA',
     'nCapacidadeInstaladaPorDia',
@@ -129,7 +128,7 @@ class _UnidadesDeConservacaoState extends State<UnidadesDeConservacao> {
     'outraAtividade',
     'extensaoCaracteristicas',
     'outrasHidrografia',
-      'nCapacidadeDeVeiculos',
+    'nCapacidadeDeVeiculos',
     'nAutomoveis',
     'nOnibus',
     'outrasEspecies',
@@ -868,7 +867,6 @@ class _FuncionamentoState extends State<Funcionamento>
   bool get wantKeepAlive => true;
   @override
   Widget build(BuildContext context) {
-    print("Valor vindo do banco ${widget.hospedagemModel!.entradaGratuita}");
     super.build(context);
     final sizeScreen = MediaQuery.sizeOf(context);
 
@@ -1275,7 +1273,8 @@ class _FuncionamentoState extends State<Funcionamento>
       RadioFormField(
         options: ['Turistas', 'Moradores'],
         title: 'Principal Público Frequentador',
-        onSaved: (newValue) => valoresjson['principalPublicoFrequentador'] = newValue,
+        onSaved: (newValue) =>
+            valoresjson['principalPublicoFrequentador'] = newValue,
         initialValue: isUpdate
             ? widget.hospedagemModel!.principalPublicoFrequentador
             : "",
@@ -1502,8 +1501,7 @@ class _CaracteristicasState extends State<Caracteristicas>
               'outro'
             ],
             title: 'Outros Equipamentos e Serviços',
-            onSaved: (newValue) =>
-                valoresjson['outrosEquipamentos'] = newValue,
+            onSaved: (newValue) => valoresjson['outrosEquipamentos'] = newValue,
             initialValue:
                 isUpdate ? widget.hospedagemModel!.outrosEquipamentos : [],
           ),
@@ -2389,7 +2387,7 @@ class _CaracteristicasState extends State<Caracteristicas>
             name: 'Fretado',
             fontWeight: FontWeight.bold,
           ),
-           textLabel(
+          textLabel(
             name: 'Informações da Empresa',
             fontWeight: FontWeight.bold,
           ),
@@ -2413,7 +2411,7 @@ class _CaracteristicasState extends State<Caracteristicas>
             name: 'Site',
             controller: widget.controllers['fretadoSite1'],
           ),
-           textLabel(
+          textLabel(
             name: 'Informações da Empresa',
             fontWeight: FontWeight.bold,
           ),
@@ -2437,7 +2435,7 @@ class _CaracteristicasState extends State<Caracteristicas>
             name: 'Site',
             controller: widget.controllers['fretadoSite2'],
           ),
-           textLabel(
+          textLabel(
             name: 'Informações da Empresa',
             fontWeight: FontWeight.bold,
           ),
@@ -2461,7 +2459,7 @@ class _CaracteristicasState extends State<Caracteristicas>
             name: 'Site',
             controller: widget.controllers['fretadoSite3'],
           ),
-           textLabel(
+          textLabel(
             name: 'Informações da Empresa',
             fontWeight: FontWeight.bold,
           ),
@@ -2485,7 +2483,7 @@ class _CaracteristicasState extends State<Caracteristicas>
             name: 'Site',
             controller: widget.controllers['fretadoSite4'],
           ),
-           textLabel(
+          textLabel(
             name: 'Informações da Empresa',
             fontWeight: FontWeight.bold,
           ),
@@ -2508,8 +2506,7 @@ class _CaracteristicasState extends State<Caracteristicas>
           CustomTextField(
             name: 'Site',
             controller: widget.controllers['fretadoSite5'],
-      
-          ), 
+          ),
           SizedBox(
             height: sizeScreen.height * 0.02,
           )

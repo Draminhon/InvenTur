@@ -132,6 +132,10 @@ class InformacoesBasicasModel {
   String? deposicaoAterroSanitarioDomiciliosAtendidos;
   String? deposicaoAterroSanitarioRuraisAtendidos;
   String? deposicaoAterroSanitarioEntidadeResponsavel;
+  String? deposicaoCompostagemTotalAtendidos;
+  String? deposicaoCompostagemDomiciliosAtendidos;
+  String? deposicaoCompostagemRuraisAtendidos;
+  String? deposicaoCompostagemEntidadeResponsavel;
   String? deposicaoACeuAbertoTotalAtendidos;
   String? deposicaoACeuAbertoDomiciliosAtendidos;
   String? deposicaoACeuAbertoRuraisAtendidos;
@@ -245,9 +249,8 @@ class InformacoesBasicasModel {
   String? legislacaoOutras;
 
   InformacoesBasicasModel(
-      {
-    this.id,
-        this.tipoFormulario,
+      {this.id,
+      this.tipoFormulario,
       this.uf,
       this.regiaoTuristica,
       this.municipio,
@@ -379,6 +382,10 @@ class InformacoesBasicasModel {
       this.deposicaoAterroSanitarioDomiciliosAtendidos,
       this.deposicaoAterroSanitarioRuraisAtendidos,
       this.deposicaoAterroSanitarioEntidadeResponsavel,
+      this.deposicaoCompostagemTotalAtendidos,
+      this.deposicaoCompostagemDomiciliosAtendidos,
+      this.deposicaoCompostagemRuraisAtendidos,
+      this.deposicaoCompostagemEntidadeResponsavel,
       this.deposicaoACeuAbertoTotalAtendidos,
       this.deposicaoACeuAbertoDomiciliosAtendidos,
       this.deposicaoACeuAbertoRuraisAtendidos,
@@ -491,334 +498,321 @@ class InformacoesBasicasModel {
       this.fundoMunicipalDeTurismo,
       this.legislacaoOutras});
 
-  Map<String, dynamic> toMap(){
-    return{
-    
-    'tipo_formulario': this.tipoFormulario,
-    'uf': this.uf,
-    'regiao_turistica': this.regiaoTuristica,
-    'municipio': this.municipio,
-    'tipo': this.tipo,
-    'observacoes': this.observacoes,
-    'referencias': this.referencias,
-    'nome_pesquisador': this.nomePesquisador,
-    'telefone_pesquisador': this.telefonePesquisador,
-    'email_pesquisador': this.emailPesquisador,
-    'nome_coordenador': this.nomeCoordenador,
-    'telefone_coordenador': this.telefoneCoordenador,
-    'email_coordenador': this.emailCoordenador,
-    'enderecoPrefeitura': this.enderecoPrefeitura,
-    'bairroPrefeitura': this.bairroPrefeitura,
-    'cepPrefeitura': this.cepPrefeitura,
-    'numeroPrefeitura': this.numeroPrefeitura,
-    'instagramPrefeitura': this.instagramPrefeitura,
-    'emailPrefeitura': this.emailPrefeitura,
-    'sitePrefeitura': this.sitePrefeitura,
-    'cnpjPrefeitura': this.cnpjPrefeitura,
-    'latitude': this.latitude,
-    'longitude': this.longitude,
-    'municipiosLimitrofes': this.municipiosLimitrofes,
-    'distanciaDaCapital': this.distanciaDaCapital,
-    'totalFuncionariosPrefeitura': this.totalFuncionariosPrefeitura,
-    'pessoasComDeficienciaPrefeitura':
-        this.pessoasComDeficienciaPrefeitura,
-    'nomeDoPrefeito': this.nomeDoPrefeito,
-    'nomeDasSecretariasEtc': this.nomeDasSecretariasEtc,
-    'nomeOrgaoOficialTurismo': this.nomeOrgaoOficialTurismo,
-    'enderecoOrgaoOfcTurismo': this.enderecoOrgaoOfcTurismo,
-    'avenidaRuaOfcTurismo': this.avenidaRuaOfcTurismo,
-    'distritoOrgaoOfcTurismo': this.distritoOrgaoOfcTurismo,
-    'cepOrgaoOfcTurismo': this.cepOrgaoOfcTurismo,
-    'numeroOrgaoOfcTurismo': this.numeroOrgaoOfcTurismo,
-    'instagramOrgaoOfcTurismo': this.instagramOrgaoOfcTurismo,
-    'siteOrgaoOfcTurismo': this.siteOrgaoOfcTurismo,
-    'emailOrgaoOfcTurismo': this.emailOrgaoOfcTurismo,
-    'qtdeFuncionariosOrgaoOfcTurismo':
-        this.qtdeFuncionariosOrgaoOfcTurismo,
-    'qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo':
-        this.qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo,
-    'instanciaGovernancaMunicipal': this.instanciaGovernancaMunicipal,
-    'instanciaGovernancaEstadual': this.instanciaGovernancaEstadual,
-    'instanciaGovernancaRegional': this.instanciaGovernancaRegional,
-    'instanciaGovernancaNacional': this.instanciaGovernancaNacional,
-    'instanciaGovernancaInternacional':
-        this.instanciaGovernancaInternacional,
-    'instanciaGovernancaOutras': this.instanciaGovernancaOutras,
-    'aniversarioMunicipio': this.aniversarioMunicipio,
-    'santoPadroeiro': this.santoPadroeiro,
-    'diaDoSantoPadroeiro': this.diaDoSantoPadroeiro,
-    'feriadoMunicipal01': this.feriadoMunicipal01,
-    'dataFeriadoMunicipal01': this.dataFeriadoMunicipal01,
-    'feriadoMunicipal02': this.feriadoMunicipal02,
-    'dataFeriadoMunicipal02': this.dataFeriadoMunicipal02,
-    'feriadoMunicipal03': this.feriadoMunicipal03,
-    'dataFeriadoMunicipal03': this.dataFeriadoMunicipal03,
-    'origemDoNome': this.origemDoNome,
-    'dataFundacao': this.dataFundacao,
-    'dataEmancipacao': this.dataEmancipacao,
-    'fundadores': this.fundadores,
-    'outrosFatosDeImportanciaHistorica':
-        this.outrosFatosDeImportanciaHistorica,
-    'areaTotalMunicipio': this.areaTotalMunicipio,
-    'areaUrbana': this.areaUrbana,
-    'areaRural': this.areaRural,
-    'anoBase': this.anoBase,
-    'populacaoTotal': this.populacaoTotal,
-    'populacaoUrbana': this.populacaoUrbana,
-    'populacaoRural': this.populacaoRural,
-    'anoBasePopulacao': this.anoBasePopulacao,
-    'temperaturaMedia': this.temperaturaMedia,
-    'temperaturaMinima': this.temperaturaMinima,
-    'temperaturaMaxima': this.temperaturaMaxima,
-    'altitudeMedia': this.altitudeMedia,
-    'qtdeDomiciliosAtendidos': this.qtdeDomiciliosAtendidos,
-    'empresaResponsavel': this.empresaResponsavel,
-    'esgotoTotalAtendidos': this.esgotoTotalAtendidos,
-    'esgotoDomiciliosAtendidos': this.esgotoDomiciliosAtendidos,
-    'esgotoRuraisAtendidos': this.esgotoRuraisAtendidos,
-    'esgotoEntidadeResponsavel': this.esgotoEntidadeResponsavel,
-    'fossaSepticaTotalAtendidos': this.fossaSepticaTotalAtendidos,
-    'fossaSepticaDomiciliosAtendidos':
-        this.fossaSepticaDomiciliosAtendidos,
-    'fossaSepticaRuraisAtendidos': this.fossaSepticaRuraisAtendidos,
-    'fossaSepticaEntidadeResponsavel':
-        this.fossaSepticaEntidadeResponsavel,
-    'fossaRudimentarTotalAtendidos': this.fossaRudimentarTotalAtendidos,
-    'fossaRudimentarDomiciliosAtendidos':
-        this.fossaRudimentarDomiciliosAtendidos,
-    'fossaRudimentarRuraisAtendidos':
-        this.fossaRudimentarRuraisAtendidos,
-    'fossaRudimentarEntidadeResponsavel':
-        this.fossaRudimentarEntidadeResponsavel,
-    'valaTotalAtendidos': this.valaTotalAtendidos,
-    'valaDomiciliosAtendidos': this.valaDomiciliosAtendidos,
-    'valaRuraisAtendidos': this.valaRuraisAtendidos,
-    'valaEntidadeResponsavel': this.valaEntidadeResponsavel,
-    'estacaoDeTratamentoTotalAtendidos':
-        this.estacaoDeTratamentoTotalAtendidos,
-    'estacaoDeTratamentoDomiciliosAtendidos':
-        this.estacaoDeTratamentoDomiciliosAtendidos,
-    'estacaoDeTratamentoRuraisAtendidos':
-        this.estacaoDeTratamentoRuraisAtendidos,
-    'estacaoDeTratamentoEntidadeResponsavel':
-        this.estacaoDeTratamentoEntidadeResponsavel,
-    'esgotoTratadoTotalAtendidos': this.esgotoTratadoTotalAtendidos,
-    'esgotoTratadoDomiciliosAtendidos':
-        this.esgotoTratadoDomiciliosAtendidos,
-    'esgotoTratadoRuraisAtendidos': this.esgotoTratadoRuraisAtendidos,
-    'esgotoTratadoEntidadeResponsavel':
-        this.esgotoTratadoEntidadeResponsavel,
-    'servicoDeEsgotoOutroTotalNome': this.servicoDeEsgotoOutroTotalNome,
-    'servicoDeEsgotoOutroTotalAtendidos':
-        this.servicoDeEsgotoOutroTotalAtendidos,
-    'servicoDeEsgotoOutroDomiciliosAtendidos':
-        this.servicoDeEsgotoOutroDomiciliosAtendidos,
-    'servicoDeEsgotoOutroRuraisAtendidos':
-        this.servicoDeEsgotoOutroRuraisAtendidos,
-    'servicoDeEsgotoOutroEntidadeResponsavel':
-        this.servicoDeEsgotoOutroEntidadeResponsavel,
-    'capacidadeEmKVA': this.capacidadeEmKVA,
-    'geradorDeEmergenciaCapacidadeEmKVA':
-        this.geradorDeEmergenciaCapacidadeEmKVA,
-    'redeUrbanaTotalAbastecido': this.redeUrbanaTotalAbastecido,
-    'redeUrbanaEntidadeResponsavel': this.redeUrbanaEntidadeResponsavel,
-    'redeRuralTotalAbastecido': this.redeRuralTotalAbastecido,
-    'redeRuralEntidadeResponsavel': this.redeRuralEntidadeResponsavel,
-    'abastecimentoProprioTotalAtendidos':
-        this.abastecimentoProprioTotalAtendidos,
-    'abastecimentoProprioDomiciliosAtendidos':
-        this.abastecimentoProprioDomiciliosAtendidos,
-    'abastecimentoProprioRuraisAtendidos':
-        this.abastecimentoProprioRuraisAtendidos,
-    'abastecimentoProprioEntidadeResponsavel':
-        this.abastecimentoProprioEntidadeResponsavel,
-    'servicosDeEnergiaOutroTotalNome':
-        this.servicosDeEnergiaOutroTotalNome,
-    'servicosDeEnergiaOutroTotalAtendidos':
-        this.servicosDeEnergiaOutroTotalAtendidos,
-    'servicosDeEnergiaOutroDomiciliosAtendidos':
-        this.servicosDeEnergiaOutroDomiciliosAtendidos,
-    'servicosDeEnergiaOutroEntidadeResponsavel':
-        this.servicosDeEnergiaOutroEntidadeResponsavel,
-    'coletaSeletivaTotalAtendidos': this.coletaSeletivaTotalAtendidos,
-    'coletaSeletivaDomiciliosAtendidos':
-        this.coletaSeletivaDomiciliosAtendidos,
-    'coletaSeletivaRuraisAtendidos': this.coletaSeletivaRuraisAtendidos,
-    'coletaSeletivaEntidadeResponsavel':
-        this.coletaSeletivaEntidadeResponsavel,
-    'coletaNaoSeletivaTotalAtendidos':
-        this.coletaNaoSeletivaTotalAtendidos,
-    'coletaNaoSeletivaDomiciliosAtendidos':
-        this.coletaNaoSeletivaDomiciliosAtendidos,
-    'coletaNaoSeletivaRuraisAtendidos':
-        this.coletaNaoSeletivaRuraisAtendidos,
-    'coletaNaoSeletivaEntidadeResponsavel':
-        this.coletaNaoSeletivaEntidadeResponsavel,
-    'coletaSemColetaTotal': this.coletaSemColetaTotal,
-    'coletaSemColetaDomicilios': this.coletaSemColetaDomicilios,
-    'coletaSemColetaRurais': this.coletaSemColetaRurais,
-    'deposicaoAterroSanitarioTotalAtendidos':
-        this.deposicaoAterroSanitarioTotalAtendidos,
-    'deposicaoAterroSanitarioDomiciliosAtendidos':
-        this.deposicaoAterroSanitarioDomiciliosAtendidos,
-    'deposicaoAterroSanitarioRuraisAtendidos':
-        this.deposicaoAterroSanitarioRuraisAtendidos,
-    'deposicaoAterroSanitarioEntidadeResponsavel':
-        this.deposicaoAterroSanitarioEntidadeResponsavel,
-    'deposicaoACeuAbertoTotalAtendidos':
-        this.deposicaoACeuAbertoTotalAtendidos,
-    'deposicaoACeuAbertoDomiciliosAtendidos':
-        this.deposicaoACeuAbertoDomiciliosAtendidos,
-    'deposicaoACeuAbertoRuraisAtendidos':
-        this.deposicaoACeuAbertoRuraisAtendidos,
-    'deposicaoACeuAbertoEntidadeResponsavel':
-        this.deposicaoACeuAbertoEntidadeResponsavel,
-    'deposicaoOutroTotalNome': this.deposicaoOutroTotalNome,
-    'deposicaoOutroTotalAtendidos': this.deposicaoOutroTotalAtendidos,
-    'deposicaoOutroDomiciliosAtendidos':
-        this.deposicaoOutroDomiciliosAtendidos,
-    'deposicaoOutroEntidadeResponsavel':
-        this.deposicaoOutroEntidadeResponsavel,
-    'reciclagemDeAcoTotalReciclado': this.reciclagemDeAcoTotalReciclado,
-    'reciclagemDeAcoEntidadeResponsavel':
-        this.reciclagemDeAcoEntidadeResponsavel,
-    'reciclagemDeAluminioTotalReciclado':
-        this.reciclagemDeAluminioTotalReciclado,
-    'reciclagemDeAluminioEntidadeResponsavel':
-        this.reciclagemDeAluminioEntidadeResponsavel,
-    'reciclagemDeFerroTotalReciclado':
-        this.reciclagemDeFerroTotalReciclado,
-    'reciclagemDeFerroEntidadeResponsavel':
-        this.reciclagemDeFerroEntidadeResponsavel,
-    'reciclagemOutroNome': this.reciclagemOutroNome,
-    'reciclagemOutroTotalReciclado': this.reciclagemOutroTotalReciclado,
-    'reciclagemOutroEntidadeResponsavel':
-        this.reciclagemOutroEntidadeResponsavel,
-    'reciclagemDeBateriasPilhasTotalReciclado':
-        this.reciclagemDeBateriasPilhasTotalReciclado,
-    'reciclagemDeBateriasPilhasEntidadeResponsavel':
-        this.reciclagemDeBateriasPilhasEntidadeResponsavel,
-    'reciclagemDeBorrachaTotalReciclado':
-        this.reciclagemDeBorrachaTotalReciclado,
-    'reciclagemDeBorrachaEntidadeResponsavel':
-        this.reciclagemDeBorrachaEntidadeResponsavel,
-    'reciclagemDeEletronicosTotalReciclado':
-        this.reciclagemDeEletronicosTotalReciclado,
-    'reciclagemDeEletronicosEntidadeResponsavel':
-        this.reciclagemDeEletronicosEntidadeResponsavel,
-    'reciclagemDeEmbalagensLongaVidaTotalReciclado':
-        this.reciclagemDeEmbalagensLongaVidaTotalReciclado,
-    'reciclagemDeEmbalagensLongaVidaEntidadeResponsavel':
-        this.reciclagemDeEmbalagensLongaVidaEntidadeResponsavel,
-    'reciclagemDeEntulhoTotalReciclado':
-        this.reciclagemDeEntulhoTotalReciclado,
-    'reciclagemDeEntulhoEntidadeResponsavel':
-        this.reciclagemDeEntulhoEntidadeResponsavel,
-    'reciclagemDeMadeiraTotalReciclado':
-        this.reciclagemDeMadeiraTotalReciclado,
-    'reciclagemDeMadeiraEntidadeResponsavel':
-        this.reciclagemDeMadeiraEntidadeResponsavel,
-    'reciclagemDePapelTotalReciclado':
-        this.reciclagemDePapelTotalReciclado,
-    'reciclagemDePapelEntidadeResponsavel':
-        this.reciclagemDePapelEntidadeResponsavel,
-    'reciclagemDePlasticoEEmbalagensTotalReciclado':
-        this.reciclagemDePlasticoEEmbalagensTotalReciclado,
-    'reciclagemDePlasticoEEmbalagensEntidadeResponsavel':
-        this.reciclagemDePlasticoEEmbalagensEntidadeResponsavel,
-    'reciclagemDeVidroTotalReciclado':
-        this.reciclagemDeVidroTotalReciclado,
-    'reciclagemDeVidroEntidadeResponsavel':
-        this.reciclagemDeVidroEntidadeResponsavel,
-    'reciclagemDeOleoDeCozinhaTotalReciclado':
-        this.reciclagemDeOleoDeCozinhaTotalReciclado,
-    'reciclagemDeOleoDeCozinhaEntidadeResponsavel':
-        this.reciclagemDeOleoDeCozinhaEntidadeResponsavel,
-    'reciclagemOutrosNome': this.reciclagemOutrosNome,
-    'reciclagemOutrosTotalReciclado':
-        this.reciclagemOutrosTotalReciclado,
-    'reciclagemOutrosEntidadeResponsavel':
-        this.reciclagemOutrosEntidadeResponsavel,
-    'divulgacaoImpressaFolder': this.divulgacaoImpressaFolder,
-    'divulgacaoImpressaRevista': this.divulgacaoImpressaRevista,
-    'divulgacaoImpressaJornal': this.divulgacaoImpressaJornal,
-    'divulgacaoImpressaOutros': this.divulgacaoImpressaOutros,
-    'visitantesAno': this.visitantesAno,
-    'visitantesAnoAltaTemporada': this.visitantesAnoAltaTemporada,
-    'origemInternacionalAnoBase': this.origemInternacionalAnoBase,
-    'atrativosMaisVisitados': this.atrativosMaisVisitados,
-    'redeDeEsgoto': this.redeDeEsgoto,
-    'fossaSeptica': this.fossaSeptica,
-    'fossaRudimentar': this.fossaRudimentar,
-    'vala': this.vala,
-    'estacaoDeTratamento': this.estacaoDeTratamento,
-    'esgotoTratado': this.esgotoTratado,
-    'servicoDeEsgotoOutros': this.servicoDeEsgotoOutros,
-    'geradorDeEmergencia': this.geradorDeEmergencia,
-    'redeUrbana': this.redeUrbana,
-    'redeRural': this.redeRural,
-    'abastecimentoProprio': this.abastecimentoProprio,
-    'servicosDeEnergiaOutro': this.servicosDeEnergiaOutro,
-    'coletaSeletiva': this.coletaSeletiva,
-    'coletaNaoSeletiva': this.coletaNaoSeletiva,
-    'coletaSemColeta': this.coletaSemColeta,
-    'deposicaoAterroSanitario': this.deposicaoAterroSanitario,
-    'deposicaoCompostagem': this.deposicaoCompostagem,
-    'deposicaoACeuAberto': this.deposicaoACeuAberto,
-    'deposicaoOutro': this.deposicaoOutro,
-    'reciclagemDeAco': this.reciclagemDeAco,
-    'reciclagemDeAluminio': this.reciclagemDeAluminio,
-    'reciclagemDeFerro': this.reciclagemDeFerro,
-    'reciclagemOutro': this.reciclagemOutro,
-    'reciclagemDeBateriasPilhas': this.reciclagemDeBateriasPilhas,
-    'reciclagemDeBorracha': this.reciclagemDeBorracha,
-    'reciclagemDeEletronicos': this.reciclagemDeEletronicos,
-    'reciclagemDeEmbalagensLongaVida':
-        this.reciclagemDeEmbalagensLongaVida,
-    'reciclagemDeEntulho': this.reciclagemDeEntulho,
-    'reciclagemDeMadeira': this.reciclagemDeMadeira,
-    'reciclagemDePapel': this.reciclagemDePapel,
-    'reciclagemDePlasticoEEmbalagens':
-        this.reciclagemDePlasticoEEmbalagens,
-    'reciclagemDeVidro': this.reciclagemDeVidro,
-    'reciclagemDeOleoDeCozinha': this.reciclagemDeOleoDeCozinha,
-    'reciclagemOutros': this.reciclagemOutros,
-    'servicosDeComunicacaoTelefoniaMovel':
-        this.servicosDeComunicacaoTelefoniaMovel,
-    'servicosDeComunicacaoTelefoniaFixa':
-        this.servicosDeComunicacaoTelefoniaFixa,
-    'promocaoTuristicaDivulgacaoImpressa':
-        this.promocaoTuristicaDivulgacaoImpressa,
-    'promocaoTuristicaDivulgacaoTelevisiva':
-        this.promocaoTuristicaDivulgacaoTelevisiva,
-    'mesesMaisFrios': this.mesesMaisFrios,
-    'mesesMaisQuentes': this.mesesMaisQuentes,
-    'mesesMaisChuvosos': this.mesesMaisChuvosos,
-    'mesesMenosChuvosos': this.mesesMenosChuvosos,
-    'tipoDeAbastecimento': this.tipoDeAbastecimento,
-    'energiaEletrica': this.energiaEletrica,
-    'servicosDeComunicacaoAcessoAInternet':
-        this.servicosDeComunicacaoAcessoAInternet,
-    'atendimentoEmLinguaEstrangeira':
-        this.atendimentoEmLinguaEstrangeira,
-    'atendimentoAoVisitanteInformativosImpressos':
-        this.atendimentoAoVisitanteInformativosImpressos,
-    'mesesAltaTemporada': this.mesesAltaTemporada,
-    'origemDosVisitantesTuristas': this.origemDosVisitantesTuristas,
-    'origemNacional': this.origemNacional,
-    'origemInternacional': this.origemInternacional,
-    'segmentosTurismoEspecializado': this.segmentosTurismoEspecializado,
-    'leiOrganica': this.leiOrganica,
-    'ocupacaoDoSolo': this.ocupacaoDoSolo,
-    'planoDeDesenvolvimentoDoTurismo':
-        this.planoDeDesenvolvimentoDoTurismo,
-    'protecaoAmbiental': this.protecaoAmbiental,
-    'apoioACultura': this.apoioACultura,
-    'incentivosFiscaisAoTurismo': this.incentivosFiscaisAoTurismo,
-    'planoDiretor': this.planoDiretor,
-    'fundoMunicipalDeTurismo': this.fundoMunicipalDeTurismo,
-    'legislacaoOutras': this.legislacaoOutras,
-    
+  Map<String, dynamic> toMap() {
+    return {
+      'tipo_formulario': this.tipoFormulario,
+      'uf': this.uf,
+      'regiao_turistica': this.regiaoTuristica,
+      'municipio': this.municipio,
+      'tipo': this.tipo,
+      'observacoes': this.observacoes,
+      'referencias': this.referencias,
+      'nome_pesquisador': this.nomePesquisador,
+      'telefone_pesquisador': this.telefonePesquisador,
+      'email_pesquisador': this.emailPesquisador,
+      'nome_coordenador': this.nomeCoordenador,
+      'telefone_coordenador': this.telefoneCoordenador,
+      'email_coordenador': this.emailCoordenador,
+      'enderecoPrefeitura': this.enderecoPrefeitura,
+      'bairroPrefeitura': this.bairroPrefeitura,
+      'cepPrefeitura': this.cepPrefeitura,
+      'numeroPrefeitura': this.numeroPrefeitura,
+      'instagramPrefeitura': this.instagramPrefeitura,
+      'emailPrefeitura': this.emailPrefeitura,
+      'sitePrefeitura': this.sitePrefeitura,
+      'cnpjPrefeitura': this.cnpjPrefeitura,
+      'latitude': this.latitude,
+      'longitude': this.longitude,
+      'municipiosLimitrofes': this.municipiosLimitrofes,
+      'distanciaDaCapital': this.distanciaDaCapital,
+      'totalFuncionariosPrefeitura': this.totalFuncionariosPrefeitura,
+      'pessoasComDeficienciaPrefeitura': this.pessoasComDeficienciaPrefeitura,
+      'nomeDoPrefeito': this.nomeDoPrefeito,
+      'nomeDasSecretariasEtc': this.nomeDasSecretariasEtc,
+      'nomeOrgaoOficialTurismo': this.nomeOrgaoOficialTurismo,
+      'enderecoOrgaoOfcTurismo': this.enderecoOrgaoOfcTurismo,
+      'avenidaRuaOfcTurismo': this.avenidaRuaOfcTurismo,
+      'distritoOrgaoOfcTurismo': this.distritoOrgaoOfcTurismo,
+      'cepOrgaoOfcTurismo': this.cepOrgaoOfcTurismo,
+      'numeroOrgaoOfcTurismo': this.numeroOrgaoOfcTurismo,
+      'instagramOrgaoOfcTurismo': this.instagramOrgaoOfcTurismo,
+      'siteOrgaoOfcTurismo': this.siteOrgaoOfcTurismo,
+      'emailOrgaoOfcTurismo': this.emailOrgaoOfcTurismo,
+      'qtdeFuncionariosOrgaoOfcTurismo': this.qtdeFuncionariosOrgaoOfcTurismo,
+      'qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo':
+          this.qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo,
+      'instanciaGovernancaMunicipal': this.instanciaGovernancaMunicipal,
+      'instanciaGovernancaEstadual': this.instanciaGovernancaEstadual,
+      'instanciaGovernancaRegional': this.instanciaGovernancaRegional,
+      'instanciaGovernancaNacional': this.instanciaGovernancaNacional,
+      'instanciaGovernancaInternacional': this.instanciaGovernancaInternacional,
+      'instanciaGovernancaOutras': this.instanciaGovernancaOutras,
+      'aniversarioMunicipio': this.aniversarioMunicipio,
+      'santoPadroeiro': this.santoPadroeiro,
+      'diaDoSantoPadroeiro': this.diaDoSantoPadroeiro,
+      'feriadoMunicipal01': this.feriadoMunicipal01,
+      'dataFeriadoMunicipal01': this.dataFeriadoMunicipal01,
+      'feriadoMunicipal02': this.feriadoMunicipal02,
+      'dataFeriadoMunicipal02': this.dataFeriadoMunicipal02,
+      'feriadoMunicipal03': this.feriadoMunicipal03,
+      'dataFeriadoMunicipal03': this.dataFeriadoMunicipal03,
+      'origemDoNome': this.origemDoNome,
+      'dataFundacao': this.dataFundacao,
+      'dataEmancipacao': this.dataEmancipacao,
+      'fundadores': this.fundadores,
+      'outrosFatosDeImportanciaHistorica':
+          this.outrosFatosDeImportanciaHistorica,
+      'areaTotalMunicipio': this.areaTotalMunicipio,
+      'areaUrbana': this.areaUrbana,
+      'areaRural': this.areaRural,
+      'anoBase': this.anoBase,
+      'populacaoTotal': this.populacaoTotal,
+      'populacaoUrbana': this.populacaoUrbana,
+      'populacaoRural': this.populacaoRural,
+      'anoBasePopulacao': this.anoBasePopulacao,
+      'temperaturaMedia': this.temperaturaMedia,
+      'temperaturaMinima': this.temperaturaMinima,
+      'temperaturaMaxima': this.temperaturaMaxima,
+      'altitudeMedia': this.altitudeMedia,
+      'qtdeDomiciliosAtendidos': this.qtdeDomiciliosAtendidos,
+      'empresaResponsavel': this.empresaResponsavel,
+      'esgotoTotalAtendidos': this.esgotoTotalAtendidos,
+      'esgotoDomiciliosAtendidos': this.esgotoDomiciliosAtendidos,
+      'esgotoRuraisAtendidos': this.esgotoRuraisAtendidos,
+      'esgotoEntidadeResponsavel': this.esgotoEntidadeResponsavel,
+      'fossaSepticaTotalAtendidos': this.fossaSepticaTotalAtendidos,
+      'fossaSepticaDomiciliosAtendidos': this.fossaSepticaDomiciliosAtendidos,
+      'fossaSepticaRuraisAtendidos': this.fossaSepticaRuraisAtendidos,
+      'fossaSepticaEntidadeResponsavel': this.fossaSepticaEntidadeResponsavel,
+      'fossaRudimentarTotalAtendidos': this.fossaRudimentarTotalAtendidos,
+      'fossaRudimentarDomiciliosAtendidos':
+          this.fossaRudimentarDomiciliosAtendidos,
+      'fossaRudimentarRuraisAtendidos': this.fossaRudimentarRuraisAtendidos,
+      'fossaRudimentarEntidadeResponsavel':
+          this.fossaRudimentarEntidadeResponsavel,
+      'valaTotalAtendidos': this.valaTotalAtendidos,
+      'valaDomiciliosAtendidos': this.valaDomiciliosAtendidos,
+      'valaRuraisAtendidos': this.valaRuraisAtendidos,
+      'valaEntidadeResponsavel': this.valaEntidadeResponsavel,
+      'estacaoDeTratamentoTotalAtendidos':
+          this.estacaoDeTratamentoTotalAtendidos,
+      'estacaoDeTratamentoDomiciliosAtendidos':
+          this.estacaoDeTratamentoDomiciliosAtendidos,
+      'estacaoDeTratamentoRuraisAtendidos':
+          this.estacaoDeTratamentoRuraisAtendidos,
+      'estacaoDeTratamentoEntidadeResponsavel':
+          this.estacaoDeTratamentoEntidadeResponsavel,
+      'esgotoTratadoTotalAtendidos': this.esgotoTratadoTotalAtendidos,
+      'esgotoTratadoDomiciliosAtendidos': this.esgotoTratadoDomiciliosAtendidos,
+      'esgotoTratadoRuraisAtendidos': this.esgotoTratadoRuraisAtendidos,
+      'esgotoTratadoEntidadeResponsavel': this.esgotoTratadoEntidadeResponsavel,
+      'servicoDeEsgotoOutroTotalNome': this.servicoDeEsgotoOutroTotalNome,
+      'servicoDeEsgotoOutroTotalAtendidos':
+          this.servicoDeEsgotoOutroTotalAtendidos,
+      'servicoDeEsgotoOutroDomiciliosAtendidos':
+          this.servicoDeEsgotoOutroDomiciliosAtendidos,
+      'servicoDeEsgotoOutroRuraisAtendidos':
+          this.servicoDeEsgotoOutroRuraisAtendidos,
+      'servicoDeEsgotoOutroEntidadeResponsavel':
+          this.servicoDeEsgotoOutroEntidadeResponsavel,
+      'capacidadeEmKVA': this.capacidadeEmKVA,
+      'geradorDeEmergenciaCapacidadeEmKVA':
+          this.geradorDeEmergenciaCapacidadeEmKVA,
+      'redeUrbanaTotalAbastecido': this.redeUrbanaTotalAbastecido,
+      'redeUrbanaEntidadeResponsavel': this.redeUrbanaEntidadeResponsavel,
+      'redeRuralTotalAbastecido': this.redeRuralTotalAbastecido,
+      'redeRuralEntidadeResponsavel': this.redeRuralEntidadeResponsavel,
+      'abastecimentoProprioTotalAtendidos':
+          this.abastecimentoProprioTotalAtendidos,
+      'abastecimentoProprioDomiciliosAtendidos':
+          this.abastecimentoProprioDomiciliosAtendidos,
+      'abastecimentoProprioRuraisAtendidos':
+          this.abastecimentoProprioRuraisAtendidos,
+      'abastecimentoProprioEntidadeResponsavel':
+          this.abastecimentoProprioEntidadeResponsavel,
+      'servicosDeEnergiaOutroTotalNome': this.servicosDeEnergiaOutroTotalNome,
+      'servicosDeEnergiaOutroTotalAtendidos':
+          this.servicosDeEnergiaOutroTotalAtendidos,
+      'servicosDeEnergiaOutroDomiciliosAtendidos':
+          this.servicosDeEnergiaOutroDomiciliosAtendidos,
+      'servicosDeEnergiaOutroEntidadeResponsavel':
+          this.servicosDeEnergiaOutroEntidadeResponsavel,
+      'coletaSeletivaTotalAtendidos': this.coletaSeletivaTotalAtendidos,
+      'coletaSeletivaDomiciliosAtendidos':
+          this.coletaSeletivaDomiciliosAtendidos,
+      'coletaSeletivaRuraisAtendidos': this.coletaSeletivaRuraisAtendidos,
+      'coletaSeletivaEntidadeResponsavel':
+          this.coletaSeletivaEntidadeResponsavel,
+      'coletaNaoSeletivaTotalAtendidos': this.coletaNaoSeletivaTotalAtendidos,
+      'coletaNaoSeletivaDomiciliosAtendidos':
+          this.coletaNaoSeletivaDomiciliosAtendidos,
+      'coletaNaoSeletivaRuraisAtendidos': this.coletaNaoSeletivaRuraisAtendidos,
+      'coletaNaoSeletivaEntidadeResponsavel':
+          this.coletaNaoSeletivaEntidadeResponsavel,
+      'coletaSemColetaTotal': this.coletaSemColetaTotal,
+      'coletaSemColetaDomicilios': this.coletaSemColetaDomicilios,
+      'coletaSemColetaRurais': this.coletaSemColetaRurais,
+      'deposicaoAterroSanitarioTotalAtendidos':
+          this.deposicaoAterroSanitarioTotalAtendidos,
+      'deposicaoAterroSanitarioDomiciliosAtendidos':
+          this.deposicaoAterroSanitarioDomiciliosAtendidos,
+      'deposicaoAterroSanitarioRuraisAtendidos':
+          this.deposicaoAterroSanitarioRuraisAtendidos,
+      'deposicaoAterroSanitarioEntidadeResponsavel':
+          this.deposicaoAterroSanitarioEntidadeResponsavel,
+      'deposicaoCompostagemTotalAtendidos':
+          this.deposicaoCompostagemTotalAtendidos,
+      'deposicaoCompostagemDomiciliosAtendidos':
+          this.deposicaoCompostagemDomiciliosAtendidos,
+      'deposicaoCompostagemRuraisAtendidos':
+          this.deposicaoCompostagemRuraisAtendidos,
+      'deposicaoCompostagemEntidadeResponsavel':
+          this.deposicaoCompostagemEntidadeResponsavel,
+      'deposicaoACeuAbertoTotalAtendidos':
+          this.deposicaoACeuAbertoTotalAtendidos,
+      'deposicaoACeuAbertoDomiciliosAtendidos':
+          this.deposicaoACeuAbertoDomiciliosAtendidos,
+      'deposicaoACeuAbertoRuraisAtendidos':
+          this.deposicaoACeuAbertoRuraisAtendidos,
+      'deposicaoACeuAbertoEntidadeResponsavel':
+          this.deposicaoACeuAbertoEntidadeResponsavel,
+      'deposicaoOutroTotalNome': this.deposicaoOutroTotalNome,
+      'deposicaoOutroTotalAtendidos': this.deposicaoOutroTotalAtendidos,
+      'deposicaoOutroDomiciliosAtendidos':
+          this.deposicaoOutroDomiciliosAtendidos,
+      'deposicaoOutroEntidadeResponsavel':
+          this.deposicaoOutroEntidadeResponsavel,
+      'reciclagemDeAcoTotalReciclado': this.reciclagemDeAcoTotalReciclado,
+      'reciclagemDeAcoEntidadeResponsavel':
+          this.reciclagemDeAcoEntidadeResponsavel,
+      'reciclagemDeAluminioTotalReciclado':
+          this.reciclagemDeAluminioTotalReciclado,
+      'reciclagemDeAluminioEntidadeResponsavel':
+          this.reciclagemDeAluminioEntidadeResponsavel,
+      'reciclagemDeFerroTotalReciclado': this.reciclagemDeFerroTotalReciclado,
+      'reciclagemDeFerroEntidadeResponsavel':
+          this.reciclagemDeFerroEntidadeResponsavel,
+      'reciclagemOutroNome': this.reciclagemOutroNome,
+      'reciclagemOutroTotalReciclado': this.reciclagemOutroTotalReciclado,
+      'reciclagemOutroEntidadeResponsavel':
+          this.reciclagemOutroEntidadeResponsavel,
+      'reciclagemDeBateriasPilhasTotalReciclado':
+          this.reciclagemDeBateriasPilhasTotalReciclado,
+      'reciclagemDeBateriasPilhasEntidadeResponsavel':
+          this.reciclagemDeBateriasPilhasEntidadeResponsavel,
+      'reciclagemDeBorrachaTotalReciclado':
+          this.reciclagemDeBorrachaTotalReciclado,
+      'reciclagemDeBorrachaEntidadeResponsavel':
+          this.reciclagemDeBorrachaEntidadeResponsavel,
+      'reciclagemDeEletronicosTotalReciclado':
+          this.reciclagemDeEletronicosTotalReciclado,
+      'reciclagemDeEletronicosEntidadeResponsavel':
+          this.reciclagemDeEletronicosEntidadeResponsavel,
+      'reciclagemDeEmbalagensLongaVidaTotalReciclado':
+          this.reciclagemDeEmbalagensLongaVidaTotalReciclado,
+      'reciclagemDeEmbalagensLongaVidaEntidadeResponsavel':
+          this.reciclagemDeEmbalagensLongaVidaEntidadeResponsavel,
+      'reciclagemDeEntulhoTotalReciclado':
+          this.reciclagemDeEntulhoTotalReciclado,
+      'reciclagemDeEntulhoEntidadeResponsavel':
+          this.reciclagemDeEntulhoEntidadeResponsavel,
+      'reciclagemDeMadeiraTotalReciclado':
+          this.reciclagemDeMadeiraTotalReciclado,
+      'reciclagemDeMadeiraEntidadeResponsavel':
+          this.reciclagemDeMadeiraEntidadeResponsavel,
+      'reciclagemDePapelTotalReciclado': this.reciclagemDePapelTotalReciclado,
+      'reciclagemDePapelEntidadeResponsavel':
+          this.reciclagemDePapelEntidadeResponsavel,
+      'reciclagemDePlasticoEEmbalagensTotalReciclado':
+          this.reciclagemDePlasticoEEmbalagensTotalReciclado,
+      'reciclagemDePlasticoEEmbalagensEntidadeResponsavel':
+          this.reciclagemDePlasticoEEmbalagensEntidadeResponsavel,
+      'reciclagemDeVidroTotalReciclado': this.reciclagemDeVidroTotalReciclado,
+      'reciclagemDeVidroEntidadeResponsavel':
+          this.reciclagemDeVidroEntidadeResponsavel,
+      'reciclagemDeOleoDeCozinhaTotalReciclado':
+          this.reciclagemDeOleoDeCozinhaTotalReciclado,
+      'reciclagemDeOleoDeCozinhaEntidadeResponsavel':
+          this.reciclagemDeOleoDeCozinhaEntidadeResponsavel,
+      'reciclagemOutrosNome': this.reciclagemOutrosNome,
+      'reciclagemOutrosTotalReciclado': this.reciclagemOutrosTotalReciclado,
+      'reciclagemOutrosEntidadeResponsavel':
+          this.reciclagemOutrosEntidadeResponsavel,
+      'divulgacaoImpressaFolder': this.divulgacaoImpressaFolder,
+      'divulgacaoImpressaRevista': this.divulgacaoImpressaRevista,
+      'divulgacaoImpressaJornal': this.divulgacaoImpressaJornal,
+      'divulgacaoImpressaOutros': this.divulgacaoImpressaOutros,
+      'visitantesAno': this.visitantesAno,
+      'visitantesAnoAltaTemporada': this.visitantesAnoAltaTemporada,
+      'origemInternacionalAnoBase': this.origemInternacionalAnoBase,
+      'atrativosMaisVisitados': this.atrativosMaisVisitados,
+      'redeDeEsgoto': this.redeDeEsgoto,
+      'fossaSeptica': this.fossaSeptica,
+      'fossaRudimentar': this.fossaRudimentar,
+      'vala': this.vala,
+      'estacaoDeTratamento': this.estacaoDeTratamento,
+      'esgotoTratado': this.esgotoTratado,
+      'servicoDeEsgotoOutros': this.servicoDeEsgotoOutros,
+      'geradorDeEmergencia': this.geradorDeEmergencia,
+      'redeUrbana': this.redeUrbana,
+      'redeRural': this.redeRural,
+      'abastecimentoProprio': this.abastecimentoProprio,
+      'servicosDeEnergiaOutro': this.servicosDeEnergiaOutro,
+      'coletaSeletiva': this.coletaSeletiva,
+      'coletaNaoSeletiva': this.coletaNaoSeletiva,
+      'coletaSemColeta': this.coletaSemColeta,
+      'deposicaoAterroSanitario': this.deposicaoAterroSanitario,
+      'deposicaoCompostagem': this.deposicaoCompostagem,
+      'deposicaoACeuAberto': this.deposicaoACeuAberto,
+      'deposicaoOutro': this.deposicaoOutro,
+      'reciclagemDeAco': this.reciclagemDeAco,
+      'reciclagemDeAluminio': this.reciclagemDeAluminio,
+      'reciclagemDeFerro': this.reciclagemDeFerro,
+      'reciclagemOutro': this.reciclagemOutro,
+      'reciclagemDeBateriasPilhas': this.reciclagemDeBateriasPilhas,
+      'reciclagemDeBorracha': this.reciclagemDeBorracha,
+      'reciclagemDeEletronicos': this.reciclagemDeEletronicos,
+      'reciclagemDeEmbalagensLongaVida': this.reciclagemDeEmbalagensLongaVida,
+      'reciclagemDeEntulho': this.reciclagemDeEntulho,
+      'reciclagemDeMadeira': this.reciclagemDeMadeira,
+      'reciclagemDePapel': this.reciclagemDePapel,
+      'reciclagemDePlasticoEEmbalagens': this.reciclagemDePlasticoEEmbalagens,
+      'reciclagemDeVidro': this.reciclagemDeVidro,
+      'reciclagemDeOleoDeCozinha': this.reciclagemDeOleoDeCozinha,
+      'reciclagemOutros': this.reciclagemOutros,
+      'servicosDeComunicacaoTelefoniaMovel':
+          this.servicosDeComunicacaoTelefoniaMovel,
+      'servicosDeComunicacaoTelefoniaFixa':
+          this.servicosDeComunicacaoTelefoniaFixa,
+      'promocaoTuristicaDivulgacaoImpressa':
+          this.promocaoTuristicaDivulgacaoImpressa,
+      'promocaoTuristicaDivulgacaoTelevisiva':
+          this.promocaoTuristicaDivulgacaoTelevisiva,
+      'mesesMaisFrios': this.mesesMaisFrios,
+      'mesesMaisQuentes': this.mesesMaisQuentes,
+      'mesesMaisChuvosos': this.mesesMaisChuvosos,
+      'mesesMenosChuvosos': this.mesesMenosChuvosos,
+      'tipoDeAbastecimento': this.tipoDeAbastecimento,
+      'energiaEletrica': this.energiaEletrica,
+      'servicosDeComunicacaoAcessoAInternet':
+          this.servicosDeComunicacaoAcessoAInternet,
+      'atendimentoEmLinguaEstrangeira': this.atendimentoEmLinguaEstrangeira,
+      'atendimentoAoVisitanteInformativosImpressos':
+          this.atendimentoAoVisitanteInformativosImpressos,
+      'mesesAltaTemporada': this.mesesAltaTemporada,
+      'origemDosVisitantesTuristas': this.origemDosVisitantesTuristas,
+      'origemNacional': this.origemNacional,
+      'origemInternacional': this.origemInternacional,
+      'segmentosTurismoEspecializado': this.segmentosTurismoEspecializado,
+      'leiOrganica': this.leiOrganica,
+      'ocupacaoDoSolo': this.ocupacaoDoSolo,
+      'planoDeDesenvolvimentoDoTurismo': this.planoDeDesenvolvimentoDoTurismo,
+      'protecaoAmbiental': this.protecaoAmbiental,
+      'apoioACultura': this.apoioACultura,
+      'incentivosFiscaisAoTurismo': this.incentivosFiscaisAoTurismo,
+      'planoDiretor': this.planoDiretor,
+      'fundoMunicipalDeTurismo': this.fundoMunicipalDeTurismo,
+      'legislacaoOutras': this.legislacaoOutras,
     };
   }
 
@@ -987,6 +981,16 @@ class InformacoesBasicasModel {
         json['deposicaoAterroSanitarioRuraisAtendidos'];
     deposicaoAterroSanitarioEntidadeResponsavel =
         json['deposicaoAterroSanitarioEntidadeResponsavel'];
+
+    deposicaoCompostagemTotalAtendidos =
+        json['deposicaoCompostagemTotalAtendidos'];
+    deposicaoCompostagemDomiciliosAtendidos =
+        json['deposicaoCompostagemDomiciliosAtendidos'];
+    deposicaoCompostagemRuraisAtendidos =
+        json['deposicaoCompostagemRuraisAtendidos'];
+    deposicaoCompostagemEntidadeResponsavel =
+        json['deposicaoCompostagemEntidadeResponsavel'];
+
     deposicaoACeuAbertoTotalAtendidos =
         json['deposicaoACeuAbertoTotalAtendidos'];
     deposicaoACeuAbertoDomiciliosAtendidos =
@@ -1107,10 +1111,10 @@ class InformacoesBasicasModel {
         json['promocaoTuristicaDivulgacaoImpressa'];
     promocaoTuristicaDivulgacaoTelevisiva =
         json['promocaoTuristicaDivulgacaoTelevisiva'];
-    mesesMaisFrios =  List<String>.from(json['mesesMaisFrios']);
-    mesesMaisQuentes =  List<String>.from(json['mesesMaisQuentes']);
-    mesesMaisChuvosos =  List<String>.from(json['mesesMaisChuvosos']);
-    mesesMenosChuvosos =  List<String>.from(json['mesesMenosChuvosos']);
+    mesesMaisFrios = List<String>.from(json['mesesMaisFrios']);
+    mesesMaisQuentes = List<String>.from(json['mesesMaisQuentes']);
+    mesesMaisChuvosos = List<String>.from(json['mesesMaisChuvosos']);
+    mesesMenosChuvosos = List<String>.from(json['mesesMenosChuvosos']);
     tipoDeAbastecimento = json['tipoDeAbastecimento'];
     energiaEletrica = json['energiaEletrica'];
     servicosDeComunicacaoAcessoAInternet =
@@ -1118,11 +1122,12 @@ class InformacoesBasicasModel {
     atendimentoEmLinguaEstrangeira = json['atendimentoEmLinguaEstrangeira'];
     atendimentoAoVisitanteInformativosImpressos =
         json['atendimentoAoVisitanteInformativosImpressos'];
-    mesesAltaTemporada =  List<String>.from(json['mesesAltaTemporada']);
+    mesesAltaTemporada = List<String>.from(json['mesesAltaTemporada']);
     origemDosVisitantesTuristas = json['origemDosVisitantesTuristas'];
-    origemNacional =  List<String>.from(json['origemNacional']);
-    origemInternacional =  List<String>.from(json['origemInternacional']);
-    segmentosTurismoEspecializado =  List<String>.from(json['segmentosTurismoEspecializado']);
+    origemNacional = List<String>.from(json['origemNacional']);
+    origemInternacional = List<String>.from(json['origemInternacional']);
+    segmentosTurismoEspecializado =
+        List<String>.from(json['segmentosTurismoEspecializado']);
     leiOrganica = json['leiOrganica'];
     ocupacaoDoSolo = json['ocupacaoDoSolo'];
     planoDeDesenvolvimentoDoTurismo = json['planoDeDesenvolvimentoDoTurismo'];
@@ -1308,6 +1313,15 @@ class InformacoesBasicasModel {
         this.deposicaoAterroSanitarioRuraisAtendidos;
     data['deposicaoAterroSanitarioEntidadeResponsavel'] =
         this.deposicaoAterroSanitarioEntidadeResponsavel;
+
+    data['deposicaoCompostagemTotalAtendidos'] =
+        this.deposicaoCompostagemTotalAtendidos;
+    data['deposicaoCompostagemDomiciliosAtendidos'] =
+        this.deposicaoCompostagemDomiciliosAtendidos;
+    data['deposicaoCompostagemRuraisAtendidos'] =
+        this.deposicaoCompostagemRuraisAtendidos;
+    data['deposicaoCompostagemEntidadeResponsavel'] =
+        this.deposicaoCompostagemEntidadeResponsavel;
     data['deposicaoACeuAbertoTotalAtendidos'] =
         this.deposicaoACeuAbertoTotalAtendidos;
     data['deposicaoACeuAbertoDomiciliosAtendidos'] =

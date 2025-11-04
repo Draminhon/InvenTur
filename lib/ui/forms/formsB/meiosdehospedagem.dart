@@ -203,7 +203,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     for (final controller in _acessibilidadeControllers.values) {
       controller.dispose();
     }
-valoresjson.clear();
+    valoresjson.clear();
     valoresjson['tipo_formulario'] = 'Meios de Hospedagem';
     isUpdate = false;
     super.dispose();
@@ -594,8 +594,8 @@ class _IdentificacaoState extends State<Identificacao>
         MapaWidget(
             valoresJson: valoresjson,
             isUpdate: isUpdate,
-             latitude: widget.hospedagemModel?.latitude??"-3.73",
-            longitude: widget.hospedagemModel?.longitude?? "-38.52"),
+            latitude: widget.hospedagemModel?.latitude ?? "-3.73",
+            longitude: widget.hospedagemModel?.longitude ?? "-38.52"),
         textLabel(name: 'Endereço:', fontWeight: FontWeight.bold),
 
         CustomTextField(
@@ -1019,13 +1019,6 @@ class _FuncionamentoState extends State<Funcionamento>
       ),
       SizedBox(
         height: sizeScreen.height * 0.02,
-      ),
-      textLabel(
-        name: 'Meses de Alta Temporada',
-        fontWeight: FontWeight.bold,
-      ),
-      SizedBox(
-        height: sizeScreen.height * 0.01,
       ),
 
       CheckboxGroupFormField(

@@ -10,16 +10,23 @@ def process_value(value):
     # Se for callable, chama a função
     if callable(value):
         value = value()
-    # Se for datetime com tzinfo, remove o tzinfo
+        
+    # --- CORREÇÃO DE BUG ---
+    # Verifica se é datetime.datetime (mais específico) ANTES de verificar Model ou list.
+    # O original 'isinstance(value, datetime)' daria True para 'date' e 'datetime',
+    # mas 'date' não tem '.tzinfo', o que causaria um erro.
     if isinstance(value, datetime):
         if value.tzinfo is not None:
             value = value.replace(tzinfo=None)
-    # Se for uma instância de Model, converte para string
-    if isinstance(value, Model):
+    # Se for uma instância de Model (e não datetime), converte para string
+    elif isinstance(value, Model):
         value = str(value)
     # Se for lista ou dict, converte para JSON
     elif isinstance(value, (list, dict)):
         value = json.dumps(value, ensure_ascii=False)
+        
+    # Deixa 'date', 'int', 'str', 'bool', 'None' passarem,
+    # pois o openpyxl lida bem com eles.
     return value
 
 def export_pesquisa_to_excel(request, pesquisa_id):
@@ -35,7 +42,7 @@ def export_pesquisa_to_excel(request, pesquisa_id):
     # ==============================
     dados_sheet_title = f"Dados {date.today().strftime('%d-%m-%Y')}"
     ws_pesquisa = wb.active
-    ws_pesquisa.title = dados_sheet_title
+    ws_pesquisa.title = dados_sheet_title # Este título é curto, sem problemas
 
     EXCLUDE_FIELDS = ['id', 'is_active', 'base_ptr', 'pesquisa']
     
@@ -67,31 +74,58 @@ def export_pesquisa_to_excel(request, pesquisa_id):
     # ======================================
     # Abas para os formulários/equipamentos
     # ======================================
+    MODEL_SHEET_MAP = [
+        (AlimentosEBebidas, "Alimentos e Bebidas"),
+        (SistemaDeSeguranca, "Sistemas de Segurança"),
+        (Rodovia, "Rodovia"),
+        (MeioDeHospedagem, "Meios de Hospedagem"),
+        (LocadorasDeImoveis, "Locadoras de Imóveis"),
+        (GuiamentoEConducaoTuristica, "Guiamento e Condução Turística"),
+        (GastronomiaArtesanato, "Gastronomia e Artesanato"),
+        (OutrosMeiosDeHospedagem, "Outros Meios de Hospedagem"),
+        (InformacaoBasicaDoMunicipio, "Informações Básicas do Município"),
+        (ComercioTuristico, "Comércio Turístico"),
+        (AgenciaDeTurismo, "Agência de Turismo"),
+        (TransporteTuristico, "Transporte Turístico"),
+        (EspacoParaEventos, "Espaço para Eventos"),
+        (ServicosParaEventos, "Serviços para Eventos"),
+        (Parques, "Parques"),
+        (EspacosDeDiversaoECultura, "Espaços de Diversão e Cultura"),
+        (InformacoesTuristicas, "Informações Turísticas"),
+        (EntidadesAssociativas, "Entidades Associativas"),
+        (InstalacoesEsportivas, "Instalações Esportivas"),
+        (UnidadesDeConservacao, "Unidades de Conservação"),
+        (EventosProgramados, "Eventos Programados"),
+    ]
+
+    base_filters = {
+        'pesquisa': pesquisa,
+        'is_active': True
+    }
+
     sheets = []
-    ab_queryset = AlimentosEBebidas.objects.filter(pesquisa=pesquisa,is_active=True)
-    ss_queryset = SistemaDeSeguranca.objects.filter(pesquisa=pesquisa,is_active=True)
-    rodovia_queryset = Rodovia.objects.filter(pesquisa=pesquisa,is_active=True)
-    meiosHospedagem_queryset = MeioDeHospedagem.objects.filter(pesquisa=pesquisa,is_active=True)
 
-    if ab_queryset.exists():
-        sheets.append(("Alimentos e Bebidas", ab_queryset))
-    if ss_queryset.exists():
-        sheets.append(("Sistemas de Segurança", ss_queryset))
-    if rodovia_queryset.exists():
-        sheets.append(("Rodovia", rodovia_queryset))
-    if meiosHospedagem_queryset.exists():
-        sheets.append(("Meios de Hospedagem", meiosHospedagem_queryset))
+    for model_class, sheet_name in MODEL_SHEET_MAP:
+        results = list(model_class.objects.filter(**base_filters))
 
+        if results:
+            sheets.append((sheet_name, results, model_class))
     
-    for sheet_title, queryset in sheets:
-        ws = wb.create_sheet(title=sheet_title)
-        model = queryset.model
+    for sheet_title, results_list, model_class in sheets:
+        
+        # --- CORREÇÃO DE 31 CARACTERES ---
+        # Trunca o título para 31 caracteres para evitar o erro do Excel
+        safe_title = sheet_title[:31]
+        
+        ws = wb.create_sheet(title=safe_title)
+        model = model_class
+        
         model_field_names = [field.name for field in model._meta.fields if field.name not in EXCLUDE_FIELDS]
         m2m_field_names = [field.name for field in model._meta.many_to_many if field.name not in EXCLUDE_FIELDS]
         all_field_names = model_field_names + m2m_field_names
         ws.append(all_field_names)
         
-        for obj in queryset:
+        for obj in results_list:
             row = []
             # Processa os campos normais
             for field in model._meta.fields:
@@ -122,4 +156,3 @@ def export_pesquisa_to_excel(request, pesquisa_id):
     response["Content-Disposition"] = f'attachment; filename="pesquisa_{pesquisa.id}.xlsx"'
     wb.save(response)
     return response
-

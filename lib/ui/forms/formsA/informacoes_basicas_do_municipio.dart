@@ -182,10 +182,10 @@ class _InformacoesBasicasDoMunicipioState
     'deposicaoAterroSanitarioDomiciliosAtendidos',
     'deposicaoAterroSanitarioRuraisAtendidos',
     'deposicaoAterroSanitarioEntidadeResponsavel',
-    'deposicaoAterroSanitarioTotalAtendidos',
-    'deposicaoAterroSanitarioDomiciliosAtendidos',
-    'deposicaoAterroSanitarioRuraisAtendidos',
-    'deposicaoAterroSanitarioEntidadeResponsavel',
+    'deposicaoCompostagemTotalAtendidos',
+    'deposicaoCompostagemDomiciliosAtendidos',
+    'deposicaoCompostagemRuraisAtendidos',
+    'deposicaoCompostagemEntidadeResponsavel',
     'deposicaoACeuAbertoTotalAtendidos',
     'deposicaoACeuAbertoDomiciliosAtendidos',
     'deposicaoACeuAbertoRuraisAtendidos',
@@ -354,7 +354,7 @@ class _InformacoesBasicasDoMunicipioState
     for (final controller in _legislacaoControllers.values) {
       controller.dispose();
     }
-        valoresJson.clear();
+    valoresJson.clear();
     valoresJson['tipo_formulario'] = 'Informações Básicas do Município';
     isUpdate = false;
     super.dispose();
@@ -534,7 +534,7 @@ class _IdentificacaoState extends State<Identificacao>
         ),
 
         RadioFormField(
-          title: "Tipo",
+            title: "Tipo",
             initialValue: isUpdate ? widget.infoModel!.tipo! : '',
             options: ['Caracterização do município'],
             onSaved: widget.onSaved)
@@ -680,8 +680,8 @@ class _InformacoesGeraisState extends State<InformacoesGerais> {
       MapaWidget(
           valoresJson: valoresJson,
           isUpdate: isUpdate,
-          latitude: widget.infoModel?.latitude??"-3.73",
-            longitude: widget.infoModel?.longitude?? "-38.52"),
+          latitude: widget.infoModel?.latitude ?? "-3.73",
+          longitude: widget.infoModel?.longitude ?? "-38.52"),
       SizedBox(
         height: 55.h,
       ),
@@ -1818,28 +1818,28 @@ class _CaracteristicasState extends State<Caracteristicas>
             CustomTextField(
               name: 'Total Atendido (%)',
               controller:
-                  widget.controllers['deposicaoAterroSanitarioTotalAtendidos'],
+                  widget.controllers['deposicaoCompostagemTotalAtendidos'],
               formatter: [FilteringTextInputFormatter.digitsOnly],
               keyboardType: TextInputType.numberWithOptions(),
             ),
             CustomTextField(
               name: 'Domicílios Urbanos Atendidos (%)',
-              controller: widget
-                  .controllers['deposicaoAterroSanitarioDomiciliosAtendidos'],
+              controller:
+                  widget.controllers['deposicaoCompostagemDomiciliosAtendidos'],
               formatter: [FilteringTextInputFormatter.digitsOnly],
               keyboardType: TextInputType.numberWithOptions(),
             ),
             CustomTextField(
               name: 'Domicílios Rurais Atendidos (%)',
               controller:
-                  widget.controllers['deposicaoAterroSanitarioRuraisAtendidos'],
+                  widget.controllers['deposicaoCompostagemRuraisAtendidos'],
               formatter: [FilteringTextInputFormatter.digitsOnly],
               keyboardType: TextInputType.numberWithOptions(),
             ),
             CustomTextField(
               name: 'Entidade Responsável',
-              controller: widget
-                  .controllers['deposicaoAterroSanitarioEntidadeResponsavel'],
+              controller:
+                  widget.controllers['deposicaoCompostagemEntidadeResponsavel'],
             )
           ]),
       ConditionalFieldsGroup(

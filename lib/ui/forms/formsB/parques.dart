@@ -233,10 +233,9 @@ class _ParquesState extends State<Parques> {
         );
       } else {
         isUpdate
-            ? FormService().updateForm(widget.hospedagemModel!.id!, valoresjson,
-                AppConstants.PARQUES)
-            : FormService()
-                .sendForm(valoresjson, AppConstants.PARQUES);
+            ? FormService().updateForm(
+                widget.hospedagemModel!.id!, valoresjson, AppConstants.PARQUES)
+            : FormService().sendForm(valoresjson, AppConstants.PARQUES);
         print("Formulário finalizado e pronto para enviar!");
       }
     } else {
@@ -768,7 +767,6 @@ class _IdentificacaoState extends State<Identificacao>
         CustomTextField(
           name: 'Entidade Manetedora',
           controller: widget.controllers['entidadeManetedora'],
-
         ),
 
         CustomTextField(
@@ -1013,13 +1011,6 @@ class _FuncionamentoState extends State<Funcionamento>
       SizedBox(
         height: sizeScreen.height * 0.02,
       ),
-      textLabel(
-        name: 'Meses de Alta Temporada',
-        fontWeight: FontWeight.bold,
-      ),
-      SizedBox(
-        height: sizeScreen.height * 0.01,
-      ),
 
       CheckboxGroupFormField(
         title: 'Meses de Alta Temporada',
@@ -1203,65 +1194,68 @@ class _FuncionamentoState extends State<Funcionamento>
         ],
       ),
 
-      CheckboxGroupFormField(options: [
-        'Arcade games',
-        'Evolution',
-        'Teatro',
-        'Barco viking',
-        'Jogos eletrônicos',
-        'Roda-gigante',
-        'Barco',
-        'Labirinto',
-        'Rotor',
-        'Brinquedo com reboque',
-        'Brinquedo educativo',
-        'Brinquedo giratório',
-        'Montanha-russa aquática',
-        'Montanha-russa',
-        'Quadra poliesportiva',
-        'Show temático',
-        'Carrossel',
-        'Simuladores diversos',
-        'Campo de futebol',
-        'Kartódromo',
-        'Carro de bate-bate',
-        'Casa assombrada',
-        'Parede de escalada',
-        'Teleférico',
-        'Cascata',
-        'Piscina adulto',
-        'Piscina olímpica',
-        'Piscina infantil',
-        'Piscina com ondas',
-        'Piscina semiolímpica',
-        'Tobogã',
-        'Toboágua altura alta',
-        'Toboágua altura média',
-        'Toboágua altura baixa',
-        'Torre aquática alta',
-        'Torre aquática média',
-        'Torre aquática baixa',
-        'Cataclisma',
-        'Catapulta',
-        'Cinema',
-        'Pula-pula aquático',
-        'Escorregadores',
-        'Playground aquático',
-        'Playground',
-        'Elevador (brinquedos)',
-        'Trem-fantasma',
-        'Trenzinho',
-        'Aquário',
-        'Zoológico',
-        'Galeria',
-        'Hidromassagem',
-        'Sauna',
-        'outro'
-      ],
-      title: 'Outros Equipamentos e Espaços',
-      initialValue: isUpdate ? widget.hospedagemModel!.outrosEquipamentosEEspacos : [],
-      onSaved: (newValue) => valoresjson['outrosEquipamentosEEspacos']= newValue
-      ),
+      CheckboxGroupFormField(
+          options: [
+            'Arcade games',
+            'Evolution',
+            'Teatro',
+            'Barco viking',
+            'Jogos eletrônicos',
+            'Roda-gigante',
+            'Barco',
+            'Labirinto',
+            'Rotor',
+            'Brinquedo com reboque',
+            'Brinquedo educativo',
+            'Brinquedo giratório',
+            'Montanha-russa aquática',
+            'Montanha-russa',
+            'Quadra poliesportiva',
+            'Show temático',
+            'Carrossel',
+            'Simuladores diversos',
+            'Campo de futebol',
+            'Kartódromo',
+            'Carro de bate-bate',
+            'Casa assombrada',
+            'Parede de escalada',
+            'Teleférico',
+            'Cascata',
+            'Piscina adulto',
+            'Piscina olímpica',
+            'Piscina infantil',
+            'Piscina com ondas',
+            'Piscina semiolímpica',
+            'Tobogã',
+            'Toboágua altura alta',
+            'Toboágua altura média',
+            'Toboágua altura baixa',
+            'Torre aquática alta',
+            'Torre aquática média',
+            'Torre aquática baixa',
+            'Cataclisma',
+            'Catapulta',
+            'Cinema',
+            'Pula-pula aquático',
+            'Escorregadores',
+            'Playground aquático',
+            'Playground',
+            'Elevador (brinquedos)',
+            'Trem-fantasma',
+            'Trenzinho',
+            'Aquário',
+            'Zoológico',
+            'Galeria',
+            'Hidromassagem',
+            'Sauna',
+            'outro'
+          ],
+          title: 'Outros Equipamentos e Espaços',
+          initialValue: isUpdate
+              ? widget.hospedagemModel!.outrosEquipamentosEEspacos
+              : [],
+          onSaved: (newValue) =>
+              valoresjson['outrosEquipamentosEEspacos'] = newValue),
 
       SizedBox(
         height: sizeScreen.height * 0.02,

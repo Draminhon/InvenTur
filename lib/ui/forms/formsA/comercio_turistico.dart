@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/models/forms/forms%20A/comercio_turistico_model.dart';
+import 'package:inventur/ui/widgets/maps/mapa_widget.dart';
 import 'package:inventur/ui/widgets/widgets/checkBox.dart';
 import 'package:inventur/ui/widgets/widgets/fields.dart';
 import 'package:inventur/ui/widgets/container_widget.dart';
@@ -159,7 +160,7 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
       ),
     ];
   }
-  
+
   @override
   void dispose() {
     for (final controller in _identificacaoControllers.values) {
@@ -168,14 +169,15 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
     for (final controller in _funcionamentoControllers.values) {
       controller.dispose();
     }
-    for(final controller in _protecaoControllers.values){
+    for (final controller in _protecaoControllers.values) {
       controller.dispose();
     }
-     valoresJson.clear();
+    valoresJson.clear();
     valoresJson['tipo_formulario'] = 'Comércio Turístico';
     isUpdate = false;
     super.dispose();
   }
+
   void getInfoUsersInPesquisa() async {
     Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
 
@@ -230,7 +232,6 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
         // _enviarFormulario(); // Você pode chamar sua função de envio aqui
       }
     } else {
-
       _formKey.currentState!.save();
       _identificacaoControllers.forEach((key, controller) {
         valoresJson[key] = controller.text;
@@ -343,8 +344,9 @@ class Identificacao extends StatefulWidget {
   State<Identificacao> createState() => _IdentificacaoState();
 }
 
-class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveClientMixin {
-        bool _isFullScreen = false;
+class _IdentificacaoState extends State<Identificacao>
+    with AutomaticKeepAliveClientMixin {
+  bool _isFullScreen = false;
 
   // Altura inicial do mapa quando não está em tela cheia
   final double _initialMapHeight = 300.0;
@@ -354,6 +356,7 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
       _isFullScreen = !_isFullScreen;
     });
   }
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
@@ -361,7 +364,8 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
   Widget build(BuildContext context) {
     super.build(context);
     final sizeScreen = MediaQuery.sizeOf(context);
-    final double currentMapHeight = _isFullScreen ? sizeScreen.height * 0.8 : _initialMapHeight;
+    final double currentMapHeight =
+        _isFullScreen ? sizeScreen.height * 0.8 : _initialMapHeight;
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -412,7 +416,7 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
           ),
           CustomTextField(
             name: 'CNPJ',
-           // validat: _validators.validarCNPJ,
+            // validat: _validators.validarCNPJ,
             keyboardType: TextInputType.numberWithOptions(),
             formatter: [_validators.cnpjFormatter],
             controller: widget.controllers['CNPJ'],
@@ -469,28 +473,11 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
             name: "Coordenadas Geográficas",
             fontWeight: FontWeight.bold,
           ),
-             SizedBox(
-        
-        height: _isFullScreen ? currentMapHeight : currentMapHeight,
-
-        width: 1300.h,
-        child: GestureDetector(
-          onDoubleTap:() =>  _toggleFullScreen(),
-          child: MeuMapa(onPlaceSelected: (value) {
-            setState(() {
-              value.forEach(
-                (key, value) {
-                  
-                  valoresJson[key] = value;
-                },
-              );
-              
-            });
-          },
-         
-          initialLatitude: isUpdate ? double.tryParse(widget.infoModel!.latitude!) : null,
-          initialLongitute: isUpdate ? double.tryParse(widget.infoModel!.longitude!) : null,
-          ))),
+          MapaWidget(
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              latitude: widget.infoModel?.latitude ?? "-3.73",
+              longitude: widget.infoModel?.longitude ?? "-38.52"),
           SizedBox(
             height: 55.h,
           ),
@@ -559,7 +546,8 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
             valoresJson: valoresJson,
             isUpdate: isUpdate,
             children: [],
-            optionModelValue: isUpdate ? widget.infoModel!.sinalizacaoDeAcesso! : '',
+            optionModelValue:
+                isUpdate ? widget.infoModel!.sinalizacaoDeAcesso! : '',
           ),
           ConditionalFieldsGroup(
             title: 'Turística',
@@ -567,7 +555,8 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
             valoresJson: valoresJson,
             isUpdate: isUpdate,
             children: [],
-            optionModelValue: isUpdate ? widget.infoModel!.sinalizacaoTuristica! : '',
+            optionModelValue:
+                isUpdate ? widget.infoModel!.sinalizacaoTuristica! : '',
           ),
           CustomTextField(
             name: 'Pontos de Referência',
@@ -580,7 +569,6 @@ class _IdentificacaoState extends State<Identificacao> with AutomaticKeepAliveCl
       ),
     );
   }
-
 }
 
 class Funcionamento extends StatefulWidget {
@@ -594,7 +582,8 @@ class Funcionamento extends StatefulWidget {
   State<Funcionamento> createState() => _FuncionamentoState();
 }
 
-class _FuncionamentoState extends State<Funcionamento> with AutomaticKeepAliveClientMixin {
+class _FuncionamentoState extends State<Funcionamento>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -637,8 +626,9 @@ class _FuncionamentoState extends State<Funcionamento> with AutomaticKeepAliveCl
               'Inglês e Espanhol',
               'outro'
             ],
-            initialValue:
-                isUpdate ? widget.infoModel!.atendimentoEmLinguaEstrangeira! : '',
+            initialValue: isUpdate
+                ? widget.infoModel!.atendimentoEmLinguaEstrangeira!
+                : '',
             title: 'Atendimento em Língua Estrangeira',
             onSaved: (newValue) =>
                 valoresJson['atendimentoEmLinguaEstrangeira'] = newValue,
@@ -648,7 +638,8 @@ class _FuncionamentoState extends State<Funcionamento> with AutomaticKeepAliveCl
             title: 'Informativos Impressos',
             onSaved: (newValue) =>
                 valoresJson['informativosImpressos'] = newValue,
-            initialValue: isUpdate ? widget.infoModel!.informativosImpressos! : [],
+            initialValue:
+                isUpdate ? widget.infoModel!.informativosImpressos! : [],
           ),
           SizedBox(
             height: 55.h,
@@ -700,7 +691,8 @@ class _FuncionamentoState extends State<Funcionamento> with AutomaticKeepAliveCl
               jsonKey: 'funcionamento24h',
               valoresJson: valoresJson,
               isUpdate: isUpdate,
-              optionModelValue: isUpdate ? widget.infoModel!.funcionamento24h : '',
+              optionModelValue:
+                  isUpdate ? widget.infoModel!.funcionamento24h : '',
               children: []),
           ConditionalFieldsGroup(
               title: 'Funcionamento\nem Feriados',
@@ -806,7 +798,7 @@ class _FuncionamentoState extends State<Funcionamento> with AutomaticKeepAliveCl
       ),
     );
   }
-  
+
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
@@ -1113,21 +1105,22 @@ class Protecao extends StatelessWidget {
                 SizedBox(
                   height: 55.h,
                 ),
-               
               ]),
-              SizedBox(height: 55.h,),
-               ContainerHeader(title: 'Observações e Referências'),
-                SizedBox(
-                  height: 55.h,
-                ),
-                CustomTextField(
-                  name: 'Observações',
-                  controller: controllers['observacoes'],
-                ),
-                CustomTextField(
-                  name: 'Referências',
-                  controller: controllers['referencias'],
-                )
+          SizedBox(
+            height: 55.h,
+          ),
+          ContainerHeader(title: 'Observações e Referências'),
+          SizedBox(
+            height: 55.h,
+          ),
+          CustomTextField(
+            name: 'Observações',
+            controller: controllers['observacoes'],
+          ),
+          CustomTextField(
+            name: 'Referências',
+            controller: controllers['referencias'],
+          )
         ],
       ),
     );

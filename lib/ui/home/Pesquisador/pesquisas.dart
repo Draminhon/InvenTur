@@ -447,13 +447,14 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
             'Unidades De Conservação': (data) => UnidadesDeConservacao(
                   hospedagemModel: UnidadesDeConservacaoModel.fromJson(data),
                 ),
-
             'Eventos Programados': (data) => EventosProgramados(
-              hospedagemModel: EventosProgramadosModel.fromJson(data),
-            ),
-            'Gastronomia e Artesanatos': (data)=>GastronomiaArtesanatoTrabalhosManuais(
-              hospedagemModel: GastronomiaArtesanatoTrabalhosManuaisModel.fromJson(data),
-            )
+                  hospedagemModel: EventosProgramadosModel.fromJson(data),
+                ),
+            'Gastronomia e Artesanatos': (data) =>
+                GastronomiaArtesanatoTrabalhosManuais(
+                  hospedagemModel:
+                      GastronomiaArtesanatoTrabalhosManuaisModel.fromJson(data),
+                )
           };
           return GestureDetector(
             onTap: () {
@@ -643,6 +644,16 @@ String getDisplay(Map<String, dynamic> dados) {
     case 'Locadora de Imóveis':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Entidades Associativas e Similares':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Guiamento e Condução Turística':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Instalações Esportivas':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Unidades De Conservação':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Eventos Programados':
+      return '$tipoFormulario\n${dados['regiao_turistica']}';
+    case 'Gastronomia e Artesanatos':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
     default:
       return '$tipoFormulario\n${dados['tipo'] ?? ''}';
