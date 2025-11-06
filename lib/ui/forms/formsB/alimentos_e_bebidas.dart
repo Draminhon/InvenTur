@@ -555,9 +555,11 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             name: 'Coordenadas Geográficas',
             fontWeight: FontWeight.bold,
           ),
-        MapaWidget(valoresJson: valoresJson, isUpdate: isUpdate,
-         latitude: widget.infoModel?.latitude??"-3.73",
-            longitude: widget.infoModel?.longitude?? "-38.52"),
+        MapaWidget(
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              latitude: widget.infoModel?.latitude ?? "Não Informado",
+              longitude: widget.infoModel?.longitude ?? "Não Informado"),
           textLabel(
             name: 'Endereço:',
             fontWeight: FontWeight.bold,

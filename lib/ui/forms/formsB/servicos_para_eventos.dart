@@ -557,11 +557,11 @@ class _IdentificacaoState extends State<Identificacao>
         SizedBox(
           height: sizeScreen.height * 0.02,
         ),
-        MapaWidget(
-            valoresJson: valoresjson,
-            isUpdate: isUpdate,
-            latitude: widget.hospedagemModel?.latitude ?? "-3.73",
-            longitude: widget.hospedagemModel?.longitude ?? "-38.52"),
+      MapaWidget(
+              valoresJson: valoresjson,
+              isUpdate: isUpdate,
+              latitude: widget.hospedagemModel?.latitude ?? "Não Informado",
+              longitude: widget.hospedagemModel?.longitude ?? "Não Informado"),
         textLabel(name: 'Endereço:', fontWeight: FontWeight.bold),
 
         CustomTextField(

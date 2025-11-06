@@ -7,7 +7,6 @@ import 'package:inventur/ui/widgets/maps/mapa_widget.dart';
 import 'package:inventur/ui/widgets/widgets/checkBox.dart';
 import 'package:inventur/ui/widgets/widgets/fields.dart';
 import 'package:inventur/ui/widgets/container_widget.dart';
-import 'package:inventur/ui/widgets/maps/map.dart';
 import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
 import 'package:inventur/ui/widgets/text%20fields/customTextField.dart';
 import 'package:inventur/ui/widgets/radioButton.dart';
@@ -476,8 +475,8 @@ class _IdentificacaoState extends State<Identificacao>
           MapaWidget(
               valoresJson: valoresJson,
               isUpdate: isUpdate,
-              latitude: widget.infoModel?.latitude ?? "-3.73",
-              longitude: widget.infoModel?.longitude ?? "-38.52"),
+              latitude: widget.infoModel?.latitude ?? "Não Informado",
+              longitude: widget.infoModel?.longitude ?? "Não Informado"),
           SizedBox(
             height: 55.h,
           ),

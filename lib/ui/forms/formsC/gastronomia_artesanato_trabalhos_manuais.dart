@@ -16,7 +16,7 @@ import 'package:inventur/controllers/pesquisa_controller.dart';
 import 'package:inventur/ui/widgets/widgets/fields.dart';
 
 final Map<String, dynamic> valoresjson = {
-  'tipo_formulario': 'Gastronomia, Artesanato e Trabalhos Manuais',
+  'tipo_formulario': 'Gastronomia e Artesanato',
 };
 bool isUpdate = false;
 
@@ -257,7 +257,7 @@ class _GastronomiaArtesanatoTrabalhosManuaisState
 
     valoresjson.clear();
     valoresjson['tipo_formulario'] =
-        'Gastronomia, Artesanato e Trabalhos Manuais';
+        'Gastronomia e Artesanato';
     isUpdate = false;
     super.dispose();
   }

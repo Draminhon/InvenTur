@@ -642,3 +642,11 @@ class EntidadesAssociativasAdmin(admin.ModelAdmin):
 @admin.register(UnidadesDeConservacao)
 class UnidadesDeConservacaoAdmin(admin.ModelAdmin):
     list_display = [field.name for field in UnidadesDeConservacao._meta.fields]  
+
+@admin.register(EventosProgramados)
+class EventosProgramadosAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in EventosProgramados._meta.fields] 
+    
+@admin.register(GastronomiaArtesanato)
+class GastronomiaArtesanatoAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in GastronomiaArtesanato._meta.fields] 

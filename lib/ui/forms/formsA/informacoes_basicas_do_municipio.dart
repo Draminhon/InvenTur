@@ -678,10 +678,10 @@ class _InformacoesGeraisState extends State<InformacoesGerais> {
       //   ],
       // ),
       MapaWidget(
-          valoresJson: valoresJson,
-          isUpdate: isUpdate,
-          latitude: widget.infoModel?.latitude ?? "-3.73",
-          longitude: widget.infoModel?.longitude ?? "-38.52"),
+              valoresJson: valoresJson,
+              isUpdate: isUpdate,
+              latitude: widget.infoModel?.latitude ?? "Não Informado",
+              longitude: widget.infoModel?.longitude ?? "Não Informado"),
       SizedBox(
         height: 55.h,
       ),

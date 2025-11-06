@@ -400,7 +400,6 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
           final equipamento = filteredPosts[index];
           final dados = equipamento['dados'];
 
-          print(equipamento['tipo']);
           final Map<String, Widget Function(dynamic data)> pageBuilders = {
             'Rodovia': (data) =>
                 Rodovia(infoModel: RodoviaModel.fromJson(data)),
@@ -612,6 +611,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
 /// Função auxiliar para montar o texto exibido para cada equipamento
 String getDisplay(Map<String, dynamic> dados) {
   final tipoFormulario = dados['tipo_formulario'] ?? '';
+  print(tipoFormulario);
   switch (tipoFormulario) {
     case 'Rodovia':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
@@ -645,15 +645,15 @@ String getDisplay(Map<String, dynamic> dados) {
       return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Entidades Associativas e Similares':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
-    case 'Guiamento e Condução Turística':
+    case 'Guiamento E Condução Turística':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Instalações Esportivas':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
-    case 'Unidades De Conservação':
+    case 'Unidades de Conservação':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
     case 'Eventos Programados':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
-    case 'Gastronomia e Artesanatos':
+    case 'Gastronomia e Artesanato':
       return '$tipoFormulario\n${dados['regiao_turistica']}';
     default:
       return '$tipoFormulario\n${dados['tipo'] ?? ''}';
