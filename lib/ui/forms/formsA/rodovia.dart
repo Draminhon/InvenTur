@@ -6,15 +6,12 @@ import 'package:inventur/models/forms/forms%20A/rodovia_model.dart';
 import 'package:inventur/ui/widgets/widgets/fields.dart';
 import 'package:inventur/ui/widgets/container_widget.dart';
 import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
-import 'package:inventur/services/admin_service.dart';
-import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
-import 'package:inventur/validators/validators.dart';
+import 'package:inventur/utils/utils_functions.dart';
 import '../../widgets/text fields/customTextField.dart';
 import '../../widgets/radioButton.dart';
 import '../../widgets/widgets/checkBox.dart';
 
-final Validators _validators = Validators();
 final Map<String, dynamic> valoresjson = {
   'tipo_formulario': 'Rodovia',
 };
@@ -31,7 +28,9 @@ class Rodovia extends StatefulWidget {
 
 class _RodoviaState extends State<Rodovia> {
   int currentStep = 0;
-
+  int pesquisadorId = 0;
+  bool isTheOwner = false;
+  final UtilsFunctions _utils = UtilsFunctions();
   late List<Widget> pages;
 
   final _formKey = GlobalKey<FormState>();
@@ -51,7 +50,6 @@ class _RodoviaState extends State<Rodovia> {
     'municipios_vizinhos_interligados_rodovia',
     'whatsapp',
     'instagram',
-    
   ];
 
   final List<String> _chavesCaracteristicas = const [
@@ -67,18 +65,6 @@ class _RodoviaState extends State<Rodovia> {
     'observacoes',
     'referencias',
   ];
-
-  void getInfoUsersInPesquisa() async {
-    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
-
-    valoresjson['nome_pesquisador'] = info['pesquisador']['nome'];
-    valoresjson['telefone_pesquisador'] = info['pesquisador']['telefone'];
-    valoresjson['email_pesquisador'] = info['pesquisador']['email'];
-
-    valoresjson['nome_coordenador'] = info['coordenador']['nome'];
-    valoresjson['telefone_coordenador'] = info['coordenador']['telefone'];
-    valoresjson['email_coordenador'] = info['coordenador']['email'];
-  }
 
   void _preencherDadosParaTeste() {
     if (widget.infoModel != null) {
@@ -107,7 +93,6 @@ class _RodoviaState extends State<Rodovia> {
     super.didChangeDependencies();
     try {
       final argument = ModalRoute.of(context)!.settings.arguments as Map;
-      print("ARGUMENTO: $argument");
       if (argument.containsKey('isUpdate')) {
         isUpdate = argument['isUpdate'];
       } else {
@@ -116,7 +101,6 @@ class _RodoviaState extends State<Rodovia> {
     } catch (e) {
       isUpdate = false;
     }
-    print("VARIAVEL IS UPDATE: $isUpdate");
     if (isUpdate == true) {
       _preencherDadosParaTeste();
     }
@@ -125,7 +109,23 @@ class _RodoviaState extends State<Rodovia> {
   @override
   void initState() {
     super.initState();
-    getInfoUsersInPesquisa();
+
+    _utils
+        .getInfoUsersInPesquisa(valoresjson)
+        .then(
+          (value) => setState(() {
+            pesquisadorId = value;
+          }),
+        )
+        .then(
+          (value) => setState(() {
+            if (widget.infoModel != null) {
+              print("chamando funcao");
+              isTheOwner = _utils.isTheOwner(
+                  pesquisadorId, widget.infoModel!.usuario_criador!);
+            }
+          }),
+        );
 
     for (final key in _chavesIdentificacao) {
       _identificacaoControllers[key] = TextEditingController();
@@ -141,9 +141,9 @@ class _RodoviaState extends State<Rodovia> {
         hospedagemModel: widget.infoModel,
       ),
       Caracteristicas(
-         controllers: _caracteristicasControllers,
-         hospedagemModel: widget.infoModel,
-       ),
+        controllers: _caracteristicasControllers,
+        hospedagemModel: widget.infoModel,
+      ),
     ];
   }
 
@@ -177,11 +177,6 @@ class _RodoviaState extends State<Rodovia> {
         },
       );
 
-      valoresjson.forEach(
-        (key, value) {
-          print("$key  - $value");
-        },
-      );
       if (currentStep < pages.length - 1) {
         // Avança para a próxima página
         _pageController.nextPage(
@@ -189,11 +184,13 @@ class _RodoviaState extends State<Rodovia> {
           curve: Curves.ease,
         );
       } else {
-        isUpdate
-            ? FormService().updateForm(
-                widget.infoModel!.id!, valoresjson, AppConstants.RODOVIA_CREATE)
-            : FormService().sendForm(valoresjson, AppConstants.RODOVIA_CREATE);
-        print("Formulário finalizado e pronto para enviar!");
+
+          _utils.decideSendingOrUpdating(isUpdate,
+           isTheOwner,
+            context,
+             widget.infoModel?.id ?? 0,
+              valoresjson,
+               AppConstants.RODOVIA_CREATE);
       }
     } else {
       _formKey.currentState!.save();
@@ -206,12 +203,6 @@ class _RodoviaState extends State<Rodovia> {
         },
       );
 
-      valoresjson.forEach(
-        (key, value) {
-          print("$key  - $value");
-        },
-      );
-
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Por favor, corrija os erros no formulário.')));
     }
@@ -219,11 +210,6 @@ class _RodoviaState extends State<Rodovia> {
 
   @override
   Widget build(BuildContext context) {
-    valoresjson.forEach(
-      (key, value) {
-        print("$key : $value");
-      },
-    );
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(

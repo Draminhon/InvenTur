@@ -1,49 +1,58 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/ui/screens/password%20recover%20screens/changepassword_page.dart';
+import 'package:inventur/ui/screens/password%20recover%20screens/passwordOtp_page.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:inventur/validators/email_validator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class RecuperarSenha extends StatelessWidget {
+class RecuperarSenha extends StatefulWidget {
+  RecuperarSenha({super.key});
+
+  @override
+  State<RecuperarSenha> createState() => _RecuperarSenhaState();
+}
+
+class _RecuperarSenhaState extends State<RecuperarSenha> {
   final EmailValidator _emailValidator = EmailValidator();
+
   final TextEditingController _emailController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
-  RecuperarSenha({super.key});
+  bool _isLoading = false;
+  Future<void> requestOtp(String email) async {
+    try {
+      final response = await http.post(
+        Uri.parse('${AppConstants.BASE_URI}password-reset/request/'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email}),
+      );
+
+      if (response.statusCode == 200) {
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) {
+          return PasswordotpPage(email: email);
+        }));
+      } else {
+        print(response.body);
+        final snackBar = SnackBar(
+          content: Text('Verifique o e-mail informado e tente novamente.'),
+          behavior: SnackBarBehavior.floating,
+          backgroundColor: Colors.redAccent,
+          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          duration: const Duration(seconds: 3),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Future<void> requestOtp(String email) async {
-      try {
-        final response = await http.post(
-          Uri.parse('${AppConstants.BASE_URI}password-reset/request/'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'email': email}),
-        );
-
-        if (response.statusCode == 200) {
-
-          Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) {
-            return MudarSenha(email: _emailController.text);
-          }));
-        } else {
-          print(response.body);
-          final snackBar = SnackBar(
-            content: Text('Verifique o e-mail informado e tente novamente.'),
-            behavior: SnackBarBehavior.floating,
-            backgroundColor: Colors.redAccent,
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            duration: const Duration(seconds: 3),
-          );
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        }
-      } catch (e) {
-        print(e);
-      }
-    }
-
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
         backgroundColor: Colors.white,
@@ -158,26 +167,29 @@ class RecuperarSenha extends StatelessWidget {
                       backgroundColor: const Color.fromARGB(255, 55, 111, 60),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
-                  onPressed: () async {
-          showDialog(context: context, builder: (context) {
-            return Container(
-              padding: EdgeInsets.symmetric(vertical: 1000.w, horizontal: 200.w),
-              child: AlertDialog(
-
-                content: Center(child: CircularProgressIndicator()),
-                shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(20)),
-              ),
-            );
-          },);
+                  onPressed: _isLoading ? null :
+                   () async {
                     
-
+                   
                     _formKey.currentState!.save();
                     if (_formKey.currentState?.validate() ?? false) {
+                      setState(() => _isLoading = true,);
+
                       await requestOtp(_emailController.text);
+
+                      if(mounted){
+                        setState(() => _isLoading=false,);
+                      }
                     }
-                  },
-                  child: const Text(
+                    
+                                      },
+                  child: _isLoading ?
+                  SizedBox(
+                    height: 20.h,
+                    width: 20.w,
+                    child: CircularProgressIndicator(color: Colors.white, strokeAlign: 2,),
+                  ) :
+                   const Text(
                     'OBTER CÓDIGO',
                     style: TextStyle(
                         color: Colors.white,

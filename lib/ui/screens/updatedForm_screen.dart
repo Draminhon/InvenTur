@@ -72,7 +72,8 @@ class UpdatedForm extends StatelessWidget {
           const SizedBox(height: 150),
           GestureDetector(
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/PesquisadorHome');
+                           Navigator.pop(context);
+
             },
             child: Container(
               height: 55,
@@ -140,7 +141,7 @@ class UpdatedFormError extends StatelessWidget {
           const SizedBox(height: 150),
           GestureDetector(
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/PesquisadorHome');
+              Navigator.pop(context);
             },
             child: Container(
               height: 55,

@@ -87,8 +87,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Use your email provider's SMTP server
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'britomurilorog@gmail.com'
-EMAIL_HOST_PASSWORD = 'Murilo159753@'
+EMAIL_HOST_USER = 'murilo.brito07@aluno.ifce.edu.br'
+EMAIL_HOST_PASSWORD = 'hxnl tetw spvi ntjy '
 
 
 MIDDLEWARE = [
@@ -188,9 +188,3 @@ DATE_INPUT_FORMATS = [
     '%d/%m/%Y',  # Dia/Mês/Ano
 ]
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = True
-EMAIL_PORT = 587
-EMAIL_HOST_USER = "britomurilorog@gmail.com"
-EMAIL_HOST_PASSWORD = "vgtv ojuk nzck ptfp "

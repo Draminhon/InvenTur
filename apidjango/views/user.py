@@ -9,7 +9,7 @@ from rest_framework import generics
 
 class UserViewSet(viewsets.ModelViewSet):
 
-    queryset = CustomUser.objects.filter(is_active=True)
+    queryset = CustomUser.objects.filter(is_active=True, is_superuser=False)
     serializer_class = UserSerializer
 
     permission_classes = [permissions.AllowAny] 

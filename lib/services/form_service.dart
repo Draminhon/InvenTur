@@ -8,7 +8,6 @@ import 'package:inventur/ui/screens/updatedForm_screen.dart';
 import 'package:inventur/ui/screens/sync_page.dart';
 import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/services/sync_service.dart';
-import 'package:inventur/services/temporary.dart';
 import 'package:inventur/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

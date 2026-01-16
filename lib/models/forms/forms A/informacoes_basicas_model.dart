@@ -1,5 +1,6 @@
 class InformacoesBasicasModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -250,6 +251,7 @@ class InformacoesBasicasModel {
 
   InformacoesBasicasModel(
       {this.id,
+      this.usuario_criador,
       this.tipoFormulario,
       this.uf,
       this.regiaoTuristica,
@@ -502,6 +504,7 @@ class InformacoesBasicasModel {
     return {
       'tipo_formulario': this.tipoFormulario,
       'uf': this.uf,
+      'usuario_criador': this.usuario_criador,
       'regiao_turistica': this.regiaoTuristica,
       'municipio': this.municipio,
       'tipo': this.tipo,
@@ -818,7 +821,7 @@ class InformacoesBasicasModel {
 
   InformacoesBasicasModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-
+usuario_criador = json['usuario_criador'];
     tipoFormulario = json['tipo_formulario'];
     uf = json['uf'];
     regiaoTuristica = json['regiao_turistica'];
@@ -1142,6 +1145,7 @@ class InformacoesBasicasModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = id;
+    data['usuario_criador'] = usuario_criador;
     data['tipo_formulario'] = this.tipoFormulario;
     data['uf'] = this.uf;
     data['regiao_turistica'] = this.regiaoTuristica;

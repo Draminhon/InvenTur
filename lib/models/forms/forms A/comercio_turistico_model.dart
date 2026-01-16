@@ -1,5 +1,6 @@
 class ComercioTuristicoModel {
     int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -82,6 +83,7 @@ class ComercioTuristicoModel {
   ComercioTuristicoModel(
       {
             this.id,
+            this.usuario_criador,
         this.tipoFormulario,
       this.uf,
       this.regiaoTuristica,
@@ -164,6 +166,7 @@ class ComercioTuristicoModel {
 
   Map<String, dynamic> toMap(){
     return{
+      'usuario_criador': this.usuario_criador,
           'tipo_formulario': this.tipoFormulario,
     'uf': this.uf,
     'regiao_turistica': this.regiaoTuristica,
@@ -250,7 +253,7 @@ class ComercioTuristicoModel {
 
   ComercioTuristicoModel.fromJson(Map<String, dynamic> json) {
         id = json['id'];
-
+usuario_criador = json['usuario_criador'];
     tipoFormulario = json['tipo_formulario'];
     uf = json['uf'];
     regiaoTuristica = json['regiao_turistica'];
@@ -336,6 +339,7 @@ class ComercioTuristicoModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['sinalizacaoDeAcesso'] = this.sinalizacaoDeAcesso;
+    data['usuario_criador'] = this.usuario_criador;
     data['sinalizacaoTuristica'] = this.sinalizacaoTuristica;
     data['subtipo'] = this.subtipo;
     data['natureza'] = this.natureza;

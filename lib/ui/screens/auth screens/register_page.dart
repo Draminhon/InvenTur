@@ -434,10 +434,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.black.withAlpha(5)),
                             ),
-                            SizedBox(
-                                height: 150.w,
-                                width: 150.w,
-                                child: CircularProgressIndicator())
+                            Center(
+                              child: SizedBox(
+                                  height: 150.w,
+                                  width: 150.w,
+                                  child: CircularProgressIndicator()),
+                            )
                           ],
                         ),
                       ),

@@ -62,14 +62,20 @@ Future<void> initApp() async {
 Future<List<Pesquisa>> getPesquisasOffline() async {
   final prefs = await SharedPreferences.getInstance();
   
-   String? user = prefs.getString("user_data")!;
 
+   String? user = prefs.getString("user_data");
+
+  if(user != null){
     Map<String, dynamic> userData = jsonDecode(user);
-
     List<dynamic> pesquisasJson = userData['pesquisas'];
-    
+  
     List<Pesquisa> pesquisas =pesquisasJson.map((json) => Pesquisa.fromJson(json as Map<String, dynamic>))
     .toList();
-
     return pesquisas;
+
+  }
+
+    return [];
+
+    
 }

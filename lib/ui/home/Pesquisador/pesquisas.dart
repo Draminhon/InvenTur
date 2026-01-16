@@ -160,6 +160,8 @@ class _PesquisasState extends State<Pesquisas> {
   CheckConnectivity connection = new CheckConnectivity();
 
   Future<List<Map<String, dynamic>>> getRodovias() async {
+
+
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     final pesquisaId = arguments['pesquisa_id'];
 
@@ -399,7 +401,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
           final isadmin = arguments['is_admin'];
           final equipamento = filteredPosts[index];
           final dados = equipamento['dados'];
-
+          print(dados['usuario_criador']);
           final Map<String, Widget Function(dynamic data)> pageBuilders = {
             'Rodovia': (data) =>
                 Rodovia(infoModel: RodoviaModel.fromJson(data)),

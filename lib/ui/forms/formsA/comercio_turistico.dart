@@ -11,9 +11,8 @@ import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
 import 'package:inventur/ui/widgets/text%20fields/customTextField.dart';
 import 'package:inventur/ui/widgets/radioButton.dart';
 import 'package:inventur/ui/widgets/text%20fields/tables.dart';
-import 'package:inventur/services/admin_service.dart';
-import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
+import 'package:inventur/utils/utils_functions.dart';
 import 'package:inventur/validators/validators.dart';
 
 final Validators _validators = Validators();
@@ -32,6 +31,10 @@ class ComercioTuristico extends StatefulWidget {
 
 class _ComercioTuristicoState extends State<ComercioTuristico> {
   int currentStep = 0;
+
+    int pesquisadorId = 0;
+  bool isTheOwner = false;
+  final UtilsFunctions _utils = UtilsFunctions();
 
   late List<Widget> pages;
 
@@ -131,7 +134,22 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getInfoUsersInPesquisa();
+     _utils
+        .getInfoUsersInPesquisa(valoresJson)
+        .then(
+          (value) => setState(() {
+            pesquisadorId = value;
+          }),
+        )
+        .then(
+          (value) => setState(() {
+            if (widget.infoModel != null) {
+              print("chamando funcao");
+              isTheOwner = _utils.isTheOwner(
+                  pesquisadorId, widget.infoModel!.usuario_criador!);
+            }
+          }),
+        );
     for (final key in _chavesIdentificacao) {
       _identificacaoControllers[key] = TextEditingController();
     }
@@ -177,18 +195,6 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
     super.dispose();
   }
 
-  void getInfoUsersInPesquisa() async {
-    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
-
-    valoresJson['nome_pesquisador'] = info['pesquisador']['nome'];
-    valoresJson['telefone_pesquisador'] = info['pesquisador']['telefone'];
-    valoresJson['email_pesquisador'] = info['pesquisador']['email'];
-
-    valoresJson['nome_coordenador'] = info['coordenador']['nome'];
-    valoresJson['telefone_coordenador'] = info['coordenador']['telefone'];
-    valoresJson['email_coordenador'] = info['coordenador']['email'];
-  }
-
   void _enviarFormulario() {
     if (_formKey.currentState?.validate() ?? false) {
       _formKey.currentState!.save();
@@ -208,11 +214,7 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
           valoresJson[key] = value.text;
         },
       );
-      valoresJson.forEach(
-        (key, value) {
-          print("$key  - $value");
-        },
-      );
+
       if (currentStep < pages.length - 1) {
         // Avança para a próxima página
         _pageController.nextPage(
@@ -220,15 +222,11 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
           curve: Curves.ease,
         );
       } else {
-        // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
-        isUpdate
-            ? FormService().updateForm(widget.infoModel!.id!, valoresJson,
-                AppConstants.COMERCIO_TURISTICO)
-            : FormService()
-                .sendForm(valoresJson, AppConstants.COMERCIO_TURISTICO);
-        print("Formulário finalizado e pronto para enviar!");
+                _utils.decideSendingOrUpdating(isUpdate,
+                 isTheOwner,
+                  context,
+                   widget.infoModel?.id ?? 0, valoresJson, AppConstants.COMERCIO_TURISTICO);
 
-        // _enviarFormulario(); // Você pode chamar sua função de envio aqui
       }
     } else {
       _formKey.currentState!.save();

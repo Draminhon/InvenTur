@@ -1,5 +1,6 @@
 class LocadoraDeImoveisModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -18,6 +19,7 @@ class LocadoraDeImoveisModel {
 
   LocadoraDeImoveisModel({
     this.id,
+    this.usuario_criador,
     this.tipoFormulario,
     this.uf,
     this.regiaoTuristica,
@@ -38,6 +40,7 @@ class LocadoraDeImoveisModel {
   // Método para converter JSON em objeto
   LocadoraDeImoveisModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador = json['usuario_criador'];
     tipoFormulario = json['tipo_formulario'];
     uf = json['uf'];
     regiaoTuristica = json['regiao_turistica'];
@@ -70,6 +73,7 @@ class LocadoraDeImoveisModel {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['usuario_criador'] = usuario_criador;
     data['tipo_formulario'] = tipoFormulario;
     data['uf'] = uf;
     data['regiao_turistica'] = regiaoTuristica;

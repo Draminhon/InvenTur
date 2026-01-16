@@ -2,6 +2,8 @@ class RodoviaModel{
     late List<RodoviaModel> _rodovias;
     List<RodoviaModel> get rodovias => _rodovias;
   int? id;
+  
+  int? usuario_criador;
   String? tipoFormulario;
   String? criacao;
   String? atualizacao;
@@ -59,6 +61,7 @@ class RodoviaModel{
   RodoviaModel(
       {  
       this.id,
+      this.usuario_criador,
       this.tipoFormulario,
       this.criacao,
       this.atualizacao,
@@ -120,6 +123,7 @@ class RodoviaModel{
 
   RodoviaModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador = json['usuario_criador'];
     tipoFormulario = json['tipo_formulario'];
     criacao = json['criacao'];
     atualizacao = json['atualizacao'];
@@ -186,6 +190,7 @@ class RodoviaModel{
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['usuario_criador'] = usuario_criador;
     data['criacao'] = criacao;
     data['atualizacao'] = atualizacao;
     data['uf'] = uf;
@@ -246,6 +251,7 @@ class RodoviaModel{
    Map<String, dynamic> toMap() {
     return {
     'id': id,
+    'usuario_criador': usuario_criador,
     'criacao': criacao,
     'atualizacao': atualizacao,
     'uf': uf,

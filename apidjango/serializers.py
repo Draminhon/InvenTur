@@ -103,7 +103,7 @@ class LocadorasDeImoveisSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'pesquisa', 'contatos', 'servicos_especializados',
             'tipo_formulario', 'uf', 'regiao_turistica', 'municipio',
-            'tipo', 'observacoes', 'referencias',
+            'tipo', 'observacoes', 'referencias', 'usuario_criador',
             'nome_pesquisador', 'telefone_pesquisador', 'email_pesquisador',
             'nome_coordenador', 'telefone_coordenador', 'email_coordenador'
         ]

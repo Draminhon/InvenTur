@@ -115,7 +115,9 @@ class Base(models.Model):
 
     tipo = models.CharField(max_length=255, blank=True, null=True)
   
- 
+    
+    usuario_criador = models.ForeignKey("CustomUser", on_delete=models.SET_NULL, null=True, blank=True)
+    
     observacoes = models.TextField(blank=True, null=True)
     referencias = models.TextField(blank=True, null=True)
 

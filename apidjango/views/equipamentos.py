@@ -25,6 +25,9 @@ class RodoviaViewSet(viewsets.ModelViewSet):
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
+
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
@@ -36,7 +39,8 @@ class SistemaDeSegurancaViewSet(viewsets.ModelViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
@@ -48,7 +52,8 @@ class LocadoraDeImoveisViewSet(viewsets.ModelViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
@@ -60,7 +65,8 @@ class GuiamentoEConducaoTuristicaViewSet(viewsets.ModelViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
@@ -72,7 +78,8 @@ class AlimentosEBebidasViewSet(viewsets.ModelViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
@@ -84,7 +91,8 @@ class MeioDeHospedagemViewSet(viewsets.ModelViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
@@ -97,6 +105,8 @@ class InformacoesBasicasViewSet(viewsets.ModelViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
 
 class ComercioTuristicoViewSet(viewsets.ModelViewSet):
     queryset = ComercioTuristico.objects.filter(is_active=True)
@@ -104,113 +114,140 @@ class ComercioTuristicoViewSet(viewsets.ModelViewSet):
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
 class OutromeiodehospedagemViewSet(viewsets.ModelViewSet):
     queryset = OutrosMeiosDeHospedagem.objects.filter(is_active=True)
     serializer_class = OutrosMeiosDeHospedagemSerializer
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
 class AgenciaDeTurismoViewSet(viewsets.ModelViewSet):
     queryset = AgenciaDeTurismo.objects.filter(is_active=True)
     serializer_class = AgenciaDeTurismoSerializer
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
 class TransporteTuristicoViewSet(viewsets.ModelViewSet):
     queryset = TransporteTuristico.objects.filter(is_active=True)
     serializer_class = TransporteTuristicoSerializer
     
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
 class EspacoParaEventosViewSet(viewsets.ModelViewSet):
     queryset = EspacoParaEventos.objects.filter(is_active=True)
     serializer_class = EspacoParaEventosSerializer
     
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)   
 class ServicosParaEventosViewSet(viewsets.ModelViewSet):
     queryset = ServicosParaEventos.objects.filter(is_active=True)
     serializer_class = ServicosParaEventosSerializer
     
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]   
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
 class ParquesViewSet(viewsets.ModelViewSet):
     queryset = Parques.objects.filter(is_active=True)
     serializer_class = ParquesSerializer
     
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
 class EspacosDeDiversaoECulturaViewSet(viewsets.ModelViewSet):
     queryset = EspacosDeDiversaoECultura.objects.filter(is_active=True)
     serializer_class = EspacosDeDiversaoECulturaSerializer
     
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
 class InformacoesTuristicasViewSet(viewsets.ModelViewSet):
     queryset = InformacoesTuristicas.objects.filter(is_active=True)
     serializer_class = InformacoesTuristicasSerializer
     
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
 class EntidadesAssociativasViewSet(viewsets.ModelViewSet):
     queryset = EntidadesAssociativas.objects.filter(is_active=True)
     serializer_class = EntidadesAssociativasSerializer
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)   
 class InstalacoesEsportivasViewSet(viewsets.ModelViewSet):
     queryset = InstalacoesEsportivas.objects.filter(is_active=True)
     serializer_class = InstalacoesEsportivasSerializer
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
 class UnidadesDeConservacaoViewSet(viewsets.ModelViewSet):
     queryset = UnidadesDeConservacao.objects.filter(is_active=True)
     serializer_class = UnidadesDeConservacaoSerializer
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)    
 class EventosProgramadosViewSet(viewsets.ModelViewSet):
     queryset = EventosProgramados.objects.filter(is_active=True)
     serializer_class = EventosProgramadosSerializer
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
-    
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)    
 class GastronomiaArtesanatoViewSet(viewsets.ModelViewSet):
     queryset = GastronomiaArtesanato.objects.filter(is_active=True)
     serializer_class = GastronomiaArtesanatoSerializer
 
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
+    def perform_create(self, serializer):
+        serializer.save(usuario_criador=self.request.user)
+        
+            
 class EquipamentosListView(APIView):
+    
+    
     def get(self, request, *args, **kwargs):
         pesquisa_id = request.query_params.get('pesquisa_id')
-
+        user = request.user
         if not pesquisa_id:
             raise ValidationError({"detail": "O parâmetro 'pesquisa_id' é obrigatório."})
 
+        filtros = {
+            'pesquisa_id': pesquisa_id,
+            'is_active': True
+        }
+        
+
+        
         # Rodovias
-        rodovias = Rodovia.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        rodovias = Rodovia.objects.filter(**filtros)
         rodovias_serialized = [
             {"tipo": "Rodovia", "dados": RodoviaSerializer(rodovia).data}
             for rodovia in rodovias
         ]
 
         # Sistemas de Segurança
-        sistemas = SistemaDeSeguranca.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        sistemas = SistemaDeSeguranca.objects.filter(pesquisa__id=pesquisa_id,
+                                                     is_active=True)
         sistemas_serialized = [
             {"tipo": "SistemaDeSeguranca", "dados": SistemaDeSegurancaSerializer(sistema).data}
             for sistema in sistemas
@@ -230,13 +267,15 @@ class EquipamentosListView(APIView):
 
         #info basicas do municipio
 
-        infosBasicas = InformacaoBasicaDoMunicipio.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        infosBasicas = InformacaoBasicaDoMunicipio.objects.filter(pesquisa__id=pesquisa_id,
+                                                                  is_active=True)
         infosBasicas_serialized = [
             {"tipo": "Informações Básicas do Município", "dados": InformacoesBasicasSerializer(infoBasica).data}
             for infoBasica in infosBasicas
         ]
         
-        comercioTuristicos = ComercioTuristico.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        comercioTuristicos = ComercioTuristico.objects.filter(pesquisa__id=pesquisa_id, 
+                                                              is_active=True)
         comercioTuristicos_serialized = [
             {"tipo": "Comércio Turístico", "dados": ComercioTuristicoSerializer(comercioTuristico).data}
             for comercioTuristico in comercioTuristicos

@@ -43,6 +43,9 @@ Future<void> clearPesquisaId() async {
 }
 
 Future<Map<String, dynamic>> getAdminAndPesquisadorInfo() async {
+
+  int pesquisadorId = 0;
+
   String pesquisadorNome = '';
   String pesquisadorTelefone = '';
   String pesquisadorEmail = '';
@@ -57,7 +60,7 @@ Future<Map<String, dynamic>> getAdminAndPesquisadorInfo() async {
 
     if (userDataString != null) {
       Map<String, dynamic> userData = json.decode(userDataString);
-
+      pesquisadorId = userData['id'];
       pesquisadorNome = userData['name'];
       pesquisadorTelefone = userData['telefone'];
       pesquisadorEmail = userData['email'];
@@ -74,6 +77,7 @@ Future<Map<String, dynamic>> getAdminAndPesquisadorInfo() async {
 
   return {
     'pesquisador': {
+      'id': pesquisadorId,
       'nome': pesquisadorNome,
       'telefone': pesquisadorTelefone,
       'email': pesquisadorEmail,
