@@ -280,7 +280,7 @@ class _InformacoesBasicasDoMunicipioState
             if (widget.infoModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.infoModel!.usuario_criador!);
+                  pesquisadorId, widget.infoModel!.usuario_criador!,context);
             }
           }),
         );

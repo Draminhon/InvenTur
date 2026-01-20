@@ -146,7 +146,7 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
             if (widget.infoModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.infoModel!.usuario_criador!);
+                  pesquisadorId, widget.infoModel!.usuario_criador!, context);
             }
           }),
         );

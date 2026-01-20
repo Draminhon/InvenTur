@@ -24,6 +24,7 @@ import 'package:inventur/models/forms/forms%20B/parques_model.dart';
 import 'package:inventur/models/forms/forms%20B/servicos_para_eventos_model.dart';
 import 'package:inventur/models/forms/forms%20B/transporte_turistico_model.dart';
 import 'package:inventur/ui/forms/formsA/comercio_turistico.dart';
+import 'package:inventur/ui/forms/formsA/sistema_de_seguran%C3%A7a.dart';
 import 'package:inventur/ui/forms/formsB/entidades_associativas.dart';
 import 'package:inventur/ui/forms/formsB/espacos_de_diversao_e_cultura.dart';
 import 'package:inventur/ui/forms/formsB/espacos_para_eventos.dart';
@@ -43,7 +44,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/ui/forms/formsA/informacoes_basicas_do_municipio.dart';
 import 'package:inventur/ui/forms/formsA/locadora_de_imoveis.dart';
 import 'package:inventur/ui/forms/formsA/rodovia.dart';
-import 'package:inventur/ui/forms/formsA/sistema_de_seguranca_edit.dart';
 import 'package:inventur/ui/forms/formsB/agencias_de_turismo.dart';
 import 'package:inventur/ui/forms/formsB/alimentos_e_bebidas.dart';
 import 'package:inventur/ui/forms/formsB/meiosdehospedagem.dart';
@@ -415,8 +415,8 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                 hospedagemModel: OutrosTiposDeAcomodacaoModel.fromJson(data)),
             'Agência de Turismo': (data) => AgenciasDeTurismo(
                 infoModel: AgenciasDeTurismoModel.fromJson(data)),
-            'SistemaDeSeguranca': (data) => SistemaDeSegurancaEdit(
-                sistemaModel: SistemaDeSegurancaModel.fromJson(data)),
+            'SistemaDeSeguranca': (data) => SistemaDeSeguranca(
+                infoModel: SistemaDeSegurancaModel.fromJson(data)),
             'AlimentosEBebidas': (data) => AlimentosEBebidas(
                 infoModel: AlimentosEBebidasModel.fromJson(data)),
             'Meios de Hospedagem': (data) => MeiosDeHospedagem(

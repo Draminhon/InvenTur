@@ -1,5 +1,6 @@
 class AgenciasDeTurismoModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -152,6 +153,7 @@ String? cambio;
 
   AgenciasDeTurismoModel({
     this.id,
+    this.usuario_criador,
     this.segmentosEspecializado,
     this.tipoFormulario,
     this.vendasAltaTemporada,
@@ -302,6 +304,7 @@ this.tipoDeServicoAeronave,
 
 AgenciasDeTurismoModel.fromJson(Map<String, dynamic> json) {
   id = json['id'];
+  usuario_criador = json['usuario_criador'];
   vendasBaixaTemporada = json['vendasBaixaTemporada'];
   tipoFormulario = json['tipoFormulario'];
   uf = json['uf'];
@@ -454,6 +457,7 @@ AgenciasDeTurismoModel.fromJson(Map<String, dynamic> json) {
 Map<String, dynamic> toMap() {
    return{
     'id': id,
+    'usuario_criador': usuario_criador,
     'anoBaseEmissivos': anoBaseEmissivos,
     'totalVendasEmissivos': totalVendasEmissivos,
     'tipo_formulario': tipoFormulario,

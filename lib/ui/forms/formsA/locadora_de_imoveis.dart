@@ -71,7 +71,7 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
         setState(() {
           pesquisadorId = value;
           if (widget.infoModel != null) {
-            isTheOwner = _utils.isTheOwner(pesquisadorId, widget.infoModel!.usuario_criador!);
+            isTheOwner = _utils.isTheOwner(pesquisadorId, widget.infoModel!.usuario_criador!,context);
           }
         });
       }

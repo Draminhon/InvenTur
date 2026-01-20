@@ -122,7 +122,7 @@ class _RodoviaState extends State<Rodovia> {
             if (widget.infoModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.infoModel!.usuario_criador!);
+                  pesquisadorId, widget.infoModel!.usuario_criador!,context);
             }
           }),
         );
@@ -258,6 +258,7 @@ class _RodoviaState extends State<Rodovia> {
           if (currentStep == 0) const Spacer(),
 
           // Botão Continuar / Finalizar
+
           Container(
             height: 160.h,
             width: 550.w,

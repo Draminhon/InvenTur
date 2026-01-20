@@ -15,6 +15,7 @@ import 'package:inventur/ui/widgets/text%20fields/tables.dart';
 import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
+import 'package:inventur/utils/utils_functions.dart';
 import 'package:inventur/validators/validators.dart';
 import '../../widgets/widgets/checkBox.dart';
 
@@ -35,6 +36,9 @@ class AgenciasDeTurismo extends StatefulWidget {
 
 class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
   int currentStep = 0;
+    int pesquisadorId = 0;
+  bool isTheOwner = false;
+  final UtilsFunctions _utils = UtilsFunctions();
   late List<Widget> pages;
   final _formKey = GlobalKey<FormState>();
   final PageController _pageController = PageController();
@@ -153,8 +157,24 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
   @override
   void initState() {
     // TODO: implement initState
+    
+    _utils
+        .getInfoUsersInPesquisa(valoresJson)
+        .then(
+          (value) => setState(() {
+            pesquisadorId = value;
+          }),
+        )
+        .then(
+          (value) => setState(() {
+            if (widget.infoModel != null) {
+              print("chamando funcao");
+              isTheOwner = _utils.isTheOwner(
+                  pesquisadorId, widget.infoModel!.usuario_criador!,context);
+            }
+          }),
+        );
     super.initState();
-    getInfoUsersInPesquisa();
     for (final key in _chavesInfo) {
       _informacoesGeralController[key] = TextEditingController();
     }
@@ -242,11 +262,12 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
         );
       } else {
         // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
-        isUpdate
-            ? FormService().updateForm(widget.infoModel!.id!, valoresJson,
-                AppConstants.AGENCIA_TURISMO)
-            : FormService().sendForm(valoresJson, AppConstants.AGENCIA_TURISMO);
-        print("Formulário finalizado e pronto para enviar!");
+              _utils.decideSendingOrUpdating(isUpdate,
+           isTheOwner,
+            context,
+             widget.infoModel?.id ?? 0,
+              valoresJson,
+               AppConstants.AGENCIA_TURISMO);
 
         // _enviarFormulario(); // Você pode chamar sua função de envio aqui
       }
@@ -265,11 +286,7 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
           valoresJson[key] = value.text;
         },
       );
-      valoresJson.forEach(
-        (key, value) {
-          print("$key  - $value");
-        },
-      );
+   
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Por favor, corrija os erros no formulário.')));

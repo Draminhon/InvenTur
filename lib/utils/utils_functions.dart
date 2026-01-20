@@ -19,11 +19,12 @@ class UtilsFunctions {
    
   }
 
-   bool isTheOwner(int pesquisadorId, int usuarioCriador) {
-    print("############## $pesquisadorId $usuarioCriador #################");
+   bool isTheOwner(int pesquisadorId, int usuarioCriador, BuildContext context) {
     if (pesquisadorId == usuarioCriador) {
       return true;
     } else {
+          Modals().showNoAcessPermissionnDialog(context);
+
       return false;
     }
   }

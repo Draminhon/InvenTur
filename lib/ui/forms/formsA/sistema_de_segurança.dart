@@ -1,58 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:inventur/models/forms/forms%20A/sistema_de_seguranca_model.dart';
 import 'package:inventur/ui/widgets/radioButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inventur/ui/widgets/text%20fields/tables.dart';
-import 'package:inventur/services/admin_service.dart';
 import 'package:inventur/services/form_service.dart';
 import 'package:inventur/utils/app_constants.dart';
+import 'package:inventur/utils/utils_functions.dart';
 import '../../widgets/text fields/customOutro.dart';
 import '../../widgets/text fields/customTextField.dart';
 
 class SistemaDeSeguranca extends StatefulWidget {
-  SistemaDeSeguranca({super.key});
+  final SistemaDeSegurancaModel? infoModel;
+  SistemaDeSeguranca({super.key, this.infoModel});
 
   @override
   State<SistemaDeSeguranca> createState() => _SistemaDeSegurancaState();
 }
 
-FormService _formService = FormService();
 
 class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
-  String pesquisadorNome = '';
-  String pesquisadorTelefone = '';
-  String pesquisadorEmail = '';
 
-  String coordenadorNome = '';
-  String coordenadorTelefone = '';
-  String coordenadorEmail = '';
+  final FormService _formService = FormService();
+  final UtilsFunctions _utils = UtilsFunctions();
 
-  void getInfoUsersInPesquisa() async {
-    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
+  int pesquisadorId = 0;
+  bool isTheOwner = false;
+  bool isUpdate = false;
 
-    pesquisadorNome = info['pesquisador']['nome'];
-    pesquisadorTelefone = info['pesquisador']['telefone'];
-    pesquisadorEmail = info['pesquisador']['email'];
-
-    coordenadorNome = info['coordenador']['nome'];
-    coordenadorEmail = info['coordenador']['telefone'];
-    coordenadorTelefone = info['coordenador']['email'];
-  }
-
-  TextEditingController email_coordenador = TextEditingController();
-  TextEditingController email_pesquisador = TextEditingController();
-  TextEditingController municipio = TextEditingController();
-  TextEditingController nome_coordenador = TextEditingController();
-  TextEditingController nome_pesquisador = TextEditingController();
-  TextEditingController observacoes = TextEditingController();
-  TextEditingController referencias = TextEditingController();
-  TextEditingController regiao_turistica = TextEditingController();
-  List<Tables> sections = [Tables()];
-  List<Tables2> sections2 = [Tables2()];
-  TextEditingController telefone_coordenador = TextEditingController();
-  TextEditingController telefone_pesquisador = TextEditingController();
-  TextEditingController tipo = TextEditingController();
+  final TextEditingController email_coordenador = TextEditingController();
+  final TextEditingController email_pesquisador = TextEditingController();
+  final TextEditingController municipio = TextEditingController();
+  final TextEditingController nome_coordenador = TextEditingController();
+  final TextEditingController nome_pesquisador = TextEditingController();
+  final TextEditingController observacoes = TextEditingController();
+  final TextEditingController referencias = TextEditingController();
+  final TextEditingController regiao_turistica = TextEditingController();
+  final TextEditingController telefone_coordenador = TextEditingController();
+  final TextEditingController telefone_pesquisador = TextEditingController();
+  final TextEditingController tipo = TextEditingController();
   final TextEditingController uf = TextEditingController();
+
+  List<Tables> sections = [];
+  List<Tables2> sections2 = [];
+
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Sistema de Segurança',
     'uf': null,
@@ -61,31 +52,105 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
     'tipo': null,
     'observacoes': null,
     'referencias': null,
-    'nome_pesquisador': 'jose',
-    'telefone_pesquisador': '12453',
-    'email_pesquisador': 'jose@gmail.com',
-    'nome_coordenador': 'oihaioo',
-    'telefone_coordenador': '4444',
-    'email_coordenador': 'ogaio@gmail.com',
   };
 
   final _formKey = GlobalKey<FormState>();
 
-  void autoFillForm() {
-    uf.text = 'CE';
-    regiao_turistica.text = 'Flores e Mel';
-    municipio.text = 'Viçosa do Ceará';
-    tipo.text = 'Rodovia';
-    observacoes.text = 'ABCDEFGHIJKLMNOPQRSTUVWXZ';
-    referencias.text = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    nome_pesquisador.text = 'Murilo';
-    telefone_pesquisador.text = '40028922';
-    email_pesquisador.text = 'murilo@gmail.com';
-    nome_coordenador.text = 'Raquel';
-    telefone_coordenador.text = '202115599';
-    email_coordenador.text = 'raquelsilveira@gmail.com';
+  
+  @override 
+  void initState() {
+    super.initState();
+
+    sections.add(Tables(key: UniqueKey(),));
+    sections2.add(Tables2(key: UniqueKey(),));
+
+    _utils.getInfoUsersInPesquisa(valoresjson).then((value) {
+      if (mounted){
+        setState(() {
+          pesquisadorId = value;
+          if(widget.infoModel != null){
+            isTheOwner = _utils.isTheOwner(
+              pesquisadorId,
+               widget.infoModel?.usuario_criador ?? 0, context);
+          }
+        });
+      }
+    },);
   }
 
+  @override
+  void didChangeDependencies(){
+    super.didChangeDependencies();
+
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if(args is Map && args.containsKey('isUpdate')){
+      if(isUpdate != args['isUpdate']){
+        setState(() {
+          isUpdate = args['isUpdate'];
+        });
+        if(isUpdate){
+          autoFillForm();
+        }
+      }
+    }
+  }
+
+  void autoFillForm() {
+    // Garante que o build terminou antes de manipular controllers e listas
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.infoModel == null) return;
+
+      setState(() {
+        // Limpa e repovoa as tabelas
+        sections.clear();
+        if (widget.infoModel!.contatos != null && widget.infoModel!.contatos!.isNotEmpty) {
+          for (var contato in widget.infoModel!.contatos!) {
+            var novaSecao = Tables(key: UniqueKey());
+            novaSecao.fillForm(
+              contato.nome ?? '',
+              contato.endereco ?? '',
+              contato.whatsapp ?? '',
+              contato.email ?? '',
+            );
+            sections.add(novaSecao);
+          }
+        } else {
+          sections.add(Tables(key: UniqueKey()));
+        }
+
+        sections2.clear();
+        if (widget.infoModel!.servicosEspecializados != null && widget.infoModel!.servicosEspecializados!.isNotEmpty) {
+          for (var servico in widget.infoModel!.servicosEspecializados!) {
+            var novaSecao = Tables2(key: UniqueKey());
+            novaSecao.fillForm(
+              servico.email ?? '',
+              servico.servicosEspecializados ?? '',
+              servico.outrasInformacoes ?? '',
+            );
+            sections2.add(novaSecao);
+          }
+        } else {
+          sections2.add(Tables2(key: UniqueKey()));
+        }
+
+        // Preenche controllers simples
+        uf.text = widget.infoModel!.uf ?? '';
+        regiao_turistica.text = widget.infoModel!.regiaoTuristica ?? '';
+        municipio.text = widget.infoModel!.municipio ?? '';
+        tipo.text = widget.infoModel!.tipo ?? '';
+        observacoes.text = widget.infoModel!.observacoes ?? '';
+        referencias.text = widget.infoModel!.referencias ?? '';
+        nome_pesquisador.text = widget.infoModel!.nomePesquisador ?? '';
+        telefone_pesquisador.text = widget.infoModel!.telefonePesquisador ?? '';
+        email_pesquisador.text = widget.infoModel!.emailPesquisador ?? '';
+        nome_coordenador.text = widget.infoModel!.nomeCoordenador ?? '';
+        telefone_coordenador.text = widget.infoModel!.telefoneCoordenador ?? '';
+        email_coordenador.text = widget.infoModel!.emailCoordenador ?? '';
+      });
+    });
+  }
+
+  @override
   void dispose() {
     uf.dispose();
     regiao_turistica.dispose();
@@ -105,7 +170,6 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
 
   @override
   Widget build(BuildContext context) {
-    getInfoUsersInPesquisa();
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
         backgroundColor: Colors.white,
@@ -231,156 +295,21 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                             fontSize: sizeScreen.height * 0.03),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        sections.length > 1
-                            ? GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    sections.removeLast();
-                                  });
-                                },
-                                child: Container(
-                                  height: 150.w,
-                                  width: 400.w,
-                                  margin: EdgeInsets.only(
-                                    top: 50.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        'Remover',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      Icon(
-                                        FontAwesomeIcons.circleMinus,
-                                        color: Colors.white,
-                                        size: 100.w,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : SizedBox(
-                                width: 300.w,
-                              ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              sections.add(Tables());
-                            });
-                          },
-                          child: Container(
-                            height: 150.w,
-                            width: 740.w,
-                            margin: EdgeInsets.only(top: 50.h),
-                            decoration: BoxDecoration(
-                                color: AppConstants.MAIN_GREEN,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'Adicionar nova seção',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Icon(
-                                  FontAwesomeIcons.circlePlus,
-                                  color: Colors.white,
-                                  size: 100.w,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    _buildDynamicButtons(onAdd: 
+                    () => setState(() => sections.add(Tables(key: UniqueKey(),)),)
+                    , onRemove: () => setState(() => sections.removeLast(),),
+                     listLength: sections.length),
+     
                     Column(
                       children: sections,
                     ),
                     SizedBox(
                       height: sizeScreen.height * 0.05,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        sections2.length > 1
-                            ? GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    sections2.removeLast();
-                                  });
-                                },
-                                child: Container(
-                                  height: 150.w,
-                                  width: 400.w,
-                                  margin: EdgeInsets.only(
-                                    top: 50.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        'Remover',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      Icon(
-                                        FontAwesomeIcons.circleMinus,
-                                        color: Colors.white,
-                                        size: 100.w,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : SizedBox(
-                                width: 300.w,
-                              ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              sections2.add(Tables2());
-                            });
-                          },
-                          child: Container(
-                            height: 150.w,
-                            width: 740.w,
-                            margin: EdgeInsets.only(top: 50.h),
-                            decoration: BoxDecoration(
-                                color: AppConstants.MAIN_GREEN,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'Adicionar nova seção',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Icon(
-                                  FontAwesomeIcons.circlePlus,
-                                  color: Colors.white,
-                                  size: 100.w,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+    _buildDynamicButtons(onAdd: 
+                    () => setState(() => sections2.add(Tables2(key: UniqueKey(),)),)
+                    , onRemove: () => setState(() => sections2.removeLast(),),
+                     listLength: sections.length),
                     Column(
                       children: sections2,
                     ),
@@ -440,14 +369,8 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                       width: 300,
                       child: ElevatedButton(
                         onPressed: () {
-                          valoresjson['nome_pesquisador'] = pesquisadorNome;
-                          valoresjson['telefone_pesquisador'] =
-                              pesquisadorTelefone;
-                          valoresjson['email_pesquisador'] = pesquisadorEmail;
-                          valoresjson['nome_coordenador'] = coordenadorNome;
-                          valoresjson['telefone_coordenador'] =
-                              coordenadorTelefone;
-                          valoresjson['email_coordenador'] = coordenadorEmail;
+                          if(_formKey.currentState!.validate()){
+                            _formKey.currentState!.save();
 
                           valoresjson['contatos'] = sections
                               .map((element) => element.getData())
@@ -455,18 +378,15 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                           valoresjson['servicos_especializados'] = sections2
                               .map((element) => element.getData())
                               .toList();
-                          if (_formKey.currentState!.validate()) {
                             //  ScaffoldMessenger.of(context).showSnackBar(
                             //      SnackBar(content: Text('processing data')));
 
-                            _formKey.currentState!.save();
-                            debugPrint(valoresjson.toString(), wrapWidth: 1024);
-                            _formService.sendForm(valoresjson, AppConstants.SISTEMAS_DE_SEGURANCA);
-                            sections2
-                                .forEach((element) => print(element.getData()));
+                          _utils.decideSendingOrUpdating(isUpdate, isTheOwner, context,
+                           widget.infoModel?.id ?? 0,
+                            valoresjson,
+                             AppConstants.SISTEMAS_DE_SEGURANCA);
 
-                            Navigator.pushReplacementNamed(
-                                context, '/SendedForm');
+                         
                           }
                         },
                         style: OutlinedButton.styleFrom(
@@ -487,5 +407,40 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                     ),
                   ],
                 ))));
+  }
+
+    Widget _buildDynamicButtons({required VoidCallback onAdd, required VoidCallback onRemove, required int listLength}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        if (listLength > 1)
+          GestureDetector(
+            onTap: onRemove,
+            child: _actionButton('Remover', Colors.red, FontAwesomeIcons.circleMinus),
+          )
+        else
+          SizedBox(width: 300.w),
+        GestureDetector(
+          onTap: onAdd,
+          child: _actionButton('Adicionar nova seção', AppConstants.MAIN_GREEN, FontAwesomeIcons.circlePlus, width: 740.w),
+        ),
+      ],
+    );
+  }
+
+  Widget _actionButton(String label, Color color, IconData icon, {double? width}) {
+    return Container(
+      height: 150.w,
+      width: width ?? 400.w,
+      margin: EdgeInsets.only(top: 50.h),
+      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(10)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(label, style: const TextStyle(color: Colors.white)),
+          Icon(icon, color: Colors.white, size: 100.w),
+        ],
+      ),
+    );
   }
 }
