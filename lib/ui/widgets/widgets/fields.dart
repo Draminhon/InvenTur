@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
-import 'package:inventur/ui/widgets/expandedTileYoN.dart';
+import 'package:sistur/ui/widgets/text%20fields/customOutro.dart';
+import 'package:sistur/ui/widgets/expandedTileYoN.dart';
 
 class ConditionalFieldsGroup extends StatefulWidget {
   final String title;

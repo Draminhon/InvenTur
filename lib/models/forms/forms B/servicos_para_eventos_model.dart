@@ -1,5 +1,6 @@
 class ServicosParaEventosModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -115,6 +116,7 @@ class ServicosParaEventosModel {
   String? outrasAcessibilidade;
   ServicosParaEventosModel(
       {this.id,
+      this.usuario_criador,
       this.tipoFormulario,
       this.geradorCapacidadeEmKVA,
       this.uf,
@@ -213,6 +215,7 @@ class ServicosParaEventosModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'usuario_criador': usuario_criador,
       'tipo_formulario': tipoFormulario,
       'atividadesBasicas': atividadesBasicas,
         'geradorCapacidadeEmKVA': geradorCapacidadeEmKVA,
@@ -314,6 +317,7 @@ class ServicosParaEventosModel {
 
   ServicosParaEventosModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador = json['usuario_criador'];
     atividadesBasicas = List<String>.from(json['atividadesBasicas'] ??[]);
     equipamentosEServicos = List<String>.from(json['equipamentosEServicos'] ?? []); 
         geradorCapacidadeEmKVA = json['geradorCapacidadeEmKVA'];

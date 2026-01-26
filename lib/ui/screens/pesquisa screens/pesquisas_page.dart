@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/models/pesquisa_model.dart';
-import 'package:inventur/controllers/pesquisa_controller.dart';
-import 'package:inventur/ui/widgets/cards/pesquisa_card_widget.dart';
-import 'package:inventur/utils/app_constants.dart';
+import 'package:sistur/models/pesquisa_model.dart';
+import 'package:sistur/controllers/pesquisa_controller.dart';
+import 'package:sistur/ui/widgets/cards/pesquisa_card_widget.dart';
+import 'package:sistur/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:http/http.dart' as http;

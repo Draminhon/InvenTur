@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/services/admin_service.dart';
-import 'package:inventur/services/form_service.dart';
-import 'package:inventur/utils/modals.dart';
+import 'package:sistur/services/admin_service.dart';
+import 'package:sistur/services/form_service.dart';
+import 'package:sistur/utils/modals.dart';
 
 class UtilsFunctions {
 
-  Future<int> getInfoUsersInPesquisa(Map<String, dynamic> valoresjson) async {
+  Future<int> getInfoUsersInPesquisa(Map<String, dynamic> valoresjson,  bool isAdmin) async {
     Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
+    print("Is admin $isAdmin");
+    if(isAdmin == false){
     valoresjson['nome_pesquisador'] = info['pesquisador']['nome'];
     valoresjson['telefone_pesquisador'] = info['pesquisador']['telefone'];
     valoresjson['email_pesquisador'] = info['pesquisador']['email'];
@@ -14,19 +16,24 @@ class UtilsFunctions {
     valoresjson['nome_coordenador'] = info['coordenador']['nome'];
     valoresjson['telefone_coordenador'] = info['coordenador']['telefone'];
     valoresjson['email_coordenador'] = info['coordenador']['email'];
-
+    }
     return info['pesquisador']['id'];
    
   }
 
-   bool isTheOwner(int pesquisadorId, int usuarioCriador, BuildContext context) {
-    if (pesquisadorId == usuarioCriador) {
+   bool isTheOwner(int pesquisadorId, int usuarioCriador, bool isAdmin, BuildContext context) {
+    if(isAdmin != true){
+   if (pesquisadorId == usuarioCriador) {
       return true;
     } else {
           Modals().showNoAcessPermissionnDialog(context);
 
       return false;
     }
+    }else{
+      return true;
+    }
+ 
   }
 
   void decideSendingOrUpdating(bool isUpdate, isTheOwner,
@@ -44,5 +51,6 @@ class UtilsFunctions {
           ("deu ERRO!");
         }
   }
+
 
 }

@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/models/forms/forms%20B/alimentos_bebidas_model.dart';
-import 'package:inventur/ui/widgets/widgets/fields.dart';
-import 'package:inventur/ui/widgets/container_widget.dart';
-import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
-import 'package:inventur/ui/widgets/text%20fields/customTextField.dart';
-import 'package:inventur/ui/widgets/maps/mapa_widget.dart';
-import 'package:inventur/ui/widgets/radioButton.dart';
-import 'package:inventur/ui/widgets/text%20fields/tables.dart';
-import 'package:inventur/services/admin_service.dart';
-import 'package:inventur/services/form_service.dart';
-import 'package:inventur/utils/app_constants.dart';
-import 'package:inventur/validators/validators.dart';
+import 'package:sistur/models/forms/forms%20B/alimentos_bebidas_model.dart';
+import 'package:sistur/ui/widgets/widgets/fields.dart';
+import 'package:sistur/ui/widgets/container_widget.dart';
+import 'package:sistur/ui/widgets/text%20fields/customOutro.dart';
+import 'package:sistur/ui/widgets/text%20fields/customTextField.dart';
+import 'package:sistur/ui/widgets/maps/mapa_widget.dart';
+import 'package:sistur/ui/widgets/radioButton.dart';
+import 'package:sistur/ui/widgets/text%20fields/tables.dart';
+import 'package:sistur/services/admin_service.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/utils/utils_functions.dart';
+import 'package:sistur/validators/validators.dart';
 import '../../widgets/widgets/checkBox.dart';
 
 final Validators _validators = Validators();
@@ -25,14 +25,17 @@ bool isUpdate = false;
 //formulario
 class AlimentosEBebidas extends StatefulWidget {
   final AlimentosEBebidasModel? infoModel;
-  const AlimentosEBebidas({super.key, this.infoModel});
+  final bool? isAdmin;
+  const AlimentosEBebidas({super.key, this.infoModel, this.isAdmin});
 
   @override
   State<AlimentosEBebidas> createState() => _AlimentosEBebidasState();
 }
 
 class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
-
+    int pesquisadorId = 0;
+  bool isTheOwner = false;
+  final UtilsFunctions _utils = UtilsFunctions();
   int currentStep = 0;
   late List<Widget> pages;
   final _formKey = GlobalKey<FormState>();
@@ -144,9 +147,24 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
+     _utils
+        .getInfoUsersInPesquisa(valoresJson, widget.isAdmin ?? false)
+        .then(
+          (value) => setState(() {
+            pesquisadorId = value;
+          }),
+        )
+        .then(
+          (value) => setState(() {
+            if (widget.infoModel != null) {
+              print("chamando funcao");
+              isTheOwner = _utils.isTheOwner(
+                  pesquisadorId, widget.infoModel!.usuario_criador!,widget.isAdmin ?? false,context);
+            }
+          }),
+        );
     super.initState();
-    getInfoUsersInPesquisa();
     for (final key in _chavesInfo) {
       _informacoesGeralController[key] = TextEditingController();
     }
@@ -192,17 +210,7 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
     super.dispose();
   }
 
-  void getInfoUsersInPesquisa() async {
-    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
 
-    valoresJson['nome_pesquisador'] = info['pesquisador']['nome'];
-    valoresJson['telefone_pesquisador'] = info['pesquisador']['telefone'];
-    valoresJson['email_pesquisador'] = info['pesquisador']['email'];
-
-    valoresJson['nome_coordenador'] = info['coordenador']['nome'];
-    valoresJson['telefone_coordenador'] = info['coordenador']['telefone'];
-    valoresJson['email_coordenador'] = info['coordenador']['email'];
-  }
 
   void _enviarFormulario() async{
     if (_formKey.currentState?.validate() ?? false) {
@@ -234,12 +242,11 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
         );
       } else {
         // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
-        isUpdate
-            ? FormService().updateForm(widget.infoModel!.id!, valoresJson,
-                AppConstants.ALIMENTOS_E_BEBIDAS)
-            : FormService()
-                .sendForm(valoresJson, AppConstants.ALIMENTOS_E_BEBIDAS);
-        print("Formulário finalizado e pronto para enviar!");
+        _utils.decideSendingOrUpdating(isUpdate,
+         isTheOwner,
+          context,
+           widget.infoModel?.id ?? 0, valoresJson, AppConstants.ALIMENTOS_E_BEBIDAS);
+
 
         // _enviarFormulario(); // Você pode chamar sua função de envio aqui
       }
@@ -304,37 +311,41 @@ Widget build(BuildContext context) {
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           // Botão Voltar
           if (currentStep > 0)
-            Container(
-              margin: EdgeInsets.only(bottom: 35.h),
-              child: TextButton(
-                onPressed: () {
-                  _pageController.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.ease,
-                  );
-                },
-                child: const Text('VOLTAR'),
+            SafeArea(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 20.h),
+                child: TextButton(
+                  onPressed: () {
+                    _pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
+                    );
+                  },
+                  child: const Text('VOLTAR'),
+                ),
               ),
             ),
           // Espaçador para alinhar o botão Continuar à direita quando não houver o Voltar
           if (currentStep == 0) const Spacer(),
 
           // Botão Continuar / Finalizar
-          Container(
-            height: 160.h,
-            width: 550.w,
-            margin: currentStep > 0
-                ? EdgeInsets.only(bottom: 55.h)
-                : EdgeInsets.only(bottom: 55.h, right: 55.w),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
-              onPressed: () {
-                _enviarFormulario();
-              },
-              child: Text(
-                currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
-                style: const TextStyle(color: Colors.white),
+          SafeArea(
+            child: Container(
+              height: 160.h,
+              width: 550.w,
+              margin: currentStep > 0
+                  ? EdgeInsets.only(bottom: 20.h)
+                  : EdgeInsets.only(bottom: 20.h, right: 55.w),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
+                onPressed: () {
+                  _enviarFormulario();
+                },
+                child: Text(
+                  currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ),
           )

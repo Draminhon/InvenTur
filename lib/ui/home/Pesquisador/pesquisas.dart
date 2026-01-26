@@ -2,56 +2,57 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:inventur/models/forms/Forms%20C/eventos_programados_model.dart';
-import 'package:inventur/models/forms/Forms%20C/gastronomia_artesanato_trabalhos_manuais_model.dart';
-import 'package:inventur/models/forms/Forms%20C/unidades_de_conservacao_model.dart';
-import 'package:inventur/models/forms/forms%20B/agencia_de_turismo_model.dart';
-import 'package:inventur/models/forms/forms%20B/alimentos_bebidas_model.dart';
-import 'package:inventur/models/forms/forms%20A/comercio_turistico_model.dart';
-import 'package:inventur/models/forms/forms%20A/informacoes_basicas_model.dart';
-import 'package:inventur/models/forms/forms%20A/locadora_de_imoveis_model.dart';
-import 'package:inventur/models/forms/forms%20B/entidades_associativas_model.dart';
-import 'package:inventur/models/forms/forms%20B/espaco_para_eventos_model.dart';
-import 'package:inventur/models/forms/forms%20B/espacos_de_diversao_e_cultura_model.dart';
-import 'package:inventur/models/forms/forms%20B/guiamento_e_conducao_turisttica_model.dart';
-import 'package:inventur/models/forms/forms%20B/informacoes_turisticas_model.dart';
-import 'package:inventur/models/forms/forms%20B/instalacoes_esportivas_model.dart';
-import 'package:inventur/models/forms/forms%20B/meios_hospedagem_model.dart';
-import 'package:inventur/models/forms/forms%20B/outros_tipos_de_acomodacao_model.dart';
-import 'package:inventur/models/forms/forms%20A/rodovia_model.dart';
-import 'package:inventur/models/forms/forms%20A/sistema_de_seguranca_model.dart';
-import 'package:inventur/models/forms/forms%20B/parques_model.dart';
-import 'package:inventur/models/forms/forms%20B/servicos_para_eventos_model.dart';
-import 'package:inventur/models/forms/forms%20B/transporte_turistico_model.dart';
-import 'package:inventur/ui/forms/formsA/comercio_turistico.dart';
-import 'package:inventur/ui/forms/formsA/sistema_de_seguran%C3%A7a.dart';
-import 'package:inventur/ui/forms/formsB/entidades_associativas.dart';
-import 'package:inventur/ui/forms/formsB/espacos_de_diversao_e_cultura.dart';
-import 'package:inventur/ui/forms/formsB/espacos_para_eventos.dart';
-import 'package:inventur/ui/forms/formsB/guiamento_e_conducao_turistica.dart';
-import 'package:inventur/ui/forms/formsB/informacoes_turisticas.dart';
-import 'package:inventur/ui/forms/formsB/instalacoes_esportivas.dart';
-import 'package:inventur/ui/forms/formsB/parques.dart';
-import 'package:inventur/ui/forms/formsB/servicos_para_eventos.dart';
-import 'package:inventur/ui/forms/formsC/eventos_programados.dart';
-import 'package:inventur/ui/forms/formsC/gastronomia_artesanato_trabalhos_manuais.dart';
-import 'package:inventur/ui/forms/formsC/unidades_de_conservacao.dart';
-import 'package:inventur/ui/screens/forms%20screens/formA_screen.dart';
-import 'package:inventur/ui/screens/forms%20screens/formB._screen.dart';
-import 'package:inventur/ui/screens/forms%20screens/formC_screen.dart';
+import 'package:sistur/models/forms/Forms%20C/eventos_programados_model.dart';
+import 'package:sistur/models/forms/Forms%20C/gastronomia_artesanato_trabalhos_manuais_model.dart';
+import 'package:sistur/models/forms/Forms%20C/unidades_de_conservacao_model.dart';
+import 'package:sistur/models/forms/forms%20B/agencia_de_turismo_model.dart';
+import 'package:sistur/models/forms/forms%20B/alimentos_bebidas_model.dart';
+import 'package:sistur/models/forms/forms%20A/comercio_turistico_model.dart';
+import 'package:sistur/models/forms/forms%20A/informacoes_basicas_model.dart';
+import 'package:sistur/models/forms/forms%20A/locadora_de_imoveis_model.dart';
+import 'package:sistur/models/forms/forms%20B/entidades_associativas_model.dart';
+import 'package:sistur/models/forms/forms%20B/espaco_para_eventos_model.dart';
+import 'package:sistur/models/forms/forms%20B/espacos_de_diversao_e_cultura_model.dart';
+import 'package:sistur/models/forms/forms%20B/guiamento_e_conducao_turisttica_model.dart';
+import 'package:sistur/models/forms/forms%20B/informacoes_turisticas_model.dart';
+import 'package:sistur/models/forms/forms%20B/instalacoes_esportivas_model.dart';
+import 'package:sistur/models/forms/forms%20B/meios_hospedagem_model.dart';
+import 'package:sistur/models/forms/forms%20B/outros_tipos_de_acomodacao_model.dart';
+import 'package:sistur/models/forms/forms%20A/rodovia_model.dart';
+import 'package:sistur/models/forms/forms%20A/sistema_de_seguranca_model.dart';
+import 'package:sistur/models/forms/forms%20B/parques_model.dart';
+import 'package:sistur/models/forms/forms%20B/servicos_para_eventos_model.dart';
+import 'package:sistur/models/forms/forms%20B/transporte_turistico_model.dart';
+import 'package:sistur/ui/forms/formsA/comercio_turistico.dart';
+import 'package:sistur/ui/forms/formsA/sistema_de_seguran%C3%A7a.dart';
+import 'package:sistur/ui/forms/formsB/entidades_associativas.dart';
+import 'package:sistur/ui/forms/formsB/espacos_de_diversao_e_cultura.dart';
+import 'package:sistur/ui/forms/formsB/espacos_para_eventos.dart';
+import 'package:sistur/ui/forms/formsB/guiamento_e_conducao_turistica.dart';
+import 'package:sistur/ui/forms/formsB/informacoes_turisticas.dart';
+import 'package:sistur/ui/forms/formsB/instalacoes_esportivas.dart';
+import 'package:sistur/ui/forms/formsB/parques.dart';
+import 'package:sistur/ui/forms/formsB/servicos_para_eventos.dart';
+import 'package:sistur/ui/forms/formsC/eventos_programados.dart';
+import 'package:sistur/ui/forms/formsC/gastronomia_artesanato_trabalhos_manuais.dart';
+import 'package:sistur/ui/forms/formsC/unidades_de_conservacao.dart';
+import 'package:sistur/ui/screens/forms%20screens/formA_screen.dart';
+import 'package:sistur/ui/screens/forms%20screens/formB._screen.dart';
+import 'package:sistur/ui/screens/forms%20screens/formC_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/forms/formsA/informacoes_basicas_do_municipio.dart';
-import 'package:inventur/ui/forms/formsA/locadora_de_imoveis.dart';
-import 'package:inventur/ui/forms/formsA/rodovia.dart';
-import 'package:inventur/ui/forms/formsB/agencias_de_turismo.dart';
-import 'package:inventur/ui/forms/formsB/alimentos_e_bebidas.dart';
-import 'package:inventur/ui/forms/formsB/meiosdehospedagem.dart';
-import 'package:inventur/ui/forms/formsB/outros_tipos_de_acomodacao.dart';
-import 'package:inventur/ui/forms/formsB/transporte_turistico.dart';
-import 'package:inventur/services/interceptor_service.dart';
-import 'package:inventur/utils/app_constants.dart';
-import 'package:inventur/utils/check_connectivity.dart';
+import 'package:sistur/ui/forms/formsA/informacoes_basicas_do_municipio.dart';
+import 'package:sistur/ui/forms/formsA/locadora_de_imoveis.dart';
+import 'package:sistur/ui/forms/formsA/rodovia.dart';
+import 'package:sistur/ui/forms/formsB/agencias_de_turismo.dart';
+import 'package:sistur/ui/forms/formsB/alimentos_e_bebidas.dart';
+import 'package:sistur/ui/forms/formsB/meiosdehospedagem.dart';
+import 'package:sistur/ui/forms/formsB/outros_tipos_de_acomodacao.dart';
+import 'package:sistur/ui/forms/formsB/transporte_turistico.dart';
+import 'package:sistur/services/interceptor_service.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/utils/check_connectivity.dart';
+import 'package:sistur/utils/utils_functions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Atualiza a quantidade de locais
@@ -158,7 +159,6 @@ class _PesquisasState extends State<Pesquisas> {
   int qtdeBanco = 0;
   final ApiService _apiService = ApiService();
   CheckConnectivity connection = new CheckConnectivity();
-
   Future<List<Map<String, dynamic>>> getRodovias() async {
 
 
@@ -196,12 +196,13 @@ class _PesquisasState extends State<Pesquisas> {
 
   @override
   void initState() {
-    // TODO: implement initState
+ 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    
     final arguments = ModalRoute.of(context)?.settings.arguments as Map;
     final isadmin = arguments['is_admin'];
     Future<List<Map<String, dynamic>>> rodoviasFuture = getRodovias();
@@ -370,10 +371,16 @@ class ShowRodoviaAux extends StatefulWidget {
 
 class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
   List<Map<String, dynamic>> posts = [];
-
+  final Map<String, dynamic> valoresJ ={};
+int usuario = 0;
   @override
   void initState() {
     super.initState();
+      UtilsFunctions().getInfoUsersInPesquisa(valoresJ, false).then((value) {
+     setState(() {
+       usuario = value;
+     });
+   },);
     posts = List.from(widget.posts);
   }
 
@@ -401,69 +408,92 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
           final isadmin = arguments['is_admin'];
           final equipamento = filteredPosts[index];
           final dados = equipamento['dados'];
-          print(dados['usuario_criador']);
           final Map<String, Widget Function(dynamic data)> pageBuilders = {
             'Rodovia': (data) =>
-                Rodovia(infoModel: RodoviaModel.fromJson(data)),
+                Rodovia(infoModel: RodoviaModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Transporte Turistico': (data) => TransporteTuristico(
-                infoModel: TransporteTuristicoModel.fromJson(data)),
+                infoModel: TransporteTuristicoModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Serviços para Eventos': (data) => ServicosParaEventos(
-                hospedagemModel: ServicosParaEventosModel.fromJson(data)),
+                hospedagemModel: ServicosParaEventosModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Espaço para Eventos': (data) => EspacosParaEventos(
-                hospedagemModel: EspacosParaEventosModel.fromJson(data)),
+                hospedagemModel: EspacosParaEventosModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Outros Tipos de Acomodação': (data) => OutrosTiposDeAcomodacao(
-                hospedagemModel: OutrosTiposDeAcomodacaoModel.fromJson(data)),
+                hospedagemModel: OutrosTiposDeAcomodacaoModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Agência de Turismo': (data) => AgenciasDeTurismo(
-                infoModel: AgenciasDeTurismoModel.fromJson(data)),
+                infoModel: AgenciasDeTurismoModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'SistemaDeSeguranca': (data) => SistemaDeSeguranca(
-                infoModel: SistemaDeSegurancaModel.fromJson(data)),
+                infoModel: SistemaDeSegurancaModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'AlimentosEBebidas': (data) => AlimentosEBebidas(
-                infoModel: AlimentosEBebidasModel.fromJson(data)),
+                infoModel: AlimentosEBebidasModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Meios de Hospedagem': (data) => MeiosDeHospedagem(
-                hospedagemModel: MeiosDeHospedagemModel.fromJson(data)),
+                hospedagemModel: MeiosDeHospedagemModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Parques': (data) =>
-                Parques(hospedagemModel: ParquesModel.fromJson(data)),
+                Parques(hospedagemModel: ParquesModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Espaços Para Diversão e Cultura': (data) =>
                 EspacosDeDiversaoECultura(
                     hospedagemModel:
-                        EspacosDeDiversaoECulturaModel.fromJson(data)),
+                        EspacosDeDiversaoECulturaModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Informações Turisticas': (data) => InformacoesTuristicas(
-                hospedagemModel: InformacoesTuristicasModel.fromJson(data)),
+                hospedagemModel: InformacoesTuristicasModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Informações Básicas do Município': (data) =>
                 InformacoesBasicasDoMunicipio(
-                    infoModel: InformacoesBasicasModel.fromJson(data)),
+                    infoModel: InformacoesBasicasModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Comércio Turístico': (data) => ComercioTuristico(
-                infoModel: ComercioTuristicoModel.fromJson(data)),
+                infoModel: ComercioTuristicoModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Locadora de Imóveis': (data) => LocadoraDeImoveis(
-                infoModel: LocadoraDeImoveisModel.fromJson(data)),
+                infoModel: LocadoraDeImoveisModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Entidades Associativas e Similares': (data) =>
                 EntidadesAssociativas(
-                    hospedagemModel: EntidadesAssociativasModel.fromJson(data)),
+                    hospedagemModel: EntidadesAssociativasModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Guiamento e Condução Turística': (data) =>
                 GuiamentoEConducaoTurististica(
                     infoModel:
-                        GuiamentoEConducaoTurististicaModel.fromJson(data)),
+                        GuiamentoEConducaoTurististicaModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Instalações Esportivas': (data) => InstalacoesEsportivas(
-                hospedagemModel: InstalacoesEsportivasModel.fromJson(data)),
+                hospedagemModel: InstalacoesEsportivasModel.fromJson(data), isAdmin: isadmin == null ? false : true,),
+
             'Unidades De Conservação': (data) => UnidadesDeConservacao(
-                  hospedagemModel: UnidadesDeConservacaoModel.fromJson(data),
+                  hospedagemModel: UnidadesDeConservacaoModel.fromJson(data)
+                  , isAdmin: isadmin == null ? false : true,
                 ),
+
             'Eventos Programados': (data) => EventosProgramados(
-                  hospedagemModel: EventosProgramadosModel.fromJson(data),
+                  hospedagemModel: EventosProgramadosModel.fromJson(data)
+                  , isAdmin: isadmin == null ? false : true,
                 ),
+
             'Gastronomia e Artesanatos': (data) =>
                 GastronomiaArtesanatoTrabalhosManuais(
                   hospedagemModel:
-                      GastronomiaArtesanatoTrabalhosManuaisModel.fromJson(data),
+                      GastronomiaArtesanatoTrabalhosManuaisModel.fromJson(data)
+                      , isAdmin: isadmin == null ? false : true,
                 )
           };
+        
           return GestureDetector(
             onTap: () {
               updateQtdeLocais(dados['pesquisa'], posts.length);
 
               final String tipo = equipamento['tipo'];
               final dynamic data = equipamento['dados'];
-
+              print(data);
               final pageBuilder = pageBuilders[tipo];
 
               if (pageBuilder != null) {
@@ -471,7 +501,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => pageBuilder(data),
-                    settings: RouteSettings(arguments: {'isUpdate': true}),
+                    settings: RouteSettings(arguments: {'isUpdate': true, 'isAdmin': isadmin == null ? false : true}),
                   ),
                 );
               } else {
@@ -490,12 +520,12 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                       color: AppConstants.MAIN_GREEN,
                     ),
                     margin:
-                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
-                    height: 250.h,
+                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 100.w),
+                    height: 350.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(width: 140.w),
+                        SizedBox(width: 100.w),
                         Flexible(
                           child: Center(
                             child: Text(
@@ -504,7 +534,7 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                                 fontSize: 55.w,
                                 color: Colors.white,
                               ),
-                              overflow: TextOverflow.ellipsis,
+                              overflow: TextOverflow.clip,
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -584,19 +614,21 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
                 : Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.grey.shade300,
+                      color: (usuario != dados['usuario_criador']) ?  Color.fromARGB(255, 51, 131, 59) : Colors.grey.shade300 ,
                     ),
                     margin:
-                        EdgeInsets.symmetric(vertical: 20.h, horizontal: 130.w),
-                    height: 250.h,
+                        EdgeInsets.symmetric(vertical: 25.h, horizontal: 130.w),
+                    height: 350.h,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Flexible(
                           child: Text(
                             getDisplay(dados),
-                            style: TextStyle(fontSize: 55.w),
-                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 55.w,                      color: (usuario == dados['usuario_criador']) ? Colors.black: Colors.white,
+ ),
+
+                            overflow: TextOverflow.clip,
                             textAlign: TextAlign.center,
                           ),
                         ),
@@ -613,50 +645,51 @@ class _ShowRodoviaAuxState extends State<ShowRodoviaAux> {
 /// Função auxiliar para montar o texto exibido para cada equipamento
 String getDisplay(Map<String, dynamic> dados) {
   final tipoFormulario = dados['tipo_formulario'] ?? '';
-  print(tipoFormulario);
   switch (tipoFormulario) {
     case 'Rodovia':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Sistema de Segurança':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Alimentos e bebidas':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Meios de Hospedagem':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Informações Básicas do Município':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Comércio Turístico':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Outros Tipos de Acomodação':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Agência de Turismo':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Transporte Turistico':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
-    case 'Serviços para Eventos':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
+    case 'Serviço para Eventos':
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Espaço para Eventos':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Parques':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Espaços de Diversão e Cultura':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Informações Turísticas':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Locadora de Imóveis':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Entidades Associativas e Similares':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Guiamento E Condução Turística':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Instalações Esportivas':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Unidades de Conservação':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Eventos Programados':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
     case 'Gastronomia e Artesanato':
-      return '$tipoFormulario\n${dados['regiao_turistica']}';
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';
+    case 'Informações Básicas do Município':
+      return 'Formulário: $tipoFormulario\nRegião: ${dados['regiao_turistica']}\nPesquisador: ${dados['nome_pesquisador']}';  
     default:
       return '$tipoFormulario\n${dados['tipo'] ?? ''}';
   }

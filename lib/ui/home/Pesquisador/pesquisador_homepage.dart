@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/models/pesquisa_model.dart';
-import 'package:inventur/controllers/user_controller.dart';
-import 'package:inventur/ui/widgets/container_widget.dart';
+import 'package:sistur/models/pesquisa_model.dart';
+import 'package:sistur/controllers/user_controller.dart';
+import 'package:sistur/ui/widgets/container_widget.dart';
 import 'package:intl/intl.dart';
-import 'package:inventur/services/admin_service.dart';
-import 'package:inventur/services/offline_login.dart';
-import 'package:inventur/services/sync_service.dart';
-import 'package:inventur/ui/widgets/options_drawer_widget.dart';
-import 'package:inventur/utils/app_constants.dart';
+import 'package:sistur/services/admin_service.dart';
+import 'package:sistur/services/offline_login.dart';
+import 'package:sistur/services/sync_service.dart';
+import 'package:sistur/ui/widgets/options_drawer_widget.dart';
+import 'package:sistur/utils/app_constants.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/utils/check_connectivity.dart';
+import 'package:sistur/utils/check_connectivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -282,31 +282,33 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
               },
             )),
             bottomNavigationBar: (isConnected && qtdeBanco >= 1)
-            ? Container(
-                height: 250.w,
-                margin: EdgeInsets.only(left: 55.w, right: 55.w, bottom: 150.w),
-                child: ElevatedButton(
-                  style: ButtonStyle(
-                      shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                      padding: WidgetStateProperty.all(EdgeInsets.symmetric(
-                        vertical: 34.904.h,
-                      )),
-                      backgroundColor: WidgetStateProperty.all(
-                          const Color.fromARGB(255, 55, 111, 60)),
-                      overlayColor: WidgetStateProperty.all(
-                          const Color.fromARGB(255, 55, 111, 60))),
-                  onPressed: () async {
-                    await DataSyncService().syncPending();
-                    // Após sincronizar, atualiza a contagem de itens pendentes
-                    await getQtdeBanco();
-                  },
-                  child: Text(
-                    'Sincronizar agora',
-                    style: TextStyle(color: Colors.white, fontSize: 65.76.w),
+            ? SafeArea(
+              child: Container(
+                  height: 250.w,
+                  margin: EdgeInsets.only(left: 55.w, right: 55.w, bottom: 150.w),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10))),
+                        padding: WidgetStateProperty.all(EdgeInsets.symmetric(
+                          vertical: 34.904.h,
+                        )),
+                        backgroundColor: WidgetStateProperty.all(
+                            const Color.fromARGB(255, 55, 111, 60)),
+                        overlayColor: WidgetStateProperty.all(
+                            const Color.fromARGB(255, 55, 111, 60))),
+                    onPressed: () async {
+                      await DataSyncService().syncPending();
+                      // Após sincronizar, atualiza a contagem de itens pendentes
+                      await getQtdeBanco();
+                    },
+                    child: Text(
+                      'Sincronizar agora',
+                      style: TextStyle(color: Colors.white, fontSize: 65.76.w),
+                    ),
                   ),
                 ),
-              )
+            )
             : const SizedBox.shrink(), // Se não estiver conectado ou não houver dados, não mostra nada
         );
   }
@@ -366,7 +368,7 @@ Widget showPesquisas(List<Pesquisa> posts) {
             savePesquisaId(post.id!);
 
             Navigator.pushNamed(context, '/Pesquisas',
-                arguments: {'pesquisa_id': post.id});
+                arguments: {'pesquisa_id': post.id, 'user_id': post.userId});
           },
           child: PesquisaPesquisadorCardWidget(
             pesquisa: post,

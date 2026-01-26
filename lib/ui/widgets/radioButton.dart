@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
+import 'package:sistur/ui/widgets/text%20fields/customOutro.dart';
 
-import 'package:inventur/ui/widgets/text%20fields/customTextField.dart';
+import 'package:sistur/ui/widgets/text%20fields/customTextField.dart';
 
 enum opcoes { a, b, c, d, e, f, g, h, i, j }
 

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/controllers/user_controller.dart';
-import 'package:inventur/ui/home/Administrador/dialogs/admin_register_dialog.dart';
-import 'package:inventur/ui/home/Administrador/widgets/popup_menu_widget.dart';
-import 'package:inventur/ui/home/Administrador/widgets/user_card_widget.dart';
-import 'package:inventur/ui/home/Administrador/dialogs/user_management_dialog.dart';
+import 'package:sistur/controllers/user_controller.dart';
+import 'package:sistur/ui/home/Administrador/dialogs/admin_register_dialog.dart';
+import 'package:sistur/ui/home/Administrador/widgets/popup_menu_widget.dart';
+import 'package:sistur/ui/home/Administrador/widgets/user_card_widget.dart';
+import 'package:sistur/ui/home/Administrador/dialogs/user_management_dialog.dart';
 
 class UserManagementPage extends StatefulWidget {
   final UserController userControllerNotifier;

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:inventur/services/sync_service.dart';
+import 'package:sistur/services/sync_service.dart';
 
 class SyncQueuePage extends StatefulWidget {
   const SyncQueuePage({Key? key}) : super(key: key);

@@ -2,21 +2,20 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/models/forms/forms%20B/meios_hospedagem_model.dart';
-import 'package:inventur/controllers/pesquisa_controller.dart';
-import 'package:inventur/ui/widgets/widgets/checkBox.dart';
-import 'package:inventur/ui/widgets/widgets/fields.dart';
-import 'package:inventur/ui/widgets/container_widget.dart';
-import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
-import 'package:inventur/ui/widgets/text%20fields/customTextField.dart';
-import 'package:inventur/ui/widgets/maps/mapa_widget.dart';
-import 'package:inventur/ui/widgets/text%20fields/multi_auto_complete_form_field.dart';
-import 'package:inventur/ui/widgets/radioButton.dart';
-import 'package:inventur/ui/widgets/text%20fields/tables.dart';
-import 'package:inventur/services/admin_service.dart';
-import 'package:inventur/services/form_service.dart';
-import 'package:inventur/utils/app_constants.dart';
-import 'package:inventur/validators/validators.dart';
+import 'package:sistur/models/forms/forms%20B/meios_hospedagem_model.dart';
+import 'package:sistur/controllers/pesquisa_controller.dart';
+import 'package:sistur/ui/widgets/widgets/checkBox.dart';
+import 'package:sistur/ui/widgets/widgets/fields.dart';
+import 'package:sistur/ui/widgets/container_widget.dart';
+import 'package:sistur/ui/widgets/text%20fields/customOutro.dart';
+import 'package:sistur/ui/widgets/text%20fields/customTextField.dart';
+import 'package:sistur/ui/widgets/maps/mapa_widget.dart';
+import 'package:sistur/ui/widgets/text%20fields/multi_auto_complete_form_field.dart';
+import 'package:sistur/ui/widgets/radioButton.dart';
+import 'package:sistur/ui/widgets/text%20fields/tables.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/utils/utils_functions.dart';
+import 'package:sistur/validators/validators.dart';
 
 final Validators _validators = Validators();
 final Map<String, dynamic> valoresjson = {
@@ -26,7 +25,8 @@ bool isUpdate = false;
 
 class MeiosDeHospedagem extends StatefulWidget {
   final MeiosDeHospedagemModel? hospedagemModel;
-  const MeiosDeHospedagem({super.key, this.hospedagemModel});
+  final bool? isAdmin;
+  const MeiosDeHospedagem({super.key, this.hospedagemModel, this.isAdmin});
 
   @override
   State<MeiosDeHospedagem> createState() => _MeiosDeHospedagemState();
@@ -34,7 +34,10 @@ class MeiosDeHospedagem extends StatefulWidget {
 
 class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
   int currentStep = 0;
+  int pesquisadorId = 0;
+  bool isTheOwner = false;
 
+  final UtilsFunctions _utils = UtilsFunctions();
   late List<Widget> pages;
 
   final _formKey = GlobalKey<FormState>();
@@ -98,17 +101,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
     'referencias'
   ];
 
-  void getInfoUsersInPesquisa() async {
-    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
-
-    valoresjson['nome_pesquisador'] = info['pesquisador']['nome'];
-    valoresjson['telefone_pesquisador'] = info['pesquisador']['telefone'];
-    valoresjson['email_pesquisador'] = info['pesquisador']['email'];
-
-    valoresjson['nome_coordenador'] = info['coordenador']['nome'];
-    valoresjson['telefone_coordenador'] = info['coordenador']['telefone'];
-    valoresjson['email_coordenador'] = info['coordenador']['email'];
-  }
+  
 
   void _preencherDadosParaTeste() {
     if (widget.hospedagemModel != null) {
@@ -150,6 +143,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
       if (argument.containsKey('isUpdate')) {
         isUpdate = argument['isUpdate'];
       }
+
     } catch (e) {
       isUpdate = false;
     }
@@ -161,8 +155,23 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
 
   @override
   void initState() {
+    
+    _utils.getInfoUsersInPesquisa(valoresjson, widget.isAdmin??false)
+        .then(
+          (value) => setState(() {
+            pesquisadorId = value;
+          }),
+        )
+        .then(
+          (value) => setState(() {
+            if (widget.hospedagemModel != null) {
+              print("chamando funcao");
+              isTheOwner = _utils.isTheOwner(
+                  pesquisadorId, widget.hospedagemModel!.usuario_criador!,widget.isAdmin??false,context,);
+            }
+          }),
+        );
     super.initState();
-    getInfoUsersInPesquisa();
 
     for (final key in _chavesIdentificacao) {
       _identificacaoControllers[key] = TextEditingController();
@@ -241,12 +250,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
           curve: Curves.ease,
         );
       } else {
-        isUpdate
-            ? FormService().updateForm(widget.hospedagemModel!.id!, valoresjson,
-                AppConstants.MEIOS_DE_HOSPEDAGEM)
-            : FormService()
-                .sendForm(valoresjson, AppConstants.MEIOS_DE_HOSPEDAGEM);
-        print("Formulário finalizado e pronto para enviar!");
+        _utils.decideSendingOrUpdating(isUpdate, isTheOwner, context, widget.hospedagemModel?.id ?? 0, valoresjson, AppConstants.MEIOS_DE_HOSPEDAGEM);
       }
     } else {
       _formKey.currentState!.save();
@@ -308,37 +312,41 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           // Botão Voltar
           if (currentStep > 0)
-            Container(
-              margin: EdgeInsets.only(bottom: 35.h),
-              child: TextButton(
-                onPressed: () {
-                  _pageController.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.ease,
-                  );
-                },
-                child: const Text('VOLTAR'),
+            SafeArea(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 20.h),
+                child: TextButton(
+                  onPressed: () {
+                    _pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
+                    );
+                  },
+                  child: const Text('VOLTAR'),
+                ),
               ),
             ),
           // Espaçador para alinhar o botão Continuar à direita quando não houver o Voltar
           if (currentStep == 0) const Spacer(),
 
           // Botão Continuar / Finalizar
-          Container(
-            height: 160.h,
-            width: 550.w,
-            margin: currentStep > 0
-                ? EdgeInsets.only(bottom: 55.h)
-                : EdgeInsets.only(bottom: 55.h, right: 55.w),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
-              onPressed: () {
-                _enviarFormulario();
-              },
-              child: Text(
-                currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
-                style: const TextStyle(color: Colors.white),
+          SafeArea(
+            child: Container(
+              height: 160.h,
+              width: 550.w,
+              margin: currentStep > 0
+                  ? EdgeInsets.only(bottom: 20.h, top: 20.h,)
+                  : EdgeInsets.only(bottom: 20.h, top: 20.h, right: 55.w),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
+                onPressed: () {
+                  _enviarFormulario();
+                },
+                child: Text(
+                  currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ),
           )

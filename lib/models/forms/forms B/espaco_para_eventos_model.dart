@@ -1,5 +1,6 @@
 class EspacosParaEventosModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -198,6 +199,7 @@ String? capacidadeeOutros;
   String? outrasAcessibilidade;
   EspacosParaEventosModel(
       {this.id,
+      this.usuario_criador,
       this.tipoFormulario,
       this.geradorCapacidadeEmKVA,
       this.uf,
@@ -379,6 +381,7 @@ String? capacidadeeOutros;
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'usuario_criador':usuario_criador,
       'tipo_formulario': tipoFormulario,
       "cadeira_movel": cadeiraMovel,
       "energiaEletrica": energiaEletrica,
@@ -563,6 +566,7 @@ String? capacidadeeOutros;
 
   EspacosParaEventosModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador = json['usuario_criador'];
     equipamentosEServicos = List<String>.from(json['equipamentosEServicos'] ?? []); 
     quantidadeAreaDeCarga= json["quantidadeAreaDeCarga"];
         areaTotalAreaDeCarga= json["areaTotalAreaDeCarga"];

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/models/forms/forms%20A/sistema_de_seguranca_model.dart';
-import 'package:inventur/ui/widgets/radioButton.dart';
+import 'package:sistur/models/forms/forms%20A/sistema_de_seguranca_model.dart';
+import 'package:sistur/ui/widgets/radioButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/widgets/text%20fields/tables.dart';
-import 'package:inventur/services/form_service.dart';
-import 'package:inventur/utils/app_constants.dart';
-import 'package:inventur/utils/utils_functions.dart';
+import 'package:sistur/ui/widgets/text%20fields/tables.dart';
+import 'package:sistur/services/form_service.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/utils/utils_functions.dart';
 import '../../widgets/text fields/customOutro.dart';
 import '../../widgets/text fields/customTextField.dart';
 
 class SistemaDeSeguranca extends StatefulWidget {
   final SistemaDeSegurancaModel? infoModel;
-  SistemaDeSeguranca({super.key, this.infoModel});
+  final bool? isAdmin;
+  SistemaDeSeguranca({super.key, this.infoModel, this.isAdmin});
 
   @override
   State<SistemaDeSeguranca> createState() => _SistemaDeSegurancaState();
@@ -64,14 +65,14 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
     sections.add(Tables(key: UniqueKey(),));
     sections2.add(Tables2(key: UniqueKey(),));
 
-    _utils.getInfoUsersInPesquisa(valoresjson).then((value) {
+    _utils.getInfoUsersInPesquisa(valoresjson, widget.isAdmin ?? false).then((value) {
       if (mounted){
         setState(() {
           pesquisadorId = value;
           if(widget.infoModel != null){
             isTheOwner = _utils.isTheOwner(
               pesquisadorId,
-               widget.infoModel?.usuario_criador ?? 0, context);
+               widget.infoModel?.usuario_criador ?? 0,widget.isAdmin ?? false, context);
           }
         });
       }
@@ -257,11 +258,9 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                     SizedBox(
                       height: sizeScreen.height * 0.05,
                     ),
-                    textLabel(
-                      name: 'Tipo:',
-                      fontWeight: FontWeight.bold,
-                    ),
-                    RadioD(
+                    RadioFormField(
+                      title: 'Tipo:',
+                      initialValue: widget.infoModel?.tipo ?? "",
                       options: [
                         'Polícia Civil',
                         'Polícia Militar',
@@ -274,7 +273,7 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                         'Defesa Civil',
                         'outro'
                       ],
-                      getValue: (newValue) {
+                      onSaved: (newValue) {
                         valoresjson['tipo'] = newValue;
                       },
                     ),
@@ -364,41 +363,43 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                     SizedBox(
                       height: sizeScreen.height * 0.05,
                     ),
-                    SizedBox(
-                      height: 50,
-                      width: 300,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          if(_formKey.currentState!.validate()){
-                            _formKey.currentState!.save();
-
-                          valoresjson['contatos'] = sections
-                              .map((element) => element.getData())
-                              .toList();
-                          valoresjson['servicos_especializados'] = sections2
-                              .map((element) => element.getData())
-                              .toList();
-                            //  ScaffoldMessenger.of(context).showSnackBar(
-                            //      SnackBar(content: Text('processing data')));
-
-                          _utils.decideSendingOrUpdating(isUpdate, isTheOwner, context,
-                           widget.infoModel?.id ?? 0,
-                            valoresjson,
-                             AppConstants.SISTEMAS_DE_SEGURANCA);
-
-                         
-                          }
-                        },
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.green[800],
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        child: Text(
-                          'Enviar',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25), // Use um fontSize fixo
+                    SafeArea(
+                      child: SizedBox(
+                        height: 50,
+                        width: 300,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if(_formKey.currentState!.validate()){
+                              _formKey.currentState!.save();
+                      
+                            valoresjson['contatos'] = sections
+                                .map((element) => element.getData())
+                                .toList();
+                            valoresjson['servicos_especializados'] = sections2
+                                .map((element) => element.getData())
+                                .toList();
+                              //  ScaffoldMessenger.of(context).showSnackBar(
+                              //      SnackBar(content: Text('processing data')));
+                      
+                            _utils.decideSendingOrUpdating(isUpdate, isTheOwner, context,
+                             widget.infoModel?.id ?? 0,
+                              valoresjson,
+                               AppConstants.SISTEMAS_DE_SEGURANCA);
+                      
+                           
+                            }
+                          },
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: Colors.green[800],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                          child: Text(
+                            'Enviar',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25), // Use um fontSize fixo
+                          ),
                         ),
                       ),
                     ),

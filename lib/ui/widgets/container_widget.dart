@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/models/pesquisa_model.dart';
-import 'package:inventur/services/admin_service.dart';
+import 'package:sistur/models/pesquisa_model.dart';
+import 'package:sistur/services/admin_service.dart';
 class PesquisaPesquisadorCardWidget extends StatefulWidget {
   final Pesquisa pesquisa;
 

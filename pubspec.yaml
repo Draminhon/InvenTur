@@ -1,4 +1,4 @@
-name: inventur
+name: sistur
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -68,15 +68,15 @@ flutter_native_splash:
   color: "#ffffff"
   image: "assets/images/logo.png"
   android: true
-  ios: true
+  ios: true 
 
-flutter_icons:
+flutter_launcher_icons:
   image_path: "assets/images/logo.png"
   ios: true
   remove_alpha_ios: true
   android: "launcher_icon"
   adaptative_icon_background: "#ffffff"
-  adaptative_icon_foreground: "assets/images/logo.png"
+  adaptative_icon_foreground: "assets/images/logo.png" 
 
 dev_dependencies:
   flutter_test:

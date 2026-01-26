@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:inventur/main.dart';
-import 'package:inventur/ui/widgets/widgets/sendButton.dart';
-import 'package:inventur/ui/screens/updatedForm_screen.dart';
-import 'package:inventur/ui/screens/sync_page.dart';
-import 'package:inventur/services/admin_service.dart';
-import 'package:inventur/services/sync_service.dart';
-import 'package:inventur/utils/app_constants.dart';
+import 'package:sistur/main.dart';
+import 'package:sistur/ui/widgets/widgets/sendButton.dart';
+import 'package:sistur/ui/screens/updatedForm_screen.dart';
+import 'package:sistur/ui/screens/sync_page.dart';
+import 'package:sistur/services/admin_service.dart';
+import 'package:sistur/services/sync_service.dart';
+import 'package:sistur/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class FormService {

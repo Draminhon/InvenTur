@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/controllers/user_controller.dart';
-import 'package:inventur/ui/widgets/forms/registration_form_widget.dart';
+import 'package:sistur/controllers/user_controller.dart';
+import 'package:sistur/ui/widgets/forms/registration_form_widget.dart';
 
 class AdminRegisterDialogButton extends StatelessWidget {
   final UserController userControllerNotifier;

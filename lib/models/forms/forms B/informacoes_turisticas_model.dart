@@ -1,5 +1,6 @@
 class InformacoesTuristicasModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -138,6 +139,7 @@ class InformacoesTuristicasModel {
   String? outrasAcessibilidade;
   InformacoesTuristicasModel({
     this.id,
+    this.usuario_criador,
     this.tipoFormulario,
     this.uf,
     this.regiaoTuristica,
@@ -256,6 +258,7 @@ class InformacoesTuristicasModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'usuario_criador': usuario_criador,
       'tipo_formulario': tipoFormulario,
       'uf': uf,
       'permissaoDeAcesso': permissaoDeAcesso,
@@ -382,7 +385,7 @@ class InformacoesTuristicasModel {
     id = json['id'];
     tipoFormulario = json['tipo_formulario'];
     uf = json['uf'];
-
+usuario_criador = json['usuario_criador'];
      entidadeManetedora= json['entidadeManetedora'];
      entidadeManetedoraEmail = json['entidadeManetedoraEmail'];
      entidadeManetedoraSite = json['entidadeManetedoraSite'];

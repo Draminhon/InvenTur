@@ -1,5 +1,6 @@
 class GastronomiaArtesanatoTrabalhosManuaisModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -57,6 +58,7 @@ class GastronomiaArtesanatoTrabalhosManuaisModel {
   String? descritivoEspecialidades;
   GastronomiaArtesanatoTrabalhosManuaisModel({
      this.integraRoteiros,
+     this.usuario_criador,
      this.locaisDeComercializacao,
      this.descritivoEspecialidades,
        this.tabelaEquipamentoEEspaco,
@@ -119,6 +121,7 @@ tabelaEquipamentoEEspaco =
         Map<String, dynamic>.from(json['tabelaEquipamentoEEspaco'] ?? {});
     tabelaEquipamentoEEspaco2 =
         Map<String, dynamic>.from(json['tabelaEquipamentoEEspaco2'] ?? {});
+        usuario_criador = json['usuario_criador'];
   doEquipamentoEspaco = json['doEquipamentoEspaco'];
   daAreaOuEdificacaoEmQueEstaLocalizado = json['daAreaOuEdificacaoEmQueEstaLocalizado'];
         locaisDeComercializacao = List<String>.from(json['locaisDeComercializacao'] ??[]);
@@ -187,6 +190,7 @@ tabelaEquipamentoEEspaco =
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
+    data['usuario_criador'] = usuario_criador;
     data['descritivoEspecialidades'] = descritivoEspecialidades;
         data['integraRoteiros']= integraRoteiros;
         data['integraGuiaTuristico']= integraGuiaTuristico;

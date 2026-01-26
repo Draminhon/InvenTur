@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/ui/widgets/container_form.dart';
+import 'package:sistur/ui/widgets/container_form.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 class FormularioA extends StatelessWidget {
   const FormularioA({super.key});

@@ -2,21 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/models/forms/forms%20B/agencia_de_turismo_model.dart';
-import 'package:inventur/controllers/pesquisa_controller.dart';
-import 'package:inventur/ui/widgets/widgets/fields.dart';
-import 'package:inventur/ui/widgets/container_widget.dart';
-import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
-import 'package:inventur/ui/widgets/text%20fields/customTextField.dart';
-import 'package:inventur/ui/widgets/maps/mapa_widget.dart';
-import 'package:inventur/ui/widgets/text%20fields/multi_auto_complete_form_field.dart';
-import 'package:inventur/ui/widgets/radioButton.dart';
-import 'package:inventur/ui/widgets/text%20fields/tables.dart';
-import 'package:inventur/services/admin_service.dart';
-import 'package:inventur/services/form_service.dart';
-import 'package:inventur/utils/app_constants.dart';
-import 'package:inventur/utils/utils_functions.dart';
-import 'package:inventur/validators/validators.dart';
+import 'package:sistur/models/forms/forms%20B/agencia_de_turismo_model.dart';
+import 'package:sistur/controllers/pesquisa_controller.dart';
+import 'package:sistur/ui/widgets/widgets/fields.dart';
+import 'package:sistur/ui/widgets/container_widget.dart';
+import 'package:sistur/ui/widgets/text%20fields/customOutro.dart';
+import 'package:sistur/ui/widgets/text%20fields/customTextField.dart';
+import 'package:sistur/ui/widgets/maps/mapa_widget.dart';
+import 'package:sistur/ui/widgets/text%20fields/multi_auto_complete_form_field.dart';
+import 'package:sistur/ui/widgets/radioButton.dart';
+import 'package:sistur/ui/widgets/text%20fields/tables.dart';
+import 'package:sistur/services/admin_service.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/utils/utils_functions.dart';
+import 'package:sistur/validators/validators.dart';
 import '../../widgets/widgets/checkBox.dart';
 
 final Validators _validators = Validators();
@@ -28,7 +27,8 @@ bool isUpdate = false;
 //formulario
 class AgenciasDeTurismo extends StatefulWidget {
   final AgenciasDeTurismoModel? infoModel;
-  const AgenciasDeTurismo({super.key, this.infoModel});
+  final bool? isAdmin;
+  const AgenciasDeTurismo({super.key, this.infoModel, this.isAdmin});
 
   @override
   State<AgenciasDeTurismo> createState() => _AgenciasDeTurismoState();
@@ -159,7 +159,7 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
     // TODO: implement initState
     
     _utils
-        .getInfoUsersInPesquisa(valoresJson)
+        .getInfoUsersInPesquisa(valoresJson, widget.isAdmin ?? false)
         .then(
           (value) => setState(() {
             pesquisadorId = value;
@@ -170,7 +170,7 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
             if (widget.infoModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.infoModel!.usuario_criador!,context);
+                  pesquisadorId, widget.infoModel!.usuario_criador!,widget.isAdmin ?? false,context);
             }
           }),
         );
@@ -220,17 +220,7 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
     super.dispose();
   }
 
-  void getInfoUsersInPesquisa() async {
-    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
 
-    valoresJson['nome_pesquisador'] = info['pesquisador']['nome'];
-    valoresJson['telefone_pesquisador'] = info['pesquisador']['telefone'];
-    valoresJson['email_pesquisador'] = info['pesquisador']['email'];
-
-    valoresJson['nome_coordenador'] = info['coordenador']['nome'];
-    valoresJson['telefone_coordenador'] = info['coordenador']['telefone'];
-    valoresJson['email_coordenador'] = info['coordenador']['email'];
-  }
 
   void _enviarFormulario() async {
     if (_formKey.currentState?.validate() ?? false) {
@@ -327,37 +317,41 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           // Botão Voltar
           if (currentStep > 0)
-            Container(
-              margin: EdgeInsets.only(bottom: 35.h),
-              child: TextButton(
-                onPressed: () {
-                  _pageController.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.ease,
-                  );
-                },
-                child: const Text('VOLTAR'),
+            SafeArea(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 20.h),
+                child: TextButton(
+                  onPressed: () {
+                    _pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
+                    );
+                  },
+                  child: const Text('VOLTAR'),
+                ),
               ),
             ),
           // Espaçador para alinhar o botão Continuar à direita quando não houver o Voltar
           if (currentStep == 0) const Spacer(),
 
           // Botão Continuar / Finalizar
-          Container(
-            height: 160.h,
-            width: 550.w,
-            margin: currentStep > 0
-                ? EdgeInsets.only(bottom: 55.h)
-                : EdgeInsets.only(bottom: 55.h, right: 55.w),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
-              onPressed: () {
-                _enviarFormulario();
-              },
-              child: Text(
-                currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
-                style: const TextStyle(color: Colors.white),
+          SafeArea(
+            child: Container(
+              height: 160.h,
+              width: 550.w,
+              margin: currentStep > 0
+                  ? EdgeInsets.only(bottom: 20.h)
+                  : EdgeInsets.only(bottom: 20.h, right: 55.w),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
+                onPressed: () {
+                  _enviarFormulario();
+                },
+                child: Text(
+                  currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ),
           )

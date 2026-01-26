@@ -1,5 +1,6 @@
 class AlimentosEBebidasModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -106,6 +107,7 @@ class AlimentosEBebidasModel {
 
   AlimentosEBebidasModel({
     this.id,
+    this.usuario_criador,
     this.tipoFormulario,
     this.uf,
     this.regiaoTuristica,
@@ -211,6 +213,7 @@ class AlimentosEBebidasModel {
 
 AlimentosEBebidasModel.fromJson(Map<String, dynamic> json) {
   id = json['id'];
+  usuario_criador = json['usuario_criador'];
   tipoFormulario = json['tipoFormulario'];
   uf = json['uf'];
   regiaoTuristica = json['regiao_turistica'];
@@ -318,6 +321,7 @@ AlimentosEBebidasModel.fromJson(Map<String, dynamic> json) {
 Map<String, dynamic> toMap() {
    return{
     'id': id,
+    'usuario_criador': usuario_criador,
     'tipo_formulario': tipoFormulario,
     'uf': uf,
     'regiao_turistica': regiaoTuristica,

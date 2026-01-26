@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/ui/widgets/widgets/apis/estados.dart';
-import 'package:inventur/ui/widgets/widgets/apis/paises.dart';
-import 'package:inventur/ui/widgets/widgets/checkBox.dart';
-import 'package:inventur/ui/widgets/widgets/tabela.dart';
+import 'package:sistur/ui/widgets/widgets/apis/estados.dart';
+import 'package:sistur/ui/widgets/widgets/apis/paises.dart';
+import 'package:sistur/ui/widgets/widgets/checkBox.dart';
+import 'package:sistur/ui/widgets/widgets/tabela.dart';
 
 import '../../widgets/text fields/customOutro.dart';
 import '../../widgets/text fields/customTextField.dart';

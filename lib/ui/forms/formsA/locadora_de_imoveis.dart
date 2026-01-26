@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/models/forms/forms%20A/locadora_de_imoveis_model.dart';
-import 'package:inventur/ui/widgets/radioButton.dart';
+import 'package:sistur/models/forms/forms%20A/locadora_de_imoveis_model.dart';
+import 'package:sistur/ui/widgets/radioButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/widgets/text%20fields/tables.dart';
-import 'package:inventur/services/form_service.dart';
-import 'package:inventur/utils/app_constants.dart';
-import 'package:inventur/utils/utils_functions.dart';
+import 'package:sistur/ui/widgets/text%20fields/tables.dart';
+import 'package:sistur/services/form_service.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/utils/utils_functions.dart';
 import '../../widgets/text fields/customTextField.dart';
 
 class LocadoraDeImoveis extends StatefulWidget {
   final LocadoraDeImoveisModel? infoModel;
-
-  LocadoraDeImoveis({super.key, this.infoModel});
+  final bool? isAdmin;
+  LocadoraDeImoveis({super.key, this.infoModel, this.isAdmin});
 
   @override
   State<LocadoraDeImoveis> createState() => _LocadoraDeImoveisState();
@@ -27,7 +27,6 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
   int pesquisadorId = 0;
   bool isTheOwner = false;
   bool isUpdate = false;
-
   // Controllers
   final TextEditingController email_coordenador = TextEditingController();
   final TextEditingController email_pesquisador = TextEditingController();
@@ -66,12 +65,12 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
     sections.add(TabelaInfoGerais(key: UniqueKey()));
     sections2.add(TabelaInfoGerais2(key: UniqueKey()));
 
-    _utils.getInfoUsersInPesquisa(valoresjson).then((value) {
+    _utils.getInfoUsersInPesquisa(valoresjson, widget.isAdmin ?? false).then((value) {
       if (mounted) {
         setState(() {
           pesquisadorId = value;
           if (widget.infoModel != null) {
-            isTheOwner = _utils.isTheOwner(pesquisadorId, widget.infoModel!.usuario_criador!,context);
+            isTheOwner = _utils.isTheOwner(pesquisadorId, widget.infoModel!.usuario_criador!,widget.isAdmin ?? false,context);
           }
         });
       }
@@ -268,33 +267,35 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
               const SizedBox(height: 30),
               
               // --- BOTÃO ENVIAR ---
-              SizedBox(
-                height: 50,
-                width: 300,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green[800],
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              SafeArea(
+                child: SizedBox(
+                  height: 50,
+                  width: 300,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green[800],
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        _formKey.currentState!.save();
+                
+                        // COLETA DE DADOS DAS TABELAS DINÂMICAS
+                        valoresjson['contatos'] = sections.map((e) => e.getData()).toList();
+                        valoresjson['servicos_especializados'] = sections2.map((e) => e.getData()).toList();
+                
+                        _utils.decideSendingOrUpdating(
+                          isUpdate, 
+                          isTheOwner, 
+                          context, 
+                          widget.infoModel?.id ?? 0, 
+                          valoresjson, 
+                          AppConstants.LOCADORA_IMOVEIS
+                        );
+                      }
+                    },
+                    child: const Text('Enviar', style: TextStyle(color: Colors.white, fontSize: 25)),
                   ),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      _formKey.currentState!.save();
-
-                      // COLETA DE DADOS DAS TABELAS DINÂMICAS
-                      valoresjson['contatos'] = sections.map((e) => e.getData()).toList();
-                      valoresjson['servicos_especializados'] = sections2.map((e) => e.getData()).toList();
-
-                      _utils.decideSendingOrUpdating(
-                        isUpdate, 
-                        isTheOwner, 
-                        context, 
-                        widget.infoModel?.id ?? 0, 
-                        valoresjson, 
-                        AppConstants.LOCADORA_IMOVEIS
-                      );
-                    }
-                  },
-                  child: const Text('Enviar', style: TextStyle(color: Colors.white, fontSize: 25)),
                 ),
               ),
               const SizedBox(height: 30),

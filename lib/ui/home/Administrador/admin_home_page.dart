@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:inventur/models/user_model.dart';
-import 'package:inventur/controllers/user_controller.dart';
-import 'package:inventur/ui/home/Administrador/user_management_page.dart';
-import 'package:inventur/ui/screens/pesquisa%20screens/pesquisas_page.dart';
-import 'package:inventur/ui/widgets/options_drawer_widget.dart';
-import 'package:inventur/utils/app_constants.dart';
+import 'package:sistur/models/user_model.dart';
+import 'package:sistur/controllers/user_controller.dart';
+import 'package:sistur/ui/home/Administrador/user_management_page.dart';
+import 'package:sistur/ui/screens/pesquisa%20screens/pesquisas_page.dart';
+import 'package:sistur/ui/widgets/options_drawer_widget.dart';
+import 'package:sistur/utils/app_constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

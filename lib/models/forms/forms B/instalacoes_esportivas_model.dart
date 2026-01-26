@@ -1,5 +1,6 @@
 class InstalacoesEsportivasModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -194,6 +195,7 @@ class InstalacoesEsportivasModel {
   String? caracteristicasEspecificas;
   InstalacoesEsportivasModel(
       {this.modalidadesPraticadasGinasio,
+      this.usuario_criador,
       this.ginasioAreaCoberta,
       this.ginasioPoliesportivo,
       this.pistaDeSkateTipoDePista,
@@ -366,6 +368,7 @@ class InstalacoesEsportivasModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'usuario_criador': usuario_criador,
       'tipo_formulario': tipoFormulario,
       'uf': uf,
       'modalidadesPraticadasGinasio': modalidadesPraticadasGinasio,
@@ -549,6 +552,7 @@ class InstalacoesEsportivasModel {
 
   InstalacoesEsportivasModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador = json['usuario_criador'];
     entradaGratuita = json['entradaGratuita'];
     entradaPaga = json['entradaPaga'];
     tipoFormulario = json['tipo_formulario'];

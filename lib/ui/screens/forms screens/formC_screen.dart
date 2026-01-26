@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/widgets/container_form.dart';
+import 'package:sistur/ui/widgets/container_form.dart';
 
 class FormularioC extends StatelessWidget {
   const FormularioC({super.key});

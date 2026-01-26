@@ -2,18 +2,18 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/models/forms/forms%20A/comercio_turistico_model.dart';
-import 'package:inventur/ui/widgets/maps/mapa_widget.dart';
-import 'package:inventur/ui/widgets/widgets/checkBox.dart';
-import 'package:inventur/ui/widgets/widgets/fields.dart';
-import 'package:inventur/ui/widgets/container_widget.dart';
-import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
-import 'package:inventur/ui/widgets/text%20fields/customTextField.dart';
-import 'package:inventur/ui/widgets/radioButton.dart';
-import 'package:inventur/ui/widgets/text%20fields/tables.dart';
-import 'package:inventur/utils/app_constants.dart';
-import 'package:inventur/utils/utils_functions.dart';
-import 'package:inventur/validators/validators.dart';
+import 'package:sistur/models/forms/forms%20A/comercio_turistico_model.dart';
+import 'package:sistur/ui/widgets/maps/mapa_widget.dart';
+import 'package:sistur/ui/widgets/widgets/checkBox.dart';
+import 'package:sistur/ui/widgets/widgets/fields.dart';
+import 'package:sistur/ui/widgets/container_widget.dart';
+import 'package:sistur/ui/widgets/text%20fields/customOutro.dart';
+import 'package:sistur/ui/widgets/text%20fields/customTextField.dart';
+import 'package:sistur/ui/widgets/radioButton.dart';
+import 'package:sistur/ui/widgets/text%20fields/tables.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/utils/utils_functions.dart';
+import 'package:sistur/validators/validators.dart';
 
 final Validators _validators = Validators();
 final Map<String, dynamic> valoresJson = {
@@ -23,7 +23,8 @@ bool isUpdate = false;
 
 class ComercioTuristico extends StatefulWidget {
   final ComercioTuristicoModel? infoModel;
-  const ComercioTuristico({super.key, this.infoModel});
+  final bool? isAdmin;
+  const ComercioTuristico({super.key, this.infoModel, this.isAdmin});
 
   @override
   State<ComercioTuristico> createState() => _ComercioTuristicoState();
@@ -31,7 +32,6 @@ class ComercioTuristico extends StatefulWidget {
 
 class _ComercioTuristicoState extends State<ComercioTuristico> {
   int currentStep = 0;
-
     int pesquisadorId = 0;
   bool isTheOwner = false;
   final UtilsFunctions _utils = UtilsFunctions();
@@ -135,7 +135,7 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
     // TODO: implement initState
     super.initState();
      _utils
-        .getInfoUsersInPesquisa(valoresJson)
+        .getInfoUsersInPesquisa(valoresJson, widget.isAdmin ?? false)
         .then(
           (value) => setState(() {
             pesquisadorId = value;
@@ -146,7 +146,7 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
             if (widget.infoModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.infoModel!.usuario_criador!, context);
+                  pesquisadorId, widget.infoModel!.usuario_criador!, widget.isAdmin ?? false, context);
             }
           }),
         );
@@ -289,37 +289,41 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           // Botão Voltar
           if (currentStep > 0)
-            Container(
-              margin: EdgeInsets.only(bottom: 35.h),
-              child: TextButton(
-                onPressed: () {
-                  _pageController.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.ease,
-                  );
-                },
-                child: const Text('VOLTAR'),
+            SafeArea(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 20.h),
+                child: TextButton(
+                  onPressed: () {
+                    _pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
+                    );
+                  },
+                  child: const Text('VOLTAR'),
+                ),
               ),
             ),
           // Espaçador para alinhar o botão Continuar à direita quando não houver o Voltar
           if (currentStep == 0) const Spacer(),
 
           // Botão Continuar / Finalizar
-          Container(
-            height: 160.h,
-            width: 550.w,
-            margin: currentStep > 0
-                ? EdgeInsets.only(bottom: 55.h)
-                : EdgeInsets.only(bottom: 55.h, right: 55.w),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
-              onPressed: () {
-                _enviarFormulario();
-              },
-              child: Text(
-                currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
-                style: const TextStyle(color: Colors.white),
+          SafeArea(
+            child: Container(
+              height: 160.h,
+              width: 550.w,
+              margin: currentStep > 0
+                  ? EdgeInsets.only(bottom: 20.h, top: 20.h)
+                  : EdgeInsets.only(bottom: 20.h, top: 20.h, right: 55.w),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
+                onPressed: () {
+                  _enviarFormulario();
+                },
+                child: Text(
+                  currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ),
           )

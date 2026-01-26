@@ -1,5 +1,6 @@
 class OutrosTiposDeAcomodacaoModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -173,6 +174,7 @@ class OutrosTiposDeAcomodacaoModel {
   String? outrasAcessibilidade;
   OutrosTiposDeAcomodacaoModel({
     this.id,
+    this.usuario_criador,
     this.tipoFormulario,
     this.uf,
     this.regiaoTuristica,
@@ -326,6 +328,7 @@ class OutrosTiposDeAcomodacaoModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'usuario_criador': usuario_criador,
       'tipo_formulario': tipoFormulario,
       'uf': uf,
       'regiao_turistica': regiaoTuristica,
@@ -485,6 +488,7 @@ class OutrosTiposDeAcomodacaoModel {
 
   OutrosTiposDeAcomodacaoModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador = json['usuario_criador'];
            pontosDeAgua = json['pontosDeAgua'];
       aguaPotavel = json['aguaPotavel'];
     tipoFormulario = json['tipo_formulario'];

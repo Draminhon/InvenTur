@@ -1,5 +1,6 @@
 class EspacosDeDiversaoECulturaModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -141,6 +142,7 @@ class EspacosDeDiversaoECulturaModel {
   String? outrasAcessibilidade;
   EspacosDeDiversaoECulturaModel({
     this.id,
+    this.usuario_criador,
     this.tipoFormulario,
     this.uf,
     this.regiaoTuristica,
@@ -262,6 +264,7 @@ class EspacosDeDiversaoECulturaModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'usuario_criador':usuario_criador,
       'tipo_formulario': tipoFormulario,
       'uf': uf,
       'permissaoDeAcesso': permissaoDeAcesso,
@@ -389,6 +392,7 @@ class EspacosDeDiversaoECulturaModel {
 
   EspacosDeDiversaoECulturaModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador =json['usuario_criador'];
     tipoFormulario = json['tipo_formulario'];
     uf = json['uf'];
 

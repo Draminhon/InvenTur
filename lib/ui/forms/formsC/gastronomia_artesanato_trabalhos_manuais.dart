@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/models/forms/Forms%20C/gastronomia_artesanato_trabalhos_manuais_model.dart';
-import 'package:inventur/ui/widgets/container_widget.dart';
-import 'package:inventur/ui/widgets/radioButton.dart';
+import 'package:sistur/models/forms/Forms%20C/gastronomia_artesanato_trabalhos_manuais_model.dart';
+import 'package:sistur/ui/widgets/container_widget.dart';
+import 'package:sistur/ui/widgets/radioButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
-import 'package:inventur/ui/widgets/text%20fields/tables.dart';
-import 'package:inventur/services/admin_service.dart';
-import 'package:inventur/services/form_service.dart';
-import 'package:inventur/ui/widgets/widgets/checkBox.dart';
-import 'package:inventur/utils/app_constants.dart';
+import 'package:sistur/ui/widgets/text%20fields/customOutro.dart';
+import 'package:sistur/ui/widgets/text%20fields/tables.dart';
+import 'package:sistur/services/admin_service.dart';
+import 'package:sistur/services/form_service.dart';
+import 'package:sistur/ui/widgets/widgets/checkBox.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/utils/utils_functions.dart';
 import '../../widgets/text fields/customTextField.dart';
 import 'package:dots_indicator/dots_indicator.dart';
-import 'package:inventur/controllers/pesquisa_controller.dart';
-import 'package:inventur/ui/widgets/widgets/fields.dart';
+import 'package:sistur/controllers/pesquisa_controller.dart';
+import 'package:sistur/ui/widgets/widgets/fields.dart';
 
 final Map<String, dynamic> valoresjson = {
   'tipo_formulario': 'Gastronomia e Artesanato',
@@ -22,8 +23,9 @@ bool isUpdate = false;
 
 class GastronomiaArtesanatoTrabalhosManuais extends StatefulWidget {
   final GastronomiaArtesanatoTrabalhosManuaisModel? hospedagemModel;
+  final bool? isAdmin;
   const GastronomiaArtesanatoTrabalhosManuais(
-      {super.key, this.hospedagemModel});
+      {super.key, this.hospedagemModel, this.isAdmin});
 
   @override
   State<GastronomiaArtesanatoTrabalhosManuais> createState() =>
@@ -36,7 +38,9 @@ class _GastronomiaArtesanatoTrabalhosManuaisState
   List<TabelaGastronomiaArtesanato2> sections2 = [
     TabelaGastronomiaArtesanato2()
   ];
-
+  int pesquisadorId = 0;
+  bool isTheOwner = false;
+  final UtilsFunctions _utils = UtilsFunctions();
   int currentStep = 0;
   int qtdeInfo = 0;
   int qtdeServicosEspecializados = 0;
@@ -112,18 +116,7 @@ class _GastronomiaArtesanatoTrabalhosManuaisState
     'referencias'
   ];
 
-  void getInfoUsersInPesquisa() async {
-    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
-
-    valoresjson['nome_pesquisador'] = info['pesquisador']['nome'];
-    valoresjson['telefone_pesquisador'] = info['pesquisador']['telefone'];
-    valoresjson['email_pesquisador'] = info['pesquisador']['email'];
-
-    valoresjson['nome_coordenador'] = info['coordenador']['nome'];
-    valoresjson['telefone_coordenador'] = info['coordenador']['telefone'];
-    valoresjson['email_coordenador'] = info['coordenador']['email'];
-  }
-
+ 
   void _preencherDadosParaTeste() {
     if (widget.hospedagemModel != null) {
       final model = widget.hospedagemModel!;
@@ -211,8 +204,22 @@ class _GastronomiaArtesanatoTrabalhosManuaisState
   @override
   void initState() {
     super.initState();
-    getInfoUsersInPesquisa();
-
+_utils
+        .getInfoUsersInPesquisa(valoresjson, widget.isAdmin??false)
+        .then(
+          (value) => setState(() {
+            pesquisadorId = value;
+          }),
+        )
+        .then(
+          (value) => setState(() {
+            if (widget.hospedagemModel != null) {
+              print("chamando funcao");
+              isTheOwner = _utils.isTheOwner(
+                  pesquisadorId, widget.hospedagemModel!.usuario_criador!,widget.isAdmin??false,context);
+            }
+          }),
+        );
     for (final key in _chavesIdentificacao) {
       _identificacaoControllers[key] = TextEditingController();
     }
@@ -299,12 +306,10 @@ class _GastronomiaArtesanatoTrabalhosManuaisState
           curve: Curves.ease,
         );
       } else {
-        isUpdate
-            ? FormService().updateForm(widget.hospedagemModel!.id!, valoresjson,
-                AppConstants.GASTRONOMIA_ARTESANATO)
-            : FormService()
-                .sendForm(valoresjson, AppConstants.GASTRONOMIA_ARTESANATO);
-        print("Formulário finalizado e pronto para enviar!");
+        _utils.decideSendingOrUpdating(isUpdate, 
+        isTheOwner,
+         context,
+          widget.hospedagemModel?.id ?? 0, valoresjson, AppConstants.GASTRONOMIA_ARTESANATO);
       }
     } else {
       _formKey.currentState!.save();
@@ -371,37 +376,41 @@ class _GastronomiaArtesanatoTrabalhosManuaisState
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           // Botão Voltar
           if (currentStep > 0)
-            Container(
-              margin: EdgeInsets.only(bottom: 35.h),
-              child: TextButton(
-                onPressed: () {
-                  _pageController.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.ease,
-                  );
-                },
-                child: const Text('VOLTAR'),
+            SafeArea(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 20.h),
+                child: TextButton(
+                  onPressed: () {
+                    _pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
+                    );
+                  },
+                  child: const Text('VOLTAR'),
+                ),
               ),
             ),
           // Espaçador para alinhar o botão Continuar à direita quando não houver o Voltar
           if (currentStep == 0) const Spacer(),
 
           // Botão Continuar / Finalizar
-          Container(
-            height: 160.h,
-            width: 550.w,
-            margin: currentStep > 0
-                ? EdgeInsets.only(bottom: 55.h)
-                : EdgeInsets.only(bottom: 55.h, right: 55.w),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
-              onPressed: () {
-                _enviarFormulario();
-              },
-              child: Text(
-                currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
-                style: const TextStyle(color: Colors.white),
+          SafeArea(
+            child: Container(
+              height: 160.h,
+              width: 550.w,
+              margin: currentStep > 0
+                  ? EdgeInsets.only(bottom: 20.h, top: 20.h)
+                  : EdgeInsets.only(bottom: 20.h, top: 20.h, right: 55.w),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
+                onPressed: () {
+                  _enviarFormulario();
+                },
+                child: Text(
+                  currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ),
           )

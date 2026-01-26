@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/screens/password%20recover%20screens/changepassword_page.dart';
-import 'package:inventur/ui/widgets/text%20fields/text_field_widget.dart';
-import 'package:inventur/utils/app_constants.dart';
+import 'package:sistur/ui/screens/password%20recover%20screens/changepassword_page.dart';
+import 'package:sistur/ui/widgets/text%20fields/text_field_widget.dart';
+import 'package:sistur/utils/app_constants.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

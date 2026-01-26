@@ -1,5 +1,6 @@
 class EntidadesAssociativasModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -164,6 +165,7 @@ String? distanciasAeroporto;
   String? outrasAcessibilidade;
   EntidadesAssociativasModel({
     this.id,
+    this.usuario_criador,
     this.tipoFormulario,
     this.abrangencia,
     this.uf,
@@ -304,6 +306,7 @@ String? distanciasAeroporto;
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'usuario_criador': usuario_criador,
       'tipo_formulario': tipoFormulario,
       'uf': uf,
       'representividade': representividade,
@@ -450,6 +453,7 @@ String? distanciasAeroporto;
 
   EntidadesAssociativasModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador = json['usuario_criador'];
     tipoFormulario = json['tipo_formulario'];
     uf = json['uf'];
     CNPJ = json['CNPJ'];

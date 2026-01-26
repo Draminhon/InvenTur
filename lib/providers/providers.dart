@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/models/user_model.dart';
+import 'package:sistur/models/user_model.dart';
 
 class UserProvider with ChangeNotifier{
 

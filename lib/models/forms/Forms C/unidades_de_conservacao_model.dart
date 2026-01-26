@@ -1,5 +1,6 @@
 class UnidadesDeConservacaoModel {
   String? nomeOficial;
+  int? usuario_criador;
   String? esferaAdministrativa;
   String? distanciasAeroporto;
   String? distanciasRodoviaria;
@@ -321,6 +322,7 @@ String? fretadoSite5;
   String? instalacoesOutras;
   UnidadesDeConservacaoModel(
       {this.id,
+      this.usuario_criador,
       this.tipoFormulario,
       this.instalacoesOutras,
       this.visitacao,
@@ -618,6 +620,7 @@ String? fretadoSite5;
 
   Map<String, dynamic> toMap() {
     return {
+      'usuario_criador':usuario_criador,
       'nomeOficial': nomeOficial,
       'esferaAdministrativa': esferaAdministrativa,
         'distanciasAeroporto': distanciasAeroporto,
@@ -923,6 +926,7 @@ String? fretadoSite5;
 
   UnidadesDeConservacaoModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador = json['usuario_criador'];
     tipoFormulario = json['tipo_formulario'];
     autoguiada = json['autoguiada'];
     guiada = json['guiada'];

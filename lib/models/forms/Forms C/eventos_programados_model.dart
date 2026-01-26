@@ -1,6 +1,7 @@
 class EventosProgramadosModel {
 
  List<String>? tipoLista;
+ int? usuario_criador;
   String? cnpjRealizador;
   String? entidadeManetedoraWhatsapp;
   String? entidadeManetedoraInstagram;
@@ -330,6 +331,7 @@ String? fretadoSite5;
   String? instalacoesOutras;
   EventosProgramadosModel(
       {this.id,
+      this.usuario_criador,
       this.tipoFormulario,
       this.instalacoesOutras,
       this.visitacao,
@@ -636,6 +638,7 @@ String? fretadoSite5;
   Map<String, dynamic> toMap() {
     return {
       'tipoLista': tipoLista,
+      'usuario_criador':usuario_criador,
         'cnpjRealizador': cnpjRealizador,
         'entidadeManetedoraWhatsapp': entidadeManetedoraWhatsapp,
         'entidadeManetedoraInstagram': entidadeManetedoraInstagram,
@@ -948,6 +951,7 @@ String? fretadoSite5;
 
   EventosProgramadosModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador = json['usuario_criador'];
     tipoLista = List<String>.from(json['tipoLista'] ?? []);
     cnpjRealizador = json['cnpjRealizador'];
     entidadeManetedoraWhatsapp = json['entidadeManetedoraWhatsapp'];

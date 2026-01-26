@@ -1,98 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/models/forms/forms%20B/guiamento_e_conducao_turisttica_model.dart';
-import 'package:inventur/ui/widgets/radioButton.dart';
+import 'package:sistur/models/forms/forms%20B/guiamento_e_conducao_turisttica_model.dart';
+import 'package:sistur/ui/widgets/radioButton.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/widgets/text%20fields/tables.dart';
-import 'package:inventur/services/admin_service.dart';
-import 'package:inventur/services/form_service.dart';
-import 'package:inventur/ui/widgets/widgets/checkBox.dart';
-import 'package:inventur/utils/app_constants.dart';
+import 'package:sistur/ui/widgets/text%20fields/tables.dart';
+import 'package:sistur/ui/widgets/widgets/checkBox.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/utils/utils_functions.dart';
 import '../../widgets/text fields/customTextField.dart';
-bool isUpdate = false;
+
 
 class GuiamentoEConducaoTurististica extends StatefulWidget {
   final GuiamentoEConducaoTurististicaModel? infoModel;
-
-  GuiamentoEConducaoTurististica({super.key, this.infoModel});
+  final bool? isAdmin;
+  GuiamentoEConducaoTurististica({super.key, this.infoModel, this.isAdmin});
 
   @override
-  State<GuiamentoEConducaoTurististica> createState() => _GuiamentoEConducaoTurististicaState();
+  State<GuiamentoEConducaoTurististica> createState() =>
+      _GuiamentoEConducaoTurististicaState();
 }
 
-FormService _formService = FormService();
 
-class _GuiamentoEConducaoTurististicaState extends State<GuiamentoEConducaoTurististica> {
-  String pesquisadorNome = '';
-  String pesquisadorTelefone = '';
-  String pesquisadorEmail = '';
+class _GuiamentoEConducaoTurististicaState
+    extends State<GuiamentoEConducaoTurististica> {
 
-  String coordenadorNome = '';
-  String coordenadorTelefone = '';
-  String coordenadorEmail = '';
+  final UtilsFunctions _utils = UtilsFunctions();
 
-  void getInfoUsersInPesquisa() async {
-    Map<String, dynamic> info = await getAdminAndPesquisadorInfo();
+  int pesquisadorId = 0;
+  bool isTheOwner = false;
+  bool isUpdate = false;
 
-    pesquisadorNome = info['pesquisador']['nome'];
-    pesquisadorTelefone = info['pesquisador']['telefone'];
-    pesquisadorEmail = info['pesquisador']['email'];
-
-    coordenadorNome = info['coordenador']['nome'];
-    coordenadorEmail = info['coordenador']['telefone'];
-    coordenadorTelefone = info['coordenador']['email'];
-  }
-
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    try {
-      final argument = ModalRoute.of(context)!.settings.arguments as Map;
-      print("ARGUMENTO: $argument");
-      if (argument.containsKey('isUpdate')) {
-        isUpdate = argument['isUpdate'];
-      }
-    } catch (e) {
-      isUpdate = false;
-    }
-    print("VARIAVEL IS UPDATE: $isUpdate");
-    if (isUpdate) {
-      autoFillForm();
-
-    if (widget.infoModel!.contatos != null) {
-      qtdeInfo = widget.infoModel!.contatos!.length;
-      qtdeServicosEspecializados = widget.infoModel!.servicosEspecializados!.length;
-    }
-
-    if (qtdeInfo >= 0) {
-      for (int i = 1; i < qtdeInfo; i++) {
-        sections.add(TabelaGuiamentoTuristico());
-      }
-      for (int i = 0; i < qtdeInfo; i++) {
-        if (i < widget.infoModel!.contatos!.length) {
-          var contato = widget.infoModel!.contatos![i];
-          sections[i].fillForm(contato.nome_completo!, contato.cpf!,
-              contato.endereco!, contato.email!, contato.telefone!);
-        }
-      }
-    }
-
-    if (qtdeServicosEspecializados >= 0) {
-      for (int i = 1; i < qtdeServicosEspecializados; i++) {
-        sections2.add(TabelaGuiamentoTuristico2());
-      }
-
-      for (int i = 0; i < qtdeServicosEspecializados; i++) {
-        if (i < widget.infoModel!.servicosEspecializados!.length) {
-          var servicos = widget.infoModel!.servicosEspecializados![i];
-          sections2[i].fillForm(servicos.escolaridade!, servicos.servicos_especializados_formulario!,
-              servicos.numero_cadastur!, servicos.outros_cadastros!, servicos.outras_informacoes!);
-        }
-      }
-    }
-    }
-  }
   TextEditingController email_coordenador = TextEditingController();
   TextEditingController email_pesquisador = TextEditingController();
   TextEditingController municipio = TextEditingController();
@@ -101,12 +38,14 @@ class _GuiamentoEConducaoTurististicaState extends State<GuiamentoEConducaoTuris
   TextEditingController observacoes = TextEditingController();
   TextEditingController referencias = TextEditingController();
   TextEditingController regiao_turistica = TextEditingController();
-  List<TabelaGuiamentoTuristico> sections = [TabelaGuiamentoTuristico()];
-  List<TabelaGuiamentoTuristico2> sections2 = [TabelaGuiamentoTuristico2()];
   TextEditingController telefone_coordenador = TextEditingController();
   TextEditingController telefone_pesquisador = TextEditingController();
   TextEditingController tipo = TextEditingController();
   final TextEditingController uf = TextEditingController();
+
+   List<TabelaGuiamentoTuristico> sections = [];
+  List<TabelaGuiamentoTuristico2> sections2 = [];
+
   final Map<String, dynamic> valoresjson = {
     'tipo_formulario': 'Guiamento E Condução Turística',
     'uf': null,
@@ -115,98 +54,106 @@ class _GuiamentoEConducaoTurististicaState extends State<GuiamentoEConducaoTuris
     'tipo': null,
     'observacoes': null,
     'referencias': null,
-    'nome_pesquisador': 'jose',
-    'telefone_pesquisador': '12453',
-    'email_pesquisador': 'jose@gmail.com',
-    'nome_coordenador': 'oihaioo',
-    'telefone_coordenador': '4444',
-    'email_coordenador': 'ogaio@gmail.com',
   };
 
   final _formKey = GlobalKey<FormState>();
-  int qtdeInfo = 0;
-  int qtdeServicosEspecializados = 0;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    
+
+    sections.add(TabelaGuiamentoTuristico(key: UniqueKey(),));
+    sections2.add(TabelaGuiamentoTuristico2(key: UniqueKey(),));
+
+    _utils.getInfoUsersInPesquisa(valoresjson, widget.isAdmin??false).then((value) {
+      if(mounted){
+        setState(() {
+          pesquisadorId = value;
+          if(widget.infoModel != null){
+            print("dados: $pesquisadorId, ${widget.infoModel!.usuario_criador}");
+            isTheOwner = _utils.isTheOwner(pesquisadorId,
+             widget.infoModel?.usuario_criador ?? 0, widget.isAdmin??false, context);
+          }
+        });
+      }
+    },);
+
   }
 
-  void autoFillForm() {
-    if (widget.infoModel!.uf != null) {
-      uf.text = widget.infoModel!.uf!;
-    } else {
-      uf.text = '';
-    }
+@override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-    if (widget.infoModel!.regiaoTuristica != null) {
-      regiao_turistica.text = widget.infoModel!.regiaoTuristica!;
-    } else {
-      regiao_turistica.text = '';
-    }
-
-    if (widget.infoModel!.municipio != null) {
-      municipio.text = widget.infoModel!.municipio!;
-    } else {
-      municipio.text = '';
-    }
-
-    if (widget.infoModel!.tipo != null) {
-      tipo.text = widget.infoModel!.tipo!;
-    } else {
-      tipo.text = '';
-    }
-
-    if (widget.infoModel!.observacoes != null) {
-      observacoes.text = widget.infoModel!.observacoes!;
-    } else {
-      observacoes.text = '';
-    }
-
-    if (widget.infoModel!.referencias != null) {
-      referencias.text = widget.infoModel!.referencias!;
-    } else {
-      referencias.text = '';
-    }
-
-    if (widget.infoModel!.nomePesquisador != null) {
-      nome_pesquisador.text = widget.infoModel!.nomePesquisador!;
-    } else {
-      nome_pesquisador.text = '';
-    }
-
-    if (widget.infoModel!.telefonePesquisador != null) {
-      telefone_pesquisador.text = widget.infoModel!.telefonePesquisador!;
-    } else {
-      telefone_pesquisador.text = '';
-    }
-
-    if (widget.infoModel!.emailPesquisador != null) {
-      email_pesquisador.text = widget.infoModel!.emailPesquisador!;
-    } else {
-      email_pesquisador.text = '';
-    }
-
-    if (widget.infoModel!.nomeCoordenador != null) {
-      nome_coordenador.text = widget.infoModel!.nomeCoordenador!;
-    } else {
-      nome_coordenador.text = '';
-    }
-
-    if (widget.infoModel!.telefoneCoordenador != null) {
-      telefone_coordenador.text = widget.infoModel!.telefoneCoordenador!;
-    } else {
-      telefone_coordenador.text = '';
-    }
-
-    if (widget.infoModel!.emailCoordenador != null) {
-      email_coordenador.text = widget.infoModel!.emailCoordenador!;
-    } else {
-      email_coordenador.text = '';
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if(args is Map && args.containsKey('isUpdate')){
+      if(isUpdate != args['isUpdate']){
+  setState(() {
+        isUpdate = args['isUpdate'];
+      });
+        if(isUpdate){
+        autoFillForm();
+      }
+      }
     }
   }
+   void autoFillForm() {
+    // Garante que o build terminou antes de manipular controllers e listas
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (widget.infoModel == null) return;
 
+      setState(() {
+        // Limpa e repovoa as tabelas
+        sections.clear();
+        if (widget.infoModel!.contatos != null && widget.infoModel!.contatos!.isNotEmpty) {
+          for (var contato in widget.infoModel!.contatos!) {
+            var novaSecao = TabelaGuiamentoTuristico(key: UniqueKey());
+            novaSecao.fillForm(
+              contato.nome_completo ?? '',
+              contato.cpf ?? '',
+              contato.endereco ?? '',
+              contato.email ?? '',
+              contato.telefone ?? '',
+            );
+            sections.add(novaSecao);
+          }
+        } else {
+          sections.add(TabelaGuiamentoTuristico(key: UniqueKey()));
+        }
+
+        sections2.clear();
+        if (widget.infoModel!.servicosEspecializados != null && widget.infoModel!.servicosEspecializados!.isNotEmpty) {
+          for (var servico in widget.infoModel!.servicosEspecializados!) {
+            var novaSecao = TabelaGuiamentoTuristico2(key: UniqueKey());
+            novaSecao.fillForm(
+              servico.escolaridade ?? '',
+              servico.servicos_especializados_formulario ?? '',
+              servico.numero_cadastur ?? '',
+              servico.outros_cadastros ?? '',
+              servico.outras_informacoes ?? '',
+            );
+            sections2.add(novaSecao);
+          }
+        } else {
+          sections2.add(TabelaGuiamentoTuristico2(key: UniqueKey()));
+        }
+
+        // Preenche controllers simples
+        uf.text = widget.infoModel!.uf ?? '';
+        regiao_turistica.text = widget.infoModel!.regiaoTuristica ?? '';
+        municipio.text = widget.infoModel!.municipio ?? '';
+        tipo.text = widget.infoModel!.tipo ?? '';
+        observacoes.text = widget.infoModel!.observacoes ?? '';
+        referencias.text = widget.infoModel!.referencias ?? '';
+        nome_pesquisador.text = widget.infoModel!.nomePesquisador ?? '';
+        telefone_pesquisador.text = widget.infoModel!.telefonePesquisador ?? '';
+        email_pesquisador.text = widget.infoModel!.emailPesquisador ?? '';
+        nome_coordenador.text = widget.infoModel!.nomeCoordenador ?? '';
+        telefone_coordenador.text = widget.infoModel!.telefoneCoordenador ?? '';
+        email_coordenador.text = widget.infoModel!.emailCoordenador ?? '';
+      });
+    });
+  }
+  @override
   void dispose() {
     uf.dispose();
     regiao_turistica.dispose();
@@ -224,9 +171,9 @@ class _GuiamentoEConducaoTurististicaState extends State<GuiamentoEConducaoTuris
     super.dispose();
   }
 
+    
   @override
   Widget build(BuildContext context) {
-    getInfoUsersInPesquisa();
     final sizeScreen = MediaQuery.sizeOf(context);
     return Scaffold(
         backgroundColor: Colors.white,
@@ -314,23 +261,25 @@ class _GuiamentoEConducaoTurististicaState extends State<GuiamentoEConducaoTuris
                     SizedBox(
                       height: sizeScreen.height * 0.05,
                     ),
-  
                     RadioFormField(
-                      title: 'Tipo',
-                      options: [
-                         'Guiamento e condução turística'
-                      ],
-                      onSaved: (newValue) {
-                        valoresjson['tipo'] = newValue;
-                      },
-                      initialValue: isUpdate ? widget.infoModel!.tipo : ''
-                    ),
-
+                        title: 'Tipo',
+                        options: ['Guiamento e condução turística'],
+                        onSaved: (newValue) {
+                          valoresjson['tipo'] = newValue;
+                        },
+                        initialValue: isUpdate ? widget.infoModel!.tipo : ''),
                     CheckboxGroupFormField(
-                      title: 'Subtipos',
-                      initialValue: isUpdate ? widget.infoModel!.subtipos : [],
-                      onSaved: (newValue) => valoresjson['subtipos'] = newValue,
-                      options: ['Guia de turismo', 'Monitor', 'Condutor', 'outro']),
+                        title: 'Subtipos',
+                        initialValue:
+                            isUpdate ? widget.infoModel!.subtipos : [],
+                        onSaved: (newValue) =>
+                            valoresjson['subtipos'] = newValue,
+                        options: [
+                          'Guia de turismo',
+                          'Monitor',
+                          'Condutor',
+                          'outro'
+                        ]),
                     SizedBox(
                       height: sizeScreen.height * 0.03,
                     ),
@@ -348,156 +297,19 @@ class _GuiamentoEConducaoTurististicaState extends State<GuiamentoEConducaoTuris
                             fontSize: sizeScreen.height * 0.03),
                       ),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        sections.length > 1
-                            ? GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    sections.removeLast();
-                                  });
-                                },
-                                child: Container(
-                                  height: 150.w,
-                                  width: 400.w,
-                                  margin: EdgeInsets.only(
-                                    top: 50.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        'Remover',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      Icon(
-                                        FontAwesomeIcons.circleMinus,
-                                        color: Colors.white,
-                                        size: 100.w,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : SizedBox(
-                                width: 300.w,
-                              ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              sections.add(TabelaGuiamentoTuristico());
-                            });
-                          },
-                          child: Container(
-                            height: 150.w,
-                            width: 740.w,
-                            margin: EdgeInsets.only(top: 50.h),
-                            decoration: BoxDecoration(
-                                color: AppConstants.MAIN_GREEN,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'Adicionar nova seção',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Icon(
-                                  FontAwesomeIcons.circlePlus,
-                                  color: Colors.white,
-                                  size: 100.w,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    _buildDynamicButtons(onAdd: () => setState(() => 
+                    sections.add(TabelaGuiamentoTuristico(key: UniqueKey(),)),),
+                     onRemove:() => setState(() => setState(() => sections.removeLast(),),),
+                      listLength: sections.length),
                     Column(
                       children: sections,
                     ),
                     SizedBox(
                       height: sizeScreen.height * 0.05,
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        sections2.length > 1
-                            ? GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    sections2.removeLast();
-                                  });
-                                },
-                                child: Container(
-                                  height: 150.w,
-                                  width: 400.w,
-                                  margin: EdgeInsets.only(
-                                    top: 50.h,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: Colors.red,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Text(
-                                        'Remover',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                      Icon(
-                                        FontAwesomeIcons.circleMinus,
-                                        color: Colors.white,
-                                        size: 100.w,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : SizedBox(
-                                width: 300.w,
-                              ),
-                        GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              sections2.add(TabelaGuiamentoTuristico2());
-                            });
-                          },
-                          child: Container(
-                            height: 150.w,
-                            width: 740.w,
-                            margin: EdgeInsets.only(top: 50.h),
-                            decoration: BoxDecoration(
-                                color: AppConstants.MAIN_GREEN,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Text(
-                                  'Adicionar nova seção',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                Icon(
-                                  FontAwesomeIcons.circlePlus,
-                                  color: Colors.white,
-                                  size: 100.w,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                    _buildDynamicButtons(
+                      onAdd: () => setState(() => sections2.add(TabelaGuiamentoTuristico2(key: UniqueKey(),)),),
+                       onRemove: () => setState(() => sections2.removeLast(),), listLength: sections2.length),
                     Column(
                       children: sections2,
                     ),
@@ -552,52 +364,37 @@ class _GuiamentoEConducaoTurististicaState extends State<GuiamentoEConducaoTuris
                     SizedBox(
                       height: sizeScreen.height * 0.05,
                     ),
-                    SizedBox(
-                      height: 50,
-                      width: 300,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          valoresjson['nome_pesquisador'] = pesquisadorNome;
-                          valoresjson['telefone_pesquisador'] =
-                              pesquisadorTelefone;
-                          valoresjson['email_pesquisador'] = pesquisadorEmail;
-                          valoresjson['nome_coordenador'] = coordenadorNome;
-                          valoresjson['telefone_coordenador'] =
-                              coordenadorTelefone;
-                          valoresjson['email_coordenador'] = coordenadorEmail;
+                    SafeArea(
+                      child: SizedBox(
+                        height: 50,
+                        width: 300,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if(_formKey.currentState!.validate()){
+                              _formKey.currentState!.save();
 
-                          valoresjson['contatos'] = sections
-                              .map((element) => element.getData())
-                              .toList();
-                          valoresjson['servicos_especializados'] = sections2
-                              .map((element) => element.getData())
-                              .toList();
-                          if (_formKey.currentState!.validate()) {
-                            //  ScaffoldMessenger.of(context).showSnackBar(
-                            //      SnackBar(content: Text('processing data')));
-
-                            _formKey.currentState!.save();
-                          isUpdate ? _formService.updateForm(widget.infoModel!.id!, valoresjson, AppConstants.GUIAMENTO_E_CONDUCAO_TURISTICA) :  _formService.sendForm(valoresjson,
-                                AppConstants.GUIAMENTO_E_CONDUCAO_TURISTICA);
-      
-
-                          }
-                                                     debugPrint(valoresjson.toString(), wrapWidth: 1024);
-
-                            sections2
-                                .forEach((element) => print(element.getData()));
-
-                        },
-                        style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.green[800],
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                        ),
-                        child: Text(
-                          'Enviar',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25), // Use um fontSize fixo
+                            valoresjson['contatos'] = sections
+                                .map((element) => element.getData())
+                                .toList();
+                            valoresjson['servicos_especializados'] = sections2
+                                .map((element) => element.getData())
+                                .toList();
+      _utils.decideSendingOrUpdating(isUpdate, isTheOwner, context, widget.infoModel?.id??0,
+       valoresjson, AppConstants.GUIAMENTO_E_CONDUCAO_TURISTICA);
+                            }
+                      
+                          },
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: Colors.green[800],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                          ),
+                          child: Text(
+                            'Enviar',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 25), // Use um fontSize fixo
+                          ),
                         ),
                       ),
                     ),
@@ -606,5 +403,39 @@ class _GuiamentoEConducaoTurististicaState extends State<GuiamentoEConducaoTuris
                     ),
                   ],
                 ))));
+  }
+      Widget _buildDynamicButtons({required VoidCallback onAdd, required VoidCallback onRemove, required int listLength}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        if (listLength > 1)
+          GestureDetector(
+            onTap: onRemove,
+            child: _actionButton('Remover', Colors.red, FontAwesomeIcons.circleMinus),
+          )
+        else
+          SizedBox(width: 300.w),
+        GestureDetector(
+          onTap: onAdd,
+          child: _actionButton('Adicionar nova seção', AppConstants.MAIN_GREEN, FontAwesomeIcons.circlePlus, width: 740.w),
+        ),
+      ],
+    );
+  }
+
+  Widget _actionButton(String label, Color color, IconData icon, {double? width}) {
+    return Container(
+      height: 150.w,
+      width: width ?? 400.w,
+      margin: EdgeInsets.only(top: 50.h),
+      decoration: BoxDecoration(color: color, borderRadius: BorderRadius.circular(10)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(label, style: const TextStyle(color: Colors.white)),
+          Icon(icon, color: Colors.white, size: 100.w),
+        ],
+      ),
+    );
   }
 }

@@ -1,5 +1,6 @@
 class MeiosDeHospedagemModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -143,6 +144,7 @@ class MeiosDeHospedagemModel {
   String? outrasAcessibilidade;
   MeiosDeHospedagemModel({
     this.id,
+    this.usuario_criador,
     this.tipoFormulario,
     this.uf,
     this.regiaoTuristica,
@@ -267,6 +269,7 @@ class MeiosDeHospedagemModel {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'usuario_criador': usuario_criador,
       'tipo_formulario': tipoFormulario,
       'uf': uf,
       'regiao_turistica': regiaoTuristica,
@@ -397,6 +400,7 @@ class MeiosDeHospedagemModel {
 
   MeiosDeHospedagemModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador = json['usuario_criador'];
     tipoFormulario = json['tipo_formulario'];
     uf = json['uf'];
     regiaoTuristica = json['regiao_turistica'];

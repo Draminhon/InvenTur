@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:inventur/controllers/user_controller.dart';
-import 'package:inventur/ui/widgets/text%20fields/text_field_widget.dart';
-import 'package:inventur/validators/cpf_validator.dart';
-import 'package:inventur/validators/email_validator.dart';
-import 'package:inventur/validators/name_validator.dart';
-import 'package:inventur/validators/password_validator.dart';
+import 'package:sistur/controllers/user_controller.dart';
+import 'package:sistur/ui/widgets/text%20fields/text_field_widget.dart';
+import 'package:sistur/validators/cpf_validator.dart';
+import 'package:sistur/validators/email_validator.dart';
+import 'package:sistur/validators/name_validator.dart';
+import 'package:sistur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:inventur/utils/app_constants.dart';
+import 'package:sistur/utils/app_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 

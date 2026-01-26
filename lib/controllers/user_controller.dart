@@ -1,8 +1,6 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:inventur/models/user_model.dart';
-import 'package:inventur/utils/app_constants.dart';
+import 'package:sistur/models/user_model.dart';
+import 'package:sistur/utils/app_constants.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

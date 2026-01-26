@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/widgets/container_form.dart';
-import 'package:inventur/ui/widgets/sizedBox.dart';
+import 'package:sistur/ui/widgets/container_form.dart';
+import 'package:sistur/ui/widgets/sizedBox.dart';
 
 class FormularioB extends StatelessWidget {
   const FormularioB({super.key});

@@ -2,12 +2,12 @@ import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/models/forms/forms%20A/rodovia_model.dart';
-import 'package:inventur/ui/widgets/widgets/fields.dart';
-import 'package:inventur/ui/widgets/container_widget.dart';
-import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
-import 'package:inventur/utils/app_constants.dart';
-import 'package:inventur/utils/utils_functions.dart';
+import 'package:sistur/models/forms/forms%20A/rodovia_model.dart';
+import 'package:sistur/ui/widgets/widgets/fields.dart';
+import 'package:sistur/ui/widgets/container_widget.dart';
+import 'package:sistur/ui/widgets/text%20fields/customOutro.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/utils/utils_functions.dart';
 import '../../widgets/text fields/customTextField.dart';
 import '../../widgets/radioButton.dart';
 import '../../widgets/widgets/checkBox.dart';
@@ -20,7 +20,8 @@ bool isUpdate = false;
 
 class Rodovia extends StatefulWidget {
   final RodoviaModel? infoModel;
-  Rodovia({super.key, this.infoModel});
+  final bool? isAdmin;
+  Rodovia({super.key, this.infoModel, this.isAdmin});
 
   @override
   State<Rodovia> createState() => _RodoviaState();
@@ -30,6 +31,7 @@ class _RodoviaState extends State<Rodovia> {
   int currentStep = 0;
   int pesquisadorId = 0;
   bool isTheOwner = false;
+  bool isAdmin = false;
   final UtilsFunctions _utils = UtilsFunctions();
   late List<Widget> pages;
 
@@ -93,13 +95,18 @@ class _RodoviaState extends State<Rodovia> {
     super.didChangeDependencies();
     try {
       final argument = ModalRoute.of(context)!.settings.arguments as Map;
-      if (argument.containsKey('isUpdate')) {
+        if (argument.containsKey('isUpdate')) {
         isUpdate = argument['isUpdate'];
+      }
+
+      if(argument.containsKey('isAdmin')){
+        isAdmin = argument['isAdmin'];
       } else {
         isUpdate = false;
       }
     } catch (e) {
       isUpdate = false;
+      isAdmin = false;
     }
     if (isUpdate == true) {
       _preencherDadosParaTeste();
@@ -111,7 +118,7 @@ class _RodoviaState extends State<Rodovia> {
     super.initState();
 
     _utils
-        .getInfoUsersInPesquisa(valoresjson)
+        .getInfoUsersInPesquisa(valoresjson, widget.isAdmin ?? false)
         .then(
           (value) => setState(() {
             pesquisadorId = value;
@@ -122,7 +129,7 @@ class _RodoviaState extends State<Rodovia> {
             if (widget.infoModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.infoModel!.usuario_criador!,context);
+                  pesquisadorId,  widget.infoModel!.usuario_criador!, widget.isAdmin ?? false, context);
             }
           }),
         );
@@ -242,16 +249,18 @@ class _RodoviaState extends State<Rodovia> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
           // Botão Voltar
           if (currentStep > 0)
-            Container(
-              margin: EdgeInsets.only(bottom: 35.h),
-              child: TextButton(
-                onPressed: () {
-                  _pageController.previousPage(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.ease,
-                  );
-                },
-                child: const Text('VOLTAR'),
+            SafeArea(
+              child: Container(
+                margin: EdgeInsets.only(bottom: 20.h),
+                child: TextButton(
+                  onPressed: () {
+                    _pageController.previousPage(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.ease,
+                    );
+                  },
+                  child: const Text('VOLTAR'),
+                ),
               ),
             ),
           // Espaçador para alinhar o botão Continuar à direita quando não houver o Voltar
@@ -259,21 +268,23 @@ class _RodoviaState extends State<Rodovia> {
 
           // Botão Continuar / Finalizar
 
-          Container(
-            height: 160.h,
-            width: 550.w,
-            margin: currentStep > 0
-                ? EdgeInsets.only(bottom: 55.h)
-                : EdgeInsets.only(bottom: 55.h, right: 55.w),
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
-              onPressed: () {
-                _enviarFormulario();
-              },
-              child: Text(
-                currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
-                style: const TextStyle(color: Colors.white),
+          SafeArea(
+            child: Container(
+              height: 160.h,
+              width: 550.w,
+              margin: currentStep > 0
+                  ? EdgeInsets.only(bottom: 20.h, top: 20.h)
+                  : EdgeInsets.only(bottom: 20.h, top: 20.h, right: 55.w),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 55, 111, 60)),
+                onPressed: () {
+                  _enviarFormulario();
+                },
+                child: Text(
+                  currentStep < pages.length - 1 ? 'CONTINUAR' : 'FINALIZAR',
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ),
           )

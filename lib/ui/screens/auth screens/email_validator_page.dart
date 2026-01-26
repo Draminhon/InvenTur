@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/services/email_verification_code_service.dart';
-import 'package:inventur/ui/widgets/text%20fields/text_field_widget.dart';
-import 'package:inventur/validators/email_verification_code_validator.dart';
+import 'package:sistur/services/email_verification_code_service.dart';
+import 'package:sistur/ui/widgets/text%20fields/text_field_widget.dart';
+import 'package:sistur/validators/email_verification_code_validator.dart';
 
 class EmailValidatorPage extends StatefulWidget {
   final String email;

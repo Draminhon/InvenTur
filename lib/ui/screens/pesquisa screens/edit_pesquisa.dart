@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:inventur/models/endereco/estado_model.dart';
-import 'package:inventur/models/endereco/municipio_model.dart';
-import 'package:inventur/models/user_model.dart';
-import 'package:inventur/controllers/pesquisa_controller.dart';
-import 'package:inventur/ui/widgets/cards/user_pesquisa_card_widget.dart';
+import 'package:sistur/models/endereco/estado_model.dart';
+import 'package:sistur/models/endereco/municipio_model.dart';
+import 'package:sistur/models/user_model.dart';
+import 'package:sistur/controllers/pesquisa_controller.dart';
+import 'package:sistur/ui/widgets/cards/user_pesquisa_card_widget.dart';
 import 'package:http/http.dart' as http;
-import 'package:inventur/ui/widgets/text%20fields/auto_complete_text_field.dart';
+import 'package:sistur/ui/widgets/text%20fields/auto_complete_text_field.dart';
 import 'dart:convert';
-import 'package:inventur/utils/app_constants.dart';
+import 'package:sistur/utils/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -381,6 +381,7 @@ class _EditPesquisaState extends State<EditPesquisa>
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 10),
                         decoration: const BoxDecoration(
+                          color: Colors.white,
                             border: Border.symmetric(
                                 horizontal: BorderSide(
                                     color: Color.fromARGB(255, 55, 111, 60)))),
@@ -484,111 +485,113 @@ class _EditPesquisaState extends State<EditPesquisa>
                       ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: SizedBox(
-                            height: screenSize.height * .06,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  shape: WidgetStateProperty.all(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10))),
-                                  padding: WidgetStateProperty.all(
-                                      EdgeInsets.symmetric(
-                                          vertical: screenSize.height * 0.012)),
-                                  backgroundColor: WidgetStateProperty.all(
-                                      const Color.fromARGB(255, 55, 111, 60)),
-                                  overlayColor: WidgetStateProperty.all(
-                                      Colors.green[600])),
-                              onPressed: () async {
-                                // String municipio;
-                                // String estado;
-                                // final dataInicio = _inicioController.text;
-                                // final dataTermino = _terminoController.text;
-                                // final codigoIBGE = _codigIbgeController.text;
-                                // if (_municipioSelecionado!.nome != '') {
-                                //   municipio = _municipioSelecionado!.nome;
-                                // } else {
-                                //   municipio = _municipioController.text;
-                                // }
-
-                                // if (_estadoSelecionado!.nome != '') {
-                                //   estado = _estadoSelecionado!.nome;
-                                // } else {
-                                //   estado = _estadoController.text;
-                                // }
-                                // createPesquisa(
-                                //     dataInicio,
-                                //     dataTermino,
-                                //     codigoIBGE,
-                                //     estado,
-                                //     municipio,
-                                //     selectedUsers);
-                                final success =
-                                    await _pesquisaController.atualizarPesquisa(
-                                  adminId: adminId,
-                                  pesquisaId: pesquisaId,
-                                  rawDataInicio: _inicioController.text,
-                                  rawDataTermino: _terminoController.text,
-                                  codigoIBGE: _codigIbgeController.text,
-                                  estado: _estadoController.text,
-                                  municipio: _municipioController.text,
-                                  selectedUsers: selectedUsers,
-                                );
-                                if (success) {
-                                  Navigator.pop(context, true);
-                                } else {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content:
-                                          Text("Erro ao atualizar pesquisa"),
-                                    ),
+                  SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: screenSize.height * .06,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    shape: WidgetStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    padding: WidgetStateProperty.all(
+                                        EdgeInsets.symmetric(
+                                            vertical: screenSize.height * 0.012)),
+                                    backgroundColor: WidgetStateProperty.all(
+                                        const Color.fromARGB(255, 55, 111, 60)),
+                                    overlayColor: WidgetStateProperty.all(
+                                        Colors.green[600])),
+                                onPressed: () async {
+                                  // String municipio;
+                                  // String estado;
+                                  // final dataInicio = _inicioController.text;
+                                  // final dataTermino = _terminoController.text;
+                                  // final codigoIBGE = _codigIbgeController.text;
+                                  // if (_municipioSelecionado!.nome != '') {
+                                  //   municipio = _municipioSelecionado!.nome;
+                                  // } else {
+                                  //   municipio = _municipioController.text;
+                                  // }
+                    
+                                  // if (_estadoSelecionado!.nome != '') {
+                                  //   estado = _estadoSelecionado!.nome;
+                                  // } else {
+                                  //   estado = _estadoController.text;
+                                  // }
+                                  // createPesquisa(
+                                  //     dataInicio,
+                                  //     dataTermino,
+                                  //     codigoIBGE,
+                                  //     estado,
+                                  //     municipio,
+                                  //     selectedUsers);
+                                  final success =
+                                      await _pesquisaController.atualizarPesquisa(
+                                    adminId: adminId,
+                                    pesquisaId: pesquisaId,
+                                    rawDataInicio: _inicioController.text,
+                                    rawDataTermino: _terminoController.text,
+                                    codigoIBGE: _codigIbgeController.text,
+                                    estado: _estadoController.text,
+                                    municipio: _municipioController.text,
+                                    selectedUsers: selectedUsers,
                                   );
-                                }
-                              },
-                              child: Text(
-                                "Confirmar",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: screenSize.height * .03),
+                                  if (success) {
+                                    Navigator.pop(context, true);
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content:
+                                            Text("Erro ao atualizar pesquisa"),
+                                      ),
+                                    );
+                                  }
+                                },
+                                child: Text(
+                                  "Confirmar",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: screenSize.height * .03),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: SizedBox(
-                            height: screenSize.height * .06,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  shape: WidgetStateProperty.all(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10))),
-                                  padding: WidgetStateProperty.all(
-                                      EdgeInsets.symmetric(
-                                          vertical: screenSize.height * 0.012)),
-                                  backgroundColor: WidgetStateProperty.all(
-                                      const Color.fromARGB(255, 232, 0, 0)),
-                                  overlayColor:
-                                      WidgetStateProperty.all(Colors.red[500])),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                "Cancelar",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: screenSize.height * .03),
+                          const SizedBox(width: 20),
+                          Expanded(
+                            child: SizedBox(
+                              height: screenSize.height * .06,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    shape: WidgetStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    padding: WidgetStateProperty.all(
+                                        EdgeInsets.symmetric(
+                                            vertical: screenSize.height * 0.012)),
+                                    backgroundColor: WidgetStateProperty.all(
+                                        const Color.fromARGB(255, 232, 0, 0)),
+                                    overlayColor:
+                                        WidgetStateProperty.all(Colors.red[500])),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text(
+                                  "Cancelar",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: screenSize.height * .03),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],

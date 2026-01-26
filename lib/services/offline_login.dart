@@ -1,14 +1,13 @@
 import 'dart:convert';
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:inventur/models/pesquisa_model.dart';
+import 'package:sistur/models/pesquisa_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Certifique-se de que os imports das suas páginas e do navigatorKey estão corretos.
-import 'package:inventur/main.dart';
-import 'package:inventur/ui/screens/auth%20screens/login_page.dart';
-import 'package:inventur/ui/home/Pesquisador/pesquisador_homepage.dart';
-import 'package:inventur/ui/home/Administrador/admin_home_page.dart';
+import 'package:sistur/main.dart';
+import 'package:sistur/ui/screens/auth%20screens/login_page.dart';
+import 'package:sistur/ui/home/Pesquisador/pesquisador_homepage.dart';
+import 'package:sistur/ui/home/Administrador/admin_home_page.dart';
 
 
 Future<void> initApp() async {

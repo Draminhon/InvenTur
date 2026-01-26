@@ -1,5 +1,6 @@
 class TransporteTuristicoModel {
   int? id;
+  int? usuario_criador;
   String? tipoFormulario;
   String? uf;
   String? regiaoTuristica;
@@ -138,6 +139,7 @@ class TransporteTuristicoModel {
   List<String>? vendasEReservas;
   TransporteTuristicoModel({
     this.id,
+    this.usuario_criador,
     this.tipoFormulario,
     this.uf,
     this.vendasEReservas,
@@ -275,6 +277,7 @@ this.quantidadeVeiculosAdaptados,
 
   TransporteTuristicoModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
+    usuario_criador = json['usuario_criador'];
     tipoFormulario = json['tipoFormulario'];
     uf = json['uf'];
     mediaAnualPassageiros = json['mediaAnualPassageiros'];
@@ -428,6 +431,7 @@ quantidadeVeiculosAdaptados = json['quantidadeVeiculosAdaptados'];
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'usuario_criador': usuario_criador,
       'tipo_formulario': tipoFormulario,
       'uf': uf,
       'idadeMediaVeiculos': idadeMediaVeiculos,

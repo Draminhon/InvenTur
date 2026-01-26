@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:inventur/ui/screens/password%20recover%20screens/changepassword_page.dart';
-import 'package:inventur/ui/screens/password%20recover%20screens/passwordOtp_page.dart';
-import 'package:inventur/utils/app_constants.dart';
-import 'package:inventur/validators/email_validator.dart';
+import 'package:sistur/ui/screens/password%20recover%20screens/changepassword_page.dart';
+import 'package:sistur/ui/screens/password%20recover%20screens/passwordOtp_page.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/validators/email_validator.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 

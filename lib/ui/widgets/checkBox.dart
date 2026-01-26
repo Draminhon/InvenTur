@@ -2,8 +2,8 @@ import 'dart:collection';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
-import 'package:inventur/ui/widgets/text%20fields/customOutro.dart';
-import 'package:inventur/ui/widgets/text%20fields/customTextField.dart';
+import 'package:sistur/ui/widgets/text%20fields/customOutro.dart';
+import 'package:sistur/ui/widgets/text%20fields/customTextField.dart';
 
 class CheckB extends StatefulWidget {
   const CheckB({super.key, required this.nomes});

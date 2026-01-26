@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inventur/models/user_model.dart';
-import 'package:inventur/controllers/pesquisa_controller.dart';
+import 'package:sistur/models/user_model.dart';
+import 'package:sistur/controllers/pesquisa_controller.dart';
 
 class UserPesquisaCardList extends StatefulWidget{
   final User user;
