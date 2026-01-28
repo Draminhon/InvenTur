@@ -21,9 +21,11 @@ class MeuMapa extends StatefulWidget {
   State<MeuMapa> createState() => _MeuMapaState();
 }
 
+  String accessToken = "pk.eyJ1IjoibXVyaWxvcm9kIiwiYSI6ImNtZjFhajJmdzBpOTMya3BweDR0bTE0Y3IifQ.bNCRgdKwVbeeY1pHeFUAaQ";
+
 class _MeuMapaState extends State<MeuMapa> {
   final MapController _mapController = MapController();
-  final MapService _mapService = MapService(mapboxAccessToken: 'pk.eyJ1IjoibXVyaWxvcm9kIiwiYSI6ImNtZjFhajJmdzBpOTMya3BweDR0bTE0Y3IifQ.bNCRgdKwVbeeY1pHeFUAaQ');
+  final MapService _mapService = MapService(mapboxAccessToken: accessToken);
 
   LugarInfo? _tappedPlaceInfo;
   LatLng? _currentLocationMarker; 
@@ -39,12 +41,42 @@ class _MeuMapaState extends State<MeuMapa> {
 
 
     if(widget.initialLatitude != null && widget.initialLongitute != null){
+     
+     final point = LatLng(widget.initialLatitude!, widget.initialLongitute!);
+
+      _tappedMarker = point;
+
+
       WidgetsBinding.instance.addPostFrameCallback((_){
-        centerOnCoordinates(widget.initialLatitude!, widget.initialLongitute!);
+        _fetchPlaceInfo(point);
       });
     }
   }
 
+  Future<void> _fetchPlaceInfo(LatLng point) async {
+    setState(() => _isLoading = true);
+    
+    try {
+      final info = await _mapService.getInfoFromCoordinates(point);
+      widget.onPlaceSelected?.call(info.toMap());
+
+      if (mounted) {
+        setState(() => _tappedPlaceInfo = info); // Correção aqui: atribuir 'info'
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _tappedPlaceInfo = LugarInfo(
+              coordenadas: point,
+              displayName: 'Erro: ${e.toString()}');
+        });
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
+  }
 
   @override
   void dispose() {
@@ -63,26 +95,8 @@ class _MeuMapaState extends State<MeuMapa> {
       _tappedMarker = point;
     });
 
-    try{
-      final info = await _mapService.getInfoFromCoordinates(point);
+    await _fetchPlaceInfo(point);
 
-      widget.onPlaceSelected?.call(info.toMap());
-
-      if(mounted){
-        setState(() => _tappedPlaceInfo,);
-      }
-    }catch(e){
-      if(mounted){
-        setState(() {
-          _tappedPlaceInfo = LugarInfo(coordenadas: point,
-          displayName: 'Erro ao buscar informações: ${e.toString()}');
-        });
-      }
-    }finally{
-      if(mounted){
-        setState(() => _isLoading = false,);
-      }
-    }
   }
 
   void _startLocationStream() {
@@ -158,14 +172,21 @@ class _MeuMapaState extends State<MeuMapa> {
   
   @override
   Widget build(BuildContext context) {
+    final LatLng centroInicial = (widget.initialLatitude != null && widget.initialLongitute != null) ?
+    LatLng(widget.initialLatitude!, widget.initialLongitute!):
+    LatLng(-15.7942, -47.8825);
+
     return Scaffold(
       body: Stack(
         children: [
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
-              initialCenter: LatLng(-15.7942, -47.8825), // Brasília
-              initialZoom: 4.0,
+              initialCenter: centroInicial, // Brasília
+              initialZoom: 18.0,
+              onMapReady: () {
+                
+              },
               onTap: (tapPosition, latLng) => _handleMapTap(latLng),
               onSecondaryTap: (tapPosition, point) {
                 widget.onDoubleClick?.call();
