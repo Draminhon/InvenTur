@@ -1,2 +1,0 @@
-/home/murilo/InvenTur/android/app/.cxx/Debug/4s2j2r4a/x86/CMakeFiles/edit_cache.dir
-/home/murilo/InvenTur/android/app/.cxx/Debug/4s2j2r4a/x86/CMakeFiles/rebuild_cache.dir

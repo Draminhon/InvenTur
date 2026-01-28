@@ -5,7 +5,7 @@ from ..serializers import *
 from ..models import *
 from django.http import HttpResponse, JsonResponse
 from rest_framework import generics
-
+ 
  
 class UserViewSet(viewsets.ModelViewSet):
 

@@ -236,7 +236,7 @@ class EquipamentosListView(APIView):
             'is_active': True
         }
         
-
+ 
         
         # Rodovias
         rodovias = Rodovia.objects.filter(**filtros)

@@ -30,7 +30,7 @@ router.register(r'eventosprogramados', EventosProgramadosViewSet, basename='Even
 router.register(r'gastronomiaartesanato', GastronomiaArtesanatoViewSet, basename='Gastronomia Artesanato')
  
 urlpatterns = [
-
+ 
     path('', include(router.urls)),
 
     path("password-reset/request/", PasswordResetRequestAPIView.as_view(), name="password-reset-request"),

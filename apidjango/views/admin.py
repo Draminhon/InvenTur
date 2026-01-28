@@ -7,7 +7,7 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-
+ 
 
 def get_admin_details(request, admin_id):
     admin = get_object_or_404(CustomUser, id = admin_id)
