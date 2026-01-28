@@ -3,7 +3,7 @@ from .models import *
 from apidjango.models import validate_cpf
 from django.core.mail import send_mail
 from django.utils.timezone import now, timedelta
-
+ 
 class ChangePasswordSerializer(serializers.Serializer):
     new_password = serializers.CharField(write_only=True, required=True)
 

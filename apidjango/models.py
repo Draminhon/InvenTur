@@ -10,7 +10,7 @@ import random
 from datetime import timedelta
 from django.utils import timezone
 
-
+ 
 
 def validate_cpf(cpf):
     cpf = ''.join(filter(str.isdigit, cpf))

@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
 class PesquisaViewSet(viewsets.ModelViewSet):
-
+ 
     queryset = Pesquisa.objects.filter(is_active=True)
     serializer_class = PesquisaSerializer
 

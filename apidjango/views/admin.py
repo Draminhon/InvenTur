@@ -15,7 +15,7 @@ def get_admin_details(request, admin_id):
         'id': admin.id,
         'username': admin.username
     })
-
+ 
 class AdminUserCreateView(generics.ListCreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = UserSerializer

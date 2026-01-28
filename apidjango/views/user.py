@@ -6,7 +6,7 @@ from ..models import *
 from django.http import HttpResponse, JsonResponse
 from rest_framework import generics
 
-
+ 
 class UserViewSet(viewsets.ModelViewSet):
 
     queryset = CustomUser.objects.filter(is_active=True, is_superuser=False)

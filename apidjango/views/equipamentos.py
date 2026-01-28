@@ -266,7 +266,7 @@ class EquipamentosListView(APIView):
         ]        
 
         #info basicas do municipio
-
+ 
         infosBasicas = InformacaoBasicaDoMunicipio.objects.filter(pesquisa__id=pesquisa_id,
                                                                   is_active=True)
         infosBasicas_serialized = [

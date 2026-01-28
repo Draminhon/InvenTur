@@ -11,7 +11,7 @@ import json
 from django.contrib.auth import authenticate, login
 from rest_framework_simplejwt.tokens import RefreshToken
 
-
+ 
 @csrf_exempt
 def UsuarioLoginView(request):
     # Responde a métodos não-POST com erro 405
