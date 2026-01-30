@@ -559,10 +559,14 @@ Widget selectedUsersSection() {
             itemBuilder: (context, index) {
               final user = selectedUsers.elementAt(index);
               return UserPesquisaCardList(
+                key: ValueKey(user.id),
                 user: user,
-                pesquisaId: 1,
-                pesquisaController: _pesquisaController,
                 xIsVisible: true,
+                onRemove: (u) {
+                  setState(() {
+                    selectedUsers.remove(u);
+                  });
+                },
               );
             },
           )
@@ -603,9 +607,7 @@ Widget selectedUsersSection() {
             },
             child: UserPesquisaCardList(
               user: post,
-              pesquisaId: 1,
               isSelected: isSelected,
-              pesquisaController: _pesquisaController,
             ),
           );
         },

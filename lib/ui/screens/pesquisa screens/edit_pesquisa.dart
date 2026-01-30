@@ -66,7 +66,7 @@ class _EditPesquisaState extends State<EditPesquisa>
   @override
   void initState() {
     super.initState();
-
+      
     _inicioController = TextEditingController();
     _terminoController = TextEditingController();
     _codigIbgeController = TextEditingController();
@@ -109,9 +109,13 @@ class _EditPesquisaState extends State<EditPesquisa>
       if (_estadoController.text.isEmpty && args.containsKey('estado')) {
         _estadoController.text = args['estado'];
       }
-
+_usersIds.clear();
+          selectedUsers.clear();
       _usersIds.addAll(args['pesquisadores']);
       alreadySelectedUsersSection(userId: _usersIds);
+          
+
+          
     }
   }
 
@@ -202,6 +206,7 @@ class _EditPesquisaState extends State<EditPesquisa>
 
   @override
   Widget build(BuildContext context) {
+
     final args = ModalRoute.of(context)?.settings.arguments as Map?;
 
     pesquisaId = args!['id'];
@@ -455,7 +460,7 @@ class _EditPesquisaState extends State<EditPesquisa>
                                     });
                                   },
                                 )),
-
+                            SizedBox(height: 55.h ,),
                             userSearchAndSelectSection(), // Aqui exibimos o campo de busca e os resultados.
                           ],
                           onExpansionChanged: (expanded) {
@@ -486,9 +491,7 @@ class _EditPesquisaState extends State<EditPesquisa>
                     ),
                   ),
                   SafeArea(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 10),
-                      child: Row(
+                    child:  Row(
                         children: [
                           Expanded(
                             child: SizedBox(
@@ -499,37 +502,13 @@ class _EditPesquisaState extends State<EditPesquisa>
                                         RoundedRectangleBorder(
                                             borderRadius:
                                                 BorderRadius.circular(10))),
-                                    padding: WidgetStateProperty.all(
-                                        EdgeInsets.symmetric(
-                                            vertical: screenSize.height * 0.012)),
+                                   
                                     backgroundColor: WidgetStateProperty.all(
                                         const Color.fromARGB(255, 55, 111, 60)),
                                     overlayColor: WidgetStateProperty.all(
                                         Colors.green[600])),
                                 onPressed: () async {
-                                  // String municipio;
-                                  // String estado;
-                                  // final dataInicio = _inicioController.text;
-                                  // final dataTermino = _terminoController.text;
-                                  // final codigoIBGE = _codigIbgeController.text;
-                                  // if (_municipioSelecionado!.nome != '') {
-                                  //   municipio = _municipioSelecionado!.nome;
-                                  // } else {
-                                  //   municipio = _municipioController.text;
-                                  // }
-                    
-                                  // if (_estadoSelecionado!.nome != '') {
-                                  //   estado = _estadoSelecionado!.nome;
-                                  // } else {
-                                  //   estado = _estadoController.text;
-                                  // }
-                                  // createPesquisa(
-                                  //     dataInicio,
-                                  //     dataTermino,
-                                  //     codigoIBGE,
-                                  //     estado,
-                                  //     municipio,
-                                  //     selectedUsers);
+                                
                                   final success =
                                       await _pesquisaController.atualizarPesquisa(
                                     adminId: adminId,
@@ -542,7 +521,7 @@ class _EditPesquisaState extends State<EditPesquisa>
                                     selectedUsers: selectedUsers,
                                   );
                                   if (success) {
-                                    Navigator.pop(context, true);
+                                    Navigator.of(context).pop(true);
                                   } else {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -570,10 +549,8 @@ class _EditPesquisaState extends State<EditPesquisa>
                                     shape: WidgetStateProperty.all(
                                         RoundedRectangleBorder(
                                             borderRadius:
-                                                BorderRadius.circular(10))),
-                                    padding: WidgetStateProperty.all(
-                                        EdgeInsets.symmetric(
-                                            vertical: screenSize.height * 0.012)),
+                                               BorderRadius.circular(10))),
+                                  
                                     backgroundColor: WidgetStateProperty.all(
                                         const Color.fromARGB(255, 232, 0, 0)),
                                     overlayColor:
@@ -593,7 +570,6 @@ class _EditPesquisaState extends State<EditPesquisa>
                         ],
                       ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -629,14 +605,23 @@ class _EditPesquisaState extends State<EditPesquisa>
       itemBuilder: (context, index) {
         final user = selectedUsers.elementAt(index);
         return UserPesquisaCardList(
+          key: ValueKey(user.id),
           user: user,
-          onRemove: (p0) {
-            setState(() {
-              selectedUsers.remove(p0);
-            });
+          onRemove: (u) async {
+            final sucesso = await _pesquisaController.removerPesquisador(
+              pesquisaId: pesquisaId,
+              userId: u.id!,
+            );
+            if (sucesso) {
+              setState(() {
+                selectedUsers.remove(u);
+              });
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("Erro ao remover pesquisador")),
+              );
+            }
           },
-          pesquisaId: pesquisaId,
-          pesquisaController: _pesquisaController,
           xIsVisible: true,
         );
       },
@@ -696,8 +681,6 @@ class _EditPesquisaState extends State<EditPesquisa>
             child: UserPesquisaCardList(
               user: post,
               isSelected: isSelected,
-              pesquisaId: pesquisaId,
-              pesquisaController: _pesquisaController,
             ),
           );
         },

@@ -198,7 +198,10 @@ class PesquisaController extends ChangeNotifier {
             codigoIBGE: codigoIBGE,
             estado: estado,
             municipio: municipio,
-            pesquisadores: selectedUsers.map((user) => user.id).toList(),
+            pesquisadores: selectedUsers
+                .map((user) => user.id)
+                .whereType<int>()
+                .toList(),
           );
         }
         notifyListeners();

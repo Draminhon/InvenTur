@@ -117,22 +117,18 @@ Future<File?> downloadExcel(int pesquisaId) async {
 
 
 class _PesquisaCardState extends State<PesquisaCard> {
-
   late PesquisaController _pesquisaController;
 
-   Future<void> loadPesquisas() async {
+  Future<void> _loadPesquisas() async {
     List<Pesquisa> pesquisas = await getPesquisas();
     _pesquisaController.addPesquisa(pesquisas);
   }
-  late Pesquisa _pesquisa;
-  
 
   bool _opened = false;
 
   @override
   void initState() {
     super.initState();
-    _pesquisa = widget.pesquisa;
     _pesquisaController = widget.pesquisaController;
   }
 
@@ -161,7 +157,7 @@ class _PesquisaCardState extends State<PesquisaCard> {
                 IconButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/Pesquisas', arguments: {
-                        'pesquisa_id': _pesquisa.id,
+                        'pesquisa_id': widget.pesquisa.id,
                         'is_admin': true
                       });
                     },
@@ -169,21 +165,24 @@ class _PesquisaCardState extends State<PesquisaCard> {
                       Icons.remove_red_eye,
                       color: AppConstants.MAIN_GREEN,
                     )),
-                // SizedBox(width: 700.w,),
                 IconButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/EditPesquisa', arguments: {
-                        'id': _pesquisa.id,
-                        'data_inicio': _pesquisa.dataInicio,
-                        'data_termino': _pesquisa.dataTermino,
-                        'codigoIBGE': _pesquisa.codigoIBGE,
-                        'municipio': _pesquisa.municipio,
-                        'estado': _pesquisa.estado,
-                        'pesquisadores': _pesquisa.userId,
-                        'admin_id': _pesquisa.adminId
-                      }).then((result) {
+                      Navigator.pushNamed(
+                        context,
+                        '/EditPesquisa',
+                        arguments: {
+                          'id': widget.pesquisa.id,
+                          'data_inicio': widget.pesquisa.dataInicio,
+                          'data_termino': widget.pesquisa.dataTermino,
+                          'codigoIBGE': widget.pesquisa.codigoIBGE,
+                          'municipio': widget.pesquisa.municipio,
+                          'estado': widget.pesquisa.estado,
+                          'pesquisadores': widget.pesquisa.userId,
+                          'admin_id': widget.pesquisa.adminId
+                        },
+                      ).then((result) {
                         if (result == true) {
-                            loadPesquisas();
+                          _loadPesquisas();
                         }
                       });
                     },
@@ -207,17 +206,14 @@ class _PesquisaCardState extends State<PesquisaCard> {
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
-                                    child: Text('Cancelar')),
+                                    child: const Text('Cancelar')),
                                 TextButton(
                                     onPressed: () {
-                                      setState(() {
-                                           _pesquisaController.removePesquisa(
-                                          false, _pesquisa);
-                                      });
-                                   
+                                      _pesquisaController.removePesquisa(
+                                          false, widget.pesquisa);
                                       Navigator.pop(context);
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       'Excluir',
                                       style: TextStyle(color: Colors.red),
                                     ))
@@ -324,11 +320,11 @@ class _PesquisaCardState extends State<PesquisaCard> {
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: PopupMenuButton(
+              child: PopupMenuButton<String>(
                 enableFeedback: true,
                 color: Colors.white,
                 tooltip: 'Status da Pesquisa',
-                initialValue: _pesquisa.status,
+                initialValue: widget.pesquisa.status,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 itemBuilder: (context) {
@@ -342,7 +338,8 @@ class _PesquisaCardState extends State<PesquisaCard> {
                 },
                 onSelected: (String value) {
                   setState(() {
-                    _pesquisaController.setPesquisaStatus(value, _pesquisa);
+                    _pesquisaController.setPesquisaStatus(
+                        value, widget.pesquisa);
                     _opened = !_opened;
                   });
                 },
@@ -361,25 +358,25 @@ class _PesquisaCardState extends State<PesquisaCard> {
                       Text(
                         'Status',
                         style: TextStyle(
-                          color:
-                              _pesquisaController.statusColor(_pesquisa.status),
+                          color: _pesquisaController
+                              .statusColor(widget.pesquisa.status),
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ),
                       ),
                       Text(
-                        _pesquisa.status,
+                        widget.pesquisa.status,
                         style: TextStyle(
                             color: _pesquisaController
-                                .statusColor(_pesquisa.status),
+                                .statusColor(widget.pesquisa.status),
                             fontWeight: FontWeight.bold),
                       ),
                       Icon(
                         _opened
                             ? Icons.keyboard_arrow_up_rounded
                             : Icons.keyboard_arrow_down_rounded,
-                        color:
-                            _pesquisaController.statusColor(_pesquisa.status),
+                        color: _pesquisaController
+                            .statusColor(widget.pesquisa.status),
                       ),
                     ],
                   ),

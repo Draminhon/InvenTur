@@ -62,20 +62,27 @@ class Pesquisa {
     };
   }
 
-  Pesquisa copyWith({required String dataInicio, required String dataTermino, required String codigoIBGE, required String estado, required String municipio, required List<int?> pesquisadores}) {
+  Pesquisa copyWith({
+    String? dataInicio,
+    String? dataTermino,
+    String? codigoIBGE,
+    String? estado,
+    String? municipio,
+    List<int>? pesquisadores,
+  }) {
     return Pesquisa(
       id: id,
       adminId: adminId,
       adminEmail: adminEmail,
       adminTelefone: adminTelefone,
-      userId: userId,
-      codigoIBGE: codigoIBGE,
-      estado: estado,
-      municipio: municipio,
-      dataInicio: dataInicio,
-      dataTermino: dataTermino,
+      userId: pesquisadores ?? userId,
+      codigoIBGE: codigoIBGE ?? this.codigoIBGE,
+      estado: estado ?? this.estado,
+      municipio: municipio ?? this.municipio,
+      dataInicio: dataInicio ?? this.dataInicio,
+      dataTermino: dataTermino ?? this.dataTermino,
       quantidadeLocais: quantidadeLocais,
-      quantidadePesquisadores: quantidadePesquisadores,
+      quantidadePesquisadores: pesquisadores?.length ?? quantidadePesquisadores,
       status: status,
     );
   }

@@ -2,66 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:sistur/models/user_model.dart';
 import 'package:sistur/controllers/pesquisa_controller.dart';
 
-class UserPesquisaCardList extends StatefulWidget{
+class UserPesquisaCardList extends StatelessWidget {
   final User user;
-  bool isSelected;
-  final PesquisaController pesquisaController;
+  final bool isSelected;
   final bool xIsVisible;
-  final int pesquisaId;
   final void Function(User)? onRemove;
-   
-   UserPesquisaCardList({
+
+  const UserPesquisaCardList({
     super.key,
     required this.user,
-    required this.pesquisaId,
-    required this.pesquisaController,
-    this.onRemove,
     this.isSelected = false,
-    this.xIsVisible = false
+    this.xIsVisible = false,
+    this.onRemove,
   });
-   @override
-  State<UserPesquisaCardList> createState() => _UserPesquisaCardListState();
-}
 
-class _UserPesquisaCardListState extends State<UserPesquisaCardList>{
-
-  bool _isVisible = true;
-void _removeUser() async {
-  // 1) Chamar o método que faz a requisição HTTP de remoção
-  final sucesso = await widget.pesquisaController.removerPesquisador(
-    pesquisaId: widget.pesquisaId,
-    userId: widget.user.id!,
-  );
-  if (sucesso) {
-    // 2) Atualiza lista local
-    widget.pesquisaController.removeUserPesquisa(widget.user);
-    // 3) Atualiza a UI deste card
-    setState(() {
-      _isVisible = false;
-      // Se quiser também atualizar widget.isSelected, você pode:
-      widget.isSelected = false;
-      widget.onRemove!(widget.user);
-    });
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Erro ao remover pesquisador")),
-    );
-  }
-}
-
-
-
- @override
-Widget build(BuildContext context) {
-  if (!_isVisible) return SizedBox.shrink();
+  @override
+  Widget build(BuildContext context) {
     return Card(
-    
       elevation: 6,
       color: Colors.white,
       surfaceTintColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18),
-       
       ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -73,36 +35,36 @@ Widget build(BuildContext context) {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Nome:", style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(widget.user.username)
+                      const Text("Nome:",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(user.username)
                     ],
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("CPF:", style: TextStyle(fontWeight: FontWeight.bold)),
-                      Text(widget.user.CPF)
+                      const Text("Email:",
+                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      Text(user.email)
                     ],
                   ),
                 ],
               ),
             ),
-
-          widget.xIsVisible ?
-          Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: IconButton(
-                padding: EdgeInsets.zero,
-                visualDensity: VisualDensity.compact,
-                onPressed: _removeUser,
-                icon: const Icon(
-                  Icons.close_rounded,
-                  color: Color.fromARGB(255, 232, 0, 0),
-                  size: 36,
+            if (xIsVisible && onRemove != null)
+              Padding(
+                padding: const EdgeInsets.only(left: 8),
+                child: IconButton(
+                  padding: EdgeInsets.zero,
+                  visualDensity: VisualDensity.compact,
+                  onPressed: () => onRemove!(user),
+                  icon: const Icon(
+                    Icons.close_rounded,
+                    color: Color.fromARGB(255, 232, 0, 0),
+                    size: 36,
+                  ),
                 ),
-              ),
-            ) :
-            Container()
+              )
           ],
         ),
       ),
