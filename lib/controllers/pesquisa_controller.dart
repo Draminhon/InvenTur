@@ -10,7 +10,6 @@ import 'package:sistur/utils/app_constants.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:intl/intl.dart';
 
 class PesquisaController extends ChangeNotifier {
   static const String _finished = "Concluído";
@@ -216,7 +215,6 @@ class PesquisaController extends ChangeNotifier {
       print("Erro ao fazer a requisição: $e");
       return false;
     }
-    notifyListeners();
   }
 
   Municipio? getMunicipioByNome(String nome) {
