@@ -15,6 +15,9 @@ import 'package:sistur/utils/check_connectivity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:provider/provider.dart';
+import 'package:sistur/models/user_model.dart';
+import 'package:sistur/providers/providers.dart';
 
 // Future<void> refreshToken() async {
 //   final prefs = await SharedPreferences.getInstance();
@@ -121,6 +124,21 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
         userStatus = userData['status'];
         userId = userData['id'];
         userTelefone = userData['telefone'];
+
+        // Update UserProvider
+        User newUser = User(
+          id: userId,
+          username: userName,
+          email: userEmail,
+          CPF: userCPF,
+          status: userStatus,
+          // Access level not explicitly in userData map in this function, but PesquisadorHome implies Pesquisador level
+          // Or check if userData has it. Usually it does.
+          accessLevel: userData['acessLevel'] ?? 'Pesquisador', 
+          telefone: userTelefone,
+        );
+        Provider.of<UserProvider>(context, listen: false).setUser(newUser);
+
       });
     }
   }
@@ -217,12 +235,7 @@ class _PesquisadorHomeState extends State<PesquisadorHome> {
         ),
         drawer: SafeArea(
             child: OptionsDrawer(
-          userId: userId,
           userController: _userController,
-          userName: userName,
-          userEmail: userEmail,
-          cpf: userCPF,
-          telefone: userTelefone,
         )),
         body: Padding(
             padding: EdgeInsets.only(

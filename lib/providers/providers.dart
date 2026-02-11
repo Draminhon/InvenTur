@@ -12,10 +12,11 @@ void setUser(User newUser){
   notifyListeners();
 }
 
-void updateUser(String name, String email, String cpf){
+void updateUser(String name, String email, String cpf, String telefone){
   _user.username = name;
   _user.email = email;
   _user.CPF = cpf;
+  _user.telefone = telefone;
   notifyListeners();
 }
 

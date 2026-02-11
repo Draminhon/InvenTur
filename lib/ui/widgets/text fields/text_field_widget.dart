@@ -10,6 +10,7 @@ class PasswordTextField extends StatefulWidget {
   final TextEditingController controller;
   final String? Function(String?)? validator;
   final List<TextInputFormatter>? inputFormatters;
+  final bool enabled;
 
   const PasswordTextField({
     super.key,
@@ -21,6 +22,7 @@ class PasswordTextField extends StatefulWidget {
     required this.labelText,
     required this.controller,
     required this.prefixIcon,
+    this.enabled = true,
   });
 
   @override
@@ -40,26 +42,49 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.sizeOf(context);
 
+    // Define colors based on enabled state
+    final Color iconColor = widget.enabled
+        ? const Color.fromARGB(255, 55, 111, 60)
+        : Colors.grey;
+    final Color borderColor = widget.enabled
+        ? const Color.fromARGB(255, 55, 111, 60)
+        : Colors.grey.shade400;
+    final Color fillColor = widget.enabled ? Colors.transparent : Colors.grey.shade200;
+
     return TextFormField(
+      readOnly: !widget.enabled,
       obscureText: obscureText,
       validator: widget.validator,
       controller: widget.controller,
       keyboardType: widget.keyboardType,
       inputFormatters: widget.inputFormatters,
       obscuringCharacter: widget.obscuringCharacter,
+      style: TextStyle(
+        color: widget.enabled ? Colors.black : Colors.grey.shade700,
+      ),
       decoration: InputDecoration(
         isDense: true,
+        filled: !widget.enabled,
+        fillColor: fillColor,
         errorMaxLines: 3,
         labelText: widget.labelText,
+        labelStyle: TextStyle(
+          color: widget.enabled ? null : Colors.grey.shade700,
+        ),
         contentPadding: EdgeInsets.symmetric(vertical: screenSize.height * .02),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
-            borderSide:
-                const BorderSide(color: Color.fromARGB(255, 55, 111, 60))),
+            borderSide: BorderSide(color: borderColor)),
+        disabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Colors.grey.shade400)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: borderColor, width: 2)),
         prefixIcon: Icon(
           widget.prefixIcon,
-          color: const Color.fromARGB(255, 55, 111, 60),
+          color: iconColor,
         ),
         suffixIcon: widget.isSecret
             ? IconButton(
@@ -70,7 +95,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
                 },
                 icon: Icon(
                     obscureText ? Icons.visibility : Icons.visibility_off,
-                    color: const Color.fromARGB(255, 55, 111, 60)))
+                    color: iconColor))
             : null,
       ),
     );

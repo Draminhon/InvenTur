@@ -441,7 +441,6 @@ String? userDataString = prefs.getString('user_data');
                         children: [
                           Expanded(
                             child: SizedBox(
-                              height: screenSize.height * .06,
                               child: ElevatedButton(
                                 style: ButtonStyle(
                                     shape: WidgetStateProperty.all(
@@ -493,7 +492,6 @@ String? userDataString = prefs.getString('user_data');
                           const SizedBox(width: 20),
                           Expanded(
                             child: SizedBox(
-                              height: screenSize.height * .06,
                               child: ElevatedButton(
                                 style: ButtonStyle(
                                     shape: WidgetStateProperty.all(

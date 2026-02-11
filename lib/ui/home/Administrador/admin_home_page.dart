@@ -11,6 +11,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:sistur/models/user_model.dart';
+import 'package:sistur/providers/providers.dart';
 
 class AdminHomePage extends StatefulWidget {
   const AdminHomePage({super.key});
@@ -64,6 +67,19 @@ class _AdminHomePageState extends State<AdminHomePage> {
     userCPF = userData['CPF'];
     userTelefone = userData['telefone'];
     print(userDataString);
+    
+          // Update UserProvider
+          User newUser = User(
+            id: userId,
+            username: userName,
+            email: userEmail,
+            CPF: userCPF,
+            telefone: userTelefone,
+            // AdminHomePage implies Admin level. Or check userData['acessLevel']
+             accessLevel: userData['acessLevel'] ?? 'Administrador',
+          );
+          Provider.of<UserProvider>(context, listen: false).setUser(newUser);
+
     });
 
     }
@@ -89,7 +105,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 245, 245, 245),
         drawer: SafeArea(
-          child: OptionsDrawer(userController: _userController, userName: userName, userEmail: userEmail, cpf: userCPF, userId: userId,telefone: userTelefone,)
+          child: OptionsDrawer(userController: _userController)
         ),
         appBar: AppBar(
           title: Text(pageTitle[currentPageIndex]!),

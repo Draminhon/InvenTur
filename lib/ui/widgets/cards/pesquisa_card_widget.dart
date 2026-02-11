@@ -159,7 +159,7 @@ class _PesquisaCardState extends State<PesquisaCard> {
                       Navigator.pushNamed(context, '/Pesquisas', arguments: {
                         'pesquisa_id': widget.pesquisa.id,
                         'is_admin': true
-                      });
+                      }).then((_) => _loadPesquisas());
                     },
                     icon: Icon(
                       Icons.remove_red_eye,

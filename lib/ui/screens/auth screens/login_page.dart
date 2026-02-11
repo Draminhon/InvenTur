@@ -14,6 +14,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:sistur/models/user_model.dart';
+import 'package:sistur/providers/providers.dart';
 
 CheckConnectivity connection = new CheckConnectivity();
 
@@ -142,6 +145,19 @@ class _LoginPageState extends State<LoginPage> {
           print("refresh token armazenado: $refreshToken");
 
           //print("Usuario logado com sucesso: ${json.encode(user)}");
+
+          // Update UserProvider
+          User newUser = User(
+            id: user['id'],
+            username: user['username'] ?? user['name'] ?? '',
+            email: user['email'] ?? '',
+            CPF: user['CPF'] ?? '',
+            status: user['status'] ?? '',
+            accessLevel: user['access_level'] ?? user['acessLevel'] ?? '',
+            telefone: user['telefone'] ?? '',
+          );
+          Provider.of<UserProvider>(context, listen: false).setUser(newUser);
+
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
             return user['access_level'] == 'Pesquisador'

@@ -14,6 +14,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:sistur/providers/providers.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({super.key});
@@ -123,6 +125,9 @@ class _RegisterPageState extends State<RegisterPage> {
         };
         prefs.setString('user_data', jsonEncode(userData));
 
+        // Update global state
+        Provider.of<UserProvider>(context, listen: false).updateUser(username, email, CPF, telefone);
+
         Navigator.pop(context);
         const snackBar =
             SnackBar(content: Text("Atualização realizada com sucesso!"));
@@ -220,6 +225,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   controller: _cpfController,
                                   keyboardType: TextInputType.number,
                                   prefixIcon: FontAwesomeIcons.solidAddressCard,
+                                  enabled: isChange != true, // Disable if editing
                                   validator: (cpf) {
                                     return _cpfValidator.validate(cpf: cpf);
                                   },

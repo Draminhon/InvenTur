@@ -58,11 +58,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Atualiza a quantidade de locais
 Future updateQtdeLocais(int pesquisa, int quantidade) async {
   var url = Uri.parse('${AppConstants.BASE_URI}pesquisa/${pesquisa}/');
+  final prefs = await SharedPreferences.getInstance();
+  String? token = prefs.getString('access_token');
   try {
     var response = await http.patch(
       url,
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
       },
       body: jsonEncode({'quantidadeLocais': quantidade}),
     );
@@ -384,11 +387,12 @@ int usuario = 0;
     posts = List.from(widget.posts);
   }
 
-  void removePost(int index) {
+  void removePost(int index, int pesquisaId) {
     if (mounted) {
       setState(() {
         posts.removeAt(index);
       });
+      updateQtdeLocais(pesquisaId, posts.length);
     }
   }
 
@@ -590,7 +594,7 @@ int usuario = 0;
                                         } catch (e) {
                                           print('Erro $e');
                                         }
-                                        removePost(index);
+                                          removePost(index, dados['pesquisa']);
                                         Navigator.pop(context);
                                       },
                                       child: const Text(
@@ -614,7 +618,7 @@ int usuario = 0;
                 : Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: (usuario != dados['usuario_criador']) ?  Color.fromARGB(255, 51, 131, 59) : Colors.grey.shade300 ,
+                      color: (usuario != dados['usuario_criador']) ? Colors.grey.shade300 :  Color.fromARGB(255, 51, 131, 59),
                     ),
                     margin:
                         EdgeInsets.symmetric(vertical: 25.h, horizontal: 130.w),
@@ -625,7 +629,7 @@ int usuario = 0;
                         Flexible(
                           child: Text(
                             getDisplay(dados),
-                            style: TextStyle(fontSize: 55.w,                      color: (usuario == dados['usuario_criador']) ? Colors.black: Colors.white,
+                            style: TextStyle(fontSize: 55.w,                      color: (usuario == dados['usuario_criador']) ? Colors.white :Colors.black,
  ),
 
                             overflow: TextOverflow.clip,

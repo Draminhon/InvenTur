@@ -35,6 +35,7 @@ class User {
       'email': email,
       'accessLevel': accessLevel,
       'status': status,
+      'telefone': telefone,
     };
   }
 }
