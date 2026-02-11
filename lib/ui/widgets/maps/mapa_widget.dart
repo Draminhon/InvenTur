@@ -45,7 +45,6 @@ class _MapaWidgetState extends State<MapaWidget> {
                   value.forEach(
                     (key, value) {
                       widget.valoresJson[key] = value;
-                      print('aaaaa $key, $value');
                     },
                   );
                 });
