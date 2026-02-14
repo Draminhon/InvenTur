@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventur/validators/email_validator.dart';
+import 'package:sistur/validators/email_validator.dart';
 
 void main() {
   late EmailValidator emailValidator;

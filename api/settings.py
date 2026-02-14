@@ -16,7 +16,7 @@ from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+ 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
@@ -57,7 +57,11 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
      'rest_framework_simplejwt.token_blacklist',
-]
+    'django_otp',
+    'django_otp.plugins.otp_totp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_hotp',
+]   
  
 AUTH_USER_MODEL =  'apidjango.CustomUser'
 
@@ -79,12 +83,21 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # Use your email provider's SMTP server
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'murilo.brito07@aluno.ifce.edu.br'
+EMAIL_HOST_PASSWORD = 'hxnl tetw spvi ntjy '
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware'
@@ -174,3 +187,4 @@ DEFAULT_CHARSET = 'utf-8'
 DATE_INPUT_FORMATS = [
     '%d/%m/%Y',  # Dia/Mês/Ano
 ]
+

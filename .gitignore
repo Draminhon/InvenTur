@@ -44,5 +44,5 @@ app.*.map.json
 
 api/settings.py
 api/wsgi.py
-
+apidjango/migrations/
 db.sqlite3

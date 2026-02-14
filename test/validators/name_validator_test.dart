@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventur/validators/name_validator.dart';
+import 'package:sistur/validators/name_validator.dart';
 
 void main() {
   late NameValidator nameValidator;

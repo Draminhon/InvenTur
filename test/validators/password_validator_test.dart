@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventur/validators/password_validator.dart';
+import 'package:sistur/validators/password_validator.dart';
 
 void main() {
   late PasswordValidator passwordValidator;

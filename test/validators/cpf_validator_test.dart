@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventur/validators/cpf_validator.dart';
+import 'package:sistur/validators/cpf_validator.dart';
 
 void main() {
   late CPFValidator cpfValidator;

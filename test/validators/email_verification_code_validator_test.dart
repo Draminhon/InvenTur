@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:inventur/services/email_verification_code_service.dart';
-import 'package:inventur/validators/email_verification_code_validator.dart';
+import 'package:sistur/services/email_verification_code_service.dart';
+import 'package:sistur/validators/email_verification_code_validator.dart';
 
 void main() {
   String expectedCode;
