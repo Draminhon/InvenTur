@@ -6,15 +6,17 @@ class ContainerA extends StatelessWidget {
   const ContainerA({super.key, required this.form, required this.routeName});
   @override
   Widget build(BuildContext context) {
-
+double altura = MediaQuery.of(context).size.height;
     return GestureDetector(
       onTap: () {
         Navigator.pushReplacementNamed(context, routeName);
       },
       child: Container(
-          margin: EdgeInsets.only(bottom: 29.92.h, left: 134.4.w, right: 134.4.w),
+          margin: EdgeInsets.only(bottom: 40.h, left: 134.4.w, right: 134.4.w),
           padding: EdgeInsets.symmetric(horizontal:30.w),
-          height: 200.52.h,
+          constraints: BoxConstraints(
+            minHeight: altura < 900 ? 250.h : 220.h
+          ),
           decoration: BoxDecoration(
             gradient: LinearGradient(colors: [const Color.fromARGB(255, 55, 111, 60), const Color.fromARGB(255, 77, 156, 84)]),
             borderRadius: BorderRadius.circular(10),
@@ -99,12 +101,13 @@ class _ExpansionTileA extends State<ExpansionTileA> {
   Widget build(BuildContext context) {
     final String titulo = widget.titulo;
     List minhaLista = widget.minhaLista;
+double altura = MediaQuery.of(context).size.height;
 
     return Column(
   children: [
     Container(
       margin: EdgeInsets.only(
-        bottom: 29.92.h,
+        bottom: 40.h,
         left: 134.4.w,
         right: 134.4.w,
       ),
@@ -134,7 +137,7 @@ class _ExpansionTileA extends State<ExpansionTileA> {
           ),
           child: ExpansionTile(
             
-            minTileHeight:    200.52.h,
+            minTileHeight: altura < 900 ? 250.h : 210.h,
             dense: true,
             collapsedIconColor: Colors.white,
             iconColor: Colors.white,

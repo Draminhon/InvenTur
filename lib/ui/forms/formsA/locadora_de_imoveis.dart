@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sistur/models/forms/forms%20A/locadora_de_imoveis_model.dart';
 import 'package:sistur/ui/widgets/radioButton.dart';
@@ -197,6 +198,7 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
                         validator: (v) => (v == null || v.isEmpty) ? 'Preencha' : null,
                         onSaved: (newValue) => valoresjson['uf'] = newValue,
                         decoration: const InputDecoration(hintText: 'UF'),
+                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s\u00C0-\u00FF]'))], 
                       ),
                     ),
                     SizedBox(width: sizeScreen.width * 0.09),
@@ -208,6 +210,8 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
                         validator: (v) => (v == null || v.isEmpty) ? 'Preencha' : null,
                         onSaved: (newValue) => valoresjson['regiao_turistica'] = newValue,
                         decoration: const InputDecoration(hintText: 'Região Turística'),
+                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s\u00C0-\u00FF]'))], 
+
                       ),
                     )
                   ],
@@ -221,6 +225,8 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
                   validator: (v) => (v == null || v.isEmpty) ? 'Preencha' : null,
                   decoration: const InputDecoration(isDense: true, hintText: 'Municipio'),
                   onSaved: (newValue) => valoresjson['municipio'] = newValue,
+                          inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s\u00C0-\u00FF]'))], 
+
                 ),
               ),
 

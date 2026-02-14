@@ -398,6 +398,8 @@ int usuario = 0;
 
   @override
   Widget build(BuildContext context) {
+    double altura = MediaQuery.of(context).size.height;
+    print(altura);
     final filteredPosts = posts.where((post) {
       final display = getDisplay(post['dados']).toLowerCase();
       return display.contains(widget.searchQuery.toLowerCase());
@@ -622,7 +624,9 @@ int usuario = 0;
                     ),
                     margin:
                         EdgeInsets.symmetric(vertical: 25.h, horizontal: 130.w),
-                    height: 350.h,
+                        constraints: BoxConstraints(
+                          minHeight: altura < 900 ? 450.h : 350.h
+                        ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

@@ -124,6 +124,7 @@ class UpdatedFormError extends StatelessWidget {
               child: Text(
                 'Ocorreu um erro ao atualizar o formulário!',
                 style: TextStyle(fontSize:80.w, fontWeight: FontWeight.w600),
+              textAlign: TextAlign.justify,
               ),
             ),
              const SizedBox(

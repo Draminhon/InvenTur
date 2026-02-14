@@ -18,6 +18,7 @@
   import 'package:provider/provider.dart';
   import 'package:sistur/models/user_model.dart';
   import 'package:sistur/providers/providers.dart';
+import 'package:sistur/utils/modals.dart';
 
   // Future<void> refreshToken() async {
   //   final prefs = await SharedPreferences.getInstance();
@@ -332,6 +333,7 @@
                               await getQtdeBanco();
                             } finally {
                               if (mounted) {
+                                Modals().showSyncDialog(context);
                                 setState(() {
                                   _isSyncing = false;
                                 });

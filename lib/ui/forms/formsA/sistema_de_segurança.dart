@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sistur/models/forms/forms%20A/sistema_de_seguranca_model.dart';
 import 'package:sistur/ui/widgets/radioButton.dart';
@@ -207,6 +208,8 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                                   onSaved: (newValue) {
                                     valoresjson['uf'] = newValue;
                                   },
+                                    inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s\u00C0-\u00FF]'))       ],
                                   decoration: InputDecoration(
                                     hintText: 'UF',
                                   ),
@@ -228,6 +231,8 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                                   onSaved: (newValue) {
                                     valoresjson['regiao_turistica'] = newValue;
                                   },
+                                    inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s\u00C0-\u00FF]'))       ],
                                   decoration: InputDecoration(
                                       hintText: 'Região Turística'),
                                 ))
@@ -250,6 +255,8 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
                           isDense: true,
                           hintText: 'Municipio',
                         ),
+                          inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s\u00C0-\u00FF]'))       ],
                         onSaved: (newValue) {
                           valoresjson['municipio'] = newValue;
                         },
