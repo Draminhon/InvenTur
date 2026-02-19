@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // --- WIDGET AUXILIAR: AutocompleteTextField ---
 // Adicionamos um novo callback: onSubmitted
@@ -11,7 +12,7 @@ class AutocompleteTextField extends StatelessWidget {
   final TextAlign textAlign;
   final ValueChanged<String>? onSubmitted; // <-- NOVO: Callback para submissão
 
-  const AutocompleteTextField({
+   AutocompleteTextField({
     super.key,
     required this.controllerAuto,
     required this.label,
@@ -20,7 +21,8 @@ class AutocompleteTextField extends StatelessWidget {
     this.textAlign = TextAlign.start,
     this.onSubmitted, // <-- NOVO: Adicionado ao construtor
   });
-
+  var filterText =  FilteringTextInputFormatter.allow
+  (RegExp(r'[a-zA-ZáàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]'));
   @override
   Widget build(BuildContext context) {
     return Autocomplete<String>(
@@ -40,9 +42,13 @@ class AutocompleteTextField extends StatelessWidget {
         });
 
         return TextFormField(
+       inputFormatters: [
+  filterText
+  ],
           controller: textEditingController,
           focusNode: focusNode,
           decoration: InputDecoration(
+            
             labelText: label,
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -125,6 +131,7 @@ class _MultiAutocompleteFormFieldState
   @override
   Widget build(BuildContext context) {
     return FormField<List<String>>(
+        
       // Ao invés de passar o onSaved diretamente, nós o envolvemos
       // para garantir que os valores finais dos controllers sejam lidos.
       onSaved: (value) {
@@ -166,6 +173,7 @@ class _MultiAutocompleteFormFieldState
                 itemCount: widget.fieldCount,
                 itemBuilder: (context, index) {
                   return AutocompleteTextField(
+
                     controllerAuto: _controllers[index],
                     label: "${widget.label} ${index + 1}",
                     optionsBuilder: widget.optionsBuilder,

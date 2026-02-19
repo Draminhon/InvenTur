@@ -41,6 +41,10 @@ thumbColor: const Color.fromARGB(255, 55, 111, 60),
               controller: firstController,
                 itemCount: widget.nomes.length,
                 itemBuilder: (context, index) {
+
+        
+
+
                   return Column(children: [
                     (ListTile(
                         title: Tooltip(
@@ -234,6 +238,8 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
       initialValue: widget.initialValue ?? [],
       builder: (FormFieldState<List<String>> field) {
         
+        final bool isNoSelected = field.value!.contains("Não");
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -261,18 +267,29 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
                     final option = widget.options[index];
                     // O estado 'checked' é derivado diretamente do valor do FormField
                     final bool isChecked = field.value!.contains(option);
-             void toggleCheckbox(bool? value) {
-                List<String> newValues = List.from(field.value!);
-                if (value == true) {
-                  newValues.add(option);
-                  countMarkd+=1;
 
+                    final bool isOptionsDisabled = isNoSelected && option != "Não";
+
+             void toggleCheckbox(bool? value) {
+                if (isOptionsDisabled) return;
+                List<String> newValues = List.from(field.value!);
+
+                if (value == true) {
+                  
+                if(option == "Não"){
+                  newValues.clear();
+                  newValues.add(option);
+                  countMarkd = 1;
+                }else{
+ newValues.add(option);
+                  countMarkd+=1;
+                }
                 } else {
                   newValues.remove(option);
                   countMarkd-=1;
                 }
 
-                if(countMarkd > 3 && widget.isLimitedBy3){
+                if(countMarkd > 3 && widget.isLimitedBy3 && option != "Não"){
                                 newValues.removeAt(0);
                                 countMarkd-=1;
 
@@ -282,19 +299,19 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
                     return Column(
                       children: [
                         ListTile(
-                          onTap: () => toggleCheckbox(!isChecked),
+                          onTap: isOptionsDisabled ?  null : () => toggleCheckbox(!isChecked),
                           title: Tooltip(
                             message: option,
                             child: Text(
                               option,
                               overflow: TextOverflow.clip,
-                              // style: TextStyle(fontSize: 60.w),
+                               style: TextStyle(color: isOptionsDisabled ? Colors.grey : Colors.black),
                             ),
                           ),
                           leading: Checkbox(
                             value: isChecked,
 
-                            onChanged: (bool? value) {
+                            onChanged: isOptionsDisabled ? null : (bool? value) {
                               // ALTERAÇÃO 4: Lógica de mudança centralizada aqui
                               // Criamos uma nova lista a partir do valor atual do campo
                               List<String> newValues = List.from(field.value!);

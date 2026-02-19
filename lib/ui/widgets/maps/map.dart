@@ -25,8 +25,7 @@ class MeuMapa extends StatefulWidget {
   State<MeuMapa> createState() => _MeuMapaState();
 }
 
-String accessToken =
-    "";
+const accessToken = String.fromEnvironment('API_TOKEN_MAPBOX', defaultValue: "OIE");
 
 class _MeuMapaState extends State<MeuMapa> {
 
@@ -207,6 +206,10 @@ void _subscribeToConnectivity() {
 
   @override
   Widget build(BuildContext context) {
+
+  print({String.fromEnvironment('API_TOKEN_MAPBOX')});
+
+    
     final LatLng centroInicial =
         (widget.initialLatitude != null && widget.initialLongitute != null)
             ? LatLng(widget.initialLatitude!, widget.initialLongitute!)

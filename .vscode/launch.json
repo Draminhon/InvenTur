@@ -1,0 +1,14 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "App (Produção)",
+      "request": "launch",
+      "type": "dart",
+      "toolArgs": [
+        "--dart-define",
+        "API_TOKEN_MAPBOX=pk.eyJ1IjoibXVyaWxvcm9kIiwiYSI6ImNtZjFhajJmdzBpOTMya3BweDR0bTE0Y3IifQ.bNCRgdKwVbeeY1pHeFUAaQ"
+      ]
+    }
+  ]
+}

@@ -1337,6 +1337,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
           children: [
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'quantidade',
                 controller: getController('auditorio quantidade'),
                 validat: (p0) {},
@@ -1348,6 +1350,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
             ),
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'área total(m²)',
                 controller: getController('auditorio area total'),
                 validat: (p0) {},
@@ -1359,6 +1363,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
             ),
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'capacidade nºpessoas',
                 controller: getController('auditorio capacidade n de pessoas'),
                 validat: (p0) {},
@@ -1378,6 +1384,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
           children: [
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'quantidade',
                 controller: getController('salas modulares quantidade'),
                 validat: (p0) {},
@@ -1389,6 +1397,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
             ),
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'área total(m²)',
                 controller: getController('salas modulares area total'),
                 validat: (p0) {},
@@ -1400,6 +1410,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
             ),
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'capacidade nºpessoas',
                 validat: (p0) {},
                 controller: getController('capacidade de pessoas'),
@@ -1419,6 +1431,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
           children: [
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'quantidade',
                 validat: (p0) {},
                 controller: getController('pavilhao de feiras quantidade'),
@@ -1430,6 +1444,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
             ),
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'área total(m²)',
                 validat: (p0) {},
                 controller: getController('pavilhao de feiras area total'),
@@ -1441,6 +1457,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
             ),
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'capacidade nºpessoas',
                 validat: (p0) {},
                 controller: getController('pavilhao de feiras n de pessoas'),
@@ -1460,6 +1478,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
           children: [
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'quantidade',
                 validat: (p0) {},
                 controller:
@@ -1472,6 +1492,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
             ),
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'área total(m²)',
                 validat: (p0) {},
                 controller:
@@ -1484,6 +1506,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
             ),
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'capacidade nºpessoas',
                 validat: (p0) {},
                 controller:
@@ -1505,6 +1529,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
           children: [
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'quantidade',
                 validat: (p0) {},
                 controller:
@@ -1517,6 +1543,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
             ),
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'área total(m²)',
                 validat: (p0) {},
                 controller:
@@ -1529,6 +1557,8 @@ class _TablesInstalacoesState extends State<TablesInstalacoes> {
             ),
             Expanded(
               child: CustomTextField(
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 name: 'capacidade nºpessoas',
                 validat: (p0) {},
                 controller:
@@ -2316,6 +2346,7 @@ class TabelaGastronomiaArtesanato2 extends StatelessWidget {
             height: 190.w,
             margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
             child: TextFormField(
+                  
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Preencha o campo';
@@ -2385,7 +2416,6 @@ class TabelaGastronomiaArtesanato2 extends StatelessWidget {
                     width: 1080.w,
                     margin: EdgeInsets.only(left: 30.w, right: 30.h, top: 50.h),
                     child: TextFormField(
-                      keyboardType: TextInputType.numberWithOptions(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Preencha o campo';

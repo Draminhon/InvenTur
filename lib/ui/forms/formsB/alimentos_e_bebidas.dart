@@ -701,6 +701,8 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
               child: CustomTextField(
                 name: '(km)',
                 controller: widget.controllers['distanciasAeroporto'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
               ),
             ),
             ],
@@ -715,6 +717,8 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
               child: CustomTextField(
                 name: '(km)',
                 controller: widget.controllers['distanciasRodoviaria'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
               ),
             ),
             ],
@@ -729,6 +733,8 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
               child: CustomTextField(
                 name: '(km)',
                 controller: widget.controllers['distanciaEstacaoFerroviaria'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
               ),
             ),
             ],
@@ -743,6 +749,8 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
               child: CustomTextField(
                 name: '(km)',
                 controller: widget.controllers['distanciaEstacaoMaritima'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
               ),
             ),
             ],
@@ -757,6 +765,8 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
               child: CustomTextField(
                 name: '(km)',
                 controller: widget.controllers['distanciaEstacaoMetroviaria'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
               ),
             ),
             ],
@@ -771,6 +781,8 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
               child: CustomTextField(
                 name: '(km)',
                 controller: widget.controllers['distanciaPontoDeOnibus'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
               ),
             ),
             ],
@@ -785,6 +797,8 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
               child: CustomTextField(
                 name: '(km)',
                 controller: widget.controllers['distanciaPontoDeTaxi'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
               ),
             ),
             ],
@@ -806,6 +820,8 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
               child: CustomTextField(
                 name: '(km)',
                 controller: widget.controllers['distanciaOutras'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
               ),
             ),
             ],
@@ -1003,6 +1019,8 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
           CustomTextField(
             name: 'nº',
             controller: widget.controllers['capInstaladaPdia'],
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
           ),
           textLabel(
             name: 'Pessoas atendidas sentadas nº:',
@@ -1011,6 +1029,8 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
           CustomTextField(
             name: 'nº',
             controller: widget.controllers['capInstaladasSentadas'],
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
           ),
           textLabel(
             name: 'Capacidade simultânea nº:',
@@ -1019,6 +1039,8 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
           CustomTextField(
             name: 'nº',
             controller: widget.controllers['capSimultanea'],
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
           ),
           textLabel(
             name: 'Pessoas atendidas sentadas nº:',
@@ -1027,6 +1049,8 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
           CustomTextField(
             name: 'nº',
             controller: widget.controllers['capSimultaneaSentadas'],
+            formatter: [FilteringTextInputFormatter.digitsOnly],
+            keyboardType: TextInputType.numberWithOptions(),
           ),
           SizedBox(
             height: 55.h,
