@@ -212,9 +212,44 @@ class CheckboxGroupFormField extends StatefulWidget {
 
 class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
   final ScrollController _scrollController = ScrollController();
+    late final TextEditingController _outroController;  
+  late List<String> _resolvedInitialValue;
+
+  void initState() {
+    super.initState();
+
+    _outroController = TextEditingController();
+
+    _resolvedInitialValue = List.from(widget.initialValue ?? []);
+
+    String outroEncontrado = _resolvedInitialValue.firstWhere(
+      (element) => element.startsWith('outro:'),
+      orElse: () => '',
+    );
+
+    if (outroEncontrado.isNotEmpty) {
+      if (outroEncontrado.length > 7) {
+        _outroController.text = outroEncontrado.substring(7);
+      } else {
+        _outroController.text = '';
+      }
+
+      // Se existe um detalhe "outro:", garante que a opção "outro" esteja na lista
+      if (!_resolvedInitialValue.contains('outro')) {
+        _resolvedInitialValue.add('outro');
+      }
+    }
+
+    // countMarkd deve contar apenas opções da lista (incluindo "outro", mas não "outro: detalhes")
+    countMarkd = _resolvedInitialValue
+        .where((element) => !element.startsWith('outro:'))
+        .length;
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
+    _outroController.dispose();
     _scrollController.dispose();
     super.dispose();
     
@@ -222,6 +257,7 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
   int countMarkd = 0;
   @override
   Widget build(BuildContext context) {
+    print("Outro Controller: ${_outroController.text}");
     final sizeScreen = MediaQuery.sizeOf(context);
     return FormField<List<String>>(
       onSaved: widget.onSaved,
@@ -351,6 +387,7 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
                             child: TextFormField( // Exemplo com TextFormField
                               decoration: const InputDecoration(labelText: 'Qual?'),
                               // ALTERAÇÃO 5: Atualiza o valor do campo "outro"
+                              controller: _outroController,
                               onChanged: (text) {
                                 List<String> newValues = List.from(field.value!);
                                 // Remove qualquer valor "outro:" antigo para evitar duplicatas
