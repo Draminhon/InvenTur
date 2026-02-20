@@ -101,7 +101,6 @@ class UserCard extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        width: 200,
                         child: Text(
                           user.username,
                           textAlign: TextAlign.end,
@@ -119,9 +118,24 @@ class UserCard extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(
-                        width: 200,
                         child: Text(
                           user.email,
+                          textAlign: TextAlign.end,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 15.h,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Telefone:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        child: Text(
+                          user.telefone,
                           textAlign: TextAlign.end,
                           style: const TextStyle(overflow: TextOverflow.ellipsis),
                         ),
