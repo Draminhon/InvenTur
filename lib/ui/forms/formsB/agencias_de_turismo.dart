@@ -709,6 +709,8 @@ class _InformacaoPageState extends State<InformacaoPage>
                 child: CustomTextField(
                   name: '(km)',
                   controller: widget.controllers['distanciasAeroporto'],
+              formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
             ],
@@ -724,6 +726,8 @@ class _InformacaoPageState extends State<InformacaoPage>
                 child: CustomTextField(
                   name: '(km)',
                   controller: widget.controllers['distanciasRodoviaria'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
             ],
@@ -739,6 +743,8 @@ class _InformacaoPageState extends State<InformacaoPage>
                 child: CustomTextField(
                   name: '(km)',
                   controller: widget.controllers['distanciaEstacaoFerroviaria'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
             ],
@@ -754,6 +760,8 @@ class _InformacaoPageState extends State<InformacaoPage>
                 child: CustomTextField(
                   name: '(km)',
                   controller: widget.controllers['distanciaEstacaoMaritima'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
             ],
@@ -769,6 +777,8 @@ class _InformacaoPageState extends State<InformacaoPage>
                 child: CustomTextField(
                   name: '(km)',
                   controller: widget.controllers['distanciaEstacaoMetroviaria'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
             ],
@@ -784,6 +794,8 @@ class _InformacaoPageState extends State<InformacaoPage>
                 child: CustomTextField(
                   name: '(km)',
                   controller: widget.controllers['distanciaPontoDeOnibus'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
             ],
@@ -799,6 +811,8 @@ class _InformacaoPageState extends State<InformacaoPage>
                 child: CustomTextField(
                   name: '(km)',
                   controller: widget.controllers['distanciaPontoDeTaxi'],
+                formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
             ],
@@ -821,6 +835,8 @@ class _InformacaoPageState extends State<InformacaoPage>
                 child: CustomTextField(
                   name: '(km)',
                   controller: widget.controllers['distanciaOutras'],
+                  formatter: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.numberWithOptions(),
                 ),
               ),
             ],

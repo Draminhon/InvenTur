@@ -41,6 +41,10 @@ thumbColor: const Color.fromARGB(255, 55, 111, 60),
               controller: firstController,
                 itemCount: widget.nomes.length,
                 itemBuilder: (context, index) {
+
+        
+
+
                   return Column(children: [
                     (ListTile(
                         title: Tooltip(
@@ -208,9 +212,44 @@ class CheckboxGroupFormField extends StatefulWidget {
 
 class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
   final ScrollController _scrollController = ScrollController();
+    late final TextEditingController _outroController;  
+  late List<String> _resolvedInitialValue;
+
+  void initState() {
+    super.initState();
+
+    _outroController = TextEditingController();
+
+    _resolvedInitialValue = List.from(widget.initialValue ?? []);
+
+    String outroEncontrado = _resolvedInitialValue.firstWhere(
+      (element) => element.startsWith('outro:'),
+      orElse: () => '',
+    );
+
+    if (outroEncontrado.isNotEmpty) {
+      if (outroEncontrado.length > 7) {
+        _outroController.text = outroEncontrado.substring(7);
+      } else {
+        _outroController.text = '';
+      }
+
+      // Se existe um detalhe "outro:", garante que a opção "outro" esteja na lista
+      if (!_resolvedInitialValue.contains('outro')) {
+        _resolvedInitialValue.add('outro');
+      }
+    }
+
+    // countMarkd deve contar apenas opções da lista (incluindo "outro", mas não "outro: detalhes")
+    countMarkd = _resolvedInitialValue
+        .where((element) => !element.startsWith('outro:'))
+        .length;
+  }
+
   @override
   void dispose() {
     // TODO: implement dispose
+    _outroController.dispose();
     _scrollController.dispose();
     super.dispose();
     
@@ -218,6 +257,7 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
   int countMarkd = 0;
   @override
   Widget build(BuildContext context) {
+    print("Outro Controller: ${_outroController.text}");
     final sizeScreen = MediaQuery.sizeOf(context);
     return FormField<List<String>>(
       onSaved: widget.onSaved,
@@ -234,6 +274,8 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
       initialValue: widget.initialValue ?? [],
       builder: (FormFieldState<List<String>> field) {
         
+        final bool isNoSelected = field.value!.contains("Não");
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -261,18 +303,29 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
                     final option = widget.options[index];
                     // O estado 'checked' é derivado diretamente do valor do FormField
                     final bool isChecked = field.value!.contains(option);
-             void toggleCheckbox(bool? value) {
-                List<String> newValues = List.from(field.value!);
-                if (value == true) {
-                  newValues.add(option);
-                  countMarkd+=1;
 
+                    final bool isOptionsDisabled = isNoSelected && option != "Não";
+
+             void toggleCheckbox(bool? value) {
+                if (isOptionsDisabled) return;
+                List<String> newValues = List.from(field.value!);
+
+                if (value == true) {
+                  
+                if(option == "Não"){
+                  newValues.clear();
+                  newValues.add(option);
+                  countMarkd = 1;
+                }else{
+ newValues.add(option);
+                  countMarkd+=1;
+                }
                 } else {
                   newValues.remove(option);
                   countMarkd-=1;
                 }
 
-                if(countMarkd > 3 && widget.isLimitedBy3){
+                if(countMarkd > 3 && widget.isLimitedBy3 && option != "Não"){
                                 newValues.removeAt(0);
                                 countMarkd-=1;
 
@@ -282,19 +335,19 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
                     return Column(
                       children: [
                         ListTile(
-                          onTap: () => toggleCheckbox(!isChecked),
+                          onTap: isOptionsDisabled ?  null : () => toggleCheckbox(!isChecked),
                           title: Tooltip(
                             message: option,
                             child: Text(
                               option,
                               overflow: TextOverflow.clip,
-                              // style: TextStyle(fontSize: 60.w),
+                               style: TextStyle(color: isOptionsDisabled ? Colors.grey : Colors.black),
                             ),
                           ),
                           leading: Checkbox(
                             value: isChecked,
 
-                            onChanged: (bool? value) {
+                            onChanged: isOptionsDisabled ? null : (bool? value) {
                               // ALTERAÇÃO 4: Lógica de mudança centralizada aqui
                               // Criamos uma nova lista a partir do valor atual do campo
                               List<String> newValues = List.from(field.value!);
@@ -334,6 +387,7 @@ class _CheckboxGroupFormFieldState extends State<CheckboxGroupFormField> {
                             child: TextFormField( // Exemplo com TextFormField
                               decoration: const InputDecoration(labelText: 'Qual?'),
                               // ALTERAÇÃO 5: Atualiza o valor do campo "outro"
+                              controller: _outroController,
                               onChanged: (text) {
                                 List<String> newValues = List.from(field.value!);
                                 // Remove qualquer valor "outro:" antigo para evitar duplicatas

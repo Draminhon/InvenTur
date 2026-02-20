@@ -1258,6 +1258,7 @@ class _FuncionamentoState extends State<Funcionamento>
         controller: widget.controllers['capacidadeEmKVA'],
         formatter: [FilteringTextInputFormatter.digitsOnly],
         name: 'Capacidade em KVA',
+            keyboardType: TextInputType.numberWithOptions(),
       ),
       SizedBox(
         height: sizeScreen.height * 0.032,

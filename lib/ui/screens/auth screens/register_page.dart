@@ -117,12 +117,20 @@ class _RegisterPageState extends State<RegisterPage> {
       if (response.statusCode == 200) {
         print('Usuario atualizado com sucesso: ${response.body}');
 
-        Map<String, dynamic> userData = {
-          'id': user,
-          'name': username,
-          'email': email,
-          'cpf': CPF
-        };
+        String? oldUserDataString = prefs.getString('user_data');
+        Map<String, dynamic> userData = {};
+        if (oldUserDataString != null) {
+          userData = jsonDecode(oldUserDataString);
+        }
+
+        userData['id'] = user;
+        userData['name'] = username;
+        userData['username'] = username;
+        userData['email'] = email;
+        userData['cpf'] = CPF;
+        userData['CPF'] = CPF;
+        userData['telefone'] = telefone;
+        
         prefs.setString('user_data', jsonEncode(userData));
 
         // Update global state
