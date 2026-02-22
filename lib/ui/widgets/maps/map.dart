@@ -40,6 +40,7 @@ class _MeuMapaState extends State<MeuMapa> {
   bool _isLoading = false;
 
   StreamSubscription<Position>? _positionStreamSubscription;
+  bool _isCentering = false;
 
   @override
   void initState() {
@@ -151,6 +152,7 @@ void _subscribeToConnectivity() {
   }
 
   Future<void> _centerMapOnUserLocation() async {
+    setState(() => _isCentering=true,);
     try {
       final position = await _mapService.getCurrentPosition();
       final userLocation = LatLng(position.latitude, position.longitude);
@@ -167,6 +169,10 @@ void _subscribeToConnectivity() {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Ocorreu um erro inesperado.')));
+    }finally{
+      if(mounted){
+        setState(() => _isCentering=false,);
+      }
     }
   }
 
@@ -207,7 +213,6 @@ void _subscribeToConnectivity() {
   @override
   Widget build(BuildContext context) {
 
-  print({String.fromEnvironment('API_TOKEN_MAPBOX')});
 
     
     final LatLng centroInicial =
@@ -279,7 +284,14 @@ void _subscribeToConnectivity() {
       floatingActionButton: _hasConnectionError ? Container() : FloatingActionButton(
         onPressed: _centerMapOnUserLocation,
         tooltip: 'Centralizar na sua Localização',
-        child: const Icon(Icons.my_location),
+        child: _isCentering ?  SizedBox(
+          width: 24.w,
+          height: 24.h,
+          child: CircularProgressIndicator(
+            color: Colors.white,
+            strokeWidth: 3,
+          ),
+        ) : const Icon(Icons.my_location),
       ),
     );
   }
