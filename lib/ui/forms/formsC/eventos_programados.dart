@@ -807,6 +807,8 @@ class _IdentificacaoState extends State<Identificacao>
         ),
          CustomTextField(
           name: 'Whatsapp',
+            formatter: [FilteringTextInputFormatter.digitsOnly, _validators.phoneFormatter],
+            keyboardType: TextInputType.numberWithOptions(),
           controller: widget.controllers['entidadeManetedoraWhatsapp'],
         ), CustomTextField(
           name: 'Instagram',

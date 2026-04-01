@@ -527,7 +527,7 @@ int usuario = 0;
                     ),
                     margin:
                         EdgeInsets.symmetric(vertical: 20.h, horizontal: 100.w),
-                    height: 350.h,
+                        padding: EdgeInsets.symmetric(vertical: 10.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

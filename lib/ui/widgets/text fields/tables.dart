@@ -117,14 +117,18 @@ class Tables extends StatelessWidget {
                         return null;
                       },
                       controller: _whatsappController,
+                      keyboardType: TextInputType.numberWithOptions(),
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly, Validators().phoneFormatter],
                       style: const TextStyle(
                           color: Colors.black), //String? Function(String?)
 
                       decoration: InputDecoration(
+                        
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
                         isDense: true,
+                        
                         hintText: 'Whatsapp',
                         hintStyle: const TextStyle(color: Colors.grey),
                         contentPadding: EdgeInsets.only(top: 150.h, left: 50.h),

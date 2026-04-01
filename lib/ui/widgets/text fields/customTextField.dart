@@ -314,6 +314,7 @@ class _CustomTextDateState extends State<CustomTextDate> {
           return null;
         },
         onSaved: (newValue) {
+          try{
           if (newValue != null && newValue.isNotEmpty) {
             // Convertendo para o formato 'yyyy-MM-dd' antes de enviar ao servidor
             final parsedDate = inputFormat.parse(newValue);
@@ -322,6 +323,21 @@ class _CustomTextDateState extends State<CustomTextDate> {
               widget.getValue!(formattedDate);
             }
           }
+          }catch(e){
+            ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: const Text('Corrija a data!'),
+    duration: const Duration(seconds: 2),
+    action: SnackBarAction(
+      label: 'Desfazer',
+      onPressed: () {
+        // Lógica ao clicar no botão da mensagem
+      },
+    ),
+  ),
+);
+          }
+         
         },
         decoration: InputDecoration(
           border: OutlineInputBorder(

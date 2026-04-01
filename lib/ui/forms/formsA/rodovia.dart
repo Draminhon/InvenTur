@@ -8,6 +8,7 @@ import 'package:sistur/ui/widgets/container_widget.dart';
 import 'package:sistur/ui/widgets/text%20fields/customOutro.dart';
 import 'package:sistur/utils/app_constants.dart';
 import 'package:sistur/utils/utils_functions.dart';
+import 'package:sistur/validators/validators.dart';
 import '../../widgets/text fields/customTextField.dart';
 import '../../widgets/radioButton.dart';
 import '../../widgets/widgets/checkBox.dart';
@@ -452,6 +453,8 @@ class _IdentificacaoState extends State<Identificacao>
       ),
       CustomTextField(
         controller: widget.controllers['whatsapp'],
+        formatter: [FilteringTextInputFormatter.digitsOnly, Validators().phoneFormatter],
+        keyboardType: TextInputType.numberWithOptions(),
         name: '(xx) x xxxx-xxxx',
       ),
       CustomTextField(

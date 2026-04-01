@@ -1422,6 +1422,7 @@ class _FuncionamentoState extends State<Funcionamento>
 class Caracteristicas extends StatefulWidget {
   final Map<String, TextEditingController> controllers;
   final UnidadesDeConservacaoModel? hospedagemModel;
+  
   const Caracteristicas(
       {super.key, required this.controllers, this.hospedagemModel});
 
@@ -1430,9 +1431,12 @@ class Caracteristicas extends StatefulWidget {
 }
 
 class _CaracteristicasState extends State<Caracteristicas>
+
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
+final Validators _validators = Validators();
+  
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -2307,10 +2311,14 @@ class _CaracteristicasState extends State<Caracteristicas>
           ),
           CustomTextField(
             name: 'Empresa',
-            controller: widget.controllers['empresa1'],
+            controller: widget.controllers['empresa1']
           ),
           CustomTextField(
             name: 'Telefone',
+
+            formatter: [FilteringTextInputFormatter.digitsOnly, _validators.phoneFormatter],
+            
+            keyboardType: TextInputType.numberWithOptions(),
             controller: widget.controllers['telefone1'],
           ),
           CustomTextField(
@@ -2331,6 +2339,8 @@ class _CaracteristicasState extends State<Caracteristicas>
           ),
           CustomTextField(
             name: 'Telefone',
+            formatter: [FilteringTextInputFormatter.digitsOnly,_validators.phoneFormatter],
+            keyboardType: TextInputType.numberWithOptions(),
             controller: widget.controllers['telefone2'],
           ),
           CustomTextField(
@@ -2351,6 +2361,8 @@ class _CaracteristicasState extends State<Caracteristicas>
           ),
           CustomTextField(
             name: 'Telefone',
+            formatter: [FilteringTextInputFormatter.digitsOnly,_validators.phoneFormatter],
+            keyboardType: TextInputType.numberWithOptions(),
             controller: widget.controllers['telefone3'],
           ),
           CustomTextField(
@@ -2371,6 +2383,8 @@ class _CaracteristicasState extends State<Caracteristicas>
           ),
           CustomTextField(
             name: 'Telefone',
+            formatter: [FilteringTextInputFormatter.digitsOnly,_validators.phoneFormatter],
+            keyboardType: TextInputType.numberWithOptions(),
             controller: widget.controllers['telefone4'],
           ),
           CustomTextField(
@@ -2391,6 +2405,8 @@ class _CaracteristicasState extends State<Caracteristicas>
           ),
           CustomTextField(
             name: 'Telefone',
+            formatter: [FilteringTextInputFormatter.digitsOnly,_validators.phoneFormatter],
+            keyboardType: TextInputType.numberWithOptions(),
             controller: widget.controllers['telefone5'],
           ),
           CustomTextField(
@@ -2422,6 +2438,8 @@ class _CaracteristicasState extends State<Caracteristicas>
           ),
           CustomTextField(
             name: 'Telefone',
+            formatter: [FilteringTextInputFormatter.digitsOnly,_validators.phoneFormatter],
+            keyboardType: TextInputType.numberWithOptions(),
             controller: widget.controllers['fretadoTelefone1'],
           ),
           CustomTextField(
@@ -2446,6 +2464,8 @@ class _CaracteristicasState extends State<Caracteristicas>
           ),
           CustomTextField(
             name: 'Telefone',
+            formatter: [FilteringTextInputFormatter.digitsOnly,_validators.phoneFormatter],
+            keyboardType: TextInputType.numberWithOptions(),
             controller: widget.controllers['fretadoTelefone2'],
           ),
           CustomTextField(
@@ -2470,6 +2490,8 @@ class _CaracteristicasState extends State<Caracteristicas>
           ),
           CustomTextField(
             name: 'Telefone',
+            formatter: [FilteringTextInputFormatter.digitsOnly,_validators.phoneFormatter],
+            keyboardType: TextInputType.numberWithOptions(),
             controller: widget.controllers['fretadoTelefone3'],
           ),
           CustomTextField(
@@ -2494,6 +2516,8 @@ class _CaracteristicasState extends State<Caracteristicas>
           ),
           CustomTextField(
             name: 'Telefone',
+            formatter: [FilteringTextInputFormatter.digitsOnly,_validators.phoneFormatter],
+            keyboardType: TextInputType.numberWithOptions(),
             controller: widget.controllers['fretadoTelefone4'],
           ),
           CustomTextField(
@@ -2518,6 +2542,8 @@ class _CaracteristicasState extends State<Caracteristicas>
           ),
           CustomTextField(
             name: 'Telefone',
+            formatter: [FilteringTextInputFormatter.digitsOnly,_validators.phoneFormatter],
+            keyboardType: TextInputType.numberWithOptions(),
             controller: widget.controllers['fretadoTelefone5'],
           ),
           CustomTextField(
