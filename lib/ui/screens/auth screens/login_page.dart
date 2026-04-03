@@ -11,7 +11,7 @@ import 'package:sistur/validators/cpf_validator.dart';
 import 'package:sistur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:sistur/services/interceptor_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
@@ -116,20 +116,18 @@ class _LoginPageState extends State<LoginPage> {
         _isLoading = true;
       });
 
-      final url = Uri.parse(AppConstants.BASE_URI + AppConstants.LOGIN_URI);
       try {
-        final response = await http.post(url,
-            headers: <String, String>{
-              'Content-Type': 'application/json; charset=UTF-8',
-            },
-            body: json.encode(<String, String>{
-              'CPF': cpf,
-              'password': password,
-            }));
+        final response = await ApiService().post(
+          AppConstants.LOGIN_URI,
+          data: {
+            'CPF': cpf,
+            'password': password,
+          },
+        );
         final prefs = await SharedPreferences.getInstance();
 
         if (response.statusCode == 200) {
-          final Map<String, dynamic> responseData = json.decode(response.body);
+          final Map<String, dynamic> responseData = response.data;
           String accessToken = responseData['access'];
           String refreshToken = responseData['refresh'];
           if (responseData['access_exp'] != null) {
@@ -165,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
                 : const AdminHomePage();
           }));
         } else {
-          print("Usário nao logado ${response.body}");
+          print("Usuário não logado ${response.data}");
           setState(() {
             _isWrong = true;
           });

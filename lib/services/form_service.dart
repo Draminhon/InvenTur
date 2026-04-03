@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:sistur/services/interceptor_service.dart';
+import 'package:dio/dio.dart';
 import 'package:sistur/main.dart';
 import 'package:sistur/ui/widgets/widgets/sendButton.dart';
 import 'package:sistur/ui/screens/updatedForm_screen.dart';
@@ -14,26 +13,22 @@ import 'package:shared_preferences/shared_preferences.dart';
 class FormService {
   Future<bool> sendForm(
       Map<String, dynamic> valoresjson, String endpoint) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-    final url = Uri.parse(AppConstants.BASE_URI + endpoint);
-    int? pesquisa_id = await getPesquisaId();
-
+    int? pesquisaId;
     try {
-      valoresjson['pesquisa'] = pesquisa_id;
-      final response = await http.post(url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            "Authorization": "Bearer $token",
-          },
-          body: json.encode(valoresjson));
+      pesquisaId = await getPesquisaId();
+      valoresjson['pesquisa'] = pesquisaId;
+      final response = await ApiService().post(
+        endpoint,
+        data: valoresjson,
+      ); 
+
       if (response.statusCode == 201) {
         debugPrint("Formulário enviado com sucesso!");
         navigatorKey.currentState?.pushReplacement(
             MaterialPageRoute(builder: (context) => const SendedFormPage()));
         return true;
       } else {
-        debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.body}");
+        debugPrint("ERRO AO ENVIAR O FORMULÁRIO: ${response.statusCode}");
         navigatorKey.currentState?.pushReplacement(MaterialPageRoute(
             builder: (context) => const SendedFormErrorPage()));
         return false;
@@ -41,7 +36,7 @@ class FormService {
     } catch (e) {
       print('Erro: $e');
       await DataSyncService()
-          .enqueue(method: 'POST', endpoint: endpoint, payload: valoresjson, pesquisa_id: pesquisa_id!);
+          .enqueue(method: 'POST', endpoint: endpoint, payload: valoresjson, pesquisa_id: pesquisaId!);
 
       navigatorKey.currentState?.pushReplacement(
           MaterialPageRoute(builder: (context) => const SyncPage()));
@@ -51,26 +46,17 @@ class FormService {
 
   Future<void> updateForm(
       int id, Map<String, dynamic> data, String endpoint) async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-
-    final url = Uri.parse('${AppConstants.BASE_URI}$endpoint$id/');
-
     try {
-      final response = await http.patch(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer $token",
-        },
-        body: json.encode(data),
+      final response = await ApiService().patch(
+        '$endpoint$id/',
+        data: data,
       );
       if (response.statusCode == 200) {
         debugPrint("Formulário atualizado com sucesso!");
         navigatorKey.currentState?.pushReplacement(
             MaterialPageRoute(builder: (context) => const UpdatedForm()));
       } else {
-        debugPrint("ERRO AO ATUALIZAR O FORMULÁRIO: ${response.body}");
+        debugPrint("ERRO AO ATUALIZAR O FORMULÁRIO: ${response.statusCode}");
         navigatorKey.currentState?.pushReplacement(
             MaterialPageRoute(builder: (context) => const UpdatedFormError()));
       }

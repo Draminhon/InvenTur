@@ -5,7 +5,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 // import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:sistur/services/interceptor_service.dart';
 
 class DataSyncService {
   static final DataSyncService _instace = DataSyncService._();
@@ -95,49 +96,36 @@ ADD COLUMN pesquisa_id INTEGER''');
   }
 
   Future<void> _processQueue() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
     final items = await _db.query('queue');
     for (final item in items) {
       final id = item['id'] as int;
       final method = item['method'] as String;
       final endpoint = item['endpoint'] as String;
       final payload = json.decode(item['payload'] as String);
+      
       try {
-        final method = item['method'] as String;
-        final endpoint = item['endpoint'] as String;
-        final payload = json.decode(item['payload'] as String);
-
-        final uri = Uri.parse(AppConstants.BASE_URI + endpoint);
-        late http.Response resp;
+        late Response resp;
 
         if (method == 'POST') {
-          resp = await http.post(
-            uri,
-            headers: {
-              'Content-Type': 'application/json; charset=UTF-8',
-              "Authorization": "Bearer $token"
-            },
-            body: json.encode(payload),
+          resp = await ApiService().post(
+            endpoint,
+            data: payload,
           );
         } else if (method == 'PUT') {
-          resp = await http.put(
-            uri,
-            headers: {
-              'Content-Type': 'application/json; charset=UTF-8',
-              "Authorization": "Bearer $token"
-            },
-            body: json.encode(payload),
+          resp = await ApiService().put(
+            endpoint,
+            data: payload,
           );
         }
-        if (resp.statusCode >= 200 && resp.statusCode < 300) {
+
+        if (resp.statusCode != null && resp.statusCode! >= 200 && resp.statusCode! < 300) {
           await removeItem(id);
           debugPrint('Item $id sincronizado e removido da fila.');
         } else {
           debugPrint('Falha no servidor para item $id: ${resp.statusCode}');
-          // opcional: decidir se remove ou mantém para retry
         }
       } catch (e) {
+        debugPrint('Erro ao processar item $id: $e');
         break;
       }
     }

@@ -8,10 +8,58 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import json
+import threading
+import time
 from django.contrib.auth import authenticate, login
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.views import TokenRefreshView
 
  
+class SessionMonitor:
+    _instance = None
+    _stop_event = threading.Event()
+    _thread = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(SessionMonitor, cls).__new__(cls)
+        return cls._instance
+
+    def _run_countdown(self):
+        print("\n" + "="*50)
+        print("▶️ MONITOR: Sessão Iniciada! Expiração em 5 min.")
+        print("="*50 + "\n")
+        
+        for i in range(1, 6):
+            if self._stop_event.wait(60):
+                return
+            print(f"🕒 MONITOR: {i}/5 minutos decorridos...")
+        
+        print("\n" + "!"*50)
+        print("⚠️ MONITOR: 5 min atingidos! O Access Token expirou.")
+        print("!"*50 + "\n")
+
+    def start(self):
+        self.stop()
+        self._stop_event.clear()
+        self._thread = threading.Thread(target=self._run_countdown, daemon=True)
+        self._thread.start()
+
+    def stop(self):
+        self._stop_event.set()
+
+monitor = SessionMonitor()
+
+class DecoratedTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        if response.status_code == 200:
+            print("\n" + "♻️"*20)
+            print("♻️  REFRESH TOKEN ATIVADO! Renovando sessão...")
+            print("♻️"*20 + "\n")
+            monitor.start()
+        return response
+
 @csrf_exempt
 def UsuarioLoginView(request):
     # Responde a métodos não-POST com erro 405
@@ -63,6 +111,7 @@ def UsuarioLoginView(request):
     # Geração do token JWT
     try:
         refresh = RefreshToken.for_user(user)
+        monitor.start() # Inicia contador no terminal
         return JsonResponse({
             "refresh": str(refresh),
             "access": str(refresh.access_token),
@@ -92,6 +141,8 @@ class LogoutAPIView(APIView):
         try:
             refresh_token = request.data.get("refresh")
             token = RefreshToken(refresh_token)
+            token.blacklist()
+            monitor.stop() # Para contador no terminal
 
             return Response({"detail": "Logout realizado com sucesso."}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:

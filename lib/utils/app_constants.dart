@@ -8,6 +8,7 @@ class AppConstants {
  //static const String BASE_URI = "https://nupreds.ifce.edu.br/inventur/api/v1/";
 //    static const String BASE_URI = "http://localhost";
   static const String LOGIN_URI = "login/";
+  static const String REFRESH_TOKEN_URI = "api/token/refresh/";
   static const String REGISTER_URI = "user/";
   static const String GET_USERS = "user/";
   static const  String GET_PESQUISAS = "pesquisa";

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 import 'package:sistur/models/endereco/estado_model.dart';
 import 'package:sistur/models/endereco/municipio_model.dart';
@@ -6,10 +7,7 @@ import 'package:sistur/models/endereco/pais_model.dart';
 import 'package:sistur/models/pesquisa_model.dart';
 import 'package:sistur/models/user_model.dart';
 import 'package:sistur/services/brasil_service.dart';
-import 'package:sistur/utils/app_constants.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistur/services/interceptor_service.dart';
 
 class PesquisaController extends ChangeNotifier {
   static const String _finished = "Concluído";
@@ -53,24 +51,21 @@ class PesquisaController extends ChangeNotifier {
     required int pesquisaId,
     required int userId,
   }) async {
-    final url = Uri.parse(
-        '${AppConstants.BASE_URI}pesquisa/$pesquisaId/remover-pesquisador/');
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-    final response = await http.patch(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'Authorization': 'Bearer $token'
-      },
-      body: json.encode({'user_id': userId}),
-    );
-    if (response.statusCode == 200) {
-      print("removido com sucesso! ${pesquisaId} + ${userId}");
-      return true;
-    } else {
-      print(
-          'Erro ao remover pesquisador: ${response.statusCode} ${response.body}');
+    try {
+      final response = await ApiService().patch(
+        'pesquisa/$pesquisaId/remover-pesquisador/',
+        data: {'user_id': userId},
+      );
+
+      if (response.statusCode == 200) {
+        print("removido com sucesso! ${pesquisaId} + ${userId}");
+        return true;
+      } else {
+        print('Erro ao remover pesquisador: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Erro ao remover pesquisador: $e');
       return false;
     }
   }
@@ -93,19 +88,10 @@ class PesquisaController extends ChangeNotifier {
   }
 
   void removePesquisa(bool active, Pesquisa pesquisa) async {
-    var url = Uri.parse('${AppConstants.BASE_URI}pesquisa/${pesquisa.id}/');
-
     try {
-      final prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('access_token');
-
-      final response = await http.patch(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer $token",
-        },
-        body: json.encode({'is_active': active}),
+      final response = await ApiService().patch(
+        'pesquisa/${pesquisa.id}/',
+        data: {'is_active': active},
       );
 
       if (response.statusCode == 204) {
@@ -147,8 +133,6 @@ class PesquisaController extends ChangeNotifier {
     required String municipio,
     required Set<User> selectedUsers,
   }) async {
-    var url = Uri.parse('${AppConstants.BASE_URI}pesquisa/$pesquisaId/');
-
     // Ajustar as datas caso contenham o formato 'at'
     if (rawDataInicio.contains('at')) {
       rawDataInicio = rawDataInicio.split('at').first.trim();
@@ -156,9 +140,6 @@ class PesquisaController extends ChangeNotifier {
     }
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('access_token');
-
       // Converter as datas para o formato correto
       DateTime dtInicio = parseDate(rawDataInicio);
       DateTime dtTermino = parseDate(rawDataTermino);
@@ -167,14 +148,10 @@ class PesquisaController extends ChangeNotifier {
       String dataInicioFormatada = outputFormat.format(dtInicio);
       String dataTerminoFormatada = outputFormat.format(dtTermino);
 
-      // Fazer a requisição PATCH
-      var response = await http.patch(
-        url,
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $token"
-        },
-        body: json.encode({
+      // Fazer a requisição PATCH via ApiService
+      var response = await ApiService().patch(
+        'pesquisa/$pesquisaId/',
+        data: {
           'admin': adminId,
           'dataInicio': dataInicioFormatada,
           'dataTermino': dataTerminoFormatada,
@@ -182,13 +159,12 @@ class PesquisaController extends ChangeNotifier {
           'estado': estado,
           'municipio': municipio,
           'usuario': selectedUsers.map((user) => user.id).toList(),
-        }),
+        },
       );
 
       // Verificar o código de status da resposta
       if (response.statusCode == 200) {
         print("Pesquisa atualizada com sucesso!");
-        print("Resposta: ${response.body}");
         final idx = _pesquisas.indexWhere((p) => p.id == pesquisaId);
         if (idx != -1) {
           _pesquisas[idx] = _pesquisas[idx].copyWith(
@@ -208,11 +184,10 @@ class PesquisaController extends ChangeNotifier {
       } else {
         print(
             "Erro ao atualizar pesquisa. Código de status: ${response.statusCode}");
-        print("Resposta do servidor: ${response.body}");
         return false;
       }
     } catch (e) {
-      print("Erro ao fazer a requisição: $e");
+      print("Erro ao atualizar pesquisa: $e");
       return false;
     }
   }
@@ -268,17 +243,11 @@ class PesquisaController extends ChangeNotifier {
   void setPesquisaStatus(String status, Pesquisa pesquisa) async {
     pesquisa.status = status;
     notifyListeners();
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-    var url = Uri.parse('${AppConstants.BASE_URI}pesquisa/${pesquisa.id}/');
-
     try {
-      await http.patch(url,
-          headers: {
-            'Content-Type': 'application/json',
-            "Authorization": "Bearer $token"
-          },
-          body: json.encode({'status': status}));
+      await ApiService().patch(
+        'pesquisa/${pesquisa.id}/',
+        data: {'status': status},
+      );
     } catch (e) {
       print("Erro ao atualizar o status no banco: $e");
     }

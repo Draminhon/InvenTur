@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sistur/models/user_model.dart';
-import 'package:sistur/utils/app_constants.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:sistur/services/interceptor_service.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -51,20 +49,10 @@ class UserController extends ChangeNotifier {
   }
 
   void removeUser(bool active, User user) async {
-    var url =
-        Uri.parse('${AppConstants.BASE_URI}user/${user.id}/');
-
-    try {     final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
-      final response =  await http.patch(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer $token",
-        },
-        body: json.encode({
-          'is_active': active
-        }),
+    try {
+      final response = await ApiService().patch(
+        'user/${user.id}/',
+        data: {'is_active': active},
       );
 
       if (response.statusCode == 200) {
@@ -155,28 +143,17 @@ class UserController extends ChangeNotifier {
     user.status = status;
     notifyListeners();
 
-    var url = Uri.parse(
-        '${AppConstants.BASE_URI}user/${user.id}/');
-
     try {
-
-      final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
-      await http.patch(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          "Authorization": "Bearer $token",
-
-        },
-        body: json.encode({
+      await ApiService().patch(
+        'user/${user.id}/',
+        data: {
           'id': user.id,
           'username': user.username,
           'CPF': user.CPF,
           'email': user.email,
           'acessLevel': user.accessLevel,
           'status': status
-        }),
+        },
       );
     } catch (e) {
       print('Erro ao atualizar o status no banco: $e');

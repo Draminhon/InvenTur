@@ -7,30 +7,31 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class ApiService {
+  static final ApiService _instance = ApiService._internal();
+  factory ApiService() => _instance;
+
   final Dio _dio = Dio();
   static const String _baseUrl = AppConstants.BASE_URI;
   bool _isDialogShowing = false;
 
-  ApiService() {
+  ApiService._internal() {
     _dio.options.baseUrl = _baseUrl;
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          // URLs que não precisam de token (como login, registro)
-          if (options.path.contains('/login')) {
-            // Verificação simplificada
+          // URLs que não precisam de token
+          if (options.path.contains(AppConstants.LOGIN_URI) || 
+              options.path.contains(AppConstants.REFRESH_TOKEN_URI)) {
             return handler.next(options);
           }
 
           final prefs = await SharedPreferences.getInstance();
-          final accessToken = prefs.getString('access_token');
-          final accessTokenExp = prefs.getInt('access_token_exp');
+          String? accessToken = prefs.getString('access_token');
 
           if (accessToken == null) {
-            print("Nenhum token encontrado. Rejeitando a requisição.");
             return handler.reject(
               DioException(requestOptions: options, error: "Não autenticado"),
-              true, // Use 'true' para propagar a exceção
+              true,
             );
           }
 
@@ -38,45 +39,86 @@ class ApiService {
           final bool isExpired = JwtDecoder.isExpired(accessToken);
 
           if (isExpired) {
-            print("Token expirado. Deslogando o usuário...");
-            _handleSessionExpiration();
-            // 1. Limpa todos os dados salvos
-            await _logoutUser(prefs);
-
-            // 2. Rejeita a requisição para que a chamada original falhe
-            return handler.reject(
-              DioException(requestOptions: options, error: "Sessão expirada"),
-              true,
-            );
+            print("Token expirado. Tentando refresh...");
+            final success = await _refreshToken();
+            if (success) {
+              accessToken = prefs.getString('access_token');
+              options.headers['Authorization'] = 'Bearer $accessToken';
+              return handler.next(options);
+            } else {
+              print("Refresh falhou. Deslogando...");
+              _handleSessionExpiration();
+              return handler.reject(
+                DioException(requestOptions: options, error: "Sessão expirada"),
+                true,
+              );
+            }
           }
 
-          // Se o token NÃO expirou, continua normalmente
-          print("Token válido. Prosseguindo com a requisição.");
           options.headers['Authorization'] = 'Bearer $accessToken';
           return handler.next(options);
         },
-        onError: (DioException e, handler) {
-          // Você pode adicionar uma lógica aqui para, por exemplo,
-          // verificar se o erro é de "Sessão expirada" e redirecionar
-          // para a tela de login.
-          print("Erro na requisição: ${e.message}");
+        onError: (DioException e, handler) async {
+          // Se o servidor retornar 401, tentamos o refresh uma última vez
+          if (e.response?.statusCode == 401 && 
+              !e.requestOptions.path.contains(AppConstants.LOGIN_URI)) {
+            print("401 detectado no interceptor. Tentando refresh...");
+            final success = await _refreshToken();
+            if (success) {
+              final prefs = await SharedPreferences.getInstance();
+              final newToken = prefs.getString('access_token');
+              
+              // Refaz a requisição original com o novo token
+              final opts = e.requestOptions;
+              opts.headers['Authorization'] = 'Bearer $newToken';
+              
+              final response = await _dio.fetch(opts);
+              return handler.resolve(response);
+            }
+          }
           return handler.next(e);
         },
       ),
     );
   }
-  Future<void> _handleSessionExpiration() async {
-    // Se um diálogo já estiver sendo exibido, não faça nada.
-    if (_isDialogShowing) return;
 
+  Future<bool> _refreshToken() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final refreshToken = prefs.getString('refresh_token');
+
+      if (refreshToken == null) return false;
+
+      // Usamos uma instância limpa do Dio para evitar interceptores em loop
+      final response = await Dio().post(
+        _baseUrl + AppConstants.REFRESH_TOKEN_URI,
+        data: {'refresh': refreshToken},
+      );
+
+      if (response.statusCode == 200) {
+        final String newAccess = response.data['access'];
+        final String newRefresh = response.data['refresh'];
+
+        await prefs.setString('access_token', newAccess);
+        await prefs.setString('refresh_token', newRefresh);
+        
+        print("Tokens renovados com sucesso.");
+        return true;
+      }
+    } catch (e) {
+      print("Erro ao renovar token: $e");
+    }
+    return false;
+  }
+
+  Future<void> _handleSessionExpiration() async {
+    if (_isDialogShowing) return;
     _isDialogShowing = true;
 
-    // Usa o contexto do Navigator para mostrar o diálogo
     final context = navigatorKey.currentContext;
     if (context != null) {
       showDialog(
         context: context,
-        // Impede o usuário de fechar o diálogo tocando fora
         barrierDismissible: false,
         builder: (BuildContext dialogContext) {
           return const AlertDialog(
@@ -93,37 +135,36 @@ class ApiService {
         },
       );
 
-      // Aguarda um momento para o usuário ver a mensagem
       await Future.delayed(const Duration(seconds: 2));
-
-      // Limpa os dados do usuário
       final prefs = await SharedPreferences.getInstance();
       await prefs.clear();
 
-      // Navega para a tela de login, removendo todas as outras telas
-      // A navegação irá remover o diálogo automaticamente.
       navigatorKey.currentState?.pushAndRemoveUntil(
-        MaterialPageRoute(builder: (_) => LoginPage()), // Sua tela de login
+        MaterialPageRoute(builder: (_) => LoginPage()),
         (Route<dynamic> route) => false,
       );
     }
-
-    // Reseta a flag após a conclusão
     _isDialogShowing = false;
   }
 
-  /// Função auxiliar para limpar os dados do usuário.
-  Future<void> _logoutUser(SharedPreferences prefs) async {
-    await prefs
-        .clear(); // Remove todos os dados (token, refresh token, dados do usuário, etc.)
-  }
-
-  // Métodos para fazer as chamadas
+  // Métodos para facilitar o uso no lugar do pacote 'http'
   Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
     return _dio.get(path, queryParameters: queryParameters);
   }
 
-  Future<Response> post(String path, dynamic data) {
+  Future<Response> post(String path, {dynamic data}) {
     return _dio.post(path, data: data);
+  }
+
+  Future<Response> patch(String path, {dynamic data}) {
+    return _dio.patch(path, data: data);
+  }
+
+  Future<Response> put(String path, {dynamic data}) {
+    return _dio.put(path, data: data);
+  }
+
+  Future<Response> delete(String path, {dynamic data}) {
+    return _dio.delete(path, data: data);
   }
 }

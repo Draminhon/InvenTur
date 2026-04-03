@@ -1,31 +1,27 @@
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:sistur/utils/app_constants.dart';
+
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistur/services/interceptor_service.dart';
 
 class AdminService {
   static Future<String> getAdminName(int adminId) async {
-    if(adminId < 0){
+    if (adminId < 0) {
       return "erro";
     }
 
-    try{
-    var url = Uri.parse(AppConstants.BASE_URI + 'admin/$adminId');
-    final response =
-        await http.get(url, headers: {"Content-Type": "application/json"});
+    try {
+      final response = await ApiService().get('admin/$adminId/');
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      return data['username'];
-    } else {
+      if (response.statusCode == 200) {
+        return response.data['username'];
+      } else {
+        return "administrador não encontrado";
+      }
+    } catch (e) {
       return "administrador não encontrado";
     }
-    }catch(e){
-      return "administrador não encontrado";
-    }
-
   }
-  }
+}
 
 Future<void> savePesquisaId(int pesquisaId) async {
   final prefs = await SharedPreferences.getInstance();
