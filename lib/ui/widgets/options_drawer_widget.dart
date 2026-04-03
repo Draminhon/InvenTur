@@ -5,9 +5,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sistur/controllers/user_controller.dart';
 import 'package:sistur/ui/home/Pesquisador/perfil_pesquisador.dart';
 import 'package:sistur/utils/app_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistur/services/secure_storage_service.dart';
+import 'package:sistur/services/interceptor_service.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:sistur/providers/providers.dart';
 
@@ -26,52 +26,31 @@ class _OptionsDrawerState extends State<OptionsDrawer> {
   bool _isLoading = false;
 
 
-Future<void> logout(BuildContext context) async {
-
-
-  setState(() {
-    _isLoading = true;
-  });
-
-
-  final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
-String? refreshToken = prefs.getString('refresh_token');
-try{final response = await http.post(
-    Uri.parse('${AppConstants.BASE_URI}logout/'),
-    headers: {
-      'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-
-      },
-      
-     body: jsonEncode({'refresh': refreshToken}),
-  );
-
-  print(response.statusCode);
-  if(response.statusCode == 205){
-   
-     await prefs.remove('access_token');
-  await prefs.remove('user_data');
-    Navigator.pushReplacementNamed(context, '/Login');
-    
-  }else{
-    print('Erro ao fazer logout: ${response.body}');
-        await prefs.remove('access_token');
-    await prefs.remove('user_data');
-    Navigator.pushReplacementNamed(context, '/Login');
-  }}catch(e){
-    await prefs.remove('access_token');
-    await prefs.remove('user_data');
-    Navigator.pushReplacementNamed(context, '/Login');
-    
-  }finally{
+  Future<void> logout(BuildContext context) async {
     setState(() {
-      _isLoading = false;
+      _isLoading = true;
     });
+
+    final secureStorage = SecureStorageService();
+    String? refreshToken = await secureStorage.read('refresh_token');
+
+    try {
+      if (refreshToken != null) {
+        await ApiService().post(
+          'logout/',
+          data: {'refresh': refreshToken},
+        );
+      }
+    } catch (e) {
+      print('Erro ao fazer logout no servidor: $e');
+    } finally {
+      await secureStorage.clearAll();
+      setState(() {
+        _isLoading = false;
+      });
+      Navigator.pushReplacementNamed(context, '/Login');
+    }
   }
-  
-}
 
   @override
   Widget build(BuildContext context) {

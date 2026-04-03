@@ -4,8 +4,7 @@ import 'package:sistur/ui/screens/password%20recover%20screens/changepasswordsuc
 import 'package:sistur/ui/widgets/text%20fields/text_field_widget.dart';
 import 'package:sistur/utils/app_constants.dart';
 import 'package:sistur/validators/password_validator.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:sistur/services/interceptor_service.dart';
 
 class MudarSenha extends StatefulWidget {
   MudarSenha({super.key, required this.email});
@@ -29,22 +28,23 @@ class _MudarSenhaState extends State<MudarSenha> {
     Future<void> requestOtp(String password) async {
       String email = widget.email;
       try {
-        final response = await http.post(
-          Uri.parse('${AppConstants.BASE_URI}password-reset/change-password/'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'email': email, 'new_password': password}),
+        final response = await ApiService().post(
+          'password-reset/change-password/',
+          data: {'email': email, 'new_password': password},
         );
 
         if (response.statusCode == 200) {
-          print(response.body);
+          print("Senha alterada com sucesso");
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
             return ConfirmacaoNovaSenha();
           }));
         } else {
-          print(response.body);
+          print("Erro ao alterar senha: ${response.statusCode}");
         }
-      } catch (e) {}
+      } catch (e) {
+        print("Erro capturado no changePassword: $e");
+      }
     }
 
     return Scaffold(

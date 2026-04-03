@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sistur/ui/screens/auth%20screens/register_confirmation.dart';
@@ -11,11 +12,12 @@ import 'package:sistur/validators/name_validator.dart';
 import 'package:sistur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:sistur/services/secure_storage_service.dart';
+import 'package:sistur/services/interceptor_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:sistur/providers/providers.dart';
+import 'package:dio/dio.dart';
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({super.key});
@@ -55,8 +57,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future<void> registerUser(
       String username, String CPF, String email, String password, String telefone) async {
-    final url = Uri.parse(AppConstants.BASE_URI + AppConstants.REGISTER_URI);
-
     setState(() {
       _isLoading = true;
     });
@@ -64,29 +64,33 @@ class _RegisterPageState extends State<RegisterPage> {
     FocusScope.of(context).unfocus();
 
     try {
-      final response = await http.post(url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: json.encode(<String, String>{
-            'username': username,
-            'CPF': CPF,
-            'email': email,
-            'password': password,
-            'telefone': telefone,
-          }));
+      final response = await ApiService().post(
+        AppConstants.REGISTER_URI,
+        data: {
+          'username': username,
+          'CPF': CPF,
+          'email': email,
+          'password': password,
+          'telefone': telefone,
+        },
+      );
 
-      if (response.statusCode == 201) {
-        print('Usuario registrado com sucesso');
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        Navigator.pop(context);
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) {
           return const RegisterConfimation();
         }));
-      } else {
-        print('Erro ao registrar o usuário: ${response.body}');
       }
+    } on DioException catch (e) {
+      String errorMsg = "Erro ao registrar usuário.";
+      if (e.response?.statusCode == 400) {
+        errorMsg = "Verifique os dados informados (CPF ou Email já podem estar em uso).";
+      }
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMsg)));
+      debugPrint('Erro Dio ao registrar usuário: ${e.message}');
     } catch (e) {
-      print('Erro: $e');
+      debugPrint('Erro genérico ao registrar usuário: $e');
     } finally {
       setState(() {
         _isLoading = false;
@@ -96,28 +100,23 @@ class _RegisterPageState extends State<RegisterPage> {
 
   Future updateUsers(int user, String username, String CPF, String email,
       String password, String telefone) async {
-    var url =
-        Uri.parse('${AppConstants.BASE_URI}user/$user/');
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
     try {
-      var response = await http.patch(url,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer $token'
-          },
-          body: json.encode(<String, String>{
-            'username': username,
-            'CPF': CPF,
-            'email': email,
-            'password': password,
-            'telefone': telefone
-          }));
+      final response = await ApiService().patch(
+        'user/$user/',
+        data: {
+          'username': username,
+          'CPF': CPF,
+          'email': email,
+          'password': password,
+          'telefone': telefone
+        },
+      );
 
       if (response.statusCode == 200) {
-        print('Usuario atualizado com sucesso: ${response.body}');
-
-        String? oldUserDataString = prefs.getString('user_data');
+        print('Usuário atualizado com sucesso');
+        
+        final secureStorage = SecureStorageService();
+        String? oldUserDataString = await secureStorage.read('user_data');
         Map<String, dynamic> userData = {};
         if (oldUserDataString != null) {
           userData = jsonDecode(oldUserDataString);
@@ -131,7 +130,7 @@ class _RegisterPageState extends State<RegisterPage> {
         userData['CPF'] = CPF;
         userData['telefone'] = telefone;
         
-        prefs.setString('user_data', jsonEncode(userData));
+        await secureStorage.write('user_data', jsonEncode(userData));
 
         // Update global state
         Provider.of<UserProvider>(context, listen: false).updateUser(username, email, CPF, telefone);
@@ -140,12 +139,12 @@ class _RegisterPageState extends State<RegisterPage> {
         const snackBar =
             SnackBar(content: Text("Atualização realizada com sucesso!"));
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      } else {
-        print(
-            'Erro ao atualizar usuario: ${response.statusCode} - ${response.body}');
       }
+    } on DioException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Falha ao atualizar dados. Verifique sua conexão.")));
+      debugPrint('Erro Dio na atualização: ${e.message}');
     } catch (e) {
-      print('Erro na requisição: $e');
+      debugPrint('Erro genérico na atualização: $e');
     }
   }
 

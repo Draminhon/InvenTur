@@ -3,9 +3,9 @@ import 'package:sistur/models/pesquisa_model.dart';
 import 'package:sistur/controllers/pesquisa_controller.dart';
 import 'package:sistur/ui/widgets/cards/pesquisa_card_widget.dart';
 import 'package:sistur/utils/app_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistur/services/secure_storage_service.dart';
+import 'package:sistur/services/interceptor_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class PesquisasPage extends StatefulWidget {
@@ -21,35 +21,34 @@ class _PesquisasPageState extends State<PesquisasPage> {
   final PesquisaController _pesquisaController = PesquisaController();
 
   static Future<List<Pesquisa>> getPesquisas() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? userDataString = prefs.getString('user_data');
+    final secureStorage = SecureStorageService();
+    String? userDataString = await secureStorage.read('user_data');
     if (userDataString == null) {
-      print("Nenhum dado do usuário encontrado no SharedPreferences.");
+      print("Nenhum dado do usuário encontrado no SecureStorage.");
       return [];
     }
 
     Map<String, dynamic> userData = json.decode(userDataString);
-    final url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_PESQUISAS);
     int adminId = userData['id'];
 
     try {
-      final prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('access_token');
-      final response = await http.get(url, headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      });
+      final response = await ApiService().get(AppConstants.GET_PESQUISAS);
 
-      final List body = json.decode(utf8.decode(response.bodyBytes));
-      final List<Pesquisa> todasAsPesquisas =
-          body.map((e) => Pesquisa.fromJson(e)).toList();
-      final List<Pesquisa> pesquisasFiltradas = todasAsPesquisas
-          .where((pesquisa) =>
-              pesquisa.adminId != null && pesquisa.adminId == adminId)
-          .toList();
-      return pesquisasFiltradas;
+      if (response.statusCode == 200) {
+        final List body = response.data;
+        final List<Pesquisa> todasAsPesquisas =
+            body.map((e) => Pesquisa.fromJson(e)).toList();
+        final List<Pesquisa> pesquisasFiltradas = todasAsPesquisas
+            .where((pesquisa) =>
+                pesquisa.adminId != null && pesquisa.adminId == adminId)
+            .toList();
+        return pesquisasFiltradas;
+      } else {
+        print("Erro ao carregar pesquisas: ${response.statusCode}");
+        return [];
+      }
     } catch (e) {
-      print("Erro: $e");
+      print("Erro em getPesquisas admin_page: $e");
       return [];
     }
   }

@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:sistur/main.dart';
 import 'package:sistur/ui/screens/auth%20screens/login_page.dart';
-import 'package:sistur/utils/app_constants.dart'; // Certifique-se que o caminho está correto
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistur/utils/app_constants.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:sistur/services/secure_storage_service.dart';
 
 class ApiService {
   static final ApiService _instance = ApiService._internal();
@@ -21,12 +21,13 @@ class ApiService {
         onRequest: (options, handler) async {
           // URLs que não precisam de token
           if (options.path.contains(AppConstants.LOGIN_URI) || 
-              options.path.contains(AppConstants.REFRESH_TOKEN_URI)) {
+              options.path.contains(AppConstants.REFRESH_TOKEN_URI) ||
+              options.path.contains('password-reset/')) {
             return handler.next(options);
           }
 
-          final prefs = await SharedPreferences.getInstance();
-          String? accessToken = prefs.getString('access_token');
+          final secureStorage = SecureStorageService();
+          String? accessToken = await secureStorage.read('access_token');
 
           if (accessToken == null) {
             return handler.reject(
@@ -42,8 +43,8 @@ class ApiService {
             print("Token expirado. Tentando refresh...");
             final success = await _refreshToken();
             if (success) {
-              accessToken = prefs.getString('access_token');
-              options.headers['Authorization'] = 'Bearer $accessToken';
+              final refreshedToken = await secureStorage.read('access_token');
+              options.headers['Authorization'] = 'Bearer $refreshedToken';
               return handler.next(options);
             } else {
               print("Refresh falhou. Deslogando...");
@@ -65,8 +66,8 @@ class ApiService {
             print("401 detectado no interceptor. Tentando refresh...");
             final success = await _refreshToken();
             if (success) {
-              final prefs = await SharedPreferences.getInstance();
-              final newToken = prefs.getString('access_token');
+              final secureStorage = SecureStorageService();
+              final newToken = await secureStorage.read('access_token');
               
               // Refaz a requisição original com o novo token
               final opts = e.requestOptions;
@@ -84,8 +85,8 @@ class ApiService {
 
   Future<bool> _refreshToken() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final refreshToken = prefs.getString('refresh_token');
+      final secureStorage = SecureStorageService();
+      final refreshToken = await secureStorage.read('refresh_token');
 
       if (refreshToken == null) return false;
 
@@ -99,8 +100,9 @@ class ApiService {
         final String newAccess = response.data['access'];
         final String newRefresh = response.data['refresh'];
 
-        await prefs.setString('access_token', newAccess);
-        await prefs.setString('refresh_token', newRefresh);
+        final secureStorage = SecureStorageService();
+        await secureStorage.write('access_token', newAccess);
+        await secureStorage.write('refresh_token', newRefresh);
         
         print("Tokens renovados com sucesso.");
         return true;
@@ -136,8 +138,7 @@ class ApiService {
       );
 
       await Future.delayed(const Duration(seconds: 2));
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.clear();
+      await SecureStorageService().clearAll();
 
       navigatorKey.currentState?.pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => LoginPage()),
@@ -148,23 +149,23 @@ class ApiService {
   }
 
   // Métodos para facilitar o uso no lugar do pacote 'http'
-  Future<Response> get(String path, {Map<String, dynamic>? queryParameters}) {
-    return _dio.get(path, queryParameters: queryParameters);
+  Future<Response> get(String path, {Map<String, dynamic>? queryParameters, Options? options}) {
+    return _dio.get(path, queryParameters: queryParameters, options: options);
   }
 
-  Future<Response> post(String path, {dynamic data}) {
-    return _dio.post(path, data: data);
+  Future<Response> post(String path, {dynamic data, Options? options}) {
+    return _dio.post(path, data: data, options: options);
   }
 
-  Future<Response> patch(String path, {dynamic data}) {
-    return _dio.patch(path, data: data);
+  Future<Response> patch(String path, {dynamic data, Options? options}) {
+    return _dio.patch(path, data: data, options: options);
   }
 
-  Future<Response> put(String path, {dynamic data}) {
-    return _dio.put(path, data: data);
+  Future<Response> put(String path, {dynamic data, Options? options}) {
+    return _dio.put(path, data: data, options: options);
   }
 
-  Future<Response> delete(String path, {dynamic data}) {
-    return _dio.delete(path, data: data);
+  Future<Response> delete(String path, {dynamic data, Options? options}) {
+    return _dio.delete(path, data: data, options: options);
   }
 }

@@ -7,10 +7,9 @@ import 'package:sistur/validators/email_validator.dart';
 import 'package:sistur/validators/name_validator.dart';
 import 'package:sistur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:sistur/utils/app_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistur/services/secure_storage_service.dart';
+import 'package:sistur/services/interceptor_service.dart';
 
 
 class ResgistrationForm extends StatelessWidget {
@@ -42,36 +41,26 @@ class ResgistrationForm extends StatelessWidget {
 
   Future<void> registerUser(String username, String CPF, String email, String password, String telefone) async{
 
-    final url = Uri.parse('${AppConstants.BASE_URI}admin/register/');
+    try {
+      final response = await ApiService().post(
+        'admin/register/',
+        data: {
+          'username': username,
+          'CPF': CPF,
+          'email': email,
+          'password': password,
+          'telefone': telefone
+        },
+      );
 
-  try{
-          final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
-      final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer $token",
-      },
-      body: json.encode(<String, String>{
-        'username': username,
-        'CPF': CPF,
-        'email': email,
-        'password': password,
-        'telefone': telefone
-      })
-    ); 
-
-     
-    
-    if(response.statusCode == 201){
-      print('Usuario registrado com sucesso');
-    }else{
-      print('Erro ao registrar o usuário: ${response.body}');    }
-
-     }catch(e){
+      if (response.statusCode == 201) {
+        print('Usuario registrado com sucesso');
+      } else {
+        print('Erro ao registrar o usuário: ${response.statusCode}');
+      }
+    } catch (e) {
       print('Erro: $e');
-     }
+    }
 
   }
 

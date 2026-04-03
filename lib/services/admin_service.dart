@@ -1,6 +1,5 @@
 import 'dart:convert';
-
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistur/services/secure_storage_service.dart';
 import 'package:sistur/services/interceptor_service.dart';
 
 class AdminService {
@@ -24,18 +23,15 @@ class AdminService {
 }
 
 Future<void> savePesquisaId(int pesquisaId) async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setInt('pesquisa_id', pesquisaId);
+  await SecureStorageService().setInt('pesquisa_id', pesquisaId);
 }
 
 Future<int?> getPesquisaId() async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getInt('pesquisa_id');
+  return await SecureStorageService().getInt('pesquisa_id');
 }
 
 Future<void> clearPesquisaId() async {
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.remove('pesquisa_id');
+  await SecureStorageService().delete('pesquisa_id');
 }
 
 Future<Map<String, dynamic>> getAdminAndPesquisadorInfo() async {
@@ -51,8 +47,8 @@ Future<Map<String, dynamic>> getAdminAndPesquisadorInfo() async {
   String coordenadorTelefone = '';
 
   try {
-    final prefs = await SharedPreferences.getInstance();
-    String? userDataString = prefs.getString('user_data');
+    final secureStorage = SecureStorageService();
+    String? userDataString = await secureStorage.read('user_data');
 
     if (userDataString != null) {
       Map<String, dynamic> userData = json.decode(userDataString);
@@ -61,11 +57,9 @@ Future<Map<String, dynamic>> getAdminAndPesquisadorInfo() async {
       pesquisadorTelefone = userData['telefone'];
       pesquisadorEmail = userData['email'];
 
-      print(prefs.getKeys());
-
-      coordenadorNome = prefs.getString('adminName')!;
-      coordenadorEmail = prefs.getString('adminEmail')!;
-      coordenadorTelefone = prefs.getString('adminTelefone')!;
+      coordenadorNome = await secureStorage.read('adminName') ?? '';
+      coordenadorEmail = await secureStorage.read('adminEmail') ?? '';
+      coordenadorTelefone = await secureStorage.read('adminTelefone') ?? '';
     }
   } catch (e) {
     print(e);

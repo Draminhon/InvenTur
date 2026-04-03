@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:sistur/models/forms/Forms%20C/eventos_programados_model.dart';
 import 'package:sistur/models/forms/Forms%20C/gastronomia_artesanato_trabalhos_manuais_model.dart';
@@ -49,33 +48,27 @@ import 'package:sistur/ui/forms/formsB/alimentos_e_bebidas.dart';
 import 'package:sistur/ui/forms/formsB/meiosdehospedagem.dart';
 import 'package:sistur/ui/forms/formsB/outros_tipos_de_acomodacao.dart';
 import 'package:sistur/ui/forms/formsB/transporte_turistico.dart';
+import 'package:sistur/services/secure_storage_service.dart';
 import 'package:sistur/services/interceptor_service.dart';
 import 'package:sistur/utils/app_constants.dart';
 import 'package:sistur/utils/check_connectivity.dart';
 import 'package:sistur/utils/utils_functions.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:dio/dio.dart';
 
 /// Atualiza a quantidade de locais
 Future updateQtdeLocais(int pesquisa, int quantidade) async {
-  var url = Uri.parse('${AppConstants.BASE_URI}pesquisa/${pesquisa}/');
-  final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
   try {
-    var response = await http.patch(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token'
-      },
-      body: jsonEncode({'quantidadeLocais': quantidade}),
+    var response = await ApiService().patch(
+      'pesquisa/$pesquisa/',
+      data: {'quantidadeLocais': quantidade},
     );
     if (response.statusCode == 200) {
-      print('Quantidade de locais atualizada com sucesso: ${response.body}');
+      print('Quantidade de locais atualizada com sucesso');
     } else {
-      print('Erro ao atualizar: ${response.statusCode} - ${response.body}');
+      print('Erro ao atualizar: ${response.statusCode}');
     }
   } catch (e) {
-    print('Erro na requisição: $e');
+    print('Erro na requisição updateQtdeLocais: $e');
   }
 }
 
@@ -569,33 +562,19 @@ int usuario = 0;
                                         final String nome =
                                             dados['tipo_formulario'];
                                         print('excluindo: $nome (ID: $id)');
-                                        var url = Uri.parse(
-                                            '${AppConstants.BASE_URI}base/$id/');
-                                        final prefs = await SharedPreferences
-                                            .getInstance();
-                                        String? token =
-                                            prefs.getString('access_token');
-                                        try {
-                                          final response = await http.patch(
-                                            url,
-                                            headers: {
-                                              'Content-Type':
-                                                  'application/json',
-                                              "Authorization": "Bearer $token"
-                                            },
-                                            body: json
-                                                .encode({'is_active': false}),
-                                          );
-                                          if (response.statusCode == 204) {
-                                            print(
-                                                'Usuário deletado com sucesso');
-                                          } else {
-                                            print(
-                                                'Falha ao deletar: ${response.statusCode}');
-                                          }
-                                        } catch (e) {
-                                          print('Erro $e');
+                                      try {
+                                        final response = await ApiService().patch(
+                                          'base/$id/',
+                                          data: {'is_active': false},
+                                        );
+                                        if (response.statusCode == 204 || response.statusCode == 200) {
+                                          print('Equipamento deletado com sucesso');
+                                        } else {
+                                          print('Falha ao deletar: ${response.statusCode}');
                                         }
+                                      } catch (e) {
+                                        print('Erro ao deletar equipamento: $e');
+                                      }
                                           removePost(index, dados['pesquisa']);
                                         Navigator.pop(context);
                                       },

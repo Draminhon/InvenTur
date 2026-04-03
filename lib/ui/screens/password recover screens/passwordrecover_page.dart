@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sistur/services/interceptor_service.dart';
 import 'package:sistur/ui/screens/password%20recover%20screens/changepassword_page.dart';
 import 'package:sistur/ui/screens/password%20recover%20screens/passwordOtp_page.dart';
 import 'package:sistur/utils/app_constants.dart';
@@ -24,10 +25,9 @@ class _RecuperarSenhaState extends State<RecuperarSenha> {
   bool _isLoading = false;
   Future<void> requestOtp(String email) async {
     try {
-      final response = await http.post(
-        Uri.parse('${AppConstants.BASE_URI}password-reset/request/'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({'email': email}),
+      final response = await ApiService().post(
+        'password-reset/request/',
+        data: {'email': email},
       );
 
       if (response.statusCode == 200) {
@@ -36,18 +36,18 @@ class _RecuperarSenhaState extends State<RecuperarSenha> {
           return PasswordotpPage(email: email);
         }));
       } else {
-        print(response.body);
-        final snackBar = SnackBar(
+        print("Erro no requestOtp: ${response.statusCode}");
+        final snackBar = const SnackBar(
           content: Text('Verifique o e-mail informado e tente novamente.'),
           behavior: SnackBarBehavior.floating,
           backgroundColor: Colors.redAccent,
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          duration: const Duration(seconds: 3),
+          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          duration: Duration(seconds: 3),
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } catch (e) {
-      print(e);
+      print("Erro capturado no requestOtp: $e");
     }
   }
 

@@ -3,8 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sistur/ui/screens/password%20recover%20screens/changepassword_page.dart';
 import 'package:sistur/ui/widgets/text%20fields/text_field_widget.dart';
 import 'package:sistur/utils/app_constants.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:sistur/services/interceptor_service.dart';
 
 class PasswordotpPage extends StatefulWidget {
   PasswordotpPage({super.key, required this.email});
@@ -20,32 +19,31 @@ class _PasswordotpPageState extends State<PasswordotpPage> {
     Future<void> requestOtp(String otp) async {
       String email = widget.email;
       try {
-        final response = await http.post(
-          Uri.parse('${AppConstants.BASE_URI}password-reset/verify-otp/'),
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode({'email': email, 'otp': otp}),
+        final response = await ApiService().post(
+          'password-reset/verify-otp/',
+          data: {'email': email, 'otp': otp},
         );
 
         if (response.statusCode == 200) {
-              print(response.body);
-             Navigator.pushReplacement(context,
+          print("OTP verificado com sucesso");
+          Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
-            return MudarSenha(email: email,);
+            return MudarSenha(email: email);
           }));
-
         } else {
-                    final snackBar = SnackBar(
+          final snackBar = const SnackBar(
             content: Text('Verifique o código informado e tente novamente.'),
             behavior: SnackBarBehavior.floating,
             backgroundColor: Colors.redAccent,
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            duration: const Duration(seconds: 3),
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            duration: Duration(seconds: 3),
           );
-            print(response.body);
-
+          print("Erro ao verificar OTP: ${response.statusCode}");
           ScaffoldMessenger.of(context).showSnackBar(snackBar);
         }
-      } catch (e) {}
+      } catch (e) {
+        print("Erro capturado no verifyOtp: $e");
+      }
     }
   @override
   Widget build(BuildContext context) {

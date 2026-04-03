@@ -1,39 +1,35 @@
-import 'package:sistur/utils/app_constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistur/services/secure_storage_service.dart';
+import 'package:sistur/services/interceptor_service.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
+/// Refreshes the access token using the refresh token stored in SecureStorage.
+/// Note: This is mostly handled by ApiService/InterceptorService now.
+Future<void> refreshAcessToken() async {
+  final secureStorage = SecureStorageService();
+  String? refreshToken = await secureStorage.read('refresh_token');
 
-Future<void> refreshAcessToken() async{
-
-  final prefs = await SharedPreferences.getInstance();
-  String? refreshToken = prefs.getString('refresh_token');
-
-  if(refreshToken == null){
-    print("Refresh token não encontrado. O usuário precisa fazer login novamente");
+  if (refreshToken == null) {
+    print("Refresh token não encontrado no SecureStorage.");
     return;
   }
 
-  final url = Uri.parse(AppConstants.BASE_URI + 'api/token/refresh/');
-
-  try{
-    final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json; charset=UTF-8'},
-        body: json.encode({'refresh':  refreshToken}),
+  try {
+    final response = await ApiService().post(
+      'api/token/refresh/',
+      data: {'refresh': refreshToken},
     );
 
-    if(response.statusCode == 200){
-      final Map<String, dynamic> responseData = json.decode(response.body);
-      String newAcessToken = responseData['acess'];
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = response.data;
+      String newAcessToken = responseData['access'];
 
-      await prefs.setString('acess_token', newAcessToken);
-      print("Novo acess token obtido e armazenado: $newAcessToken");
-    }else{
-      print("Erro ao renovar o token: ${response.body}");
+      await secureStorage.write('access_token', newAcessToken);
+      print("Novo access token obtido e armazenado via SecureStorage.");
+    } else {
+      print("Erro ao renovar o token: ${response.statusCode}");
     }
-  }catch(e){
-    print("Erro ao tentar renovar o acess token: $e");
+  } catch (e) {
+    print("Erro ao tentar renovar o access token: $e");
   }
 }
 bool isTokenExpired(String token) {

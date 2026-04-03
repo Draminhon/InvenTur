@@ -7,10 +7,10 @@ import 'package:sistur/ui/home/Administrador/user_management_page.dart';
 import 'package:sistur/ui/screens/pesquisa%20screens/pesquisas_page.dart';
 import 'package:sistur/ui/widgets/options_drawer_widget.dart';
 import 'package:sistur/utils/app_constants.dart';
-import 'package:http/http.dart' as http;
+import 'package:sistur/services/secure_storage_service.dart';
+import 'package:sistur/services/interceptor_service.dart';
 import 'dart:convert';
 
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:sistur/models/user_model.dart';
 import 'package:sistur/providers/providers.dart';
@@ -25,16 +25,17 @@ class AdminHomePage extends StatefulWidget {
 class _AdminHomePageState extends State<AdminHomePage> {
 
   static Future<List<User>> getUsers() async {
-      final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
-    try{
-    var url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_USERS);
-    final response = await http.get(url, headers: {"Content-Type": "application/json",  
-                                                   "Authorization": "Bearer $token",});
-    final List body = json.decode(utf8.decode(response.bodyBytes));
-    return body.map((e) => User.fromJson(e)).toList();
-    }catch(e){
-      print('Falha ao carregar usuários');
+    try {
+      final response = await ApiService().get(AppConstants.GET_USERS);
+      if (response.statusCode == 200) {
+        final List body = response.data;
+        return body.map((e) => User.fromJson(e)).toList();
+      } else {
+        print('Falha ao carregar usuários: ${response.statusCode}');
+        return [];
+      }
+    } catch (e) {
+      print('Erro ao carregar usuários: $e');
       return [];
     }
   }
@@ -54,34 +55,28 @@ class _AdminHomePageState extends State<AdminHomePage> {
     0: 'Pesquisas Cadastradas',
     1: 'Gerenciar Usuários',
   };
-  Future<void> getUserInfo()async{
-  
-    final prefs = await SharedPreferences.getInstance();
-    String? userDataString = prefs.getString('user_data');
-    if(userDataString != null){
-    Map<String, dynamic> userData = json.decode(userDataString);
-    setState(() {
-      userId = userData['id'];
-          userName = userData['name'];
-    userEmail = userData['email'];
-    userCPF = userData['CPF'];
-    userTelefone = userData['telefone'];
-    print(userDataString);
-    
-          // Update UserProvider
-          User newUser = User(
-            id: userId,
-            username: userName,
-            email: userEmail,
-            CPF: userCPF,
-            telefone: userTelefone,
-            // AdminHomePage implies Admin level. Or check userData['acessLevel']
-             accessLevel: userData['acessLevel'] ?? 'Administrador',
-          );
-          Provider.of<UserProvider>(context, listen: false).setUser(newUser);
+  Future<void> getUserInfo() async {
+    final secureStorage = SecureStorageService();
+    String? userDataString = await secureStorage.read('user_data');
+    if (userDataString != null) {
+      Map<String, dynamic> userData = json.decode(userDataString);
+      setState(() {
+        userId = userData['id'];
+        userName = userData['name'];
+        userEmail = userData['email'];
+        userCPF = userData['CPF'];
+        userTelefone = userData['telefone'];
 
-    });
-
+        User newUser = User(
+          id: userId,
+          username: userName,
+          email: userEmail,
+          CPF: userCPF,
+          telefone: userTelefone,
+          accessLevel: userData['acessLevel'] ?? 'Administrador',
+        );
+        Provider.of<UserProvider>(context, listen: false).setUser(newUser);
+      });
     }
   }
   @override

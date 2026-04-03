@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sistur/models/user_model.dart';
 import 'package:sistur/services/interceptor_service.dart';
 
-import 'package:shared_preferences/shared_preferences.dart';
+
 
 class UserController extends ChangeNotifier {
   static const String _allStatus = 'Todos';

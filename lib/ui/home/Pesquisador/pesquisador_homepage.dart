@@ -9,10 +9,10 @@
   import 'package:sistur/ui/widgets/options_drawer_widget.dart';
   import 'package:sistur/utils/app_constants.dart';
   import 'dart:convert';
-  import 'package:http/http.dart' as http;
   import 'package:flutter_screenutil/flutter_screenutil.dart';
   import 'package:sistur/utils/check_connectivity.dart';
-  import 'package:shared_preferences/shared_preferences.dart';
+  import 'package:sistur/services/secure_storage_service.dart';
+  import 'package:sistur/services/interceptor_service.dart';
   import 'dart:async';
   import 'package:connectivity_plus/connectivity_plus.dart';
   import 'package:provider/provider.dart';
@@ -20,9 +20,9 @@
   import 'package:sistur/providers/providers.dart';
 import 'package:sistur/utils/modals.dart';
 
-  // Future<void> refreshToken() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   String? refresh = prefs.getString('refresh_token');
+
+
+
 
   //   if (refresh != null) {
   //     var url = Uri.parse('${AppConstants.BASE_URI}api/token/refresh/');
@@ -54,54 +54,19 @@ import 'package:sistur/utils/modals.dart';
   class _PesquisadorHomeState extends State<PesquisadorHome> {
     static Future<List<Pesquisa>> getPesquisas() async {
       try {
-        // Obtém a instância das preferências e o token de acesso
-        final prefs = await SharedPreferences.getInstance();
-        String? token = prefs.getString('access_token');
-        if (token == null) {
-          print("Token de acesso não encontrado.");
-          return [];
-        }
+        final response = await ApiService().get('pesquisas/usuario/');
 
-        // Define a URL da API
-        final url = Uri.parse('${AppConstants.BASE_URI}pesquisas/usuario/');
-
-        // Realiza a requisição GET com o token atual
-        http.Response response = await _getWithToken(url, token);
-
-        // Se o token expirou, tenta atualizar e refazer a requisição
-        if (response.statusCode == 401) {
-          //  await refreshToken();
-          token = prefs.getString('access_token');
-          if (token == null) {
-            print("Falha ao atualizar o token de acesso.");
-            return [];
-          }
-          print('Novo token fornecido: $token');
-          response = await _getWithToken(url, token);
-        }
-
-        // Se a resposta for bem-sucedida, decodifica o JSON e retorna a lista de pesquisas
         if (response.statusCode == 200) {
-          final List<dynamic> data = json.decode(utf8.decode(response.bodyBytes));
+          final List<dynamic> data = response.data;
           return data.map((item) => Pesquisa.fromJson(item)).toList();
         } else {
-          // Em caso de erro, loga os detalhes e retorna lista vazia
           print("Falha ao carregar pesquisas. Status: ${response.statusCode}");
-          print("Resposta: ${response.body}");
           return [];
         }
       } catch (e) {
         print("Ocorreu um erro ao buscar as pesquisas: $e");
         return [];
       }
-    }
-
-    /// Realiza uma requisição GET com o token de autorização informado.
-    static Future<http.Response> _getWithToken(Uri url, String token) async {
-      return await http.get(url, headers: {
-        "Authorization": "Bearer $token",
-        "Content-Type": "application/json",
-      });
     }
 
     Future<List<Pesquisa>> pesquisasFuture = getPesquisas();
@@ -114,8 +79,8 @@ import 'package:sistur/utils/modals.dart';
     String userStatus = '';
     String userTelefone = '';
     Future<void> getUserInfo() async {
-      final prefs = await SharedPreferences.getInstance();
-      String? userDataString = prefs.getString('user_data');
+      final secureStorage = SecureStorageService();
+      String? userDataString = await secureStorage.read('user_data');
       if (userDataString != null) {
         Map<String, dynamic> userData = json.decode(userDataString);
         setState(() {
@@ -126,15 +91,12 @@ import 'package:sistur/utils/modals.dart';
           userId = userData['id'];
           userTelefone = userData['telefone'];
 
-          // Update UserProvider
           User newUser = User(
             id: userId,
             username: userName,
             email: userEmail,
             CPF: userCPF,
             status: userStatus,
-            // Access level not explicitly in userData map in this function, but PesquisadorHome implies Pesquisador level
-            // Or check if userData has it. Usually it does.
             accessLevel: userData['acessLevel'] ?? 'Pesquisador',
             telefone: userTelefone,
           );
@@ -391,22 +353,18 @@ import 'package:sistur/utils/modals.dart';
           return GestureDetector(
             onTap: () async {
               try {
-                final prefs = await SharedPreferences.getInstance();
+                final secureStorage = SecureStorageService();
 
                 if (post.adminEmail != null && post.adminTelefone != null) {
-                  Future<void> obterNomeAdmin() async {
-                    final adminUsername =
-                        await AdminService.getAdminName(post.adminId!);
-                    prefs.setString('adminName', adminUsername.toString());
-                  }
-
-                  obterNomeAdmin();
-
-                  prefs.setString('adminEmail', post.adminEmail!);
-                  prefs.setString('adminTelefone', post.adminTelefone!);
+                  final adminUsername =
+                      await AdminService.getAdminName(post.adminId!);
+                  
+                  await secureStorage.write('adminName', adminUsername.toString());
+                  await secureStorage.write('adminEmail', post.adminEmail!);
+                  await secureStorage.write('adminTelefone', post.adminTelefone!);
                 }
               } catch (e) {
-                print('Erro ao adicionar email ou telefone do administrador');
+                print('Erro ao adicionar dados do administrador no SecureStorage: $e');
               }
 
               savePesquisaId(post.id!);

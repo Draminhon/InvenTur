@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:latlong2/latlong.dart';
-import 'dart:convert';
 
 // Modelo para armazenar as informações do local de forma estruturada
 class LugarInfo {
@@ -41,7 +40,6 @@ class LugarInfo {
   factory LugarInfo.fromMapboxJson(
       Map<String, dynamic> json, LatLng originalPoint) {
     final context = json['context'] ?? [];
-    final properties = json['properties'] ?? {};
 
     String findInContext(String key) {
       for (var item in (context as List)) {
@@ -82,6 +80,7 @@ class LocationServiceException implements Exception {
 
 class MapService {
   final String mapboxAccessToken;
+  final Dio _dio = Dio();
 
   MapService({required this.mapboxAccessToken});
 
@@ -120,13 +119,12 @@ class MapService {
   }
 
   Future<LugarInfo> getInfoFromCoordinates(LatLng point) async {
-    final url = Uri.parse(
-        'https://api.mapbox.com/geocoding/v5/mapbox.places/${point.longitude},${point.latitude}.json?access_token=$mapboxAccessToken&types=poi,address,neighborhood,place,region,country');
+    final url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/${point.longitude},${point.latitude}.json?access_token=$mapboxAccessToken&types=poi,address,neighborhood,place,region,country';
 
     try {
-      final response = await http.get(url);
+      final response = await _dio.get(url);
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+        final data = response.data;
         final features = data['features'] as List;
         if (features.isNotEmpty) {
           return LugarInfo.fromMapboxJson(features.first, point);
@@ -138,7 +136,7 @@ class MapService {
         throw Exception('Erro ao buscar informações do servidor Mapbox.');
       }
     } catch (e) {
-      throw Exception('Erro de conexão ao buscar informações: $e');
+      throw Exception('Erro de conexão ao buscar informações via Dio: $e');
     }
   }
 }

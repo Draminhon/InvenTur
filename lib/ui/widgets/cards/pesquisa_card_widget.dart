@@ -1,14 +1,15 @@
 import 'dart:convert';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 import 'package:sistur/models/pesquisa_model.dart';
 import 'package:sistur/controllers/pesquisa_controller.dart';
 import 'package:sistur/utils/app_constants.dart';
 import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:open_file/open_file.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistur/services/secure_storage_service.dart';
+import 'package:sistur/services/interceptor_service.dart';
+import 'package:dio/dio.dart';
 
 class PesquisaCard extends StatefulWidget {
   final Pesquisa pesquisa;
@@ -26,29 +27,20 @@ class PesquisaCard extends StatefulWidget {
 
 
  Future<List<Pesquisa>> getPesquisas() async {
-    
-    final prefs = await SharedPreferences.getInstance();
-    String? userDataString = prefs.getString('user_data');
+    final secureStorage = SecureStorageService();
+    String? userDataString = await secureStorage.read('user_data');
     if (userDataString == null) {
-      print("Nenhum dado do usuário encontrado no SharedPreferences.");
+      print("Nenhum dado do usuário encontrado no SecureStorage.");
       return [];
     }
 
     Map<String, dynamic> userData = json.decode(userDataString);
-    final url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_PESQUISAS);
     int adminId = userData['id'];
 
-
-
     try {
-      final prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('access_token');
-      final response = await http.get(url, headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      });
+      final response = await ApiService().get(AppConstants.GET_PESQUISAS);
 
-      final List body = json.decode(utf8.decode(response.bodyBytes));
+      final List body = response.data;
       final List<Pesquisa> todasAsPesquisas =
           body.map((e) => Pesquisa.fromJson(e)).toList();
       final List<Pesquisa> pesquisasFiltradas = todasAsPesquisas
@@ -64,53 +56,42 @@ class PesquisaCard extends StatefulWidget {
 
  
 Future<File?> downloadExcel(int pesquisaId) async {
-  final prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('access_token');
-  final url = Uri.parse(AppConstants.BASE_URI + 'export/pesquisa/$pesquisaId');
-
-  final response = await http.get(
-    url,
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'Authorization': 'Bearer $token'
-    },
-  );
-
-  if (response.statusCode == 200) {
-    // Seleciona o diretório
-    final selectedDirectory = await FilePicker.platform.getDirectoryPath(
-      dialogTitle: 'Selecione o local para salvar o arquivo',
+  try {
+    final response = await ApiService().get(
+      'export/pesquisa/$pesquisaId',
+      options: Options(responseType: ResponseType.bytes),
     );
 
-    if (selectedDirectory == null) {
-      print("Nenhum diretório foi selecionado");
+    if (response.statusCode == 200) {
+      final selectedDirectory = await FilePicker.platform.getDirectoryPath(
+        dialogTitle: 'Selecione o local para salvar o arquivo',
+      );
+
+      if (selectedDirectory == null) {
+        print("Nenhum diretório foi selecionado");
+        return null;
+      }
+
+      final filePath = '$selectedDirectory/pesquisa_$pesquisaId.xlsx';
+      final file = File(filePath);
+
+      await file.writeAsBytes(response.data);
+      print('Arquivo saved com sucesso em: $filePath');
+      
+      try {
+        final result = await OpenFile.open(file.path);
+        print('Resultado ao abrir o arquivo: ${result.message}');
+      } catch (e) {
+        print('Erro ao tentar abrir o arquivo: $e');
+      }
+
+      return file;
+    } else {
+      print('Erro ao baixar o Excel: ${response.statusCode}');
       return null;
     }
-
-    final filePath = '$selectedDirectory/pesquisa_$pesquisaId.xlsx';
-    final file = File(filePath);
-
-    // Primeiro, tenta salvar o arquivo
-    try {
-      await file.writeAsBytes(response.bodyBytes);
-      print('Arquivo salvo com sucesso em: $filePath');
-    } catch (e) {
-      print('Erro ao salvar o arquivo: $e');
-      return null;
-    }
-
-    // Em seguida, tenta abrir o arquivo sem interferir no retorno
-    try {
-      final result = await OpenFile.open(file.path);
-      print('Resultado ao abrir o arquivo: ${result.message}');
-    } catch (e) {
-      print('Erro ao tentar abrir o arquivo: $e');
-      // Aqui você pode apenas registrar o erro e continuar, já que o arquivo foi salvo
-    }
-
-    return file;
-  } else {
-    print('Erro ao baixar o Excel: ${response.statusCode}');
+  } catch (e) {
+    print('Erro fatal ao baixar Excel: $e');
     return null;
   }
 }

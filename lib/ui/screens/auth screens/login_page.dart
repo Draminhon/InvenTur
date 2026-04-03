@@ -1,6 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:sistur/services/interceptor_service.dart';
 import 'package:sistur/ui/home/Administrador/admin_home_page.dart';
 import 'package:sistur/ui/home/Pesquisador/pesquisador_homepage.dart';
 import 'package:sistur/ui/widgets/text%20fields/divider_text_widget.dart';
@@ -11,8 +13,7 @@ import 'package:sistur/validators/cpf_validator.dart';
 import 'package:sistur/validators/password_validator.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'dart:convert';
-import 'package:sistur/services/interceptor_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistur/services/secure_storage_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:sistur/models/user_model.dart';
@@ -21,8 +22,7 @@ import 'package:sistur/providers/providers.dart';
 CheckConnectivity connection = new CheckConnectivity();
 
 Future<String?> getToken() async {
-  final prefs = await SharedPreferences.getInstance();
-  return prefs.getString('access_token');
+  return await SecureStorageService().read('access_token');
 }
 
 class LoginPage extends StatefulWidget {
@@ -114,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
     Future<void> loginUser(String cpf, String password) async {
       setState(() {
         _isLoading = true;
+        _isWrong = false; // Reseta o estado de erro ao tentar novamente
       });
 
       try {
@@ -124,27 +125,24 @@ class _LoginPageState extends State<LoginPage> {
             'password': password,
           },
         );
-        final prefs = await SharedPreferences.getInstance();
+        final secureStorage = SecureStorageService();
 
         if (response.statusCode == 200) {
           final Map<String, dynamic> responseData = response.data;
           String accessToken = responseData['access'];
           String refreshToken = responseData['refresh'];
+          
           if (responseData['access_exp'] != null) {
             int accessTokenExp = responseData['access_exp'];
-            await prefs.setInt('access_token_exp', accessTokenExp);
+            await secureStorage.setInt('access_token_exp', accessTokenExp);
           }
+          
           final Map<String, dynamic> user = responseData['user'];
 
-          await prefs.setString('user_data', json.encode(user));
-          await prefs.setString('access_token', accessToken);
-          await prefs.setString('refresh_token', refreshToken);
-          print("token armazenado: $accessToken");
-          print("refresh token armazenado: $refreshToken");
+          await secureStorage.write('user_data', json.encode(user));
+          await secureStorage.write('access_token', accessToken);
+          await secureStorage.write('refresh_token', refreshToken);
 
-          //print("Usuario logado com sucesso: ${json.encode(user)}");
-
-          // Update UserProvider
           User newUser = User(
             id: user['id'],
             username: user['username'] ?? user['name'] ?? '',
@@ -162,14 +160,18 @@ class _LoginPageState extends State<LoginPage> {
                 ? const PesquisadorHome()
                 : const AdminHomePage();
           }));
-        } else {
-          print("Usuário não logado ${response.data}");
-          setState(() {
-            _isWrong = true;
-          });
         }
+      } on DioException catch (e) {
+        // Define erro para qualquer falha de resposta ou conexão no login
+        setState(() {
+          _isWrong = true;
+        });
+        debugPrint("Erro Dio no login: ${e.message}");
       } catch (e) {
-        print(e);
+        setState(() {
+          _isWrong = true;
+        });
+        debugPrint("Erro genérico no login: $e");
       } finally {
         setState(() {
           _isLoading = false;
@@ -183,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          reverse: true,
+          reverse: false,
           child: SizedBox(
             width: screenSize.width,
             height: screenSize.height - MediaQuery.paddingOf(context).top,

@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sistur/models/user_model.dart';
 import 'package:sistur/controllers/user_controller.dart';
 import 'package:sistur/utils/app_constants.dart';
-import 'package:http/http.dart' as http;
 
 
 

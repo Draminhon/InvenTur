@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sistur/models/endereco/estado_model.dart';
@@ -5,12 +6,12 @@ import 'package:sistur/models/endereco/municipio_model.dart';
 import 'package:sistur/models/user_model.dart';
 import 'package:sistur/controllers/pesquisa_controller.dart';
 import 'package:sistur/ui/widgets/cards/user_pesquisa_card_widget.dart';
-import 'package:http/http.dart' as http;
-import 'package:sistur/ui/widgets/text%20fields/auto_complete_text_field.dart';
 import 'dart:convert';
 import 'package:sistur/utils/app_constants.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sistur/ui/widgets/text%20fields/auto_complete_text_field.dart';
+import 'package:sistur/services/secure_storage_service.dart';
+import 'package:sistur/services/interceptor_service.dart';
 
 class EditPesquisa extends StatefulWidget {
   const EditPesquisa({super.key});
@@ -50,15 +51,19 @@ class _EditPesquisaState extends State<EditPesquisa>
   late List<int> _usersIds;
   late int pesquisaId;
   static Future<List<User>> getUsers() async {
-    var url = Uri.parse(AppConstants.BASE_URI + AppConstants.GET_USERS);
-    final prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('access_token');
-    final response = await http.get(url, headers: {
-      "Content-Type": "application/json",
-      "Authorization": "Bearer $token",
-    });
-    final List body = json.decode(utf8.decode(response.bodyBytes));
-    return body.map((e) => User.fromJson(e)).toList();
+    try {
+      final response = await ApiService().get(AppConstants.GET_USERS);
+      if (response.statusCode == 200) {
+        final List body = response.data;
+        return body.map((e) => User.fromJson(e)).toList();
+      } else {
+        print("Falha ao buscar usuários em EditPesquisa: ${response.statusCode}");
+        return [];
+      }
+    } catch (e) {
+      print("Erro ao buscar usuários em EditPesquisa: $e");
+      return [];
+    }
   }
 
   Future<List<User>> userFuture = getUsers();
@@ -166,41 +171,36 @@ _usersIds.clear();
       String estado,
       String municipio,
       Set<User> selectedUserss) async {
-    final url = Uri.parse('${AppConstants.BASE_URI}pesquisa/');
-    final prefs = await SharedPreferences.getInstance();
-    String? userDataString = prefs.getString('user_data');
-    Map<String, dynamic> userData = json.decode(userDataString!);
-    print("Nome do usuário: ${userData['id']}");
-
-    selectedUsers.forEach((user) {
-      print(
-          'ID: ${user.id}, CPF: ${user.CPF}, Username: ${user.username}, Email: ${user.email}');
-    });
+    
     try {
-      final response = await http.post(url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: json.encode(<String, dynamic>{
-            'admin_id': userData['id'],
-            'dataInicio': dataInicio,
-            'dataTermino': dataTermino,
-            'codigoIBGE': codIBGE,
-            'estado': estado,
-            'municipio': municipio,
-            'pesquisadores': selectedUserss.map((user) => user.id).toList()
-          }));
+      final secureStorage = SecureStorageService();
+      String? userDataString = await secureStorage.read('user_data');
+      if (userDataString == null) return;
+      
+      Map<String, dynamic> userData = json.decode(userDataString);
+
+      final response = await ApiService().post(
+        'pesquisa/',
+        data: {
+          'admin': userData['id'],
+          'dataInicio': dataInicio,
+          'dataTermino': dataTermino,
+          'codigoIBGE': codIBGE,
+          'estado': estado,
+          'municipio': municipio,
+          'usuario': selectedUserss.map((user) => user.id).toList()
+        },
+      );
 
       if (response.statusCode == 201) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Pesquisa criada com sucesso!"),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Pesquisa criada com sucesso!")));
         Navigator.pop(context);
-      } else {
-        print('Erro ao criar pesquisa: ${response.body}');
       }
+    } on DioException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Erro ao criar pesquisa. Verifique os dados ou sua conexão.")));
+      debugPrint('Erro Dio ao criar pesquisa: ${e.message}');
     } catch (e) {
-      print('Erro: $e');
+      debugPrint('Erro genérico ao criar pesquisa: $e');
     }
   }
 

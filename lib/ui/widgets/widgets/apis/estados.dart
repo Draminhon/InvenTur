@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:dio/dio.dart';
 
 class Estados extends StatefulWidget {
   const Estados({super.key});
@@ -12,6 +11,8 @@ class Estados extends StatefulWidget {
 class _EstadosState extends State<Estados> {
   List<String> states = [];
   String? selectedState;
+  final Dio _dio = Dio();
+
   @override
   void initState(){
     super.initState();
@@ -19,13 +20,16 @@ class _EstadosState extends State<Estados> {
   }
   
   Future<void> getStates() async{
-    var response = await http.get(Uri.parse('https://servicodados.ibge.gov.br/api/v1/localidades/estados'));
-    var jsonResponse = jsonDecode(response.body);
+    try {
+      final response = await _dio.get('https://servicodados.ibge.gov.br/api/v1/localidades/estados');
+      final List jsonResponse = response.data;
 
-    setState(() {
-for (var state in jsonResponse){
-      states.add(state['sigla']);
-    }});
+      setState(() {
+        states = jsonResponse.map<String>((state) => state['sigla'] as String).toList();
+      });
+    } catch (e) {
+      print("Erro ao buscar estados no widget Estados: $e");
+    }
   }
 
  @override
