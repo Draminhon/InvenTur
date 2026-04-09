@@ -108,6 +108,7 @@ MIDDLEWARE = [
     'django_otp.middleware.OTPMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'csp.middleware.CSPMiddleware',
     'corsheaders.middleware.CorsMiddleware'
 ]
 
@@ -195,4 +196,19 @@ DEFAULT_CHARSET = 'utf-8'
 DATE_INPUT_FORMATS = [
     '%d/%m/%Y',  # Dia/Mês/Ano
 ]
+
+# Security Hardening
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Content Security Policy (CSP)
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "https://api.mapbox.com", "https://fonts.googleapis.com")
+CSP_SCRIPT_SRC = ("'self'", "'unsafe-inline'", "https://api.mapbox.com")
+CSP_IMG_SRC = ("'self'", "data:", "blob:", "https://api.mapbox.com")
+CSP_CONNECT_SRC = ("'self'", "https://api.mapbox.com", "https://events.mapbox.com")
+CSP_FONT_SRC = ("'self'", "https://fonts.gstatic.com")
+CSP_WORKER_SRC = ("'self'", "blob:")
+CSP_FRAME_ANCESTORS = ("'self'",)
+CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
 

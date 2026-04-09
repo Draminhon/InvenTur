@@ -1,4 +1,5 @@
 from rest_framework import  permissions, viewsets, status, views
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from ..serializers import *
@@ -12,14 +13,12 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.filter(is_active=True, is_superuser=False)
     serializer_class = UserSerializer
 
-    permission_classes = [permissions.AllowAny] 
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return HttpResponse(serializer.data, status = status.HTTP_201_CREATED, headers=headers)
+    def get_permissions(self):
+        if self.action == 'create':
+            return [permissions.AllowAny()]
+        return [permissions.IsAuthenticated()]
+
 
     def partial_update(self, request, *args, **kwargs):
         kwargs['partial'] = True

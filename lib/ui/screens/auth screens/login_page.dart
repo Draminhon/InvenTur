@@ -185,22 +185,19 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          reverse: false,
+          reverse: true,
           child: SizedBox(
             width: screenSize.width,
             height: screenSize.height - MediaQuery.paddingOf(context).top,
             child: Column(
               children: [
                 Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: screenSize.height * .07),
                     child: Center(
                       child: Image.asset(
                         'assets/images/logo.png',
                         height: screenSize.height * 0.35,
                       ),
                     ),
-                  ),
                 ),
                 _isWrong
                     ? Container(

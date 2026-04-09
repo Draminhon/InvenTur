@@ -22,7 +22,8 @@ class ApiService {
           // URLs que não precisam de token
           if (options.path.contains(AppConstants.LOGIN_URI) || 
               options.path.contains(AppConstants.REFRESH_TOKEN_URI) ||
-              options.path.contains('password-reset/')) {
+              options.path.contains('password-reset/') ||
+              (options.path == AppConstants.REGISTER_URI && options.method == 'POST')) {
             return handler.next(options);
           }
 

@@ -3,8 +3,51 @@ from .models import *
 from apidjango.models import validate_cpf
 from django.core.mail import send_mail
 from django.utils.timezone import now, timedelta
+import bleach
+
+class XSSSafeSerializerMixin:
+    """
+    Mixin to sanitize all string fields in a serializer to prevent XSS.
+    """
+    def to_internal_value(self, data):
+        # Primeiro, obtemos os dados validados pelo DRF
+        internal_value = super().to_internal_value(data)
+        
+        # Sanitizamos todos os campos de string
+        for key, value in internal_value.items():
+            if isinstance(value, str):
+                # Remove todas as tags HTML e atributos
+                internal_value[key] = bleach.clean(value, tags=[], attributes={}, strip=True)
+            elif isinstance(value, list):
+                # Sanitiza strings dentro de listas (ex: JSONField ou IDs)
+                internal_value[key] = [
+                    bleach.clean(v, tags=[], attributes={}, strip=True) if isinstance(v, str) else v
+                    for v in value
+                ]
+            elif isinstance(value, dict):
+                # Sanitiza dicionários recursivamente (ex: JSONField)
+                internal_value[key] = self._sanitize_dict(value)
+        
+        return internal_value
+
+    def _sanitize_dict(self, data):
+        new_dict = {}
+        for k, v in data.items():
+            if isinstance(v, str):
+                new_dict[k] = bleach.clean(v, tags=[], attributes={}, strip=True)
+            elif isinstance(v, dict):
+                new_dict[k] = self._sanitize_dict(v)
+            elif isinstance(v, list):
+                new_dict[k] = [
+                    bleach.clean(item, tags=[], attributes={}, strip=True) if isinstance(item, str) else item
+                    for item in v
+                ]
+            else:
+                new_dict[k] = v
+        return new_dict
+
  
-class ChangePasswordSerializer(serializers.Serializer):
+class ChangePasswordSerializer(XSSSafeSerializerMixin, serializers.Serializer):
     new_password = serializers.CharField(write_only=True, required=True)
 
     def validate_new_password(self, value):
@@ -13,7 +56,7 @@ class ChangePasswordSerializer(serializers.Serializer):
             raise serializers.ValidationError("A senha deve ter pelo menos 8 caracteres.")
         return value
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     pesquisas = serializers.PrimaryKeyRelatedField(
         many = True,
         queryset = Pesquisa.objects.all(),
@@ -52,7 +95,7 @@ class UserSerializer(serializers.ModelSerializer):
         validate_cpf(value)
         return value 
 
-class PesquisaSerializer(serializers.ModelSerializer):
+class PesquisaSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
 
 
 
@@ -73,27 +116,27 @@ class PesquisaSerializer(serializers.ModelSerializer):
     def get_quantidadeLocais(self, obj):
         return obj.bases.filter(is_active=True).count()
 
-class ContatoInfoSerializer(serializers.ModelSerializer):
+class ContatoInfoSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = ContatoInfo
         fields = ['nome', 'endereco', 'whatsapp', 'email']
 
-class ServicoEspecializadoInfoSerializer(serializers.ModelSerializer):
+class ServicoEspecializadoInfoSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = ServicoEspecializadoInfo
         fields = ['email', 'servicos_especializados', 'outras_informacoes']
 
-class InfoGeraisSerializer(serializers.ModelSerializer):
+class InfoGeraisSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = InfoGerais
         fields = ['razao_social', 'nome_fantasia', 'cnpj', 'endereco', 'telefone']
 
-class EnderecoInfoSerializer(serializers.ModelSerializer):
+class EnderecoInfoSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = EnderecoInfo
         fields = ['email', 'site', 'tipoImoveis', 'outrasInfo']
 
-class LocadorasDeImoveisSerializer(serializers.ModelSerializer):
+class LocadorasDeImoveisSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     contatos = InfoGeraisSerializer(many=True)  # Aninhando os dados completos
     servicos_especializados = EnderecoInfoSerializer(many=True)
 
@@ -160,17 +203,17 @@ class LocadorasDeImoveisSerializer(serializers.ModelSerializer):
         
         return instance
     
-class InformacoesGuiamentoSerializer(serializers.ModelSerializer):
+class InformacoesGuiamentoSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = InformacoesGuiamento
         fields = ['nome_completo', 'cpf', 'email', 'endereco', 'telefone']
 
-class InformacoesGuiamentoCadasturSerializer(serializers.ModelSerializer):
+class InformacoesGuiamentoCadasturSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = InformacoesGuiamentoCadastur
         fields = ['escolaridade', 'servicos_especializados_formulario', 'numero_cadastur', 'outras_informacoes', 'outros_cadastros']
 
-class GuiamentoEConducaoTuristicaSerializer(serializers.ModelSerializer):
+class GuiamentoEConducaoTuristicaSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     contatos = InformacoesGuiamentoSerializer(many=True)  # Aninhando os dados completos
     servicos_especializados = InformacoesGuiamentoCadasturSerializer(many=True)
 
@@ -238,17 +281,17 @@ class GuiamentoEConducaoTuristicaSerializer(serializers.ModelSerializer):
         
         return instance
 
-class GastronomiaArtesanatoInfoSerializer(serializers.ModelSerializer):
+class GastronomiaArtesanatoInfoSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = GastronomiaArtesanatoInfo
         fields = ['nome_completo', 'atelie_aberto', 'email', 'endereco', 'telefone']
 
-class GastronomiaArtesanatoInfoAtelieSerializer(serializers.ModelSerializer):
+class GastronomiaArtesanatoInfoAtelieSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = GastronomiaArtesanatoInfoAtelie
         fields = ['ano_inicio_atividade', 'premiacao', 'outras_informacoes',]
 
-class GastronomiaArtesanatoSerializer(serializers.ModelSerializer):
+class GastronomiaArtesanatoSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     contatos = GastronomiaArtesanatoInfoSerializer(many=True)  # Aninhando os dados completos
     servicos_especializados = GastronomiaArtesanatoInfoAtelieSerializer(many=True)
 
@@ -363,7 +406,7 @@ class GastronomiaArtesanatoSerializer(serializers.ModelSerializer):
 
 
 
-class SistemaDeSegurancaSerializer(serializers.ModelSerializer):
+class SistemaDeSegurancaSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     contatos = ContatoInfoSerializer(many=True)  # Aninhando os dados completos
     servicos_especializados = ServicoEspecializadoInfoSerializer(many=True)
 
@@ -430,7 +473,7 @@ class SistemaDeSegurancaSerializer(serializers.ModelSerializer):
         
         return instance
 
-class RodoviaSerializer(serializers.ModelSerializer):
+class RodoviaSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     # tipo_de_organizacao_instituicao = serializers.PrimaryKeyRelatedField(many=True, queryset=TipoOrganizacao.objects.all())
     # posto_de_combustivel = serializers.PrimaryKeyRelatedField(many=True, queryset=PostoDeCombustivel.objects.all())
     # outros_servicos = serializers.PrimaryKeyRelatedField(many=True, queryset=OutrosServicos.objects.all())
@@ -440,98 +483,98 @@ class RodoviaSerializer(serializers.ModelSerializer):
         model = Rodovia
         fields = '__all__'  # ou especifique os campos que você deseja incluir
 
-class AlimentosEBebidasSerializer(serializers.ModelSerializer):
+class AlimentosEBebidasSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
 
     class Meta:
         model = AlimentosEBebidas
         fields = '__all__'
 
-class MeioDeHospedagemSerializer(serializers.ModelSerializer):
+class MeioDeHospedagemSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = MeioDeHospedagem
         fields = '__all__'
 
-class OutrosMeiosDeHospedagemSerializer(serializers.ModelSerializer):
+class OutrosMeiosDeHospedagemSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = OutrosMeiosDeHospedagem
         fields = '__all__'
 
-class AgenciaDeTurismoSerializer(serializers.ModelSerializer):
+class AgenciaDeTurismoSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = AgenciaDeTurismo
         fields = '__all__'
 
-class TransporteTuristicoSerializer(serializers.ModelSerializer):
+class TransporteTuristicoSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = TransporteTuristico
         fields = '__all__'
         
-class ComercioTuristicoSerializer(serializers.ModelSerializer):
+class ComercioTuristicoSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = ComercioTuristico
         fields = '__all__'
 
-class EspacoParaEventosSerializer(serializers.ModelSerializer):
+class EspacoParaEventosSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = EspacoParaEventos
         fields = '__all__'
         
-class ServicosParaEventosSerializer(serializers.ModelSerializer):
+class ServicosParaEventosSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = ServicosParaEventos
         fields = '__all__'
 
-class ParquesSerializer(serializers.ModelSerializer):
+class ParquesSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = Parques
         fields = '__all__'
 
-class EspacosDeDiversaoECulturaSerializer(serializers.ModelSerializer):
+class EspacosDeDiversaoECulturaSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = EspacosDeDiversaoECultura
         fields = '__all__'
 
-class InformacoesTuristicasSerializer(serializers.ModelSerializer):
+class InformacoesTuristicasSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = InformacoesTuristicas
         fields = '__all__'
         
-class EntidadesAssociativasSerializer(serializers.ModelSerializer):
+class EntidadesAssociativasSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = EntidadesAssociativas
         fields = '__all__'
 
-class UnidadesDeConservacaoSerializer(serializers.ModelSerializer):
+class UnidadesDeConservacaoSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = UnidadesDeConservacao
         fields = '__all__'
 
-class EventosProgramadosSerializer(serializers.ModelSerializer):
+class EventosProgramadosSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = EventosProgramados
         fields = '__all__'
         
-class InformacoesBasicasSerializer(serializers.ModelSerializer):
+class InformacoesBasicasSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = InformacaoBasicaDoMunicipio
         fields = '__all__'
         
-class InstalacoesEsportivasSerializer(serializers.ModelSerializer):
+class InstalacoesEsportivasSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = InstalacoesEsportivas
         fields = '__all__'
 
-class EquipamentoSerializer(serializers.Serializer):
+class EquipamentoSerializer(XSSSafeSerializerMixin, serializers.Serializer):
     tipo = serializers.CharField()
     dados = serializers.JSONField()
 
-class DynamicBaseSerializer(serializers.ModelSerializer):
+class DynamicBaseSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
 
     class Meta:
         model = Base
         fields = '__all__'
 
-class PasswordResetRequestSerializer(serializers.Serializer):
+class PasswordResetRequestSerializer(XSSSafeSerializerMixin, serializers.Serializer):
     email = serializers.EmailField()
 
     def validate_email(self, value):
@@ -550,7 +593,7 @@ class PasswordResetRequestSerializer(serializers.Serializer):
         )
         return value
 
-class OTPVerificationSerializer(serializers.Serializer):
+class OTPVerificationSerializer(XSSSafeSerializerMixin, serializers.Serializer):
     email = serializers.EmailField()
     otp = serializers.CharField(max_length=6)
 
@@ -571,7 +614,7 @@ class OTPVerificationSerializer(serializers.Serializer):
 
         return data
 
-class PasswordResetSerializer(serializers.Serializer):
+class PasswordResetSerializer(XSSSafeSerializerMixin, serializers.Serializer):
     email = serializers.EmailField()
     new_password = serializers.CharField(write_only=True)
 
