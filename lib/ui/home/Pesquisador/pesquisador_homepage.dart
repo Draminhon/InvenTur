@@ -99,6 +99,8 @@ import 'package:sistur/utils/modals.dart';
             status: userStatus,
             accessLevel: userData['acessLevel'] ?? 'Pesquisador',
             telefone: userTelefone,
+            fotoPerfil: userData['foto_perfil'],
+            fotoPerfilBase64: userData['foto_perfil_base64'],
           );
           Provider.of<UserProvider>(context, listen: false).setUser(newUser);
         });
@@ -195,6 +197,37 @@ import 'package:sistur/utils/modals.dart';
         appBar: AppBar(
           foregroundColor: const Color.fromARGB(255, 55, 111, 60),
           backgroundColor: Colors.white,
+          leading: Builder(
+            builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Consumer<UserProvider>(
+                  builder: (context, userProvider, child) {
+                    final user = userProvider.user;
+                    return GestureDetector(
+                      onTap: () => Scaffold.of(context).openDrawer(),
+                      child: CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        backgroundImage: user.fotoPerfilBase64 != null
+                            ? MemoryImage(base64Decode(user.fotoPerfilBase64!))
+                            : (user.fotoPerfil != null
+                                ? NetworkImage(user.fullFotoPerfilUrl!)
+                                : null) as ImageProvider?,
+                        child: (user.fotoPerfil == null &&
+                                user.fotoPerfilBase64 == null)
+                            ? const Icon(
+                                Icons.account_circle,
+                                size: 40,
+                                color: Color.fromARGB(255, 55, 111, 60),
+                              )
+                            : null,
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
           title: Text(
             'Minhas Pesquisas',
             style: TextStyle(

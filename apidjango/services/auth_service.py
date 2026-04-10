@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from ..serializers import *
 from ..models import *
+from ..fields import EncryptionService
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
@@ -124,7 +125,8 @@ def UsuarioLoginView(request):
                 "email": user.email,
                 "access_level": user.acessLevel,
                 "status": user.status,
-                "telefone": user.telefone
+                "telefone": user.telefone,
+                "foto_perfil": user.foto_perfil.url if user.foto_perfil else None
             } 
         }, status=status.HTTP_200_OK)
     except Exception as e:
@@ -186,9 +188,10 @@ def verificar_email(request):
             # You can add logic here to validate the CPF format using a regular expression
             # or a third-party library. If validation fails, return an appropriate error response.
 
-            # Query the database for user with matching CPF
+            # Query the database for user with matching email using blind index
             try:
-                user = CustomUser.objects.get(email=email)
+                email_hash = EncryptionService().get_blind_index(email)
+                user = CustomUser.objects.get(email_hash=email_hash)
                 return JsonResponse({
                     'success': True,
                     'user': {

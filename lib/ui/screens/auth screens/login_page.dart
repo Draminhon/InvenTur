@@ -151,7 +151,30 @@ class _LoginPageState extends State<LoginPage> {
             status: user['status'] ?? '',
             accessLevel: user['access_level'] ?? user['acessLevel'] ?? '',
             telefone: user['telefone'] ?? '',
+            fotoPerfil: user['foto_perfil'],
           );
+
+          // Tentar baixar e salvar a foto em Base64 para uso offline
+          if (newUser.fotoPerfil != null) {
+            try {
+              final String imageUrl = newUser.fullFotoPerfilUrl!;
+              final response = await Dio().get<List<int>>(
+                imageUrl,
+                options: Options(responseType: ResponseType.bytes),
+              );
+              if (response.statusCode == 200 && response.data != null) {
+                String base64Image = base64Encode(response.data!);
+                newUser.fotoPerfilBase64 = base64Image;
+                
+                // Atualizar o JSON no secure storage para incluir o Base64
+                user['foto_perfil_base64'] = base64Image;
+                await secureStorage.write('user_data', json.encode(user));
+              }
+            } catch (e) {
+              debugPrint("Erro ao fazer cache da foto de perfil: $e");
+            }
+          }
+
           Provider.of<UserProvider>(context, listen: false).setUser(newUser);
 
           Navigator.pushReplacement(context,

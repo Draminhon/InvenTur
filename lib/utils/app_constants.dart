@@ -11,6 +11,7 @@ class AppConstants {
   static const String REFRESH_TOKEN_URI = "api/token/refresh/";
   static const String REGISTER_URI = "user/";
   static const String GET_USERS = "user/";
+  static const String VERIFICAR_CPF_URI = "verificarcpf/";
   static const  String GET_PESQUISAS = "pesquisa";
   static const String RODOVIA_CREATE = "rodovias/";
   static const String OUTROS_MEIOS_DE_HOSPEDAGEM = "outromeiodehospedagem/";

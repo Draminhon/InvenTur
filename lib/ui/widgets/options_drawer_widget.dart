@@ -65,10 +65,19 @@ class _OptionsDrawerState extends State<OptionsDrawer> {
                 accountName: Text(user.username), 
                 accountEmail: Text(user.email),
                 currentAccountPicture: CircleAvatar(
-                  child: Icon(
-                    Icons.admin_panel_settings,
-                    size: 65,
-                  ),
+                  backgroundColor: Colors.white,
+                  backgroundImage: user.fotoPerfilBase64 != null
+                      ? MemoryImage(base64Decode(user.fotoPerfilBase64!))
+                      : (user.fotoPerfil != null
+                          ? NetworkImage(user.fullFotoPerfilUrl!)
+                          : null) as ImageProvider?,
+                  child: (user.fotoPerfil == null && user.fotoPerfilBase64 == null)
+                      ? const Icon(
+                          Icons.admin_panel_settings,
+                          size: 45,
+                          color: Color.fromARGB(255, 55, 111, 60),
+                        )
+                      : null,
                 ),
               ),
               TextButton(

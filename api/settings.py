@@ -22,6 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-4ao0m$%#84aj(^!1ydivlx&^z&2cxq(-k23@0=jic93)8_3y47'
+FIELD_ENCRYPTION_KEY = 'PoDekgQdBdrHH02f9OPRL_lbV-pMOVm4NWJZt_ki3SY='
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -211,4 +212,7 @@ CSP_FONT_SRC = ("'self'", "https://fonts.gstatic.com")
 CSP_WORKER_SRC = ("'self'", "blob:")
 CSP_FRAME_ANCESTORS = ("'self'",)
 CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 

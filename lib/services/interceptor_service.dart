@@ -23,7 +23,8 @@ class ApiService {
           if (options.path.contains(AppConstants.LOGIN_URI) || 
               options.path.contains(AppConstants.REFRESH_TOKEN_URI) ||
               options.path.contains('password-reset/') ||
-              (options.path == AppConstants.REGISTER_URI && options.method == 'POST')) {
+              (options.path == AppConstants.REGISTER_URI && options.method == 'POST') ||
+              options.path.contains(AppConstants.VERIFICAR_CPF_URI)) {
             return handler.next(options);
           }
 

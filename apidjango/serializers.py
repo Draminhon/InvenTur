@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from apidjango.models import validate_cpf
+from .fields import EncryptionService
 from django.core.mail import send_mail
 from django.utils.timezone import now, timedelta
 import bleach
@@ -65,7 +66,7 @@ class UserSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
         
     class Meta:
         model = CustomUser
-        fields = ['id','username', 'CPF', 'email', 'password', 'is_active',  'acessLevel', 'status', 'password', 'telefone', 'pesquisas']
+        fields = ['id','username', 'CPF', 'email', 'password', 'is_active',  'acessLevel', 'status', 'password', 'telefone', 'pesquisas', 'foto_perfil']
         extra_kwargs = {'password': {'write_only': True, 'required': False, 'allow_blank': True}}
 
 
@@ -93,8 +94,25 @@ class UserSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     
     def validate_CPF(self, value):
         validate_cpf(value)
+        
+        # Check uniqueness using blind index
+        cpf_hash = EncryptionService().get_blind_index(value)
+        user_id = self.instance.id if self.instance else None
+        
+        if CustomUser.objects.filter(cpf_hash=cpf_hash).exclude(id=user_id).exists():
+            raise serializers.ValidationError("Este CPF já está cadastrado.")
+            
         return value 
 
+    def validate_email(self, value):
+        # Check uniqueness using blind index
+        email_hash = EncryptionService().get_blind_index(value)
+        user_id = self.instance.id if self.instance else None
+        
+        if CustomUser.objects.filter(email_hash=email_hash).exclude(id=user_id).exists():
+            raise serializers.ValidationError("Este e-mail já está cadastrado.")
+            
+        return value
 class PesquisaSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
 
 
@@ -579,7 +597,8 @@ class PasswordResetRequestSerializer(XSSSafeSerializerMixin, serializers.Seriali
 
     def validate_email(self, value):
         try:
-            user = CustomUser.objects.get(email=value)
+            email_hash = EncryptionService().get_blind_index(value)
+            user = CustomUser.objects.get(email_hash=email_hash)
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError("Nenhum usuário com esse email foi encontrado")
 
@@ -599,7 +618,8 @@ class OTPVerificationSerializer(XSSSafeSerializerMixin, serializers.Serializer):
 
     def validate(self, data):
         try:
-            user = CustomUser.objects.get(email=data["email"])
+            email_hash = EncryptionService().get_blind_index(data["email"])
+            user = CustomUser.objects.get(email_hash=email_hash)
         except CustomUser.DoesNotExist:   
             raise serializers.ValidationError({"email": "usuário não encontrado."})
         
@@ -620,7 +640,8 @@ class PasswordResetSerializer(XSSSafeSerializerMixin, serializers.Serializer):
 
     def validate(self, data):
         try:
-            user = CustomUser.objects.get(email=data["email"])
+            email_hash = EncryptionService().get_blind_index(data["email"])
+            user = CustomUser.objects.get(email_hash=email_hash)
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError({"email": "user não encontrado"})
 
@@ -631,7 +652,8 @@ class PasswordResetSerializer(XSSSafeSerializerMixin, serializers.Serializer):
 
     
     def save(self, **kwargs):
-        user = CustomUser.objects.get(email=self.validated_data["email"])
+        email_hash = EncryptionService().get_blind_index(self.validated_data["email"])
+        user = CustomUser.objects.get(email_hash=email_hash)
         user.set_password(self.validated_data["new_password"])
         user.otp = None  # Clear OTP after successful reset
         user.otp_exp = None

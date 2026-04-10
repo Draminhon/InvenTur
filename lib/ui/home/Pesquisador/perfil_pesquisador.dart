@@ -3,15 +3,99 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sistur/providers/providers.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:dio/dio.dart';
+import 'package:sistur/services/interceptor_service.dart';
+import 'package:sistur/utils/app_constants.dart';
+import 'dart:convert';
+import 'package:sistur/services/secure_storage_service.dart';
 
-class ContaPesquisador extends StatelessWidget {
+class ContaPesquisador extends StatefulWidget {
   const ContaPesquisador({super.key});
+
+  @override
+  State<ContaPesquisador> createState() => _ContaPesquisadorState();
+}
+
+class _ContaPesquisadorState extends State<ContaPesquisador> {
+  final ImagePicker _picker = ImagePicker();
+  bool _isLoadingImage = false;
 
   String formatCPF(String cpf) {
     if (cpf.length != 11) {
       return cpf;
     }
     return '${cpf.substring(0, 3)}.${cpf.substring(3, 6)}.${cpf.substring(6, 9)}-${cpf.substring(9, 11)}';
+  }
+
+  Future<void> _pickAndUploadImage(BuildContext context, int userId) async {
+    try {
+      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+
+      setState(() {
+        _isLoadingImage = true;
+      });
+
+      String fileName = image.path.split('/').last;
+
+      FormData formData = FormData.fromMap({
+        "foto_perfil":
+            await MultipartFile.fromFile(image.path, filename: fileName),
+      });
+
+      final response = await ApiService().patch(
+        'user/$userId/',
+        data: formData,
+      );
+
+      if (response.statusCode == 200) {
+        if (mounted) {
+          final userProvider = Provider.of<UserProvider>(context, listen: false);
+          final String newFotoUrl = response.data['foto_perfil'];
+          userProvider.user.fotoPerfil = newFotoUrl;
+          
+          final secureStorage = SecureStorageService();
+          String? userDataString = await secureStorage.read('user_data');
+          
+          // Ler a imagem local para salvar o Base64 em cache para uso offline
+          String? base64Image;
+          try {
+            final bytes = await image.readAsBytes();
+            base64Image = base64Encode(bytes);
+            userProvider.user.fotoPerfilBase64 = base64Image;
+          } catch (e) {
+            debugPrint("Erro ao converter imagem em Base64: $e");
+          }
+
+          if (userDataString != null) {
+            Map<String, dynamic> userData = jsonDecode(userDataString);
+            userData['foto_perfil'] = newFotoUrl;
+            if (base64Image != null) {
+              userData['foto_perfil_base64'] = base64Image;
+            }
+            await secureStorage.write('user_data', jsonEncode(userData));
+          }
+
+          userProvider.notifyListeners();
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Foto de perfil atualizada com sucesso!')),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Erro ao atualizar foto: $e')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoadingImage = false;
+        });
+      }
+    }
   }
 
   @override
@@ -28,12 +112,38 @@ class ContaPesquisador extends StatelessWidget {
           appBar: AppBar(),
           body: Column(
             children: [
-              CircleAvatar(
-                maxRadius: screenSize.height * 0.15,
-                child: Icon(
-                  Icons.person,
-                  size: screenSize.height * 0.15,
-                ),
+              Stack(
+                alignment: Alignment.bottomRight,
+                children: [
+                  CircleAvatar(
+                    maxRadius: screenSize.height * 0.15,
+                    backgroundColor: Colors.grey[200],
+                    backgroundImage: user.fotoPerfilBase64 != null
+                        ? MemoryImage(base64Decode(user.fotoPerfilBase64!))
+                        : (user.fotoPerfil != null
+                            ? NetworkImage(_getFullImageUrl(user.fotoPerfil!))
+                            : null) as ImageProvider?,
+                    child: (user.fotoPerfil == null && user.fotoPerfilBase64 == null)
+                        ? Icon(
+                            Icons.person,
+                            size: screenSize.height * 0.15,
+                            color: Colors.grey[600],
+                          )
+                        : null,
+                  ),
+                  _isLoadingImage 
+                  ? const CircularProgressIndicator()
+                  : Container(
+                      decoration: const BoxDecoration(
+                        color: Color.fromARGB(255, 55, 111, 60),
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.camera_alt, color: Colors.white),
+                        onPressed: () => _pickAndUploadImage(context, user.id!),
+                      ),
+                    ),
+                ],
               ),
               Container(
                 padding: EdgeInsets.only(top: screenSize.height * 0.03),
@@ -108,21 +218,6 @@ class ContaPesquisador extends StatelessWidget {
                       'user_cpf': user.CPF,
                       'user_email': user.email,
                       'user_id': user.id,
-                      // 'user_telefone': user.telefone // Telefone missing in User model based on previous view_file, checking providers.dart
-                      // providers.dart shows User model has id, username, email, CPF. user_controller shows accessLevel, status.
-                      // register_page shows updateUsers taking telefone.
-                      // Let's assume User model MIGHT NOT have telefone or I missed it.
-                      // Checking User model is safest, but I don't want to break flow.
-                      // Usage in register_page: _telefoneController.text = telefone;
-                      // If I don't pass it, it might be null.
-                      // Let's pass empty string if not available or check model first?
-                      // I will temporarily pass empty string/existing value if I can find it.
-                      // In providers.dart: User _user = User(id:0, username: "", email: "", CPF: "");
-                      // It seems User model does NOT have telefone in the default constructor used there.
-                      // But register_page expects it.
-                      // I will keep it as empty string for now or check if User model has it.
-                      // Warning: This might clear the phone number if not handled!
-                      // I should check UserModel first.
                       'user_telefone': user.telefone
                     }),
                     style: OutlinedButton.styleFrom(
@@ -139,5 +234,12 @@ class ContaPesquisador extends StatelessWidget {
         );
       },
     );
+  }
+
+  String _getFullImageUrl(String path) {
+    if (path.startsWith('http')) return path;
+    const String baseUrl = AppConstants.BASE_URI; 
+    String url = baseUrl.endsWith('/api/v1/') ? baseUrl.substring(0, baseUrl.length - 8) : baseUrl;
+    return '$url$path';
   }
 }

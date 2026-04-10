@@ -10,7 +10,7 @@ import random
 from datetime import timedelta
 from django.utils import timezone
 
- 
+from .fields import EncryptedCharField, BlindIndexField, EncryptionService
 
 def validate_cpf(cpf):
     cpf = ''.join(filter(str.isdigit, cpf))
@@ -35,8 +35,12 @@ def validate_cpf(cpf):
 class CustomUser(AbstractUser):
 
     pesquisas = models.ManyToManyField("Pesquisa", related_name="pesquisas", blank=True, null=True)
-    email = models.EmailField(unique=True)
-    CPF = models.CharField(max_length=11, unique=True)
+    email = EncryptedCharField(max_length=255)
+    email_hash = BlindIndexField(unique=True, null=True, blank=True)
+    CPF = EncryptedCharField(max_length=11)
+    cpf_hash = BlindIndexField(unique=True, null=True, blank=True)
+    foto_perfil = models.ImageField(upload_to='perfil/', null=True, blank=True)
+    
     username = models.CharField(
         max_length = 150,
         unique=False,
@@ -60,10 +64,19 @@ class CustomUser(AbstractUser):
 
     acessLevel = models.CharField(max_length=22, default='Pesquisador');
     status = models.CharField(max_length=50, default='Ativo');
-    telefone = models.CharField(max_length=25);
+    telefone = EncryptedCharField(max_length=25);
+
+    def save(self, *args, **kwargs):
+        if self.CPF:
+            self.cpf_hash = EncryptionService().get_blind_index(self.CPF)
+        if self.email:
+            self.email_hash = EncryptionService().get_blind_index(self.email)
+        super().save(*args, **kwargs)
+
     def clean(self):
         super().clean()
-        validate_cpf(self.CPF)
+        if self.CPF:
+            validate_cpf(self.CPF)
 # Create your models here.
 class Pesquisa(models.Model):
 
@@ -148,16 +161,16 @@ class ContatoInfo(models.Model):
 
 
     nome = models.CharField(max_length=255,null=True, blank=True)
-    endereco = models.CharField(max_length=255,null=True, blank=True)
-    whatsapp = models.CharField(max_length=255,null=True, blank=True)
-    email = models.CharField(max_length=255,null=True, blank=True)
+    endereco = EncryptedCharField(max_length=255,null=True, blank=True)
+    whatsapp = EncryptedCharField(max_length=255,null=True, blank=True)
+    email = EncryptedCharField(max_length=255,null=True, blank=True)
 
 class ServicoEspecializadoInfo(models.Model):
     
     sistema_de_seguranca = models.ManyToManyField("SistemaDeSeguranca", related_name="servicos_info")
 
 
-    email = models.CharField(max_length=255,null=True, blank=True)
+    email = EncryptedCharField(max_length=255,null=True, blank=True)
     servicos_especializados = models.TextField(null=True, blank=True)
     outras_informacoes = models.TextField(null=True, blank=True)
     
@@ -170,14 +183,14 @@ class InfoGerais(models.Model):
 
     razao_social = models.CharField(max_length=255, null=True, blank=True)
     nome_fantasia = models.CharField(max_length=255, null=True, blank=True)
-    cnpj = models.CharField(max_length=255, null=True, blank=True)
-    endereco = models.CharField(max_length=255, null=True, blank=True)
-    telefone = models.CharField(max_length=255, null=True, blank=True)
+    cnpj = EncryptedCharField(max_length=255, null=True, blank=True)
+    endereco = EncryptedCharField(max_length=255, null=True, blank=True)
+    telefone = EncryptedCharField(max_length=255, null=True, blank=True)
 
 class EnderecoInfo(models.Model):
     locadora_de_imoveis = models.ManyToManyField("LocadorasDeImoveis", related_name="endereco_info")
 
-    email = models.CharField(max_length=255, null=True, blank=True)
+    email = EncryptedCharField(max_length=255, null=True, blank=True)
     site = models.CharField(max_length=255, null=True, blank=True)
     tipoImoveis = models.CharField(max_length=255, null=True, blank=True)
     outrasInfo = models.CharField(max_length=255, null=True, blank=True)
@@ -190,10 +203,10 @@ class InformacoesGuiamento(models.Model):
     guiamento_e_conducao = models.ManyToManyField("GuiamentoEConducaoTuristica", related_name="info_gerais")
 
     nome_completo = models.CharField(max_length=255, null=True, blank=True)
-    cpf = models.CharField(max_length=255, null=True, blank=True)
-    email = models.CharField(max_length=255, null=True, blank=True)
-    endereco = models.CharField(max_length=255, null=True, blank=True)
-    telefone = models.CharField(max_length=255, null=True, blank=True)
+    cpf = EncryptedCharField(max_length=255, null=True, blank=True)
+    email = EncryptedCharField(max_length=255, null=True, blank=True)
+    endereco = EncryptedCharField(max_length=255, null=True, blank=True)
+    telefone = EncryptedCharField(max_length=255, null=True, blank=True)
 
 class InformacoesGuiamentoCadastur(models.Model):
     guiamento_e_conducao = models.ManyToManyField("GuiamentoEConducaoTuristica", related_name="endereco_info")
@@ -253,9 +266,9 @@ class GastronomiaArtesanatoInfo(models.Model):
 
     nome_completo = models.CharField(max_length=255, null=True, blank=True)
     atelie_aberto = models.CharField(max_length=255, null=True, blank=True)
-    email = models.CharField(max_length=255, null=True, blank=True)
-    endereco = models.CharField(max_length=255, null=True, blank=True)
-    telefone = models.CharField(max_length=255, null=True, blank=True)
+    email = EncryptedCharField(max_length=255, null=True, blank=True)
+    endereco = EncryptedCharField(max_length=255, null=True, blank=True)
+    telefone = EncryptedCharField(max_length=255, null=True, blank=True)
 
 class GastronomiaArtesanatoInfoAtelie(models.Model):
     guiamento_e_conducao = models.ManyToManyField("GastronomiaArtesanato", related_name="endereco_info")
@@ -277,7 +290,7 @@ class AlimentosEBebidas(Base):
     pais = models.CharField(max_length=255,blank=True, null=True)
     razaoSocial = models.CharField(max_length=255, null=True, blank=True)
     nomeFantasia = models.CharField(max_length=255, null=True, blank=True)
-    CNPJ = models.CharField(max_length=255, null=True, blank=True)
+    CNPJ = EncryptedCharField(max_length=255, null=True, blank=True)
     codigoCNAE = models.CharField(max_length=255, null=True, blank=True)
     atividadeEconomica =models.CharField(max_length=255, null=True, blank=True)
     inscricaoMunicipal = models.CharField(max_length=255, null=True, blank=True)
@@ -296,9 +309,9 @@ class AlimentosEBebidas(Base):
     CEP = models.CharField(max_length=255, null=True, blank=True)
 
     
-    whatsapp = models.CharField(max_length=50, null=True, blank=True)
+    whatsapp = EncryptedCharField(max_length=50, null=True, blank=True)
     instagram = models.CharField(max_length=50, null=True, blank=True)
-    email = models.CharField(max_length=50, null=True, blank=True)
+    email = EncryptedCharField(max_length=50, null=True, blank=True)
     sinalizacaoDeAcesso = models.CharField(max_length=50, null=True, blank=True)
     sinalizacaoTuristica = models.CharField(max_length=50, null=True, blank=True)
 
@@ -434,7 +447,7 @@ class Rodovia(Base):
     inicio_atividade = models.CharField(max_length=255,blank=True, null=True)
     ##Entidade mantedora
 
-    whatsapp = models.CharField(max_length=255,blank=True, null=True)
+    whatsapp = EncryptedCharField(max_length=255,blank=True, null=True)
     instagram = models.CharField(max_length=255,blank=True, null=True)
 
     ##Sinalização
@@ -569,7 +582,7 @@ class MeioDeHospedagem(Base):
     atividadeEconomica = models.TextField("Atividade Econômica", blank=True, null=True)
     inscricaoMunicipal = models.CharField("Inscrição Municipal", max_length=50, blank=True, null=True)
     nomeDaRede = models.CharField("Nome da Rede", max_length=255, blank=True, null=True)
-    CNPJ = models.CharField("CNPJ", max_length=20, blank=True, null=True)
+    CNPJ = EncryptedCharField("CNPJ", max_length=20, blank=True, null=True)
     inicioDaAtividade = models.CharField("Início da Atividade",max_length=255, blank=True, null=True)
     
     # Dados de quantitativos e capacidade
@@ -584,9 +597,9 @@ class MeioDeHospedagem(Base):
     bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
     distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
     CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
-    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    whatsapp = EncryptedCharField("WhatsApp", max_length=50, blank=True, null=True)
     instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
-    email = models.CharField("Email", max_length=254, blank=True, null=True)
+    email = EncryptedCharField("Email", max_length=254, blank=True, null=True)
     site = models.CharField("Site", max_length=255,blank=True, null=True)
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
@@ -811,9 +824,9 @@ class InformacaoBasicaDoMunicipio(Base):
     cepPrefeitura = models.CharField(max_length=255,blank=True, null=True)
     numeroPrefeitura = models.CharField(max_length=255,blank=True, null=True)
     instagramPrefeitura = models.CharField(max_length=255,blank=True, null=True)
-    emailPrefeitura = models.CharField(max_length=255,blank=True, null=True)
+    emailPrefeitura = EncryptedCharField(max_length=255,blank=True, null=True)
     sitePrefeitura = models.CharField(max_length=255,blank=True, null=True)
-    cnpjPrefeitura = models.CharField(max_length=255,blank=True, null=True)
+    cnpjPrefeitura = EncryptedCharField(max_length=255,blank=True, null=True)
     latitudePrefeitura = models.CharField(max_length=255,blank=True, null=True)
     longitudePrefeitura = models.CharField(max_length=255,blank=True, null=True)
     municipiosLimitrofes = models.CharField(max_length=255,blank=True, null=True)
@@ -830,7 +843,7 @@ class InformacaoBasicaDoMunicipio(Base):
     numeroOrgaoOfcTurismo = models.CharField(max_length=255,blank=True, null=True)
     instagramOrgaoOfcTurismo = models.CharField(max_length=255,blank=True, null=True)
     siteOrgaoOfcTurismo = models.CharField(max_length=255,blank=True, null=True)
-    emailOrgaoOfcTurismo = models.CharField(max_length=255,blank=True, null=True)
+    emailOrgaoOfcTurismo = EncryptedCharField(max_length=255,blank=True, null=True)
     qtdeFuncionariosOrgaoOfcTurismo = models.CharField(max_length=255,blank=True, null=True)
     qtdeFormacaoSuperiorEmTurismoOrgaoOfcturismo = models.CharField(max_length=255,blank=True, null=True)
     instanciaGovernancaMunicipal = models.CharField(max_length=255,blank=True, null=True)
@@ -1054,7 +1067,7 @@ class ComercioTuristico(Base):
      localizacao =  models.CharField(max_length=255,blank=True, null=True) 
      razaoSocial = models.CharField(max_length=255,blank=True, null=True)  
      nomeFantasia = models.CharField(max_length=255,blank=True, null=True)  
-     CNPJ =  models.CharField(max_length=255,blank=True, null=True) 
+     CNPJ = EncryptedCharField(max_length=255,blank=True, null=True) 
      codigoCNAE =  models.CharField(max_length=255,blank=True, null=True) 
      atividadeEconomica = models.CharField(max_length=255,blank=True, null=True)  
      inscricaoMunicipal =  models.CharField(max_length=255,blank=True, null=True) 
@@ -1063,9 +1076,9 @@ class ComercioTuristico(Base):
      bairroLocalidade =   models.CharField(max_length=255,blank=True, null=True)
      distrito =   models.CharField(max_length=255,blank=True, null=True)
      CEP =   models.CharField(max_length=255,blank=True, null=True)
-     whatsapp =   models.CharField(max_length=255,blank=True, null=True)
+     whatsapp = EncryptedCharField(max_length=255,blank=True, null=True)
      instagram =   models.CharField(max_length=255,blank=True, null=True)
-     email =   models.CharField(max_length=255,blank=True, null=True)
+     email = EncryptedCharField(max_length=255,blank=True, null=True)
      site =   models.CharField(max_length=255,blank=True, null=True)
      pontosDeReferencia =   models.CharField(max_length=255,blank=True, null=True)
      outrasRegrasEInformacoes = models.CharField(max_length=255,blank=True, null=True)  
@@ -1122,7 +1135,7 @@ class AgenciaDeTurismo(Base):
     pais = models.CharField(max_length=255,blank=True, null=True)
     razaoSocial = models.CharField(max_length=255, null=True, blank=True)
     nomeFantasia = models.CharField(max_length=255, null=True, blank=True)
-    CNPJ = models.CharField(max_length=255, null=True, blank=True)
+    CNPJ = EncryptedCharField(max_length=255, null=True, blank=True)
     codigoCNAE = models.CharField(max_length=255, null=True, blank=True)
     atividadeEconomica =models.CharField(max_length=255, null=True, blank=True)
     inscricaoMunicipal = models.CharField(max_length=255, null=True, blank=True)
@@ -1141,9 +1154,9 @@ class AgenciaDeTurismo(Base):
     CEP = models.CharField(max_length=255, null=True, blank=True)
 
     
-    whatsapp = models.CharField(max_length=50, null=True, blank=True)
+    whatsapp = EncryptedCharField(max_length=50, null=True, blank=True)
     instagram = models.CharField(max_length=50, null=True, blank=True)
-    email = models.CharField(max_length=50, null=True, blank=True)
+    email = EncryptedCharField(max_length=50, null=True, blank=True)
     sinalizacaoDeAcesso = models.CharField(max_length=50, null=True, blank=True)
     sinalizacaoTuristica = models.CharField(max_length=50, null=True, blank=True)
 
@@ -1299,7 +1312,7 @@ class TransporteTuristico(Base):
     pais = models.CharField(max_length=255,blank=True, null=True)
     razaoSocial = models.CharField(max_length=255, null=True, blank=True)
     nomeFantasia = models.CharField(max_length=255, null=True, blank=True)
-    CNPJ = models.CharField(max_length=255, null=True, blank=True)
+    CNPJ = EncryptedCharField(max_length=255, null=True, blank=True)
     codigoCNAE = models.CharField(max_length=255, null=True, blank=True)
     atividadeEconomica =models.CharField(max_length=255, null=True, blank=True)
     inscricaoMunicipal = models.CharField(max_length=255, null=True, blank=True)
@@ -1326,9 +1339,9 @@ class TransporteTuristico(Base):
     entidadeAmbitoInternacional = models.CharField(max_length=255, null=True, blank=True) 
     categoriaAmbitoInternacional = models.CharField(max_length=255, null=True, blank=True) 
     abrangencia = models.CharField(max_length=255, null=True, blank=True)
-    whatsapp = models.CharField(max_length=50, null=True, blank=True)
+    whatsapp = EncryptedCharField(max_length=50, null=True, blank=True)
     instagram = models.CharField(max_length=50, null=True, blank=True)
-    email = models.CharField(max_length=50, null=True, blank=True)
+    email = EncryptedCharField(max_length=50, null=True, blank=True)
     sinalizacaoDeAcesso = models.CharField(max_length=50, null=True, blank=True)
     sinalizacaoTuristica = models.CharField(max_length=50, null=True, blank=True)
 
@@ -1533,7 +1546,7 @@ class EspacoParaEventos(Base):
     atividadeEconomica = models.TextField("Atividade Econômica", blank=True, null=True)
     inscricaoMunicipal = models.CharField("Inscrição Municipal", max_length=50, blank=True, null=True)
     nomeDaRede = models.CharField("Nome da Rede", max_length=255, blank=True, null=True)
-    CNPJ = models.CharField("CNPJ", max_length=20, blank=True, null=True)
+    CNPJ = EncryptedCharField("CNPJ", max_length=20, blank=True, null=True)
     inicioDaAtividade = models.CharField("Início da Atividade",max_length=255, blank=True, null=True)
     
     # Dados de quantitativos e capacidade
@@ -1548,9 +1561,9 @@ class EspacoParaEventos(Base):
     bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
     distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
     CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
-    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    whatsapp = EncryptedCharField("WhatsApp", max_length=50, blank=True, null=True)
     instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
-    email = models.CharField("Email", max_length=254, blank=True, null=True)
+    email = EncryptedCharField("Email", max_length=254, blank=True, null=True)
     site = models.CharField("Site", max_length=255,blank=True, null=True)
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
@@ -1733,7 +1746,7 @@ class ServicosParaEventos(Base):
     atividadeEconomica = models.TextField("Atividade Econômica", blank=True, null=True)
     inscricaoMunicipal = models.CharField("Inscrição Municipal", max_length=50, blank=True, null=True)
     nomeDaRede = models.CharField("Nome da Rede", max_length=255, blank=True, null=True)
-    CNPJ = models.CharField("CNPJ", max_length=20, blank=True, null=True)
+    CNPJ = EncryptedCharField("CNPJ", max_length=20, blank=True, null=True)
     inicioDaAtividade = models.CharField("Início da Atividade",max_length=255, blank=True, null=True)
     
     # Dados de quantitativos e capacidade
@@ -1748,9 +1761,9 @@ class ServicosParaEventos(Base):
     bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
     distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
     CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
-    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    whatsapp = EncryptedCharField("WhatsApp", max_length=50, blank=True, null=True)
     instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
-    email = models.CharField("Email", max_length=254, blank=True, null=True)
+    email = EncryptedCharField("Email", max_length=254, blank=True, null=True)
     site = models.CharField("Site", max_length=255,blank=True, null=True)
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
@@ -1846,7 +1859,7 @@ class Parques(Base):
     atividadeEconomica = models.TextField("Atividade Econômica", blank=True, null=True)
     inscricaoMunicipal = models.CharField("Inscrição Municipal", max_length=50, blank=True, null=True)
     nomeDaRede = models.CharField("Nome da Rede", max_length=255, blank=True, null=True)
-    CNPJ = models.CharField("CNPJ", max_length=20, blank=True, null=True)
+    CNPJ = EncryptedCharField("CNPJ", max_length=20, blank=True, null=True)
     inicioDaAtividade = models.CharField("Início da Atividade",max_length=255, blank=True, null=True)
     
     # Dados de quantitativos e capacidade
@@ -1861,9 +1874,9 @@ class Parques(Base):
     bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
     distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
     CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
-    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    whatsapp = EncryptedCharField("WhatsApp", max_length=50, blank=True, null=True)
     instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
-    email = models.CharField("Email", max_length=254, blank=True, null=True)
+    email = EncryptedCharField("Email", max_length=254, blank=True, null=True)
     site = models.CharField("Site", max_length=255,blank=True, null=True)
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
@@ -1887,7 +1900,7 @@ class Parques(Base):
     areaTotalDoEstabelecimento = models.CharField(max_length = 254, blank=True, null=True)
     ambientacaoTematica = models.CharField(max_length = 254, blank=True, null=True)
     entidadeManetedora = models.CharField(max_length = 254, blank=True, null=True)
-    entidadeManetedoraEmail = models.CharField(max_length = 254, blank=True, null=True)
+    entidadeManetedoraEmail = EncryptedCharField(max_length = 254, blank=True, null=True)
     entidadeManetedoraSite = models.CharField(max_length = 254, blank=True, null=True)
     entradaGratuita = models.CharField(max_length = 254, blank=True, null=True)
     entradaPaga = models.CharField(max_length = 254, blank=True, null=True)
@@ -1963,7 +1976,7 @@ class EspacosDeDiversaoECultura(Base):
     atividadeEconomica = models.TextField("Atividade Econômica", blank=True, null=True)
     inscricaoMunicipal = models.CharField("Inscrição Municipal", max_length=50, blank=True, null=True)
     nomeDaRede = models.CharField("Nome da Rede", max_length=255, blank=True, null=True)
-    CNPJ = models.CharField("CNPJ", max_length=20, blank=True, null=True)
+    CNPJ = EncryptedCharField("CNPJ", max_length=20, blank=True, null=True)
     inicioDaAtividade = models.CharField("Início da Atividade",max_length=255, blank=True, null=True)
     
     # Dados de quantitativos e capacidade
@@ -1978,9 +1991,9 @@ class EspacosDeDiversaoECultura(Base):
     bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
     distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
     CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
-    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    whatsapp = EncryptedCharField("WhatsApp", max_length=50, blank=True, null=True)
     instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
-    email = models.CharField("Email", max_length=254, blank=True, null=True)
+    email = EncryptedCharField("Email", max_length=254, blank=True, null=True)
     site = models.CharField("Site", max_length=255,blank=True, null=True)
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
@@ -2092,9 +2105,9 @@ class InformacoesTuristicas(Base):
     bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
     distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
     CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
-    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    whatsapp = EncryptedCharField("WhatsApp", max_length=50, blank=True, null=True)
     instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
-    email = models.CharField("Email", max_length=254, blank=True, null=True)
+    email = EncryptedCharField("Email", max_length=254, blank=True, null=True)
     site = models.CharField("Site", max_length=255,blank=True, null=True)
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
@@ -2115,7 +2128,7 @@ class InformacoesTuristicas(Base):
     
     ambientacaoTematica = models.CharField(max_length = 254, blank=True, null=True)
     entidadeManetedora = models.CharField(max_length = 254, blank=True, null=True)
-    entidadeManetedoraEmail = models.CharField(max_length = 254, blank=True, null=True)
+    entidadeManetedoraEmail = EncryptedCharField(max_length = 254, blank=True, null=True)
     entidadeManetedoraSite = models.CharField(max_length = 254, blank=True, null=True)
     entradaGratuita = models.CharField(max_length = 254, blank=True, null=True)
     entradaPaga = models.CharField(max_length = 254, blank=True, null=True)
@@ -2205,9 +2218,9 @@ class EntidadesAssociativas(Base):
     bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
     distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
     CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
-    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    whatsapp = EncryptedCharField("WhatsApp", max_length=50, blank=True, null=True)
     instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
-    email = models.CharField("Email", max_length=254, blank=True, null=True)
+    email = EncryptedCharField("Email", max_length=254, blank=True, null=True)
     site = models.CharField("Site", max_length=255,blank=True, null=True)
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
@@ -2228,7 +2241,7 @@ class EntidadesAssociativas(Base):
     
     ambientacaoTematica = models.CharField(max_length = 254, blank=True, null=True)
     entidadeManetedora = models.CharField(max_length = 254, blank=True, null=True)
-    entidadeManetedoraEmail = models.CharField(max_length = 254, blank=True, null=True)
+    entidadeManetedoraEmail = EncryptedCharField(max_length = 254, blank=True, null=True)
     entidadeManetedoraSite = models.CharField(max_length = 254, blank=True, null=True)
     entradaGratuita = models.CharField(max_length = 254, blank=True, null=True)
     entradaPaga = models.CharField(max_length = 254, blank=True, null=True)
@@ -2251,7 +2264,7 @@ class EntidadesAssociativas(Base):
     numeroDeAssociados  = models.CharField(max_length=255, null=True, blank=True)
     abrangencia  = models.CharField(max_length=255, null=True, blank=True)
     representividade  = models.CharField(max_length=255, null=True, blank=True)
-    CNPJ  = models.CharField(max_length=255, null=True, blank=True)
+    CNPJ  = EncryptedCharField(max_length=255, null=True, blank=True)
     forum  = models.CharField(max_length=255, null=True, blank=True)
     conselho  = models.CharField(max_length=255, null=True, blank=True)
     federecao  = models.CharField(max_length=255, null=True, blank=True)
@@ -2340,7 +2353,7 @@ class InstalacoesEsportivas(Base):
     atividadeEconomica = models.TextField("Atividade Econômica", blank=True, null=True)
     inscricaoMunicipal = models.CharField("Inscrição Municipal", max_length=50, blank=True, null=True)
     nomeDaRede = models.CharField("Nome da Rede", max_length=255, blank=True, null=True)
-    CNPJ = models.CharField("CNPJ", max_length=20, blank=True, null=True)
+    CNPJ = EncryptedCharField("CNPJ", max_length=20, blank=True, null=True)
     inicioDaAtividade = models.CharField("Início da Atividade",max_length=255, blank=True, null=True)
     
     # Dados de quantitativos e capacidade
@@ -2355,9 +2368,9 @@ class InstalacoesEsportivas(Base):
     bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
     distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
     CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
-    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    whatsapp = EncryptedCharField("WhatsApp", max_length=50, blank=True, null=True)
     instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
-    email = models.CharField("Email", max_length=254, blank=True, null=True)
+    email = EncryptedCharField("Email", max_length=254, blank=True, null=True)
     site = models.CharField("Site", max_length=255,blank=True, null=True)
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
@@ -2437,7 +2450,7 @@ class InstalacoesEsportivas(Base):
     outrasOutras = models.CharField(max_length=255,blank=True, null=True)
     caracteristicasEspecificas = models.CharField(max_length=255,blank=True, null=True)
     entidadeManetedora = models.CharField(max_length=255,blank=True, null=True)
-    entidadeManetedoraEmail = models.CharField(max_length=255,blank=True, null=True)
+    entidadeManetedoraEmail = EncryptedCharField(max_length=255,blank=True, null=True)
     entidadeManetedoraSite = models.CharField(max_length=255,blank=True, null=True)
     entradaGratuita = models.CharField(max_length=255,blank=True, null=True)
     entradaPaga = models.CharField(max_length=255,blank=True, null=True)
@@ -2524,7 +2537,7 @@ class UnidadesDeConservacao(Base):
     atividadeEconomica = models.TextField("Atividade Econômica", blank=True, null=True)
     inscricaoMunicipal = models.CharField("Inscrição Municipal", max_length=50, blank=True, null=True)
     nomeDaRede = models.CharField("Nome da Rede", max_length=255, blank=True, null=True)
-    CNPJ = models.CharField("CNPJ", max_length=20, blank=True, null=True)
+    CNPJ = EncryptedCharField("CNPJ", max_length=20, blank=True, null=True)
     inicioDaAtividade = models.CharField("Início da Atividade",max_length=255, blank=True, null=True)
     
     # Dados de quantitativos e capacidade
@@ -2539,9 +2552,9 @@ class UnidadesDeConservacao(Base):
     bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
     distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
     CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
-    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    whatsapp = EncryptedCharField("WhatsApp", max_length=50, blank=True, null=True)
     instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
-    email = models.CharField("Email", max_length=254, blank=True, null=True)
+    email = EncryptedCharField("Email", max_length=254, blank=True, null=True)
     site = models.CharField("Site", max_length=255,blank=True, null=True)
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
@@ -2586,7 +2599,7 @@ class UnidadesDeConservacao(Base):
     distanciasOutraNome = models.CharField(max_length=255,blank=True, null=True)
     distanciaOutras = models.CharField(max_length=255,blank=True, null=True)
     entidadeManetedora = models.CharField(max_length=255,blank=True, null=True)
-    entidadeManetedoraEmail = models.CharField(max_length=255,blank=True, null=True)
+    entidadeManetedoraEmail = EncryptedCharField(max_length=255,blank=True, null=True)
     entidadeManetedoraSite = models.CharField(max_length=255,blank=True, null=True)
     planoDeManejo = models.CharField(max_length=255,blank=True, null=True)
     visitacao = models.CharField(max_length=255,blank=True, null=True)
@@ -2778,7 +2791,7 @@ class EventosProgramados(Base):
     tipoLista = models.JSONField(blank=True,null=True)
     nomeOficial = models.CharField(max_length=255,blank=True,null=True)
     # Campos String? -> CharField
-    cnpjRealizador = models.CharField(max_length=255,blank=True, null=True)
+    cnpjRealizador = EncryptedCharField(max_length=255,blank=True, null=True)
     entidadeManetedoraWhatsapp = models.CharField(max_length=255,blank=True, null=True)
     entidadeManetedoraInstagram = models.CharField(max_length=255,blank=True, null=True)
     periodoDeRealizacao = models.CharField(max_length=255,blank=True, null=True)
@@ -2864,7 +2877,7 @@ class EventosProgramados(Base):
     atividadeEconomica = models.TextField("Atividade Econômica", blank=True, null=True)
     inscricaoMunicipal = models.CharField("Inscrição Municipal", max_length=50, blank=True, null=True)
     nomeDaRede = models.CharField("Nome da Rede", max_length=255, blank=True, null=True)
-    CNPJ = models.CharField("CNPJ", max_length=20, blank=True, null=True)
+    CNPJ = EncryptedCharField("CNPJ", max_length=20, blank=True, null=True)
     inicioDaAtividade = models.CharField("Início da Atividade",max_length=255, blank=True, null=True)
     
     # Dados de quantitativos e capacidade
@@ -2879,9 +2892,9 @@ class EventosProgramados(Base):
     bairroLocalidade = models.CharField("Bairro/Localidade", max_length=255, blank=True, null=True)
     distrito = models.CharField("Distrito", max_length=255, blank=True, null=True)
     CEP = models.CharField("CEP", max_length=20, blank=True, null=True)
-    whatsapp = models.CharField("WhatsApp", max_length=50, blank=True, null=True)
+    whatsapp = EncryptedCharField("WhatsApp", max_length=50, blank=True, null=True)
     instagram = models.CharField("Instagram", max_length=100, blank=True, null=True)
-    email = models.CharField("Email", max_length=254, blank=True, null=True)
+    email = EncryptedCharField("Email", max_length=254, blank=True, null=True)
     site = models.CharField("Site", max_length=255,blank=True, null=True)
     pontosDeReferencia = models.TextField("Pontos de Referência", blank=True, null=True)
     
@@ -2926,7 +2939,7 @@ class EventosProgramados(Base):
     distanciasOutraNome = models.CharField(max_length=255,blank=True, null=True)
     distanciaOutras = models.CharField(max_length=255,blank=True, null=True)
     entidadeManetedora = models.CharField(max_length=255,blank=True, null=True)
-    entidadeManetedoraEmail = models.CharField(max_length=255,blank=True, null=True)
+    entidadeManetedoraEmail = EncryptedCharField(max_length=255,blank=True, null=True)
     entidadeManetedoraSite = models.CharField(max_length=255,blank=True, null=True)
     planoDeManejo = models.CharField(max_length=255,blank=True, null=True)
     visitacao = models.CharField(max_length=255,blank=True, null=True)
