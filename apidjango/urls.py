@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import *
 from .views import *
 from .services import *
 from rest_framework.routers import DefaultRouter
- 
+  
 router = DefaultRouter()
 router.register(r'rodovias', RodoviaViewSet, basename='rodovia')
 router.register(r'alimentosEBebidas', AlimentosEBebidasViewSet, basename='alimentos e bebidas')

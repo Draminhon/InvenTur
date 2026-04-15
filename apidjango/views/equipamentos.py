@@ -6,7 +6,7 @@ from ..models import *
 from django.http import HttpResponse, JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
- 
+  
 class RodoviaViewSet(viewsets.ModelViewSet):
 
     """

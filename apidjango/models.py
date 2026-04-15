@@ -9,7 +9,7 @@ from django.core.mail import send_mail, EmailMessage
 import random
 from datetime import timedelta
 from django.utils import timezone
- 
+  
 from .fields import EncryptedCharField, BlindIndexField, EncryptionService
 
 def validate_cpf(cpf):

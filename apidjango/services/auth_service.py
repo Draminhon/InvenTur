@@ -15,7 +15,7 @@ from django.contrib.auth import authenticate, login
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
  
- 
+  
 class SessionMonitor:
     _instance = None
     _stop_event = threading.Event()

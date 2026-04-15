@@ -4,7 +4,7 @@ from django.db import models
 from django.conf import settings
 from cryptography.fernet import Fernet
 import base64
- 
+  
 class EncryptionService:
     _instance = None
     
