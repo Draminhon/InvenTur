@@ -5,7 +5,7 @@ from .fields import EncryptionService
 from django.core.mail import send_mail
 from django.utils.timezone import now, timedelta
 import bleach
-
+ 
 class XSSSafeSerializerMixin:
     """
     Mixin to sanitize all string fields in a serializer to prevent XSS.

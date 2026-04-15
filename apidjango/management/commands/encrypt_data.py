@@ -3,7 +3,7 @@ import django
 from django.core.management.base import BaseCommand
 from apidjango.models import CustomUser, ContatoInfo, InfoGerais, AlimentosEBebidas, Rodovia, MeioDeHospedagem, InformacaoBasicaDoMunicipio, ComercioTuristico, AgenciaDeTurismo, TransporteTuristico, EspacoParaEventos, ServicosParaEventos, Parques, EspacosDeDiversaoECultura, InformacoesTuristicas, EntidadesAssociativas, InstalacoesEsportivas, UnidadesDeConservacao, EventosProgramados
 from apidjango.fields import EncryptionService
-
+ 
 class Command(BaseCommand):
     help = 'Criptografa dados existentes no banco de dados'
 
