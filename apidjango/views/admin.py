@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from ..serializers import *
 from ..models import *
+from ..fields import EncryptionService
 from django.http import HttpResponse, JsonResponse
 from rest_framework import generics
 from rest_framework.response import Response
@@ -24,7 +25,16 @@ class AdminUserCreateView(generics.ListCreateAPIView):
         data = request.data.copy()
         cpf = data.get('CPF')
 
-        user = CustomUser.objects.filter(CPF=cpf).first()
+        if not cpf:
+            return Response(
+                {"CPF": ["Este campo é obrigatório."]},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # CPF é criptografado no banco (Fernet, não determinístico), então a busca
+        # precisa ser feita pelo blind index e não pelo campo em si.
+        cpf_hash = EncryptionService().get_blind_index(cpf)
+        user = CustomUser.objects.filter(cpf_hash=cpf_hash).first()
 
         if user:
            user.acessLevel = 'Administrador'
