@@ -184,7 +184,7 @@ class _OutrosTiposDeAcomodacaoState extends State<OutrosTiposDeAcomodacao> {
             if (widget.hospedagemModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.hospedagemModel!.usuario_criador!,widget.isAdmin??false,context);
+                  pesquisadorId, widget.hospedagemModel!.usuario_criador ?? 0,widget.isAdmin??false,context);
             }
           }),
         );
@@ -1252,7 +1252,7 @@ class _FuncionamentoState extends State<Funcionamento>
       RadioFormField(
         
           title: 'Área de Acampamento',
-          initialValue: isUpdate ? widget.hospedagemModel!.areaAcampamento! : "",
+          initialValue: isUpdate ? (widget.hospedagemModel?.areaAcampamento ?? '') : "",
           onSaved: (newValue) => valoresjson['areaAcampamento'] = newValue,
           options: ['Pavimentada', 'Brita', 'Gramada', 'Areia', 'outro']),
       textLabel(
@@ -1388,7 +1388,7 @@ class _FuncionamentoState extends State<Funcionamento>
           title: 'Instalações Elétricas',
           jsonKey: 'instalacoesEletricas',
           valoresJson: valoresjson,
-          optionModelValue: isUpdate ? widget.hospedagemModel!.instalacoesEletricas! :"",
+          optionModelValue: isUpdate ? (widget.hospedagemModel?.instalacoesEletricas ?? '') :"",
           isUpdate: isUpdate,
           children: [
             ConditionalFieldsGroup(
@@ -1716,7 +1716,7 @@ class _FuncionamentoState extends State<Funcionamento>
       ),
         CheckboxGroupFormField(
             title: 'Utilização',
-            initialValue: isUpdate ? widget.hospedagemModel!.utilizacao! : [],
+            initialValue: isUpdate ? (widget.hospedagemModel?.utilizacao ?? []) : [],
             onSaved: (newValue) => valoresjson['utilizacao'] = newValue,
             options: ['Eventos promovidos',
          'Aluguel de espaço para eventos',

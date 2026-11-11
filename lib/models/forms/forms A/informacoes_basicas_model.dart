@@ -1114,10 +1114,10 @@ usuario_criador = json['usuario_criador'];
         json['promocaoTuristicaDivulgacaoImpressa'];
     promocaoTuristicaDivulgacaoTelevisiva =
         json['promocaoTuristicaDivulgacaoTelevisiva'];
-    mesesMaisFrios = List<String>.from(json['mesesMaisFrios']);
-    mesesMaisQuentes = List<String>.from(json['mesesMaisQuentes']);
-    mesesMaisChuvosos = List<String>.from(json['mesesMaisChuvosos']);
-    mesesMenosChuvosos = List<String>.from(json['mesesMenosChuvosos']);
+    mesesMaisFrios = List<String>.from(json['mesesMaisFrios'] ?? []);
+    mesesMaisQuentes = List<String>.from(json['mesesMaisQuentes'] ?? []);
+    mesesMaisChuvosos = List<String>.from(json['mesesMaisChuvosos'] ?? []);
+    mesesMenosChuvosos = List<String>.from(json['mesesMenosChuvosos'] ?? []);
     tipoDeAbastecimento = json['tipoDeAbastecimento'];
     energiaEletrica = json['energiaEletrica'];
     servicosDeComunicacaoAcessoAInternet =
@@ -1125,12 +1125,12 @@ usuario_criador = json['usuario_criador'];
     atendimentoEmLinguaEstrangeira = json['atendimentoEmLinguaEstrangeira'];
     atendimentoAoVisitanteInformativosImpressos =
         json['atendimentoAoVisitanteInformativosImpressos'];
-    mesesAltaTemporada = List<String>.from(json['mesesAltaTemporada']);
+    mesesAltaTemporada = List<String>.from(json['mesesAltaTemporada'] ?? []);
     origemDosVisitantesTuristas = json['origemDosVisitantesTuristas'];
-    origemNacional = List<String>.from(json['origemNacional']);
-    origemInternacional = List<String>.from(json['origemInternacional']);
+    origemNacional = List<String>.from(json['origemNacional'] ?? []);
+    origemInternacional = List<String>.from(json['origemInternacional'] ?? []);
     segmentosTurismoEspecializado =
-        List<String>.from(json['segmentosTurismoEspecializado']);
+        List<String>.from(json['segmentosTurismoEspecializado'] ?? []);
     leiOrganica = json['leiOrganica'];
     ocupacaoDoSolo = json['ocupacaoDoSolo'];
     planoDeDesenvolvimentoDoTurismo = json['planoDeDesenvolvimentoDoTurismo'];

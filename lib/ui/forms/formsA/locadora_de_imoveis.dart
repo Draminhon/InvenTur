@@ -71,7 +71,7 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
         setState(() {
           pesquisadorId = value;
           if (widget.infoModel != null) {
-            isTheOwner = _utils.isTheOwner(pesquisadorId, widget.infoModel!.usuario_criador!,widget.isAdmin ?? false,context);
+            isTheOwner = _utils.isTheOwner(pesquisadorId, widget.infoModel!.usuario_criador ?? 0,widget.isAdmin ?? false,context);
           }
         });
       }
@@ -102,8 +102,8 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
       setState(() {
         // Limpa e repovoa as tabelas
         sections.clear();
-        if (widget.infoModel!.contatos != null && widget.infoModel!.contatos!.isNotEmpty) {
-          for (var contato in widget.infoModel!.contatos!) {
+        if (widget.infoModel!.contatos != null && (widget.infoModel?.contatos ?? []).isNotEmpty) {
+          for (var contato in (widget.infoModel?.contatos ?? [])) {
             var novaSecao = TabelaInfoGerais(key: UniqueKey());
             novaSecao.fillForm(
               contato.razao_social ?? '',
@@ -119,8 +119,8 @@ class _LocadoraDeImoveisState extends State<LocadoraDeImoveis> {
         }
 
         sections2.clear();
-        if (widget.infoModel!.servicosEspecializados != null && widget.infoModel!.servicosEspecializados!.isNotEmpty) {
-          for (var servico in widget.infoModel!.servicosEspecializados!) {
+        if (widget.infoModel!.servicosEspecializados != null && (widget.infoModel?.servicosEspecializados ?? []).isNotEmpty) {
+          for (var servico in (widget.infoModel?.servicosEspecializados ?? [])) {
             var novaSecao = TabelaInfoGerais2(key: UniqueKey());
             novaSecao.fillForm(
               servico.email ?? '',

@@ -104,8 +104,8 @@ class _GuiamentoEConducaoTurististicaState
       setState(() {
         // Limpa e repovoa as tabelas
         sections.clear();
-        if (widget.infoModel!.contatos != null && widget.infoModel!.contatos!.isNotEmpty) {
-          for (var contato in widget.infoModel!.contatos!) {
+        if (widget.infoModel!.contatos != null && (widget.infoModel?.contatos ?? []).isNotEmpty) {
+          for (var contato in (widget.infoModel?.contatos ?? [])) {
             var novaSecao = TabelaGuiamentoTuristico(key: UniqueKey());
             novaSecao.fillForm(
               contato.nome_completo ?? '',
@@ -121,8 +121,8 @@ class _GuiamentoEConducaoTurististicaState
         }
 
         sections2.clear();
-        if (widget.infoModel!.servicosEspecializados != null && widget.infoModel!.servicosEspecializados!.isNotEmpty) {
-          for (var servico in widget.infoModel!.servicosEspecializados!) {
+        if (widget.infoModel!.servicosEspecializados != null && (widget.infoModel?.servicosEspecializados ?? []).isNotEmpty) {
+          for (var servico in (widget.infoModel?.servicosEspecializados ?? [])) {
             var novaSecao = TabelaGuiamentoTuristico2(key: UniqueKey());
             novaSecao.fillForm(
               servico.escolaridade ?? '',

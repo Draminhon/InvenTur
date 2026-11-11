@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sistur/controllers/user_controller.dart';
 import 'package:sistur/ui/home/Pesquisador/perfil_pesquisador.dart';
+import 'package:sistur/ui/home/Pesquisador/painel_pesquisador.dart';
 import 'package:sistur/utils/app_constants.dart';
 import 'package:sistur/services/secure_storage_service.dart';
 import 'package:sistur/services/interceptor_service.dart';
@@ -104,6 +105,43 @@ class _OptionsDrawerState extends State<OptionsDrawer> {
                           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           child: Text(
                             "Meus Dados",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Icon(Icons.arrow_forward_ios_rounded),
+                  ],
+                ),
+              ),
+              if (user.accessLevel == 'Pesquisador')
+              TextButton(
+                style: ButtonStyle(
+                  shape: const WidgetStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    )
+                  ),
+                  foregroundColor: WidgetStatePropertyAll(Colors.green[800]),
+                ),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => const PainelPesquisador()
+                  ),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(FontAwesomeIcons.chartPie),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          child: Text(
+                            "Meu Painel",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold

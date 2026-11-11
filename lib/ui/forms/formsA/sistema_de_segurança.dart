@@ -105,8 +105,8 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
       setState(() {
         // Limpa e repovoa as tabelas
         sections.clear();
-        if (widget.infoModel!.contatos != null && widget.infoModel!.contatos!.isNotEmpty) {
-          for (var contato in widget.infoModel!.contatos!) {
+        if (widget.infoModel!.contatos != null && (widget.infoModel?.contatos ?? []).isNotEmpty) {
+          for (var contato in (widget.infoModel?.contatos ?? [])) {
             var novaSecao = Tables(key: UniqueKey());
             novaSecao.fillForm(
               contato.nome ?? '',
@@ -121,8 +121,8 @@ class _SistemaDeSegurancaState extends State<SistemaDeSeguranca> {
         }
 
         sections2.clear();
-        if (widget.infoModel!.servicosEspecializados != null && widget.infoModel!.servicosEspecializados!.isNotEmpty) {
-          for (var servico in widget.infoModel!.servicosEspecializados!) {
+        if (widget.infoModel!.servicosEspecializados != null && (widget.infoModel?.servicosEspecializados ?? []).isNotEmpty) {
+          for (var servico in (widget.infoModel?.servicosEspecializados ?? [])) {
             var novaSecao = Tables2(key: UniqueKey());
             novaSecao.fillForm(
               servico.email ?? '',

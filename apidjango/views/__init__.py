@@ -1,4 +1,5 @@
 from .equipamentos import *
 from .pesquisa import *
 from .user import * 
-from .admin import * 
+from .admin import *
+from .dashboard import *

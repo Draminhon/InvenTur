@@ -162,9 +162,9 @@ class _GastronomiaArtesanatoTrabalhosManuaisState
     if (isUpdate) {
       _preencherDadosParaTeste();
       if (widget.hospedagemModel!.contatos != null) {
-        qtdeInfo = widget.hospedagemModel!.contatos!.length;
+        qtdeInfo = (widget.hospedagemModel?.contatos ?? []).length;
         qtdeServicosEspecializados =
-            widget.hospedagemModel!.servicosEspecializados!.length;
+            (widget.hospedagemModel?.servicosEspecializados ?? []).length;
       }
 
       if (qtdeInfo >= 0) {
@@ -172,8 +172,8 @@ class _GastronomiaArtesanatoTrabalhosManuaisState
           sections.add(TabelaGastronomiaArtesanato());
         }
         for (int i = 0; i < qtdeInfo; i++) {
-          if (i < widget.hospedagemModel!.contatos!.length) {
-            var contato = widget.hospedagemModel!.contatos![i];
+          if (i < (widget.hospedagemModel?.contatos ?? []).length) {
+            var contato = (widget.hospedagemModel?.contatos ?? [])[i];
             sections[i].fillForm(contato.nome_completo!, contato.atelie_aberto!,
                 contato.endereco!, contato.email!, contato.telefone!);
           }
@@ -186,8 +186,8 @@ class _GastronomiaArtesanatoTrabalhosManuaisState
         }
 
         for (int i = 0; i < qtdeServicosEspecializados; i++) {
-          if (i < widget.hospedagemModel!.servicosEspecializados!.length) {
-            var servicos = widget.hospedagemModel!.servicosEspecializados![i];
+          if (i < (widget.hospedagemModel?.servicosEspecializados ?? []).length) {
+            var servicos = (widget.hospedagemModel?.servicosEspecializados ?? [])[i];
             sections2[i].fillForm(
               servicos.ano_inicio_atividade!,
               servicos.premiacao!,
@@ -214,7 +214,7 @@ _utils
             if (widget.hospedagemModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.hospedagemModel!.usuario_criador!,widget.isAdmin??false,context);
+                  pesquisadorId, widget.hospedagemModel!.usuario_criador ?? 0,widget.isAdmin??false,context);
             }
           }),
         );

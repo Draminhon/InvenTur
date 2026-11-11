@@ -160,7 +160,7 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
             if (widget.infoModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.infoModel!.usuario_criador!,widget.isAdmin ?? false,context);
+                  pesquisadorId, widget.infoModel!.usuario_criador ?? 0,widget.isAdmin ?? false,context);
             }
           }),
         );
@@ -241,7 +241,7 @@ class _AlimentosEBebidasState extends State<AlimentosEBebidas> {
           curve: Curves.ease,
         );
       } else {
-        // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
+        // isUpdate ? FormService().updateForm((widget.infoModel?.id ?? 0), valoresJson,AppConstants.INFO_BASICA_CREATE ) :
         _utils.decideSendingOrUpdating(isUpdate,
          isTheOwner,
           context,
@@ -466,7 +466,7 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             title: 'Natureza',
             onSaved: (newValue) => valoresJson['natureza'] = newValue,
             options: ['Pública', 'Privada', 'outro'],
-            initialValue: isUpdate ? widget.infoModel!.natureza! : '',
+            initialValue: isUpdate ? (widget.infoModel?.natureza ?? '') : '',
           ),
           CheckboxGroupFormField(
             title: 'Tipo de Organização/Instituição',
@@ -479,7 +479,7 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
               'Empresa',
               'outro'
             ],
-            initialValue: isUpdate ? widget.infoModel!.tipoDeOrganizacaoInstituicao! : [],
+            initialValue: isUpdate ? (widget.infoModel?.tipoDeOrganizacaoInstituicao ?? []) : [],
           ),
           //formatação inicio da atividade
           Row(
@@ -557,7 +557,7 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             onSaved: (newValue) => valoresJson['localizacao'] = newValue,
             title: 'Localização',
             options: ['Urbana', 'Rural'],
-            initialValue: isUpdate ? widget.infoModel!.localizacao! : '',
+            initialValue: isUpdate ? (widget.infoModel?.localizacao ?? '') : '',
           ),
           SizedBox(
             height: 55.h,
@@ -660,7 +660,7 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             valoresJson: valoresJson,
             isUpdate: isUpdate,
             children: [],
-            optionModelValue: isUpdate ? widget.infoModel!.sinalizacaoDeAcesso! : '',
+            optionModelValue: isUpdate ? (widget.infoModel?.sinalizacaoDeAcesso ?? '') : '',
           ),
           ConditionalFieldsGroup(
             title: 'Turística',
@@ -668,7 +668,7 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
             valoresJson: valoresJson,
             isUpdate: isUpdate,
             children: [],
-            optionModelValue: isUpdate ? widget.infoModel!.sinalizacaoTuristica! : '',
+            optionModelValue: isUpdate ? (widget.infoModel?.sinalizacaoTuristica ?? '') : '',
           ),
           CheckboxGroupFormField(
             title: 'Proximidades: ',
@@ -681,7 +681,7 @@ class _InformacaoPageState extends State<InformacaoPage> with AutomaticKeepAlive
               'Posto de combustível',
               'outro'
             ],
-            initialValue: isUpdate ? widget.infoModel!.proximidades! : [],
+            initialValue: isUpdate ? (widget.infoModel?.proximidades ?? []) : [],
           ),
           SizedBox(
             height: 30.w,
@@ -887,7 +887,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Cartão de Crédito',
               'Cartão de Débito'
             ],
-            initialValue: isUpdate ? widget.infoModel!.formasDePagamento! : [],
+            initialValue: isUpdate ? (widget.infoModel?.formasDePagamento ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Vendas e Reservas: ',
@@ -899,7 +899,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Instagram',
               'Outro'
             ],
-            initialValue: isUpdate ? widget.infoModel!.vendasEReservas! : [],
+            initialValue: isUpdate ? (widget.infoModel?.vendasEReservas ?? []) : [],
           ),
           //atendimento
           textLabel(
@@ -915,7 +915,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Espanhol',
               'Outro'
             ],
-            initialValue: isUpdate ? widget.infoModel!.atendimentoEmLinguasEstrangeiras! : [],
+            initialValue: isUpdate ? (widget.infoModel?.atendimentoEmLinguasEstrangeiras ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Informativos impressos: ',
@@ -927,7 +927,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Português',
               'Outro'
             ],
-            initialValue: isUpdate ? widget.infoModel!.informativosImpressos! : [],
+            initialValue: isUpdate ? (widget.infoModel?.informativosImpressos ?? []) : [],
           ),
           SizedBox(
             height: 55.h,
@@ -954,7 +954,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Dezembro',
               'Ano inteiro'
             ],
-            initialValue: isUpdate ? widget.infoModel!.periodo! : [],
+            initialValue: isUpdate ? (widget.infoModel?.periodo ?? []) : [],
           ),
           textLabel(name: 'Horário'),
           SizedBox(
@@ -994,7 +994,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Animais', 
               'outro'
             ],
-            initialValue: isUpdate ? widget.infoModel!.restricoes! : [],
+            initialValue: isUpdate ? (widget.infoModel?.restricoes ?? []) : [],
           ),
           textLabel(
             name: 'Outras regras e informações:',
@@ -1074,7 +1074,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Coberto', 
               'Descoberto'
             ],
-            initialValue: isUpdate ? widget.infoModel!.estacionamento! : [],
+            initialValue: isUpdate ? (widget.infoModel?.estacionamento ?? []) : [],
           ),
           Row(children: [
             textLabel(name: "Capacidade de\n veiculos nº:"),
@@ -1150,7 +1150,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Sanitário próprio',
               'outro',
             ],
-            initialValue: isUpdate ? widget.infoModel!.servicosEEquipamentos! : [],
+            initialValue: isUpdate ? (widget.infoModel?.servicosEEquipamentos ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Especificação da gastromia pro país: ',
@@ -1185,7 +1185,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Tailandesa',
               'outro',
             ],
-            initialValue: isUpdate ? widget.infoModel!.especificacaoDaGastronomiaPorPais! : [],
+            initialValue: isUpdate ? (widget.infoModel?.especificacaoDaGastronomiaPorPais ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Se for brasileira, por região: ',
@@ -1203,7 +1203,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Paulista',
               'Outras'
             ],
-            initialValue: isUpdate ? widget.infoModel!.seForBrasileiraPorRegiao! : [],
+            initialValue: isUpdate ? (widget.infoModel?.seForBrasileiraPorRegiao ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Por especialização: ',
@@ -1232,7 +1232,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Sorveteria',
               'Outros'
             ],
-            initialValue: isUpdate ? widget.infoModel!.porEspecializacao! : [],
+            initialValue: isUpdate ? (widget.infoModel?.porEspecializacao ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Por tipo de dieta: ',
@@ -1244,7 +1244,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'Natural',
               'Outros'
             ],
-            initialValue: isUpdate ? widget.infoModel!.porTipoDeDieta! : [],
+            initialValue: isUpdate ? (widget.infoModel?.porTipoDeDieta ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Por tipo de serviço: ',
@@ -1260,7 +1260,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage> with AutomaticKee
               'delivery',
               'Outros'
             ],
-            initialValue: isUpdate ? widget.infoModel!.porTipoDeServico! : [],
+            initialValue: isUpdate ? (widget.infoModel?.porTipoDeServico ?? []) : [],
           ),
           SizedBox(
             height: 55.h,

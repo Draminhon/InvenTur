@@ -122,6 +122,7 @@ class Base(models.Model):
     is_active = models.BooleanField(default=True)
    
     tipo_formulario = models.CharField(max_length=100, blank=True, null=True)
+    criacao = models.DateTimeField(auto_now_add=True, null=True)
     uf = models.CharField(max_length=255, blank=True, null=True)
     regiao_turistica = models.CharField(max_length=255, blank=True, null=True)
     municipio = models.CharField(max_length=255, blank=True, null=True)

@@ -146,7 +146,7 @@ class _ComercioTuristicoState extends State<ComercioTuristico> {
             if (widget.infoModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.infoModel!.usuario_criador!, widget.isAdmin ?? false, context);
+                  pesquisadorId, widget.infoModel!.usuario_criador ?? 0, widget.isAdmin ?? false, context);
             }
           }),
         );
@@ -446,7 +446,7 @@ class _IdentificacaoState extends State<Identificacao>
             title: 'Natureza',
             onSaved: (newValue) => valoresJson['natureza'] = newValue,
             options: ['Pública', 'Privada', 'outro'],
-            initialValue: isUpdate ? widget.infoModel!.natureza! : '',
+            initialValue: isUpdate ? (widget.infoModel?.natureza ?? '') : '',
           ),
           RadioFormField(
             title: 'Tipo de Organização/Instituição',
@@ -459,13 +459,13 @@ class _IdentificacaoState extends State<Identificacao>
               'Empresa',
               'outro'
             ],
-            initialValue: isUpdate ? widget.infoModel!.tipoDeOrganizacao! : '',
+            initialValue: isUpdate ? (widget.infoModel?.tipoDeOrganizacao ?? '') : '',
           ),
           RadioFormField(
             onSaved: (newValue) => valoresJson['localizacao'] = newValue,
             title: 'Localização',
             options: ['Urbana', 'Rural', 'outro'],
-            initialValue: isUpdate ? widget.infoModel!.localizacao! : '',
+            initialValue: isUpdate ? (widget.infoModel?.localizacao ?? '') : '',
           ),
           SizedBox(
             height: 55.h,
@@ -548,7 +548,7 @@ class _IdentificacaoState extends State<Identificacao>
             isUpdate: isUpdate,
             children: [],
             optionModelValue:
-                isUpdate ? widget.infoModel!.sinalizacaoDeAcesso! : '',
+                isUpdate ? (widget.infoModel?.sinalizacaoDeAcesso ?? '') : '',
           ),
           ConditionalFieldsGroup(
             title: 'Turística',
@@ -557,7 +557,7 @@ class _IdentificacaoState extends State<Identificacao>
             isUpdate: isUpdate,
             children: [],
             optionModelValue:
-                isUpdate ? widget.infoModel!.sinalizacaoTuristica! : '',
+                isUpdate ? (widget.infoModel?.sinalizacaoTuristica ?? '') : '',
           ),
           CustomTextField(
             name: 'Pontos de Referência',
@@ -613,7 +613,7 @@ class _FuncionamentoState extends State<Funcionamento>
             ],
             title: 'Formas de Pagamento',
             onSaved: (newValue) => valoresJson['formasDePagamento'] = newValue,
-            initialValue: isUpdate ? widget.infoModel!.formasDePagamento! : [],
+            initialValue: isUpdate ? (widget.infoModel?.formasDePagamento ?? []) : [],
           ),
           SizedBox(
             height: 55.h,
@@ -628,7 +628,7 @@ class _FuncionamentoState extends State<Funcionamento>
               'outro'
             ],
             initialValue: isUpdate
-                ? widget.infoModel!.atendimentoEmLinguaEstrangeira!
+                ? (widget.infoModel?.atendimentoEmLinguaEstrangeira ?? '')
                 : '',
             title: 'Atendimento em Língua Estrangeira',
             onSaved: (newValue) =>
@@ -640,7 +640,7 @@ class _FuncionamentoState extends State<Funcionamento>
             onSaved: (newValue) =>
                 valoresJson['informativosImpressos'] = newValue,
             initialValue:
-                isUpdate ? widget.infoModel!.informativosImpressos! : [],
+                isUpdate ? (widget.infoModel?.informativosImpressos ?? []) : [],
           ),
           SizedBox(
             height: 55.h,
@@ -659,7 +659,7 @@ class _FuncionamentoState extends State<Funcionamento>
           CheckboxGroupFormField(
             onSaved: (p0) => valoresJson['regrasDeFuncionamentoPeriodo'] = p0,
             initialValue:
-                isUpdate ? widget.infoModel!.regrasDeFuncionamentoPeriodo! : [],
+                isUpdate ? (widget.infoModel?.regrasDeFuncionamentoPeriodo ?? []) : [],
             options: [
               'Janeiro',
               'Fevereiro',
@@ -732,7 +732,7 @@ class _FuncionamentoState extends State<Funcionamento>
           RadioFormField(
             options: ['Pago', 'Gratuito', 'Coberto', 'Descoberto'],
             title: 'Estacionamento',
-            initialValue: isUpdate ? widget.infoModel!.estacionamento! : '',
+            initialValue: isUpdate ? (widget.infoModel?.estacionamento ?? '') : '',
             onSaved: (newValue) => valoresJson['estacionamento'] = newValue,
           ),
           CustomTextField(
@@ -755,7 +755,7 @@ class _FuncionamentoState extends State<Funcionamento>
           ),
           CheckboxGroupFormField(
             title: 'Produtos e Serviços',
-            initialValue: isUpdate ? widget.infoModel!.produtosEServicos! : [],
+            initialValue: isUpdate ? (widget.infoModel?.produtosEServicos ?? []) : [],
             options: [
               'Alimentos caseiros/regionais',
               'Objetos de decoração',
@@ -777,7 +777,7 @@ class _FuncionamentoState extends State<Funcionamento>
             onSaved: (newValue) => valoresJson['produtosEServicos'] = newValue,
           ),
           CheckboxGroupFormField(
-              initialValue: isUpdate ? widget.infoModel!.outrosServicos! : [],
+              initialValue: isUpdate ? (widget.infoModel?.outrosServicos ?? []) : [],
               onSaved: (newValue) => valoresJson['outrosServicos'] = newValue,
               title: 'Outros Serviços',
               options: [

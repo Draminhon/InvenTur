@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:sistur/models/user_model.dart';
 import 'package:sistur/controllers/user_controller.dart';
 import 'package:sistur/ui/home/Administrador/user_management_page.dart';
+import 'package:sistur/ui/home/Administrador/dados_page.dart';
+import 'package:sistur/ui/home/Administrador/gestao_page.dart';
 import 'package:sistur/ui/screens/pesquisa%20screens/pesquisas_page.dart';
 import 'package:sistur/ui/widgets/options_drawer_widget.dart';
 import 'package:sistur/utils/app_constants.dart';
@@ -53,7 +55,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
   final Map<int, String> pageTitle = {
    // 0: 'Andamento das Pesquisas',
     0: 'Pesquisas Cadastradas',
-    1: 'Gerenciar Usuários',
+    1: 'Dados',
+    2: 'Gestão',
+    3: 'Gerenciar Usuários',
   };
   Future<void> getUserInfo() async {
     final secureStorage = SecureStorageService();
@@ -98,7 +102,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
     }
     loadUsers();
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Scaffold(
         backgroundColor: const Color.fromARGB(255, 245, 245, 245),
         drawer: SafeArea(
@@ -106,6 +110,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
         ),
         appBar: AppBar(
           title: Text(pageTitle[currentPageIndex]!),
+          // Abas de painel (Dados e Gestão) com título centralizado
+          centerTitle: currentPageIndex == 1 || currentPageIndex == 2,
           foregroundColor: const Color.fromARGB(255, 55, 111, 60),
           backgroundColor: Colors.white,
           leading: Builder(
@@ -160,6 +166,14 @@ class _AdminHomePageState extends State<AdminHomePage> {
               label: 'Pesquisas'
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.insights),
+              label: 'Dados'
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.leaderboard),
+              label: 'Gestão'
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.groups),
               label: 'Usuários'
             ),
@@ -179,6 +193,8 @@ class _AdminHomePageState extends State<AdminHomePage> {
             //   color: Colors.green,
             // ),
             const PesquisasPage(),
+            const DadosPage(),
+            const GestaoPage(),
             UserManagementPage(userControllerNotifier: _userController),
           ],
         ),

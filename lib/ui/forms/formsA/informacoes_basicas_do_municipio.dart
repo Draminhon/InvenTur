@@ -278,7 +278,7 @@ class _InformacoesBasicasDoMunicipioState
             if (widget.infoModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.infoModel!.usuario_criador!,widget.isAdmin ?? false,context);
+                  pesquisadorId, widget.infoModel!.usuario_criador ?? 0,widget.isAdmin ?? false,context);
             }
           }),
         );
@@ -541,7 +541,7 @@ class _IdentificacaoState extends State<Identificacao>
 
         RadioFormField(
             title: "Tipo",
-            initialValue: isUpdate ? widget.infoModel!.tipo! : '',
+            initialValue: isUpdate ? (widget.infoModel?.tipo ?? '') : '',
             options: ['Caracterização do município'],
             onSaved: widget.onSaved)
 

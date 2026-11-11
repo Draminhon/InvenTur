@@ -29,6 +29,33 @@ def process_value(value):
     # pois o openpyxl lida bem com eles.
     return value
 
+# Equipamentos exportados (uma aba por modelo). Também usado pelo painel de dados do administrador,
+# para que o app e o relatório do Power BI usem os mesmos nomes de equipamento.
+MODEL_SHEET_MAP = [
+    (AlimentosEBebidas, "Alimentos e Bebidas"),
+    (SistemaDeSeguranca, "Sistemas de Segurança"),
+    (Rodovia, "Rodovia"),
+    (MeioDeHospedagem, "Meios de Hospedagem"),
+    (LocadorasDeImoveis, "Locadoras de Imóveis"),
+    (GuiamentoEConducaoTuristica, "Guiamento e Condução Turística"),
+    (GastronomiaArtesanato, "Gastronomia e Artesanato"),
+    (OutrosMeiosDeHospedagem, "Outros Meios de Hospedagem"),
+    (InformacaoBasicaDoMunicipio, "Informações Básicas do Município"),
+    (ComercioTuristico, "Comércio Turístico"),
+    (AgenciaDeTurismo, "Agência de Turismo"),
+    (TransporteTuristico, "Transporte Turístico"),
+    (EspacoParaEventos, "Espaço para Eventos"),
+    (ServicosParaEventos, "Serviços para Eventos"),
+    (Parques, "Parques"),
+    (EspacosDeDiversaoECultura, "Espaços de Diversão e Cultura"),
+    (InformacoesTuristicas, "Informações Turísticas"),
+    (EntidadesAssociativas, "Entidades Associativas"),
+    (InstalacoesEsportivas, "Instalações Esportivas"),
+    (UnidadesDeConservacao, "Unidades de Conservação"),
+    (EventosProgramados, "Eventos Programados"),
+]
+
+
 def export_pesquisa_to_excel(request, pesquisa_id):
     try:
         pesquisa = Pesquisa.objects.get(id=pesquisa_id)
@@ -74,29 +101,6 @@ def export_pesquisa_to_excel(request, pesquisa_id):
     # ======================================
     # Abas para os formulários/equipamentos
     # ======================================
-    MODEL_SHEET_MAP = [
-        (AlimentosEBebidas, "Alimentos e Bebidas"),
-        (SistemaDeSeguranca, "Sistemas de Segurança"),
-        (Rodovia, "Rodovia"),
-        (MeioDeHospedagem, "Meios de Hospedagem"),
-        (LocadorasDeImoveis, "Locadoras de Imóveis"),
-        (GuiamentoEConducaoTuristica, "Guiamento e Condução Turística"),
-        (GastronomiaArtesanato, "Gastronomia e Artesanato"),
-        (OutrosMeiosDeHospedagem, "Outros Meios de Hospedagem"),
-        (InformacaoBasicaDoMunicipio, "Informações Básicas do Município"),
-        (ComercioTuristico, "Comércio Turístico"),
-        (AgenciaDeTurismo, "Agência de Turismo"),
-        (TransporteTuristico, "Transporte Turístico"),
-        (EspacoParaEventos, "Espaço para Eventos"),
-        (ServicosParaEventos, "Serviços para Eventos"),
-        (Parques, "Parques"),
-        (EspacosDeDiversaoECultura, "Espaços de Diversão e Cultura"),
-        (InformacoesTuristicas, "Informações Turísticas"),
-        (EntidadesAssociativas, "Entidades Associativas"),
-        (InstalacoesEsportivas, "Instalações Esportivas"),
-        (UnidadesDeConservacao, "Unidades de Conservação"),
-        (EventosProgramados, "Eventos Programados"),
-    ]
 
     base_filters = {
         'pesquisa': pesquisa,

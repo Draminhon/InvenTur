@@ -170,7 +170,7 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
             if (widget.infoModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.infoModel!.usuario_criador!,widget.isAdmin ?? false,context);
+                  pesquisadorId, widget.infoModel!.usuario_criador ?? 0,widget.isAdmin ?? false,context);
             }
           }),
         );
@@ -251,7 +251,7 @@ class _AgenciasDeTurismoState extends State<AgenciasDeTurismo> {
           curve: Curves.ease,
         );
       } else {
-        // isUpdate ? FormService().updateForm(widget.infoModel!.id!, valoresJson,AppConstants.INFO_BASICA_CREATE ) :
+        // isUpdate ? FormService().updateForm((widget.infoModel?.id ?? 0), valoresJson,AppConstants.INFO_BASICA_CREATE ) :
               _utils.decideSendingOrUpdating(isUpdate,
            isTheOwner,
             context,
@@ -464,7 +464,7 @@ class _InformacaoPageState extends State<InformacaoPage>
             title: 'Natureza',
             onSaved: (newValue) => valoresJson['natureza'] = newValue,
             options: ['Pública', 'Privada', 'outro'],
-            initialValue: isUpdate ? widget.infoModel!.natureza! : '',
+            initialValue: isUpdate ? (widget.infoModel?.natureza ?? '') : '',
           ),
           CheckboxGroupFormField(
             title: 'Tipo de Organização/Instituição',
@@ -479,7 +479,7 @@ class _InformacaoPageState extends State<InformacaoPage>
               'outro'
             ],
             initialValue:
-                isUpdate ? widget.infoModel!.tipoDeOrganizacaoInstituicao! : [],
+                isUpdate ? (widget.infoModel?.tipoDeOrganizacaoInstituicao ?? []) : [],
           ),
           //formatação inicio da atividade
           Row(children: [
@@ -563,7 +563,7 @@ class _InformacaoPageState extends State<InformacaoPage>
             onSaved: (newValue) => valoresJson['localizacao'] = newValue,
             title: 'Localização',
             options: ['Urbana', 'Rural'],
-            initialValue: isUpdate ? widget.infoModel!.localizacao! : '',
+            initialValue: isUpdate ? (widget.infoModel?.localizacao ?? '') : '',
           ),
           SizedBox(
             height: 55.h,
@@ -667,7 +667,7 @@ class _InformacaoPageState extends State<InformacaoPage>
             isUpdate: isUpdate,
             children: [],
             optionModelValue:
-                isUpdate ? widget.infoModel!.sinalizacaoDeAcesso! : '',
+                isUpdate ? (widget.infoModel?.sinalizacaoDeAcesso ?? '') : '',
           ),
           ConditionalFieldsGroup(
             title: 'Turística',
@@ -676,7 +676,7 @@ class _InformacaoPageState extends State<InformacaoPage>
             isUpdate: isUpdate,
             children: [],
             optionModelValue:
-                isUpdate ? widget.infoModel!.sinalizacaoTuristica! : '',
+                isUpdate ? (widget.infoModel?.sinalizacaoTuristica ?? '') : '',
           ),
           CheckboxGroupFormField(
             title: 'Proximidades: ',
@@ -691,7 +691,7 @@ class _InformacaoPageState extends State<InformacaoPage>
               'Posto de combustível',
               'outro'
             ],
-            initialValue: isUpdate ? widget.infoModel!.proximidades! : [],
+            initialValue: isUpdate ? (widget.infoModel?.proximidades ?? []) : [],
           ),
           SizedBox(
             height: 30.w,
@@ -928,7 +928,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
               'Cartão de Crédito',
               'Cartão de Débito'
             ],
-            initialValue: isUpdate ? widget.infoModel!.formasDePagamento! : [],
+            initialValue: isUpdate ? (widget.infoModel?.formasDePagamento ?? []) : [],
           ),
 
           //atendimento
@@ -940,7 +940,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
                 valoresJson['atendimentoEmLinguasEstrangeiras'] = newValue,
             options: ['Não', 'Inglês', 'Espanhol', 'Outro'],
             initialValue: isUpdate
-                ? widget.infoModel!.atendimentoEmLinguasEstrangeiras!
+                ? (widget.infoModel?.atendimentoEmLinguasEstrangeiras ?? [])
                 : [],
           ),
           CheckboxGroupFormField(
@@ -949,7 +949,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
                 valoresJson['informativosImpressos'] = newValue,
             options: ['Não', 'Inglês', 'Espanhol', 'Português', 'Outro'],
             initialValue:
-                isUpdate ? widget.infoModel!.informativosImpressos! : [],
+                isUpdate ? (widget.infoModel?.informativosImpressos ?? []) : [],
           ),
           SizedBox(
             height: 55.h,
@@ -976,7 +976,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
               'Dezembro',
               'Ano inteiro'
             ],
-            initialValue: isUpdate ? widget.infoModel!.periodo! : [],
+            initialValue: isUpdate ? (widget.infoModel?.periodo ?? []) : [],
           ),
           textLabel(name: 'Horário'),
           SizedBox(
@@ -1260,7 +1260,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
               'Tarifa especial para agentes de viagem',
               'Tarifa especial para empresas'
             ],
-            initialValue: isUpdate ? widget.infoModel!.bilhetesTerrestres! : [],
+            initialValue: isUpdate ? (widget.infoModel?.bilhetesTerrestres ?? []) : [],
           ),
 
           CheckboxGroupFormField(
@@ -1277,7 +1277,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
               'Tarifa especial para agentes de viagem',
               'Tarifa especial para empresas'
             ],
-            initialValue: isUpdate ? widget.infoModel!.bilhetesAereos! : [],
+            initialValue: isUpdate ? (widget.infoModel?.bilhetesAereos ?? []) : [],
           ),
 
           CheckboxGroupFormField(
@@ -1292,7 +1292,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
               'Venda direta',
               'Venda via agentes'
             ],
-            initialValue: isUpdate ? widget.infoModel!.pacotesTuristicos! : [],
+            initialValue: isUpdate ? (widget.infoModel?.pacotesTuristicos ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Cruzeiros Marítimos',
@@ -1306,7 +1306,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
               'Venda direta',
               'Venda via agentes'
             ],
-            initialValue: isUpdate ? widget.infoModel!.cruzeirosMaritimos! : [],
+            initialValue: isUpdate ? (widget.infoModel?.cruzeirosMaritimos ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Meios de Hospedgem',
@@ -1322,7 +1322,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
               'Tarifas Especiais para Agentes de Viagem',
               'Tarifas Especiais para Empresas',
             ],
-            initialValue: isUpdate ? widget.infoModel!.meiosDeHospedagem! : [],
+            initialValue: isUpdate ? (widget.infoModel?.meiosDeHospedagem ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Serviços de Traslados, Passeios, Visitas e Outros',
@@ -1338,7 +1338,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
               'Tarifas Especiais para Agentes de Viagem',
               'Tarifas Especiais para Empresas',
             ],
-            initialValue: isUpdate ? widget.infoModel!.servicosTraslados! : [],
+            initialValue: isUpdate ? (widget.infoModel?.servicosTraslados ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Seguro de Viagem',
@@ -1354,7 +1354,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
               'Tarifas Especiais para Agentes de Viagem',
               'Tarifas Especiais para Empresas',
             ],
-            initialValue: isUpdate ? widget.infoModel!.seguroDeViagem! : [],
+            initialValue: isUpdate ? (widget.infoModel?.seguroDeViagem ?? []) : [],
           ),
           CheckboxGroupFormField(
             title: 'Locação de Automóveis',
@@ -1372,7 +1372,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
               'Tarifas Especiais para Empresas',
             ],
             initialValue:
-                isUpdate ? widget.infoModel!.locacaoDeAutomoveis! : [],
+                isUpdate ? (widget.infoModel?.locacaoDeAutomoveis ?? []) : [],
           ),
           ConditionalFieldsGroup(
               title: 'Câmbio',
@@ -1385,7 +1385,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
           RadioFormField(
             options: ['Passaporte', 'Visto', 'outro'],
             title: 'Apoio a Despachos de Documentos',
-            initialValue: isUpdate ? widget.infoModel!.apoioADespachos! : "",
+            initialValue: isUpdate ? (widget.infoModel?.apoioADespachos ?? '') : "",
             onSaved: (newValue) => valoresJson['apoioADespachos'] = newValue,
           ),
           CustomTextField(
@@ -1397,7 +1397,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
               onSaved: (newValue) =>
                   valoresJson['servicosEAtividadesEspecializadas'] = newValue,
               initialValue: isUpdate
-                  ? widget.infoModel!.servicosEAtividadesEspecializadas!
+                  ? (widget.infoModel?.servicosEAtividadesEspecializadas ?? [])
                   : [],
               options: [
                 'Visita técnica e missões empresariais',
@@ -1544,7 +1544,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
                   options: ['Aluguel', 'Carga', 'Passeio'],
                   title: 'Tipo de Serviço',
                   initialValue:
-                      isUpdate ? widget.infoModel!.tipoDeServico! : [],
+                      isUpdate ? (widget.infoModel?.tipoDeServico ?? []) : [],
                   onSaved: (newValue) =>
                       valoresJson['tipoDeServico'] = newValue,
                 ),
@@ -1649,7 +1649,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
                   options: ['Aluguel', 'Carga', 'Passeio'],
                   title: 'Tipo de Serviço',
                   initialValue:
-                      isUpdate ? widget.infoModel!.tipoDeServicoAquatico! : [],
+                      isUpdate ? (widget.infoModel?.tipoDeServicoAquatico ?? []) : [],
                   onSaved: (newValue) =>
                       valoresJson['tipoDeServicoAquatico'] = newValue,
                 ),
@@ -1708,7 +1708,7 @@ class _FuncionamentoPageState extends State<FuncionamentoPage>
                   options: ['Aluguel', 'Carga', 'Passeio'],
                   title: 'Tipo de Serviço',
                   initialValue:
-                      isUpdate ? widget.infoModel!.tipoDeServicoAeronave! : [],
+                      isUpdate ? (widget.infoModel?.tipoDeServicoAeronave ?? []) : [],
                   onSaved: (newValue) =>
                       valoresJson['tipoDeServicoAeronave'] = newValue,
                 ),

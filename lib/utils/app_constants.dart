@@ -34,6 +34,8 @@ class AppConstants {
   static const String UNIDADES_DE_CONSERVACAO = 'unidadesconservacao/';
   static const String EVENTOS_PROGRAMADOS = 'eventosprogramados/';
   static const String GASTRONOMIA_ARTESANATO = 'gastronomiaartesanato/';
+  static const String ADMIN_DASHBOARD = 'admin/dashboard/';
+  static const String ADMIN_GESTAO = 'admin/gestao/';
 
 
     static const String SET_PESQUISA_STATUS = "pesquisa/<int:pk>/";

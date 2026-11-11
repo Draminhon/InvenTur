@@ -167,7 +167,7 @@ class _MeiosDeHospedagemState extends State<MeiosDeHospedagem> {
             if (widget.hospedagemModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId, widget.hospedagemModel!.usuario_criador!,widget.isAdmin??false,context,);
+                  pesquisadorId, widget.hospedagemModel!.usuario_criador ?? 0,widget.isAdmin??false,context,);
             }
           }),
         );

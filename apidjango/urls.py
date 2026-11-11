@@ -41,7 +41,10 @@ urlpatterns = [
     path('base/<int:pk>/', BaseViewSet.as_view({'patch': 'update'})),
     path('user/status/update/<int:pk>/', StatusUpdateAPIView.as_view(), name='status-update'),
     path('pesquisas/usuario/', PesquisaUsuarioAuth.as_view(), name='pesquisar usuario por token'),
+    path('pesquisador/dashboard/', PesquisadorDashboardView.as_view(), name='pesquisador-dashboard'),
     path('admin/register/', AdminUserCreateView.as_view(), name = 'create-admin'),
+    path('admin/dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
+    path('admin/gestao/', AdminGestaoView.as_view(), name='admin-gestao'),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', DecoratedTokenRefreshView.as_view(), name = 'token_refresh'),

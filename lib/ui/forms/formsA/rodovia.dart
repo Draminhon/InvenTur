@@ -130,7 +130,7 @@ class _RodoviaState extends State<Rodovia> {
             if (widget.infoModel != null) {
               print("chamando funcao");
               isTheOwner = _utils.isTheOwner(
-                  pesquisadorId,  widget.infoModel!.usuario_criador!, widget.isAdmin ?? false, context);
+                  pesquisadorId,  widget.infoModel!.usuario_criador ?? 0, widget.isAdmin ?? false, context);
             }
           }),
         );
@@ -322,7 +322,7 @@ class _IdentificacaoState extends State<Identificacao>
         onSaved: (newValue) {
           valoresjson['tipo'] = newValue;
         },
-        initialValue: isUpdate ? widget.hospedagemModel!.tipo! : "",
+        initialValue: isUpdate ? (widget.hospedagemModel?.tipo ?? '') : "",
       ),
       RadioFormField(
         title: 'Subtipos:',
@@ -330,7 +330,7 @@ class _IdentificacaoState extends State<Identificacao>
         onSaved: (newValue) {
           valoresjson['subtipos'] = newValue;
         },
-        initialValue: isUpdate ? widget.hospedagemModel!.subtipos! : "",
+        initialValue: isUpdate ? (widget.hospedagemModel?.subtipos ?? '') : "",
       ),
       SizedBox(
         height: 55.w,
@@ -350,7 +350,7 @@ class _IdentificacaoState extends State<Identificacao>
         onSaved: (newValue) {
           valoresjson['jurisdicao'] = newValue;
         },
-        initialValue: isUpdate ? widget.hospedagemModel!.jurisdicao! : "",
+        initialValue: isUpdate ? (widget.hospedagemModel?.jurisdicao ?? '') : "",
       ),
       RadioFormField(
         title: 'Natureza:',
@@ -428,7 +428,7 @@ class _IdentificacaoState extends State<Identificacao>
           title: 'Pedágio:',
           jsonKey: 'pedagio',
           optionModelValue:
-              isUpdate == true ? widget.hospedagemModel!.pedagio! : "não",
+              isUpdate == true ? (widget.hospedagemModel?.pedagio ?? '') : "não",
           valoresJson: valoresjson,
           isUpdate: isUpdate,
           children: []),
@@ -472,7 +472,7 @@ class _IdentificacaoState extends State<Identificacao>
           title: 'de acesso - ',
           jsonKey: 'sinalizacao_de_acesso',
           optionModelValue: isUpdate == true
-              ? widget.hospedagemModel!.sinalizacaoDeAcesso!
+              ? (widget.hospedagemModel?.sinalizacaoDeAcesso ?? '')
               : "não",
           valoresJson: valoresjson,
           isUpdate: isUpdate,
