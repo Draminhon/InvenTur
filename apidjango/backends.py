@@ -4,7 +4,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.http import HttpRequest
 from .models import CustomUser
 from .fields import EncryptionService
-  
+   
 class CPFBackend(ModelBackend):
     def authenticate(self, request, CPF = None, password = None, **kwargs):
         if CPF is None:
