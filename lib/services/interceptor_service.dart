@@ -6,6 +6,18 @@ import 'package:sistur/utils/app_constants.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:sistur/services/secure_storage_service.dart';
 
+/// Resultado de uma tentativa de renovar a sessão.
+enum _Renovacao {
+  /// Tokens novos gravados.
+  ok,
+
+  /// O servidor recusou o refresh token (vencido, revogado, conta excluída): aí sim a sessão acabou.
+  sessaoInvalida,
+
+  /// Sem resposta do servidor (sem internet, timeout, servidor fora): a sessão continua válida.
+  semConexao,
+}
+
 class ApiService {
   static final ApiService _instance = ApiService._internal();
   factory ApiService() => _instance;
@@ -14,13 +26,23 @@ class ApiService {
   static const String _baseUrl = AppConstants.BASE_URI;
   bool _isDialogShowing = false;
 
+  /// Renova um pouco ANTES de vencer: relógio do aparelho adiantado e o tempo da requisição na rede
+  /// fariam o token chegar vencido ao servidor.
+  static const Duration _margemExpiracao = Duration(seconds: 30);
+
+  /// Renovação em andamento. O servidor gira o refresh token a cada renovação e bloqueia o anterior
+  /// (ROTATE_REFRESH_TOKENS + BLACKLIST_AFTER_ROTATION): duas renovações simultâneas com o mesmo token
+  /// fazem a segunda ser recusada — e o app deslogava o usuário com a sessão ainda válida. Por isso
+  /// só existe UMA renovação por vez; quem chegar durante ela espera o mesmo resultado.
+  Future<_Renovacao>? _renovacaoEmAndamento;
+
   ApiService._internal() {
     _dio.options.baseUrl = _baseUrl;
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           // URLs que não precisam de token
-          if (options.path.contains(AppConstants.LOGIN_URI) || 
+          if (options.path.contains(AppConstants.LOGIN_URI) ||
               options.path.contains(AppConstants.REFRESH_TOKEN_URI) ||
               options.path.contains('password-reset/') ||
               (options.path == AppConstants.REGISTER_URI && options.method == 'POST') ||
@@ -38,23 +60,12 @@ class ApiService {
             );
           }
 
-          // Checa se o token expirou
-          final bool isExpired = JwtDecoder.isExpired(accessToken);
-
-          if (isExpired) {
-            print("Token expirado. Tentando refresh...");
-            final success = await _refreshToken();
-            if (success) {
-              final refreshedToken = await secureStorage.read('access_token');
-              options.headers['Authorization'] = 'Bearer $refreshedToken';
-              return handler.next(options);
+          if (_venceEmBreve(accessToken)) {
+            final resultado = await _renovarSessao();
+            if (resultado == _Renovacao.ok) {
+              accessToken = await secureStorage.read('access_token');
             } else {
-              print("Refresh falhou. Deslogando...");
-              _handleSessionExpiration();
-              return handler.reject(
-                DioException(requestOptions: options, error: "Sessão expirada"),
-                true,
-              );
+              return handler.reject(_erroDeSessao(options, resultado), true);
             }
           }
 
@@ -62,21 +73,30 @@ class ApiService {
           return handler.next(options);
         },
         onError: (DioException e, handler) async {
-          // Se o servidor retornar 401, tentamos o refresh uma última vez
-          if (e.response?.statusCode == 401 && 
-              !e.requestOptions.path.contains(AppConstants.LOGIN_URI)) {
-            print("401 detectado no interceptor. Tentando refresh...");
-            final success = await _refreshToken();
-            if (success) {
-              final secureStorage = SecureStorageService();
-              final newToken = await secureStorage.read('access_token');
-              
-              // Refaz a requisição original com o novo token
-              final opts = e.requestOptions;
-              opts.headers['Authorization'] = 'Bearer $newToken';
-              
-              final response = await _dio.fetch(opts);
-              return handler.resolve(response);
+          final opts = e.requestOptions;
+          // 401 do servidor: renova e repete a requisição UMA vez (marcada para não entrar em loop)
+          if (e.response?.statusCode == 401 &&
+              !opts.path.contains(AppConstants.LOGIN_URI) &&
+              !opts.path.contains(AppConstants.REFRESH_TOKEN_URI) &&
+              opts.extra['repetida_apos_renovar'] != true) {
+            final secureStorage = SecureStorageService();
+            final tokenUsado = (opts.headers['Authorization'] as String?)?.replaceFirst('Bearer ', '');
+            final tokenAtual = await secureStorage.read('access_token');
+
+            // Outra requisição já renovou enquanto esta estava na rede: só repete com o token novo
+            _Renovacao resultado = _Renovacao.ok;
+            if (tokenAtual == null || tokenAtual == tokenUsado || _venceEmBreve(tokenAtual)) {
+              resultado = await _renovarSessao();
+            }
+            if (resultado != _Renovacao.ok) {
+              return handler.next(resultado == _Renovacao.semConexao ? _erroDeSessao(opts, resultado) : e);
+            }
+            try {
+              opts.headers['Authorization'] = 'Bearer ${await secureStorage.read('access_token')}';
+              opts.extra['repetida_apos_renovar'] = true;
+              return handler.resolve(await _dio.fetch(opts));
+            } on DioException catch (erro) {
+              return handler.next(erro);
             }
           }
           return handler.next(e);
@@ -85,34 +105,66 @@ class ApiService {
     );
   }
 
-  Future<bool> _refreshToken() async {
+  bool _venceEmBreve(String token) {
     try {
-      final secureStorage = SecureStorageService();
-      final refreshToken = await secureStorage.read('refresh_token');
+      return JwtDecoder.getRemainingTime(token) <= _margemExpiracao;
+    } catch (_) {
+      return true; // token ilegível: tenta renovar
+    }
+  }
 
-      if (refreshToken == null) return false;
+  /// Erro devolvido quando a renovação não deu certo. Sem conexão, é um erro de conexão comum (sem resposta):
+  /// os fluxos offline tratam normalmente (ex.: o formulário vai para a fila). Sessão recusada: desloga.
+  DioException _erroDeSessao(RequestOptions options, _Renovacao resultado) {
+    if (resultado == _Renovacao.sessaoInvalida) {
+      _handleSessionExpiration();
+      return DioException(requestOptions: options, error: "Sessão expirada");
+    }
+    return DioException(
+      requestOptions: options,
+      type: DioExceptionType.connectionError,
+      error: "Sem conexão para renovar a sessão",
+    );
+  }
 
-      // Usamos uma instância limpa do Dio para evitar interceptores em loop
-      final response = await Dio().post(
+  /// Uma renovação por vez (ver _renovacaoEmAndamento).
+  Future<_Renovacao> _renovarSessao() {
+    return _renovacaoEmAndamento ??= _refreshToken().whenComplete(() => _renovacaoEmAndamento = null);
+  }
+
+  Future<_Renovacao> _refreshToken() async {
+    final secureStorage = SecureStorageService();
+    final refreshToken = await secureStorage.read('refresh_token');
+    if (refreshToken == null) return _Renovacao.sessaoInvalida;
+
+    try {
+      // Instância limpa do Dio para não passar pelos interceptores (evita loop)
+      final response = await Dio(BaseOptions(
+        connectTimeout: const Duration(seconds: 15),
+        receiveTimeout: const Duration(seconds: 15),
+      )).post(
         _baseUrl + AppConstants.REFRESH_TOKEN_URI,
         data: {'refresh': refreshToken},
       );
-
-      if (response.statusCode == 200) {
-        final String newAccess = response.data['access'];
-        final String newRefresh = response.data['refresh'];
-
-        final secureStorage = SecureStorageService();
-        await secureStorage.write('access_token', newAccess);
-        await secureStorage.write('refresh_token', newRefresh);
-        
-        print("Tokens renovados com sucesso.");
-        return true;
+      final String newAccess = response.data['access'];
+      final String? newRefresh = response.data['refresh'];
+      await secureStorage.write('access_token', newAccess);
+      if (newRefresh != null) await secureStorage.write('refresh_token', newRefresh);
+      debugPrint("Tokens renovados com sucesso.");
+      return _Renovacao.ok;
+    } on DioException catch (e) {
+      final status = e.response?.statusCode;
+      // Só o servidor RECUSANDO o refresh encerra a sessão. Sem internet/timeout/servidor fora, não.
+      if (status == 401 || status == 400) {
+        debugPrint("Refresh recusado pelo servidor ($status): sessão encerrada.");
+        return _Renovacao.sessaoInvalida;
       }
+      debugPrint("Sem conexão para renovar a sessão (${e.type}); a sessão continua.");
+      return _Renovacao.semConexao;
     } catch (e) {
-      print("Erro ao renovar token: $e");
+      debugPrint("Erro ao renovar token: $e");
+      return _Renovacao.semConexao;
     }
-    return false;
   }
 
   Future<void> _handleSessionExpiration() async {
