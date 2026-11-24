@@ -88,20 +88,25 @@ class DataSyncService {
 
     _db = await openDatabase(
       join(path, 'sync_queue.db'),
-      version: 2,
+      version: 3,
       onCreate: (db, version) async {
         await db.execute('''CREATE TABLE queue (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         method TEXT,
         endpoint TEXT,
         payload TEXT,
-        pesquisa_id INTEGER)''');
+        pesquisa_id INTEGER,
+        usuario_id INTEGER)''');
       },
       onUpgrade: (db, oldVersion, newVersion) async {
         if (oldVersion < 2) {
           await db.execute('''
 ALTER TABLE queue
 ADD COLUMN pesquisa_id INTEGER''');
+        }
+        if (oldVersion < 3) {
+          // Dono de cada formulário da fila (mais de uma pessoa pode usar o mesmo aparelho)
+          await db.execute('ALTER TABLE queue ADD COLUMN usuario_id INTEGER');
         }
       },
     );
@@ -110,6 +115,34 @@ ADD COLUMN pesquisa_id INTEGER''');
     _iniciarRetentativas();
     // Ao abrir o app, já tenta enviar o que ficou pendente
     unawaited(_tentarEmSegundoPlano());
+  }
+
+  /// Usuário logado neste aparelho (null se ninguém estiver logado).
+  Future<int?> _usuarioAtual() async {
+    try {
+      final dados = await SecureStorageService().read('user_data');
+      if (dados == null) return null;
+      final id = json.decode(dados)['id'];
+      return id is int ? id : int.tryParse('$id');
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// Filtro da fila: só os formulários do usuário logado. Itens antigos, de antes de a fila guardar o dono
+  /// (usuario_id nulo), ficam com quem estiver logado, como antes. Sem ninguém logado, nada.
+  Future<(String, List<Object?>)> _filtroDoUsuario() async {
+    final usuario = await _usuarioAtual();
+    if (usuario == null) return ('0 = 1', <Object?>[]);
+    return ('(usuario_id = ? OR usuario_id IS NULL)', <Object?>[usuario]);
+  }
+
+  /// Apaga os formulários pendentes do usuário logado (usado ao excluir a conta).
+  Future<void> limparDoUsuarioAtual() async {
+    final usuario = await _usuarioAtual();
+    if (usuario == null) return;
+    await _db.delete('queue', where: 'usuario_id = ? OR usuario_id IS NULL', whereArgs: [usuario]);
+    await _atualizarContagem();
   }
 
   Future<void> enqueue({
@@ -122,7 +155,9 @@ ADD COLUMN pesquisa_id INTEGER''');
       'method': method,
       'endpoint': endpoint,
       'payload': json.encode(payload),
-      'pesquisa_id': pesquisa_id
+      'pesquisa_id': pesquisa_id,
+      // Sem isto, se outra pessoa entrasse neste aparelho, a fila seria enviada com o login dela
+      'usuario_id': await _usuarioAtual(),
     });
     await _atualizarContagem();
   }
@@ -137,8 +172,9 @@ ADD COLUMN pesquisa_id INTEGER''');
   }
 
   Future<int> getPendingCount() async {
-    // faz SELECT COUNT(*) FROM queue
-    final result = await _db.rawQuery('SELECT COUNT(*) AS count FROM queue');
+    // Só os formulários do usuário logado
+    final (filtro, args) = await _filtroDoUsuario();
+    final result = await _db.rawQuery('SELECT COUNT(*) AS count FROM queue WHERE $filtro', args);
     // o rawQuery sempre retorna List<Map<String, Object?>>
     final count = result.first['count'] as int;
     return count;
@@ -149,8 +185,9 @@ ADD COLUMN pesquisa_id INTEGER''');
       await init();
     }
 
-    final List<Map<String, Object?>> results = await _db.rawQuery('SELECT COUNT(*) AS count FROM queue WHERE pesquisa_id = ?', [pesquisaId]
-    );
+    final (filtro, args) = await _filtroDoUsuario();
+    final List<Map<String, Object?>> results = await _db.rawQuery(
+        'SELECT COUNT(*) AS count FROM queue WHERE pesquisa_id = ? AND $filtro', [pesquisaId, ...args]);
     return Sqflite.firstIntValue(results) ?? 0;
   }
 
@@ -161,7 +198,9 @@ ADD COLUMN pesquisa_id INTEGER''');
   }
 
   Future<ResultadoSync> _processQueue() async {
-    final items = await _db.query('queue');
+    // Envia só os formulários de quem está logado (com o login dessa pessoa)
+    final (filtro, args) = await _filtroDoUsuario();
+    final items = await _db.query('queue', where: filtro, whereArgs: args);
     int enviados = 0;
     int recusados = 0;
     bool interrompida = false;
@@ -214,7 +253,8 @@ ADD COLUMN pesquisa_id INTEGER''');
   }
 
   Future<List<Map<String, dynamic>>> getPendingItems() async {
-    final items = await _db.query('queue', orderBy: 'id DESC');
+    final (filtro, args) = await _filtroDoUsuario();
+    final items = await _db.query('queue', where: filtro, whereArgs: args, orderBy: 'id DESC');
 
     return items.map((row) {
       return {

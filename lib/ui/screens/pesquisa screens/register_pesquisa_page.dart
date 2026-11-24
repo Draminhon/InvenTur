@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sistur/models/endereco/estado_model.dart';
@@ -160,15 +161,34 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
         },
       );
 
+      if (!mounted) return; // o usuário saiu da tela durante o envio
       if (response.statusCode == 201) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Pesquisa criada com sucesso!")));
         Navigator.pop(context, true);
       } else {
-        print('Erro ao criar pesquisa: ${response.statusCode}');
+        _avisarErroCriacao('Não foi possível criar a pesquisa.');
       }
+    } on DioException catch (e) {
+      // Antes o erro só ia para o log: o administrador tocava em salvar e nada acontecia
+      final dados = e.response?.data;
+      String mensagem = e.response == null
+          ? 'Sem conexão. É preciso internet para criar a pesquisa.'
+          : 'Não foi possível criar a pesquisa.';
+      if (dados is Map && dados.isNotEmpty) {
+        final primeiro = dados.values.first;
+        mensagem = (primeiro is List && primeiro.isNotEmpty ? primeiro.first : primeiro).toString();
+      }
+      _avisarErroCriacao(mensagem);
     } catch (e) {
-      print('Erro ao criar pesquisa: $e');
+      debugPrint('Erro ao criar pesquisa: $e');
+      _avisarErroCriacao('Não foi possível criar a pesquisa.');
     }
+  }
+
+  void _avisarErroCriacao(String mensagem) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(mensagem), backgroundColor: Colors.red[700]));
   }
 
 

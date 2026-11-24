@@ -10,6 +10,7 @@ import 'package:sistur/services/interceptor_service.dart';
 import 'package:sistur/utils/app_constants.dart';
 import 'dart:convert';
 import 'package:sistur/services/secure_storage_service.dart';
+import 'package:sistur/services/sync_service.dart';
 import 'package:sistur/ui/widgets/excluir_conta_dialog.dart';
 
 class ContaPesquisador extends StatefulWidget {
@@ -25,7 +26,14 @@ class _ContaPesquisadorState extends State<ContaPesquisador> {
 
   Future<void> _pickAndUploadImage(BuildContext context, int userId) async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+      // Reduz a foto (aparece pequena no app): fotos de câmera têm 3-8 MB, passariam do limite de 5 MB do servidor
+      // e pesariam no cache offline (a foto também é guardada em Base64 no armazenamento seguro)
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 800,
+        maxHeight: 800,
+        imageQuality: 85,
+      );
       if (image == null) return;
 
       setState(() {
@@ -78,10 +86,23 @@ class _ContaPesquisadorState extends State<ContaPesquisador> {
           );
         }
       }
+    } on DioException catch (e) {
+      // Mensagem amigável (antes mostrava o erro técnico inteiro do Dio)
+      if (mounted) {
+        final dados = e.response?.data;
+        String mensagem = e.response == null
+            ? 'Sem conexão. É preciso internet para trocar a foto.'
+            : 'Não foi possível atualizar a foto.';
+        if (dados is Map && dados['foto_perfil'] is List && (dados['foto_perfil'] as List).isNotEmpty) {
+          mensagem = (dados['foto_perfil'] as List).first.toString();
+        }
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(mensagem)));
+      }
     } catch (e) {
+      debugPrint('Erro ao atualizar foto: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao atualizar foto: $e')),
+          const SnackBar(content: Text('Não foi possível atualizar a foto.')),
         );
       }
     } finally {
@@ -226,6 +247,8 @@ class _ContaPesquisadorState extends State<ContaPesquisador> {
     final mensagens = ScaffoldMessenger.of(context);
     final excluiu = await confirmarExclusaoDeConta(context);
     if (!excluiu) return;
+    // Os formulários pendentes desta conta não podem mais ser enviados (o diálogo avisou): saem da fila
+    await DataSyncService().limparDoUsuarioAtual();
     // Encerra a sessão neste aparelho e volta ao login
     await SecureStorageService().clearAll();
     mensagens.showSnackBar(const SnackBar(content: Text('Sua conta foi excluída e seus dados pessoais foram apagados.')));

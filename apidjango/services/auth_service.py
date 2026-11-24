@@ -125,7 +125,9 @@ def UsuarioLoginView(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
 
-    # Validação dos campos
+    # Validação dos campos (tipos também: um número ou lista no lugar do texto derrubava o login com erro 500)
+    if not isinstance(email, str) or not isinstance(password, str):
+        email = password = None
     if not email or not password:
         return JsonResponse(
             {"error": "E-mail e senha são obrigatórios"}, 

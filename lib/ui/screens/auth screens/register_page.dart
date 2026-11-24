@@ -39,6 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   // Aceite obrigatório dos Termos de Uso e da Política de Privacidade (somente no cadastro)
   bool _aceiteTermos = false;
+  bool _dadosPreenchidos = false;
   late final TapGestureRecognizer _linkTermos = TapGestureRecognizer()..onTap = () => _abrirTermos(0);
   late final TapGestureRecognizer _linkPrivacidade = TapGestureRecognizer()..onTap = () => _abrirTermos(1);
 
@@ -96,6 +97,7 @@ class _RegisterPageState extends State<RegisterPage> {
         },
       );
 
+      if (!mounted) return; // saiu da tela durante o envio
       if (response.statusCode == 200 || response.statusCode == 201) {
         Navigator.pop(context);
         Navigator.pushReplacement(context,
@@ -104,8 +106,16 @@ class _RegisterPageState extends State<RegisterPage> {
         }));
       }
     } on DioException catch (e) {
-      String errorMsg = "Erro ao registrar usuário.";
-      if (e.response?.statusCode == 400) {
+      if (!mounted) return;
+      String errorMsg = e.response == null
+          ? "Sem conexão. Verifique sua internet e tente novamente."
+          : "Erro ao registrar usuário.";
+      // Mostra o motivo real devolvido pelo servidor (e-mail em uso, senha curta, termos...)
+      final dados = e.response?.data;
+      if (dados is Map && dados.isNotEmpty) {
+        final primeiro = dados.values.first;
+        errorMsg = (primeiro is List && primeiro.isNotEmpty ? primeiro.first : primeiro).toString();
+      } else if (e.response?.statusCode == 400) {
         errorMsg = "Verifique os dados informados (o e-mail pode já estar em uso).";
       }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMsg)));
@@ -165,6 +175,7 @@ class _RegisterPageState extends State<RegisterPage> {
         userData['telefone'] = telefone;
         
         await secureStorage.write('user_data', jsonEncode(userData));
+        if (!mounted) return; // saiu da tela durante o envio
 
         // Update global state
         Provider.of<UserProvider>(context, listen: false).updateUser(username, email.trim().toLowerCase(), telefone);
@@ -175,6 +186,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } on DioException catch (e) {
+      if (!mounted) return;
       // Mostra o motivo devolvido pelo servidor (ex.: senha atual incorreta, e-mail já cadastrado)
       final dados = e.response?.data;
       String mensagem = e.response == null
@@ -203,10 +215,12 @@ class _RegisterPageState extends State<RegisterPage> {
     final telefone = arguments['user_telefone'];
     double paddingBottomTextField = screenSize.height * .015;
 
-    if (isChange == true) {
-      _nameController.text = username;
-      _emailController.text = email;
-      _telefoneController.text = telefone;
+    // Preenche os dados atuais UMA vez (no build, cada redesenho apagava o que a pessoa já tinha digitado)
+    if (isChange == true && !_dadosPreenchidos) {
+      _dadosPreenchidos = true;
+      _nameController.text = username ?? '';
+      _emailController.text = email ?? '';
+      _telefoneController.text = telefone ?? '';
     }
 
     return Scaffold(

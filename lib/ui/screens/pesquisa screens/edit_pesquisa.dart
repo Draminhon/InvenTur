@@ -428,6 +428,7 @@ _usersIds.clear();
                                     municipio: _municipioController.text,
                                     selectedUsers: selectedUsers,
                                   );
+                                  if (!context.mounted) return; // saiu da tela durante o envio
                                   if (success) {
                                     Navigator.of(context).pop(true);
                                   } else {
@@ -497,10 +498,28 @@ _usersIds.clear();
           key: ValueKey(user.id),
           user: user,
           onRemove: (u) async {
+            // Confirmação: a remoção é imediata no servidor (antes, um toque acidental no X já removia)
+            final confirmou = await showDialog<bool>(
+              context: context,
+              builder: (contexto) => AlertDialog(
+                title: const Text('Remover pesquisador?'),
+                content: Text('${u.username} sairá desta pesquisa e não poderá mais enviar formulários nela. '
+                    'Para voltar, precisará usar o código da pesquisa de novo.'),
+                actions: [
+                  TextButton(onPressed: () => Navigator.pop(contexto, false), child: const Text('Cancelar')),
+                  TextButton(
+                    onPressed: () => Navigator.pop(contexto, true),
+                    child: const Text('Remover', style: TextStyle(color: Colors.red)),
+                  ),
+                ],
+              ),
+            );
+            if (confirmou != true || !mounted) return;
             final sucesso = await _pesquisaController.removerPesquisador(
               pesquisaId: pesquisaId,
               userId: u.id!,
             );
+            if (!mounted) return;
             if (sucesso) {
               setState(() {
                 selectedUsers.remove(u);

@@ -230,7 +230,8 @@ class EquipamentosListView(APIView):
         pesquisa_id = request.query_params.get('pesquisa_id')
         user = request.user
         if not pesquisa_id:
-            raise ValidationError({"detail": "O parâmetro 'pesquisa_id' é obrigatório."})
+            # Resposta 400 (antes levantava o ValidationError do Django, que o DRF não trata: virava erro 500)
+            return Response({"detail": "O parâmetro 'pesquisa_id' é obrigatório."}, status=400)
         # Só pesquisas no escopo do usuário (admin: as que criou; pesquisador: as da equipe); senão 404
         pesquisa_id = exigir_pesquisa_visivel(user, pesquisa_id)
 
