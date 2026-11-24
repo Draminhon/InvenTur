@@ -46,12 +46,15 @@ urlpatterns = [
     path('admin/dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
     path('admin/gestao/', AdminGestaoView.as_view(), name='admin-gestao'),
 
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    # Login só por /login/ (com limite de tentativas e aceite dos termos). /api/token/ (login paralelo sem
+    # essas proteções) foi removido; o refresh continua.
     path('api/token/refresh/', DecoratedTokenRefreshView.as_view(), name = 'token_refresh'),
 
-    path('admin/<int:admin_id>/', get_admin_details, name = 'get_admin_details'),
-    path('verificaremail/', verificar_email, name ='verificar-email'),
-    path('user/<int:pk>/change-password/', AlterPasswordView.as_view(), name ='alter password'),
+    # Removidos por segurança (não eram usados pelo app):
+    #  - admin/<id>/: devolvia o nome de qualquer usuário sem exigir login;
+    #  - verificaremail/: dizia, sem login, se um e-mail tinha conta e devolvia o ID dela;
+    #  - user/<id>/change-password/: qualquer usuário logado trocava a senha de QUALQUER conta.
+    # Troca de senha: pelo perfil (user/<id>/, exige a senha atual) ou pela recuperação por e-mail.
     path('login/', UsuarioLoginView, name = 'usuario-login'),
     path('logout/', LogoutAPIView.as_view(), name ='logout'),
 ] 

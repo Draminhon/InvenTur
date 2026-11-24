@@ -1,3 +1,4 @@
+from django.core.cache import cache
 from django.utils import timezone
 from rest_framework import  permissions, viewsets, status, views, generics
 from rest_framework.permissions import IsAuthenticated
@@ -63,6 +64,39 @@ class DecoratedTokenRefreshView(TokenRefreshView):
             monitor.start()
         return response
 
+# Limite de tentativas de login (contra descoberta de senha por tentativa e erro).
+# Conta só as tentativas ERRADAS: 5 por e-mail ou 20 por IP; ao atingir, bloqueia por 15 minutos.
+LOGIN_MAX_FALHAS_EMAIL = 5
+LOGIN_MAX_FALHAS_IP = 20
+LOGIN_BLOQUEIO_SEGUNDOS = 15 * 60
+
+
+def _ip_do_cliente(request):
+    # Mesma regra dos limites do DRF: respeita DJANGO_NUM_PROXIES para achar o IP real atrás de proxy
+    from rest_framework.throttling import BaseThrottle
+    return BaseThrottle().get_ident(request) or ''
+
+
+def _chaves_de_falha(request, email):
+    return (f'login-falhas:email:{EncryptionService().get_email_index(email)}',
+            f'login-falhas:ip:{_ip_do_cliente(request)}')
+
+
+def _login_bloqueado(request, email):
+    chave_email, chave_ip = _chaves_de_falha(request, email)
+    return (cache.get(chave_email, 0) >= LOGIN_MAX_FALHAS_EMAIL or
+            cache.get(chave_ip, 0) >= LOGIN_MAX_FALHAS_IP)
+
+
+def _registrar_falha_de_login(request, email):
+    for chave in _chaves_de_falha(request, email):
+        cache.add(chave, 0, LOGIN_BLOQUEIO_SEGUNDOS)
+        try:
+            cache.incr(chave)
+        except ValueError:
+            cache.set(chave, 1, LOGIN_BLOQUEIO_SEGUNDOS)
+
+
 @csrf_exempt
 def UsuarioLoginView(request):
     # Responde a métodos não-POST com erro 405
@@ -98,14 +132,23 @@ def UsuarioLoginView(request):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    if _login_bloqueado(request, email):
+        return JsonResponse(
+            {"error": "Muitas tentativas de login. Aguarde 15 minutos ou recupere sua senha."},
+            status=status.HTTP_429_TOO_MANY_REQUESTS
+        )
+
     # Autenticação
     user = authenticate(request, email=email, password=password)
     if user is None:
+        _registrar_falha_de_login(request, email)
         return JsonResponse(
             {"error": "Credenciais inválidas"}, 
             status=status.HTTP_401_UNAUTHORIZED
         )
 
+
+    cache.delete(_chaves_de_falha(request, email)[0])  # acertou: zera as falhas deste e-mail
 
     # Último acesso: base da regra de contas inativas (Política de Privacidade, seção 10)
     user.last_login = timezone.now()
@@ -159,55 +202,3 @@ class LogoutAPIView(APIView):
             return Response({"detail": "Logout realizado com sucesso."}, status=status.HTTP_205_RESET_CONTENT)
         except Exception as e:
             return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-class AlterPasswordView(generics.UpdateAPIView):
-    serializer_class = ChangePasswordSerializer
-    queryset = CustomUser.objects.all()
-
-    def partial_update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-    
-        user = self.get_object()
-
-        serializer = self.get_serializer(data=request.data)
-        try:
-            serializer.is_valid(raise_exception=True)
-        except serializers.ValidationError as e:
-            print("Validation errors:", e.detail)
-            return Response({"error": e.detail}, status=400)
-    
-        user.set_password(serializer.validated_data['new_password'])
-        user.save()
-
-        return Response({"sucess": "Password changed sucessfully"})
-
-@csrf_exempt
-def verificar_email(request):
-    permission_classes = [permissions.AllowAny] 
-
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            email = data.get('email', '').strip()
-
-            if not email:
-                return JsonResponse({'success': False, 'message': 'email cannot be empty'}, status=400)
-
-            # Query the database for user with matching email using blind index
-            try:
-                email_hash = EncryptionService().get_email_index(email)
-                user = CustomUser.objects.get(email_hash=email_hash)
-                return JsonResponse({
-                    'success': True,
-                    'user': {
-                        'id': user.id,
-                    }
-                })
-            except CustomUser.DoesNotExist:
-                return JsonResponse({'success': False, 'message': 'email not found'}, status=404)
-
-        except Exception as e:
-            print(f"Error verifying email: {e}")  # Log the error for debugging
-            return JsonResponse({'success': False, 'message': 'Internal server error'}, status=500)
-
-    return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)

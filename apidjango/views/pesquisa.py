@@ -8,8 +8,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.decorators import action
 from rest_framework.throttling import UserRateThrottle
-from ..permissoes import IsAdministrador, eh_administrador, pesquisas_visiveis
-from ..models import TAMANHO_CODIGO_PESQUISA, normalizar_codigo_pesquisa
+from ..permissoes import IsAdministrador, eh_administrador, equipamentos_visiveis, pesquisas_visiveis
+from ..models import TAMANHO_CODIGO_PESQUISA, gerar_codigo_pesquisa, normalizar_codigo_pesquisa
 
 
 class VincularPesquisaThrottle(UserRateThrottle):
@@ -29,9 +29,12 @@ class PesquisaViewSet(viewsets.ModelViewSet):
         # Administrador: só as pesquisas que criou; pesquisador: só as da sua equipe (ver permissoes.py)
         return pesquisas_visiveis(self.request.user)
 
+    # Ações exclusivas do administrador. O pesquisador só lista/vê as pesquisas da sua equipe e se vincula por código;
+    # sem isto ele podia alterar a pesquisa (datas, situação, equipe) e remover colegas.
+    ACOES_DO_ADMINISTRADOR = ('create', 'destroy', 'update', 'partial_update', 'remover_pesquisador', 'gerar_codigo')
+
     def get_permissions(self):
-        # Criar e excluir pesquisas é exclusivo de administradores
-        if self.action in ('create', 'destroy'):
+        if self.action in self.ACOES_DO_ADMINISTRADOR:
             return [IsAdministrador()]
         return super().get_permissions()
 
@@ -82,11 +85,23 @@ class PesquisaViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
 
+    @action(detail=True, methods=['post'], url_path='gerar-codigo')
+    def gerar_codigo(self, request, pk=None):
+        """
+        POST /pesquisa/{id}/gerar-codigo/
+        Troca o código de vínculo (ex.: o código vazou). O código antigo deixa de funcionar na hora;
+        quem já está na equipe continua nela.
+        """
+        pesquisa = self.get_object()  # só as pesquisas do próprio administrador (get_queryset)
+        pesquisa.codigo = gerar_codigo_pesquisa()
+        pesquisa.save(update_fields=['codigo'])
+        return Response({'codigo': pesquisa.codigo,
+                         'detail': 'Novo código gerado. O código anterior não funciona mais.'})
+
     @action(detail=True, methods=['patch'], url_path='remover-pesquisador')
     def remover_pesquisador(self, request, pk=None):
         pesquisa = self.get_object()
         user_id = request.data.get('user_id')
-        print(f"Tentando remover user_id: {user_id} da pesquisa {pesquisa.id}")
         if user_id is None:
             return Response({"detail": "user_id é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
         user = get_object_or_404(CustomUser, id=user_id)
@@ -102,14 +117,17 @@ class BaseViewSet(viewsets.ModelViewSet):
     serializer_class = DynamicBaseSerializer
 
     def get_queryset(self):
-        return Base.objects.filter(pesquisa__in=pesquisas_visiveis(self.request.user))
+        return equipamentos_visiveis(Base.objects.all(), self.request.user)
 
     def update(self, request, *args, **kwargs):
-        instance = self.get_object()  # respeita o escopo de pesquisas do usuário (404 fora dele)
-        serializer = self.get_serializer(instance, data=request.data, partial=True)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-         
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        """
+        PATCH /base/{id}/ {"is_active": false} — só serve para excluir (desativar) um equipamento.
+        Qualquer outro campo é recusado: antes dava para mover o formulário para outra pesquisa ou trocar o autor.
+        """
+        if set(request.data.keys()) != {'is_active'} or request.data.get('is_active') not in (False, 'false', 'False', 0, '0'):
+            return Response({'detail': 'Esta rota só exclui equipamentos: envie apenas {"is_active": false}.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        base = self.get_object()
+        base.is_active = False
+        base.save(update_fields=['is_active'])
+        return Response({'detail': 'Equipamento excluído.'})

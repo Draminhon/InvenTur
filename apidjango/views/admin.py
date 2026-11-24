@@ -11,13 +11,6 @@ from django.shortcuts import get_object_or_404
 from ..permissoes import IsAdministrador, usuarios_visiveis
  
 
-def get_admin_details(request, admin_id):
-    admin = get_object_or_404(CustomUser, id = admin_id)
-    return JsonResponse({
-        'id': admin.id,
-        'username': admin.username
-    })
- 
 class AdminUserCreateView(generics.ListCreateAPIView):
     """
     POST /admin/register/ — o administrador cadastra um PESQUISADOR. A conta fica vinculada a quem a criou
@@ -34,7 +27,7 @@ class AdminUserCreateView(generics.ListCreateAPIView):
         return usuarios_visiveis(self.request.user)
 
     def create(self, request, *args, **kwargs):
-        data = request.data.copy()
+        data = dict(request.data.items())  # sem cópia profunda (ver views/user.py)
         perfil = data.get('acessLevel') or 'Pesquisador'
         if perfil != 'Pesquisador':
             return Response(

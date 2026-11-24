@@ -52,6 +52,13 @@ DEBUG = env_bool('DJANGO_DEBUG', False)
 
 ALLOWED_HOSTS = env_lista('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1')
 
+# Endereços HTTPS do servidor (ex.: https://sistur.exemplo.br). Sem isto, o login do painel /admin/ dá erro 403
+CSRF_TRUSTED_ORIGINS = env_lista('CSRF_TRUSTED_ORIGINS')
+
+# Quantos proxies (nginx, PythonAnywhere...) ficam na frente do Django. Usado para descobrir o IP real do cliente
+# nos limites de tentativas; sem isso, todos os usuários pareceriam vir do mesmo IP (o do proxy)
+NUM_PROXIES = int(env('DJANGO_NUM_PROXIES', 0)) or None
+
 
 #CORS_ALLOW_ALL_ORIGINS = True
 # Application definition
@@ -94,6 +101,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'NUM_PROXIES': NUM_PROXIES,
     'DATE_FORMAT': '%d/%m/%Y',
     'DATETIME_FORMAT': '%d/%m/%Y %H:%M:%S',
 }
@@ -213,6 +221,8 @@ DATE_FORMAT = 'd/m/Y'
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+# Destino do "python manage.py collectstatic" (arquivos do painel /admin/), servido pelo servidor web em produção
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -228,6 +238,13 @@ DATE_INPUT_FORMATS = [
 # Security Hardening
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
+
+if not DEBUG:
+    # Produção (atrás de HTTPS): o proxy informa que a conexão original era segura; cookies só por HTTPS
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = env_bool('DJANGO_SECURE_SSL_REDIRECT', False)
 
 # Content Security Policy (CSP)
 CSP_DEFAULT_SRC = ("'self'",)

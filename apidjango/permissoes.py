@@ -6,6 +6,10 @@ Regra única, usada por todas as views:
   - administrador: apenas as pesquisas que ele criou (Pesquisa.admin == usuário);
   - pesquisador: apenas as pesquisas em que faz parte da equipe (Pesquisa.usuario contém o usuário).
 
+Equipamentos (formulários inventariados):
+  - administrador: todos os equipamentos das pesquisas que ele criou;
+  - pesquisador: SOMENTE os equipamentos que ele mesmo inventariou (usuario_criador), nas pesquisas da equipe.
+
 Registros fora do escopo respondem 404 (e não 403), para não revelar que existem.
 """
 from django.http import Http404
@@ -33,6 +37,15 @@ def pesquisas_visiveis(user, apenas_ativas=True):
     if getattr(user, 'acessLevel', None) == 'Administrador':
         return qs.filter(admin=user)
     return qs.filter(usuario=user).distinct()
+
+
+def equipamentos_visiveis(qs, user):
+    """Restringe um QuerySet de equipamentos (modelos com `pesquisa` e `usuario_criador`) ao que [user] pode
+    acessar: o administrador vê os das suas pesquisas; o pesquisador, só os que ele inventariou."""
+    qs = qs.filter(pesquisa__in=pesquisas_visiveis(user))
+    if eh_administrador(user):
+        return qs
+    return qs.filter(usuario_criador=user)
 
 
 def usuarios_visiveis(admin):
@@ -72,12 +85,17 @@ class IsAdministrador(permissions.BasePermission):
 
 class EscopoPesquisaMixin:
     """
-    Para viewsets de formulários (modelos com FK `pesquisa`): lista/edita/apaga apenas registros de pesquisas
-    no escopo do usuário, e só permite criar ou mover registros para pesquisas desse escopo.
+    Para viewsets de formulários (modelos com FK `pesquisa`): lista/edita/apaga apenas os equipamentos que o usuário
+    pode acessar (ver equipamentos_visiveis), e só permite criar ou mover registros para pesquisas do seu escopo.
     """
 
     def get_queryset(self):
-        return super().get_queryset().filter(pesquisa__in=pesquisas_visiveis(self.request.user))
+        # Admin: equipamentos das suas pesquisas; pesquisador: só os que ele inventariou (os demais dão 404)
+        return equipamentos_visiveis(super().get_queryset(), self.request.user)
+
+    def perform_update(self, serializer):
+        # O autor nunca muda numa edição (nem o admin nem o pesquisador podem atribuir o equipamento a outra pessoa)
+        serializer.save(usuario_criador=serializer.instance.usuario_criador)
 
     def _validar_pesquisa_destino(self, request):
         destino = request.data.get('pesquisa')

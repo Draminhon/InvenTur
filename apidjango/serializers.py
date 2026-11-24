@@ -5,6 +5,8 @@ from .fields import EncryptionService
 from django.core.mail import send_mail
 from django.utils.timezone import now, timedelta
 import bleach
+import hmac
+from django.core.cache import cache
  
 class XSSSafeSerializerMixin:
     """
@@ -57,12 +59,13 @@ class ChangePasswordSerializer(XSSSafeSerializerMixin, serializers.Serializer):
             raise serializers.ValidationError("A senha deve ter pelo menos 8 caracteres.")
         return value
 
+# Tamanho máximo da foto de perfil
+TAMANHO_MAXIMO_FOTO = 5 * 1024 * 1024
+
+
 class UserSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
-    pesquisas = serializers.PrimaryKeyRelatedField(
-        many = True,
-        queryset = Pesquisa.objects.all(),
-        required=False
-        )
+    # Somente leitura: ninguém entra numa pesquisa por aqui (só pelo código de vínculo)
+    pesquisas = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
         
     class Meta:
         model = CustomUser
@@ -105,6 +108,16 @@ class UserSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
             instance.pesquisas.set(pesquisas_data)
         return instance
     
+    def validate_foto_perfil(self, value):
+        if value and getattr(value, 'size', 0) > TAMANHO_MAXIMO_FOTO:
+            raise serializers.ValidationError('A foto deve ter no máximo 5 MB.')
+        return value
+
+    def validate_password(self, value):
+        if value and value.strip() and len(value) < 8:
+            raise serializers.ValidationError('A senha deve ter pelo menos 8 caracteres.')
+        return value
+
     def validate_email(self, value):
         # Check uniqueness using blind index
         email_hash = EncryptionService().get_email_index(value)
@@ -128,11 +141,31 @@ class PesquisaSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = Pesquisa
         fields = '__all__'
-        # O dono da pesquisa é definido pelo servidor na criação e não pode ser trocado pelo cliente
-        read_only_fields = ['admin']
+        # Definidos pelo servidor: o dono (na criação), o código de vínculo (gerado; trocado só por gerar-codigo)
+        # e os registros de data/anonimização
+        read_only_fields = ['admin', 'codigo', 'anonimizada_em', 'criacao', 'atualizacao']
 
     def update(self, instance, validated_data):
         return super().update(instance, validated_data)
+
+    def validate_usuario(self, usuarios):
+        """
+        A equipe só cresce pelo código de vínculo (o pesquisador decide entrar). Por aqui o administrador só pode
+        REMOVER pessoas (edição) ou incluir quem já tem relação com ele (criação) — senão poderia puxar qualquer
+        conta do sistema para a própria pesquisa e passar a vê-la.
+        """
+        from .permissoes import usuarios_visiveis
+        ids = {u.id for u in usuarios}
+        if self.instance is not None:
+            permitidos = set(self.instance.usuario.values_list('id', flat=True))
+            mensagem = 'Pesquisadores só entram na pesquisa pelo código de vínculo. Aqui é possível apenas remover.'
+        else:
+            request = self.context.get('request')
+            permitidos = set(usuarios_visiveis(request.user).values_list('id', flat=True)) if request else set()
+            mensagem = 'Só é possível incluir pesquisadores que já participam das suas pesquisas.'
+        if not ids <= permitidos:
+            raise serializers.ValidationError(mensagem)
+        return usuarios
 
     def validate(self, attrs):
         # A data de término precisa ser posterior à de início (numa edição parcial, compara com o valor salvo)
@@ -604,71 +637,93 @@ class DynamicBaseSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer)
         model = Base
         fields = '__all__'
 
+# ---------------------------------------------------------------- Recuperação de senha
+# Regras: a resposta não revela se o e-mail tem conta; o código de 6 dígitos vale 10 minutos e é anulado após
+# 5 tentativas erradas na mesma conta (além do limite por IP nas views); a troca exige um código validado e
+# ainda no prazo; a senha nova tem no mínimo 8 caracteres; as sessões abertas são encerradas após a troca.
+OTP_MAX_FALHAS = 5
+MENSAGEM_CODIGO_INVALIDO = 'Código inválido ou expirado. Peça um novo código.'
+
+
+def _usuario_pelo_email(email):
+    return CustomUser.objects.filter(email_hash=EncryptionService().get_email_index(email), is_active=True).first()
+
+
+def _chave_falhas_otp(user):
+    return f'otp-falhas:{user.id}'
+
+
 class PasswordResetRequestSerializer(XSSSafeSerializerMixin, serializers.Serializer):
     email = serializers.EmailField()
 
     def validate_email(self, value):
-        try:
-            email_hash = EncryptionService().get_email_index(value)
-            user = CustomUser.objects.get(email_hash=email_hash)
-        except CustomUser.DoesNotExist:
-            raise serializers.ValidationError("Nenhum usuário com esse email foi encontrado")
-
+        user = _usuario_pelo_email(value)
+        # Sem conta: responde igual (não revela quais e-mails estão cadastrados), mas não envia nada
+        if user is None:
+            return value
         user.generate_otp()
+        cache.delete(_chave_falhas_otp(user))
         send_mail(
             "Código para recuperar sua senha",
-            f"Seu código para recuperar sua senha é: {user.otp}",
+            f"Seu código para recuperar sua senha é: {user.otp}\n\n"
+            "Ele vale por 10 minutos. Se você não pediu a recuperação, ignore este e-mail.",
             settings.DEFAULT_FROM_EMAIL,
             [user.email],
             fail_silently=False
         )
         return value
 
+
 class OTPVerificationSerializer(XSSSafeSerializerMixin, serializers.Serializer):
     email = serializers.EmailField()
     otp = serializers.CharField(max_length=6)
 
     def validate(self, data):
-        try:
-            email_hash = EncryptionService().get_email_index(data["email"])
-            user = CustomUser.objects.get(email_hash=email_hash)
-        except CustomUser.DoesNotExist:   
-            raise serializers.ValidationError({"email": "usuário não encontrado."})
-        
-        if user.otp!=data["otp"]:
-            raise serializers.ValidationError({"otp": "OTP invalido"})
-        
-        if user.otp_exp < now():
-            raise serializers.ValidationError({"otp": "OTP expirado"})
+        user = _usuario_pelo_email(data["email"])
+        if user is None or not user.otp or not user.otp_exp or user.otp_exp < now():
+            raise serializers.ValidationError({"otp": MENSAGEM_CODIGO_INVALIDO})
 
+        if not hmac.compare_digest(str(user.otp), str(data["otp"]).strip()):
+            chave = _chave_falhas_otp(user)
+            cache.add(chave, 0, 15 * 60)
+            try:
+                falhas = cache.incr(chave)
+            except ValueError:
+                falhas = 1
+                cache.set(chave, 1, 15 * 60)
+            if falhas >= OTP_MAX_FALHAS:
+                # Muitas tentativas: anula o código (é preciso pedir outro)
+                user.otp, user.otp_exp, user.otp_verified = None, None, False
+                user.save(update_fields=['otp', 'otp_exp', 'otp_verified'])
+                cache.delete(chave)
+            raise serializers.ValidationError({"otp": MENSAGEM_CODIGO_INVALIDO})
+
+        cache.delete(_chave_falhas_otp(user))
         user.otp_verified = True
-        user.save()
-
+        user.save(update_fields=['otp_verified'])
         return data
+
 
 class PasswordResetSerializer(XSSSafeSerializerMixin, serializers.Serializer):
     email = serializers.EmailField()
-    new_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True, min_length=8, error_messages={
+        'min_length': 'A senha deve ter pelo menos 8 caracteres.'})
 
     def validate(self, data):
-        try:
-            email_hash = EncryptionService().get_email_index(data["email"])
-            user = CustomUser.objects.get(email_hash=email_hash)
-        except CustomUser.DoesNotExist:
-            raise serializers.ValidationError({"email": "user não encontrado"})
-
-        if not user.otp_verified:
-            raise serializers.ValidationError({"otp": "verificação por OTP necessária"})
-        
+        user = _usuario_pelo_email(data["email"])
+        # Código validado E ainda dentro dos 10 minutos (antes, a validação valia para sempre)
+        if user is None or not user.otp_verified or not user.otp_exp or user.otp_exp < now():
+            raise serializers.ValidationError({"otp": "Valide o código enviado por e-mail antes de trocar a senha."})
+        self._user = user
         return data
 
-    
     def save(self, **kwargs):
-        email_hash = EncryptionService().get_email_index(self.validated_data["email"])
-        user = CustomUser.objects.get(email_hash=email_hash)
+        from .retencao import _invalidar_sessoes
+        user = self._user
         user.set_password(self.validated_data["new_password"])
-        user.otp = None  # Clear OTP after successful reset
+        user.otp = None  # o código não pode ser reutilizado
         user.otp_exp = None
-        user.otp_verified = False  # Reset verification status
+        user.otp_verified = False
         user.save()
+        _invalidar_sessoes(user)  # quem estava logado com a senha antiga é desconectado
         return user

@@ -30,7 +30,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from ..models import *
-from ..permissoes import pesquisas_visiveis
+from ..permissoes import equipamentos_visiveis, pesquisas_visiveis
 
 # services/__init__.py faz "import *": expõe só o que é desta exportação, sem vazar módulos auxiliares
 __all__ = ['MODEL_SHEET_MAP', 'export_pesquisa_to_excel', 'gerar_planilha', 'nome_do_arquivo']
@@ -288,13 +288,15 @@ def _aba_equipamentos(wb, titulo, modelo, registros):
     ws.freeze_panes = 'B2'  # cabeçalho e coluna de ID sempre visíveis
 
 
-def gerar_planilha(pesquisa):
-    """Monta a planilha da pesquisa. Separado da view para poder ser testado/reaproveitado."""
+def gerar_planilha(pesquisa, user=None):
+    """Monta a planilha da pesquisa. Com [user], inclui só os equipamentos que ele pode acessar
+    (o pesquisador exporta apenas o que inventariou)."""
     wb = openpyxl.Workbook()
     abas = []
     for modelo, titulo in MODEL_SHEET_MAP:
+        qs = modelo.objects.all() if user is None else equipamentos_visiveis(modelo.objects.all(), user)
         registros = list(
-            modelo.objects.filter(pesquisa=pesquisa, is_active=True)
+            qs.filter(pesquisa=pesquisa, is_active=True)
             .select_related('usuario_criador')
             .prefetch_related(*[c.name for c in modelo._meta.many_to_many])
             .order_by('id')
@@ -325,7 +327,7 @@ def export_pesquisa_to_excel(request, pesquisa_id):
     if pesquisa is None:
         return HttpResponse('Pesquisa não encontrada', status=404)
 
-    wb = gerar_planilha(pesquisa)
+    wb = gerar_planilha(pesquisa, request.user)
     nome = nome_do_arquivo(pesquisa)
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     response['Content-Disposition'] = f'attachment; filename="{nome}"; filename*=UTF-8\'\'{quote(nome)}'
