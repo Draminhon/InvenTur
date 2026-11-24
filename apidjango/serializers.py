@@ -1,11 +1,11 @@
+from django.conf import settings
 from rest_framework import serializers
 from .models import *
-from apidjango.models import validate_cpf
 from .fields import EncryptionService
 from django.core.mail import send_mail
 from django.utils.timezone import now, timedelta
 import bleach
-  
+ 
 class XSSSafeSerializerMixin:
     """
     Mixin to sanitize all string fields in a serializer to prevent XSS.
@@ -66,9 +66,22 @@ class UserSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
         
     class Meta:
         model = CustomUser
-        fields = ['id','username', 'CPF', 'email', 'password', 'is_active',  'acessLevel', 'status', 'password', 'telefone', 'pesquisas', 'foto_perfil']
+        fields = ['id','username', 'email', 'password', 'is_active',  'acessLevel', 'status', 'password', 'telefone', 'pesquisas', 'foto_perfil', 'pesquisas_ids']
         extra_kwargs = {'password': {'write_only': True, 'required': False, 'allow_blank': True}}
 
+
+    pesquisas_ids = serializers.SerializerMethodField()
+
+    def get_pesquisas_ids(self, obj):
+        """Pesquisas ativas de quem está consultando (administrador) das quais este usuário faz parte."""
+        request = self.context.get('request')
+        admin = getattr(request, 'user', None)
+        if not admin or not admin.is_authenticated:
+            return []
+        qs = obj.usuario.filter(is_active=True)
+        if not admin.is_superuser:
+            qs = qs.filter(admin=admin)
+        return list(qs.values_list('id', flat=True))
 
     def create(self, validated_data):
         pesquisas_data = validated_data.pop('pesquisas', [])
@@ -92,21 +105,9 @@ class UserSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
             instance.pesquisas.set(pesquisas_data)
         return instance
     
-    def validate_CPF(self, value):
-        validate_cpf(value)
-        
-        # Check uniqueness using blind index
-        cpf_hash = EncryptionService().get_blind_index(value)
-        user_id = self.instance.id if self.instance else None
-        
-        if CustomUser.objects.filter(cpf_hash=cpf_hash).exclude(id=user_id).exists():
-            raise serializers.ValidationError("Este CPF já está cadastrado.")
-            
-        return value 
-
     def validate_email(self, value):
         # Check uniqueness using blind index
-        email_hash = EncryptionService().get_blind_index(value)
+        email_hash = EncryptionService().get_email_index(value)
         user_id = self.instance.id if self.instance else None
         
         if CustomUser.objects.filter(email_hash=email_hash).exclude(id=user_id).exists():
@@ -127,10 +128,21 @@ class PesquisaSerializer(XSSSafeSerializerMixin, serializers.ModelSerializer):
     class Meta:
         model = Pesquisa
         fields = '__all__'
+        # O dono da pesquisa é definido pelo servidor na criação e não pode ser trocado pelo cliente
+        read_only_fields = ['admin']
 
     def update(self, instance, validated_data):
-        return super().update(instance, validated_data) 
-    
+        return super().update(instance, validated_data)
+
+    def validate(self, attrs):
+        # A data de término precisa ser posterior à de início (numa edição parcial, compara com o valor salvo)
+        inicio = attrs.get('dataInicio', getattr(self.instance, 'dataInicio', None))
+        termino = attrs.get('dataTermino', getattr(self.instance, 'dataTermino', None))
+        if inicio and termino and termino <= inicio:
+            raise serializers.ValidationError(
+                {'dataTermino': ['A data de término deve ser posterior à data de início.']})
+        return super().validate(attrs)
+
     def get_quantidadeLocais(self, obj):
         return obj.bases.filter(is_active=True).count()
 
@@ -597,7 +609,7 @@ class PasswordResetRequestSerializer(XSSSafeSerializerMixin, serializers.Seriali
 
     def validate_email(self, value):
         try:
-            email_hash = EncryptionService().get_blind_index(value)
+            email_hash = EncryptionService().get_email_index(value)
             user = CustomUser.objects.get(email_hash=email_hash)
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError("Nenhum usuário com esse email foi encontrado")
@@ -606,7 +618,7 @@ class PasswordResetRequestSerializer(XSSSafeSerializerMixin, serializers.Seriali
         send_mail(
             "Código para recuperar sua senha",
             f"Seu código para recuperar sua senha é: {user.otp}",
-            "britomurilorog@gmail.com",
+            settings.DEFAULT_FROM_EMAIL,
             [user.email],
             fail_silently=False
         )
@@ -618,7 +630,7 @@ class OTPVerificationSerializer(XSSSafeSerializerMixin, serializers.Serializer):
 
     def validate(self, data):
         try:
-            email_hash = EncryptionService().get_blind_index(data["email"])
+            email_hash = EncryptionService().get_email_index(data["email"])
             user = CustomUser.objects.get(email_hash=email_hash)
         except CustomUser.DoesNotExist:   
             raise serializers.ValidationError({"email": "usuário não encontrado."})
@@ -640,7 +652,7 @@ class PasswordResetSerializer(XSSSafeSerializerMixin, serializers.Serializer):
 
     def validate(self, data):
         try:
-            email_hash = EncryptionService().get_blind_index(data["email"])
+            email_hash = EncryptionService().get_email_index(data["email"])
             user = CustomUser.objects.get(email_hash=email_hash)
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError({"email": "user não encontrado"})
@@ -652,7 +664,7 @@ class PasswordResetSerializer(XSSSafeSerializerMixin, serializers.Serializer):
 
     
     def save(self, **kwargs):
-        email_hash = EncryptionService().get_blind_index(self.validated_data["email"])
+        email_hash = EncryptionService().get_email_index(self.validated_data["email"])
         user = CustomUser.objects.get(email_hash=email_hash)
         user.set_password(self.validated_data["new_password"])
         user.otp = None  # Clear OTP after successful reset

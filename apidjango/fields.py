@@ -4,7 +4,7 @@ from django.db import models
 from django.conf import settings
 from cryptography.fernet import Fernet
 import base64
-  
+ 
 class EncryptionService:
     _instance = None
     
@@ -50,6 +50,16 @@ class EncryptionService:
         key = settings.SECRET_KEY.encode()
         h = hmac.new(key, str(value).encode(), hashlib.sha256)
         return h.hexdigest()
+
+    @staticmethod
+    def normalizar_email(email):
+        """E-mail sem espaços nas pontas e em minúsculas (o login não diferencia maiúsculas)."""
+        return str(email or '').strip().lower()
+
+    def get_email_index(self, email):
+        """Blind index do e-mail normalizado — use em TODA busca de usuário por e-mail."""
+        email = self.normalizar_email(email)
+        return self.get_blind_index(email) if email else None
 
 class EncryptedCharField(models.CharField):
     """Campo que armazena dados criptografados no banco de dados."""

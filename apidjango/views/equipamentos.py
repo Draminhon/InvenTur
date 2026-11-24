@@ -6,8 +6,9 @@ from ..models import *
 from django.http import HttpResponse, JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
-  
-class RodoviaViewSet(viewsets.ModelViewSet):
+from ..permissoes import EscopoPesquisaMixin, exigir_pesquisa_visivel
+ 
+class RodoviaViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     """
     Expondo endpoints para:
@@ -32,7 +33,7 @@ class RodoviaViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
 
-class SistemaDeSegurancaViewSet(viewsets.ModelViewSet):
+class SistemaDeSegurancaViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = SistemaDeSeguranca.objects.filter(is_active=True)
     serializer_class = SistemaDeSegurancaSerializer
@@ -45,7 +46,7 @@ class SistemaDeSegurancaViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
     
-class LocadoraDeImoveisViewSet(viewsets.ModelViewSet):
+class LocadoraDeImoveisViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = LocadorasDeImoveis.objects.filter(is_active=True)
     serializer_class = LocadorasDeImoveisSerializer
@@ -58,7 +59,7 @@ class LocadoraDeImoveisViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
 
-class GuiamentoEConducaoTuristicaViewSet(viewsets.ModelViewSet):
+class GuiamentoEConducaoTuristicaViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = GuiamentoEConducaoTuristica.objects.filter(is_active=True)
     serializer_class = GuiamentoEConducaoTuristicaSerializer
@@ -71,7 +72,7 @@ class GuiamentoEConducaoTuristicaViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
     
-class AlimentosEBebidasViewSet(viewsets.ModelViewSet):
+class AlimentosEBebidasViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = AlimentosEBebidas.objects.filter(is_active=True)
     serializer_class = AlimentosEBebidasSerializer
@@ -84,7 +85,7 @@ class AlimentosEBebidasViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
 
-class MeioDeHospedagemViewSet(viewsets.ModelViewSet):
+class MeioDeHospedagemViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = MeioDeHospedagem.objects.filter(is_active=True)
     serializer_class = MeioDeHospedagemSerializer
@@ -98,7 +99,7 @@ class MeioDeHospedagemViewSet(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
 
-class InformacoesBasicasViewSet(viewsets.ModelViewSet):
+class InformacoesBasicasViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = InformacaoBasicaDoMunicipio.objects.filter(is_active=True)
     serializer_class = InformacoesBasicasSerializer
@@ -108,7 +109,7 @@ class InformacoesBasicasViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
 
-class ComercioTuristicoViewSet(viewsets.ModelViewSet):
+class ComercioTuristicoViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = ComercioTuristico.objects.filter(is_active=True)
     serializer_class = ComercioTuristicoSerializer
 
@@ -116,7 +117,7 @@ class ComercioTuristicoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class OutromeiodehospedagemViewSet(viewsets.ModelViewSet):
+class OutromeiodehospedagemViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = OutrosMeiosDeHospedagem.objects.filter(is_active=True)
     serializer_class = OutrosMeiosDeHospedagemSerializer
 
@@ -124,7 +125,7 @@ class OutromeiodehospedagemViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class AgenciaDeTurismoViewSet(viewsets.ModelViewSet):
+class AgenciaDeTurismoViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = AgenciaDeTurismo.objects.filter(is_active=True)
     serializer_class = AgenciaDeTurismoSerializer
 
@@ -132,7 +133,7 @@ class AgenciaDeTurismoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class TransporteTuristicoViewSet(viewsets.ModelViewSet):
+class TransporteTuristicoViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = TransporteTuristico.objects.filter(is_active=True)
     serializer_class = TransporteTuristicoSerializer
     
@@ -140,7 +141,7 @@ class TransporteTuristicoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class EspacoParaEventosViewSet(viewsets.ModelViewSet):
+class EspacoParaEventosViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = EspacoParaEventos.objects.filter(is_active=True)
     serializer_class = EspacoParaEventosSerializer
     
@@ -148,7 +149,7 @@ class EspacoParaEventosViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)   
-class ServicosParaEventosViewSet(viewsets.ModelViewSet):
+class ServicosParaEventosViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = ServicosParaEventos.objects.filter(is_active=True)
     serializer_class = ServicosParaEventosSerializer
     
@@ -156,7 +157,7 @@ class ServicosParaEventosViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]   
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class ParquesViewSet(viewsets.ModelViewSet):
+class ParquesViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = Parques.objects.filter(is_active=True)
     serializer_class = ParquesSerializer
     
@@ -164,7 +165,7 @@ class ParquesViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class EspacosDeDiversaoECulturaViewSet(viewsets.ModelViewSet):
+class EspacosDeDiversaoECulturaViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = EspacosDeDiversaoECultura.objects.filter(is_active=True)
     serializer_class = EspacosDeDiversaoECulturaSerializer
     
@@ -172,7 +173,7 @@ class EspacosDeDiversaoECulturaViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class InformacoesTuristicasViewSet(viewsets.ModelViewSet):
+class InformacoesTuristicasViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = InformacoesTuristicas.objects.filter(is_active=True)
     serializer_class = InformacoesTuristicasSerializer
     
@@ -180,7 +181,7 @@ class InformacoesTuristicasViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class EntidadesAssociativasViewSet(viewsets.ModelViewSet):
+class EntidadesAssociativasViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = EntidadesAssociativas.objects.filter(is_active=True)
     serializer_class = EntidadesAssociativasSerializer
 
@@ -188,7 +189,7 @@ class EntidadesAssociativasViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)   
-class InstalacoesEsportivasViewSet(viewsets.ModelViewSet):
+class InstalacoesEsportivasViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = InstalacoesEsportivas.objects.filter(is_active=True)
     serializer_class = InstalacoesEsportivasSerializer
 
@@ -196,7 +197,7 @@ class InstalacoesEsportivasViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class UnidadesDeConservacaoViewSet(viewsets.ModelViewSet):
+class UnidadesDeConservacaoViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = UnidadesDeConservacao.objects.filter(is_active=True)
     serializer_class = UnidadesDeConservacaoSerializer
 
@@ -204,7 +205,7 @@ class UnidadesDeConservacaoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)    
-class EventosProgramadosViewSet(viewsets.ModelViewSet):
+class EventosProgramadosViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = EventosProgramados.objects.filter(is_active=True)
     serializer_class = EventosProgramadosSerializer
 
@@ -212,7 +213,7 @@ class EventosProgramadosViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)    
-class GastronomiaArtesanatoViewSet(viewsets.ModelViewSet):
+class GastronomiaArtesanatoViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = GastronomiaArtesanato.objects.filter(is_active=True)
     serializer_class = GastronomiaArtesanatoSerializer
 
@@ -230,6 +231,8 @@ class EquipamentosListView(APIView):
         user = request.user
         if not pesquisa_id:
             raise ValidationError({"detail": "O parâmetro 'pesquisa_id' é obrigatório."})
+        # Só pesquisas no escopo do usuário (admin: as que criou; pesquisador: as da equipe); senão 404
+        pesquisa_id = exigir_pesquisa_visivel(user, pesquisa_id)
 
         filtros = {
             'pesquisa_id': pesquisa_id,

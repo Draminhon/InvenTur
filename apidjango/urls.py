@@ -3,7 +3,7 @@ from rest_framework_simplejwt.views import *
 from .views import *
 from .services import *
 from rest_framework.routers import DefaultRouter
-  
+ 
 router = DefaultRouter()
 router.register(r'rodovias', RodoviaViewSet, basename='rodovia')
 router.register(r'alimentosEBebidas', AlimentosEBebidasViewSet, basename='alimentos e bebidas')
@@ -41,13 +41,16 @@ urlpatterns = [
     path('base/<int:pk>/', BaseViewSet.as_view({'patch': 'update'})),
     path('user/status/update/<int:pk>/', StatusUpdateAPIView.as_view(), name='status-update'),
     path('pesquisas/usuario/', PesquisaUsuarioAuth.as_view(), name='pesquisar usuario por token'),
+    path('pesquisador/dashboard/', PesquisadorDashboardView.as_view(), name='pesquisador-dashboard'),
     path('admin/register/', AdminUserCreateView.as_view(), name = 'create-admin'),
+    path('admin/dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
+    path('admin/gestao/', AdminGestaoView.as_view(), name='admin-gestao'),
 
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', DecoratedTokenRefreshView.as_view(), name = 'token_refresh'),
 
     path('admin/<int:admin_id>/', get_admin_details, name = 'get_admin_details'),
-    path('verificarcpf/', verificar_email, name ='verificar-cpf'),
+    path('verificaremail/', verificar_email, name ='verificar-email'),
     path('user/<int:pk>/change-password/', AlterPasswordView.as_view(), name ='alter password'),
     path('login/', UsuarioLoginView, name = 'usuario-login'),
     path('logout/', LogoutAPIView.as_view(), name ='logout'),

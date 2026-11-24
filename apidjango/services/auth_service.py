@@ -1,5 +1,7 @@
+from django.utils import timezone
 from rest_framework import  permissions, viewsets, status, views, generics
 from rest_framework.permissions import IsAuthenticated
+from ..termos import TERMOS_VERSAO, termos_pendentes
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from ..serializers import *
 from ..models import *
@@ -15,7 +17,7 @@ from django.contrib.auth import authenticate, login
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenRefreshView
  
-  
+ 
 class SessionMonitor:
     _instance = None
     _stop_event = threading.Event()
@@ -70,14 +72,14 @@ def UsuarioLoginView(request):
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
 
-    CPF = None
+    email = None
     password = None
 
     # Tratamento para JSON
     if request.content_type == "application/json":
         try:
             data = json.loads(request.body)
-            CPF = data.get("CPF")
+            email = data.get("email")
             password = data.get("password")
         except json.JSONDecodeError:
             return JsonResponse(
@@ -86,18 +88,18 @@ def UsuarioLoginView(request):
             )
     # Tratamento para form-data/x-www-form-urlencoded
     else:
-        CPF = request.POST.get("CPF")
+        email = request.POST.get("email")
         password = request.POST.get("password")
 
     # Validação dos campos
-    if not CPF or not password:
+    if not email or not password:
         return JsonResponse(
-            {"error": "CPF e senha são obrigatórios"}, 
+            {"error": "E-mail e senha são obrigatórios"}, 
             status=status.HTTP_400_BAD_REQUEST
         )
 
     # Autenticação
-    user = authenticate(request, CPF=CPF, password=password)
+    user = authenticate(request, email=email, password=password)
     if user is None:
         return JsonResponse(
             {"error": "Credenciais inválidas"}, 
@@ -105,7 +107,13 @@ def UsuarioLoginView(request):
         )
 
 
-    pesquisas_qs = user.usuario.prefetch_related('admin')
+    # Último acesso: base da regra de contas inativas (Política de Privacidade, seção 10)
+    user.last_login = timezone.now()
+    user.aviso_inatividade_em = None
+    user.save(update_fields=['last_login', 'aviso_inatividade_em'])
+
+    # Só pesquisas ativas: excluir uma pesquisa marca is_active=False, e ela não deve ir para o cache offline do app
+    pesquisas_qs = user.usuario.filter(is_active=True).prefetch_related('admin')
 
     pesquisas_data = PesquisaSerializer(pesquisas_qs, many=True).data
     
@@ -119,7 +127,6 @@ def UsuarioLoginView(request):
             "access_exp": refresh.access_token['exp'],
             "user": {
                 "id": user.id,
-                "CPF": user.CPF,
                 "name": user.username,
                 "pesquisas": pesquisas_data,
                 "email": user.email,
@@ -127,7 +134,10 @@ def UsuarioLoginView(request):
                 "status": user.status,
                 "telefone": user.telefone,
                 "foto_perfil": user.foto_perfil.url if user.foto_perfil else None
-            } 
+            },
+            # O app pede o aceite dos Termos/Política antes de liberar o acesso quando houver pendência
+            "termos_pendentes": termos_pendentes(user),
+            "termos_versao": TERMOS_VERSAO,
         }, status=status.HTTP_200_OK)
     except Exception as e:
         return JsonResponse(
@@ -180,17 +190,12 @@ def verificar_email(request):
             data = json.loads(request.body)
             email = data.get('email', '').strip()
 
-            # Check for empty CPF
             if not email:
                 return JsonResponse({'success': False, 'message': 'email cannot be empty'}, status=400)
 
-            # Validate CPF format (optional)
-            # You can add logic here to validate the CPF format using a regular expression
-            # or a third-party library. If validation fails, return an appropriate error response.
-
             # Query the database for user with matching email using blind index
             try:
-                email_hash = EncryptionService().get_blind_index(email)
+                email_hash = EncryptionService().get_email_index(email)
                 user = CustomUser.objects.get(email_hash=email_hash)
                 return JsonResponse({
                     'success': True,
@@ -202,7 +207,7 @@ def verificar_email(request):
                 return JsonResponse({'success': False, 'message': 'email not found'}, status=404)
 
         except Exception as e:
-            print(f"Error verifying CPF: {e}")  # Log the error for debugging
+            print(f"Error verifying email: {e}")  # Log the error for debugging
             return JsonResponse({'success': False, 'message': 'Internal server error'}, status=500)
 
     return JsonResponse({'success': False, 'message': 'Method not allowed'}, status=405)
