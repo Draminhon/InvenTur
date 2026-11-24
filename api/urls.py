@@ -1,6 +1,6 @@
 """
 URL configuration for api project.
- 
+
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/5.1/topics/http/urls/
 Examples:
@@ -28,3 +28,11 @@ urlpatterns = [
  
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+elif settings.SERVIR_ARQUIVOS:
+    # Produção sem configuração extra no servidor web: o Django entrega as fotos e os arquivos do /admin/
+    from django.urls import re_path
+    from django.views.static import serve
+    urlpatterns += [
+        re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+        re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT}),
+    ]

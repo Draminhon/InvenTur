@@ -132,6 +132,8 @@ DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # Retenção de dados (LGPD) 1x por dia, sem cron (ver apidjango/retencao_automatica.py)
+    'apidjango.retencao_automatica.RetencaoDiariaMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -259,4 +261,11 @@ CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# O próprio Django entrega /media/ (fotos de perfil) e /static/ (painel /admin/), sem configurar o servidor web.
+# Se o servidor web (nginx...) já servir essas pastas, pode desligar para ganhar desempenho.
+SERVIR_ARQUIVOS = env_bool('DJANGO_SERVIR_ARQUIVOS', True)
+
+# Aplica a política de retenção 1x por dia automaticamente (desligada por padrão em desenvolvimento)
+RETENCAO_AUTOMATICA = env_bool('DJANGO_RETENCAO_AUTOMATICA', not DEBUG)
 
