@@ -6,8 +6,9 @@ from ..models import *
 from django.http import HttpResponse, JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from ..permissoes import EscopoPesquisaMixin, equipamentos_visiveis, exigir_pesquisa_visivel
  
-class RodoviaViewSet(viewsets.ModelViewSet):
+class RodoviaViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     """
     Expondo endpoints para:
@@ -32,7 +33,7 @@ class RodoviaViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
 
-class SistemaDeSegurancaViewSet(viewsets.ModelViewSet):
+class SistemaDeSegurancaViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = SistemaDeSeguranca.objects.filter(is_active=True)
     serializer_class = SistemaDeSegurancaSerializer
@@ -45,7 +46,7 @@ class SistemaDeSegurancaViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
     
-class LocadoraDeImoveisViewSet(viewsets.ModelViewSet):
+class LocadoraDeImoveisViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = LocadorasDeImoveis.objects.filter(is_active=True)
     serializer_class = LocadorasDeImoveisSerializer
@@ -58,7 +59,7 @@ class LocadoraDeImoveisViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
 
-class GuiamentoEConducaoTuristicaViewSet(viewsets.ModelViewSet):
+class GuiamentoEConducaoTuristicaViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = GuiamentoEConducaoTuristica.objects.filter(is_active=True)
     serializer_class = GuiamentoEConducaoTuristicaSerializer
@@ -71,7 +72,7 @@ class GuiamentoEConducaoTuristicaViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
     
-class AlimentosEBebidasViewSet(viewsets.ModelViewSet):
+class AlimentosEBebidasViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = AlimentosEBebidas.objects.filter(is_active=True)
     serializer_class = AlimentosEBebidasSerializer
@@ -84,7 +85,7 @@ class AlimentosEBebidasViewSet(viewsets.ModelViewSet):
         kwargs['partial'] = True
         return super().update(request, *args, **kwargs)
 
-class MeioDeHospedagemViewSet(viewsets.ModelViewSet):
+class MeioDeHospedagemViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = MeioDeHospedagem.objects.filter(is_active=True)
     serializer_class = MeioDeHospedagemSerializer
@@ -98,7 +99,7 @@ class MeioDeHospedagemViewSet(viewsets.ModelViewSet):
         return super().update(request, *args, **kwargs)
 
 
-class InformacoesBasicasViewSet(viewsets.ModelViewSet):
+class InformacoesBasicasViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
 
     queryset = InformacaoBasicaDoMunicipio.objects.filter(is_active=True)
     serializer_class = InformacoesBasicasSerializer
@@ -108,7 +109,7 @@ class InformacoesBasicasViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
 
-class ComercioTuristicoViewSet(viewsets.ModelViewSet):
+class ComercioTuristicoViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = ComercioTuristico.objects.filter(is_active=True)
     serializer_class = ComercioTuristicoSerializer
 
@@ -116,7 +117,7 @@ class ComercioTuristicoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class OutromeiodehospedagemViewSet(viewsets.ModelViewSet):
+class OutromeiodehospedagemViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = OutrosMeiosDeHospedagem.objects.filter(is_active=True)
     serializer_class = OutrosMeiosDeHospedagemSerializer
 
@@ -124,7 +125,7 @@ class OutromeiodehospedagemViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class AgenciaDeTurismoViewSet(viewsets.ModelViewSet):
+class AgenciaDeTurismoViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = AgenciaDeTurismo.objects.filter(is_active=True)
     serializer_class = AgenciaDeTurismoSerializer
 
@@ -132,7 +133,7 @@ class AgenciaDeTurismoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class TransporteTuristicoViewSet(viewsets.ModelViewSet):
+class TransporteTuristicoViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = TransporteTuristico.objects.filter(is_active=True)
     serializer_class = TransporteTuristicoSerializer
     
@@ -140,7 +141,7 @@ class TransporteTuristicoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class EspacoParaEventosViewSet(viewsets.ModelViewSet):
+class EspacoParaEventosViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = EspacoParaEventos.objects.filter(is_active=True)
     serializer_class = EspacoParaEventosSerializer
     
@@ -148,7 +149,7 @@ class EspacoParaEventosViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)   
-class ServicosParaEventosViewSet(viewsets.ModelViewSet):
+class ServicosParaEventosViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = ServicosParaEventos.objects.filter(is_active=True)
     serializer_class = ServicosParaEventosSerializer
     
@@ -156,7 +157,7 @@ class ServicosParaEventosViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]   
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class ParquesViewSet(viewsets.ModelViewSet):
+class ParquesViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = Parques.objects.filter(is_active=True)
     serializer_class = ParquesSerializer
     
@@ -164,7 +165,7 @@ class ParquesViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class EspacosDeDiversaoECulturaViewSet(viewsets.ModelViewSet):
+class EspacosDeDiversaoECulturaViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = EspacosDeDiversaoECultura.objects.filter(is_active=True)
     serializer_class = EspacosDeDiversaoECulturaSerializer
     
@@ -172,7 +173,7 @@ class EspacosDeDiversaoECulturaViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class InformacoesTuristicasViewSet(viewsets.ModelViewSet):
+class InformacoesTuristicasViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = InformacoesTuristicas.objects.filter(is_active=True)
     serializer_class = InformacoesTuristicasSerializer
     
@@ -180,7 +181,7 @@ class InformacoesTuristicasViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class EntidadesAssociativasViewSet(viewsets.ModelViewSet):
+class EntidadesAssociativasViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = EntidadesAssociativas.objects.filter(is_active=True)
     serializer_class = EntidadesAssociativasSerializer
 
@@ -188,7 +189,7 @@ class EntidadesAssociativasViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)   
-class InstalacoesEsportivasViewSet(viewsets.ModelViewSet):
+class InstalacoesEsportivasViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = InstalacoesEsportivas.objects.filter(is_active=True)
     serializer_class = InstalacoesEsportivasSerializer
 
@@ -196,7 +197,7 @@ class InstalacoesEsportivasViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)
-class UnidadesDeConservacaoViewSet(viewsets.ModelViewSet):
+class UnidadesDeConservacaoViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = UnidadesDeConservacao.objects.filter(is_active=True)
     serializer_class = UnidadesDeConservacaoSerializer
 
@@ -204,7 +205,7 @@ class UnidadesDeConservacaoViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)    
-class EventosProgramadosViewSet(viewsets.ModelViewSet):
+class EventosProgramadosViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = EventosProgramados.objects.filter(is_active=True)
     serializer_class = EventosProgramadosSerializer
 
@@ -212,7 +213,7 @@ class EventosProgramadosViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     def perform_create(self, serializer):
         serializer.save(usuario_criador=self.request.user)    
-class GastronomiaArtesanatoViewSet(viewsets.ModelViewSet):
+class GastronomiaArtesanatoViewSet(EscopoPesquisaMixin, viewsets.ModelViewSet):
     queryset = GastronomiaArtesanato.objects.filter(is_active=True)
     serializer_class = GastronomiaArtesanatoSerializer
 
@@ -230,6 +231,8 @@ class EquipamentosListView(APIView):
         user = request.user
         if not pesquisa_id:
             raise ValidationError({"detail": "O parâmetro 'pesquisa_id' é obrigatório."})
+        # Só pesquisas no escopo do usuário (admin: as que criou; pesquisador: as da equipe); senão 404
+        pesquisa_id = exigir_pesquisa_visivel(user, pesquisa_id)
 
         filtros = {
             'pesquisa_id': pesquisa_id,
@@ -239,27 +242,27 @@ class EquipamentosListView(APIView):
 
         
         # Rodovias
-        rodovias = Rodovia.objects.filter(**filtros)
+        rodovias = equipamentos_visiveis(Rodovia.objects.all(), user).filter(**filtros)
         rodovias_serialized = [
             {"tipo": "Rodovia", "dados": RodoviaSerializer(rodovia).data}
             for rodovia in rodovias
         ]
 
         # Sistemas de Segurança
-        sistemas = SistemaDeSeguranca.objects.filter(pesquisa__id=pesquisa_id,
+        sistemas = equipamentos_visiveis(SistemaDeSeguranca.objects.all(), user).filter(pesquisa__id=pesquisa_id,
                                                      is_active=True)
         sistemas_serialized = [
             {"tipo": "SistemaDeSeguranca", "dados": SistemaDeSegurancaSerializer(sistema).data}
             for sistema in sistemas
         ]
         # alimentos e bebidas
-        alimentos = AlimentosEBebidas.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        alimentos = equipamentos_visiveis(AlimentosEBebidas.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         alimentos_serialized = [
             {"tipo": "AlimentosEBebidas", "dados": AlimentosEBebidasSerializer(alimento).data}
             for alimento in alimentos
         ]
         # meios de hospedagem
-        hospedagens =  MeioDeHospedagem.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        hospedagens =  equipamentos_visiveis(MeioDeHospedagem.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         hospedagens_serialized = [
             {"tipo": "Meios de Hospedagem", "dados": MeioDeHospedagemSerializer(hospedagem).data}
             for hospedagem in hospedagens
@@ -267,105 +270,105 @@ class EquipamentosListView(APIView):
 
         #info basicas do municipio
  
-        infosBasicas = InformacaoBasicaDoMunicipio.objects.filter(pesquisa__id=pesquisa_id,
+        infosBasicas = equipamentos_visiveis(InformacaoBasicaDoMunicipio.objects.all(), user).filter(pesquisa__id=pesquisa_id,
                                                                   is_active=True)
         infosBasicas_serialized = [
             {"tipo": "Informações Básicas do Município", "dados": InformacoesBasicasSerializer(infoBasica).data}
             for infoBasica in infosBasicas
         ]
         
-        comercioTuristicos = ComercioTuristico.objects.filter(pesquisa__id=pesquisa_id, 
+        comercioTuristicos = equipamentos_visiveis(ComercioTuristico.objects.all(), user).filter(pesquisa__id=pesquisa_id, 
                                                               is_active=True)
         comercioTuristicos_serialized = [
             {"tipo": "Comércio Turístico", "dados": ComercioTuristicoSerializer(comercioTuristico).data}
             for comercioTuristico in comercioTuristicos
         ]
 
-        locadoraImoveis = LocadorasDeImoveis.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        locadoraImoveis = equipamentos_visiveis(LocadorasDeImoveis.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         locadoraImoveis_serialized = [
             {"tipo": "Locadora de Imóveis", "dados": LocadorasDeImoveisSerializer(locadoraImovel).data}
             for locadoraImovel in locadoraImoveis
         ]
 
-        outrosMeios = OutrosMeiosDeHospedagem.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        outrosMeios = equipamentos_visiveis(OutrosMeiosDeHospedagem.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         outrosMeios_serialized = [
             {"tipo": "Outros Tipos de Acomodação", "dados": OutrosMeiosDeHospedagemSerializer(outroMeioHospedagem).data}
             for outroMeioHospedagem in outrosMeios
         ]
 
-        agenciasTurismo = AgenciaDeTurismo.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        agenciasTurismo = equipamentos_visiveis(AgenciaDeTurismo.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         agenciasTurismo_serialized = [
             {"tipo": "Agência de Turismo", "dados": AgenciaDeTurismoSerializer(agenciaDeTurismo).data}
             for agenciaDeTurismo in agenciasTurismo
         ]
         
-        transportesTuristicos = TransporteTuristico.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        transportesTuristicos = equipamentos_visiveis(TransporteTuristico.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         transportesTuristicos_serialized = [
             {"tipo": "Transporte Turistico", "dados": TransporteTuristicoSerializer(transporteTuristico).data}
             for transporteTuristico in transportesTuristicos
         ]
         
-        espacosParaEventos = EspacoParaEventos.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        espacosParaEventos = equipamentos_visiveis(EspacoParaEventos.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         espacosParaEventos_serialized = [
             {"tipo": "Espaço para Eventos", "dados": EspacoParaEventosSerializer(espacoParaEvento).data}
             for espacoParaEvento in espacosParaEventos
         ]
         
-        servicosParaEventos = ServicosParaEventos.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        servicosParaEventos = equipamentos_visiveis(ServicosParaEventos.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         servicosParaEventos__serialized = [
             {"tipo": "Serviços para Eventos", "dados": ServicosParaEventosSerializer(servicoParaEvento).data}
             for servicoParaEvento in servicosParaEventos
         ]
         
-        parques = Parques.objects.filter(pesquisa__id=pesquisa_id,is_active=True)
+        parques = equipamentos_visiveis(Parques.objects.all(), user).filter(pesquisa__id=pesquisa_id,is_active=True)
         parques__serialized = [
             {"tipo": "Parques", "dados": ParquesSerializer(parque).data}
             for parque in parques
         ]
         
-        espacosParaDiversao = EspacosDeDiversaoECultura.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        espacosParaDiversao = equipamentos_visiveis(EspacosDeDiversaoECultura.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         espacosParaDiversao__serialized = [
             {"tipo": "Espaços Para Diversão e Cultura", "dados": EspacosDeDiversaoECulturaSerializer(espacoParaDiversao).data}
             for espacoParaDiversao in espacosParaDiversao
         ]
         
-        informacoesTuristicas = InformacoesTuristicas.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        informacoesTuristicas = equipamentos_visiveis(InformacoesTuristicas.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         informacoesTuristicas__serialized = [
             {"tipo": "Informações Turisticas", "dados": InformacoesTuristicasSerializer(informacaoTuristica).data}
             for informacaoTuristica in informacoesTuristicas
         ]
         
-        entidadesAssociativas = EntidadesAssociativas.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        entidadesAssociativas = equipamentos_visiveis(EntidadesAssociativas.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         entidadesAssociativas__serialized = [
             {"tipo": "Entidades Associativas e Similares", "dados": EntidadesAssociativasSerializer(entidadeAssociativa).data}
             for entidadeAssociativa in entidadesAssociativas
         ]
         
-        guiamentosTuristicos = GuiamentoEConducaoTuristica.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        guiamentosTuristicos = equipamentos_visiveis(GuiamentoEConducaoTuristica.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         guiamentosTuristicos_serialized = [
             {"tipo": "Guiamento e Condução Turística", "dados": GuiamentoEConducaoTuristicaSerializer(locadoraImovel).data}
             for locadoraImovel in guiamentosTuristicos
         ]
         
-        intalacoesEsportivas = InstalacoesEsportivas.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        intalacoesEsportivas = equipamentos_visiveis(InstalacoesEsportivas.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         instalacoesEsportivas_serialized = [
             {"tipo": "Instalações Esportivas", "dados": InstalacoesEsportivasSerializer(instalacaoEsportiva).data}
             for instalacaoEsportiva in intalacoesEsportivas
         ]
         
-        unidadesConservacao = UnidadesDeConservacao.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        unidadesConservacao = equipamentos_visiveis(UnidadesDeConservacao.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         unidadesConservacao_serialized = [
             {"tipo": "Unidades De Conservação", "dados": UnidadesDeConservacaoSerializer(unidadeConservacao).data}
             for unidadeConservacao in unidadesConservacao
         ]
         
-        eventosProgramadoss = EventosProgramados.objects.filter(pesquisa__id=pesquisa_id, is_active=True)
+        eventosProgramadoss = equipamentos_visiveis(EventosProgramados.objects.all(), user).filter(pesquisa__id=pesquisa_id, is_active=True)
         eventosProgramadoss_serialized = [
             {"tipo": "Eventos Programados", "dados": EventosProgramadosSerializer(eventoProgramado).data}
             for eventoProgramado in eventosProgramadoss
         ]
         
-        gastronomiaArtesanatos = GastronomiaArtesanato.objects.filter(pesquisa__id=pesquisa_id,is_active=True)
+        gastronomiaArtesanatos = equipamentos_visiveis(GastronomiaArtesanato.objects.all(), user).filter(pesquisa__id=pesquisa_id,is_active=True)
         gastronomiaArtesanatos_serialized = [
             {"tipo": "Gastronomia e Artesanatos", "dados": GastronomiaArtesanatoSerializer(gastronomiaArtesanato).data}
             for gastronomiaArtesanato in gastronomiaArtesanatos

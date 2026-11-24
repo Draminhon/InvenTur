@@ -8,7 +8,6 @@ import 'package:sistur/controllers/pesquisa_controller.dart';
 import 'package:sistur/ui/widgets/cards/user_pesquisa_card_widget.dart';
 import 'dart:convert';
 import 'package:sistur/utils/app_constants.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sistur/ui/widgets/text%20fields/auto_complete_text_field.dart';
 import 'package:sistur/services/secure_storage_service.dart';
 import 'package:sistur/services/interceptor_service.dart';
@@ -22,7 +21,6 @@ class EditPesquisa extends StatefulWidget {
 
 class _EditPesquisaState extends State<EditPesquisa>
     with SingleTickerProviderStateMixin {
-  bool _tileExpanded = false;
   final Set<User> selectedUsers = {};
   late Estado? _estadoSelecionado = Estado(id: -1, sigla: '', nome: '');
   late Municipio? _municipioSelecionado = Municipio(id: -1, nome: '');
@@ -30,7 +28,6 @@ class _EditPesquisaState extends State<EditPesquisa>
   List<User> users = [
     User(
         username: "Fulano Silva da Costa",
-        CPF: "789.214.878-02",
         email: "fulanosilva@teste.com",
         status: "Não Ativo",
         accessLevel: 'Pesquisador'),
@@ -45,8 +42,6 @@ class _EditPesquisaState extends State<EditPesquisa>
   late TextEditingController _codigIbgeController;
   late TextEditingController _municipioController;
   late TextEditingController _estadoController;
-  final TextEditingController _nomePesquisador = TextEditingController();
-  final TextEditingController _cpfPesquisador = TextEditingController();
 
   late List<int> _usersIds;
   late int pesquisaId;
@@ -383,93 +378,6 @@ _usersIds.clear();
                           _municipioController.text = value;
                         },
                       ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                            border: Border.symmetric(
-                                horizontal: BorderSide(
-                                    color: Color.fromARGB(255, 55, 111, 60)))),
-                        child: ExpansionTile(
-                          shape: const Border.symmetric(
-                              horizontal: BorderSide(
-                                  color: Color.fromARGB(255, 55, 111, 60))),
-                          childrenPadding: const EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 15),
-                          title: const Row(
-                            children: [
-                              Spacer(flex: 2),
-                              Text(
-                                "Adicionar Pesquisador(es)",
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 55, 111, 60),
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Spacer(),
-                            ],
-                          ),
-                          trailing: Icon(
-                            _tileExpanded
-                                ? Icons.remove_rounded
-                                : Icons.add_rounded,
-                            color: const Color.fromARGB(255, 55, 111, 60),
-                            size: 32,
-                          ),
-                          children: [
-                            SizedBox(
-                                height: 150.h,
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                    isDense: true,
-                                    fillColor: Colors.white,
-                                    filled: true,
-                                    label: const Text("Procurar por nome"),
-                                    enabledBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(
-                                          color:
-                                              Color.fromARGB(255, 55, 111, 60),
-                                          width: 2.0,
-                                        )),
-                                    focusedBorder: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                        borderSide: const BorderSide(
-                                          color:
-                                              Color.fromARGB(255, 55, 111, 60),
-                                          width: 2.0,
-                                        )),
-                                    prefixIcon: const Icon(
-                                      Icons.search,
-                                      color: const Color.fromARGB(
-                                          255, 55, 111, 60),
-                                    ),
-                                  ),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      userFuture = getUsers().then((users) =>
-                                          users
-                                              .where((user) =>
-                                                  user.accessLevel ==
-                                                      'Pesquisador' &&
-                                                  (user.username
-                                                          .toLowerCase()
-                                                          .contains(value
-                                                              .toLowerCase()) ??
-                                                      false))
-                                              .toList());
-                                    });
-                                  },
-                                )),
-                            SizedBox(height: 55.h ,),
-                            userSearchAndSelectSection(), // Aqui exibimos o campo de busca e os resultados.
-                          ],
-                          onExpansionChanged: (expanded) {
-                            setState(() {
-                              _tileExpanded = expanded;
-                            });
-                          },
-                        ),
-                      ),
                     ],
                   ),
                   Flexible(
@@ -579,25 +487,6 @@ _usersIds.clear();
     );
   }
 
-  Widget userSearchAndSelectSection() {
-    return FutureBuilder<List<User>>(
-      future: userFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
-        } else if (snapshot.hasData) {
-          final users = snapshot.data!;
-          if (users.isEmpty) {
-            return const Text("Nenhum usuário encontrado");
-          }
-          return showUsers(users);
-        } else {
-          return const Text("Erro ao carregar usuários");
-        }
-      },
-    );
-  }
-
   Widget selectedUsersSection() {
     return Expanded(
         child: ListView.builder(
@@ -652,39 +541,4 @@ _usersIds.clear();
     }
   }
   // Caso nenhum dado seja recebido
-
-  Widget showUsers(List<User> posts) {
-    return SizedBox(
-      height: 800.h,
-      child: ListView.builder(
-        itemCount:
-            posts.where((post) => post.accessLevel == 'Pesquisador').length,
-        itemBuilder: (context, index) {
-          final filteredPosts =
-              posts.where((post) => post.accessLevel == 'Pesquisador').toList();
-          final post = filteredPosts[index];
-          final isSelected = selectedUsers.contains(post);
-          return GestureDetector(
-            onTap: () {
-              _pesquisaController.addUserPesquisa(post);
-
-              setState(() {
-                if (isSelected) {
-                  selectedUsers
-                      .remove(post); // Remove se já estiver selecionado
-                } else {
-                  selectedUsers
-                      .add(post); // Adiciona se não estiver selecionado
-                }
-              });
-            },
-            child: UserPesquisaCardList(
-              user: post,
-              isSelected: isSelected,
-            ),
-          );
-        },
-      ),
-    );
-  }
 }

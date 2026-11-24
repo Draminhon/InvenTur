@@ -1,4 +1,5 @@
   import 'package:flutter/material.dart';
+import 'package:sistur/ui/widgets/avatar_padrao.dart';
   import 'package:sistur/models/pesquisa_model.dart';
   import 'package:sistur/controllers/user_controller.dart';
   import 'package:sistur/ui/widgets/container_widget.dart';
@@ -19,6 +20,7 @@
   import 'package:sistur/models/user_model.dart';
   import 'package:sistur/providers/providers.dart';
 import 'package:sistur/utils/modals.dart';
+import 'package:sistur/ui/widgets/vincular_pesquisa_dialog.dart';
 
 
 
@@ -51,31 +53,51 @@ import 'package:sistur/utils/modals.dart';
     State<PesquisadorHome> createState() => _PesquisadorHomeState();
   }
 
+// Verde mais claro do botão "Sincronizar Dados" (o verde padrão do projeto é 55,111,60)
+const _verdeClaro = Color.fromARGB(255, 92, 158, 98);
+
   class _PesquisadorHomeState extends State<PesquisadorHome> {
-    static Future<List<Pesquisa>> getPesquisas() async {
+    /// Pesquisas do servidor. Retorna null quando não foi possível consultar (ex.: sem conexão) — só aí a tela
+    /// usa o cache offline. Uma lista vazia é uma resposta válida: o pesquisador não tem pesquisas ativas.
+    static Future<List<Pesquisa>?> getPesquisas() async {
       try {
         final response = await ApiService().get('pesquisas/usuario/');
 
         if (response.statusCode == 200) {
           final List<dynamic> data = response.data;
+          await _atualizarCachePesquisas(data);
           return data.map((item) => Pesquisa.fromJson(item)).toList();
         } else {
           print("Falha ao carregar pesquisas. Status: ${response.statusCode}");
-          return [];
+          return null;
         }
       } catch (e) {
         print("Ocorreu um erro ao buscar as pesquisas: $e");
-        return [];
+        return null;
       }
     }
 
-    Future<List<Pesquisa>> pesquisasFuture = getPesquisas();
+    /// Mantém o cache offline (user_data['pesquisas']) igual à última lista do servidor,
+    /// para que pesquisas excluídas ou das quais o usuário saiu não continuem aparecendo offline.
+    static Future<void> _atualizarCachePesquisas(List<dynamic> pesquisas) async {
+      try {
+        final secureStorage = SecureStorageService();
+        final userDataString = await secureStorage.read('user_data');
+        if (userDataString == null) return;
+        final userData = Map<String, dynamic>.from(json.decode(userDataString));
+        userData['pesquisas'] = pesquisas;
+        await secureStorage.write('user_data', json.encode(userData));
+      } catch (e) {
+        print("Não foi possível atualizar o cache de pesquisas: $e");
+      }
+    }
+
+    Future<List<Pesquisa>?> pesquisasFuture = getPesquisas();
     final UserController _userController = UserController();
 
     int userId = 0;
     String userName = '';
     String userEmail = '';
-    String userCPF = '';
     String userStatus = '';
     String userTelefone = '';
     Future<void> getUserInfo() async {
@@ -86,7 +108,6 @@ import 'package:sistur/utils/modals.dart';
         setState(() {
           userName = userData['name'];
           userEmail = userData['email'];
-          userCPF = userData['CPF'];
           userStatus = userData['status'];
           userId = userData['id'];
           userTelefone = userData['telefone'];
@@ -95,7 +116,6 @@ import 'package:sistur/utils/modals.dart';
             id: userId,
             username: userName,
             email: userEmail,
-            CPF: userCPF,
             status: userStatus,
             accessLevel: userData['acessLevel'] ?? 'Pesquisador',
             telefone: userTelefone,
@@ -124,6 +144,28 @@ import 'package:sistur/utils/modals.dart';
       connectivitySubscription =
           Connectivity().onConnectivityChanged.listen(_updateConnectionStatus);
       pesquisasFuture = getPesquisas();
+      // A fila também é enviada em segundo plano: acompanha o contador sem precisar recarregar a tela
+      DataSyncService().pendentes.addListener(_aoMudarPendentes);
+    }
+
+    /// A fila mudou (envio silencioso, novo formulário salvo offline...).
+    void _aoMudarPendentes() {
+      if (!mounted) return;
+      final atual = DataSyncService().pendentes.value;
+      final enviouAlgo = atual < qtdeBanco;
+      setState(() => qtdeBanco = atual);
+      // Algo foi enviado em segundo plano: atualiza a "Quantidade de Equipamentos" dos cards, sem diálogo
+      // (no envio manual quem recarrega é o próprio botão)
+      if (enviouAlgo && !_isSyncing) _recarregarPesquisasSilenciosamente();
+    }
+
+    Future<void> _recarregarPesquisasSilenciosamente() async {
+      final pesquisas = await getPesquisas();
+      if (pesquisas != null && mounted) {
+        setState(() {
+          pesquisasFuture = Future.value(pesquisas);
+        });
+      }
     }
 
     Future<void> getQtdeBanco() async {
@@ -144,6 +186,7 @@ import 'package:sistur/utils/modals.dart';
 
     @override
     void dispose() {
+      DataSyncService().pendentes.removeListener(_aoMudarPendentes);
       connectivitySubscription.cancel();
       super.dispose();
     }
@@ -207,7 +250,9 @@ import 'package:sistur/utils/modals.dart';
                     return GestureDetector(
                       onTap: () => Scaffold.of(context).openDrawer(),
                       child: CircleAvatar(
-                        backgroundColor: Colors.transparent,
+                        backgroundColor: (user.fotoPerfil == null && user.fotoPerfilBase64 == null)
+                            ? corFundoAvatarPadrao
+                            : Colors.transparent,
                         backgroundImage: user.fotoPerfilBase64 != null
                             ? MemoryImage(base64Decode(user.fotoPerfilBase64!))
                             : (user.fotoPerfil != null
@@ -215,11 +260,7 @@ import 'package:sistur/utils/modals.dart';
                                 : null) as ImageProvider?,
                         child: (user.fotoPerfil == null &&
                                 user.fotoPerfilBase64 == null)
-                            ? const Icon(
-                                Icons.account_circle,
-                                size: 40,
-                                color: Color.fromARGB(255, 55, 111, 60),
-                              )
+                            ? const IconePerfilPadrao()
                             : null,
                       ),
                     );
@@ -245,7 +286,7 @@ import 'package:sistur/utils/modals.dart';
               left: sizeScreen.height * 0.02,
               right: sizeScreen.height * 0.02,
             ),
-            child: FutureBuilder<List<Pesquisa>>(
+            child: FutureBuilder<List<Pesquisa>?>(
               future: pesquisasFuture,
               builder: (context, snapshot) {
                 if (userStatus == 'Aguardando Aprovação') {
@@ -270,11 +311,11 @@ import 'package:sistur/utils/modals.dart';
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: const CircularProgressIndicator());
                   } else if (snapshot.hasData) {
-                    final pesquisa = snapshot.data!;
-                    if (pesquisa.isEmpty) {
-                      return showPesquisas(pesquisasOff);
-                    }
-                    return showPesquisas(pesquisa);
+                    // Resposta do servidor (mesmo vazia) é a fonte da verdade: nunca mostra o cache aqui
+                    return showPesquisas(snapshot.data!);
+                  } else if (pesquisasOff.isNotEmpty) {
+                    // Sem resposta do servidor (offline): usa a última lista sincronizada
+                    return showPesquisas(pesquisasOff);
                   } else {
                     return Container(
                         margin: EdgeInsets.only(top: 1000.h),
@@ -297,58 +338,105 @@ import 'package:sistur/utils/modals.dart';
                 }
               },
             )),
-        bottomNavigationBar: (isConnected && qtdeBanco >= 1)
-            ? SafeArea(
-                child: Container(
-                  height: 250.w,
-                  margin: EdgeInsets.only(left: 55.w, right: 55.w, bottom: 150.w),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10))),
-                        padding: WidgetStateProperty.all(EdgeInsets.symmetric(
-                          vertical: 34.904.h,
-                        )),
-                        backgroundColor: WidgetStateProperty.all(
-                            const Color.fromARGB(255, 55, 111, 60)),
-                        overlayColor: WidgetStateProperty.all(
-                            const Color.fromARGB(255, 55, 111, 60))),
-                    onPressed: _isSyncing
-                        ? null
-                        : () async {
-                            setState(
-                              () {
-                                _isSyncing = true;
-                              },
-                            );
-
-                            try {
-                              await DataSyncService().syncPending();
-                              // Após sincronizar, atualiza a contagem de itens pendentes
-                              await getQtdeBanco();
-                            } finally {
-                              if (mounted) {
-                                Modals().showSyncDialog(context);
-                                setState(() {
-                                  _isSyncing = false;
-                                });
-                              }
-                            }
-                          },
-                    child: _isSyncing
-                        ? const CircularProgressIndicator(
-                            color: Colors.white,
-                          )
-                        : Text(
-                            'Sincronizar agora',
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 65.76.w),
-                          ),
+        // Rodapé: "Vincular-se a Pesquisa" e, logo abaixo, "Sincronizar Dados" (quando há envios pendentes e conexão)
+        bottomNavigationBar: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (userStatus != 'Aguardando Aprovação')
+                // Mesmo estilo do botão "Cadastrar Nova Pesquisa" do administrador (pesquisas_page.dart)
+                Padding(
+                  padding: EdgeInsets.fromLTRB(10, 5.w, 10, 10),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 180.w,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                          padding: WidgetStateProperty.all(
+                              EdgeInsets.symmetric(vertical: 10.w)),
+                          backgroundColor: WidgetStateProperty.all(
+                              const Color.fromARGB(255, 55, 111, 60)),
+                          overlayColor:
+                              WidgetStateProperty.all(Colors.green[600])),
+                      onPressed: () async {
+                        final mensagens = ScaffoldMessenger.of(context);
+                        final mensagem = await mostrarVincularPesquisa(context);
+                        // Vínculo concluído (o modal já fechou): confirma e recarrega a lista
+                        if (mensagem != null && mounted) {
+                          mensagens.showSnackBar(SnackBar(
+                            content: Text(mensagem),
+                            backgroundColor: const Color.fromARGB(255, 55, 111, 60),
+                            duration: const Duration(seconds: 5),
+                          ));
+                          setState(() {
+                            pesquisasFuture = getPesquisas();
+                          });
+                        }
+                      },
+                      child: Text(
+                        'Vincular-se a Pesquisa',
+                        style: TextStyle(color: Colors.white, fontSize: 80.w),
+                      ),
+                    ), 
                   ),
                 ),
-              )
-            : const SizedBox
-                .shrink(), // Se não estiver conectado ou não houver dados, não mostra nada
+              // Sempre abaixo do "Vincular-se a Pesquisa", em verde mais claro
+              if (isConnected && qtdeBanco >= 1)
+                Padding(
+                  padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                  child: SizedBox(
+                    width: double.infinity,
+                    height: 180.w,
+                    child: ElevatedButton(
+                      style: ButtonStyle(
+                          shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10))),
+                          padding: WidgetStateProperty.all(
+                              EdgeInsets.symmetric(vertical: 10.w)),
+                          backgroundColor: WidgetStateProperty.all(_verdeClaro),
+                          overlayColor: WidgetStateProperty.all(
+                              const Color.fromARGB(255, 55, 111, 60))),
+                      onPressed: _isSyncing
+                          ? null
+                          : () async {
+                              setState(() => _isSyncing = true);
+                              ResultadoSync? resultado;
+                              try {
+                                resultado = await DataSyncService().syncPending();
+                                // Após sincronizar, atualiza a contagem de itens pendentes
+                                await getQtdeBanco();
+                                // e recarrega as pesquisas, para a "Quantidade de Equipamentos" incluir os enviados
+                                if (mounted) {
+                                  // Corpo em bloco: a forma "=>" devolveria o Future e o setState lança erro
+                                  setState(() {
+                                    pesquisasFuture = getPesquisas();
+                                  });
+                                }
+                              } finally {
+                                if (mounted) {
+                                  Modals().showSyncDialog(context, resultado);
+                                  setState(() => _isSyncing = false);
+                                }
+                              }
+                            },
+                      child: _isSyncing
+                          ? const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                  color: Colors.white, strokeWidth: 2.5))
+                          : Text(
+                              'Sincronizar Dados ($qtdeBanco)',
+                              style: TextStyle(color: Colors.white, fontSize: 80.w),
+                            ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
       );
     }
   }
@@ -359,22 +447,17 @@ import 'package:sistur/utils/modals.dart';
         posts.where((post) => post.status != "Não Iniciado").toList();
 
     if (filteredPosts.isEmpty) {
-      return Container(
-          margin: EdgeInsets.only(top: 1000.h),
-          height: 350.h,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(
-                color: const Color.fromARGB(255, 55, 111, 60),
-                width: 10.h,
-              ),
-              borderRadius: BorderRadius.circular(10)),
-          child: Center(
-            child: const Text(
-              "Não há pesquisas disponíveis no momento.",
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-          ));
+      // Só o texto, em cinza, no meio da tela (sem caixa)
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Text(
+            "Não há pesquisas disponíveis no momento.",
+            textAlign: TextAlign.center,
+            style: TextStyle(color: Colors.grey[600], fontSize: 16),
+          ),
+        ),
+      );
     }
 
     return SizedBox(

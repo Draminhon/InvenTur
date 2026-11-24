@@ -1,10 +1,12 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:sistur/ui/widgets/avatar_padrao.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sistur/controllers/user_controller.dart';
 import 'package:sistur/ui/home/Pesquisador/perfil_pesquisador.dart';
 import 'package:sistur/ui/home/Pesquisador/painel_pesquisador.dart';
+import 'package:sistur/ui/screens/termos/termos_page.dart';
 import 'package:sistur/utils/app_constants.dart';
 import 'package:sistur/services/secure_storage_service.dart';
 import 'package:sistur/services/interceptor_service.dart';
@@ -66,18 +68,16 @@ class _OptionsDrawerState extends State<OptionsDrawer> {
                 accountName: Text(user.username), 
                 accountEmail: Text(user.email),
                 currentAccountPicture: CircleAvatar(
-                  backgroundColor: Colors.white,
+                  backgroundColor: (user.fotoPerfil == null && user.fotoPerfilBase64 == null)
+                      ? corFundoAvatarPadrao
+                      : Colors.white,
                   backgroundImage: user.fotoPerfilBase64 != null
                       ? MemoryImage(base64Decode(user.fotoPerfilBase64!))
                       : (user.fotoPerfil != null
                           ? NetworkImage(user.fullFotoPerfilUrl!)
                           : null) as ImageProvider?,
                   child: (user.fotoPerfil == null && user.fotoPerfilBase64 == null)
-                      ? const Icon(
-                          Icons.admin_panel_settings,
-                          size: 45,
-                          color: Color.fromARGB(255, 55, 111, 60),
-                        )
+                      ? const IconePerfilPadrao()
                       : null,
                 ),
               ),
@@ -142,6 +142,41 @@ class _OptionsDrawerState extends State<OptionsDrawer> {
                           padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                           child: Text(
                             "Meu Painel",
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Icon(Icons.arrow_forward_ios_rounded),
+                  ],
+                ),
+              ),
+              // Termos de Uso e Política de Privacidade sempre acessíveis (LGPD, art. 9º)
+              TextButton(
+                style: ButtonStyle(
+                  shape: const WidgetStatePropertyAll(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                    )
+                  ),
+                  foregroundColor: WidgetStatePropertyAll(Colors.green[800]),
+                ),
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (context) => const TermosPage()),
+                ),
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(Icons.privacy_tip_outlined),
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          child: Text(
+                            "Termos e Privacidade",
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold

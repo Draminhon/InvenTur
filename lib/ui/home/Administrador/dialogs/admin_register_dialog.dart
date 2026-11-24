@@ -31,14 +31,17 @@ class AdminRegisterDialogButton extends StatelessWidget {
         tapTargetSize: MaterialTapTargetSize.shrinkWrap
       ),
       child: const Row(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
-            Icons.add_moderator_rounded,
+            Icons.person_add_alt_1_rounded,
             color: Color.fromARGB(255, 55, 111, 60),
           ),
-          Padding(
-            padding: EdgeInsets.only(left: 5),
-            child: Text('Add administrador'),
+          Flexible(
+            child: Padding(
+              padding: EdgeInsets.only(left: 5),
+              child: Text('Cadastrar pesquisador', maxLines: 1, overflow: TextOverflow.ellipsis),
+            ),
           )
         ],
       ),
@@ -136,7 +139,7 @@ class _RegisterAdminDialogState extends State<RegisterAdminDialog> with SingleTi
                         ),
                         const Spacer(),
                         const Text(
-                          'Adicionar um novo Administrador',
+                          'Cadastrar novo pesquisador',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -172,11 +175,12 @@ class _RegisterAdminDialogState extends State<RegisterAdminDialog> with SingleTi
                           //   ),
                           // ),
                           Text(
-                            'O usuário terá acesso à todas as funcionalidades disponíveis ao perfil de nivel Administrador',
+                            'O pesquisador poderá registrar formulários nas pesquisas às quais for vinculado '
+                            '(pelo código da pesquisa). Administradores criam a própria conta no cadastro do aplicativo.',
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Colors.orange[900],
-                              fontSize: screenSize.height * .022,
+                              color: Colors.grey[800],
+                              fontSize: screenSize.height * .02,
                             ),
                           ),
                         ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistur/ui/widgets/avatar_padrao.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -9,6 +10,7 @@ import 'package:sistur/services/interceptor_service.dart';
 import 'package:sistur/utils/app_constants.dart';
 import 'dart:convert';
 import 'package:sistur/services/secure_storage_service.dart';
+import 'package:sistur/ui/widgets/excluir_conta_dialog.dart';
 
 class ContaPesquisador extends StatefulWidget {
   const ContaPesquisador({super.key});
@@ -20,13 +22,6 @@ class ContaPesquisador extends StatefulWidget {
 class _ContaPesquisadorState extends State<ContaPesquisador> {
   final ImagePicker _picker = ImagePicker();
   bool _isLoadingImage = false;
-
-  String formatCPF(String cpf) {
-    if (cpf.length != 11) {
-      return cpf;
-    }
-    return '${cpf.substring(0, 3)}.${cpf.substring(3, 6)}.${cpf.substring(6, 9)}-${cpf.substring(9, 11)}';
-  }
 
   Future<void> _pickAndUploadImage(BuildContext context, int userId) async {
     try {
@@ -110,25 +105,26 @@ class _ContaPesquisadorState extends State<ContaPesquisador> {
         return Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(),
-          body: Column(
+          // Rolável: evita estouro em telas pequenas
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.only(bottom: 24),
+            child: Column(
             children: [
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
                   CircleAvatar(
                     maxRadius: screenSize.height * 0.15,
-                    backgroundColor: Colors.grey[200],
+                    backgroundColor: (user.fotoPerfil == null && user.fotoPerfilBase64 == null)
+                        ? corFundoAvatarPadrao
+                        : Colors.grey[200],
                     backgroundImage: user.fotoPerfilBase64 != null
                         ? MemoryImage(base64Decode(user.fotoPerfilBase64!))
                         : (user.fotoPerfil != null
                             ? NetworkImage(_getFullImageUrl(user.fotoPerfil!))
                             : null) as ImageProvider?,
                     child: (user.fotoPerfil == null && user.fotoPerfilBase64 == null)
-                        ? Icon(
-                            Icons.person,
-                            size: screenSize.height * 0.15,
-                            color: Colors.grey[600],
-                          )
+                        ? const IconePerfilPadrao()
                         : null,
                   ),
                   _isLoadingImage 
@@ -181,31 +177,12 @@ class _ContaPesquisadorState extends State<ContaPesquisador> {
                               ))
                         ],
                       ),
-                      SizedBox(
-                        height: screenSize.height * 0.02,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const Icon(
-                            FontAwesomeIcons.solidAddressCard,
-                            color: Color.fromARGB(255, 55, 111, 60),
-                          ),
-                          Padding(
-                              padding:
-                                  EdgeInsets.only(left: screenSize.width * 0.02)),
-                          Text(
-                            formatCPF(user.CPF),
-                            style: TextStyle(fontSize: 18),
-                          )
-                        ],
-                      )
                     ]),
                   )
                 ]),
               ),
               SizedBox(
-                height: screenSize.height * 0.2,
+                height: screenSize.height * 0.12,
               ),
               SizedBox(
                   width: screenSize.width * 0.9,
@@ -215,7 +192,6 @@ class _ContaPesquisadorState extends State<ContaPesquisador> {
                         Navigator.pushNamed(context, '/AlterarDados', arguments: {
                       'is_change': true,
                       'username': user.username,
-                      'user_cpf': user.CPF,
                       'user_email': user.email,
                       'user_id': user.id,
                       'user_telefone': user.telefone
@@ -228,12 +204,32 @@ class _ContaPesquisadorState extends State<ContaPesquisador> {
                       'ALTERAR DADOS PESSOAIS',
                       style: TextStyle(color: Colors.white, fontSize: 50.w),
                     ),
-                  ))
+                  )),
+              const SizedBox(height: 12),
+              // Direito de eliminação (LGPD): o próprio usuário exclui a conta
+              TextButton.icon(
+                style: TextButton.styleFrom(foregroundColor: const Color(0xFFC62828)),
+                onPressed: () => _excluirConta(context),
+                icon: const Icon(Icons.delete_forever_outlined),
+                label: const Text('Excluir minha conta'),
+              ),
             ],
+          ),
           ),
         );
       },
     );
+  }
+
+  Future<void> _excluirConta(BuildContext context) async {
+    final navegador = Navigator.of(context);
+    final mensagens = ScaffoldMessenger.of(context);
+    final excluiu = await confirmarExclusaoDeConta(context);
+    if (!excluiu) return;
+    // Encerra a sessão neste aparelho e volta ao login
+    await SecureStorageService().clearAll();
+    mensagens.showSnackBar(const SnackBar(content: Text('Sua conta foi excluída e seus dados pessoais foram apagados.')));
+    navegador.pushNamedAndRemoveUntil('/Login', (_) => false);
   }
 
   String _getFullImageUrl(String path) {

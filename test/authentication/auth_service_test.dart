@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 
 class AuthService {
-  authenticate({String? cpf, String? password}) {
+  authenticate({String? email, String? password}) {
     
   }
 }

@@ -2,7 +2,9 @@ import 'dart:convert';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sistur/models/pesquisa_model.dart';
 import 'package:sistur/controllers/pesquisa_controller.dart';
 import 'package:sistur/utils/app_constants.dart';
@@ -55,45 +57,97 @@ class PesquisaCard extends StatefulWidget {
   }
 
  
-Future<File?> downloadExcel(int pesquisaId) async {
-  try {
-    final response = await ApiService().get(
-      'export/pesquisa/$pesquisaId',
-      options: Options(responseType: ResponseType.bytes),
-    );
-
-    if (response.statusCode == 200) {
-      final selectedDirectory = await FilePicker.platform.getDirectoryPath(
-        dialogTitle: 'Selecione o local para salvar o arquivo',
-      );
-
-      if (selectedDirectory == null) {
-        print("Nenhum diretório foi selecionado");
-        return null;
-      }
-
-      final filePath = '$selectedDirectory/pesquisa_$pesquisaId.xlsx';
-      final file = File(filePath);
-
-      await file.writeAsBytes(response.data);
-      print('Arquivo saved com sucesso em: $filePath');
-      
-      try {
-        final result = await OpenFile.open(file.path);
-        print('Resultado ao abrir o arquivo: ${result.message}');
-      } catch (e) {
-        print('Erro ao tentar abrir o arquivo: $e');
-      }
-
-      return file;
-    } else {
-      print('Erro ao baixar o Excel: ${response.statusCode}');
-      return null;
-    }
-  } catch (e) {
-    print('Erro fatal ao baixar Excel: $e');
-    return null;
+/// Exporta a pesquisa para Excel: baixa a planilha do servidor, pergunta onde salvar e oferece abrir o arquivo.
+/// Mostra o resultado (ou o motivo da falha) num SnackBar.
+Future<void> exportarPesquisaExcel(BuildContext context, Pesquisa pesquisa) async {
+  final mensagens = ScaffoldMessenger.of(context);
+  void avisar(String texto, {bool erro = false, SnackBarAction? acao}) {
+    mensagens
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: Text(texto),
+        backgroundColor: erro ? Colors.red[700] : AppConstants.MAIN_GREEN,
+        action: acao,
+        duration: Duration(seconds: acao != null ? 6 : 4),
+      ));
   }
+
+  final Response<dynamic> resposta;
+  try {
+    resposta = await ApiService().get(
+      'export/pesquisa/${pesquisa.id}/',
+      options: Options(responseType: ResponseType.bytes, receiveTimeout: const Duration(minutes: 2)),
+    );
+  } on DioException catch (e) {
+    final status = e.response?.statusCode;
+    avisar(
+      status == null
+          ? 'Sem conexão com o servidor. A exportação precisa de internet.'
+          : status == 404
+              ? 'Pesquisa não encontrada ou você não tem acesso a ela.'
+              : 'Não foi possível gerar a planilha (erro $status). Tente novamente.',
+      erro: true,
+    );
+    return;
+  } catch (_) {
+    avisar('Não foi possível gerar a planilha. Tente novamente.', erro: true);
+    return;
+  }
+
+  final bytes = Uint8List.fromList(List<int>.from(resposta.data ?? const <int>[]));
+  if (bytes.isEmpty) {
+    avisar('O servidor devolveu uma planilha vazia. Tente novamente.', erro: true);
+    return;
+  }
+
+  // Nome sugerido pelo servidor (SisTur_municipio-UF_data.xlsx)
+  final cabecalho = resposta.headers.value('content-disposition') ?? '';
+  final nome = RegExp(r'filename="([^"]+)"').firstMatch(cabecalho)?.group(1) ?? 'SisTur_pesquisa_${pesquisa.id}.xlsx';
+
+  String? caminho;
+  try {
+    // Diálogo nativo "Salvar como". No Android/iOS o próprio plugin grava os bytes (funciona com o
+    // armazenamento restrito do Android 11+, onde gravar com File numa pasta escolhida falha).
+    caminho = await FilePicker.platform.saveFile(
+      dialogTitle: 'Salvar planilha da pesquisa',
+      fileName: nome,
+      type: FileType.custom,
+      allowedExtensions: const ['xlsx'],
+      bytes: bytes,
+    );
+    if (caminho == null) return; // usuário cancelou
+    // No Android/iOS o plugin já gravou, e o caminho devolvido pode não ser acessível ao app (armazenamento
+    // restrito): não mexer nele. No desktop o diálogo só devolve o caminho: grava aqui.
+    if (!Platform.isAndroid && !Platform.isIOS) {
+      await File(caminho).writeAsBytes(bytes, flush: true);
+    }
+  } catch (_) {
+    avisar('Não foi possível salvar o arquivo no local escolhido.', erro: true);
+    return;
+  }
+
+  // Para o botão ABRIR: no celular, abre uma cópia na pasta temporária do app (sempre acessível)
+  String paraAbrir = caminho;
+  if (Platform.isAndroid || Platform.isIOS) {
+    try {
+      final copia = File('${(await getTemporaryDirectory()).path}/$nome');
+      await copia.writeAsBytes(bytes, flush: true);
+      paraAbrir = copia.path;
+    } catch (_) {}
+  }
+  avisar(
+    'Planilha salva: $nome',
+    acao: SnackBarAction(
+      label: 'ABRIR',
+      textColor: Colors.white,
+      onPressed: () async {
+        final resultado = await OpenFile.open(paraAbrir);
+        if (resultado.type != ResultType.done) {
+          avisar('Nenhum aplicativo de planilhas encontrado para abrir o arquivo.', erro: true);
+        }
+      },
+    ),
+  );
 }
 
 
@@ -106,6 +160,7 @@ class _PesquisaCardState extends State<PesquisaCard> {
   }
 
   bool _opened = false;
+  bool _exportando = false;
 
   @override
   void initState() {
@@ -127,14 +182,36 @@ class _PesquisaCardState extends State<PesquisaCard> {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
+                // Código único de vínculo: o administrador o compartilha para o pesquisador entrar na pesquisa
+                if (widget.pesquisa.codigo != null)
+                  Expanded(child: _CodigoPesquisa(codigo: widget.pesquisa.codigo!))
+                else
+                  const Spacer(),
                 IconButton(
-                    onPressed: () {
-                      downloadExcel(widget.pesquisa.id!);
-                    },
-                    icon: Icon(
-                      Icons.print_rounded,
-                      color: AppConstants.MAIN_GREEN,
-                    )),
+                    tooltip: 'Exportar para Excel',
+                    onPressed: _exportando
+                        ? null
+                        : () async {
+                            setState(() {
+                              _exportando = true;
+                            });
+                            await exportarPesquisaExcel(context, widget.pesquisa);
+                            if (mounted) {
+                              setState(() {
+                                _exportando = false;
+                              });
+                            }
+                          },
+                    icon: _exportando
+                        ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                                strokeWidth: 2.5, color: AppConstants.MAIN_GREEN))
+                        : Icon(
+                            Icons.download_rounded,
+                            color: AppConstants.MAIN_GREEN,
+                          )),
                 IconButton(
                     onPressed: () {
                       Navigator.pushNamed(context, '/Pesquisas', arguments: {
@@ -365,6 +442,62 @@ class _PesquisaCardState extends State<PesquisaCard> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Código de vínculo da pesquisa, em verde. Tocar copia o código para compartilhar com os pesquisadores.
+class _CodigoPesquisa extends StatelessWidget {
+  final String codigo;
+
+  const _CodigoPesquisa({required this.codigo});
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Tooltip(
+        message: 'Toque para copiar. Compartilhe com os pesquisadores para que se vinculem a esta pesquisa.',
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () async {
+            await Clipboard.setData(ClipboardData(text: codigo));
+            if (!context.mounted) return;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Código $codigo copiado.'), duration: const Duration(seconds: 2)),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            decoration: BoxDecoration(
+              color: AppConstants.MAIN_GREEN.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppConstants.MAIN_GREEN.withValues(alpha: 0.5)),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.vpn_key_rounded, size: 16, color: AppConstants.MAIN_GREEN),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    codigo,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: AppConstants.MAIN_GREEN,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      letterSpacing: 1.5,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 6),
+                const Icon(Icons.copy_rounded, size: 14, color: AppConstants.MAIN_GREEN),
+              ],
+            ),
+          ),
         ),
       ),
     );

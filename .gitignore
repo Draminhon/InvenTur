@@ -47,3 +47,9 @@ api/wsgi.py
 apidjango/migrations/
 db.sqlite3
 .env
+# Configuração local (segredos/valores reais); os modelos *.example são versionados
+app.env
+!.env.example
+!app.env.example
+staticfiles/
+logs/

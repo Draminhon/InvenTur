@@ -51,14 +51,33 @@ class EncryptionService:
         h = hmac.new(key, str(value).encode(), hashlib.sha256)
         return h.hexdigest()
 
+    @staticmethod
+    def normalizar_email(email):
+        """E-mail sem espaços nas pontas e em minúsculas (o login não diferencia maiúsculas)."""
+        return str(email or '').strip().lower()
+
+    def get_email_index(self, email):
+        """Blind index do e-mail normalizado — use em TODA busca de usuário por e-mail."""
+        email = self.normalizar_email(email)
+        return self.get_blind_index(email) if email else None
+
 class EncryptedCharField(models.CharField):
     """Campo que armazena dados criptografados no banco de dados."""
     
     def __init__(self, *args, **kwargs):
         # Aumentamos o max_length pois a criptografia expande o texto
+        self._max_length_original = kwargs.get('max_length')
         if 'max_length' in kwargs:
             kwargs['max_length'] = kwargs['max_length'] * 4 + 100
         super().__init__(*args, **kwargs)
+
+    def deconstruct(self):
+        # As migrações guardam o tamanho ORIGINAL (o declarado no modelo). Antes guardavam o já ampliado, que era
+        # ampliado de novo ao ler a migração: cada "makemigrations" gerava uma migração nova, com o tamanho crescendo.
+        name, path, args, kwargs = super().deconstruct()
+        if self._max_length_original is not None:
+            kwargs['max_length'] = self._max_length_original
+        return name, path, args, kwargs
 
     def from_db_value(self, value, expression, connection):
         if value is None:

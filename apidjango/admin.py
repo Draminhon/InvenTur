@@ -4,7 +4,7 @@ from .models import *
 class CustomUserAdmin(admin.ModelAdmin):
     ordering = ['id']
 
-    list_display = ['id', 'username', 'CPF','telefone', 'acessLevel', 'status','email', 'display_pesquisas', 'is_active']
+    list_display = ['id', 'username', 'telefone', 'acessLevel', 'status','email', 'display_pesquisas', 'is_active']
 
     def display_pesquisas(self, obj):
         # Exibe as pesquisas associadas ao usuário como uma string

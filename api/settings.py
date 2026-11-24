@@ -10,32 +10,60 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
 
+from django.core.exceptions import ImproperlyConfigured
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Configuração e segredos vêm do arquivo .env (fora do git; modelo em .env.example).
+# Variáveis de ambiente já definidas no sistema têm prioridade sobre o arquivo.
+load_dotenv(BASE_DIR / '.env')
+
+
+def env(nome, padrao=None, obrigatorio=False):
+    valor = os.environ.get(nome, padrao)
+    if obrigatorio and not valor:
+        raise ImproperlyConfigured(f'Defina {nome} no arquivo .env (veja .env.example).')
+    return valor
+
+
+def env_bool(nome, padrao=False):
+    return str(env(nome, str(padrao))).strip().lower() in ('1', 'true', 'yes', 'sim', 'on')
+
+
+def env_lista(nome, padrao=''):
+    return [item.strip() for item in str(env(nome, padrao)).split(',') if item.strip()]
 
  
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4ao0m$%#84aj(^!1ydivlx&^z&2cxq(-k23@0=jic93)8_3y47'
-FIELD_ENCRYPTION_KEY = 'PoDekgQdBdrHH02f9OPRL_lbV-pMOVm4NWJZt_ki3SY='
+SECRET_KEY = env('DJANGO_SECRET_KEY', obrigatorio=True)
+FIELD_ENCRYPTION_KEY = env('FIELD_ENCRYPTION_KEY', obrigatorio=True)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env_bool('DJANGO_DEBUG', False)
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = env_lista('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1')
+
+# Endereços HTTPS do servidor (ex.: https://sistur.exemplo.br). Sem isto, o login do painel /admin/ dá erro 403
+CSRF_TRUSTED_ORIGINS = env_lista('CSRF_TRUSTED_ORIGINS')
+
+# Quantos proxies (nginx, PythonAnywhere...) ficam na frente do Django. Usado para descobrir o IP real do cliente
+# nos limites de tentativas; sem isso, todos os usuários pareceriam vir do mesmo IP (o do proxy)
+NUM_PROXIES = int(env('DJANGO_NUM_PROXIES', 0)) or None
 
 
 #CORS_ALLOW_ALL_ORIGINS = True
 # Application definition
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "https://nupreds.ifce.edu.br",
-]
+CORS_ALLOWED_ORIGINS = env_lista('CORS_ALLOWED_ORIGINS')
 
 CORS_ALLOW_HEADERS = [
     "authorization",
@@ -43,7 +71,7 @@ CORS_ALLOW_HEADERS = [
 ]
 
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = env_bool('CORS_ALLOW_ALL_ORIGINS', False)
 # Application definition
 
 INSTALLED_APPS = [
@@ -73,13 +101,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'NUM_PROXIES': NUM_PROXIES,
     'DATE_FORMAT': '%d/%m/%Y',
     'DATETIME_FORMAT': '%d/%m/%Y %H:%M:%S',
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=int(env('JWT_ACCESS_MINUTES', 5))),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=int(env('JWT_REFRESH_DAYS', 7))),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
 }
@@ -93,15 +122,18 @@ PASSWORD_HASHERS = [
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'  # Use your email provider's SMTP server
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'murilo.brito07@aluno.ifce.edu.br'
-EMAIL_HOST_PASSWORD = 'hxnl tetw spvi ntjy '
+EMAIL_HOST = env('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(env('EMAIL_PORT', 587))
+EMAIL_USE_TLS = env_bool('EMAIL_USE_TLS', True)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', EMAIL_HOST_USER)
 
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    # Retenção de dados (LGPD) 1x por dia, sem cron (ver apidjango/retencao_automatica.py)
+    'apidjango.retencao_automatica.RetencaoDiariaMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -114,7 +146,7 @@ MIDDLEWARE = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'apidjango.backends.CPFBackend',
+    'apidjango.backends.EmailBackend',
     'django.contrib.auth.backends.ModelBackend'
 ]
 
@@ -143,11 +175,16 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+_db_engine = env('DB_ENGINE', 'django.db.backends.sqlite3')
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-        
+        'ENGINE': _db_engine,
+        # SQLite: caminho relativo à pasta do projeto; outros bancos: nome do banco
+        'NAME': (BASE_DIR / env('DB_NAME', 'db.sqlite3')) if _db_engine.endswith('sqlite3') else env('DB_NAME'),
+        'USER': env('DB_USER', ''),
+        'PASSWORD': env('DB_PASSWORD', ''),
+        'HOST': env('DB_HOST', ''),
+        'PORT': env('DB_PORT', ''),
     }
 }
 
@@ -186,6 +223,8 @@ DATE_FORMAT = 'd/m/Y'
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+# Destino do "python manage.py collectstatic" (arquivos do painel /admin/), servido pelo servidor web em produção
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -202,6 +241,13 @@ DATE_INPUT_FORMATS = [
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 
+if not DEBUG:
+    # Produção (atrás de HTTPS): o proxy informa que a conexão original era segura; cookies só por HTTPS
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = env_bool('DJANGO_SECURE_SSL_REDIRECT', False)
+
 # Content Security Policy (CSP)
 CSP_DEFAULT_SRC = ("'self'",)
 CSP_STYLE_SRC = ("'self'", "'unsafe-inline'", "https://api.mapbox.com", "https://fonts.googleapis.com")
@@ -215,4 +261,11 @@ CSP_INCLUDE_NONCE_IN = ['script-src', 'style-src']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# O próprio Django entrega /media/ (fotos de perfil) e /static/ (painel /admin/), sem configurar o servidor web.
+# Se o servidor web (nginx...) já servir essas pastas, pode desligar para ganhar desempenho.
+SERVIR_ARQUIVOS = env_bool('DJANGO_SERVIR_ARQUIVOS', True)
+
+# Aplica a política de retenção 1x por dia automaticamente (desligada por padrão em desenvolvimento)
+RETENCAO_AUTOMATICA = env_bool('DJANGO_RETENCAO_AUTOMATICA', not DEBUG)
 

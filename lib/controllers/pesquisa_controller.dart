@@ -158,7 +158,8 @@ class PesquisaController extends ChangeNotifier {
           'codigoIBGE': codigoIBGE,
           'estado': estado,
           'municipio': municipio,
-          'usuario': selectedUsers.map((user) => user.id).toList(),
+          // A equipe NÃO é enviada: remover alguém é feito na hora pelo "X" (remover-pesquisador). Enviar a lista
+          // aqui apagava a equipe inteira quando ela ainda não tinha carregado (lista vazia) ao confirmar.
         },
       );
 

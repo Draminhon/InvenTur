@@ -1,222 +1,78 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sistur/services/interceptor_service.dart';
-import 'package:sistur/ui/screens/password%20recover%20screens/changepassword_page.dart';
 import 'package:sistur/ui/screens/password%20recover%20screens/passwordOtp_page.dart';
-import 'package:sistur/utils/app_constants.dart';
+import 'package:sistur/ui/screens/password%20recover%20screens/recuperacao_layout.dart';
+import 'package:sistur/ui/widgets/text%20fields/text_field_widget.dart';
 import 'package:sistur/validators/email_validator.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
+/// Etapa 1 de 3 da recuperação de senha: informar o e-mail para receber o código.
 class RecuperarSenha extends StatefulWidget {
-  RecuperarSenha({super.key});
+  const RecuperarSenha({super.key});
 
   @override
   State<RecuperarSenha> createState() => _RecuperarSenhaState();
 }
 
 class _RecuperarSenhaState extends State<RecuperarSenha> {
-  final EmailValidator _emailValidator = EmailValidator();
-
-  final TextEditingController _emailController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
+  final _emailValidator = EmailValidator();
+  final _emailController = TextEditingController();
+  bool _carregando = false;
 
-  bool _isLoading = false;
-  Future<void> requestOtp(String email) async {
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _enviarCodigo() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
+    FocusScope.of(context).unfocus();
+    final email = _emailController.text.trim().toLowerCase();
+    setState(() => _carregando = true);
     try {
-      final response = await ApiService().post(
-        'password-reset/request/',
-        data: {'email': email},
-      );
-
-      if (response.statusCode == 200) {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (context) {
-          return PasswordotpPage(email: email);
-        }));
-      } else {
-        print("Erro no requestOtp: ${response.statusCode}");
-        final snackBar = const SnackBar(
-          content: Text('Verifique o e-mail informado e tente novamente.'),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Colors.redAccent,
-          margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          duration: Duration(seconds: 3),
-        );
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
-      }
+      await ApiService().post('password-reset/request/', data: {'email': email});
+      if (!mounted) return;
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => PasswordotpPage(email: email)));
     } catch (e) {
-      print("Erro capturado no requestOtp: $e");
+      if (mounted) mostrarErroRecuperacao(context, mensagemDeErro(e, 'Não foi possível enviar o código. Tente novamente.'));
+    } finally {
+      if (mounted) setState(() => _carregando = false);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final sizeScreen = MediaQuery.sizeOf(context);
-    return Scaffold(
-        backgroundColor: Colors.white,
-        body: SingleChildScrollView(
-            reverse: true,
-            padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
-            child:
-                Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Padding(
-                  padding: EdgeInsets.only(
-                    top: sizeScreen.height * 0.08,
-                    left: sizeScreen.height * 0.02,
-                    right: sizeScreen.height * 0.02,
-                    bottom: sizeScreen.height * 0.04,
-                  ),
-                  child: Center(
-                      child: Container(
-                          padding: EdgeInsets.only(
-                            top: sizeScreen.height * 0.02,
-                            left: sizeScreen.height * 0.02,
-                            right: sizeScreen.height * 0.02,
-                            bottom: sizeScreen.height * 0.008,
-                          ),
-                          height: sizeScreen.height * 0.28,
-                          margin: EdgeInsets.only(
-                            top: sizeScreen.height * 0.02,
-                            bottom: sizeScreen.height * 0.02,
-                          ),
-                          decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 238, 238, 238),
-                              borderRadius: BorderRadius.circular(15)),
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.info,
-                                size: sizeScreen.height * 0.08,
-                                color: const Color.fromARGB(255, 55, 111, 60),
-                              ),
-                              SizedBox(height: sizeScreen.height * 0.01),
-                              RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  text: 'Problemas para entrar?',
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: sizeScreen.height * 0.025,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: sizeScreen.height * 0.01,
-                              ),
-                              RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                      text:
-                                          'Insira o email cadastrado e enviaremos um código para alterar sua senha.',
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: sizeScreen.height * 0.02)))
-                            ],
-                          )))),
-              SizedBox(
-                height: sizeScreen.height * 0.03,
-              ),
-              Padding(
-                  padding: const EdgeInsets.all(25),
-                  child: Form(
-                    key: _formKey,
-                    child: SizedBox(
-                        child: TextFormField(
-                            controller: _emailController,
-                            validator: (value) =>
-                                _emailValidator.validate(email: value),
-                            decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              prefixIcon: const Icon(
-                                Icons.email,
-                                color: Color.fromARGB(255, 55, 111, 60),
-                              ),
-                              labelText: 'E-mail',
-                              errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                      color: Colors.red, width: 1.5)),
-                              focusedErrorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                      color: Colors.red, width: 1.5)),
-                              enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                      color: Color.fromARGB(255, 55, 111, 60),
-                                      width: 1.5)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: const BorderSide(
-                                      color: Color.fromARGB(255, 55, 111, 60),
-                                      width: 2)),
-                            ))),
-                  )),
-              SizedBox(
-                height: sizeScreen.height * 0.13,
-              ),
-              SizedBox(
-                height: 55,
-                width: 1200.w,
-                child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 55, 111, 60),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                  onPressed: _isLoading ? null :
-                   () async {
-                    
-                   
-                    _formKey.currentState!.save();
-                    if (_formKey.currentState?.validate() ?? false) {
-                      setState(() => _isLoading = true,);
-
-                      await requestOtp(_emailController.text);
-
-                      if(mounted){
-                        setState(() => _isLoading=false,);
-                      }
-                    }
-                    
-                                      },
-                  child: _isLoading ?
-                  SizedBox(
-                    height: 20.h,
-                    width: 20.w,
-                    child: CircularProgressIndicator(color: Colors.white, strokeAlign: 2,),
-                  ) :
-                   const Text(
-                    'OBTER CÓDIGO',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w300),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: sizeScreen.height * 0.02,
-              ),
-              SizedBox(
-                  height: 55,
-                  width: 1200.w,
-                  child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                      onPressed: () => {Navigator.pop(context)},
-                      child: const Text(
-                        'CANCELAR',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w300),
-                      )))
-            ])));
+    return RecuperacaoLayout(
+      etapa: 1,
+      icone: Icons.lock_reset_rounded,
+      titulo: 'Esqueceu sua senha?',
+      descricao: const Text(
+        'Informe o e-mail da sua conta. Vamos enviar um código de 6 dígitos para você criar uma nova senha.',
+      ),
+      conteudo: [
+        Form(
+          key: _formKey,
+          child: PasswordTextField(
+            labelText: 'E-mail',
+            controller: _emailController,
+            prefixIcon: FontAwesomeIcons.solidEnvelope,
+            keyboardType: TextInputType.emailAddress,
+            validator: (email) => _emailValidator.validate(email: email),
+          ),
+        ),
+        const SizedBox(height: 16),
+        const AvisoRecuperacao(
+          icone: Icons.mark_email_unread_outlined,
+          texto: Text('O e-mail pode levar alguns minutos para chegar e, às vezes, vai para a caixa de '
+              'Spam (Lixo eletrônico) ou Promoções.'),
+        ),
+      ],
+      textoBotao: 'Enviar código',
+      onConfirmar: _enviarCodigo,
+      carregando: _carregando,
+      onCancelar: () => Navigator.pop(context),
+    );
   }
 }

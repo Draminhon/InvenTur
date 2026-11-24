@@ -6,10 +6,28 @@ from ..models import *
 from ..serializers import *
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.throttling import AnonRateThrottle
+
+
+# Limites por IP: sem eles, o código de 6 dígitos poderia ser descoberto por tentativa e erro
+class PedirCodigoThrottle(AnonRateThrottle):
+    scope = 'senha_pedir_codigo'
+    rate = '3/min'
+
+
+class ValidarCodigoThrottle(AnonRateThrottle):
+    scope = 'senha_validar_codigo'
+    rate = '5/min'
+
+
+class TrocarSenhaThrottle(AnonRateThrottle):
+    scope = 'senha_trocar'
+    rate = '5/min'
   
 
 class PasswordResetRequestAPIView(APIView):
     permission_classes = []
+    throttle_classes = [PedirCodigoThrottle]
 
     def post(self, request):
         serializer = PasswordResetRequestSerializer(data=request.data)
@@ -26,6 +44,7 @@ class PasswordResetRequestAPIView(APIView):
 
 class OTPVerificationAPIView(APIView):
     permission_classes = []
+    throttle_classes = [ValidarCodigoThrottle]
 
     def post(self, request):
         serializer = OTPVerificationSerializer(data=request.data)
@@ -41,6 +60,7 @@ class OTPVerificationAPIView(APIView):
 
 class PasswordResetAPIView(APIView):
     permission_classes = []
+    throttle_classes = [TrocarSenhaThrottle]
 
     def post(self, request):
         serializer = PasswordResetSerializer(data=request.data)

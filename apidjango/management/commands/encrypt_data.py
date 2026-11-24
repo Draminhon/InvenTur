@@ -14,7 +14,7 @@ class Command(BaseCommand):
         users = CustomUser.objects.all()
         for user in users:
             # Forçamos a atualização para que os campos sejam criptografados no save()
-            # O CustomUser.save() já cuida do email_hash e cpf_hash
+            # O CustomUser.save() já cuida do email_hash
             user.save()
         self.stdout.write(self.style.SUCCESS(f'CustomUser: {len(users)} registros processados.'))
 

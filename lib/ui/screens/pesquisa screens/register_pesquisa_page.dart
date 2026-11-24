@@ -29,7 +29,6 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
   List<User> users = [
     User(
         username: "Fulano Silva da Costa",
-        CPF: "789.214.878-02",
         email: "fulanosilva@teste.com",
         status: "Não Ativo",
         accessLevel: 'Pesquisador'),
@@ -41,11 +40,12 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
   final PesquisaController _pesquisaController = PesquisaController();
   final TextEditingController _inicioController = TextEditingController();
   final TextEditingController _terminoController = TextEditingController();
+  // Mensagem de erro do campo "Data Término" (null = datas válidas)
+  String? _erroDatas;
   final TextEditingController _codigIbgeController = TextEditingController();
   final TextEditingController _municipioController = TextEditingController();
   final TextEditingController _estadoController = TextEditingController();
   final TextEditingController _nomePesquisador = TextEditingController();
-  final TextEditingController _cpfPesquisador = TextEditingController();
 
   static Future<List<User>> getUsers() async {
     try {
@@ -64,6 +64,18 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
   }
 
   Future<List<User>> userFuture = getUsers();
+
+  /// O término precisa ser depois do início (não pode ser igual nem anterior).
+  /// Atualiza o erro exibido no campo "Data Término" e retorna se as datas são válidas.
+  bool _validarDatas() {
+    final inicio = DateTime.tryParse(_inicioController.text.trim());
+    final termino = DateTime.tryParse(_terminoController.text.trim());
+    final erro = (inicio != null && termino != null && !termino.isAfter(inicio))
+        ? 'A data de término deve ser posterior à data de início.'
+        : null;
+    if (erro != _erroDatas) setState(() => _erroDatas = erro);
+    return erro == null;
+  }
 
   Future<String> selectDate() async {
     late DateTime? selectedDate;
@@ -188,6 +200,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
                               textAlign: TextAlign.end,
                               controller: _inicioController,
                               keyboardType: TextInputType.datetime,
+                              onChanged: (_) => _validarDatas(),
                               decoration: InputDecoration(
                                 filled: true,
                                 isCollapsed: true,
@@ -204,6 +217,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
                                 suffixIcon: IconButton(
                                   onPressed: () async {
                                     _inicioController.text = await selectDate();
+                                    _validarDatas();
                                   },
                                   icon: const Icon(
                                     Icons.date_range_rounded,
@@ -219,12 +233,21 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
                               textAlign: TextAlign.end,
                               controller: _terminoController,
                               keyboardType: TextInputType.datetime,
+                              onChanged: (_) => _validarDatas(),
                               decoration: InputDecoration(
                                 filled: true,
                                 isCollapsed: true,
                                 fillColor: Colors.white,
                                 contentPadding: const EdgeInsets.all(10),
                                 labelText: "Data Término",
+                                errorText: _erroDatas,
+                                errorMaxLines: 3,
+                                errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(color: Colors.red, width: 1.5)),
+                                focusedErrorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: const BorderSide(color: Colors.red, width: 2)),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10)),
                                 enabledBorder: OutlineInputBorder(
@@ -236,6 +259,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
                                   onPressed: () async {
                                     _terminoController.text =
                                         await selectDate();
+                                    _validarDatas();
                                   },
                                   icon: const Icon(
                                     Icons.date_range_rounded,
@@ -452,6 +476,7 @@ class _RegisterPesquisaState extends State<RegisterPesquisa>
                                     overlayColor: WidgetStateProperty.all(
                                         Colors.green[600])),
                                 onPressed: () async {
+                                  if (!_validarDatas()) return; // erro já exibido no campo "Data Término"
                                   String municipio;
                                   String estado;
                                   final dataInicio = _inicioController.text;

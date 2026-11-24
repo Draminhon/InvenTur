@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sistur/services/sync_service.dart';
 
 class Modals {
   void showNoPermissionDialog(BuildContext context) {
@@ -48,16 +49,38 @@ class Modals {
 }
 
 
- void showSyncDialog(BuildContext context) {
+ /// Mostra o resultado real da sincronização (antes dizia "sucesso" mesmo sem enviar nada).
+ void showSyncDialog(BuildContext context, [ResultadoSync? resultado]) {
+  final r = resultado ?? const ResultadoSync(interrompida: true);
+  final String titulo;
+  final Color cor;
+  final partes = <String>[];
+  if (r.enviados == 0 && r.recusados == 0 && r.interrompida) {
+    titulo = 'Não foi possível sincronizar';
+    cor = Colors.red;
+    partes.add('Verifique sua conexão e tente novamente. Os formulários continuam salvos no aparelho.');
+  } else {
+    final completa = r.recusados == 0 && !r.interrompida;
+    titulo = completa ? 'Sincronização concluída!' : 'Sincronização parcial';
+    cor = completa ? Colors.green : Colors.orange;
+    partes.add('${r.enviados} formulário(s) enviado(s).');
+    if (r.recusados > 0) {
+      partes.add('${r.recusados} formulário(s) foram recusados pelo servidor (por exemplo, você não faz mais parte '
+          'da pesquisa, ela foi excluída ou faltam dados). Eles continuam salvos no aparelho.');
+    }
+    if (r.interrompida) {
+      partes.add('A conexão caiu antes do fim: os demais serão enviados na próxima sincronização.');
+    }
+  }
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text("Sincronização Concluída!", style: TextStyle(
-          color: Colors.green,
+        title: Text(titulo, style: TextStyle(
+          color: cor,
           fontWeight: FontWeight.w500
         ),),
-        content: const Text("A sincronização foi concluída com sucesso.",style: TextStyle(fontWeight: FontWeight.w500),),
+        content: Text(partes.join('\n\n'),style: const TextStyle(fontWeight: FontWeight.w500),),
         actions: [
           TextButton(
             child: const Text("OK"),

@@ -97,7 +97,7 @@ class _MyAppState extends State<MyApp> {
       builder: (_, child) => MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        title: 'InvenTur',
+        title: 'SisTur',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
             seedColor: Colors.green,
@@ -149,7 +149,7 @@ class _MyAppState extends State<MyApp> {
           '/UnidadesDeConservacao': (_) => UnidadesDeConservacao(),
           '/EventosProgramados': (_) => EventosProgramados(),
           '/GastronomiaArtesanatoTrabalhosManuais': (_) => GastronomiaArtesanatoTrabalhosManuais()
-        },
+        }, 
         localizationsDelegates: [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,

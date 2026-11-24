@@ -545,7 +545,8 @@ class PainelVazio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text(mensagem, style: TextStyle(color: Colors.grey[700])));
+    // textAlign: quando a mensagem quebra em mais de uma linha, cada linha também fica centralizada
+    return Center(child: Text(mensagem, textAlign: TextAlign.center, style: TextStyle(color: Colors.grey[700])));
   }
 }
 

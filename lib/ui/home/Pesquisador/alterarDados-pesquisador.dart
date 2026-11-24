@@ -46,28 +46,6 @@ class AlterarCadastro extends StatelessWidget {
                       TextField(
                         decoration: InputDecoration(
                             prefixIcon: const Icon(
-                              FontAwesomeIcons.solidAddressCard,
-                              color: Color.fromARGB(255, 55, 111, 60),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: const BorderSide(
-                                   width: 2,
-                                    color: Color.fromARGB(255, 55, 111, 60),
-                                    style: BorderStyle.solid)),
-                            hintText: 'cpf',
-                            isDense: true,
-                            contentPadding:
-                                EdgeInsets.all(sizeScreen.height * 0.015),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10))),
-                      ),
-                      SizedBox(
-                        height: sizeScreen.height * 0.02,
-                      ),
-                      TextField(
-                        decoration: InputDecoration(
-                            prefixIcon: const Icon(
                               FontAwesomeIcons.solidEnvelope,
                               color: Color.fromARGB(255, 55, 111, 60),
                             ),

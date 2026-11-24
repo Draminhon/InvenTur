@@ -12,6 +12,8 @@ class Pesquisa {
   int? quantidadeLocais;
   int quantidadePesquisadores;
   String status;
+  /// Código único de vínculo (gerado pelo servidor); o pesquisador o usa para entrar na equipe
+  String? codigo;
 
   Pesquisa({
     required this.id,
@@ -26,7 +28,8 @@ class Pesquisa {
     required this.quantidadePesquisadores,
     required this.status,
      this.adminEmail,
-     this.adminTelefone
+     this.adminTelefone,
+     this.codigo,
   });
 
   // Método para criar uma instância de Pesquisa a partir de JSON
@@ -43,7 +46,8 @@ class Pesquisa {
         dataTermino = json['dataTermino'],
         quantidadeLocais = json['quantidadeLocais'] as int?,
         quantidadePesquisadores = json['quantidadePesquisadores'] ?? 0,
-        status = json['status'];
+        status = json['status'],
+        codigo = json['codigo'] as String?;
 
   // Método para converter uma instância de Pesquisa em JSON
   Map<String, dynamic> toJson() {
@@ -59,6 +63,7 @@ class Pesquisa {
       'quantidadeLocais': quantidadeLocais,
       'quantidadePesquisadores': quantidadePesquisadores,
       'status': status,
+      'codigo': codigo,
     };
   }
 
@@ -84,6 +89,7 @@ class Pesquisa {
       quantidadeLocais: quantidadeLocais,
       quantidadePesquisadores: pesquisadores?.length ?? quantidadePesquisadores,
       status: status,
+      codigo: codigo,
     );
   }
 }

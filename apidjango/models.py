@@ -12,33 +12,11 @@ from django.utils import timezone
  
 from .fields import EncryptedCharField, BlindIndexField, EncryptionService
 
-def validate_cpf(cpf):
-    cpf = ''.join(filter(str.isdigit, cpf))
-
-    if len(cpf) != 11:
-        raise ValidationError("O CPF deve ter 11 digítos")
-    
-    if cpf == cpf[0] * len(cpf):
-        raise ValidationError("O CPF não pode ter todos os dígitos iguais")
-
-    def calcular_digito(cpf, peso):
-        soma = sum(int(d) * peso for d, peso in zip(cpf[:-2], range(peso, 1, -1)))
-        resto = 11 - (soma % 11)
-        return '0' if resto >= 10 else str(resto)
-    
-    digito1 = calcular_digito(cpf, 10)
-    digito2 = calcular_digito(cpf + digito1, 11)
-
-    if cpf[-2:] != digito1 + digito2:
-        raise ValidationError("O CPF é inválido")
-    
 class CustomUser(AbstractUser):
 
     pesquisas = models.ManyToManyField("Pesquisa", related_name="pesquisas", blank=True, null=True)
     email = EncryptedCharField(max_length=255)
     email_hash = BlindIndexField(unique=True, null=True, blank=True)
-    CPF = EncryptedCharField(max_length=11)
-    cpf_hash = BlindIndexField(unique=True, null=True, blank=True)
     foto_perfil = models.ImageField(upload_to='perfil/', null=True, blank=True)
     
     username = models.CharField(
@@ -57,30 +35,62 @@ class CustomUser(AbstractUser):
     otp_verified = models.BooleanField(default=False)
 
     def generate_otp(self):
-        self.otp = str(random.randint(100000, 999999))
+        # secrets: gerador próprio para segurança (random é previsível)
+        import secrets
+        self.otp = f'{secrets.randbelow(1_000_000):06d}'
         self.otp_exp = timezone.now() + timedelta(minutes=10)
         self.otp_verified = False
         self.save()
+
+    # Prova do consentimento (LGPD): versão dos Termos/Política aceita e quando (ver apidjango/termos.py)
+    termos_versao = models.CharField(max_length=20, null=True, blank=True, editable=False)
+    termos_aceitos_em = models.DateTimeField(null=True, blank=True, editable=False)
+
+    # Retenção de dados (LGPD; ver apidjango/retencao.py e o comando aplicar_retencao)
+    excluido_em = models.DateTimeField(null=True, blank=True, editable=False)
+    aviso_inatividade_em = models.DateTimeField(null=True, blank=True, editable=False)
+
+    # Administrador que cadastrou esta conta (aparece na aba "Usuários" desse administrador)
+    criado_por = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True, editable=False,
+                                   related_name='usuarios_criados')
 
     acessLevel = models.CharField(max_length=22, default='Pesquisador');
     status = models.CharField(max_length=50, default='Ativo');
     telefone = EncryptedCharField(max_length=25);
 
     def save(self, *args, **kwargs):
-        if self.CPF:
-            self.cpf_hash = EncryptionService().get_blind_index(self.CPF)
+        # O e-mail é o identificador de login: guardado normalizado e indexado pelo blind index (busca exata)
         if self.email:
-            self.email_hash = EncryptionService().get_blind_index(self.email)
+            self.email = EncryptionService.normalizar_email(self.email)
+            self.email_hash = EncryptionService().get_email_index(self.email)
         super().save(*args, **kwargs)
-
-    def clean(self):
-        super().clean()
-        if self.CPF:
-            validate_cpf(self.CPF)
 # Create your models here.
+# Código de vínculo das pesquisas: sem caracteres que se confundem ao digitar (0/O, 1/I/L)
+ALFABETO_CODIGO_PESQUISA = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'
+TAMANHO_CODIGO_PESQUISA = 8
+
+
+def gerar_codigo_pesquisa():
+    """Código aleatório (criptograficamente seguro) que ainda não foi usado por nenhuma pesquisa."""
+    import secrets
+    while True:
+        codigo = ''.join(secrets.choice(ALFABETO_CODIGO_PESQUISA) for _ in range(TAMANHO_CODIGO_PESQUISA))
+        # Considera também pesquisas excluídas (is_active=False): um código nunca é reaproveitado
+        if not Pesquisa.objects.filter(codigo=codigo).exists():
+            return codigo
+
+
+def normalizar_codigo_pesquisa(texto):
+    """Aceita o código como o usuário digitar: minúsculas, espaços e hífens."""
+    return ''.join(ch for ch in str(texto or '').upper() if ch.isalnum())
+
+
 class Pesquisa(models.Model):
 
     usuario = models.ManyToManyField("CustomUser", related_name="usuario")
+    # Identificador único que o administrador compartilha para o pesquisador se vincular à pesquisa
+    codigo = models.CharField(max_length=12, unique=True, null=True, blank=True, editable=False,
+                              help_text="Código de vínculo da pesquisa (gerado automaticamente, nunca se repete)")
     admin = models.ForeignKey("CustomUser", on_delete=models.SET_NULL, null=True, blank=True, related_name="pesquisas_criadas", help_text="Administrador que criou esta pesquisa")
     
 
@@ -98,6 +108,8 @@ class Pesquisa(models.Model):
     
 
     is_active = models.BooleanField(default=True)
+    # Quando os dados pessoais de terceiros desta pesquisa foram anonimizados (5 anos após o término)
+    anonimizada_em = models.DateTimeField(null=True, blank=True, editable=False)
 
     @property
     def admin_email(self):
@@ -114,6 +126,11 @@ class Pesquisa(models.Model):
     @property
     def quantidadeLocais(self):
         return self.bases.filter(is_active=True).count()
+
+    def save(self, *args, **kwargs):
+        if not self.codigo:
+            self.codigo = gerar_codigo_pesquisa()
+        super().save(*args, **kwargs)
 
 class Base(models.Model):
     

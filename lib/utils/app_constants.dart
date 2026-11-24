@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 class AppConstants {
-  static const String APP_NAME = "InvenTur";
+  static const String APP_NAME = "SisTur";
   static int APP_VERSION = 1;
 
- static const String BASE_URI = "http://10.0.2.2:8000/api/v1/";
+ // Definido em app.env (flutter run --dart-define-from-file=app.env); padrão: emulador Android local
+  static const String BASE_URI = String.fromEnvironment('API_BASE_URL', defaultValue: 'http://10.0.2.2:8000/api/v1/');
  //static const String BASE_URI = "https://nupreds.ifce.edu.br/inventur/api/v1/";
 //    static const String BASE_URI = "http://localhost";
   static const String LOGIN_URI = "login/";
   static const String REFRESH_TOKEN_URI = "api/token/refresh/";
   static const String REGISTER_URI = "user/";
   static const String GET_USERS = "user/";
-  static const String VERIFICAR_CPF_URI = "verificarcpf/";
+  static const String VERIFICAR_EMAIL_URI = "verificaremail/";
   static const  String GET_PESQUISAS = "pesquisa";
   static const String RODOVIA_CREATE = "rodovias/";
   static const String OUTROS_MEIOS_DE_HOSPEDAGEM = "outromeiodehospedagem/";

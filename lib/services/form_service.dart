@@ -33,15 +33,40 @@ class FormService {
             builder: (context) => const SendedFormErrorPage()));
         return false;
       }
-    } catch (e) {
-      print('Erro: $e');
+    } on DioException catch (e) {
+      // O servidor respondeu recusando o formulário (dado inválido, sem acesso à pesquisa...): guardar na fila
+      // offline só faria ele ser reenviado para sempre, sem o pesquisador saber. Mostra a tela de erro.
+      if (_recusadoPeloServidor(e) || pesquisaId == null) {
+        debugPrint('Formulário recusado pelo servidor (${e.response?.statusCode}): ${e.response?.data}');
+        navigatorKey.currentState?.pushReplacement(
+            MaterialPageRoute(builder: (context) => const SendedFormErrorPage()));
+        return false;
+      }
+      // Sem conexão / servidor fora do ar: guarda no aparelho para enviar depois
       await DataSyncService()
-          .enqueue(method: 'POST', endpoint: endpoint, payload: valoresjson, pesquisa_id: pesquisaId!);
-
+          .enqueue(method: 'POST', endpoint: endpoint, payload: valoresjson, pesquisa_id: pesquisaId);
+      navigatorKey.currentState?.pushReplacement(
+          MaterialPageRoute(builder: (context) => const SyncPage()));
+      return false;
+    } catch (e) {
+      debugPrint('Erro ao enviar formulário: $e');
+      if (pesquisaId == null) {
+        navigatorKey.currentState?.pushReplacement(
+            MaterialPageRoute(builder: (context) => const SendedFormErrorPage()));
+        return false;
+      }
+      await DataSyncService()
+          .enqueue(method: 'POST', endpoint: endpoint, payload: valoresjson, pesquisa_id: pesquisaId);
       navigatorKey.currentState?.pushReplacement(
           MaterialPageRoute(builder: (context) => const SyncPage()));
       return false;
     }
+  }
+
+  /// Erro definitivo do servidor (4xx), que não se resolve reenviando mais tarde
+  static bool _recusadoPeloServidor(DioException e) {
+    final status = e.response?.statusCode;
+    return status != null && status >= 400 && status < 500 && status != 401 && status != 408 && status != 429;
   }
 
   Future<void> updateForm(

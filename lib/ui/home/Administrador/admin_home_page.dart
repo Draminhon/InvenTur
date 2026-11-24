@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:sistur/ui/widgets/avatar_padrao.dart';
 import 'package:sistur/models/user_model.dart';
 import 'package:sistur/controllers/user_controller.dart';
 import 'package:sistur/ui/home/Administrador/user_management_page.dart';
@@ -49,7 +50,6 @@ class _AdminHomePageState extends State<AdminHomePage> {
     int userId = 0;
     String userName = '';
     String userEmail = '';
-    String userCPF = '';
     String userTelefone = '';
 
   final Map<int, String> pageTitle = {
@@ -68,14 +68,12 @@ class _AdminHomePageState extends State<AdminHomePage> {
         userId = userData['id'];
         userName = userData['name'];
         userEmail = userData['email'];
-        userCPF = userData['CPF'];
         userTelefone = userData['telefone'];
 
         User newUser = User(
           id: userId,
           username: userName,
           email: userEmail,
-          CPF: userCPF,
           telefone: userTelefone,
           fotoPerfil: userData['foto_perfil'],
           fotoPerfilBase64: userData['foto_perfil_base64'],
@@ -124,7 +122,9 @@ class _AdminHomePageState extends State<AdminHomePage> {
                     return GestureDetector(
                       onTap: () => Scaffold.of(context).openDrawer(),
                       child: CircleAvatar(
-                        backgroundColor: Colors.transparent,
+                        backgroundColor: (user.fotoPerfil == null && user.fotoPerfilBase64 == null)
+                            ? corFundoAvatarPadrao
+                            : Colors.transparent,
                         backgroundImage: user.fotoPerfilBase64 != null
                             ? MemoryImage(base64Decode(user.fotoPerfilBase64!))
                             : (user.fotoPerfil != null
@@ -132,11 +132,7 @@ class _AdminHomePageState extends State<AdminHomePage> {
                                 : null) as ImageProvider?,
                         child: (user.fotoPerfil == null &&
                                 user.fotoPerfilBase64 == null)
-                            ? const Icon(
-                                Icons.account_circle,
-                                size: 40,
-                                color: Color.fromARGB(255, 55, 111, 60),
-                              )
+                            ? const IconePerfilPadrao()
                             : null,
                       ),
                     );

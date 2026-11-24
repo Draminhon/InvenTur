@@ -2,7 +2,6 @@ import 'package:sistur/utils/app_constants.dart';
 
 class User {
   int? id;
-  String CPF = '';
   String username = '';
   String email = '';
   String status = '';
@@ -11,11 +10,12 @@ class User {
   String telefone = '';
   String? fotoPerfil;
   String? fotoPerfilBase64;
+  /// Pesquisas do administrador logado das quais este usuário participa (filtro da aba "Usuários")
+  List<int> pesquisasIds = [];
   
   User({
     this.id,
     this.status = '',
-    this.CPF = '',
     this.username = '',
      this.email = '',
      this.accessLevel = '',
@@ -25,7 +25,6 @@ class User {
   });
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    CPF = json['CPF'];
     username = json['username'];
     email = json['email'];
     accessLevel = json['acessLevel'];
@@ -33,13 +32,13 @@ class User {
     telefone = json['telefone'];
     fotoPerfil = json['foto_perfil'];
     fotoPerfilBase64 = json['foto_perfil_base64'];
+    pesquisasIds = List<int>.from(json['pesquisas_ids'] ?? []);
   }
 
    Map<String, dynamic> toJson() {
     return {
       'id': id,
       'username': username,
-      'CPF': CPF,
       'email': email,
       'accessLevel': accessLevel,
       'status': status,

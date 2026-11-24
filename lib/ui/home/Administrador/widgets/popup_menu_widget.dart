@@ -69,14 +69,18 @@ class _PopupMenuState extends State<PopupMenu> {
               color: const Color.fromARGB(255, 55, 111, 60),
             )
             : Container(),
-            SizedBox(
-              width: 110,
-              child: Text(
-                selectedItem,
-                overflow: TextOverflow.ellipsis,
-                textAlign: widget.rightIconPosition
-                ? TextAlign.end
-                : TextAlign.start
+            // Encolhe com o espaço disponível (reticências) em vez de largura fixa, para não estourar a linha
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 6),
+                child: Text(
+                  selectedItem,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: widget.rightIconPosition
+                  ? TextAlign.end
+                  : TextAlign.start
+                ),
               ),
             ),
             widget.rightIconPosition

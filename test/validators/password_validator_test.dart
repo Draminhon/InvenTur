@@ -40,7 +40,7 @@ void main() {
         () {
           final result = passwordValidator.validate(password: '#SeNha@_');
 
-          expect(result, 'A senha deve conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial');
+          expect(result, 'A senha deve conter pelo menos: uma letra maiúscula, uma letra minúscula, um número e um caractere especial');
         },
       );
       test(

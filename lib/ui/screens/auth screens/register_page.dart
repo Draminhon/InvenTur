@@ -1,12 +1,14 @@
 import 'dart:ui';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:sistur/legal/termos_texto.dart';
+import 'package:sistur/ui/screens/termos/termos_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sistur/ui/screens/auth%20screens/register_confirmation.dart';
 import 'package:sistur/ui/widgets/text%20fields/text_field_widget.dart';
 import 'package:sistur/utils/app_constants.dart';
-import 'package:sistur/validators/cpf_validator.dart';
 import 'package:sistur/validators/email_validator.dart';
 import 'package:sistur/validators/name_validator.dart';
 import 'package:sistur/validators/password_validator.dart';
@@ -32,15 +34,30 @@ class _RegisterPageState extends State<RegisterPage> {
 
   bool _isLoading = false;
 
-  final CPFValidator _cpfValidator = CPFValidator();
+  // Perfil escolhido pelo próprio usuário no cadastro (único meio de criar um administrador)
+  String _perfil = 'Pesquisador';
+
+  // Aceite obrigatório dos Termos de Uso e da Política de Privacidade (somente no cadastro)
+  bool _aceiteTermos = false;
+  late final TapGestureRecognizer _linkTermos = TapGestureRecognizer()..onTap = () => _abrirTermos(0);
+  late final TapGestureRecognizer _linkPrivacidade = TapGestureRecognizer()..onTap = () => _abrirTermos(1);
+
+  void _abrirTermos(int aba) {
+    Navigator.push(context, MaterialPageRoute(builder: (_) => TermosPage(abaInicial: aba)));
+  }
+
+  @override
+  void dispose() {
+    _linkTermos.dispose();
+    _linkPrivacidade.dispose();
+    super.dispose();
+  }
 
   final NameValidator _nameValidator = NameValidator();
 
   final EmailValidator _emailValidator = EmailValidator();
 
   final PasswordValidator _passwordValidator = PasswordValidator();
-
-  final TextEditingController _cpfController = TextEditingController();
 
   final TextEditingController _nameController = TextEditingController();
 
@@ -49,14 +66,15 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _passwordController = TextEditingController();
 
   final TextEditingController _passwordController2 = TextEditingController();
+  // Alterar dados: exigida pelo servidor para trocar e-mail ou senha
+  final TextEditingController _senhaAtualController = TextEditingController();
 
   final TextEditingController _telefoneController = TextEditingController();
 
-  final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
   final phoneMask = MaskTextInputFormatter(mask: '(##) # ####-####');
 
   Future<void> registerUser(
-      String username, String CPF, String email, String password, String telefone) async {
+      String username, String email, String password, String telefone) async {
     setState(() {
       _isLoading = true;
     });
@@ -68,10 +86,13 @@ class _RegisterPageState extends State<RegisterPage> {
         AppConstants.REGISTER_URI,
         data: {
           'username': username,
-          'CPF': CPF,
-          'email': email,
+          'email': email.trim().toLowerCase(),
           'password': password,
           'telefone': telefone,
+          'acessLevel': _perfil,
+          // Prova do consentimento: o servidor registra a versão aceita e a data/hora
+          'aceite_termos': _aceiteTermos,
+          'termos_versao': termosVersao,
         },
       );
 
@@ -85,7 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
     } on DioException catch (e) {
       String errorMsg = "Erro ao registrar usuário.";
       if (e.response?.statusCode == 400) {
-        errorMsg = "Verifique os dados informados (CPF ou Email já podem estar em uso).";
+        errorMsg = "Verifique os dados informados (o e-mail pode já estar em uso).";
       }
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMsg)));
       debugPrint('Erro Dio ao registrar usuário: ${e.message}');
@@ -98,17 +119,30 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  Future updateUsers(int user, String username, String CPF, String email,
+  Future updateUsers(int user, String username, String email,
       String password, String telefone) async {
+    void avisar(String texto) => ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(texto), backgroundColor: Colors.red[700]));
+    // Senha nova: confere a confirmação e o tamanho antes de enviar
+    if (password.isNotEmpty) {
+      if (password != _passwordController2.text) {
+        avisar('As senhas precisam ser iguais!');
+        return;
+      }
+      if (password.length < 8) {
+        avisar('A senha deve ter pelo menos 8 caracteres.');
+        return;
+      }
+    }
     try {
       final response = await ApiService().patch(
         'user/$user/',
         data: {
           'username': username,
-          'CPF': CPF,
-          'email': email,
+          'email': email.trim().toLowerCase(),
           'password': password,
-          'telefone': telefone
+          'telefone': telefone,
+          'senha_atual': _senhaAtualController.text,
         },
       );
 
@@ -125,15 +159,15 @@ class _RegisterPageState extends State<RegisterPage> {
         userData['id'] = user;
         userData['name'] = username;
         userData['username'] = username;
-        userData['email'] = email;
-        userData['cpf'] = CPF;
-        userData['CPF'] = CPF;
+        userData['email'] = email.trim().toLowerCase();
+        userData.remove('cpf'); // dados antigos em cache
+        userData.remove('CPF');
         userData['telefone'] = telefone;
         
         await secureStorage.write('user_data', jsonEncode(userData));
 
         // Update global state
-        Provider.of<UserProvider>(context, listen: false).updateUser(username, email, CPF, telefone);
+        Provider.of<UserProvider>(context, listen: false).updateUser(username, email.trim().toLowerCase(), telefone);
 
         Navigator.pop(context);
         const snackBar =
@@ -141,7 +175,16 @@ class _RegisterPageState extends State<RegisterPage> {
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } on DioException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Falha ao atualizar dados. Verifique sua conexão.")));
+      // Mostra o motivo devolvido pelo servidor (ex.: senha atual incorreta, e-mail já cadastrado)
+      final dados = e.response?.data;
+      String mensagem = e.response == null
+          ? 'Falha ao atualizar dados. Verifique sua conexão.'
+          : 'Não foi possível atualizar os dados.';
+      if (dados is Map && dados.isNotEmpty) {
+        final primeiro = dados.values.first;
+        mensagem = (primeiro is List && primeiro.isNotEmpty ? primeiro.first : primeiro).toString();
+      }
+      avisar(mensagem);
       debugPrint('Erro Dio na atualização: ${e.message}');
     } catch (e) {
       debugPrint('Erro genérico na atualização: $e');
@@ -155,7 +198,6 @@ class _RegisterPageState extends State<RegisterPage> {
         <String, dynamic>{}) as Map;
     final isChange = arguments['is_change'];
     final username = arguments['username'];
-    final cpf = arguments['user_cpf'];
     final email = arguments['user_email'];
     final id = arguments['user_id'];
     final telefone = arguments['user_telefone'];
@@ -163,7 +205,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
     if (isChange == true) {
       _nameController.text = username;
-      _cpfController.text = cpf;
       _emailController.text = email;
       _telefoneController.text = telefone;
     }
@@ -210,6 +251,10 @@ class _RegisterPageState extends State<RegisterPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
+                                if (isChange != true) ...[
+                                  _seletorDePerfil(),
+                                  SizedBox(height: paddingBottomTextField),
+                                ],
                                 const Text('Nome',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold)),
@@ -221,22 +266,6 @@ class _RegisterPageState extends State<RegisterPage> {
                                   validator: (name) {
                                     return _nameValidator.validate(name: name);
                                   },
-                                ),
-                                SizedBox(height: paddingBottomTextField),
-                                const Text('CPF',
-                                    style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
-                                SizedBox(height: paddingBottomTextField),
-                                PasswordTextField(
-                                  labelText: 'Insira seu CPF',
-                                  controller: _cpfController,
-                                  keyboardType: TextInputType.number,
-                                  prefixIcon: FontAwesomeIcons.solidAddressCard,
-                                  enabled: isChange != true, // Disable if editing
-                                  validator: (cpf) {
-                                    return _cpfValidator.validate(cpf: cpf);
-                                  },
-                                  inputFormatters: [cpfMask],
                                 ),
                                 SizedBox(height: paddingBottomTextField),
                                 const Text('Email',
@@ -267,9 +296,21 @@ class _RegisterPageState extends State<RegisterPage> {
                                     keyboardType: TextInputType.phone,
                                     prefixIcon: FontAwesomeIcons.phone),
                                 SizedBox(height: paddingBottomTextField),
-                                const Text('Senha',
+                                if (isChange == true) ...[
+                                  const Text('Senha atual',
+                                      style: TextStyle(fontWeight: FontWeight.bold)),
+                                  SizedBox(height: paddingBottomTextField),
+                                  PasswordTextField(
+                                    labelText: 'Necessária para alterar e-mail ou senha',
+                                    prefixIcon: Icons.lock_outline,
+                                    controller: _senhaAtualController,
+                                    isSecret: true,
+                                  ),
+                                  SizedBox(height: paddingBottomTextField),
+                                ],
+                                Text(isChange == true ? 'Nova senha' : 'Senha',
                                     style:
-                                        TextStyle(fontWeight: FontWeight.bold)),
+                                        const TextStyle(fontWeight: FontWeight.bold)),
                                 SizedBox(height: paddingBottomTextField),
                                 PasswordTextField(
                                   labelText: isChange == true
@@ -304,6 +345,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                     return null;
                                   },
                                 ),
+                                if (isChange != true) ...[
+                                  SizedBox(height: paddingBottomTextField),
+                                  _campoAceiteTermos(),
+                                ],
                                 SizedBox(height: isChange == true ? 50.w : 160.h),
                                 SizedBox(
                                   height: screenSize.height * .07,
@@ -327,13 +372,9 @@ class _RegisterPageState extends State<RegisterPage> {
                                         if (isChange == true) {
                                           _formKey.currentState!.save();
         
-                                          final cpf = _cpfController.text
-                                              .replaceAll('.', '')
-                                              .replaceAll('-', '');
                                           updateUsers(
                                               id,
                                               _nameController.text,
-                                              cpf,
                                               _emailController.text,
                                               _passwordController.text,
                                               _telefoneController.text);
@@ -342,15 +383,12 @@ class _RegisterPageState extends State<RegisterPage> {
                                             _formKey.currentState!.save();
         
                                             final username = _nameController.text;
-                                            final cpf = _cpfController.text
-                                                .replaceAll('.', '')
-                                                .replaceAll('-', '');
                                             final email = _emailController.text;
                                             final password =
                                                 _passwordController.text;
                                             final telefone = _telefoneController.text;
                                             final result = await registerUser(
-                                                username, cpf, email, password, telefone);
+                                                username, email, password, telefone);
                                             
         
                                             await Future.delayed(const Duration(
@@ -465,5 +503,92 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
     );
+  }
+
+
+  /// Checkbox obrigatório: sem o aceite, o formulário não valida e o campo fica vermelho com a mensagem.
+  Widget _campoAceiteTermos() {
+    const verde = Color.fromARGB(255, 55, 111, 60);
+    const estiloLink = TextStyle(color: verde, fontWeight: FontWeight.bold, decoration: TextDecoration.underline);
+    return FormField<bool>(
+      initialValue: _aceiteTermos,
+      validator: (_) => _aceiteTermos ? null : 'Você precisa aceitar os Termos de Uso e a Política de Privacidade.',
+      builder: (campo) {
+        final erro = campo.hasError;
+        return Container(
+          padding: const EdgeInsets.fromLTRB(4, 4, 10, 4),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: erro ? Colors.red : verde.withValues(alpha: 0.4), width: erro ? 1.5 : 1),
+          ),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Row(children: [
+              Checkbox(
+                value: _aceiteTermos,
+                activeColor: verde,
+                side: BorderSide(color: erro ? Colors.red : verde, width: 2),
+                onChanged: (valor) {
+                  setState(() => _aceiteTermos = valor ?? false);
+                  campo.didChange(valor);
+                  if (erro) campo.validate();
+                },
+              ),
+              Expanded(
+                child: Text.rich(TextSpan(
+                  style: const TextStyle(fontSize: 14, color: Colors.black87),
+                  children: [
+                    const TextSpan(text: 'Li e aceito os '),
+                    TextSpan(text: 'Termos de Uso', style: estiloLink, recognizer: _linkTermos),
+                    const TextSpan(text: ' e a '),
+                    TextSpan(text: 'Política de Privacidade', style: estiloLink, recognizer: _linkPrivacidade),
+                    const TextSpan(text: '.'),
+                  ],
+                )),
+              ),
+            ]),
+            if (erro)
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 0, 0, 6),
+                child: Text(campo.errorText!, style: const TextStyle(color: Colors.red, fontSize: 12)),
+              ),
+          ]),
+        );
+      },
+    );
+  }
+
+
+  /// Escolha do perfil no cadastro: Pesquisador (padrão) ou Administrador.
+  Widget _seletorDePerfil() {
+    const verde = Color.fromARGB(255, 55, 111, 60);
+    final ehAdmin = _perfil == 'Administrador';
+    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      const Text('Perfil', style: TextStyle(fontWeight: FontWeight.bold)),
+      const SizedBox(height: 6),
+      SegmentedButton<String>(
+        segments: const [
+          ButtonSegment(value: 'Pesquisador', label: Text('Pesquisador'), icon: Icon(Icons.person_search_rounded)),
+          ButtonSegment(
+              value: 'Administrador', label: Text('Administrador'), icon: Icon(Icons.admin_panel_settings_rounded)),
+        ],
+        selected: {_perfil},
+        showSelectedIcon: false,
+        onSelectionChanged: (selecao) => setState(() => _perfil = selecao.first),
+        style: ButtonStyle(
+          backgroundColor:
+              WidgetStateProperty.resolveWith((e) => e.contains(WidgetState.selected) ? verde : Colors.white),
+          foregroundColor:
+              WidgetStateProperty.resolveWith((e) => e.contains(WidgetState.selected) ? Colors.white : verde),
+          side: const WidgetStatePropertyAll(BorderSide(color: verde)),
+        ),
+      ),
+      const SizedBox(height: 6),
+      Text(
+        ehAdmin
+            ? 'Administrador: cria e gerencia as próprias pesquisas, forma equipes e acompanha os dados inventariados.'
+            : 'Pesquisador: registra os formulários do inventário nas pesquisas às quais se vincular pelo código da pesquisa.',
+        style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+      ),
+    ]);
   }
 }

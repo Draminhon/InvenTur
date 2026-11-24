@@ -16,7 +16,7 @@ void main() {
     await tester.pumpWidget(MyApp());
 
     // Verifica se os elementos da tela de login estão presentes
-    expect(find.text('CPF'), findsOneWidget);
+    expect(find.text('E-mail'), findsOneWidget);
     expect(find.text('Senha'), findsOneWidget);
     expect(find.text('Entrar'), findsOneWidget);
     expect(find.text('Registre-se'), findsOneWidget);

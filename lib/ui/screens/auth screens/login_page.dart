@@ -1,5 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:sistur/legal/termos_texto.dart';
+import 'package:sistur/ui/screens/termos/termos_page.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:sistur/services/interceptor_service.dart';
@@ -9,9 +11,8 @@ import 'package:sistur/ui/widgets/text%20fields/divider_text_widget.dart';
 import 'package:sistur/ui/widgets/text%20fields/text_field_widget.dart';
 import 'package:sistur/utils/app_constants.dart';
 import 'package:sistur/utils/check_connectivity.dart';
-import 'package:sistur/validators/cpf_validator.dart';
+import 'package:sistur/validators/email_validator.dart';
 import 'package:sistur/validators/password_validator.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'dart:convert';
 import 'package:sistur/services/secure_storage_service.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -88,30 +89,61 @@ class _LoginPageState extends State<LoginPage> {
 
   final _formLoginKey = GlobalKey<FormState>();
 
-  final CPFValidator _cpfValidator = CPFValidator();
+  final EmailValidator _emailValidator = EmailValidator();
   final PasswordValidator _passwordValidator = PasswordValidator();
 
-  final TextEditingController _cpfController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final cpfMask = MaskTextInputFormatter(mask: '###.###.###-##');
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _cpfController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
   }
 
   bool _isWrong = false;
+  // Texto do aviso vermelho: o motivo real da falha (antes era sempre "senha incorreta")
+  String _erroLogin = 'E-mail ou senha incorretos';
   bool _isLoading = false;
+
+  /// Mostra os termos em modo obrigatório e registra o aceite no servidor.
+  /// Retorna false se o usuário recusar ou se não for possível registrar o aceite.
+  Future<bool> _solicitarAceiteDosTermos() async {
+    final aceitou = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => const TermosPage(exigirAceite: true)),
+    );
+    if (aceitou != true) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text('Para usar o SisTur é necessário aceitar os Termos de Uso e a Política de Privacidade.'),
+        ));
+      }
+      return false;
+    }
+    try {
+      await ApiService().post('user/aceitar-termos/', data: {'versao': termosVersao});
+      return true;
+    } on DioException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(e.response?.statusCode == 409
+              ? 'Há uma nova versão dos termos. Atualize o aplicativo para continuar.'
+              : 'Não foi possível registrar o aceite. Verifique a conexão e tente novamente.'),
+        ));
+      }
+      return false;
+    }
+  }
   @override
   Widget build(BuildContext context) {
     // if (isConnected == false) {
     //   initApp();
     // }
 
-    Future<void> loginUser(String cpf, String password) async {
+    Future<void> loginUser(String email, String password) async {
       setState(() {
         _isLoading = true;
         _isWrong = false; // Reseta o estado de erro ao tentar novamente
@@ -121,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
         final response = await ApiService().post(
           AppConstants.LOGIN_URI,
           data: {
-            'CPF': cpf,
+            'email': email,
             'password': password,
           },
         );
@@ -147,7 +179,6 @@ class _LoginPageState extends State<LoginPage> {
             id: user['id'],
             username: user['username'] ?? user['name'] ?? '',
             email: user['email'] ?? '',
-            CPF: user['CPF'] ?? '',
             status: user['status'] ?? '',
             accessLevel: user['access_level'] ?? user['acessLevel'] ?? '',
             telefone: user['telefone'] ?? '',
@@ -177,6 +208,16 @@ class _LoginPageState extends State<LoginPage> {
 
           Provider.of<UserProvider>(context, listen: false).setUser(newUser);
 
+          // LGPD: sem o aceite da versão vigente dos termos, o acesso não é liberado
+          if (responseData['termos_pendentes'] == true) {
+            final aceitou = await _solicitarAceiteDosTermos();
+            if (!aceitou) {
+              await secureStorage.clearAll(); // encerra a sessão recém-aberta
+              return;
+            }
+          }
+          if (!mounted) return;
+
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) {
             return user['access_level'] == 'Pesquisador'
@@ -185,14 +226,28 @@ class _LoginPageState extends State<LoginPage> {
           }));
         }
       } on DioException catch (e) {
-        // Define erro para qualquer falha de resposta ou conexão no login
+        final status = e.response?.statusCode;
+        final dados = e.response?.data;
         setState(() {
           _isWrong = true;
+          if (e.response == null) {
+            _erroLogin = 'Sem conexão com o servidor. Verifique sua internet.';
+          } else if (status == 429) {
+            // Muitas tentativas erradas: o servidor bloqueia o login por 15 minutos
+            _erroLogin = dados is Map && dados['error'] != null
+                ? dados['error'].toString()
+                : 'Muitas tentativas de login. Aguarde 15 minutos ou recupere sua senha.';
+          } else if (status == 401 || status == 400) {
+            _erroLogin = 'E-mail ou senha incorretos';
+          } else {
+            _erroLogin = 'Não foi possível entrar agora. Tente novamente em instantes.';
+          }
         });
         debugPrint("Erro Dio no login: ${e.message}");
       } catch (e) {
         setState(() {
           _isWrong = true;
+          _erroLogin = 'Não foi possível entrar agora. Tente novamente em instantes.';
         });
         debugPrint("Erro genérico no login: $e");
       } finally {
@@ -234,11 +289,13 @@ class _LoginPageState extends State<LoginPage> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'Usuário ou senha incorretos',
-                              style: TextStyle(
-                                  color: const Color.fromARGB(255, 163, 45, 36),
-                                  fontSize: 15),
+                            Expanded(
+                              child: Text(
+                                _erroLogin,
+                                style: const TextStyle(
+                                    color: Color.fromARGB(255, 163, 45, 36),
+                                    fontSize: 15),
+                              ),
                             ),
                             IconButton(
                                 onPressed: () {
@@ -259,14 +316,13 @@ class _LoginPageState extends State<LoginPage> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         PasswordTextField(
-                          labelText: 'CPF',
-                          controller: _cpfController,
-                          keyboardType: TextInputType.number,
-                          prefixIcon: FontAwesomeIcons.solidAddressCard,
-                          validator: (cpf) {
-                            return _cpfValidator.validate(cpf: cpf);
+                          labelText: 'E-mail',
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          prefixIcon: FontAwesomeIcons.solidEnvelope,
+                          validator: (email) {
+                            return _emailValidator.validate(email: email);
                           },
-                          inputFormatters: [cpfMask],
                         ),
                         SizedBox(height: screenSize.height * 0.02),
                         PasswordTextField(
@@ -292,17 +348,11 @@ class _LoginPageState extends State<LoginPage> {
                                   overlayColor: WidgetStateProperty.all(
                                       Colors.green[600])),
                               onPressed: () {
-                                //   final String cpf2 = '43443785042';
-                                // final String password2 = 'Murilo159753@';
-                                // loginUser(cpf2, password2);
                                 if (_formLoginKey.currentState!.validate()) {
-                                  final cpf = _cpfController.text
-                                      .replaceAll('.', '')
-                                      .replaceAll('-', '');
+                                  // O servidor também normaliza (espaços e maiúsculas não importam)
+                                  final email = _emailController.text.trim().toLowerCase();
                                   final password = _passwordController.text;
-                                  // final String cpf2 = '95434284097';
-                                  // final String password2 = 'Jose123@';
-                                  loginUser(cpf, password);
+                                  loginUser(email, password);
                                 }
                               },
                               child: _isLoading == false

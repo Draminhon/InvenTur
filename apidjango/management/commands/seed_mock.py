@@ -52,18 +52,6 @@ CHANCE_SEM_PESQUISADOR = 0.04
 NOMES = ['Recanto', 'Mirante', 'Sol Nascente', 'Bela Vista', 'Serra Verde', 'Oásis', 'Ponto Certo', 'Raízes',
          'Horizonte', 'Ventos', 'Cachoeira', 'Lagoa Azul', 'Trilha', 'Encanto', 'Pôr do Sol']
 
-
-def _cpf_valido(semente):
-    """CPF fictício com dígitos verificadores válidos (o campo é validado em outros fluxos)."""
-    rnd = random.Random(semente)
-    base = [rnd.randint(0, 9) for _ in range(9)]
-    for tamanho in (9, 10):
-        soma = sum(d * (tamanho + 1 - i) for i, d in enumerate(base[:tamanho]))
-        resto = (soma * 10) % 11
-        base.append(0 if resto == 10 else resto)
-    return ''.join(map(str, base))
-
-
 # Campos JSON no Django que o app lê como texto (String?) — recebem '' em vez de lista
 _JSON_TEXTO_NO_APP = {
     ('InformacaoBasicaDoMunicipio', 'origemDosVisitantesTuristas'),
@@ -139,7 +127,6 @@ class Command(BaseCommand):
             first_name=nome.split()[0],
             last_name=nome.split()[-1],
             email=email,
-            CPF=_cpf_valido(1000 + indice),
             telefone=_telefone(indice),
             acessLevel=acesso,
         )
@@ -215,6 +202,6 @@ class Command(BaseCommand):
             f'Criados: {len(PESQUISAS)} pesquisas, {total_formularios} formulários, '
             f'1 administrador e {len(pesquisadores)} pesquisadores (senha: {SENHA}).'
         ))
-        self.stdout.write('Login (CPF / senha):')
+        self.stdout.write('Login (e-mail / senha):')
         for usuario in [admin] + pesquisadores:
-            self.stdout.write(f'  {usuario.acessLevel:<13} {usuario.username:<14} CPF {usuario.CPF}')
+            self.stdout.write(f'  {usuario.acessLevel:<13} {usuario.username:<14} {usuario.email}')

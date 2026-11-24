@@ -30,6 +30,9 @@ class UserController extends ChangeNotifier {
   bool _allSelectedUsers = false;
   String _usersFilteredStatus = _allStatus;
   String _usersFilteredAccessLevel = _secondaryLevel;
+  // Filtro por pesquisa (null = todas as pesquisas do administrador)
+  int? _pesquisaFiltrada;
+  int? get pesquisaFiltrada => _pesquisaFiltrada;
 
   String get primaryLevel => _primaryLevel;
   String get secondaryLevel => _secondaryLevel;
@@ -84,6 +87,12 @@ class UserController extends ChangeNotifier {
     }
 
     for (User user in _users) {
+      // Filtro por pesquisa (vale para os pesquisadores, que são os membros das pesquisas)
+      if (_pesquisaFiltrada != null &&
+          usersFilteredAccessLevel == _accessLevels[0] &&
+          !user.pesquisasIds.contains(_pesquisaFiltrada)) {
+        continue;
+      }
       if (usersFilteredAccessLevel == _accessLevels[0] &&
           user.accessLevel == _accessLevels[0]) {
         switch (usersFilteredStatus) {
@@ -102,6 +111,8 @@ class UserController extends ChangeNotifier {
       }
       notifyListeners();
     }
+    // Garante a atualização da tela mesmo quando nenhum usuário passa pelos filtros
+    notifyListeners();
   }
 
   void selectUser({required User user}) {
@@ -149,7 +160,6 @@ class UserController extends ChangeNotifier {
         data: {
           'id': user.id,
           'username': user.username,
-          'CPF': user.CPF,
           'email': user.email,
           'acessLevel': user.accessLevel,
           'status': status
@@ -176,6 +186,26 @@ class UserController extends ChangeNotifier {
     populateFilteredUsers();
   }
 
+  void filterUsersByPesquisa(int? pesquisaId) {
+    _pesquisaFiltrada = pesquisaId;
+    notifyListeners();
+    populateFilteredUsers();
+  }
+
+  /// Recarrega os usuários do servidor (ex.: depois de cadastrar um novo usuário).
+  Future<void> recarregarUsuarios() async {
+    try {
+      final response = await ApiService().get('user/');
+      if (response.statusCode == 200) {
+        setUsers(List.from(response.data).map((e) => User.fromJson(e)).toList());
+        populateFilteredUsers();
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Erro ao recarregar usuários: $e');
+    }
+  }
+
   void filterUsersByAccessLevel(String accessLevel) {
     _usersFilteredAccessLevel = accessLevel;
     notifyListeners();
@@ -192,8 +222,6 @@ class UserController extends ChangeNotifier {
     text = text.toLowerCase();
     for (User user in _filteredUsers) {
       if (user.username.toLowerCase().contains(text)) {
-        auxUsers.add(user);
-      } else if (user.CPF.contains(text)) {
         auxUsers.add(user);
       } else if (user.email.toLowerCase().contains(text)) {
         auxUsers.add(user);

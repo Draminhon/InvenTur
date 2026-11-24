@@ -14,23 +14,6 @@ import 'package:sistur/utils/utils_functions.dart';
 import 'package:sistur/ui/forms/abrir_formulario.dart';
 import 'package:dio/dio.dart';
 
-/// Atualiza a quantidade de locais
-Future updateQtdeLocais(int pesquisa, int quantidade) async {
-  try {
-    var response = await ApiService().patch(
-      'pesquisa/$pesquisa/',
-      data: {'quantidadeLocais': quantidade},
-    );
-    if (response.statusCode == 200) {
-      print('Quantidade de locais atualizada com sucesso');
-    } else {
-      print('Erro ao atualizar: ${response.statusCode}');
-    }
-  } catch (e) {
-    print('Erro na requisição updateQtdeLocais: $e');
-  }
-}
-
 /// Página A com formulário
 class A extends StatefulWidget {
   const A({super.key});
@@ -344,7 +327,6 @@ int usuario = 0;
       setState(() {
         posts.removeAt(index);
       });
-      updateQtdeLocais(pesquisaId, posts.length);
     }
   }
 
@@ -368,7 +350,6 @@ int usuario = 0;
           final dados = equipamento['dados'];
           return GestureDetector(
             onTap: () {
-              updateQtdeLocais(dados['pesquisa'], posts.length);
 
               final String tipo = equipamento['tipo'];
               final dynamic data = equipamento['dados'];
@@ -442,21 +423,33 @@ int usuario = 0;
                                         final String nome =
                                             dados['tipo_formulario'];
                                         print('excluindo: $nome (ID: $id)');
+                                      final mensagens = ScaffoldMessenger.of(context);
+                                      final navegador = Navigator.of(context);
+                                      bool excluiu = false;
+                                      String? erro;
                                       try {
                                         final response = await ApiService().patch(
                                           'base/$id/',
                                           data: {'is_active': false},
                                         );
-                                        if (response.statusCode == 204 || response.statusCode == 200) {
-                                          print('Equipamento deletado com sucesso');
-                                        } else {
-                                          print('Falha ao deletar: ${response.statusCode}');
-                                        }
+                                        excluiu = response.statusCode == 204 || response.statusCode == 200;
+                                      } on DioException catch (e) {
+                                        erro = e.response == null
+                                            ? 'Sem conexão. É preciso internet para excluir um equipamento.'
+                                            : 'Não foi possível excluir o equipamento.';
                                       } catch (e) {
-                                        print('Erro ao deletar equipamento: $e');
+                                        erro = 'Não foi possível excluir o equipamento.';
                                       }
-                                          removePost(index, dados['pesquisa']);
-                                        Navigator.pop(context);
+                                      navegador.pop();
+                                      // Só tira da lista se o servidor confirmou (antes sumia mesmo sem excluir)
+                                      if (excluiu) {
+                                        removePost(index, dados['pesquisa']);
+                                      } else {
+                                        mensagens.showSnackBar(SnackBar(
+                                          content: Text(erro ?? 'Não foi possível excluir o equipamento.'),
+                                          backgroundColor: Colors.red[700],
+                                        ));
+                                      }
                                       },
                                       child: const Text(
                                         "Excluir",

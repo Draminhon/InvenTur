@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import UserRateThrottle
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from ..models import *
+from ..permissoes import IsAdministrador, exigir_pesquisa_visivel, pesquisas_visiveis
 from ..services.pesquisa_export import MODEL_SHEET_MAP
 
 # Agrupamento dos equipamentos nas categorias A, B e C (mesma divisão dos formulários do app)
@@ -136,16 +137,22 @@ class PesquisadorDashboardView(views.APIView):
         return response
 
 
-class IsAdministrador(permissions.BasePermission):
-    """Permite acesso apenas a administradores (acessLevel) ou superusuários."""
-    message = 'Acesso restrito a administradores.'
-
-    def has_permission(self, request, view):
-        user = request.user
-        return bool(
-            user and user.is_authenticated and user.is_active
-            and (user.is_superuser or getattr(user, 'acessLevel', None) == 'Administrador')
-        )
+def _escopo_admin(request):
+    """
+    Pesquisas que o administrador pode ver (só as que ele criou; superusuário vê todas) e o filtro dos
+    formulários correspondente. Com ?pesquisa_id=, restringe a essa pesquisa (404 se não for dele).
+    """
+    pesquisas = pesquisas_visiveis(request.user).order_by('municipio')
+    filtro = {'is_active': True, 'pesquisa__in': pesquisas}
+    pesquisa_id = request.query_params.get('pesquisa_id')
+    if pesquisa_id:
+        try:
+            pesquisa_id = int(pesquisa_id)
+        except (TypeError, ValueError):
+            raise ParametroInvalido({'pesquisa_id': 'Deve ser um número inteiro.'})
+        exigir_pesquisa_visivel(request.user, pesquisa_id)
+        filtro['pesquisa_id'] = pesquisa_id
+    return pesquisas, filtro, pesquisa_id or None
 
 
 class AdminDashboardThrottle(UserRateThrottle):
@@ -172,16 +179,7 @@ class AdminDashboardView(views.APIView):
     throttle_classes = [AdminDashboardThrottle]
 
     def get(self, request):
-        pesquisas = Pesquisa.objects.filter(is_active=True).order_by('municipio')
-
-        pesquisa_id = request.query_params.get('pesquisa_id')
-        filtro = {'is_active': True, 'pesquisa__is_active': True}
-        if pesquisa_id:
-            try:
-                pesquisa_id = int(pesquisa_id)
-            except (TypeError, ValueError):
-                raise ParametroInvalido({'pesquisa_id': 'Deve ser um número inteiro.'})
-            filtro['pesquisa_id'] = pesquisa_id
+        pesquisas, filtro, pesquisa_id = _escopo_admin(request)
 
         categoria_do_modelo = {modelo: cat for cat, modelos in CATEGORIAS.items() for modelo in modelos}
         por_categoria = {'A': 0, 'B': 0, 'C': 0}
@@ -212,8 +210,7 @@ class AdminDashboardView(views.APIView):
                                    'pesquisa_id': pid})
 
         por_equipamento.sort(key=lambda e: (-e['quantidade'], e['nome']))
-        total_pesquisas = 1 if pesquisa_id and pesquisas.filter(id=pesquisa_id).exists() else (
-            0 if pesquisa_id else pesquisas.count())
+        total_pesquisas = 1 if pesquisa_id else pesquisas.count()
 
         response = Response({
             'atualizado_em': timezone.now(),
@@ -250,14 +247,7 @@ class AdminGestaoView(views.APIView):
         from django.db.models import Count
         from django.db.models.functions import TruncDate
 
-        pesquisas = Pesquisa.objects.filter(is_active=True).order_by('municipio')
-        filtro = {'is_active': True, 'pesquisa__is_active': True}
-        pesquisa_id = request.query_params.get('pesquisa_id')
-        if pesquisa_id:
-            try:
-                filtro['pesquisa_id'] = int(pesquisa_id)
-            except (TypeError, ValueError):
-                raise ParametroInvalido({'pesquisa_id': 'Deve ser um número inteiro.'})
+        pesquisas, filtro, _ = _escopo_admin(request)
 
         contagem = Counter()
         for modelo, _ in MODEL_SHEET_MAP:

@@ -25,7 +25,8 @@ class MeuMapa extends StatefulWidget {
   State<MeuMapa> createState() => _MeuMapaState();
 }
 
-const accessToken = String.fromEnvironment('API_TOKEN_MAPBOX', defaultValue: "OIE");
+// Token PÚBLICO do Mapbox, definido em app.env (flutter run --dart-define-from-file=app.env)
+const accessToken = String.fromEnvironment('API_TOKEN_MAPBOX');
 
 class _MeuMapaState extends State<MeuMapa> {
 
