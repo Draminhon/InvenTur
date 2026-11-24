@@ -102,8 +102,10 @@ class PesquisaViewSet(viewsets.ModelViewSet):
     def remover_pesquisador(self, request, pk=None):
         pesquisa = self.get_object()
         user_id = request.data.get('user_id')
-        if user_id is None:
-            return Response({"detail": "user_id é obrigatório"}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user_id = int(user_id)
+        except (TypeError, ValueError):  # ausente ou não numérico (antes: erro 500)
+            return Response({"detail": "user_id é obrigatório e deve ser numérico"}, status=status.HTTP_400_BAD_REQUEST)
         user = get_object_or_404(CustomUser, id=user_id)
         if not pesquisa.usuario.filter(id=user.id).exists():
             return Response({"detail": "usuário não está associado a essa pesquisa"}, status=status.HTTP_400_BAD_REQUEST)
